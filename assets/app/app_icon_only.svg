@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="621.278" height="641" viewBox="0 0 621.278 641">
+  <g id="Business_Bosses_-_Icon_-_SVG" data-name="Business Bosses - Icon - SVG" transform="translate(0 -0.2)">
+    <g id="Ellipse" transform="translate(0 9.795)">
+      <circle id="Ellipse_bg" data-name="Ellipse bg" cx="277.057" cy="277.057" r="277.057" transform="translate(33.583 33.583)" fill="#e81816"/>
+      <g id="Ellipse_Outline" data-name="Ellipse Outline" transform="translate(0 0)" fill="none" stroke="#e81816" stroke-width="12">
+        <circle cx="310.639" cy="310.639" r="310.639" stroke="none"/>
+        <circle cx="310.639" cy="310.639" r="304.639" fill="none"/>
+      </g>
+    </g>
+    <text id="B" transform="translate(149.139 499.2)" fill="#fff" font-size="534" font-family="FiraSans-Regular, Fira Sans"><tspan x="0" y="0">B</tspan></text>
+  </g>
+</svg>
