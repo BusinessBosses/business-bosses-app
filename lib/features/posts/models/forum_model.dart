@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
+
 import 'package:business_bosses_v2/common/models/comment_model.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 
@@ -12,7 +13,7 @@ class ForumModel {
   final String marketCategory; // new field
   final String? location;
   final String title;
-  final List<String> images;
+  final List<String>? images;
   final int timestamp;
   final List<String> likes;
   final List<String> coins;
@@ -28,7 +29,7 @@ class ForumModel {
     required this.marketCategory,
     this.location,
     required this.title,
-    required this.images,
+    this.images,
     required this.timestamp,
     required this.likes,
     required this.coins,
@@ -103,7 +104,9 @@ class ForumModel {
       marketCategory: map['marketCategory'] as String,
       location: map['location'] != null ? map['location'] as String : null,
       title: map['title'] as String,
-      images: List<String>.from((map['images'] as List<String>)),
+      images: map['images'] != null
+          ? List<String>.from((map['images'] as List<String>))
+          : null,
       timestamp: map['timestamp'] as int,
       likes: List<String>.from((map['likes'] as List<String>)),
       coins: List<String>.from((map['coins'] as List<String>)),

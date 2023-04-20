@@ -4,17 +4,17 @@ import 'dart:convert';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 
 class CommentModel {
-  final String commentId;
+  final String? commentId;
   final String uid;
-  final String comment;
-  final int timestamp;
-  final UserModel user;
+  final String? comment;
+  final int? timestamp;
+  final UserModel? user;
   CommentModel({
-    required this.commentId,
+    this.commentId,
     required this.uid,
-    required this.comment,
-    required this.timestamp,
-    required this.user,
+    this.comment,
+    this.timestamp,
+    this.user,
   });
 
   CommentModel copyWith({
@@ -39,17 +39,19 @@ class CommentModel {
       'uid': uid,
       'comment': comment,
       'timestamp': timestamp,
-      'user': user.toMap(),
+      'user': user?.toMap(),
     };
   }
 
   factory CommentModel.fromMap(Map<String, dynamic> map) {
     return CommentModel(
-      commentId: map['commentId'] as String,
+      commentId: map['commentId'] != null ? map['commentId'] as String : null,
       uid: map['uid'] as String,
-      comment: map['comment'] as String,
-      timestamp: map['timestamp'] as int,
-      user: UserModel.fromMap(map['user'] as Map<String, dynamic>),
+      comment: map['comment'] != null ? map['comment'] as String : null,
+      timestamp: map['timestamp'] != null ? map['timestamp'] as int : null,
+      user: map['user'] != null
+          ? UserModel.fromMap(map['user'] as Map<String, dynamic>)
+          : null,
     );
   }
 
@@ -61,5 +63,25 @@ class CommentModel {
   @override
   String toString() {
     return 'CommentModel(commentId: $commentId, uid: $uid, comment: $comment, timestamp: $timestamp, user: $user)';
+  }
+
+  @override
+  bool operator ==(covariant CommentModel other) {
+    if (identical(this, other)) return true;
+
+    return other.commentId == commentId &&
+        other.uid == uid &&
+        other.comment == comment &&
+        other.timestamp == timestamp &&
+        other.user == user;
+  }
+
+  @override
+  int get hashCode {
+    return commentId.hashCode ^
+        uid.hashCode ^
+        comment.hashCode ^
+        timestamp.hashCode ^
+        user.hashCode;
   }
 }
