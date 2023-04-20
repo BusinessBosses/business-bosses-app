@@ -1,6 +1,7 @@
 import 'package:business_bosses_v2/navigation/navigation.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/services/firebase_analytics.dart';
+import 'package:business_bosses_v2/utils/constants/constants.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -35,10 +36,10 @@ class MyApp extends StatelessWidget {
       ),
     );
     final GetStorage sandBox = GetStorage();
-    sandBox.writeIfNull('uid', '');
+    sandBox.writeIfNull(Constants.USER_ID, '');
     return SimpleBuilder(
       builder: (_) {
-        final String userId = sandBox.read('uid');
+        final String userId = sandBox.read(Constants.USER_ID);
         return GetMaterialApp(
           navigatorObservers: <NavigatorObserver>[
             AnalyticsServices.getAnalyticObserver()

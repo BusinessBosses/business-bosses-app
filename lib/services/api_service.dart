@@ -1,87 +1,88 @@
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
+import 'package:business_bosses_v2/utils/constants/constants.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 
+/// SERVER BASE URL
+const String baseUrl = 'https://business-bosses.com/api/v2';
+
+/// LOCAL STORAGE SANDBOX
+final GetStorage sandBox = GetStorage();
+
 /// API CALLS
-
 class ApiService {
-  final String _url = 'http://localhost:5000';
-
-  final String _token = '';
-
   /// HTTP POST CALL
-  Future<ApiResponseModel> post(
-      {required String path,
-      required Map<String, dynamic> body,
-      bool useToken = false}) async {
-    if (useToken) {
-      final http.Response response = await http.post(
-        Uri.parse('$_url/$path'),
-        body: body,
-        headers: <String, String>{'Authorization': _token},
-      );
-      return ApiResponseModel.fromMap(response.body as Map<String, dynamic>);
-    } else {
-      final http.Response response =
-          await http.post(Uri.parse('$_url/$path'), body: body);
-
-      return ApiResponseModel.fromMap(response.body as Map<String, dynamic>);
-    }
+  static Future<ApiResponseModel> post({
+    required String path,
+    required Map<String, dynamic> body,
+  }) async {
+    final dynamic token = sandBox.read(Constants.ACCESS_TOKEN);
+    if (token == null) throw 'No access Token';
+    final http.Response response = await http.post(
+      Uri.parse('$baseUrl/$path'),
+      body: body,
+      headers: <String, String>{
+        'Content-type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'bearer $token'
+      },
+    );
+    return ApiResponseModel.fromMap(response.body as Map<String, dynamic>);
   }
 
   /// HTTP GET CALL
-  Future<ApiResponseModel> get(
-      {required String path, bool useToken = false}) async {
-    if (useToken) {
-      final http.Response response = await http.get(
-        Uri.parse('$_url/$path'),
-        headers: <String, String>{'Authorization': _token},
-      );
+  static Future<ApiResponseModel> get({
+    required String path,
+  }) async {
+    final dynamic token = sandBox.read(Constants.ACCESS_TOKEN);
+    if (token == null) throw 'No access Token';
+    final http.Response response = await http.get(
+      Uri.parse('$baseUrl/$path'),
+      headers: <String, String>{
+        'Content-type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'bearer $token'
+      },
+    );
 
-      return ApiResponseModel.fromMap(response.body as Map<String, dynamic>);
-    } else {
-      final http.Response response = await http.get(Uri.parse('$_url/$path'));
-
-      return ApiResponseModel.fromMap(response.body as Map<String, dynamic>);
-    }
+    return ApiResponseModel.fromMap(response.body as Map<String, dynamic>);
   }
 
   /// HTTP PUT CALL
-  Future<ApiResponseModel> put(
-      {required String path,
-      required Map<String, dynamic> body,
-      bool useToken = false}) async {
-    if (useToken) {
-      final http.Response response = await http.put(
-        Uri.parse('$_url/$path'),
-        body: body,
-        headers: <String, String>{'Authorization': _token},
-      );
-      return ApiResponseModel.fromMap(response.body as Map<String, dynamic>);
-    } else {
-      final http.Response response =
-          await http.put(Uri.parse('$_url/$path'), body: body);
-
-      return ApiResponseModel.fromMap(response.body as Map<String, dynamic>);
-    }
+  static Future<ApiResponseModel> put({
+    required String path,
+    required Map<String, dynamic> body,
+  }) async {
+    final dynamic token = sandBox.read(Constants.ACCESS_TOKEN);
+    if (token == null) throw 'No access Token';
+    final http.Response response = await http.put(
+      Uri.parse('$baseUrl/$path'),
+      body: body,
+      headers: <String, String>{
+        'Content-type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'bearer $token'
+      },
+    );
+    return ApiResponseModel.fromMap(response.body as Map<String, dynamic>);
   }
 
   /// HTTP DELETE CALL
-  Future<ApiResponseModel> delete(
-      {required String path,
-      required Map<String, dynamic> body,
-      bool useToken = false}) async {
-    if (useToken) {
-      final http.Response response = await http.delete(
-        Uri.parse('$_url/$path'),
-        body: body,
-        headers: <String, String>{'Authorization': _token},
-      );
-      return ApiResponseModel.fromMap(response.body as Map<String, dynamic>);
-    } else {
-      final http.Response response =
-          await http.delete(Uri.parse('$_url/$path'), body: body);
-
-      return ApiResponseModel.fromMap(response.body as Map<String, dynamic>);
-    }
+  static Future<ApiResponseModel> delete({
+    required String path,
+    required Map<String, dynamic> body,
+  }) async {
+    final dynamic token = sandBox.read(Constants.ACCESS_TOKEN);
+    if (token == null) throw 'No access Token';
+    final http.Response response = await http.delete(
+      Uri.parse('$baseUrl/$path'),
+      body: body,
+      headers: <String, String>{
+        'Content-type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'bearer $token'
+      },
+    );
+    return ApiResponseModel.fromMap(response.body as Map<String, dynamic>);
   }
 }

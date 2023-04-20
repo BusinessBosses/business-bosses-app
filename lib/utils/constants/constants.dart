@@ -83,6 +83,10 @@ class Constants {
   static const String LAUNCH_PRO_ID = '-MsUOGcOT9oRXGakCcJv';
   // static const BOSS_UP_CHALLENGE_ID = '-MsUOGcOT9oRXGakCcJv';
   static const String BOSS_UP_CHALLENGE_ID = '-MsUOGcOT9oRXGakCcJv';
+
+  /// STORAGE CONSTANTS
+  static const String ACCESS_TOKEN = 'accessToken';
+  static const String USER_ID = 'uid';
 }
 
 enum PasswordField { password, confirmPassword }
