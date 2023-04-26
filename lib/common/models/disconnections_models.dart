@@ -43,20 +43,4 @@ class DisconnectionsModel {
 
   factory DisconnectionsModel.fromJson(String source) =>
       DisconnectionsModel.fromMap(json.decode(source) as Map<String, dynamic>);
-
-  @override
-  String toString() =>
-      'DisconnectionsModel(id: $id, userId: $userId, timeStamp: $timeStamp)';
-
-  @override
-  bool operator ==(covariant DisconnectionsModel other) {
-    if (identical(this, other)) return true;
-
-    return other.id == id &&
-        other.userId == userId &&
-        other.timeStamp == timeStamp;
-  }
-
-  @override
-  int get hashCode => id.hashCode ^ userId.hashCode ^ timeStamp.hashCode;
 }

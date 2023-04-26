@@ -5,13 +5,13 @@ import 'package:business_bosses_v2/common/models/user_model.dart';
 
 class CommentModel {
   final String? commentId;
-  final String uid;
+  final String userId;
   final String? comment;
   final int? timestamp;
   final UserModel? user;
   CommentModel({
     this.commentId,
-    required this.uid,
+    required this.userId,
     this.comment,
     this.timestamp,
     this.user,
@@ -19,14 +19,14 @@ class CommentModel {
 
   CommentModel copyWith({
     String? commentId,
-    String? uid,
+    String? userId,
     String? comment,
     int? timestamp,
     UserModel? user,
   }) {
     return CommentModel(
       commentId: commentId ?? this.commentId,
-      uid: uid ?? this.uid,
+      userId: userId ?? this.userId,
       comment: comment ?? this.comment,
       timestamp: timestamp ?? this.timestamp,
       user: user ?? this.user,
@@ -36,7 +36,7 @@ class CommentModel {
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'commentId': commentId,
-      'uid': uid,
+      'userId': userId,
       'comment': comment,
       'timestamp': timestamp,
       'user': user?.toMap(),
@@ -46,7 +46,7 @@ class CommentModel {
   factory CommentModel.fromMap(Map<String, dynamic> map) {
     return CommentModel(
       commentId: map['commentId'] != null ? map['commentId'] as String : null,
-      uid: map['uid'] as String,
+      userId: map['userId'] as String,
       comment: map['comment'] != null ? map['comment'] as String : null,
       timestamp: map['timestamp'] != null ? map['timestamp'] as int : null,
       user: map['user'] != null
@@ -62,7 +62,7 @@ class CommentModel {
 
   @override
   String toString() {
-    return 'CommentModel(commentId: $commentId, uid: $uid, comment: $comment, timestamp: $timestamp, user: $user)';
+    return 'CommentModel(commentId: $commentId, userId: $userId, comment: $comment, timestamp: $timestamp, user: $user)';
   }
 
   @override
@@ -70,7 +70,7 @@ class CommentModel {
     if (identical(this, other)) return true;
 
     return other.commentId == commentId &&
-        other.uid == uid &&
+        other.userId == userId &&
         other.comment == comment &&
         other.timestamp == timestamp &&
         other.user == user;
@@ -79,7 +79,7 @@ class CommentModel {
   @override
   int get hashCode {
     return commentId.hashCode ^
-        uid.hashCode ^
+        userId.hashCode ^
         comment.hashCode ^
         timestamp.hashCode ^
         user.hashCode;

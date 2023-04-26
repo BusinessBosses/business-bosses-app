@@ -28,7 +28,10 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  cached_network_image: ^3.2.3
+  country_picker: ^2.0.20
   cupertino_icons: ^1.0.2
+  detectable_text_field: ^2.0.4
   facebook_app_events: ^0.18.3
   firebase_analytics: ^10.2.1
   firebase_core: ^2.10.0
@@ -37,11 +40,10 @@ dependencies:
     sdk: flutter
   flutter_dotenv: ^5.0.2
   flutter_stripe: ^9.1.1
+  flutter_svg: ^2.0.5
   get: ^4.6.5
   get_storage: ^2.1.1
   http: ^0.13.5
-  flutter_svg: ^2.0.5
-  country_picker: ^2.0.20
 
 dev_dependencies:
   flutter_lints: ^2.0.0
