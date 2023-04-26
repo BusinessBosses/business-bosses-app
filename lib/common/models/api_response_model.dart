@@ -43,20 +43,4 @@ class ApiResponseModel {
 
   factory ApiResponseModel.fromJson(String source) =>
       ApiResponseModel.fromMap(json.decode(source) as Map<String, dynamic>);
-
-  @override
-  String toString() =>
-      'ApiResponseModel(success: $success, message: $message, data: $data)';
-
-  @override
-  bool operator ==(covariant ApiResponseModel other) {
-    if (identical(this, other)) return true;
-
-    return other.success == success &&
-        other.message == message &&
-        other.data == data;
-  }
-
-  @override
-  int get hashCode => success.hashCode ^ message.hashCode ^ data.hashCode;
 }
