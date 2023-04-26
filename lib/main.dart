@@ -44,7 +44,8 @@ class MyApp extends StatelessWidget {
           navigatorObservers: <NavigatorObserver>[
             AnalyticsServices.getAnalyticObserver()
           ],
-          initialRoute: userId.isEmpty ? Routes.login : Routes.bottomNavigation,
+          initialRoute:
+              userId.isEmpty ? Routes.createPost : Routes.bottomNavigation,
           getPages: Nav.routes,
           debugShowCheckedModeBanner: false,
           theme: appTheme,
