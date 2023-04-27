@@ -1,11 +1,11 @@
+import 'package:business_bosses_v2/common/widgets/buttons/custom_button.dart';
 import 'package:business_bosses_v2/common/widgets/text_widget.dart'
     show TextWidget;
 import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
-import '../../../../common/ui/buttons/icon_text_button.dart';
-import '../../../../common/ui/my_outlined_button.dart';
+import '../../../../common/widgets/buttons/icon_text_button.dart';
 import '../../../../utils/theme/theme.dart';
 import '../../../../utils/validators/phone_input.dart';
 import '../../../../utils/validators/validator.dart';
@@ -126,7 +126,7 @@ class _LoginFormState extends State<LoginForm> {
             ),
             const SizedBox(height: 30.0),
 
-            MCustomButton(
+            CustomButton(
               margin: const EdgeInsets.all(2.0),
               label: 'Login',
               onPressed: () {},

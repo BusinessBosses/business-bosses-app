@@ -1,3 +1,5 @@
+// ignore_for_file: public_member_api_docs
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -41,7 +43,7 @@ class IconTextButton extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
+          children: <Widget>[
             icon == null ? SvgPicture.asset('assets/svgs/g.svg') : Icon(icon),
             const SizedBox(width: 16.0),
             Text(
