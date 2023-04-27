@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/utils/constants/constants.dart';
 import 'package:get_storage/get_storage.dart';
@@ -27,7 +29,7 @@ class ApiService {
         'Authorization': 'bearer $token'
       },
     );
-    return ApiResponseModel.fromMap(response.body as Map<String, dynamic>);
+    return ApiResponseModel.fromMap(jsonDecode(response.body));
   }
 
   /// HTTP GET CALL
@@ -45,7 +47,7 @@ class ApiService {
       },
     );
 
-    return ApiResponseModel.fromMap(response.body as Map<String, dynamic>);
+    return ApiResponseModel.fromMap(jsonDecode(response.body));
   }
 
   /// HTTP PUT CALL
@@ -64,7 +66,7 @@ class ApiService {
         'Authorization': 'bearer $token'
       },
     );
-    return ApiResponseModel.fromMap(response.body as Map<String, dynamic>);
+    return ApiResponseModel.fromMap(jsonDecode(response.body));
   }
 
   /// HTTP DELETE CALL
@@ -83,6 +85,6 @@ class ApiService {
         'Authorization': 'bearer $token'
       },
     );
-    return ApiResponseModel.fromMap(response.body as Map<String, dynamic>);
+    return ApiResponseModel.fromMap(jsonDecode(response.body));
   }
 }
