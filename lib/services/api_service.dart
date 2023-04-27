@@ -18,36 +18,42 @@ class ApiService {
     required String path,
     required Map<String, dynamic> body,
   }) async {
-    final dynamic token = sandBox.read(Constants.ACCESS_TOKEN);
-    if (token == null) throw 'No access Token';
-    final http.Response response = await http.post(
-      Uri.parse('$baseUrl/$path'),
-      body: body,
-      headers: <String, String>{
-        'Content-type': 'application/json',
-        'Accept': 'application/json',
-        'Authorization': 'bearer $token'
-      },
-    );
-    return ApiResponseModel.fromMap(jsonDecode(response.body));
+    final String token = sandBox.read(Constants.ACCESS_TOKEN);
+    try {
+      final http.Response response = await http.post(
+        Uri.parse('$baseUrl/$path'),
+        body: body,
+        headers: <String, String>{
+          'Content-type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'bearer $token'
+        },
+      );
+      return ApiResponseModel.fromMap(jsonDecode(response.body));
+    } catch (e) {
+      throw e.toString();
+    }
   }
 
   /// HTTP GET CALL
   static Future<ApiResponseModel> get({
     required String path,
   }) async {
-    final dynamic token = sandBox.read(Constants.ACCESS_TOKEN);
-    if (token == null) throw 'No access Token';
-    final http.Response response = await http.get(
-      Uri.parse('$baseUrl/$path'),
-      headers: <String, String>{
-        'Content-type': 'application/json',
-        'Accept': 'application/json',
-        'Authorization': 'bearer $token'
-      },
-    );
+    final String token = sandBox.read(Constants.ACCESS_TOKEN);
+    try {
+      final http.Response response = await http.get(
+        Uri.parse('$baseUrl/$path'),
+        headers: <String, String>{
+          'Content-type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'bearer $token'
+        },
+      );
 
-    return ApiResponseModel.fromMap(jsonDecode(response.body));
+      return ApiResponseModel.fromMap(jsonDecode(response.body));
+    } catch (e) {
+      throw e.toString();
+    }
   }
 
   /// HTTP PUT CALL
@@ -55,18 +61,21 @@ class ApiService {
     required String path,
     required Map<String, dynamic> body,
   }) async {
-    final dynamic token = sandBox.read(Constants.ACCESS_TOKEN);
-    if (token == null) throw 'No access Token';
-    final http.Response response = await http.put(
-      Uri.parse('$baseUrl/$path'),
-      body: body,
-      headers: <String, String>{
-        'Content-type': 'application/json',
-        'Accept': 'application/json',
-        'Authorization': 'bearer $token'
-      },
-    );
-    return ApiResponseModel.fromMap(jsonDecode(response.body));
+    final String token = sandBox.read(Constants.ACCESS_TOKEN);
+    try {
+      final http.Response response = await http.put(
+        Uri.parse('$baseUrl/$path'),
+        body: body,
+        headers: <String, String>{
+          'Content-type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'bearer $token'
+        },
+      );
+      return ApiResponseModel.fromMap(jsonDecode(response.body));
+    } catch (e) {
+      throw e.toString();
+    }
   }
 
   /// HTTP DELETE CALL
@@ -74,17 +83,20 @@ class ApiService {
     required String path,
     required Map<String, dynamic> body,
   }) async {
-    final dynamic token = sandBox.read(Constants.ACCESS_TOKEN);
-    if (token == null) throw 'No access Token';
-    final http.Response response = await http.delete(
-      Uri.parse('$baseUrl/$path'),
-      body: body,
-      headers: <String, String>{
-        'Content-type': 'application/json',
-        'Accept': 'application/json',
-        'Authorization': 'bearer $token'
-      },
-    );
-    return ApiResponseModel.fromMap(jsonDecode(response.body));
+    final String token = sandBox.read(Constants.ACCESS_TOKEN);
+    try {
+      final http.Response response = await http.delete(
+        Uri.parse('$baseUrl/$path'),
+        body: body,
+        headers: <String, String>{
+          'Content-type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'bearer $token'
+        },
+      );
+      return ApiResponseModel.fromMap(jsonDecode(response.body));
+    } catch (e) {
+      throw e.toString();
+    }
   }
 }
