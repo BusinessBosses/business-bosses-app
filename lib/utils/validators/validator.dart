@@ -63,13 +63,13 @@ class Validator {
   }
 
   /// Validate if username
-  static String? usernameValidator(String val, {required bool isUnique}) {
+  static String? usernameValidator(String val) {
     if (val == "") return 'Username cannot be empty';
     if (val.length <= 3) return 'Username is too short';
     if (val.contains(' ')) return 'You can\'t enter space';
-    if (isUnique) return 'Enter a unique username';
-    if (!isUnique) if (val.length < 2) return 'username is too short';
-    if (!isUnique) return 'User name already exist';
+    // if (isUnique) return 'Enter a unique username';
+    // if (!isUnique) if (val.length < 2) return 'username is too short';
+    // if (!isUnique) return 'User name already exist';
 
     return null;
   }

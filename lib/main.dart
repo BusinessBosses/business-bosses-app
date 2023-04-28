@@ -45,7 +45,7 @@ class MyApp extends StatelessWidget {
             AnalyticsServices.getAnalyticObserver()
           ],
           initialRoute:
-              userId.isEmpty ? Routes.createPost : Routes.bottomNavigation,
+              userId.isEmpty ? Routes.registration : Routes.bottomNavigation,
           getPages: Nav.routes,
           debugShowCheckedModeBanner: false,
           theme: appTheme,

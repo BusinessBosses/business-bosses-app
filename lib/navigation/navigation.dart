@@ -20,10 +20,10 @@ class Nav {
       name: Routes.registration,
       page: () => RegisterScreen(),
     ),
-    GetPage(
-      name: Routes.codeVerification,
-      page: () => const CodeVerificationScreen(),
-    ),
+    // GetPage(
+    //   name: Routes.codeVerification,
+    //   page: () => const CodeVerificationScreen(),
+    // ),
     GetPage(
       name: Routes.createPost,
       page: () => const CreatePostScreen(),
