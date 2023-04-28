@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:business_bosses_v2/features/authentication/controller/auth_controller.dart';
 import 'package:country_picker/country_picker.dart';
 import 'package:flutter/gestures.dart';
@@ -85,7 +87,7 @@ class _SignUpFormState extends State<SignUpForm> {
                     filled: true,
                     fillColor: const Color(0xffF4F4F4)),
               ),
-              const SizedBox(height: 24.0),
+              const SizedBox(height: 15.0),
               TextWidget(
                 text: isEmailAuth ? 'Email' : 'Phone',
                 size: 0,
@@ -213,81 +215,71 @@ class _SignUpFormState extends State<SignUpForm> {
           OutlinedButton(
             onPressed: () {},
             child: IconTextButton(
-              label: 'Sign up with Google',
-              onPressed: () async {
-                setState(() {
-                  _isProcessing = true;
-                });
+                label: 'Sign up with Google',
+                onPressed: () async {
+                  setState(() {
+                    _isProcessing = true;
+                  });
 
-                // print(res.);
-                // if (res.success) {
-                //   if (res.message == "newUser") {
-                //     MyUser user = MyUser(
-                //       username: res.data.user.displayName,
-                //       uid: _firebase.uid,
-                //       email: res.data.user.email,
-                //       gender: _gender,
-                //       ageRange: _ageRange,
-                //       timestamp: DateTime.now().millisecondsSinceEpoch,
-                //       deviceTokens: _deviceToken != null ? [_deviceToken] : [],
-                //     );
-                //     _onJoinedDefault(_firebase.uid);
-                //     _createUser(user);
-                //   } else {
-                //     _checkProfile();
-                //   }
-                // } else {
-                //   debugPrint("===========>>> ${res.message}");
-                //   showSnackBar(
-                //     context,
-                //     message:
-                //         'OOPS! Something went wrong. Check internet connection and try again.',
-                //   );
-                //   setState(() {
-                //     _isProcessing = false;
-                //   });
-                // }
-              },
-              borderRadius: BorderRadius.circular(20),
-              icon: Icons.search,
-            ),
+                  // print(res.);
+                  // if (res.success) {
+                  //   if (res.message == "newUser") {
+                  //     MyUser user = MyUser(
+                  //       username: res.data.user.displayName,
+                  //       uid: _firebase.uid,
+                  //       email: res.data.user.email,
+                  //       gender: _gender,
+                  //       ageRange: _ageRange,
+                  //       timestamp: DateTime.now().millisecondsSinceEpoch,
+                  //       deviceTokens: _deviceToken != null ? [_deviceToken] : [],
+                  //     );
+                  //     _onJoinedDefault(_firebase.uid);
+                  //     _createUser(user);
+                  //   } else {
+                  //     _checkProfile();
+                  //   }
+                  // } else {
+                  //   debugPrint("===========>>> ${res.message}");
+                  //   showSnackBar(
+                  //     context,
+                  //     message:
+                  //         'OOPS! Something went wrong. Check internet connection and try again.',
+                  //   );
+                  //   setState(() {
+                  //     _isProcessing = false;
+                  //   });
+                  // }
+                },
+                borderRadius: BorderRadius.circular(20),
+                icon: SvgPicture.asset(
+                  'assets/svgs/googleicon.svg',
+                  height: 24,
+                )),
           ),
           const SizedBox(height: 10.0),
-          // if (Platform.isIOS)
-          //   SignInWithAppleButton(
-          //     text: 'Sign up with Apple',
-          //     onPressed: () async {
-          //       final MyResponse res = await MyFirebase().signInWithApple();
-          //       // print(res.);
-          //       if (res.success) {
-          //         if (res.message == "newUser") {
-          //           MyUser user = MyUser(
-          //             username: res.data.user.displayName,
-          //             uid: _firebase.uid,
-          //             email: res.data.user.email,
-          //             gender: _gender,
-          //             ageRange: _ageRange,
-          //             timestamp: DateTime.now().millisecondsSinceEpoch,
-          //             deviceTokens: _deviceToken != null ? [_deviceToken] : [],
-          //           );
-          //           _onJoinedDefault(_firebase.uid);
-          //           _createUser(user);
-          //         } else {
-          //           _checkProfile();
-          //         }
-          //       } else {
-          //         debugPrint("===========>>> ${res.message}");
-          //         showSnackBar(
-          //           context,
-          //           message:
-          //               'OOPS! Something went wrong. Check internet connection and try again.',
-          //         );
-          //         setState(() {
-          //           _isProcessing = false;
-          //         });
-          //       }
-          //     },
-          //   ),
+          if (Platform.isIOS)
+            OutlinedButton(
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
+                side: MaterialStateProperty.all(BorderSide.none),
+              ),
+              onPressed: () async {
+                setState(() {
+                  _isProcessing = false;
+                });
+              },
+              child: IconTextButton(
+                backgroundColor: Colors.transparent,
+                label: 'Sign up with Apple',
+                labelColor: Colors.white,
+                onPressed: () async {},
+                borderRadius: BorderRadius.circular(20.0),
+                icon: SvgPicture.asset(
+                  'assets/svgs/applelogo.svg',
+                  height: 24,
+                ),
+              ),
+            )
 
           // agreeAndJoin(context),
         ],

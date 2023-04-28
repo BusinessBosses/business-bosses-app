@@ -1,14 +1,16 @@
+import 'dart:io';
 import 'package:business_bosses_v2/common/widgets/buttons/custom_button.dart';
 import 'package:business_bosses_v2/common/widgets/text_widget.dart'
     show TextWidget;
 import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 import '../../../../common/widgets/buttons/icon_text_button.dart';
-import '../../../../utils/theme/theme.dart';
 import '../../../../functions/validators/phone_input.dart';
 import '../../../../functions/validators/validator.dart';
+import '../../../../utils/theme/theme.dart';
 
 class LoginForm extends StatefulWidget {
   const LoginForm({super.key});
@@ -163,48 +165,43 @@ class _LoginFormState extends State<LoginForm> {
             OutlinedButton(
               onPressed: () {},
               child: IconTextButton(
-                backgroundColor: Colors.transparent,
-                label: 'Sign in with Google',
-                labelColor: textColor,
-                onPressed: () async {},
-                borderRadius: BorderRadius.circular(20.0),
-                icon: Icons.search,
-              ),
+                  backgroundColor: Colors.transparent,
+                  label: 'Sign in with Google',
+                  labelColor: textColor,
+                  onPressed: () async {},
+                  borderRadius: BorderRadius.circular(20.0),
+                  icon: SvgPicture.asset(
+                    'assets/svgs/googleicon.svg',
+                    height: 24,
+                  )),
             ),
             const SizedBox(height: 10.0),
-            // if (Platform.isIOS)
-            //   SignInWithAppleButton(
-            //     onPressed: () async {
-            //       final MyResponse res = await MyFirebase().signInWithApple();
-            //       // print(res.);
-            //       if (res.success) {
-            //         if (res.message == "newUser") {
-            //           MyUser user = MyUser(
-            //             username: res.data.user.displayName,
-            //             uid: _firebase.uid,
-            //             email: res.data.user.email,
-            //             timestamp: DateTime.now().millisecondsSinceEpoch,
-            //             deviceTokens:
-            //                 _deviceToken != null ? [_deviceToken] : [],
-            //           );
-            //           _onJoinedDefault(_firebase.uid);
-            //           _createUser(user);
-            //         } else {
-            //           _checkProfile();
-            //         }
-            //       } else {
-            //         debugPrint("===========>>> ${res.message}");
-            //         showSnackBar(
-            //           context,
-            //           message:
-            //               'OOPS! Something went wrong. Check internet connection and try again.',
-            //         );
-            //         setState(() {
-            //           _isProcessing = false;
-            //         });
-            //       }
-            //     },
-            //   ),
+
+            if (Platform.isIOS)
+              OutlinedButton(
+                style: ButtonStyle(
+                  backgroundColor:
+                      MaterialStateProperty.all<Color>(Colors.black),
+                  side: MaterialStateProperty.all(BorderSide.none),
+                ),
+                onPressed: () async {
+                  setState(() {
+                    SignInWithApple();
+                    _isProcessing = false;
+                  });
+                },
+                child: IconTextButton(
+                  backgroundColor: Colors.transparent,
+                  label: 'Sign in with Apple',
+                  labelColor: Colors.white,
+                  onPressed: () async {},
+                  borderRadius: BorderRadius.circular(20.0),
+                  icon: SvgPicture.asset(
+                    'assets/svgs/applelogo.svg',
+                    height: 24,
+                  ),
+                ),
+              )
           ],
         ),
       ),
@@ -232,5 +229,24 @@ class _LoginFormState extends State<LoginForm> {
         ),
       ),
     );
+  }
+
+  Future<void> signInWithApple() async {
+    try {
+      final credential = await SignInWithApple.getAppleIDCredential(
+        scopes: [
+          AppleIDAuthorizationScopes.email,
+          AppleIDAuthorizationScopes.fullName,
+        ],
+        webAuthenticationOptions: WebAuthenticationOptions(
+          clientId: 'your_client_id_here',
+          redirectUri: Uri.parse('your_redirect_uri_here'),
+        ),
+      );
+
+      // Use the credential data to authenticate the user
+    } catch (e) {
+      // Handle sign-in errors
+    }
   }
 }

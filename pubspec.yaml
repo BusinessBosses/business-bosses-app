@@ -46,6 +46,7 @@ dependencies:
   google_fonts: ^4.0.4
   http: ^0.13.5
   image_picker: ^0.8.7+4
+  sign_in_with_apple: ^4.3.0
   pin_code_fields: ^7.4.0
   sendgrid_mailer: ^0.1.3
 
