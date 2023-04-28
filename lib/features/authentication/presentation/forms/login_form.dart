@@ -7,8 +7,8 @@ import 'package:flutter_svg/svg.dart';
 
 import '../../../../common/widgets/buttons/icon_text_button.dart';
 import '../../../../utils/theme/theme.dart';
-import '../../../../utils/validators/phone_input.dart';
-import '../../../../utils/validators/validator.dart';
+import '../../../../functions/validators/phone_input.dart';
+import '../../../../functions/validators/validator.dart';
 
 class LoginForm extends StatefulWidget {
   const LoginForm({super.key});

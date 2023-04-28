@@ -11,8 +11,8 @@ import '../../../../common/widgets/text_widget.dart';
 import '../../../../navigation/routes.dart';
 import '../../../../utils/constants/constants.dart';
 import '../../../../utils/theme/theme.dart';
-import '../../../../utils/validators/phone_input.dart';
-import '../../../../utils/validators/validator.dart';
+import '../../../../functions/validators/phone_input.dart';
+import '../../../../functions/validators/validator.dart';
 
 /// SignUp Form Main
 class SignUpForm extends StatefulWidget {

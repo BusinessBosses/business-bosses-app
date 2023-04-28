@@ -1,9 +1,9 @@
-import 'package:business_bosses_v2/utils/validators/validator.dart';
+import 'package:business_bosses_v2/functions/validators/validator.dart';
 import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
 
 import '../../common/widgets/icon_widget.dart';
-import '../theme/theme.dart';
+import '../../utils/theme/theme.dart';
 
 class PhoneNumberInput extends StatelessWidget {
   final Function onChangeCountry;
