@@ -2,8 +2,10 @@
 
 import 'package:business_bosses_v2/features/authentication/presentation/login_screen.dart';
 import 'package:business_bosses_v2/features/authentication/presentation/register_screen.dart';
+import 'package:business_bosses_v2/features/authentication/presentation/code_verification_screen.dart';
 import 'package:business_bosses_v2/features/posts/presentation/create_post_screen.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
+
 import 'package:get/get.dart';
 
 ///NAV INITIALIZATIONS
@@ -16,7 +18,11 @@ class Nav {
     ),
     GetPage(
       name: Routes.registration,
-      page: () => const RegisterScreen(),
+      page: () => RegisterScreen(),
+    ),
+    GetPage(
+      name: Routes.codeVerification,
+      page: () => const CodeVerificationScreen(),
     ),
     GetPage(
       name: Routes.createPost,
