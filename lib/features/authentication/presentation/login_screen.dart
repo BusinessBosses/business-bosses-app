@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../../../common/widgets/text_widget.dart';
 import '../../../utils/theme/theme.dart';
@@ -48,8 +49,7 @@ class LoginScreen extends StatelessWidget {
                       children: [
                         GestureDetector(
                           onTap: () {
-                            Navigator.push(
-                                context, Routes.registration as Route<Object?>);
+                            Get.toNamed(Routes.registration);
                           },
                           child: const TextWidget(
                             text: 'Sign Up',
@@ -90,6 +90,26 @@ class LoginScreen extends StatelessWidget {
     FocusScopeNode currentFocus = FocusScope.of(context);
     if (!currentFocus.hasPrimaryFocus) {
       currentFocus.unfocus();
+    }
+  }
+
+  Future<dynamic> navigateTo(
+    BuildContext context, {
+    String? routeName,
+    var arguments,
+    isRemoveUntil = false,
+  }) async {
+    // print("=====>>>> $routeName");
+    if (routeName == null) {
+      // print('+++++++ pop');
+      Navigator.of(context).pop(arguments);
+    } else if (isRemoveUntil) {
+      return await Navigator.of(context).pushNamedAndRemoveUntil(
+          routeName, (route) => false,
+          arguments: arguments);
+    } else {
+      return await Navigator.of(context)
+          .pushNamed(routeName, arguments: arguments);
     }
   }
 }
