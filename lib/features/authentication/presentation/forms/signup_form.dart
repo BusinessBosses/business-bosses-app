@@ -1,8 +1,7 @@
+import 'package:business_bosses_v2/features/authentication/controller/auth_controller.dart';
 import 'package:country_picker/country_picker.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
@@ -25,6 +24,7 @@ class SignUpForm extends StatefulWidget {
 }
 
 class _SignUpFormState extends State<SignUpForm> {
+  final AuthController _authController = Get.put(AuthController());
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   AutovalidateMode _autoValidateMode = AutovalidateMode.disabled;
   String? _username, _authCred, _password;
@@ -60,17 +60,8 @@ class _SignUpFormState extends State<SignUpForm> {
               TextFormField(
                 onChanged: (String val) {
                   _username = val;
-                  bool? result =
-                      Validator.isUniqueUsername(val, _usersToCompareUsername);
-
-                  setState(() {
-                    _isUniqueName = result!;
-                  });
                 },
-                validator: (String? val) => Validator.usernameValidator(
-                  val!,
-                  isUnique: _isUniqueName,
-                ),
+                validator: (String? val) => Validator.usernameValidator(val!),
                 keyboardType: TextInputType.name,
                 textInputAction: TextInputAction.next,
                 decoration: inputDecoration.copyWith(
@@ -172,7 +163,11 @@ class _SignUpFormState extends State<SignUpForm> {
                 setState(() {
                   _autoValidateMode = AutovalidateMode.always;
                 });
-                Get.toNamed(Routes.codeVerification);
+                _authController.sendOtp(
+                    emailAddress: _authCred!,
+                    userName: _username!,
+                    onError: () {});
+                // Get.toNamed(Routes.codeVerification);
                 // if (isEmailAuth) {
                 // _setUpReferral();
                 // } else {
