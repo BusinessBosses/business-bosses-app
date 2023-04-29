@@ -1,12 +1,13 @@
 import 'dart:io';
-import 'package:business_bosses_v2/common/widgets/buttons/custom_button.dart';
+import 'package:apple_sign_in_safety/apple_sign_in.dart';
+import 'package:business_bosses_v2/common/widgets/buttons/custom_button.dart'
+    as custombuttom;
 import 'package:business_bosses_v2/common/widgets/text_widget.dart'
     show TextWidget;
 import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:sign_in_with_apple/sign_in_with_apple.dart';
-
 import '../../../../common/widgets/buttons/icon_text_button.dart';
 import '../../../../functions/validators/phone_input.dart';
 import '../../../../functions/validators/validator.dart';
@@ -128,12 +129,12 @@ class _LoginFormState extends State<LoginForm> {
             ),
             const SizedBox(height: 30.0),
 
-            CustomButton(
+            custombuttom.CustomButton(
               margin: const EdgeInsets.all(2.0),
               label: 'Login',
               onPressed: () {},
               isProcessing: _isProcessing,
-              buttonType: ButtonType.elevated,
+              buttonType: custombuttom.ButtonType.elevated,
               child: Container(),
             ),
             const SizedBox(height: 20.0),
@@ -178,30 +179,36 @@ class _LoginFormState extends State<LoginForm> {
             const SizedBox(height: 10.0),
 
             if (Platform.isIOS)
-              OutlinedButton(
-                style: ButtonStyle(
-                  backgroundColor:
-                      MaterialStateProperty.all<Color>(Colors.black),
-                  side: MaterialStateProperty.all(BorderSide.none),
-                ),
-                onPressed: () async {
-                  setState(() {
-                    SignInWithApple();
-                    _isProcessing = false;
-                  });
-                },
-                child: IconTextButton(
-                  backgroundColor: Colors.transparent,
-                  label: 'Sign in with Apple',
-                  labelColor: Colors.white,
-                  onPressed: () async {},
-                  borderRadius: BorderRadius.circular(20.0),
-                  icon: SvgPicture.asset(
-                    'assets/svgs/applelogo.svg',
-                    height: 24,
+              Stack(
+                children: [
+                  IconTextButton(
+                    backgroundColor: Colors.black,
+                    label: 'Sign in with Apple',
+                    labelColor: Colors.white,
+                    onPressed: logIn,
+                    borderRadius: BorderRadius.circular(10.0),
+                    icon: SvgPicture.asset(
+                      'assets/svgs/applelogo.svg',
+                      height: 24,
+                    ),
                   ),
-                ),
-              )
+                  Container(
+                    color: Colors.transparent,
+                    child: SizedBox(
+                      height: 57,
+                      child: Container(
+                        color: Colors.transparent,
+                        child: AppleSignInButton(
+                          cornerRadius: 10,
+                          type: ButtonType.defaultButton,
+                          style: ButtonStyleApple.black,
+                          onPressed: logIn,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
           ],
         ),
       ),
@@ -231,22 +238,54 @@ class _LoginFormState extends State<LoginForm> {
     );
   }
 
-  Future<void> signInWithApple() async {
-    try {
-      final credential = await SignInWithApple.getAppleIDCredential(
-        scopes: [
-          AppleIDAuthorizationScopes.email,
-          AppleIDAuthorizationScopes.fullName,
-        ],
-        webAuthenticationOptions: WebAuthenticationOptions(
-          clientId: 'your_client_id_here',
-          redirectUri: Uri.parse('your_redirect_uri_here'),
-        ),
-      );
+  void logIn() async {
+    final AuthorizationResult result = await AppleSignIn.performRequests([
+      const AppleIdRequest(requestedScopes: [Scope.email, Scope.fullName])
+    ]);
 
-      // Use the credential data to authenticate the user
-    } catch (e) {
-      // Handle sign-in errors
+    switch (result.status) {
+      case AuthorizationStatus.authorized:
+        print('success');
+        break;
+
+      case AuthorizationStatus.error:
+        print('Sign in failed 😿');
+        break;
+
+      case AuthorizationStatus.cancelled:
+        print('User cancelled');
+        break;
+    }
+  }
+
+  void checkLoggedInState() async {
+    final userId = await FlutterSecureStorage().read(key: 'userId');
+    if (userId == null) {
+      print('No stored user ID');
+      return;
+    }
+
+    final credentialState = await AppleSignIn.getCredentialState(userId);
+    switch (credentialState.status) {
+      case CredentialStatus.authorized:
+        print('getCredentialState returned authorized');
+        break;
+
+      case CredentialStatus.error:
+        print('error');
+        break;
+
+      case CredentialStatus.revoked:
+        print('getCredentialState returned revoked');
+        break;
+
+      case CredentialStatus.notFound:
+        print('getCredentialState returned not found');
+        break;
+
+      case CredentialStatus.transferred:
+        print('getCredentialState returned not transferred');
+        break;
     }
   }
 }

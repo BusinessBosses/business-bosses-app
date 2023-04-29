@@ -35,12 +35,12 @@ class _CodeVerificationScreenState extends State<CodeVerificationScreen> {
           title: const Text('Code Verification'),
         ),
         body: SingleChildScrollView(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(20.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                padding: const EdgeInsets.all(16.0),
+                padding: const EdgeInsets.all(20.0),
                 width: double.infinity,
                 child: Text(
                   'Business\nBosses',
@@ -48,7 +48,7 @@ class _CodeVerificationScreenState extends State<CodeVerificationScreen> {
                   style: Theme.of(context).textTheme.titleLarge?.copyWith(
                         fontWeight: FontWeight.w900,
                         fontSize: 28.0,
-                        color: Theme.of(context).primaryColor,
+                        color: primaryColorLT,
                       ),
                 ),
               ),

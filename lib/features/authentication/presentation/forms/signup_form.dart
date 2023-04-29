@@ -1,20 +1,23 @@
 import 'dart:io';
 
-import 'package:business_bosses_v2/features/authentication/controller/auth_controller.dart';
+import 'package:apple_sign_in_safety/apple_sign_in.dart';
+import 'package:apple_sign_in_safety/apple_sign_in_button.dart';
+import 'package:business_bosses_v2/common/widgets/buttons/custom_button.dart'
+    as custombuttom;
 import 'package:country_picker/country_picker.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
-import '../../../../common/widgets/buttons/custom_button.dart';
 import '../../../../common/widgets/buttons/icon_text_button.dart';
 import '../../../../common/widgets/text_widget.dart';
-import '../../../../navigation/routes.dart';
-import '../../../../utils/constants/constants.dart';
-import '../../../../utils/theme/theme.dart';
 import '../../../../functions/validators/phone_input.dart';
 import '../../../../functions/validators/validator.dart';
+import '../../../../utils/constants/constants.dart';
+import '../../../../utils/theme/theme.dart';
+import '../../controller/auth_controller.dart';
 
 /// SignUp Form Main
 class SignUpForm extends StatefulWidget {
@@ -157,7 +160,7 @@ class _SignUpFormState extends State<SignUpForm> {
 
           agreementText(context),
           const SizedBox(height: 24.0),
-          CustomButton(
+          custombuttom.CustomButton(
             label: 'Sign Up',
             onPressed: () {
               // print(countryCode + _authCred);
@@ -182,7 +185,7 @@ class _SignUpFormState extends State<SignUpForm> {
               }
             },
             isProcessing: _isProcessing,
-            buttonType: ButtonType.elevated,
+            buttonType: custombuttom.ButtonType.elevated,
           ),
 
           const SizedBox(height: 20.0),
@@ -258,28 +261,36 @@ class _SignUpFormState extends State<SignUpForm> {
           ),
           const SizedBox(height: 10.0),
           if (Platform.isIOS)
-            OutlinedButton(
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
-                side: MaterialStateProperty.all(BorderSide.none),
-              ),
-              onPressed: () async {
-                setState(() {
-                  _isProcessing = false;
-                });
-              },
-              child: IconTextButton(
-                backgroundColor: Colors.transparent,
-                label: 'Sign up with Apple',
-                labelColor: Colors.white,
-                onPressed: () async {},
-                borderRadius: BorderRadius.circular(20.0),
-                icon: SvgPicture.asset(
-                  'assets/svgs/applelogo.svg',
-                  height: 24,
+            Stack(
+              children: [
+                IconTextButton(
+                  backgroundColor: Colors.black,
+                  label: 'Sign in with Apple',
+                  labelColor: Colors.white,
+                  onPressed: logIn,
+                  borderRadius: BorderRadius.circular(10.0),
+                  icon: SvgPicture.asset(
+                    'assets/svgs/applelogo.svg',
+                    height: 24,
+                  ),
                 ),
-              ),
-            )
+                Container(
+                  color: Colors.transparent,
+                  child: SizedBox(
+                    height: 57,
+                    child: Container(
+                      color: Colors.transparent,
+                      child: AppleSignInButton(
+                        cornerRadius: 10,
+                        type: ButtonType.defaultButton,
+                        style: ButtonStyleApple.black,
+                        onPressed: logIn,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
 
           // agreeAndJoin(context),
         ],
@@ -373,5 +384,56 @@ class _SignUpFormState extends State<SignUpForm> {
         behavior: SnackBarBehavior.floating,
       ),
     );
+  }
+
+  void logIn() async {
+    final AuthorizationResult result = await AppleSignIn.performRequests([
+      const AppleIdRequest(requestedScopes: [Scope.email, Scope.fullName])
+    ]);
+
+    switch (result.status) {
+      case AuthorizationStatus.authorized:
+        print('success');
+        break;
+
+      case AuthorizationStatus.error:
+        print('Sign in failed 😿');
+        break;
+
+      case AuthorizationStatus.cancelled:
+        print('User cancelled');
+        break;
+    }
+  }
+
+  void checkLoggedInState() async {
+    final userId = await FlutterSecureStorage().read(key: 'userId');
+    if (userId == null) {
+      print('No stored user ID');
+      return;
+    }
+
+    final credentialState = await AppleSignIn.getCredentialState(userId);
+    switch (credentialState.status) {
+      case CredentialStatus.authorized:
+        print('getCredentialState returned authorized');
+        break;
+
+      case CredentialStatus.error:
+        print('error');
+        break;
+
+      case CredentialStatus.revoked:
+        print('getCredentialState returned revoked');
+        break;
+
+      case CredentialStatus.notFound:
+        print('getCredentialState returned not found');
+        break;
+
+      case CredentialStatus.transferred:
+        print('getCredentialState returned not transferred');
+        break;
+    }
   }
 }
