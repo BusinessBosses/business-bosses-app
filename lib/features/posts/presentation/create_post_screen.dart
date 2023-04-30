@@ -69,103 +69,110 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
           body: GestureDetector(
             onTap: () => unFocusKeyboard(context),
             child: SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: Column(
-                  children: <Widget>[
-                    const SizedBox(
-                      width: double.infinity,
-                      height: 20,
-                      child: ColoredBox(color: backgroundcolorinterface),
-                    ),
-                    const UserDetailsWidget(),
-                    TextInput(
-                      onDetectionTyped: (String text) {
-                        List<UserModel> filterUser =
-                            controller.filterUsers(text);
+              child: Column(
+                children: <Widget>[
+                  const SizedBox(
+                    width: double.infinity,
+                    height: 20,
+                    child: ColoredBox(color: backgroundcolorinterface),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                    child: Column(
+                      children: [
+                        UserDetailsWidget(),
+                        TextInput(
+                          onDetectionTyped: (String text) {
+                            List<UserModel> filterUser =
+                                controller.filterUsers(text);
 
-                        setState(() {});
+                            setState(() {});
 
-                        if (_overlayEntry != null) {
-                          _overlayEntry?.remove();
-                        }
-                        _overlayEntry = OverlayEntry(
-                          builder: (BuildContext context) {
-                            return OverlayUsersItems(
-                              initialText: text,
-                              users: filterUser,
-                              onClose: () {
-                                _titleCtrl.text = '${_titleCtrl.text} ';
-                                _titleCtrl.selection =
-                                    TextSelection.fromPosition(
-                                  TextPosition(offset: _titleCtrl.text.length),
+                            if (_overlayEntry != null) {
+                              _overlayEntry?.remove();
+                            }
+                            _overlayEntry = OverlayEntry(
+                              builder: (BuildContext context) {
+                                return OverlayUsersItems(
+                                  initialText: text,
+                                  users: filterUser,
+                                  onClose: () {
+                                    _titleCtrl.text = '${_titleCtrl.text} ';
+                                    _titleCtrl.selection =
+                                        TextSelection.fromPosition(
+                                      TextPosition(
+                                          offset: _titleCtrl.text.length),
+                                    );
+                                    _overlayEntry = null;
+                                    setState(() {});
+                                  },
+                                  onTap: (UserModel u) {
+                                    String te = _titleCtrl.text.trim();
+                                    List<String> allWords = <String>[];
+                                    allWords = te.split(' ');
+                                    allWords.removeAt(allWords.length - 1);
+                                    allWords.add('@${u.username}');
+                                    te = '';
+                                    for (int i = 0; i < allWords.length; i++) {
+                                      te = '$te${allWords[i]} ';
+                                    }
+
+                                    _titleCtrl.clear();
+
+                                    _titleCtrl.text = te;
+                                    _titleCtrl.selection =
+                                        TextSelection.fromPosition(
+                                      TextPosition(
+                                          offset: _titleCtrl.text.length),
+                                    );
+                                    setState(() {});
+                                  },
                                 );
-                                _overlayEntry = null;
-                                setState(() {});
-                              },
-                              onTap: (UserModel u) {
-                                String te = _titleCtrl.text.trim();
-                                List<String> allWords = <String>[];
-                                allWords = te.split(' ');
-                                allWords.removeAt(allWords.length - 1);
-                                allWords.add('@${u.username}');
-                                te = '';
-                                for (int i = 0; i < allWords.length; i++) {
-                                  te = '$te${allWords[i]} ';
-                                }
-
-                                _titleCtrl.clear();
-
-                                _titleCtrl.text = te;
-                                _titleCtrl.selection =
-                                    TextSelection.fromPosition(
-                                  TextPosition(offset: _titleCtrl.text.length),
-                                );
-                                setState(() {});
                               },
                             );
+                            Overlay.of(context).insert(_overlayEntry);
+                            setState(() {});
                           },
-                        );
-                        Overlay.of(context).insert(_overlayEntry);
-                        setState(() {});
-                      },
-                      titleController: _titleCtrl,
-                      onDetectionFinished: onDetectionFinished,
+                          titleController: _titleCtrl,
+                          onDetectionFinished: onDetectionFinished,
+                        ),
+                      ],
                     ),
-                    const SizedBox(
-                      height: 10,
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  AddImageWidget(controller: controller),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  if (controller.imageFileList.isNotEmpty)
+                    Preview(controller: controller),
+                  const SizedBox(
+                    width: double.infinity,
+                    height: 1,
+                    child: ColoredBox(color: backgroundcolorinterface),
+                  ),
+                  PromoteSection(controller: controller),
+                  const SizedBox(
+                    width: double.infinity,
+                    height: 1,
+                    child: ColoredBox(color: backgroundcolorinterface),
+                  ),
+                  Padding(
+                    padding:
+                        const EdgeInsets.only(left: 20, right: 20, top: 20),
+                    child: CustomButton(
+                      buttonType: ButtonType.elevated,
+                      label: 'Post',
+                      onPressed: () {},
+                      isProcessing: false,
                     ),
-                    AddImageWidget(controller: controller),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    if (controller.imageFileList.isNotEmpty)
-                      Preview(controller: controller),
-                    const SizedBox(
-                      width: double.infinity,
-                      height: 1,
-                      child: ColoredBox(color: backgroundcolorinterface),
-                    ),
-                    PromoteSection(controller: controller),
-                    const SizedBox(
-                      width: double.infinity,
-                      height: 1,
-                      child: ColoredBox(color: backgroundcolorinterface),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 15, right: 15),
-                      child: CustomButton(
-                        buttonType: ButtonType.elevated,
-                        label: 'Post',
-                        onPressed: () {},
-                        isProcessing: false,
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 50,
-                    )
-                  ],
-                ),
+                  ),
+                  const SizedBox(
+                    height: 50,
+                  )
+                ],
               ),
             ),
           ),

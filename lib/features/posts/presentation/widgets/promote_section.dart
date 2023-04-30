@@ -43,13 +43,13 @@ class PromoteSection extends StatelessWidget {
         ),
         if (controller.shouldPromote.value)
           Padding(
-            padding: const EdgeInsets.only(left: 20.0, right: 20),
+            padding: const EdgeInsets.only(left: 20.0, right: 20, bottom: 20),
             child: Stack(
               children: <Widget>[
                 ClipRRect(
                   borderRadius: BorderRadius.circular(10),
                   child: Image.asset(
-                    'assets/images/boost_banner.png',
+                    'assets/images/boostbanner.png',
                     width: size.width,
                     height: size.width / 2,
                     fit: BoxFit.cover,

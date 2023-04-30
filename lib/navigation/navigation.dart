@@ -3,6 +3,7 @@
 import 'package:business_bosses_v2/features/authentication/presentation/login_screen.dart';
 import 'package:business_bosses_v2/features/authentication/presentation/register_screen.dart';
 import 'package:business_bosses_v2/features/authentication/presentation/code_verification_screen.dart';
+import 'package:business_bosses_v2/features/moreinfoscreens/bossuppartner.dart';
 import 'package:business_bosses_v2/features/posts/presentation/create_post_screen.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 
@@ -27,6 +28,11 @@ class Nav {
     GetPage(
       name: Routes.createPost,
       page: () => const CreatePostScreen(),
+    ),
+
+    GetPage(
+      name: Routes.bossuppartner,
+      page: () => const Bossuppartner(),
     ),
   ];
 }

@@ -1,14 +1,17 @@
-import 'package:business_bosses_v2/common/widgets/buttons/custom_button.dart';
+import 'dart:io';
+import 'package:apple_sign_in_safety/apple_sign_in.dart';
+import 'package:business_bosses_v2/common/widgets/buttons/custom_button.dart'
+    as custombuttom;
 import 'package:business_bosses_v2/common/widgets/text_widget.dart'
     show TextWidget;
 import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/svg.dart';
-
 import '../../../../common/widgets/buttons/icon_text_button.dart';
-import '../../../../utils/theme/theme.dart';
 import '../../../../functions/validators/phone_input.dart';
 import '../../../../functions/validators/validator.dart';
+import '../../../../utils/theme/theme.dart';
 
 class LoginForm extends StatefulWidget {
   const LoginForm({super.key});
@@ -126,12 +129,12 @@ class _LoginFormState extends State<LoginForm> {
             ),
             const SizedBox(height: 30.0),
 
-            CustomButton(
+            custombuttom.CustomButton(
               margin: const EdgeInsets.all(2.0),
               label: 'Login',
               onPressed: () {},
               isProcessing: _isProcessing,
-              buttonType: ButtonType.elevated,
+              buttonType: custombuttom.ButtonType.elevated,
               child: Container(),
             ),
             const SizedBox(height: 20.0),
@@ -163,48 +166,49 @@ class _LoginFormState extends State<LoginForm> {
             OutlinedButton(
               onPressed: () {},
               child: IconTextButton(
-                backgroundColor: Colors.transparent,
-                label: 'Sign in with Google',
-                labelColor: textColor,
-                onPressed: () async {},
-                borderRadius: BorderRadius.circular(20.0),
-                icon: Icons.search,
-              ),
+                  backgroundColor: Colors.transparent,
+                  label: 'Sign in with Google',
+                  labelColor: textColor,
+                  onPressed: () async {},
+                  borderRadius: BorderRadius.circular(20.0),
+                  icon: SvgPicture.asset(
+                    'assets/svgs/googleicon.svg',
+                    height: 24,
+                  )),
             ),
             const SizedBox(height: 10.0),
-            // if (Platform.isIOS)
-            //   SignInWithAppleButton(
-            //     onPressed: () async {
-            //       final MyResponse res = await MyFirebase().signInWithApple();
-            //       // print(res.);
-            //       if (res.success) {
-            //         if (res.message == "newUser") {
-            //           MyUser user = MyUser(
-            //             username: res.data.user.displayName,
-            //             uid: _firebase.uid,
-            //             email: res.data.user.email,
-            //             timestamp: DateTime.now().millisecondsSinceEpoch,
-            //             deviceTokens:
-            //                 _deviceToken != null ? [_deviceToken] : [],
-            //           );
-            //           _onJoinedDefault(_firebase.uid);
-            //           _createUser(user);
-            //         } else {
-            //           _checkProfile();
-            //         }
-            //       } else {
-            //         debugPrint("===========>>> ${res.message}");
-            //         showSnackBar(
-            //           context,
-            //           message:
-            //               'OOPS! Something went wrong. Check internet connection and try again.',
-            //         );
-            //         setState(() {
-            //           _isProcessing = false;
-            //         });
-            //       }
-            //     },
-            //   ),
+
+            if (Platform.isIOS)
+              Stack(
+                children: [
+                  IconTextButton(
+                    backgroundColor: Colors.black,
+                    label: 'Sign in with Apple',
+                    labelColor: Colors.white,
+                    onPressed: logIn,
+                    borderRadius: BorderRadius.circular(10.0),
+                    icon: SvgPicture.asset(
+                      'assets/svgs/applelogo.svg',
+                      height: 24,
+                    ),
+                  ),
+                  Container(
+                    color: Colors.transparent,
+                    child: SizedBox(
+                      height: 57,
+                      child: Container(
+                        color: Colors.transparent,
+                        child: AppleSignInButton(
+                          cornerRadius: 10,
+                          type: ButtonType.defaultButton,
+                          style: ButtonStyleApple.black,
+                          onPressed: logIn,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
           ],
         ),
       ),
@@ -232,5 +236,56 @@ class _LoginFormState extends State<LoginForm> {
         ),
       ),
     );
+  }
+
+  void logIn() async {
+    final AuthorizationResult result = await AppleSignIn.performRequests([
+      const AppleIdRequest(requestedScopes: [Scope.email, Scope.fullName])
+    ]);
+
+    switch (result.status) {
+      case AuthorizationStatus.authorized:
+        print('success');
+        break;
+
+      case AuthorizationStatus.error:
+        print('Sign in failed 😿');
+        break;
+
+      case AuthorizationStatus.cancelled:
+        print('User cancelled');
+        break;
+    }
+  }
+
+  void checkLoggedInState() async {
+    final userId = await FlutterSecureStorage().read(key: 'userId');
+    if (userId == null) {
+      print('No stored user ID');
+      return;
+    }
+
+    final credentialState = await AppleSignIn.getCredentialState(userId);
+    switch (credentialState.status) {
+      case CredentialStatus.authorized:
+        print('getCredentialState returned authorized');
+        break;
+
+      case CredentialStatus.error:
+        print('error');
+        break;
+
+      case CredentialStatus.revoked:
+        print('getCredentialState returned revoked');
+        break;
+
+      case CredentialStatus.notFound:
+        print('getCredentialState returned not found');
+        break;
+
+      case CredentialStatus.transferred:
+        print('getCredentialState returned not transferred');
+        break;
+    }
   }
 }
