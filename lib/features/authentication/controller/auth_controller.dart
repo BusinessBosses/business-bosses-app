@@ -1,8 +1,7 @@
 import 'dart:math';
 
-import 'package:async/src/result/result.dart';
 import 'package:business_bosses_v2/features/authentication/presentation/code_verification_screen.dart';
-import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:sendgrid_mailer/sendgrid_mailer.dart';
@@ -39,7 +38,7 @@ class AuthController extends GetxController {
       templateId: dotenv.env['SENDGRID_TEMPLATE_ID'],
       customArgs: {'username': userName, 'otp': code.toString()},
     );
-    mailer.send(email).then((Result<void> result) {
+    mailer.send(email).then((result) {
       if (result.isError) {
         onError();
       } else {

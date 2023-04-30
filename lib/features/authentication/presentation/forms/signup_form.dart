@@ -43,9 +43,10 @@ class _SignUpFormState extends State<SignUpForm> {
     });
   }
 
+  bool _isProcessing = false;
+
   @override
   Widget build(BuildContext context) {
-    bool _isProcessing = false;
     return Form(
       key: _formKey,
       autovalidateMode: _autoValidateMode,
@@ -162,11 +163,20 @@ class _SignUpFormState extends State<SignUpForm> {
               if (agreedToTerms) {
                 setState(() {
                   _autoValidateMode = AutovalidateMode.always;
+                  _isProcessing = true;
                 });
                 _authController.sendOtp(
                     emailAddress: _authCred!,
                     userName: _username!,
-                    onError: () {});
+                    onError: () {
+                      setState(() {
+                        _isProcessing = false;
+                      });
+                    });
+                setState(() {
+                  _isProcessing = false;
+                });
+
                 // Get.toNamed(Routes.codeVerification);
                 // if (isEmailAuth) {
                 // _setUpReferral();
