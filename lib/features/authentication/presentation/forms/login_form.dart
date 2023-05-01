@@ -245,15 +245,12 @@ class _LoginFormState extends State<LoginForm> {
 
     switch (result.status) {
       case AuthorizationStatus.authorized:
-        print('success');
         break;
 
       case AuthorizationStatus.error:
-        print('Sign in failed 😿');
         break;
 
       case AuthorizationStatus.cancelled:
-        print('User cancelled');
         break;
     }
   }
@@ -261,30 +258,24 @@ class _LoginFormState extends State<LoginForm> {
   void checkLoggedInState() async {
     final userId = await FlutterSecureStorage().read(key: 'userId');
     if (userId == null) {
-      print('No stored user ID');
       return;
     }
 
     final credentialState = await AppleSignIn.getCredentialState(userId);
     switch (credentialState.status) {
       case CredentialStatus.authorized:
-        print('getCredentialState returned authorized');
         break;
 
       case CredentialStatus.error:
-        print('error');
         break;
 
       case CredentialStatus.revoked:
-        print('getCredentialState returned revoked');
         break;
 
       case CredentialStatus.notFound:
-        print('getCredentialState returned not found');
         break;
 
       case CredentialStatus.transferred:
-        print('getCredentialState returned not transferred');
         break;
     }
   }

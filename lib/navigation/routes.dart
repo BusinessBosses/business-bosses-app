@@ -24,5 +24,7 @@ class Routes {
   static const String settings = '/settingsScreen';
   static const String notifications = '/notificationsScreen';
   static const String onboarding = '/onboardingScreen';
-  static const String bossuppartner = '/bossuppartnerScreen';
+  static const String bossuppartner = '/bossuppartner';
+  static const String promotionscreen = '/promotionScreen';
+  static const String analysescreen = '/analyseScreen';
 }
