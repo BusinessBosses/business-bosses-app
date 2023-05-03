@@ -84,7 +84,6 @@ class CustomButton extends StatelessWidget {
                                   label!,
                                   style: headline6.copyWith(
                                     fontWeight: FontWeight.bold,
-                                    fontSize: 18,
                                     color: Colors.white,
                                   ),
                                 )

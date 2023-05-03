@@ -1,23 +1,19 @@
-import 'dart:io';
-
-import 'package:apple_sign_in_safety/apple_sign_in.dart';
-import 'package:apple_sign_in_safety/apple_sign_in_button.dart';
-import 'package:business_bosses_v2/common/widgets/buttons/custom_button.dart'
-    as custombuttom;
 import 'package:country_picker/country_picker.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
+import '../../../../common/widgets/buttons/custom_button.dart';
 import '../../../../common/widgets/buttons/icon_text_button.dart';
 import '../../../../common/widgets/text_widget.dart';
-import '../../../../functions/validators/phone_input.dart';
-import '../../../../functions/validators/validator.dart';
+import '../../../../navigation/routes.dart';
 import '../../../../utils/constants/constants.dart';
 import '../../../../utils/theme/theme.dart';
-import '../../controller/auth_controller.dart';
+import '../../../../utils/validators/phone_input.dart';
+import '../../../../utils/validators/validator.dart';
 
 /// SignUp Form Main
 class SignUpForm extends StatefulWidget {
@@ -29,7 +25,6 @@ class SignUpForm extends StatefulWidget {
 }
 
 class _SignUpFormState extends State<SignUpForm> {
-  final AuthController _authController = Get.put(AuthController());
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   AutovalidateMode _autoValidateMode = AutovalidateMode.disabled;
   String? _username, _authCred, _password;
@@ -65,8 +60,17 @@ class _SignUpFormState extends State<SignUpForm> {
               TextFormField(
                 onChanged: (String val) {
                   _username = val;
+                  bool? result =
+                      Validator.isUniqueUsername(val, _usersToCompareUsername);
+
+                  setState(() {
+                    _isUniqueName = result!;
+                  });
                 },
-                validator: (String? val) => Validator.usernameValidator(val!),
+                validator: (String? val) => Validator.usernameValidator(
+                  val!,
+                  isUnique: _isUniqueName,
+                ),
                 keyboardType: TextInputType.name,
                 textInputAction: TextInputAction.next,
                 decoration: inputDecoration.copyWith(
@@ -90,7 +94,7 @@ class _SignUpFormState extends State<SignUpForm> {
                     filled: true,
                     fillColor: const Color(0xffF4F4F4)),
               ),
-              const SizedBox(height: 15.0),
+              const SizedBox(height: 24.0),
               TextWidget(
                 text: isEmailAuth ? 'Email' : 'Phone',
                 size: 0,
@@ -160,7 +164,7 @@ class _SignUpFormState extends State<SignUpForm> {
 
           agreementText(context),
           const SizedBox(height: 24.0),
-          custombuttom.CustomButton(
+          CustomButton(
             label: 'Sign Up',
             onPressed: () {
               // print(countryCode + _authCred);
@@ -168,11 +172,7 @@ class _SignUpFormState extends State<SignUpForm> {
                 setState(() {
                   _autoValidateMode = AutovalidateMode.always;
                 });
-                _authController.sendOtp(
-                    emailAddress: _authCred!,
-                    userName: _username!,
-                    onError: () {});
-                // Get.toNamed(Routes.codeVerification);
+                Get.toNamed(Routes.codeVerification);
                 // if (isEmailAuth) {
                 // _setUpReferral();
                 // } else {
@@ -185,7 +185,7 @@ class _SignUpFormState extends State<SignUpForm> {
               }
             },
             isProcessing: _isProcessing,
-            buttonType: custombuttom.ButtonType.elevated,
+            buttonType: ButtonType.elevated,
           ),
 
           const SizedBox(height: 20.0),
@@ -218,79 +218,81 @@ class _SignUpFormState extends State<SignUpForm> {
           OutlinedButton(
             onPressed: () {},
             child: IconTextButton(
-                label: 'Sign up with Google',
-                onPressed: () async {
-                  setState(() {
-                    _isProcessing = true;
-                  });
+              label: 'Sign up with Google',
+              onPressed: () async {
+                setState(() {
+                  _isProcessing = true;
+                });
 
-                  // print(res.);
-                  // if (res.success) {
-                  //   if (res.message == "newUser") {
-                  //     MyUser user = MyUser(
-                  //       username: res.data.user.displayName,
-                  //       uid: _firebase.uid,
-                  //       email: res.data.user.email,
-                  //       gender: _gender,
-                  //       ageRange: _ageRange,
-                  //       timestamp: DateTime.now().millisecondsSinceEpoch,
-                  //       deviceTokens: _deviceToken != null ? [_deviceToken] : [],
-                  //     );
-                  //     _onJoinedDefault(_firebase.uid);
-                  //     _createUser(user);
-                  //   } else {
-                  //     _checkProfile();
-                  //   }
-                  // } else {
-                  //   debugPrint("===========>>> ${res.message}");
-                  //   showSnackBar(
-                  //     context,
-                  //     message:
-                  //         'OOPS! Something went wrong. Check internet connection and try again.',
-                  //   );
-                  //   setState(() {
-                  //     _isProcessing = false;
-                  //   });
-                  // }
-                },
-                borderRadius: BorderRadius.circular(20),
-                icon: SvgPicture.asset(
-                  'assets/svgs/googleicon.svg',
-                  height: 24,
-                )),
+                // print(res.);
+                // if (res.success) {
+                //   if (res.message == "newUser") {
+                //     MyUser user = MyUser(
+                //       username: res.data.user.displayName,
+                //       uid: _firebase.uid,
+                //       email: res.data.user.email,
+                //       gender: _gender,
+                //       ageRange: _ageRange,
+                //       timestamp: DateTime.now().millisecondsSinceEpoch,
+                //       deviceTokens: _deviceToken != null ? [_deviceToken] : [],
+                //     );
+                //     _onJoinedDefault(_firebase.uid);
+                //     _createUser(user);
+                //   } else {
+                //     _checkProfile();
+                //   }
+                // } else {
+                //   debugPrint("===========>>> ${res.message}");
+                //   showSnackBar(
+                //     context,
+                //     message:
+                //         'OOPS! Something went wrong. Check internet connection and try again.',
+                //   );
+                //   setState(() {
+                //     _isProcessing = false;
+                //   });
+                // }
+              },
+              borderRadius: BorderRadius.circular(20),
+              icon: Icons.search,
+            ),
           ),
           const SizedBox(height: 10.0),
-          if (Platform.isIOS)
-            Stack(
-              children: [
-                IconTextButton(
-                  backgroundColor: Colors.black,
-                  label: 'Sign in with Apple',
-                  labelColor: Colors.white,
-                  onPressed: logIn,
-                  borderRadius: BorderRadius.circular(10.0),
-                  icon: SvgPicture.asset(
-                    'assets/svgs/applelogo.svg',
-                    height: 24,
-                  ),
-                ),
-                Container(
-                  color: Colors.transparent,
-                  child: SizedBox(
-                    height: 57,
-                    child: Container(
-                      color: Colors.transparent,
-                      child: AppleSignInButton(
-                        cornerRadius: 10,
-                        type: ButtonType.defaultButton,
-                        style: ButtonStyleApple.black,
-                        onPressed: logIn,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
+          // if (Platform.isIOS)
+          //   SignInWithAppleButton(
+          //     text: 'Sign up with Apple',
+          //     onPressed: () async {
+          //       final MyResponse res = await MyFirebase().signInWithApple();
+          //       // print(res.);
+          //       if (res.success) {
+          //         if (res.message == "newUser") {
+          //           MyUser user = MyUser(
+          //             username: res.data.user.displayName,
+          //             uid: _firebase.uid,
+          //             email: res.data.user.email,
+          //             gender: _gender,
+          //             ageRange: _ageRange,
+          //             timestamp: DateTime.now().millisecondsSinceEpoch,
+          //             deviceTokens: _deviceToken != null ? [_deviceToken] : [],
+          //           );
+          //           _onJoinedDefault(_firebase.uid);
+          //           _createUser(user);
+          //         } else {
+          //           _checkProfile();
+          //         }
+          //       } else {
+          //         debugPrint("===========>>> ${res.message}");
+          //         showSnackBar(
+          //           context,
+          //           message:
+          //               'OOPS! Something went wrong. Check internet connection and try again.',
+          //         );
+          //         setState(() {
+          //           _isProcessing = false;
+          //         });
+          //       }
+          //     },
+          //   ),
 
           // agreeAndJoin(context),
         ],
@@ -384,56 +386,5 @@ class _SignUpFormState extends State<SignUpForm> {
         behavior: SnackBarBehavior.floating,
       ),
     );
-  }
-
-  void logIn() async {
-    final AuthorizationResult result = await AppleSignIn.performRequests([
-      const AppleIdRequest(requestedScopes: [Scope.email, Scope.fullName])
-    ]);
-
-    switch (result.status) {
-      case AuthorizationStatus.authorized:
-        print('success');
-        break;
-
-      case AuthorizationStatus.error:
-        print('Sign in failed 😿');
-        break;
-
-      case AuthorizationStatus.cancelled:
-        print('User cancelled');
-        break;
-    }
-  }
-
-  void checkLoggedInState() async {
-    final userId = await FlutterSecureStorage().read(key: 'userId');
-    if (userId == null) {
-      print('No stored user ID');
-      return;
-    }
-
-    final credentialState = await AppleSignIn.getCredentialState(userId);
-    switch (credentialState.status) {
-      case CredentialStatus.authorized:
-        print('getCredentialState returned authorized');
-        break;
-
-      case CredentialStatus.error:
-        print('error');
-        break;
-
-      case CredentialStatus.revoked:
-        print('getCredentialState returned revoked');
-        break;
-
-      case CredentialStatus.notFound:
-        print('getCredentialState returned not found');
-        break;
-
-      case CredentialStatus.transferred:
-        print('getCredentialState returned not transferred');
-        break;
-    }
   }
 }
