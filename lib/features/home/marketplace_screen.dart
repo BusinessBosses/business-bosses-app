@@ -18,12 +18,12 @@ class MarketplaceScreen extends StatefulWidget {
 }
 
 class _MarketplaceScreenState extends State<MarketplaceScreen> {
-  String _selectedCategory = '';
-  String _selectedLocation = '';
+  String? _selectedCategory;
+  String? _selectedLocation;
   final bool _isSearching = false;
-  String filterCode = '';
-  String filterLocation = '';
-  String filterCategory = '';
+  String? filterCode;
+  String? filterLocation;
+  String? filterCategory;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -92,8 +92,8 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                           _selectedCategory = newValue!;
                                         });
                                       },
-                                      items: <String>[
-                                        '',
+                                      items: <String?>[
+                                        null,
                                         'Home, Garden & Outdoors',
                                         'Fashion & Beauty',
                                         'Sports & Entertainment',
@@ -107,10 +107,10 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                         'Business Services & Events',
                                         'Other',
                                       ].map<DropdownMenuItem<String>>(
-                                          (String value) {
+                                          (String? value) {
                                         return DropdownMenuItem<String>(
                                           value: value,
-                                          child: value != ''
+                                          child: value != null
                                               ? Text(
                                                   value,
                                                 )
@@ -141,8 +141,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                         style: const TextStyle(fontSize: 20),
                                       ),
                                     ),
-                                    initialSelection:
-                                        filterCode == '' ? 'GB' : filterCode,
+                                    initialSelection: filterCode ?? 'GB',
                                     // pickerBuilder: (BuildContext context,
                                     //     CountryCode countryCode) {
                                     //   return Container(
@@ -182,11 +181,11 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                 child: const Text('Reset'),
                                 onPressed: () {
                                   setState(() {
-                                    filterLocation = '';
-                                    filterCode = '';
-                                    filterCategory = '';
-                                    _selectedLocation = '';
-                                    _selectedCategory = '';
+                                    filterLocation = null;
+                                    filterCode = null;
+                                    filterCategory = null;
+                                    _selectedLocation = null;
+                                    _selectedCategory = null;
                                     Navigator.of(context).pop();
                                   });
                                 },
