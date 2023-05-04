@@ -1,25 +1,44 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:get/get.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
 import '../../../utils/theme/theme.dart';
 
 /// VERIFY CODE AFTER SIGNUP
 class CodeVerificationScreen extends StatefulWidget {
-  /// KEY CONSTRUCTOR
-  const CodeVerificationScreen({Key? key, required this.otp}) : super(key: key);
-  final String otp;
+  /// VERIFY CODE AFTER SIGNUP
+  const CodeVerificationScreen({
+    super.key,
+    // required this.verififationType,
+    // this.otp = "",
+    // required this.authCred,
+    // required this.deviceToken,
+    // required this.checkProfile,
+    // required this.createUser,
+    // required this.onJoinDefault,
+    // this.password = ''
+  });
+  // final VerififationType verififationType;
+  // final String otp;
+  // final String authCred;
+  // final String deviceToken;
+  // final Function onJoinDefault;
+  // final Function createUser;
+  // final Function checkProfile;
+  // final String password;
+
   @override
   State<CodeVerificationScreen> createState() => _CodeVerificationScreenState();
 }
 
 class _CodeVerificationScreenState extends State<CodeVerificationScreen> {
   String currentText = "";
-  bool _isProcessing = false;
 
   @override
   Widget build(BuildContext context) {
+    bool _isProcessing = false;
     return AbsorbPointer(
       absorbing: _isProcessing,
       child: Scaffold(
@@ -104,13 +123,7 @@ class _CodeVerificationScreenState extends State<CodeVerificationScreen> {
                 width: double.infinity,
                 height: buttonHeight,
                 child: ElevatedButton(
-                  onPressed: () async {
-                    if (widget.otp.isNotEmpty && widget.otp == currentText) {
-                      Get.snackbar('Success', 'verified');
-                    } else {
-                      Get.snackbar('Error', 'Incorrect OTP');
-                    }
-                  },
+                  onPressed: () async {},
                   child: Text(
                     _isProcessing ? 'Verifying...' : 'Verify',
                     style: const TextStyle(
