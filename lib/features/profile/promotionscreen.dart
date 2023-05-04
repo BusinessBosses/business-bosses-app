@@ -203,7 +203,7 @@ class _PromotionScreenState extends State<PromotionScreen> {
                                   ),
                         ),
                         Text(
-                          '${_referralId ?? 'Create InviteId'} ',
+                          '$_referralId ',
                           textAlign: TextAlign.center,
                           style: Theme.of(context)
                               .textTheme
