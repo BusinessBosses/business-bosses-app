@@ -1,0 +1,201 @@
+import 'dart:core';
+
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+
+import '../../utils/theme/theme.dart';
+
+class AnalyserScreen extends StatefulWidget {
+  static const routeName = '/analyser-screen';
+
+  const AnalyserScreen({Key? key}) : super(key: key);
+
+  @override
+  _AnalyserScreenState createState() => _AnalyserScreenState();
+}
+
+class _AnalyserScreenState extends State<AnalyserScreen> {
+  bool _isInit = false;
+
+  @override
+  void didChangeDependencies() {
+    if (!_isInit) {
+      _isInit = true;
+    }
+    super.didChangeDependencies();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
+        ),
+        centerTitle: true,
+        title: const Text(
+          'Analyse',
+          textAlign: TextAlign.center,
+          style: TextStyle(fontSize: 20),
+        ),
+      ),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const SizedBox(
+            width: double.infinity,
+            height: 20,
+            child: ColoredBox(color: backgroundcolorinterface),
+          ),
+          const SizedBox(
+            height: 35,
+          ),
+          Padding(
+            padding: const EdgeInsets.only(
+              left: 20,
+            ),
+            child:
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              const Text(
+                'Hi',
+                style: TextStyle(
+                    fontSize: 25,
+                    color: textColor,
+                    fontWeight: FontWeight.w700),
+              ),
+              Text(
+                '@username',
+                style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w700,
+                    color: primaryColorLT),
+              ),
+              const SizedBox(
+                height: 5,
+              ),
+              const Text(
+                'how may I help you?',
+                style: TextStyle(fontSize: 15, fontWeight: FontWeight.w100),
+              ),
+            ]),
+          ),
+          const SizedBox(
+            height: 30,
+          ),
+          const SizedBox(
+            width: double.infinity,
+            height: 1.5,
+            child: ColoredBox(color: backgroundcolorinterface),
+          ),
+          ListTile(
+              leading: SvgPicture.asset('assets/svgs/analyze.svg'),
+              title: const Text(
+                'Analyse my Profile',
+                style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w700,
+                    color: textColor),
+              ),
+              onTap: () {},
+              trailing: SvgPicture.asset('assets/svgs/nexticon.svg')),
+          const SizedBox(
+            width: double.infinity,
+            height: 1.5,
+            child: ColoredBox(color: backgroundcolorinterface),
+          ),
+          ListTile(
+              leading: SvgPicture.asset('assets/svgs/connectrelevant.svg'),
+              title: const Text(
+                'Connect me to relevant people',
+                style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w700,
+                    color: textColor),
+              ),
+              onTap: () {},
+              trailing: SvgPicture.asset('assets/svgs/nexticon.svg')),
+          const SizedBox(
+            width: double.infinity,
+            height: 1.5,
+            child: ColoredBox(color: backgroundcolorinterface),
+          ),
+          // ListTile(
+          //     leading: SvgPicture.asset('assets/svgs/looking.svg'),
+          //     title: const Text(
+          //       'Looking for Opportunity',
+          //       style: TextStyle(
+          //           fontSize: 15,
+          //           fontWeight: FontWeight.w700,
+          //           color: textColor),
+          //     ),
+          //     onTap: () => navigateTo(
+          //           context,
+          //           routeName: OpportunitiesScreen.routeName,
+          //           arguments:
+          //               Provider.of<AppCommunities>(context, listen: false)
+          //                   .categoryById('-Mos1VMnV53H7AZa0W8q'),
+          //         ),
+          //     trailing: SvgPicture.asset('assets/svgs/nexticon.svg')),
+          // const SizedBox(
+          //   width: double.infinity,
+          //   height: 1.5,
+          //   child: ColoredBox(color: backgroundcolorinterface),
+          // ),
+          ListTile(
+              leading: SvgPicture.asset('assets/svgs/ranking.svg'),
+              title: const Text(
+                'Show my ranking',
+                style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w700,
+                    color: textColor),
+              ),
+              onTap: () {},
+              trailing: SvgPicture.asset('assets/svgs/nexticon.svg')),
+          const SizedBox(
+            width: double.infinity,
+            height: 1.5,
+            child: ColoredBox(color: backgroundcolorinterface),
+          ),
+          ListTile(
+              leading: SvgPicture.asset('assets/svgs/explore.svg'),
+              title: const Text(
+                'Explore Business Bosses',
+                style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w700,
+                    color: textColor),
+              ),
+              onTap: () {},
+              trailing: SvgPicture.asset('assets/svgs/nexticon.svg')),
+          const SizedBox(
+            width: double.infinity,
+            height: 1.5,
+            child: ColoredBox(color: backgroundcolorinterface),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class MyAnalyserItem {
+  String id;
+  String label;
+
+  MyAnalyserItem({
+    this.id = '',
+    this.label = '',
+  });
+}
+
+enum Analyser { location, industry, category }
