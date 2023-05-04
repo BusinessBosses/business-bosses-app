@@ -1,7 +1,6 @@
 // ignore_for_file: public_member_api_docs
 
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 /// APP THEME
 final ThemeData appTheme = ThemeData(
@@ -22,20 +21,15 @@ final ThemeData appTheme = ThemeData(
     // indicatorSize: TabBarIndicatorSize.label,
   ),
   hintColor: hintColor,
-  // fontFamily: 'NunitoSans',
+  fontFamily: 'NunitoSans',
   inputDecorationTheme: const InputDecorationTheme(),
   elevatedButtonTheme: elevatedButtonThemeData,
   outlinedButtonTheme: outlinedButtonThemeData,
-  textTheme: GoogleFonts.nunitoSansTextTheme(const TextTheme(
+  textTheme: const TextTheme(
     bodyLarge: bodyText1,
     bodyMedium: bodyText2,
     titleLarge: headline6,
-  )),
-  // textTheme: const TextTheme(
-  //   bodyLarge: bodyText1,
-  //   bodyMedium: bodyText2,
-  //   titleLarge: headline6,
-  // ),
+  ),
   colorScheme: ColorScheme.fromSwatch(primarySwatch: primarySwatch)
       .copyWith(background: backgroundColor),
 );

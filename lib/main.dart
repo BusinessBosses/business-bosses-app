@@ -7,12 +7,14 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   await GetStorage.init();
   await dotenv.load();
   await Firebase.initializeApp();
@@ -20,6 +22,7 @@ void main() async {
   Stripe.publishableKey =
       'pk_test_51MAcspEGsMsi6baUQ14KJlYZVcpaKiRtC5wnN42Jq3vOl68JwSahkzoiUOrOh9zGyG9nDj1bML8jOlfwMDai51Rm00vWZoIAgE';
   runApp(const MyApp());
+  FlutterNativeSplash.remove();
 }
 
 /// MAIN APP CLASS
@@ -44,7 +47,9 @@ class MyApp extends StatelessWidget {
           navigatorObservers: <NavigatorObserver>[
             AnalyticsServices.getAnalyticObserver()
           ],
-          initialRoute: userId.isEmpty ? Routes.login : Routes.bottomNavigation,
+          initialRoute: userId.isEmpty
+              ? Routes.bottomNavigation
+              : Routes.bottomNavigation,
           getPages: Nav.routes,
           debugShowCheckedModeBanner: false,
           theme: appTheme,
