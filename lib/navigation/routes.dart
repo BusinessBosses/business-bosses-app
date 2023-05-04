@@ -27,4 +27,5 @@ class Routes {
   static const String bossuppartner = '/bossuppartner';
   static const String promotionscreen = '/promotionScreen';
   static const String analysescreen = '/analyseScreen';
+
 }

@@ -1,19 +1,23 @@
+
 import 'dart:io';
 // import 'package:apple_sign_in_safety/apple_sign_in.dart';
 import 'package:business_bosses_v2/common/widgets/buttons/custom_button.dart'
     as custombuttom;
+import 'package:business_bosses_v2/common/widgets/buttons/custom_button.dart';
+
 import 'package:business_bosses_v2/common/widgets/text_widget.dart'
     show TextWidget;
 import 'package:business_bosses_v2/features/authentication/controller/auth_controller.dart';
 import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/svg.dart';
+
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
+
 import '../../../../common/widgets/buttons/icon_text_button.dart';
-import '../../../../functions/validators/phone_input.dart';
-import '../../../../functions/validators/validator.dart';
 import '../../../../utils/theme/theme.dart';
+import '../../../../utils/validators/phone_input.dart';
+import '../../../../utils/validators/validator.dart';
 
 class LoginForm extends StatefulWidget {
   const LoginForm({super.key});
@@ -131,12 +135,12 @@ class _LoginFormState extends State<LoginForm> {
             ),
             const SizedBox(height: 30.0),
 
-            custombuttom.CustomButton(
+            CustomButton(
               margin: const EdgeInsets.all(2.0),
               label: 'Login',
               onPressed: () {},
               isProcessing: _isProcessing,
-              buttonType: custombuttom.ButtonType.elevated,
+              buttonType: ButtonType.elevated,
               child: Container(),
             ),
             const SizedBox(height: 20.0),
@@ -168,17 +172,16 @@ class _LoginFormState extends State<LoginForm> {
             OutlinedButton(
               onPressed: () {},
               child: IconTextButton(
-                  backgroundColor: Colors.transparent,
-                  label: 'Sign in with Google',
-                  labelColor: textColor,
-                  onPressed: () async {},
-                  borderRadius: BorderRadius.circular(20.0),
-                  icon: SvgPicture.asset(
-                    'assets/svgs/googleicon.svg',
-                    height: 24,
-                  )),
+                backgroundColor: Colors.transparent,
+                label: 'Sign in with Google',
+                labelColor: textColor,
+                onPressed: () async {},
+                borderRadius: BorderRadius.circular(20.0),
+                icon: Icons.search,
+              ),
             ),
             const SizedBox(height: 10.0),
+
 
             if (Platform.isIOS)
               SignInWithAppleButton(onPressed: () async {
@@ -214,6 +217,40 @@ class _LoginFormState extends State<LoginForm> {
             //     ),
             //   ],
             // ),
+
+            // if (Platform.isIOS)
+            //   SignInWithAppleButton(
+            //     onPressed: () async {
+            //       final MyResponse res = await MyFirebase().signInWithApple();
+            //       // print(res.);
+            //       if (res.success) {
+            //         if (res.message == "newUser") {
+            //           MyUser user = MyUser(
+            //             username: res.data.user.displayName,
+            //             uid: _firebase.uid,
+            //             email: res.data.user.email,
+            //             timestamp: DateTime.now().millisecondsSinceEpoch,
+            //             deviceTokens:
+            //                 _deviceToken != null ? [_deviceToken] : [],
+            //           );
+            //           _onJoinedDefault(_firebase.uid);
+            //           _createUser(user);
+            //         } else {
+            //           _checkProfile();
+            //         }
+            //       } else {
+            //         debugPrint("===========>>> ${res.message}");
+            //         showSnackBar(
+            //           context,
+            //           message:
+            //               'OOPS! Something went wrong. Check internet connection and try again.',
+            //         );
+            //         setState(() {
+            //           _isProcessing = false;
+            //         });
+            //       }
+            //     },
+            //   ),
           ],
         ),
       ),
@@ -284,4 +321,5 @@ class _LoginFormState extends State<LoginForm> {
   //       break;
   //   }
   // }
+
 }

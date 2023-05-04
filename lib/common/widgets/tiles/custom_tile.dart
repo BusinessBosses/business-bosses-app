@@ -1,14 +1,23 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
 
 class CustomTile extends StatelessWidget {
+
+
+/// Custom Tile For Forums Categories GridView
+class CustomTile extends StatelessWidget {
+  /// What happens when it is tapped
+
   final Function() onTap;
 
   final String label;
   final String photo;
   final bool hideIcon;
   final bool showBorder;
+
+
+  /// Custom tile constructor
 
   const CustomTile({
     Key? key,

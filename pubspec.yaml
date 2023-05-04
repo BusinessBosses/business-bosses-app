@@ -29,6 +29,7 @@ environment:
 # versions available, run `flutter pub outdated`.
 dependencies:
   cached_network_image: ^3.2.3
+  country_list_pick: ^1.0.1+6
   country_picker: ^2.0.20
   crypto: ^3.0.3
   cupertino_icons: ^1.0.2
@@ -43,6 +44,7 @@ dependencies:
   flutter_dotenv: ^5.0.2
   flutter_linkify: ^5.0.2
   flutter_secure_storage: ^8.0.0
+  flutter_native_splash: ^2.2.19
   flutter_sticky_header: ^0.6.5
   flutter_stripe: ^9.1.1
   flutter_svg: ^2.0.5
@@ -60,6 +62,13 @@ dependencies:
   sign_in_with_apple: ^4.3.0
   social_share: ^2.3.1
   url_launcher: ^6.0.6
+  http: ^0.13.5
+  image_picker: ^0.8.7+4
+  pin_code_fields: ^7.4.0
+
+flutter_native_splash:
+  color: "#FFFFFF"
+  image: assets/images/app_logo.png
 
 dev_dependencies:
   flutter_lints: ^2.0.0
@@ -92,17 +101,17 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  # fonts:
-  #   - family: NunitoSans
-  #     fonts:
-  #       - asset: assets/fonts/NunitoSans-Regular.ttf
-  #         weight: 400
-  #       - asset: assets/fonts/NunitoSans-SemiBold.ttf
-  #         weight: 600
-  #       - asset: assets/fonts/NunitoSans-Bold.ttf
-  #         weight: 700
-  #       - asset: assets/fonts/NunitoSans-Black.ttf
-  #         weight: 900
+  fonts:
+    - family: NunitoSans
+      fonts:
+        - asset: assets/fonts/NunitoSans-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/NunitoSans-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/NunitoSans-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/NunitoSans-Black.ttf
+          weight: 900
   # fonts:
   #   - family: Schyler
   #     fonts:
