@@ -4,10 +4,13 @@ import 'package:flutter_svg/svg.dart';
 
 import '../../utils/theme/theme.dart';
 
+// ignore: public_member_api_docs
 class Bossuppartner extends StatefulWidget {
+  // ignore: public_member_api_docs
   const Bossuppartner({Key? key}) : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _BossuppartnerState createState() => _BossuppartnerState();
 }
 
@@ -59,26 +62,29 @@ class _BossuppartnerState extends State<Bossuppartner> {
           Padding(
             padding: const EdgeInsets.only(left: 20, right: 20),
             child:
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              const Text(
-                'Company name',
-                style: TextStyle(
-                    fontSize: 25,
-                    color: textColor,
-                    fontWeight: FontWeight.w700),
-              ),
-              const SizedBox(
-                height: 5,
-              ),
-              const Padding(
-                padding: EdgeInsets.only(right: 20.0),
-                child: Text(
-                  'company description',
-                  style: const TextStyle(
-                      fontSize: 15, fontWeight: FontWeight.w100),
-                ),
-              ),
-            ]),
+                // ignore: always_specify_types
+                Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: const [
+                  Text(
+                    'Company name',
+                    style: TextStyle(
+                        fontSize: 25,
+                        color: textColor,
+                        fontWeight: FontWeight.w700),
+                  ),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(right: 20.0),
+                    child: Text(
+                      'company description',
+                      style:
+                          TextStyle(fontSize: 15, fontWeight: FontWeight.w100),
+                    ),
+                  ),
+                ]),
           ),
           const SizedBox(
             height: 10,

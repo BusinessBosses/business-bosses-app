@@ -1,9 +1,14 @@
 import 'package:cached_network_image/cached_network_image.dart';
+
 import 'package:flutter/material.dart';
+
+class CustomTile extends StatelessWidget {
+
 
 /// Custom Tile For Forums Categories GridView
 class CustomTile extends StatelessWidget {
   /// What happens when it is tapped
+
   final Function() onTap;
 
   final String label;
@@ -11,7 +16,9 @@ class CustomTile extends StatelessWidget {
   final bool hideIcon;
   final bool showBorder;
 
+
   /// Custom tile constructor
+
   const CustomTile({
     Key? key,
     required this.onTap,
