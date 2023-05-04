@@ -29,10 +29,6 @@ class Nav {
       page: () => RegisterScreen(),
     ),
     GetPage(
-      name: Routes.codeVerification,
-      page: () => const CodeVerificationScreen(),
-    ),
-    GetPage(
       name: Routes.createPost,
       page: () => const CreatePostScreen(),
     ),
@@ -40,33 +36,26 @@ class Nav {
       name: Routes.myProfile,
       page: () => const MyProfileScreen(),
     ),
-
     GetPage(
       name: Routes.bossuppartner,
       page: () => const Bossuppartner(),
-     
     ),
-    
-     GetPage(
+    GetPage(
       name: Routes.bottomNavigation,
       page: () => const BottomNavScreen(),
     ),
-
     GetPage(
       name: Routes.notifications,
       page: () => NotificationsScreen(),
     ),
-
     GetPage(
       name: Routes.promotionscreen,
       page: () => const PromotionScreen(),
     ),
-
     GetPage(
       name: Routes.analysescreen,
       page: () => const AnalyserScreen(),
     ),
-
     GetPage(
       name: Routes.settings,
       page: () => const SettingsScreen(),

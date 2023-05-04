@@ -1,4 +1,3 @@
-
 import 'dart:convert';
 import 'dart:math';
 import 'dart:developer' as dartDeveloper;
@@ -94,4 +93,3 @@ class AuthController extends GetxController {
     }
   }
 }
-

@@ -1,4 +1,3 @@
-
 import 'dart:io';
 // import 'package:apple_sign_in_safety/apple_sign_in.dart';
 import 'package:business_bosses_v2/common/widgets/buttons/custom_button.dart'
@@ -182,7 +181,6 @@ class _LoginFormState extends State<LoginForm> {
             ),
             const SizedBox(height: 10.0),
 
-
             if (Platform.isIOS)
               SignInWithAppleButton(onPressed: () async {
                 AuthController().appleAuthentication();
@@ -321,5 +319,4 @@ class _LoginFormState extends State<LoginForm> {
   //       break;
   //   }
   // }
-
 }

@@ -4,6 +4,7 @@ import 'dart:io';
 // import 'package:apple_sign_in_safety/apple_sign_in_button.dart';
 import 'package:business_bosses_v2/common/widgets/buttons/custom_button.dart'
     as custombuttom;
+import 'package:business_bosses_v2/features/authentication/controller/auth_controller.dart';
 
 import 'package:country_picker/country_picker.dart';
 import 'package:flutter/gestures.dart';
@@ -182,7 +183,7 @@ class _SignUpFormState extends State<SignUpForm> {
                   _autoValidateMode = AutovalidateMode.always;
                   _isProcessing = true;
                 });
-                _authController.sendOtp(
+                AuthController().sendOtp(
                     emailAddress: _authCred!,
                     userName: _username!,
                     onError: () {
@@ -497,5 +498,4 @@ class _SignUpFormState extends State<SignUpForm> {
   //       break;
   //   }
   // }
-
 }
