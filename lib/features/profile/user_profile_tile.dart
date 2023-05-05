@@ -28,7 +28,8 @@ class UserProfileTile extends StatelessWidget {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(1000),
                     child: const NetworkImageWithPlaceHolder(
-                      imageUrl: 'user?.photoUrl',
+                      imageUrl:
+                          'https://w7.pngwing.com/pngs/831/88/png-transparent-user-profile-computer-icons-user-interface-mystique-miscellaneous-user-interface-design-smile-thumbnail.png',
                       height: 105.0,
                       width: 105.0,
                       radius: radius,

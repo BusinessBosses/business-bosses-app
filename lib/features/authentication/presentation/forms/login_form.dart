@@ -1,5 +1,6 @@
 import 'dart:io';
 // import 'package:apple_sign_in_safety/apple_sign_in.dart';
+import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/common/widgets/buttons/custom_button.dart'
     as custombuttom;
 import 'package:business_bosses_v2/common/widgets/buttons/custom_button.dart';
@@ -10,10 +11,13 @@ import 'package:business_bosses_v2/features/authentication/controller/auth_contr
 import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 import '../../../../common/widgets/buttons/icon_text_button.dart';
+import '../../../../navigation/routes.dart';
+import '../../../../services/api_service.dart';
 import '../../../../utils/theme/theme.dart';
 import '../../../../utils/validators/phone_input.dart';
 import '../../../../utils/validators/validator.dart';
@@ -33,6 +37,7 @@ class _LoginFormState extends State<LoginForm> {
   String? _authCred, _password;
   bool _invisiblePassword = true;
   String countryCode = '+447';
+  final ApiService _apiService = ApiService();
 
   onChangeCountry(Country value) {
     List spl = value.displayName.toString().split(' ');
@@ -137,7 +142,9 @@ class _LoginFormState extends State<LoginForm> {
             CustomButton(
               margin: const EdgeInsets.all(2.0),
               label: 'Login',
-              onPressed: () {},
+              onPressed: () {
+                _handleLogin();
+              },
               isProcessing: _isProcessing,
               buttonType: ButtonType.elevated,
               child: Container(),
@@ -182,73 +189,11 @@ class _LoginFormState extends State<LoginForm> {
             const SizedBox(height: 10.0),
 
             if (Platform.isIOS)
-              SignInWithAppleButton(onPressed: () async {
-                AuthController().appleAuthentication();
-              })
-            // Stack(
-            //   children: [
-            //     IconTextButton(
-            //       backgroundColor: Colors.black,
-            //       label: 'Sign in with Apple',
-            //       labelColor: Colors.white,
-            //       onPressed: logIn,
-            //       borderRadius: BorderRadius.circular(10.0),
-            //       icon: SvgPicture.asset(
-            //         'assets/svgs/applelogo.svg',
-            //         height: 24,
-            //       ),
-            //     ),
-            //     Container(
-            //       color: Colors.transparent,
-            //       child: SizedBox(
-            //         height: 57,
-            //         child: Container(
-            //           color: Colors.transparent,
-            //           child: AppleSignInButton(
-            //             cornerRadius: 10,
-            //             type: ButtonType.defaultButton,
-            //             style: ButtonStyleApple.black,
-            //             onPressed: logIn,
-            //           ),
-            //         ),
-            //       ),
-            //     ),
-            //   ],
-            // ),
-
-            // if (Platform.isIOS)
-            //   SignInWithAppleButton(
-            //     onPressed: () async {
-            //       final MyResponse res = await MyFirebase().signInWithApple();
-            //       // print(res.);
-            //       if (res.success) {
-            //         if (res.message == "newUser") {
-            //           MyUser user = MyUser(
-            //             username: res.data.user.displayName,
-            //             uid: _firebase.uid,
-            //             email: res.data.user.email,
-            //             timestamp: DateTime.now().millisecondsSinceEpoch,
-            //             deviceTokens:
-            //                 _deviceToken != null ? [_deviceToken] : [],
-            //           );
-            //           _onJoinedDefault(_firebase.uid);
-            //           _createUser(user);
-            //         } else {
-            //           _checkProfile();
-            //         }
-            //       } else {
-            //         debugPrint("===========>>> ${res.message}");
-            //         showSnackBar(
-            //           context,
-            //           message:
-            //               'OOPS! Something went wrong. Check internet connection and try again.',
-            //         );
-            //         setState(() {
-            //           _isProcessing = false;
-            //         });
-            //       }
-            //     },
-            //   ),
+              SignInWithAppleButton(
+                onPressed: () async {
+                  AuthController().appleAuthentication();
+                },
+              ),
           ],
         ),
       ),
@@ -278,45 +223,10 @@ class _LoginFormState extends State<LoginForm> {
     );
   }
 
-  // void logIn() async {
-  //   final AuthorizationResult result = await AppleSignIn.performRequests([
-  //     const AppleIdRequest(requestedScopes: [Scope.email, Scope.fullName])
-  //   ]);
-
-  //   switch (result.status) {
-  //     case AuthorizationStatus.authorized:
-  //       break;
-
-  //     case AuthorizationStatus.error:
-  //       break;
-
-  //     case AuthorizationStatus.cancelled:
-  //       break;
-  //   }
-  // }
-
-  // void checkLoggedInState() async {
-  //   final userId = await FlutterSecureStorage().read(key: 'userId');
-  //   if (userId == null) {
-  //     return;
-  //   }
-
-  //   final credentialState = await AppleSignIn.getCredentialState(userId);
-  //   switch (credentialState.status) {
-  //     case CredentialStatus.authorized:
-  //       break;
-
-  //     case CredentialStatus.error:
-  //       break;
-
-  //     case CredentialStatus.revoked:
-  //       break;
-
-  //     case CredentialStatus.notFound:
-  //       break;
-
-  //     case CredentialStatus.transferred:
-  //       break;
-  //   }
-  // }
+  void _handleLogin() async {
+    await _apiService.login(
+      _authCred!,
+      _password!,
+    );
+  }
 }
