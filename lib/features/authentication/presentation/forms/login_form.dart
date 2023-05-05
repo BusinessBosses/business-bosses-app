@@ -15,6 +15,7 @@ import 'package:get/get.dart';
 
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
+import '../../../../action/action.dart';
 import '../../../../common/widgets/buttons/icon_text_button.dart';
 import '../../../../navigation/routes.dart';
 import '../../../../services/api_service.dart';
@@ -39,7 +40,7 @@ class _LoginFormState extends State<LoginForm> {
   String countryCode = '+447';
   final ApiService _apiService = ApiService();
 
-  onChangeCountry(Country value) {
+  void onChangeCountry(Country value) {
     List spl = value.displayName.toString().split(' ');
     setState(() {
       countryCode = spl[spl.length - 1].toString().split('[')[1].split(']')[0];
@@ -142,8 +143,23 @@ class _LoginFormState extends State<LoginForm> {
             CustomButton(
               margin: const EdgeInsets.all(2.0),
               label: 'Login',
-              onPressed: () {
-                _handleLogin();
+              onPressed: () async {
+                setState(() {
+                  _autoValidateMode = AutovalidateMode.always;
+                });
+                setState(() {
+                  _isProcessing = true;
+                });
+                if (_authCred != null || _password != null) {
+                  dynamic user = await _handleLogin();
+                  if (user['success'] == false) {
+                    // ignore: use_build_context_synchronously
+                    showSnackBar(context, message: user['error']);
+                  }
+                }
+                setState(() {
+                  _isProcessing = false;
+                });
               },
               isProcessing: _isProcessing,
               buttonType: ButtonType.elevated,
@@ -223,10 +239,11 @@ class _LoginFormState extends State<LoginForm> {
     );
   }
 
-  void _handleLogin() async {
-    await _apiService.login(
+  Future<dynamic> _handleLogin() async {
+    dynamic user = await _apiService.login(
       _authCred!,
       _password!,
     );
+    return user;
   }
 }

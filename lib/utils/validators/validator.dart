@@ -25,7 +25,6 @@ class Validator {
 
   /// VAlidate Field to be email
   static String emailValidator(String? val) {
-    debugPrint('Validator.emailValidator: $val');
     if (val == null) return 'Email cannot be empty';
     if (!isValidEmail(val)) {
       return 'Invalid email';

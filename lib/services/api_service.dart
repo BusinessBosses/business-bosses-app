@@ -26,16 +26,15 @@ class ApiService {
       body: <String, String>{'email': email, 'password': password},
     );
     if (response.statusCode == 200) {
-      final jsonResponse = json.decode(response.body);
+      final dynamic jsonResponse = json.decode(response.body);
       sandBox.write(
           Constants.ACCESS_TOKEN, jsonResponse['data']['accessToken']);
+      sandBox.write(Constants.USER_ID, jsonResponse['data']['uid'].toString());
       Get.toNamed(Routes.bottomNavigation);
-      debugPrint(sandBox.read(Constants.ACCESS_TOKEN));
       return jsonResponse;
     } else {
-      final jsonResponse = response.body;
-      debugPrint(jsonResponse);
-      return;
+      final dynamic jsonResponse = json.decode(response.body);
+      return jsonResponse;
     }
   }
 
