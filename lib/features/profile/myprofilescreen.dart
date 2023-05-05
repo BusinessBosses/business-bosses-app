@@ -4,9 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 import '../../action/action.dart';
 import '../../common/widgets/tiles/outlinebuttonheader.dart';
 import '../../functions/my_native_functions.dart';
+import '../../navigation/routes.dart';
 import 'my_profile_header.dart';
 
 bool isExpanded = false;
@@ -76,7 +78,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                   radius: 5,
                 ),
                 label: Text(
-                  data.split("+")[index],
+                  data.split('+')[index],
                   style: const TextStyle(
                       fontSize: 15, fontWeight: FontWeight.w700),
                 ),
@@ -94,14 +96,16 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: Text('@username'),
+        title: const Text('@username'),
         actions: [
           IconButton(
               icon: SvgPicture.asset(
                 'assets/svgs/settings.svg',
                 height: 24.0,
               ),
-              onPressed: () {})
+              onPressed: () {
+                Get.toNamed(Routes.settings);
+              })
         ],
       ),
       body: NestedScrollView(
@@ -154,6 +158,12 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: const []),
+                    ),
+                    SingleChildScrollView(
+                      child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: const <Widget>[]),
                     ),
                   ],
                 ),
