@@ -8,23 +8,25 @@ class PostModel {
   final String title;
   final List<String>? images;
   final int timestamp;
-  final List<String> likes;
-  final List<String> coins;
-  final List<CommentModel> comments;
-  final UserModel user;
+  final List<String>? likes;
+  final List<String>? coins;
+  final List<CommentModel>? comments;
+  final UserModel? user;
   final String? videoUrl;
   final bool isRanked;
+  final dynamic isPromoted;
   PostModel({
     required this.postId,
     required this.title,
     this.images,
-    required this.timestamp,
-    required this.likes,
-    required this.coins,
-    required this.comments,
-    required this.user,
+    this.timestamp = 0,
+    this.likes,
+    this.coins,
+    this.comments,
+    this.user,
     this.videoUrl,
     required this.isRanked,
+    this.isPromoted,
   });
 
   PostModel copyWith({
@@ -38,6 +40,7 @@ class PostModel {
     UserModel? user,
     String? videoUrl,
     bool? isRanked,
+    dynamic isPromoted,
   }) {
     return PostModel(
       postId: postId ?? this.postId,
@@ -50,6 +53,7 @@ class PostModel {
       user: user ?? this.user,
       videoUrl: videoUrl ?? this.videoUrl,
       isRanked: isRanked ?? this.isRanked,
+      isPromoted: isPromoted ?? this.isPromoted,
     );
   }
 
@@ -61,10 +65,11 @@ class PostModel {
       'timestamp': timestamp,
       'likes': likes,
       'coins': coins,
-      'comments': comments.map((CommentModel x) => x.toMap()).toList(),
-      'user': user.toMap(),
+      'comments': comments?.map((CommentModel x) => x.toMap()).toList(),
+      'user': user?.toMap(),
       'videoUrl': videoUrl,
       'isRanked': isRanked,
+      'isPromoted': isPromoted,
     };
   }
 
@@ -86,6 +91,7 @@ class PostModel {
       user: UserModel.fromMap(map['user'] as Map<String, dynamic>),
       videoUrl: map['videoUrl'] != null ? map['videoUrl'] as String : null,
       isRanked: map['isRanked'] as bool,
+      isPromoted: map['isPromoted'] as dynamic,
     );
   }
 
@@ -96,6 +102,6 @@ class PostModel {
 
   @override
   String toString() {
-    return 'PostModel(postId: $postId, title: $title, images: $images, timestamp: $timestamp, likes: $likes, coins: $coins, comments: $comments, user: $user, videoUrl: $videoUrl, isRanked: $isRanked)';
+    return 'PostModel(postId: $postId, title: $title, images: $images, timestamp: $timestamp, likes: $likes, coins: $coins, comments: $comments, user: $user, videoUrl: $videoUrl, isRanked: $isRanked, isPromoted: $isPromoted)';
   }
 }

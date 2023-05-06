@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 class UserAvatarWithBadge extends StatelessWidget {
-  final UserModel user;
+  final UserModel? user;
   final double? width;
   final double? height;
   final double? radius;
@@ -26,7 +26,7 @@ class UserAvatarWithBadge extends StatelessWidget {
 
   const UserAvatarWithBadge({
     Key? key,
-    required this.user,
+    this.user,
     this.width,
     this.height,
     this.radius,
@@ -50,7 +50,7 @@ class UserAvatarWithBadge extends StatelessWidget {
       clipBehavior: Clip.none,
       children: <Widget>[
         NetworkImageWithPlaceHolder(
-          imageUrl: user.photoUrl ??
+          imageUrl: user!.photoUrl ??
               'https://img.freepik.com/premium-psd/3d-rendering-detective-profession-male-avatar_52659-1091.jpg?size=626&ext=jpg',
           height: height!,
           width: width!,
@@ -60,7 +60,7 @@ class UserAvatarWithBadge extends StatelessWidget {
           placeHolder: Icons.person,
           iconSize: iconSize,
         ),
-        if (user.isRanked ?? false)
+        if (user!.isRanked ?? false)
           Positioned(
             right: right,
             bottom: bottom,
