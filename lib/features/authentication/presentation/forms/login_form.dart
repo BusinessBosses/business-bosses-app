@@ -153,8 +153,7 @@ class _LoginFormState extends State<LoginForm> {
                 if (_authCred != null || _password != null) {
                   dynamic user = await _handleLogin();
                   if (user['success'] == false) {
-                    // ignore: use_build_context_synchronously
-                    showSnackBar(context, message: user['error']);
+                    Get.snackbar('Error', user['error']);
                   }
                 }
                 setState(() {
@@ -199,7 +198,6 @@ class _LoginFormState extends State<LoginForm> {
                 labelColor: textColor,
                 onPressed: () async {},
                 borderRadius: BorderRadius.circular(20.0),
-                icon: Icons.search,
               ),
             ),
             const SizedBox(height: 10.0),

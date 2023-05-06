@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:math';
 import 'dart:developer' as dartDeveloper;
+import 'package:async/src/result/result.dart';
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/features/authentication/presentation/code_verification_screen.dart';
 import 'package:crypto/crypto.dart';
@@ -16,6 +17,7 @@ class AuthController extends GetxController {
   void sendOtp({
     required String emailAddress,
     required String userName,
+    required String password,
     required VoidCallback onError,
   }) {
     Random rng = Random();
@@ -42,11 +44,16 @@ class AuthController extends GetxController {
       templateId: dotenv.env['SENDGRID_TEMPLATE_ID'],
       customArgs: {'username': userName, 'otp': code.toString()},
     );
-    mailer.send(email).then((result) {
+    mailer.send(email).then((Result<void> result) {
       if (result.isError) {
         onError();
       } else {
-        Get.to(() => CodeVerificationScreen(otp: code.toString()));
+        Get.to(() => CodeVerificationScreen(
+              otp: code.toString(),
+              userName: userName,
+              emailAddress: emailAddress,
+              password: password,
+            ));
       }
     }).catchError((dynamic e) {
       onError();
