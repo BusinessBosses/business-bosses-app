@@ -27,7 +27,7 @@ class ApiService {
     };
     final http.Response response = await http.post(
       Uri.parse('$baseUrl/auth/sign-in'),
-      headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+      headers: {'Content-Type': 'application/json'},
       body: jsonEncode(data),
     );
     if (response.statusCode == 200) {
@@ -39,6 +39,7 @@ class ApiService {
       return jsonResponse;
     } else {
       final dynamic jsonResponse = json.decode(response.body);
+      print(jsonResponse);
       return jsonResponse;
     }
   }
