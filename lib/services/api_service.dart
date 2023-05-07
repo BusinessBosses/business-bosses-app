@@ -14,8 +14,8 @@ import '../common/models/user_model.dart';
 import '../navigation/routes.dart';
 
 /// SERVER BASE URL
-// const String baseUrl = 'https://businessbosses-api.vercel.app/api/v1';
-const String baseUrl = 'http://192.168.1.176:3000/api/v1';
+const String baseUrl = 'https://businessbosses-api.vercel.app/api/v1';
+// const String baseUrl = 'http://192.168.1.176:3000/api/v1';
 
 /// LOCAL STORAGE SANDBOX
 final GetStorage sandBox = GetStorage();
