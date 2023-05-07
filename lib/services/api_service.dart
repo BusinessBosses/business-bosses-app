@@ -57,7 +57,7 @@ class ApiService {
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode(data),
     );
-    if (response.statusCode == 200) {
+    if (response.statusCode == 201) {
       final dynamic jsonResponse = json.decode(response.body);
       sandBox.write(
           Constants.ACCESS_TOKEN, jsonResponse['data']['accessToken']);
