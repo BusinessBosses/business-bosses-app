@@ -43,13 +43,19 @@ class MyApp extends StatelessWidget {
     sandBox.writeIfNull(Constants.USER_ID, '');
     return SimpleBuilder(
       builder: (_) {
-        final String? userId = sandBox.read(Constants.ACCESS_TOKEN);
+        final String? userId = sandBox.read(Constants.USER_ID);
         return GetMaterialApp(
           navigatorObservers: <NavigatorObserver>[
             AnalyticsServices.getAnalyticObserver()
           ],
+
+          initialRoute: userId == '' || userId == null
+              ? Routes.login
+              : Routes.bottomNavigation,
+
           initialBinding: RootBindings(),
-          initialRoute: userId == null ? Routes.login : Routes.bottomNavigation,
+         // initialRoute: userId == null ? Routes.login : Routes.bottomNavigation,
+
           getPages: Nav.routes,
           debugShowCheckedModeBanner: false,
           theme: appTheme,

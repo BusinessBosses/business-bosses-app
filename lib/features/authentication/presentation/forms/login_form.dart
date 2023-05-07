@@ -15,6 +15,7 @@ import 'package:get/get.dart';
 
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
+import '../../../../action/action.dart';
 import '../../../../common/widgets/buttons/icon_text_button.dart';
 import '../../../../navigation/routes.dart';
 import '../../../../services/api_service.dart';
@@ -38,6 +39,7 @@ class _LoginFormState extends State<LoginForm> {
   bool _invisiblePassword = true;
   String countryCode = '+447';
   final ApiService _apiService = ApiService();
+
 
   ///  COUNTRY CHANGE HANDLER
   void onChangeCountry(Country value) {
@@ -143,8 +145,22 @@ class _LoginFormState extends State<LoginForm> {
             CustomButton(
               margin: const EdgeInsets.all(2.0),
               label: 'Login',
-              onPressed: () {
-                _handleLogin();
+              onPressed: () async {
+                setState(() {
+                  _autoValidateMode = AutovalidateMode.always;
+                });
+                setState(() {
+                  _isProcessing = true;
+                });
+                if (_authCred != null || _password != null) {
+                  dynamic user = await _handleLogin();
+                  if (user['success'] == false) {
+                    Get.snackbar('Error', user['error']);
+                  }
+                }
+                setState(() {
+                  _isProcessing = false;
+                });
               },
               isProcessing: _isProcessing,
               buttonType: ButtonType.elevated,
@@ -184,7 +200,6 @@ class _LoginFormState extends State<LoginForm> {
                 labelColor: textColor,
                 onPressed: () async {},
                 borderRadius: BorderRadius.circular(20.0),
-                icon: Icons.search,
               ),
             ),
             const SizedBox(height: 10.0),
@@ -224,6 +239,12 @@ class _LoginFormState extends State<LoginForm> {
     );
   }
 
+  Future<dynamic> _handleLogin() async {
+    dynamic user = await _apiService.login(
+      _authCred!,
+      _password!,
+    );
+    return user;
   void _handleLogin() async {
     await AuthController().login(_authCred!, _password!);
   }

@@ -105,7 +105,7 @@ class Validator {
 
   /// Validate if name is valid
   static String? nameValidator(String val) {
-    if ((val.trim().isEmpty)) {
+    if ((val.isEmpty)) {
       return 'Name cannot be empty';
     }
     if (val.length < 2) return 'Name is too short';
