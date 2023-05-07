@@ -27,10 +27,11 @@ class CreatePostController extends GetxController {
 
   ///   VALIDATE CREATE POST DATA
   bool validateCreatePostData(Map<String, dynamic> data) {
-    if (data['title'] == null && imageFileList.isEmpty) {
+    if (data['title'].toString().isEmpty && imageFileList.isEmpty) {
       return false;
+    } else {
+      return true;
     }
-    return true;
   }
 
   /// UPLOAD FILE TO REMOTE SERVER
@@ -78,6 +79,7 @@ class CreatePostController extends GetxController {
 
         if (response.success) {
           _postsController.addNewPost(response.data);
+          Get.back();
         }
       } else {
         if (await uploadFile() == null) {
@@ -96,6 +98,8 @@ class CreatePostController extends GetxController {
       loading(false);
       update();
     } else {
+      showSnackbar(
+          message: 'Post can\'t be empty', title: 'OOPS!', error: true);
       return;
     }
   }

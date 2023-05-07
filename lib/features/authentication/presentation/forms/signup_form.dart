@@ -71,15 +71,15 @@ class _SignUpFormState extends State<SignUpForm> {
               TextFormField(
                 onChanged: (String val) async {
                   _username = val;
-                  bool? result = await _verifyUnique(val, '');
-                  setState(() {
-                    _isUniqueName = result;
-                  });
-                  _autoValidateMode = AutovalidateMode.always;
+                  // bool? result = await _verifyUnique(val, '');
+                  // setState(() {
+                  //   _isUniqueName = result;
+                  // });
+                  // _autoValidateMode = AutovalidateMode.always;
                 },
                 validator: (String? val) => Validator.usernameValidator(
                   val!,
-                  isUnique: _isUniqueName!,
+                  isUnique: true,
                 ),
                 keyboardType: TextInputType.name,
                 textInputAction: TextInputAction.next,
@@ -117,10 +117,10 @@ class _SignUpFormState extends State<SignUpForm> {
                 TextFormField(
                   onChanged: (String val) async {
                     _authCred = val;
-                    bool? result = await _verifyUnique('', val);
-                    setState(() {
-                      _isUniqueEmail = result;
-                    });
+                    // bool? result = await _verifyUnique('', val);
+                    // setState(() {
+                    //   _isUniqueEmail = result;
+                    // });
                   },
                   textInputAction: TextInputAction.next,
                   keyboardType: TextInputType.emailAddress,
@@ -147,7 +147,7 @@ class _SignUpFormState extends State<SignUpForm> {
                   ),
                   validator: (String? val) => Validator.emailValidatorSignUp(
                     _authCred,
-                    isUnique: _isUniqueEmail!,
+                    isUnique: true,
                   ),
                 )
               else
@@ -377,13 +377,13 @@ class _SignUpFormState extends State<SignUpForm> {
     );
   }
 
-  Future<bool?> _verifyUnique(String username, String email) async {
-    bool? user = await _apiService.verifyUnique(
-      username,
-      email,
-    );
-    return user;
-  }
+  // Future<bool?> _verifyUnique(String username, String email) async {
+  //   bool? user = await _apiService.verifyUnique(
+  //     username,
+  //     email,
+  //   );
+  //   return user;
+  // }
 
   Future<void> launchPolicy() async {
     String url = Constants.PRIVACY_POLICY_LINK;

@@ -10,7 +10,7 @@ class PostRepository {
   /// GET ALL POSTS LIMITED TO A SPECIFIC SIZE
   static Future<ApiResponseModel> fetchPosts(int page, int size) async {
     final ApiResponseModel response =
-        await ApiService.get(path: '/post/get-post?page=$page&size=$size');
+        await ApiService.get(path: '/post/get-posts?page=$page&size=$size');
     return response;
   }
 

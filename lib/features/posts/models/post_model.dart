@@ -12,10 +12,6 @@ class PostModel {
   final List<String>? coins;
   final List<CommentModel>? comments;
   final UserModel? user;
-  late final List<String> likes;
-  late final List<String> coins;
-  late final List<CommentModel> comments;
-  final UserModel user;
   final String? videoUrl;
   final bool isRanked;
   final dynamic isPromoted;
@@ -85,13 +81,11 @@ class PostModel {
           ? List<String>.from((map['images'] as List<String>))
           : null,
       timestamp: map['timestamp'] as int,
-      likes: List<String>.from((map['likes'] as List<String>)),
-      coins: List<String>.from((map['coins'] as List<String>)),
-      comments: List<CommentModel>.from(
-        (map['comments'] as List<int>).map<CommentModel>(
-          (int x) => CommentModel.fromMap(x as Map<String, dynamic>),
-        ),
-      ),
+      likes: List<String>.from((map['likes'])),
+      coins: List<String>.from((map['coins'])),
+      comments: List.from(map['comments'])
+          .map((e) => CommentModel.fromMap(e as Map<String, dynamic>))
+          .toList(),
       user: UserModel.fromMap(map['user'] as Map<String, dynamic>),
       videoUrl: map['videoUrl'] != null ? map['videoUrl'] as String : null,
       isRanked: map['isRanked'] as bool,

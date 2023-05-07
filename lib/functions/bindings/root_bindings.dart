@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 class RootBindings extends Bindings {
   @override
   void dependencies() {
-    Get.lazyPut(() => PostsController());
+    Get.put(() => PostsController());
     // TODO: implement dependencies
   }
 }

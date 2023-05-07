@@ -12,19 +12,35 @@ class PostsController extends GetxController {
   RxBool loading = RxBool(false);
 
   /// PROCESS RAW API DATA, MODELIZE AND SAVE TO STATE
-  void processPostsToState(dynamic posts) {
-    final List<Map<String, dynamic>> psts = posts as List<Map<String, dynamic>>;
+  void processPostsToState(dynamic post) {
+    final List psts = post;
     for (int i = 0; i < psts.length; i++) {
-      posts.add(PostModel.fromMap(psts[i]) as Map<String, dynamic>);
+      posts.add(PostModel.fromMap({
+        ...psts[i],
+        'likes':
+            psts[i]['likes'].map((like) => like['userId'].toString()).toList(),
+        'coins':
+            psts[i]['likes'].map((coin) => coin['userId'].toString()).toList()
+      }));
     }
   }
 
   /// ADD NEW POST TO STATE
   void addNewPost(Map<String, dynamic> newPost) {
-    PostModel modelizedNewPost = PostModel.fromMap(newPost);
-    modelizedNewPost.coins = <String>[];
-    modelizedNewPost.comments = <CommentModel>[];
-    modelizedNewPost.likes = <String>[];
+    PostModel modelizedNewPost = PostModel.fromMap({
+      ...newPost,
+      'coins': [],
+      'likes': [],
+      'comments': [],
+      'user': {
+        'username': 'testUser1',
+        'email': 'test1@gmail.com',
+        'uid': '4cc78ac9-df9b-43ad-b63e-de769b1fdfb1',
+      }
+    });
+    // modelizedNewPost.coins = <String>[];
+    // modelizedNewPost.comments = <CommentModel>[];
+    // modelizedNewPost.likes = <String>[];
 
     posts.insert(0, modelizedNewPost);
 
@@ -39,7 +55,7 @@ class PostsController extends GetxController {
         await PostRepository.fetchPosts(paginationPage.value, postsSize);
     if (response.success) {
       paginationPage(paginationPage.value + 1);
-      processPostsToState(response.data);
+      processPostsToState(response.data['rows']);
     } else {
       error(true);
     }

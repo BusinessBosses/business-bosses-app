@@ -159,29 +159,30 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                     height: 1,
                     child: ColoredBox(color: backgroundcolorinterface),
                   ),
+                  // Padding(
+                  //   padding:
+                  //       const EdgeInsets.only(left: 20, right: 20, top: 20),
+                  //   child: CustomButton(
+                  //     buttonType: ButtonType.elevated,
+                  //     label: 'Post',
+                  //     onPressed: () {},
+                  //     isProcessing: false,
+                  //   ),),
                   Padding(
-                    padding:
-                        const EdgeInsets.only(left: 20, right: 20, top: 20),
+                    padding: const EdgeInsets.only(left: 15, right: 15),
                     child: CustomButton(
                       buttonType: ButtonType.elevated,
                       label: 'Post',
-                      onPressed: () {},
-                      isProcessing: false,
-                    Padding(
-                      padding: const EdgeInsets.only(left: 15, right: 15),
-                      child: CustomButton(
-                        buttonType: ButtonType.elevated,
-                        label: 'Post',
-                        onPressed: () async {
-                          await controller.createPost({
-                            'title': _titleCtrl.text.trim(),
-                            'timestamp': DateTime.now().millisecondsSinceEpoch
-                          });
-                        },
-                        isProcessing: controller.loading.value,
-                      ),
+                      onPressed: () async {
+                        await controller.createPost({
+                          'title': _titleCtrl.text.trim(),
+                          'timestamp': DateTime.now().millisecondsSinceEpoch
+                        });
+                      },
+                      isProcessing: controller.loading.value,
                     ),
                   ),
+
                   const SizedBox(
                     height: 50,
                   )
