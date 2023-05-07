@@ -4,7 +4,7 @@ import 'package:flutter_svg/svg.dart';
 
 import '../../../utils/theme/theme.dart';
 
-Container OutlineButtonHeader() {
+Container OutlineButtonHeader(BuildContext context) {
   return Container(
     height: 50.0,
     margin: const EdgeInsets.only(top: 10),
@@ -46,7 +46,9 @@ Container OutlineButtonHeader() {
         ),
         Expanded(
           child: OutlinedButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.pushNamed(context, '/promotionScreen');
+            },
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -72,7 +74,9 @@ Container OutlineButtonHeader() {
         ),
         Expanded(
           child: OutlinedButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.pushNamed(context, '/analyseScreen');
+            },
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [

@@ -1,3 +1,4 @@
+import 'package:business_bosses_v2/features/profile/myprofilescreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -7,6 +8,7 @@ import '../posts/presentation/create_post_screen.dart';
 import 'all_communities_screen.dart';
 import 'home_screen.dart';
 import 'marketplace_screen.dart';
+
 import '../profile/myprofilescreen.dart';
 
 /// Bottom Nav Screen is basically where all home screens are navigated through

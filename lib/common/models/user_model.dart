@@ -41,9 +41,9 @@ class UserModel {
   final int? unReadCount;
   final bool? isRanked;
   UserModel({
-    required this.uid,
-    required this.username,
-    required this.email,
+    this.uid = '',
+    this.username = '',
+    this.email = '',
     this.timestamp,
     this.bossOfTheWeekTimeStamp,
     this.bossOfTheWeekUpTimeStamp,
@@ -52,7 +52,7 @@ class UserModel {
     this.name,
     this.companyName,
     this.surname,
-    required this.bio,
+    this.bio = '',
     this.website,
     this.instagram,
     this.twitter,
