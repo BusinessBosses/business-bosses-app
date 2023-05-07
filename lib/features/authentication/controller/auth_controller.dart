@@ -1,8 +1,9 @@
 import 'dart:convert';
 import 'dart:math';
-import 'dart:developer' as dartDeveloper;
+import 'dart:developer' as dartdeveloper;
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/features/authentication/presentation/code_verification_screen.dart';
+import 'package:business_bosses_v2/features/authentication/repository/auth_repository.dart';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -12,6 +13,9 @@ import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 /// Initalize Auth controller
 class AuthController extends GetxController {
+  /// AUTH LOADING STATE
+  RxBool isLoading = RxBool(false);
+
   /// SEND OTP TO USER EMAIL FOR VERIFICATION
   void sendOtp({
     required String emailAddress,
@@ -84,12 +88,39 @@ class AuthController extends GetxController {
         nonce: nonce,
       );
 
-      dartDeveloper.log(
+      dartdeveloper.log(
           'email: ${appleCredential.email}, name: ${appleCredential.familyName}');
 
       // print(appleCredential.email);
     } catch (e) {
       throw e;
+    }
+  }
+
+  /// VALIDATE LOGIN INPUT
+  String? loginValidator(String email, String password) {
+    if (email.isEmpty) {
+      return 'Email cannot be empty';
+    } else if (!email.isEmail) {
+      return 'Invalid Email Format';
+    } else if (password.isEmpty) {
+      return 'Password cannot be empty';
+    } else if (password.length < 8) {
+      return 'Password too short';
+    } else {
+      return null;
+    }
+  }
+
+  /// AUTH CONTROLLER
+  Future<void> login(String authCred, String password) async {
+    if (loginValidator(authCred, password) != null) {
+      /// show popup
+    } else {
+      isLoading(true);
+      await AuthRepository.login(
+          <String, dynamic>{'email': authCred, 'password': password});
+      isLoading(false);
     }
   }
 }
