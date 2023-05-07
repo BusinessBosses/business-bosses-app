@@ -1,3 +1,4 @@
+import 'package:business_bosses_v2/functions/bindings/root_bindings.dart';
 import 'package:business_bosses_v2/navigation/navigation.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/services/firebase_analytics.dart';
@@ -42,16 +43,19 @@ class MyApp extends StatelessWidget {
     sandBox.writeIfNull(Constants.USER_ID, '');
     return SimpleBuilder(
       builder: (_) {
-        final String userId = sandBox.read(Constants.USER_ID);
+        final String? userId = sandBox.read(Constants.USER_ID);
         return GetMaterialApp(
           navigatorObservers: <NavigatorObserver>[
             AnalyticsServices.getAnalyticObserver()
           ],
-          // initialRoute:
-          //     userId.isEmpty ? Routes.settings : Routes.bottomNavigation,
-          initialRoute: userId.isEmpty
-              ? Routes.bottomNavigation
+
+          initialRoute: userId == '' || userId == null
+              ? Routes.login
               : Routes.bottomNavigation,
+
+          initialBinding: RootBindings(),
+         // initialRoute: userId == null ? Routes.login : Routes.bottomNavigation,
+
           getPages: Nav.routes,
           debugShowCheckedModeBanner: false,
           theme: appTheme,

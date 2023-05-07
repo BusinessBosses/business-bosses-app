@@ -142,35 +142,35 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                       ),
                                     ),
                                     initialSelection: filterCode ?? 'GB',
-                                    // pickerBuilder: (BuildContext context,
-                                    //     CountryCode countryCode) {
-                                    //   return Container(
-                                    //     decoration: BoxDecoration(
-                                    //       color: backgroundcolorinterface,
-                                    //       borderRadius: BorderRadius.circular(
-                                    //           radiusValue),
-                                    //     ),
-                                    //     child: ListTile(
-                                    //       leading: _selectedLocation != null
-                                    //           ? Text(_selectedLocation)
-                                    //           : Text(
-                                    //               'Location',
-                                    //               style: bodyText2.copyWith(
-                                    //                   color: hintColor),
-                                    //             ),
-                                    //       trailing: const Icon(
-                                    //           Icons.keyboard_arrow_right),
-                                    //     ),
-                                    //   );
-                                    // },
-                                    // onChanged: (CountryCode code) {
-                                    //   setState(
-                                    //     () {
-                                    //       _selectedLocation = code.name;
-                                    //       filterCode = code.code;
-                                    //     },
-                                    //   );
-                                    // },
+                                    pickerBuilder: (BuildContext context,
+                                        CountryCode? countryCode) {
+                                      return Container(
+                                        decoration: BoxDecoration(
+                                          color: backgroundcolorinterface,
+                                          borderRadius: BorderRadius.circular(
+                                              radiusValue),
+                                        ),
+                                        child: ListTile(
+                                          leading: _selectedLocation != null
+                                              ? Text(_selectedLocation!)
+                                              : Text(
+                                                  'Location',
+                                                  style: bodyText2.copyWith(
+                                                      color: hintColor),
+                                                ),
+                                          trailing: const Icon(
+                                              Icons.keyboard_arrow_right),
+                                        ),
+                                      );
+                                    },
+                                    onChanged: (CountryCode? code) {
+                                      setState(
+                                        () {
+                                          _selectedLocation = code?.name;
+                                          filterCode = code?.code;
+                                        },
+                                      );
+                                    },
                                     useSafeArea: false,
                                   ),
                                 ],

@@ -5,6 +5,7 @@ import '../common/models/my_response.dart';
 import '../functions/my_native_functions.dart';
 import '../utils/constants/constants.dart';
 
+// ignore: public_member_api_docs
 void showSnackBar(BuildContext context, {String message = Constants.STGW}) {
   ScaffoldMessenger.of(context).hideCurrentSnackBar();
   ScaffoldMessenger.of(context).showSnackBar(

@@ -12,6 +12,10 @@ class PostModel {
   final List<String>? coins;
   final List<CommentModel>? comments;
   final UserModel? user;
+  late final List<String> likes;
+  late final List<String> coins;
+  late final List<CommentModel> comments;
+  final UserModel user;
   final String? videoUrl;
   final bool isRanked;
   final dynamic isPromoted;

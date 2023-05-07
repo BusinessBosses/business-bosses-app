@@ -9,6 +9,8 @@ import 'all_communities_screen.dart';
 import 'home_screen.dart';
 import 'marketplace_screen.dart';
 
+import '../profile/myprofilescreen.dart';
+
 /// Bottom Nav Screen is basically where all home screens are navigated through
 class BottomNavScreen extends StatefulWidget {
   /// Constructor
@@ -30,7 +32,7 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
               return AlertDialog(
                 title: const Text('Exit App'),
                 content: const Text('Are you sure you want to exit?'),
-                actions: [
+                actions: <Widget>[
                   TextButton(
                     onPressed: () {
                       Navigator.of(context).pop(false);
@@ -57,7 +59,7 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
           child: Stack(
-            children: [
+            children: <Widget>[
               Container(
                 height: MediaQuery.of(context).size.height,
                 width: MediaQuery.of(context).size.width,
@@ -88,7 +90,7 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
                     ],
                   ),
                   child: Stack(
-                    children: [
+                    children: <Widget>[
                       Column(
                         children: [
                           Container(

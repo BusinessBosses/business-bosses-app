@@ -1,18 +1,126 @@
 import 'dart:convert';
 
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
+import 'package:business_bosses_v2/utils/validators/validator.dart';
 import 'package:business_bosses_v2/utils/constants/constants.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 
+import '../common/models/user_model.dart';
+import '../navigation/routes.dart';
+
 /// SERVER BASE URL
-const String baseUrl = 'https://business-bosses.com/api/v2';
+const String baseUrl = 'https://businessbosses-api.vercel.app/api/v1';
 
 /// LOCAL STORAGE SANDBOX
 final GetStorage sandBox = GetStorage();
 
 /// API CALLS
 class ApiService {
+  /// LOGIN POINT
+  Future<dynamic> login(String email, String password) async {
+    Map<String, dynamic> data = {
+      'email': email,
+      'password': password,
+    };
+    final http.Response response = await http.post(
+      Uri.parse('$baseUrl/auth/sign-in'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode(data),
+    );
+    if (response.statusCode == 200) {
+      final dynamic jsonResponse = json.decode(response.body);
+      sandBox.write(
+          Constants.ACCESS_TOKEN, jsonResponse['data']['accessToken']);
+      sandBox.write(Constants.USER_ID, jsonResponse['data']['uid'].toString());
+      Get.toNamed(Routes.bottomNavigation);
+      return jsonResponse;
+    } else {
+      final dynamic jsonResponse = json.decode(response.body);
+      print(jsonResponse);
+      return jsonResponse;
+    }
+  }
+
+  /// LOGIN POINT
+  Future<dynamic> register(
+      String email, String password, String username) async {
+    Map<String, dynamic> data = {
+      'username': username,
+      'email': email,
+      'password': password,
+    };
+    final http.Response response = await http.post(
+      Uri.parse('$baseUrl/auth/sign-up'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode(data),
+    );
+    if (response.statusCode == 200) {
+      final dynamic jsonResponse = json.decode(response.body);
+      sandBox.write(
+          Constants.ACCESS_TOKEN, jsonResponse['data']['accessToken']);
+      sandBox.write(Constants.USER_ID, jsonResponse['data']['uid']);
+      return jsonResponse;
+    } else {
+      final dynamic jsonResponse = json.decode(response.body);
+      return jsonResponse;
+    }
+  }
+
+  /// VERIFY USERNAME OR EMAIL DURING SIGNUP
+  Future<bool?> verifyUnique(String username, String email) async {
+    Map<String, dynamic> data = {
+      'username': username,
+      'email': email,
+    };
+    final http.Response response = await http.post(
+      Uri.parse('$baseUrl/auth/email-exist'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode(data),
+    );
+    if (response.statusCode == 200) {
+      dynamic jsonResponse = json.decode(response.body);
+      jsonResponse = jsonResponse['success'];
+      if (username == '') {
+        dynamic response =
+            Validator.emailValidatorExists(email, isUnique: jsonResponse);
+        return response;
+      }
+      return jsonResponse;
+    } else {
+      dynamic jsonResponse = json.decode(response.body);
+      jsonResponse = jsonResponse['success'];
+      return jsonResponse;
+    }
+  }
+  // Future<dynamic> login(String email, String password) async {
+  //   final http.Response response = await http.post(
+  //     Uri.parse('$baseUrl/auth/sign-in'),
+  //     headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+  //     body: <String, String>{'email': email, 'password': password},
+  //   );
+  //   if (response.statusCode == 200) {
+  //     final jsonResponse = json.decode(response.body);
+  //     sandBox.write(
+  //         Constants.ACCESS_TOKEN, jsonResponse['data']['accessToken']);
+  //     Get.toNamed(Routes.bottomNavigation);
+  //     debugPrint(sandBox.read(Constants.ACCESS_TOKEN));
+  //     return jsonResponse;
+  //   } else {
+  //     final jsonResponse = response.body;
+  //     debugPrint(jsonResponse);
+  //     return;
+  //   }
+  // }
+
+  ///LOGOUT
+  Future<void> logout() async {
+    await sandBox.remove(Constants.ACCESS_TOKEN);
+    await sandBox.remove(Constants.USER_ID);
+  }
+
   /// HTTP POST CALL
   static Future<ApiResponseModel> post({
     required String path,

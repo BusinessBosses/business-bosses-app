@@ -38,7 +38,7 @@ class RegisterScreen extends StatelessWidget {
                             Get.toNamed(Routes.login);
                           },
                           child: const TextWidget(
-                            text: "Log In",
+                            text: 'Log In',
                             color: iconColor,
                             fontWeight: FontWeight.w700,
                             size: 18,
@@ -48,9 +48,9 @@ class RegisterScreen extends StatelessWidget {
                     ),
                     const SizedBox(width: 46),
                     Column(
-                      children: const [
+                      children: const <Widget>[
                         TextWidget(
-                          text: "Sign Up",
+                          text: 'Sign Up',
                           color: primaryColorLT,
                           fontWeight: FontWeight.w700,
                           size: 20,

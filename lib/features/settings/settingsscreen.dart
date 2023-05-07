@@ -2,16 +2,17 @@ import 'package:business_bosses_v2/features/settings/settingsItemModal.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 import '../../action/action.dart';
 import '../../functions/my_native_functions.dart';
+import '../../navigation/routes.dart';
+import '../../services/api_service.dart';
 import '../../utils/constants/constants.dart';
 import '../posts/presentation/widgets/settings_item.dart';
 
 class SettingsScreen extends StatefulWidget {
-  static const routeName = '/settings-screen';
-
   const SettingsScreen({Key? key}) : super(key: key);
 
   @override
@@ -20,6 +21,7 @@ class SettingsScreen extends StatefulWidget {
 
 class _SettingsScreenState extends State<SettingsScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  final ApiService _apiService = ApiService();
 
   String version = "";
 
@@ -68,7 +70,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: InkWell(
-                onTap: () {},
+                onTap: () {
+                  logout();
+                  Get.toNamed(Routes.login);
+                },
                 borderRadius: BorderRadius.circular(radiusValue),
                 child: Ink(
                   decoration: BoxDecoration(
@@ -115,7 +120,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       MyNativeFunctions.onUrlLaunch(mailUrl);
     } catch (e) {
       debugPrint('Something gone wrong try again later');
-      showSnackBar(context, message: Constants.STGW + ', try again later');
+      showSnackBar(context, message: '${Constants.STGW}, try again later');
     }
   }
 
@@ -143,4 +148,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
       routeName: 'ChangePasswordScreen.routeName',
     ),
   ];
+
+  void logout() async {
+    await _apiService.logout();
+  }
 }

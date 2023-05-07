@@ -6,10 +6,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 import '../../action/action.dart';
 import '../../common/widgets/safety_model.dart';
 import '../../common/widgets/tiles/outlinebuttonheader.dart';
 import '../../functions/my_native_functions.dart';
+import '../../navigation/routes.dart';
 import 'my_profile_header.dart';
 
 bool isExpanded = false;
@@ -79,7 +81,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                   radius: 5,
                 ),
                 label: Text(
-                  data.split("+")[index],
+                  data.split('+')[index],
                   style: const TextStyle(
                       fontSize: 15, fontWeight: FontWeight.w700),
                 ),
@@ -97,7 +99,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: Text('@username'),
+        title: const Text('@username'),
         actions: [
           IconButton(
               icon: SvgPicture.asset(
@@ -105,7 +107,8 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                 height: 24.0,
               ),
               onPressed: () {
-                Navigator.pushNamed(context, '/settingsScreen');
+                // Navigator.pushNamed(context, '/settingsScreen');
+                Get.toNamed(Routes.settings);
               })
         ],
       ),
@@ -204,6 +207,12 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                         //           ),
                         //         ),
                       ),
+                    ),
+                    SingleChildScrollView(
+                      child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: const <Widget>[]),
                     ),
                   ],
                 ),
