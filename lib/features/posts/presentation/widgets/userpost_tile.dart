@@ -91,7 +91,7 @@ class _MyPostItemState extends State<MyPostItem> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        !(_post?.isRanked ?? false)
+                        !(_post.isRanked)
                             ? Container()
                             : Container(
                                 width: leadingWidth(_post),
@@ -196,16 +196,16 @@ class _MyPostItemState extends State<MyPostItem> {
                       ),
                     ),
                     TextButton.icon(
-                        onPressed: () async {},
-                        icon: SvgPicture.asset('assets/svgs/coin.svg'),
-                        label: Text(
-                          '${_post.coins?.length ?? 0}',
-                          style:
-                              Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                    fontWeight: FontWeight.w700,
-                                    color: textColor.withOpacity(0.8),
-                                  ),
-                        )),
+                      onPressed: () async {},
+                      icon: SvgPicture.asset('assets/svgs/coin.svg'),
+                      label: Text(
+                        '${_post.coins?.length ?? 0}',
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                              fontWeight: FontWeight.w700,
+                              color: textColor.withOpacity(0.8),
+                            ),
+                      ),
+                    ),
                     const SizedBox(width: 8.0),
                     GestureDetector(
                       onTap: () => _sharePost(widget.post),
@@ -220,10 +220,9 @@ class _MyPostItemState extends State<MyPostItem> {
                       padding: const EdgeInsets.only(right: 15),
                       child: Text(
                         TimeFormat.formatString(_post.timestamp),
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyMedium
-                            ?.copyWith(color: textColor.withOpacity(0.4)),
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                              color: textColor.withOpacity(0.4),
+                            ),
                       ),
                     )
                   ],
@@ -247,7 +246,7 @@ class _MyPostItemState extends State<MyPostItem> {
 
   double leadingWidth(PostModel p) {
     double w = 0;
-    if (p?.isRanked ?? false) w = w + 42;
+    if (p.isRanked) w = w + 42;
     if (p.postId == 'currentuser.uid') {
       w = w + 42;
     }
