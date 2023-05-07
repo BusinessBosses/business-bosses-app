@@ -95,6 +95,25 @@ class ApiService {
       return jsonResponse;
     }
   }
+  // Future<dynamic> login(String email, String password) async {
+  //   final http.Response response = await http.post(
+  //     Uri.parse('$baseUrl/auth/sign-in'),
+  //     headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+  //     body: <String, String>{'email': email, 'password': password},
+  //   );
+  //   if (response.statusCode == 200) {
+  //     final jsonResponse = json.decode(response.body);
+  //     sandBox.write(
+  //         Constants.ACCESS_TOKEN, jsonResponse['data']['accessToken']);
+  //     Get.toNamed(Routes.bottomNavigation);
+  //     debugPrint(sandBox.read(Constants.ACCESS_TOKEN));
+  //     return jsonResponse;
+  //   } else {
+  //     final jsonResponse = response.body;
+  //     debugPrint(jsonResponse);
+  //     return;
+  //   }
+  // }
 
   ///LOGOUT
   Future<void> logout() async {
