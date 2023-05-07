@@ -90,7 +90,7 @@ class Validator {
     if (!isUnique) if (val.length < 2) return 'username is too short';
     if (!isUnique) return 'User name already exist';
 
-    return null;
+    return '';
   }
 
   /// Validate Social media accounts
