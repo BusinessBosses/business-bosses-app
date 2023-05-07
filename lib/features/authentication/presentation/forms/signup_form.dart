@@ -71,7 +71,7 @@ class _SignUpFormState extends State<SignUpForm> {
               TextFormField(
                 onChanged: (String val) async {
                   _username = val;
-                  bool? result = await _verifyUnique(val, 'null');
+                  bool? result = await _verifyUnique(val, '');
                   setState(() {
                     _isUniqueName = result;
                   });
@@ -117,7 +117,7 @@ class _SignUpFormState extends State<SignUpForm> {
                 TextFormField(
                   onChanged: (String val) async {
                     _authCred = val;
-                    bool? result = await _verifyUnique('null', val);
+                    bool? result = await _verifyUnique('', val);
                     setState(() {
                       _isUniqueEmail = result;
                     });

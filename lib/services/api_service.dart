@@ -83,7 +83,7 @@ class ApiService {
     if (response.statusCode == 200) {
       dynamic jsonResponse = json.decode(response.body);
       jsonResponse = jsonResponse['success'];
-      if (username == 'null') {
+      if (username == '') {
         dynamic response =
             Validator.emailValidatorExists(email, isUnique: jsonResponse);
         return response;
