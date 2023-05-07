@@ -11,7 +11,7 @@ class IconTextButton extends StatelessWidget {
   final BorderRadius borderRadius;
   final String label;
   final Color labelColor;
-  final IconData icon;
+  final IconData? icon;
   final EdgeInsetsGeometry padding;
 
   /// Icon text button
@@ -24,7 +24,7 @@ class IconTextButton extends StatelessWidget {
     required this.borderRadius,
     this.label = 'Button',
     this.labelColor = Colors.black,
-    required this.icon,
+    this.icon,
     this.padding = const EdgeInsets.symmetric(horizontal: 16.0),
   }) : super(key: key);
 

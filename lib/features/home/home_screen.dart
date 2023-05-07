@@ -1,7 +1,10 @@
+import 'package:business_bosses_v2/common/models/user_model.dart';
+import 'package:business_bosses_v2/features/posts/presentation/widgets/userpost_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../utils/theme/theme.dart';
+import '../posts/models/post_model.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -210,6 +213,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                 height: 40,
                               ),
                               onPressed: () {
+                                Navigator.pushNamed(
+                                    context, '/notificationsScreen');
                                 // navigateTo(context,
                                 //     routeName: NotificationsScreen.routeName);
                                 // MyFirebase firebase = MyFirebase();
@@ -237,29 +242,28 @@ class _HomeScreenState extends State<HomeScreen> {
                 ]),
           ]),
       body: NestedScrollView(
-        headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-          return <Widget>[
-            //   SliverStickyHeader(
-            //     sticky: false,
-            //     header: Column(
-            //       children: [
-            //         Container(
-            //           width: double.infinity,
-            //           color: const Color.fromRGBO(234, 234, 234, 100),
-            //           padding: const EdgeInsets.only(
-            //             top: 0.0,
-            //             bottom: 0.0,
-            //           ),
-            //           child: Container(),
-            //         ),
-            //       ],
-            //     ),
-            //   ),
-            // ];
-          ];
-        },
-        body: Container(),
-      ),
+          headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+            return <Widget>[
+              //   SliverStickyHeader(
+              //     sticky: false,
+              //     header: Column(
+              //       children: [
+              //         Container(
+              //           width: double.infinity,
+              //           color: const Color.fromRGBO(234, 234, 234, 100),
+              //           padding: const EdgeInsets.only(
+              //             top: 0.0,
+              //             bottom: 0.0,
+              //           ),
+              //           child: Container(),
+              //         ),
+              //       ],
+              //     ),
+              //   ),
+              // ];
+            ];
+          },
+          body: Container()),
     );
   }
 }

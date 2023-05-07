@@ -24,7 +24,6 @@ class MyNativeFunctions {
         return res;
       }
     } catch (e) {
-      debugPrint('_EditProfileScreenState._onImagePick catch: e: $e');
       res = MyResponse(success: false, message: e.toString());
       return res;
     }
@@ -55,7 +54,6 @@ class MyNativeFunctions {
         );
       }
     } catch (e) {
-      debugPrint('Functions.onMultiPicker: exception: $e');
       res = MyResponse(success: false, message: e.toString());
       return res;
     }
@@ -75,14 +73,12 @@ class MyNativeFunctions {
   }
 
   static Future<MyResponse> onUrlLaunch(String urlString) async {
-    debugPrint('Functions.onUrlLaunch: $urlString');
     try {
       await canLaunchUrlString(urlString)
           ? await launchUrlString(urlString)
           : throw 'Invalid url $urlString';
       return MyResponse(success: true);
     } catch (e) {
-      debugPrint('Functions.onUrlLaunch: $e');
       return MyResponse(success: false, message: e.toString());
     }
   }
@@ -90,7 +86,6 @@ class MyNativeFunctions {
   static String completeURL(String url, MyUrl myUrl) {
     String cUrl = url.toLowerCase();
     if (myUrl == MyUrl.twitter) {
-      debugPrint('if');
       if (cUrl.contains(Constants.TWITTER_BASE_URL)) return cUrl;
       return Constants.TWITTER_BASE_URL + cUrl;
     } else if (myUrl == MyUrl.instagram) {
@@ -98,12 +93,9 @@ class MyNativeFunctions {
 
       return Constants.INSTAGRAM_BASE_URL + cUrl;
     } else {
-      debugPrint('url: else $cUrl');
       if (cUrl.contains(Constants.HTTPS_WWW)) {
-        debugPrint('httpswww');
         return cUrl;
       } else if (cUrl.contains('www.')) {
-        debugPrint('www.');
         return 'https://' + cUrl;
       } else {
         return 'https://www.$cUrl';

@@ -9,16 +9,16 @@ import 'package:business_bosses_v2/features/authentication/controller/auth_contr
 import 'package:country_picker/country_picker.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../../../common/widgets/buttons/custom_button.dart';
 import '../../../../common/widgets/buttons/icon_text_button.dart';
 import '../../../../common/widgets/text_widget.dart';
 import '../../../../navigation/routes.dart';
+import '../../../../services/api_service.dart';
 import '../../../../utils/constants/constants.dart';
 import '../../../../utils/theme/theme.dart';
 import '../../../../utils/validators/phone_input.dart';
@@ -37,18 +37,19 @@ class _SignUpFormState extends State<SignUpForm> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   AutovalidateMode _autoValidateMode = AutovalidateMode.disabled;
   String? _username, _authCred, _password;
-  final List<String> _usersToCompareUsername = [];
-  bool _isUniqueName = true;
+  bool? _isUniqueName = false;
+  bool? _isUniqueEmail = false;
   bool isEmailAuth = true;
   bool _invisibleCPassword = true, _invisiblePassword = true;
   bool agreedToTerms = true;
+  final ApiService _apiService = ApiService();
 
   String countryCode = '+447';
 
-  onChangeCountry(Country value) {
-    List spl = value.displayName.toString().split(" ");
+  void onChangeCountry(Country value) {
+    List spl = value.displayName.toString().split(' ');
     setState(() {
-      countryCode = spl[spl.length - 1].toString().split("[")[1].split("]")[0];
+      countryCode = spl[spl.length - 1].toString().split('[')[1].split(']')[0];
     });
   }
 
@@ -68,18 +69,17 @@ class _SignUpFormState extends State<SignUpForm> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               TextFormField(
-                onChanged: (String val) {
+                onChanged: (String val) async {
                   _username = val;
-                  bool? result =
-                      Validator.isUniqueUsername(val, _usersToCompareUsername);
-
-                  setState(() {
-                    _isUniqueName = result!;
-                  });
+                  // bool? result = await _verifyUnique(val, '');
+                  // setState(() {
+                  //   _isUniqueName = result;
+                  // });
+                  // _autoValidateMode = AutovalidateMode.always;
                 },
                 validator: (String? val) => Validator.usernameValidator(
                   val!,
-                  isUnique: _isUniqueName,
+                  isUnique: true,
                 ),
                 keyboardType: TextInputType.name,
                 textInputAction: TextInputAction.next,
@@ -115,9 +115,12 @@ class _SignUpFormState extends State<SignUpForm> {
               ),
               if (isEmailAuth)
                 TextFormField(
-                  onChanged: (val) {
+                  onChanged: (String val) async {
                     _authCred = val;
-                    setState(() {});
+                    // bool? result = await _verifyUnique('', val);
+                    // setState(() {
+                    //   _isUniqueEmail = result;
+                    // });
                   },
                   textInputAction: TextInputAction.next,
                   keyboardType: TextInputType.emailAddress,
@@ -130,8 +133,22 @@ class _SignUpFormState extends State<SignUpForm> {
                     ),
                     filled: true,
                     fillColor: const Color(0xffF4F4F4),
+                    suffixIcon: _isUniqueEmail == true
+                        ? const Icon(
+                            Icons.check_circle,
+                            color: Colors.green,
+                          )
+                        : Icon(
+                            Icons.close,
+                            color: _isUniqueEmail == null
+                                ? Colors.transparent
+                                : Colors.red,
+                          ),
                   ),
-                  validator: Validator.emailValidator,
+                  validator: (String? val) => Validator.emailValidatorSignUp(
+                    _authCred,
+                    isUnique: true,
+                  ),
                 )
               else
                 PhoneNumberInput(
@@ -177,35 +194,35 @@ class _SignUpFormState extends State<SignUpForm> {
           CustomButton(
             label: 'Sign Up',
             onPressed: () {
-              // print(countryCode + _authCred);
-              if (agreedToTerms) {
-                setState(() {
-                  _autoValidateMode = AutovalidateMode.always;
-                  _isProcessing = true;
-                });
-                AuthController().sendOtp(
-                    emailAddress: _authCred!,
-                    userName: _username!,
-                    onError: () {
-                      setState(() {
-                        _isProcessing = false;
+              if (Validator.emailValidatorSignUp(_authCred,
+                          isUnique: _isUniqueEmail!) ==
+                      '' &&
+                  Validator.usernameValidator(_username!,
+                          isUnique: _isUniqueName!) ==
+                      '') {
+                if (agreedToTerms) {
+                  setState(() {
+                    _autoValidateMode = AutovalidateMode.always;
+                    _isProcessing = true;
+                  });
+                  AuthController().sendOtp(
+                      emailAddress: _authCred!,
+                      userName: _username!,
+                      password: _password!,
+                      onError: () {
+                        setState(() {
+                          _isProcessing = false;
+                        });
                       });
-                    });
-                setState(() {
-                  _isProcessing = false;
-                });
-
-                // Get.toNamed(Routes.codeVerification);
-                Get.toNamed(Routes.codeVerification);
-                // if (isEmailAuth) {
-                // _setUpReferral();
-                // } else {
-                // phoneSignUp();
-                // }
+                  setState(() {
+                    _isProcessing = false;
+                  });
+                } else {
+                  Get.snackbar('Error',
+                      'Before signing up, you must agree to our Terms and Conditions');
+                }
               } else {
-                showSnackBar(context,
-                    message:
-                        'Before signing up, you must agree to our Terms and Conditions');
+                Get.snackbar('Error', 'Invalid Entries in Form');
               }
             },
             isProcessing: _isProcessing,
@@ -217,7 +234,11 @@ class _SignUpFormState extends State<SignUpForm> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Expanded(child: Container(color: hintColor, height: 0.8)),
+              Expanded(
+                  child: Container(
+                color: hintColor,
+                height: 0.8,
+              )),
               const SizedBox(width: 16.0),
               RichText(
                 text: const TextSpan(
@@ -234,7 +255,11 @@ class _SignUpFormState extends State<SignUpForm> {
                 ),
               ),
               const SizedBox(width: 16.0),
-              Expanded(child: Container(color: hintColor, height: 0.8)),
+              Expanded(
+                  child: Container(
+                color: hintColor,
+                height: 0.8,
+              )),
             ],
           ),
           const SizedBox(height: 20.0),
@@ -247,114 +272,18 @@ class _SignUpFormState extends State<SignUpForm> {
                 setState(() {
                   _isProcessing = true;
                 });
-
-                // print(res.);
-                // if (res.success) {
-                //   if (res.message == "newUser") {
-                //     MyUser user = MyUser(
-                //       username: res.data.user.displayName,
-                //       uid: _firebase.uid,
-                //       email: res.data.user.email,
-                //       gender: _gender,
-                //       ageRange: _ageRange,
-                //       timestamp: DateTime.now().millisecondsSinceEpoch,
-                //       deviceTokens: _deviceToken != null ? [_deviceToken] : [],
-                //     );
-                //     _onJoinedDefault(_firebase.uid);
-                //     _createUser(user);
-                //   } else {
-                //     _checkProfile();
-                //   }
-                // } else {
-                //   debugPrint("===========>>> ${res.message}");
-                //   showSnackBar(
-                //     context,
-                //     message:
-                //         'OOPS! Something went wrong. Check internet connection and try again.',
-                //   );
-                //   setState(() {
-                //     _isProcessing = false;
-                //   });
-                // }
               },
               borderRadius: BorderRadius.circular(20),
-              icon: Icons.search,
             ),
           ),
           const SizedBox(height: 10.0),
           if (Platform.isIOS)
             SignInWithAppleButton(
-                text: 'Sign up with Apple',
-                onPressed: () async {
-                  AuthController().appleAuthentication();
-                })
-          // Stack(
-          //   children: [
-          //     IconTextButton(
-          //       backgroundColor: Colors.black,
-          //       label: 'Sign in with Apple',
-          //       labelColor: Colors.white,
-          //       onPressed: logIn,
-          //       borderRadius: BorderRadius.circular(10.0),
-          //       icon: SvgPicture.asset(
-          //         'assets/svgs/applelogo.svg',
-          //         height: 24,
-          //       ),
-          //     ),
-          //     Container(
-          //       color: Colors.transparent,
-          //       child: SizedBox(
-          //         height: 57,
-          //         child: Container(
-          //           color: Colors.transparent,
-          //           child: AppleSignInButton(
-          //             cornerRadius: 10,
-          //             type: ButtonType.defaultButton,
-          //             style: ButtonStyleApple.black,
-          //             onPressed: logIn,
-          //           ),
-          //         ),
-          //       ),
-          //     ),
-          //   ],
-          // ),
-          // if (Platform.isIOS)
-          //   SignInWithAppleButton(
-          //     text: 'Sign up with Apple',
-          //     onPressed: () async {
-          //       final MyResponse res = await MyFirebase().signInWithApple();
-          //       // print(res.);
-          //       if (res.success) {
-          //         if (res.message == "newUser") {
-          //           MyUser user = MyUser(
-          //             username: res.data.user.displayName,
-          //             uid: _firebase.uid,
-          //             email: res.data.user.email,
-          //             gender: _gender,
-          //             ageRange: _ageRange,
-          //             timestamp: DateTime.now().millisecondsSinceEpoch,
-          //             deviceTokens: _deviceToken != null ? [_deviceToken] : [],
-          //           );
-          //           _onJoinedDefault(_firebase.uid);
-          //           _createUser(user);
-          //         } else {
-          //           _checkProfile();
-          //         }
-          //       } else {
-          //         debugPrint("===========>>> ${res.message}");
-          //         showSnackBar(
-          //           context,
-          //           message:
-          //               'OOPS! Something went wrong. Check internet connection and try again.',
-          //         );
-          //         setState(() {
-          //           _isProcessing = false;
-          //         });
-          //       }
-          //     },
-          //   ),
-
-          // agreeAndJoin(context),
+              text: 'Sign up with Apple',
+              onPressed: () async {
+                AuthController().appleAuthentication();
+              },
+            )
         ],
       ),
     );
@@ -407,7 +336,7 @@ class _SignUpFormState extends State<SignUpForm> {
             TextSpan(
               recognizer: TapGestureRecognizer()
                 ..onTap = () {
-                  // launchPolicy();
+                  launchPolicy();
                 },
               text: 'Privacy Policy',
               style: const TextStyle(
@@ -448,54 +377,21 @@ class _SignUpFormState extends State<SignUpForm> {
     );
   }
 
-  // void logIn() async {
-  //   final AuthorizationResult result = await AppleSignIn.performRequests([
-  //     const AppleIdRequest(requestedScopes: [Scope.email, Scope.fullName])
-  //   ]);
-
-  //   switch (result.status) {
-  //     case AuthorizationStatus.authorized:
-  //       print('success');
-  //       break;
-
-  //     case AuthorizationStatus.error:
-  //       print('Sign in failed 😿');
-  //       break;
-
-  //     case AuthorizationStatus.cancelled:
-  //       print('User cancelled');
-  //       break;
-  //   }
+  // Future<bool?> _verifyUnique(String username, String email) async {
+  //   bool? user = await _apiService.verifyUnique(
+  //     username,
+  //     email,
+  //   );
+  //   return user;
   // }
 
-  // void checkLoggedInState() async {
-  //   final userId = await FlutterSecureStorage().read(key: 'userId');
-  //   if (userId == null) {
-  //     print('No stored user ID');
-  //     return;
-  //   }
-
-  //   final credentialState = await AppleSignIn.getCredentialState(userId);
-  //   switch (credentialState.status) {
-  //     case CredentialStatus.authorized:
-  //       print('getCredentialState returned authorized');
-  //       break;
-
-  //     case CredentialStatus.error:
-  //       print('error');
-  //       break;
-
-  //     case CredentialStatus.revoked:
-  //       print('getCredentialState returned revoked');
-  //       break;
-
-  //     case CredentialStatus.notFound:
-  //       print('getCredentialState returned not found');
-  //       break;
-
-  //     case CredentialStatus.transferred:
-  //       print('getCredentialState returned not transferred');
-  //       break;
-  //   }
-  // }
+  Future<void> launchPolicy() async {
+    String url = Constants.PRIVACY_POLICY_LINK;
+    bool canLunchLink = await canLaunchUrlString(url);
+    if (canLunchLink) {
+      await launchUrlString(url);
+    } else {
+      Get.snackbar('An Error Occured', 'Try again later.');
+    }
+  }
 }

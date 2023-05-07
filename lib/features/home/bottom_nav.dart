@@ -1,13 +1,17 @@
+import 'package:business_bosses_v2/features/posts/controllers/posts_controller.dart';
+import 'package:business_bosses_v2/features/profile/myprofilescreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 
 import '../../utils/theme/theme.dart';
 import '../posts/presentation/create_post_screen.dart';
 import 'all_communities_screen.dart';
 import 'home_screen.dart';
 import 'marketplace_screen.dart';
-import 'my_profile_screen.dart';
+
+import '../profile/myprofilescreen.dart';
 
 /// Bottom Nav Screen is basically where all home screens are navigated through
 class BottomNavScreen extends StatefulWidget {
@@ -19,6 +23,7 @@ class BottomNavScreen extends StatefulWidget {
 }
 
 class _BottomNavScreenState extends State<BottomNavScreen> {
+  final PostsController _postsController = Get.put(PostsController());
   int _activeIndex = 0;
   @override
   Widget build(BuildContext context) {
@@ -30,7 +35,7 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
               return AlertDialog(
                 title: const Text('Exit App'),
                 content: const Text('Are you sure you want to exit?'),
-                actions: [
+                actions: <Widget>[
                   TextButton(
                     onPressed: () {
                       Navigator.of(context).pop(false);
@@ -57,7 +62,7 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
           child: Stack(
-            children: [
+            children: <Widget>[
               Container(
                 height: MediaQuery.of(context).size.height,
                 width: MediaQuery.of(context).size.width,
@@ -88,7 +93,7 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
                     ],
                   ),
                   child: Stack(
-                    children: [
+                    children: <Widget>[
                       Column(
                         children: [
                           Container(

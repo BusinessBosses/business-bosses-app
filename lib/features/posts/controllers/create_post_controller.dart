@@ -1,9 +1,17 @@
+import 'dart:io';
+
+import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
+import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
+import 'package:business_bosses_v2/features/posts/controllers/posts_controller.dart';
+import 'package:business_bosses_v2/features/posts/repository/post_repository.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
 /// CREATEPOSTCONTROLLER
 class CreatePostController extends GetxController {
+  final PostsController _postsController = Get.find();
+
   /// ALL USERS FOR MENTIONS
   RxList<UserModel> users = RxList<UserModel>(<UserModel>[]);
 
@@ -12,7 +20,89 @@ class CreatePostController extends GetxController {
 
   /// PROMOTE STATE
   RxBool shouldPromote = false.obs;
+
+  /// LOADING STATE
+  RxBool loading = false.obs;
   late ImagePicker _picker;
+
+  ///   VALIDATE CREATE POST DATA
+  bool validateCreatePostData(Map<String, dynamic> data) {
+    if (data['title'].toString().isEmpty && imageFileList.isEmpty) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  /// UPLOAD FILE TO REMOTE SERVER
+  Future<dynamic> uploadFile() async {
+    /// UPLOADED FILE URLS
+    List<String> fileUrls = <String>[];
+
+    /// FILED SELECTED FILES
+    List<File> resourceFile = <File>[];
+
+    for (int i = 0; i < imageFileList.length; i++) {
+      File file = File(imageFileList[i].path);
+      resourceFile.add(file);
+    }
+
+    for (int i = 0; i < imageFileList.length; i++) {
+      final int bytes = resourceFile[i].readAsBytesSync().lengthInBytes;
+      final double kb = bytes / 1024;
+      final double mb = kb / 1024;
+
+      if (mb >= 3) {
+        showSnackbar(message: 'Image size should be maximum 3 MB.');
+        loading(false);
+        return null;
+      } else {
+        final dynamic res = await PostRepository.uploadFile(resourceFile[i]);
+
+        if (res == null) {
+          return null;
+        } else {
+          fileUrls.add(res['fileUrl']);
+        }
+      }
+    }
+
+    return fileUrls;
+  }
+
+  /// CREATE POST CONTROLLER (REGISTER NEW POST TO REMOTE DATA SOURCE)
+  Future<void> createPost(Map<String, dynamic> body) async {
+    if (validateCreatePostData(body)) {
+      loading(true);
+      if (imageFileList.isEmpty) {
+        final ApiResponseModel response = await PostRepository.createPost(body);
+
+        if (response.success) {
+          _postsController.addNewPost(response.data);
+          Get.back();
+        }
+      } else {
+        if (await uploadFile() == null) {
+          showSnackbar(message: 'Error Uploading image');
+        } else {
+          final ApiResponseModel response = await PostRepository.createPost(
+              <String, dynamic>{...body, 'images': await uploadFile()});
+
+          if (response.success) {
+            imageFileList.clear();
+            _postsController.addNewPost(response.data);
+            Get.back();
+          }
+        }
+      }
+      loading(false);
+      update();
+    } else {
+      showSnackbar(
+          message: 'Post can\'t be empty', title: 'OOPS!', error: true);
+      return;
+    }
+  }
 
   /// CHANGE PROMOTE STATE VALUE
   void togglePromote() {
@@ -54,11 +144,19 @@ class CreatePostController extends GetxController {
   }
 
   /// INITIALIZE CONTROLLER
-
   @override
   void onInit() {
     _picker = ImagePicker();
 
     super.onInit();
+  }
+
+  @override
+  void onClose() {
+    // TODO: implement onClose
+    users.clear();
+    imageFileList.clear();
+    shouldPromote(false);
+    super.onClose();
   }
 }

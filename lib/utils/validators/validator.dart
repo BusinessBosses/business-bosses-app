@@ -25,12 +25,31 @@ class Validator {
 
   /// VAlidate Field to be email
   static String emailValidator(String? val) {
-    debugPrint('Validator.emailValidator: $val');
     if (val == null) return 'Email cannot be empty';
     if (!isValidEmail(val)) {
       return 'Invalid email';
     } else {
       return '';
+    }
+  }
+
+  /// VAlidate Field to be email and does not exist
+  static String? emailValidatorSignUp(String? val, {required bool isUnique}) {
+    if (val == null) return 'Email cannot be empty';
+    if (isUnique == false) return 'Enter a unique email';
+    if (!isValidEmail(val)) {
+      return 'Invalid email';
+    } else {
+      return '';
+    }
+  }
+
+  /// Check if it exists from api
+  static bool? emailValidatorExists(String? val, {required bool isUnique}) {
+    if (!isValidEmail(val!)) {
+      return false;
+    } else {
+      return true;
     }
   }
 
@@ -67,11 +86,11 @@ class Validator {
     if (val == "") return 'Username cannot be empty';
     if (val.length <= 3) return 'Username is too short';
     if (val.contains(' ')) return 'You can\'t enter space';
-    if (isUnique) return 'Enter a unique username';
+    if (isUnique == false) return 'Enter a unique username';
     if (!isUnique) if (val.length < 2) return 'username is too short';
     if (!isUnique) return 'User name already exist';
 
-    return null;
+    return '';
   }
 
   /// Validate Social media accounts
@@ -104,12 +123,12 @@ class Validator {
   }
 
   /// Validate if name is valid
-  static String? nameValidator(String val) {
-    if ((val.trim().isEmpty)) {
+  static String? nameValidator(String? val) {
+    if ((val?.trim().isEmpty ?? true)) {
       return 'Name cannot be empty';
     }
-    if (val.length < 2) return 'Name is too short';
-    return null;
+    if (val!.length < 2) return 'Name is too short';
+    return '';
   }
 
   /// VAlidate bio is not empty

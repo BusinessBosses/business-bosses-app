@@ -3,13 +3,28 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
+import '../../../navigation/routes.dart';
+import '../../../services/api_service.dart';
 import '../../../utils/theme/theme.dart';
 
 /// VERIFY CODE AFTER SIGNUP
 class CodeVerificationScreen extends StatefulWidget {
   /// KEY CONSTRUCTOR
-  const CodeVerificationScreen({Key? key, required this.otp}) : super(key: key);
+  const CodeVerificationScreen({
+    Key? key,
+    required this.otp,
+    required this.userName,
+    required this.emailAddress,
+    required this.password,
+  }) : super(key: key);
+  // ignore: public_member_api_docs
   final String otp;
+  // ignore: public_member_api_docs
+  final String userName;
+  // ignore: public_member_api_docs
+  final String password;
+  // ignore: public_member_api_docs
+  final String emailAddress;
   @override
   State<CodeVerificationScreen> createState() => _CodeVerificationScreenState();
 }
@@ -17,6 +32,8 @@ class CodeVerificationScreen extends StatefulWidget {
 class _CodeVerificationScreenState extends State<CodeVerificationScreen> {
   String currentText = "";
   bool _isProcessing = false;
+
+  final ApiService _apiService = ApiService();
 
   @override
   Widget build(BuildContext context) {
@@ -106,7 +123,14 @@ class _CodeVerificationScreenState extends State<CodeVerificationScreen> {
                 child: ElevatedButton(
                   onPressed: () async {
                     if (widget.otp.isNotEmpty && widget.otp == currentText) {
-                      Get.snackbar('Success', 'verified');
+                      dynamic user = await _handleRegister();
+                      if (user['success'] == false) {
+                        Get.snackbar('Error', user['error']);
+                      } else {
+                        Get.snackbar(
+                            'Success', 'You have registered succesfully!');
+                        Get.toNamed(Routes.bottomNavigation);
+                      }
                     } else {
                       Get.snackbar('Error', 'Incorrect OTP');
                     }
@@ -126,6 +150,15 @@ class _CodeVerificationScreenState extends State<CodeVerificationScreen> {
         ),
       ),
     );
+  }
+
+  Future<dynamic> _handleRegister() async {
+    dynamic user = await _apiService.register(
+      widget.emailAddress,
+      widget.password,
+      widget.userName,
+    );
+    return user;
   }
 }
 
