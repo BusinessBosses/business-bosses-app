@@ -9,6 +9,7 @@ class SafetyModel extends StatelessWidget {
   final String subTitle;
   final String clickableText;
   final Function? onTap;
+
   final MainAxisAlignment mainAxisAlignment;
 
   const SafetyModel({
@@ -22,7 +23,6 @@ class SafetyModel extends StatelessWidget {
     this.title = 'No data found',
     this.subTitle = '',
     this.clickableText = '',
-    required this.onTap,
     this.mainAxisAlignment = MainAxisAlignment.center,
   }) : super(key: key);
 

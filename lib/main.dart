@@ -1,4 +1,3 @@
-import 'package:business_bosses_v2/functions/bindings/root_bindings.dart';
 import 'package:business_bosses_v2/navigation/navigation.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/services/firebase_analytics.dart';
@@ -12,6 +11,7 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
@@ -39,27 +39,30 @@ class MyApp extends StatelessWidget {
         statusBarIconBrightness: Brightness.dark,
       ),
     );
-    final GetStorage sandBox = GetStorage();
-    sandBox.writeIfNull(Constants.USER_ID, '');
-    return SimpleBuilder(
-      builder: (_) {
-        final String? userId = sandBox.read(Constants.USER_ID);
-        return GetMaterialApp(
-          navigatorObservers: <NavigatorObserver>[
-            AnalyticsServices.getAnalyticObserver()
-          ],
+    return FutureBuilder(
+      future: SharedPreferences.getInstance(),
+      builder:
+          (BuildContext context, AsyncSnapshot<SharedPreferences> snapshot) {
+        final SharedPreferences? data = snapshot.data;
+        if (snapshot.hasData) {
+          final String? userId = data!.getString(Constants.USER_ID);
 
-          initialRoute: userId == '' || userId == null
-              ? Routes.login
-              : Routes.bottomNavigation,
 
-          initialBinding: RootBindings(),
-          // initialRoute: userId == null ? Routes.login : Routes.bottomNavigation,
-          getPages: Nav.routes,
-          debugShowCheckedModeBanner: false,
-          theme: appTheme,
-          title: 'Business Bosses',
-        );
+          return GetMaterialApp(
+            navigatorObservers: <NavigatorObserver>[
+              AnalyticsServices.getAnalyticObserver()
+            ],
+            initialRoute: userId == '' || userId == null
+                ? Routes.login
+                : Routes.bottomNavigation,
+            getPages: Nav.routes,
+            debugShowCheckedModeBanner: false,
+            theme: appTheme,
+            title: 'Business Bosses',
+          );
+        } else {
+          return Container();
+        }
       },
     );
   }

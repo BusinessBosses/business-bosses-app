@@ -1,7 +1,11 @@
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/common/models/comment_model.dart';
+import 'package:business_bosses_v2/common/widgets/text_widget.dart';
 import 'package:business_bosses_v2/features/posts/models/post_model.dart';
 import 'package:business_bosses_v2/features/posts/repository/post_repository.dart';
+import 'package:business_bosses_v2/services/api_service.dart';
+import 'package:business_bosses_v2/utils/theme/theme.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class PostsController extends GetxController {
@@ -12,19 +16,69 @@ class PostsController extends GetxController {
   RxBool loading = RxBool(false);
 
   /// PROCESS RAW API DATA, MODELIZE AND SAVE TO STATE
-  void processPostsToState(dynamic posts) {
-    final List<Map<String, dynamic>> psts = posts as List<Map<String, dynamic>>;
+  void processPostsToState(dynamic post) {
+    final List psts = post;
     for (int i = 0; i < psts.length; i++) {
-      posts.add(PostModel.fromMap(psts[i]) as Map<String, dynamic>);
+      posts.add(PostModel.fromMap({
+        ...psts[i],
+        'likes':
+            psts[i]['likes'].map((like) => like['userId'].toString()).toList(),
+        'coins':
+            psts[i]['likes'].map((coin) => coin['userId'].toString()).toList()
+      }));
     }
+  }
+
+  /// LIKE AND UNLIKE FUNCTION
+  void postLike(String userId, String postId) {
+    final int postIndex =
+        posts.indexWhere((PostModel element) => element.postId == postId);
+    if (postIndex != -1) {
+      final bool checkLiked = posts[postIndex].likes!.contains(userId);
+      if (checkLiked) {
+        posts[postIndex]
+            .likes!
+            .removeWhere((String element) => element == userId);
+      } else {
+        posts[postIndex].likes!.add(userId);
+      }
+    }
+    update();
+  }
+
+  /// COIN AND UNCOIN FUNCTION
+  void postCoin(String userId, String postId) {
+    final int postIndex =
+        posts.indexWhere((PostModel element) => element.postId == postId);
+    if (postIndex != -1) {
+      final bool checkIfCoined = posts[postIndex].coins!.contains(userId);
+      if (checkIfCoined) {
+        posts[postIndex]
+            .coins!
+            .removeWhere((String element) => element == userId);
+      } else {
+        posts[postIndex].coins!.add(userId);
+      }
+    }
+    update();
   }
 
   /// ADD NEW POST TO STATE
   void addNewPost(Map<String, dynamic> newPost) {
-    PostModel modelizedNewPost = PostModel.fromMap(newPost);
-    modelizedNewPost.coins = <String>[];
-    modelizedNewPost.comments = <CommentModel>[];
-    modelizedNewPost.likes = <String>[];
+    PostModel modelizedNewPost = PostModel.fromMap({
+      ...newPost,
+      'coins': [],
+      'likes': [],
+      'comments': [],
+      'user': {
+        'username': 'testUser1',
+        'email': 'test1@gmail.com',
+        'uid': '4cc78ac9-df9b-43ad-b63e-de769b1fdfb1',
+      }
+    });
+    // modelizedNewPost.coins = <String>[];
+    // modelizedNewPost.comments = <CommentModel>[];
+    // modelizedNewPost.likes = <String>[];
 
     posts.insert(0, modelizedNewPost);
 
@@ -39,9 +93,38 @@ class PostsController extends GetxController {
         await PostRepository.fetchPosts(paginationPage.value, postsSize);
     if (response.success) {
       paginationPage(paginationPage.value + 1);
-      processPostsToState(response.data);
+      processPostsToState(response.data['rows']);
     } else {
       error(true);
+      if (response.message == 'send a valid token') {
+        showDialog(
+          barrierDismissible: false,
+          context: Get.context!,
+          builder: (BuildContext context) => AlertDialog(
+            title: TextWidget(
+              text: 'Access token expired',
+              fontWeight: FontWeight.w700,
+              size: 18,
+            ),
+            content: TextWidget(
+              text:
+                  'Your access token has expired. therefore, you will be required to login again to generate a new one. ',
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  ApiService().logout();
+                  Navigator.of(context).pop(context);
+                },
+                child: TextWidget(
+                  text: "Create new Access Token",
+                  color: primaryColorLT,
+                ),
+              )
+            ],
+          ),
+        );
+      }
     }
 
     loading(false);

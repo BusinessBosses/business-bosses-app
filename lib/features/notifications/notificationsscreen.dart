@@ -79,7 +79,6 @@ Center noNotificationsFoundWidget(String title) {
             ),
             title: 'You have no notification',
             subTitle: 'You\'ll receive all new $title here',
-            onTap: () {},
           ),
           const SizedBox(height: 150.0)
         ],

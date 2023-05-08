@@ -6,6 +6,8 @@ import 'package:provider/provider.dart';
 
 import '../../common/widgets/buttons/custom_child_button.dart';
 import '../../utils/theme/theme.dart';
+import '../posts/models/post_model.dart';
+import '../posts/presentation/widgets/userpost_tile.dart';
 
 class MyProfileHeader extends StatefulWidget {
   const MyProfileHeader({Key? key}) : super(key: key);

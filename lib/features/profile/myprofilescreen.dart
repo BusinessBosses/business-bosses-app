@@ -1,4 +1,6 @@
 import 'package:business_bosses_v2/common/models/user_model.dart';
+import 'package:business_bosses_v2/features/posts/models/post_model.dart';
+import 'package:business_bosses_v2/features/posts/presentation/widgets/userpost_tile.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
@@ -6,6 +8,7 @@ import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import '../../action/action.dart';
+import '../../common/widgets/safety_model.dart';
 import '../../common/widgets/tiles/outlinebuttonheader.dart';
 import '../../functions/my_native_functions.dart';
 import '../../navigation/routes.dart';
@@ -104,6 +107,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                 height: 24.0,
               ),
               onPressed: () {
+                // Navigator.pushNamed(context, '/settingsScreen');
                 Get.toNamed(Routes.settings);
               })
         ],
@@ -121,7 +125,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
           length: 2,
           child: Column(
             children: [
-              OutlineButtonHeader(),
+              OutlineButtonHeader(context),
               const SizedBox(height: 8.0),
 
               TabBar(
@@ -155,9 +159,54 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                   children: [
                     SingleChildScrollView(
                       child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: const []),
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [],
+                        // children: Consumer<MyPosts>(
+                        //   builder: (context, p, _) => p.posts.isEmpty
+                        //       ?  const SafetyModel(
+                        //           isLoading: false,
+                        //           icon: Icon(
+                        //             Icons.edit,
+                        //             size: 80.0,
+                        //             color: Colors.grey,
+                        //           ),
+                        //           title: 'You\'ve no post',
+                        //           subTitle: 'Create a post to view here',
+                        //           clickableText: 'Create post',
+                        //           // onTab: () => navigateTo(
+                        //           //   context,
+                        //           //   routeName: CreatePostScreen.routeName,
+                        //           // ),
+                        //         )
+                        //       : Container(
+                        //           height: double.infinity,
+                        //           width: double.infinity,
+                        //           color: backgroundcolorinterface,
+                        //           child: GridView.builder(
+                        //             gridDelegate:
+                        //                 const SliverGridDelegateWithFixedCrossAxisCount(
+                        //               crossAxisCount: 2,
+                        //               mainAxisSpacing: 5,
+                        //               crossAxisSpacing: 5,
+                        //             ),
+                        //             padding: const EdgeInsets.only(
+                        //                 top: 10.0,
+                        //                 bottom: 120,
+                        //                 left: 10,
+                        //                 right: 10),
+                        //             itemCount: p.posts.length,
+                        //             itemBuilder: (context, i) {
+                        //               return PostGridItem(
+                        //                 post: p.posts[i],
+                        //                 key: ValueKey(p.posts[i].postId),
+                        //                 onDeletePost: _onDeletePost,
+                        //                 onTap: () => _onPostTap(p.posts[i]),
+                        //               );
+                        //             },
+                        //           ),
+                        //         ),
+                      ),
                     ),
                     SingleChildScrollView(
                       child: Column(

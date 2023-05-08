@@ -49,7 +49,7 @@ class AuthController extends GetxController {
       templateId: dotenv.env['SENDGRID_TEMPLATE_ID'],
       customArgs: {'username': userName, 'otp': code.toString()},
     );
-    mailer.send(email).then((Result<void> result) {
+    mailer.send(email).then((result) {
       if (result.isError) {
         onError();
       } else {
