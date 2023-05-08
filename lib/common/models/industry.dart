@@ -31,9 +31,24 @@ class Industry {
       photo: map['photo'] as String,
       description: map['description'] as String,
       active: map['active'] as bool,
-      timestamp: map['timestamp'] as int,
+      timestamp: int.parse(map['timestamp']),
       categoryId: map['categoryId'] as String,
     );
+  }
+
+  static List<Industry> toIndustries({
+    required List snapshot,
+  }) {
+    List<Industry> industries = [];
+    for (var i = 0; i < snapshot.length; i++) {
+      final Industry industry = Industry.toObject(snapshot[i]);
+      industries.add(industry);
+    }
+    // snapshot.forEach((key, data) {
+    //   final Industry industry = Industry.toObject(data);
+    //   if (industry.active ?? true) industries.add(industry);
+    // });
+    return industries;
   }
 
   static List<Industry> toJustSortIndustryList(List<dynamic> responseData) {
