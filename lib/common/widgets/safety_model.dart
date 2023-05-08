@@ -8,6 +8,7 @@ class SafetyModel extends StatelessWidget {
   final String title;
   final String subTitle;
   final String clickableText;
+  final Function? onTap;
 
   final MainAxisAlignment mainAxisAlignment;
 

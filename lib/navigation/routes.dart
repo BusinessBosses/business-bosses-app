@@ -14,6 +14,7 @@ class Routes {
   static const String restPassword = '/resetPasswordScreen';
   static const String bottomNavigation = '/bottomNavScreen';
   static const String myProfile = '/myProfileScreen';
+  static const String updateProfile = '/updateProfileScreen';
   static const String publicProfile = '/publicProfileScreen';
   static const String createPost = '/createPostScreen';
   static const String postDetails = '/postDetailsScreen';
@@ -21,7 +22,6 @@ class Routes {
   static const String chat = '/chatScreen';
   static const String marketPlace = '/marketPlaceScreen';
   static const String createForum = '/createForumScreen';
-  static const String updateProfile = '/updateProfileScreen';
   static const String settings = '/settingsScreen';
   static const String notifications = '/notificationsScreen';
   static const String onboarding = '/onboardingScreen';

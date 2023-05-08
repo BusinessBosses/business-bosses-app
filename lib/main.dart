@@ -47,6 +47,7 @@ class MyApp extends StatelessWidget {
         if (snapshot.hasData) {
           final String? userId = data!.getString(Constants.USER_ID);
 
+
           return GetMaterialApp(
             navigatorObservers: <NavigatorObserver>[
               AnalyticsServices.getAnalyticObserver()

@@ -1,96 +1,64 @@
-// class Industry {
-//   String industryId;
-//   String industry;
-//   String photo;
-//   String description;
-//   List<String> joinedUsers;
-//   int timestamp;
-//   bool active;
-//   String categoryId;
+import 'dart:convert';
 
-//   Industry({
-//     required this.industryId,
-//     required this.industry,
-//     required this.photo,
-//     required this.description,
-//     required this.joinedUsers,
-//     required this.timestamp,
-//     required this.active,
-//     required this.categoryId,
-//   });
+import '../../services/api_service.dart';
+import 'api_response_model.dart';
 
-//   static List<Industry> toJustSortIndustryList({DataSnapshot snapshot}) {
-//     if (snapshot == null) return [];
-//     List<Industry> items = [];
-//     Map<dynamic, dynamic> values = snapshot.value;
-//     values?.forEach((key, pst) {
-//       Industry pt = Industry.toObject(pst);
-//       items.add(pt);
-//     });
-//     items?.sort((a, b) => b.timestamp?.compareTo(a.timestamp ?? 0) ?? 0);
-//     return items;
-//   }
+/// INDUSTRY MODEL
+class Industry {
+  String industryId;
+  String industry;
+  String photo;
+  String description;
+  int timestamp;
+  bool active;
+  String categoryId;
 
-//   factory Industry.toObject(Map<dynamic, dynamic> map) {
-//     return Industry(
-//       industryId: map['industryId'] as String,
-//       industry: map['industry'] as String,
-//       photo: map['photo'] as String,
-//       description: map['description'] as String,
-//       active: map['active'] as bool,
-//       joinedUsers: map['joinedUsers'] == null
-//           ? []
-//           : List<String>.from(map['joinedUsers']),
-//       timestamp: map['timestamp'] as int,
-//       categoryId: map['categoryId'] as String,
-//     );
-//   }
+  /// INDUSTRY MODEL
+  Industry({
+    required this.industryId,
+    required this.industry,
+    required this.photo,
+    required this.description,
+    required this.timestamp,
+    required this.active,
+    required this.categoryId,
+  });
 
-//   factory Industry.toObjectFromSnapshot(DataSnapshot snapshot) {
-//     Map<dynamic, dynamic> map = snapshot.value;
-//     return Industry(
-//       industryId: map['industryId'] as String,
-//       industry: map['industry'] as String,
-//       photo: map['photo'] as String,
-//       description: map['description'] as String,
-//       active: map['active'] as bool,
-//       joinedUsers: map['joinedUsers'] == null
-//           ? []
-//           : List<String>.from(map['joinedUsers']),
-//       timestamp: map['timestamp'] as int,
-//       categoryId: map['categoryId'] as String,
-//     );
-//   }
+  factory Industry.toObject(Map<dynamic, dynamic> map) {
+    return Industry(
+      industryId: map['industryId'] as String,
+      industry: map['industry'] as String,
+      photo: map['photo'] as String,
+      description: map['description'] as String,
+      active: map['active'] as bool,
+      timestamp: map['timestamp'] as int,
+      categoryId: map['categoryId'] as String,
+    );
+  }
 
-//   Map<dynamic, dynamic> toSetMap() {
-//     // ignore: unnecessary_cast
-//     return {
-//       'industryId': industryId,
-//       'industry': industry,
-//       'photo': photo,
-//       'description': 'It is about $industry',
-//       'joinedUsers': [],
-//       'timestamp': DateTime.now().millisecondsSinceEpoch,
-//       'categoryId': categoryId,
-//     } as Map<dynamic, dynamic>;
-//   }
+  static List<Industry> toJustSortIndustryList(List<dynamic> responseData) {
+    if (responseData == null) return [];
+    List<Industry> items = [];
+    for (final postJson in responseData) {
+      Industry pt = Industry.toObject(postJson);
+      items.add(pt);
+    }
+    items.sort((Industry a, Industry b) => b.timestamp.compareTo(a.timestamp));
+    return items;
+  }
 
-//   Map<dynamic, dynamic> toJoinedMap() {
-//     // ignore: unnecessary_cast
-//     return {
-//       // 'industryId': this.id,
-//       // 'industry': this.industry,
-//       // 'description': this.description,
-//       'joinedUsers': joinedUsers,
-//       // 'timestamp': this.timestamp,
-//     } as Map<dynamic, dynamic>;
-//   }
+  Future<List<Industry>> fetchIndustry() async {
+    final ApiResponseModel response =
+        await ApiService.get(path: Uri.parse('industry/get').toString());
 
-//   static Map<String, dynamic> toIndustriesListMap(List<Industry> industries) {
-//     Map<String, dynamic> map = {};
-//     for (Industry ind in industries ?? []) {
-//       map[ind.industryId] = ind.toSetMap();
-//     }
-//     return map;
-//   }
-// }
+    if (response.success == true) {
+      final List<dynamic> responseData = jsonDecode(response.data.rows);
+      final List<Industry> industries =
+          Industry.toJustSortIndustryList(responseData);
+
+      return industries;
+    } else {
+      throw Exception('Failed to fetch industries');
+    }
+  }
+}

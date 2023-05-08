@@ -4,7 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 class NetworkImageWithPlaceHolder extends StatelessWidget {
-  final String imageUrl;
+  final String? imageUrl;
   final double width;
   final double height;
   final double? iconSize;
@@ -55,7 +55,7 @@ class NetworkImageWithPlaceHolder extends StatelessWidget {
           borderRadius: BorderRadius.circular(radius),
           child: CachedNetworkImage(
             memCacheHeight: cacheHeight,
-            imageUrl: imageUrl /* == null ? 'https://www.error' : imageUrl*/,
+            imageUrl: imageUrl! /* == null ? 'https://www.error' : imageUrl*/,
             fit: fit,
             errorWidget: (_, __, ___) => Container(
               color: color == null
