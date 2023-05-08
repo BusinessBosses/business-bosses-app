@@ -244,8 +244,9 @@ class _LoginFormState extends State<LoginForm> {
       _password!,
     );
     return user;
+
+    // void _handleLogin() async {
+    //   await AuthController().login(_authCred!, _password!);
+    // }
   }
-  // void _handleLogin() async {
-  //   await AuthController().login(_authCred!, _password!);
-  // }
 }

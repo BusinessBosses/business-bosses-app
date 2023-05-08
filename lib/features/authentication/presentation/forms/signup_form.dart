@@ -194,35 +194,29 @@ class _SignUpFormState extends State<SignUpForm> {
           CustomButton(
             label: 'Sign Up',
             onPressed: () {
-              if (Validator.emailValidatorSignUp(_authCred,
-                          isUnique: _isUniqueEmail!) ==
-                      '' &&
-                  Validator.usernameValidator(_username!,
-                          isUnique: _isUniqueName!) ==
-                      '') {
-                if (agreedToTerms) {
-                  setState(() {
-                    _autoValidateMode = AutovalidateMode.always;
-                    _isProcessing = true;
-                  });
-                  AuthController().sendOtp(
-                      emailAddress: _authCred!,
-                      userName: _username!,
-                      password: _password!,
-                      onError: () {
-                        setState(() {
-                          _isProcessing = false;
-                        });
+              if (agreedToTerms) {
+                setState(() {
+                  _autoValidateMode = AutovalidateMode.always;
+                });
+                if (!_formKey.currentState!.validate()) return;
+                setState(() {
+                  _isProcessing = true;
+                });
+                AuthController().sendOtp(
+                    emailAddress: _authCred!,
+                    userName: _username!,
+                    password: _password!,
+                    onError: () {
+                      setState(() {
+                        _isProcessing = false;
                       });
-                  setState(() {
-                    _isProcessing = false;
-                  });
-                } else {
-                  Get.snackbar('Error',
-                      'Before signing up, you must agree to our Terms and Conditions');
-                }
+                    });
+                setState(() {
+                  _isProcessing = false;
+                });
               } else {
-                Get.snackbar('Error', 'Invalid Entries in Form');
+                Get.snackbar('Error',
+                    'Before signing up, you must agree to our Terms and Conditions');
               }
             },
             isProcessing: _isProcessing,

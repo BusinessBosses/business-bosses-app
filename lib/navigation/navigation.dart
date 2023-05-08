@@ -10,6 +10,7 @@ import 'package:business_bosses_v2/features/posts/presentation/create_post_scree
 import 'package:business_bosses_v2/features/profile/analysescreen.dart';
 import 'package:business_bosses_v2/features/profile/myprofilescreen.dart';
 import 'package:business_bosses_v2/features/profile/promotionscreen.dart';
+import 'package:business_bosses_v2/features/profile/update_profile_screen.dart';
 import 'package:business_bosses_v2/features/settings/settingsscreen.dart';
 
 import 'package:business_bosses_v2/navigation/routes.dart';
@@ -59,6 +60,10 @@ class Nav {
     GetPage(
       name: Routes.settings,
       page: () => const SettingsScreen(),
+    ),
+    GetPage(
+      name: Routes.updateProfile,
+      page: () => const UpdateProfileScreen(),
     ),
   ];
 }

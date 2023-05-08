@@ -132,11 +132,11 @@ class Validator {
   }
 
   /// VAlidate bio is not empty
-  static String? bioValidator(String val) {
-    if ((val.trim().isEmpty)) {
+  static String? bioValidator(String? val) {
+    if ((val?.trim().isEmpty ?? true)) {
       return 'Bio cannot be empty';
     }
-    if (val.length < 12) return 'Bio is too short';
+    if (val!.length < 12) return 'Bio is too short';
     return null;
   }
 

@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
 
+import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/utils/validators/validator.dart';
 import 'package:business_bosses_v2/utils/constants/constants.dart';
@@ -14,8 +16,8 @@ import '../common/models/user_model.dart';
 import '../navigation/routes.dart';
 
 /// SERVER BASE URL
-// const String baseUrl = 'https://businessbosses-api.vercel.app/api/v1';
-const String baseUrl = 'http://192.168.1.176:3000/api/v1';
+const String baseUrl = 'https://businessbosses-api.vercel.app/api/v1';
+// const String baseUrl = 'http://192.168.1.176:3000/api/v1';
 
 /// LOCAL STORAGE SANDBOX
 final GetStorage sandBox = GetStorage();
@@ -48,6 +50,29 @@ class ApiService {
       final dynamic jsonResponse = json.decode(response.body);
       print(jsonResponse);
       return jsonResponse;
+    }
+  }
+
+  /// UPLOAD FILE
+  static Future<dynamic> uploadFile(File image) async {
+    String uploadUrl = 'http://44.210.87.234/upload.php';
+    http.MultipartRequest request =
+        http.MultipartRequest('POST', Uri.parse(uploadUrl));
+    request.files.add(await http.MultipartFile.fromPath('file', image.path));
+    try {
+      final http.StreamedResponse streamedResponse = await request.send();
+
+      Map<dynamic, dynamic> result =
+          json.decode(await streamedResponse.stream.bytesToString());
+      if (result['success']) {
+        return result;
+      } else {
+        showSnackbar(message: result['message'], title: 'Error Occured');
+        return null;
+      }
+    } catch (e) {
+      showSnackbar(message: e.toString());
+      return null;
     }
   }
 
@@ -113,6 +138,7 @@ class ApiService {
 
     await sandBox.remove(Constants.ACCESS_TOKEN);
     await prefs.remove(Constants.USER_ID);
+    Get.offAllNamed(Routes.login);
   }
 
   /// HTTP POST CALL
@@ -120,7 +146,9 @@ class ApiService {
     required String path,
     required Map<String, dynamic> body,
   }) async {
+    log(body.toString());
     final String token = sandBox.read(Constants.ACCESS_TOKEN);
+    log(token);
     try {
       final http.Response response = await http.post(
         Uri.parse('$baseUrl/$path'),
@@ -170,13 +198,15 @@ class ApiService {
     try {
       final http.Response response = await http.put(
         Uri.parse('$baseUrl/$path'),
-        body: body,
+        body: jsonEncode(body),
         headers: <String, String>{
           'Content-type': 'application/json',
           'Accept': 'application/json',
           'Authorization': 'bearer $token'
         },
       );
+      log(response.body.toString());
+
       return ApiResponseModel.fromMap(jsonDecode(response.body));
     } catch (e) {
       throw e.toString();
@@ -192,7 +222,7 @@ class ApiService {
     try {
       final http.Response response = await http.delete(
         Uri.parse('$baseUrl/$path'),
-        body: body,
+        body: jsonEncode(body),
         headers: <String, String>{
           'Content-type': 'application/json',
           'Accept': 'application/json',
