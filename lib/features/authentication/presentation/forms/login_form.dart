@@ -205,10 +205,11 @@ class _LoginFormState extends State<LoginForm> {
 
             if (Platform.isIOS)
               SignInWithAppleButton(
+                height: 55,
                 onPressed: () async {
                   AuthController().appleAuthentication();
                 },
-              ),
+              )
           ],
         ),
       ),
@@ -245,7 +246,8 @@ class _LoginFormState extends State<LoginForm> {
     );
     return user;
 
-  // void _handleLogin() async {
-  //   await AuthController().login(_authCred!, _password!);
-  // }
+    // void _handleLogin() async {
+    //   await AuthController().login(_authCred!, _password!);
+    // }
+  }
 }
