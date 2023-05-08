@@ -270,7 +270,7 @@ class _SignUpFormState extends State<SignUpForm> {
             Stack(children: [
               SignInWithAppleButton(
                 height: 55,
-                text: 'SIgn up with apple',
+                text: 'SIgn up with Apple',
                 onPressed: () async {
                   AuthController().appleAuthentication();
                 },
