@@ -113,6 +113,7 @@ class ApiService {
 
     await sandBox.remove(Constants.ACCESS_TOKEN);
     await prefs.remove(Constants.USER_ID);
+    Get.offAllNamed(Routes.login);
   }
 
   /// HTTP POST CALL
@@ -120,7 +121,9 @@ class ApiService {
     required String path,
     required Map<String, dynamic> body,
   }) async {
+    log(body.toString());
     final String token = sandBox.read(Constants.ACCESS_TOKEN);
+    log(token);
     try {
       final http.Response response = await http.post(
         Uri.parse('$baseUrl/$path'),
@@ -170,7 +173,7 @@ class ApiService {
     try {
       final http.Response response = await http.put(
         Uri.parse('$baseUrl/$path'),
-        body: body,
+        body: jsonEncode(body),
         headers: <String, String>{
           'Content-type': 'application/json',
           'Accept': 'application/json',
@@ -192,7 +195,7 @@ class ApiService {
     try {
       final http.Response response = await http.delete(
         Uri.parse('$baseUrl/$path'),
-        body: body,
+        body: jsonEncode(body),
         headers: <String, String>{
           'Content-type': 'application/json',
           'Accept': 'application/json',

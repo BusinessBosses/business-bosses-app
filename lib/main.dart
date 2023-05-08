@@ -1,6 +1,3 @@
-import 'package:business_bosses_v2/features/authentication/presentation/login_screen.dart';
-import 'package:business_bosses_v2/features/home/bottom_nav.dart';
-import 'package:business_bosses_v2/functions/bindings/root_bindings.dart';
 import 'package:business_bosses_v2/navigation/navigation.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/services/firebase_analytics.dart';
@@ -54,14 +51,9 @@ class MyApp extends StatelessWidget {
             navigatorObservers: <NavigatorObserver>[
               AnalyticsServices.getAnalyticObserver()
             ],
-
             initialRoute: userId == '' || userId == null
                 ? Routes.login
                 : Routes.bottomNavigation,
-
-            // initialBinding: RootBindings(),
-            // initialRoute: userId == null ? Routes.login : Routes.bottomNavigation,
-
             getPages: Nav.routes,
             debugShowCheckedModeBanner: false,
             theme: appTheme,
