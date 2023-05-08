@@ -43,7 +43,6 @@ class _MyProfileHeaderState extends State<MyProfileHeader> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               UserProfileTile(),
-
               Container(
                 alignment: Alignment.center,
                 child: Row(
@@ -53,13 +52,13 @@ class _MyProfileHeaderState extends State<MyProfileHeader> {
                         child: CustomChildButton(
                       onPressed: () {},
                       caption: 'Connections',
-                      value: 10,
+                      value: 0,
                     )),
                     Expanded(
                         child: CustomChildButton(
                       onPressed: () {},
                       caption: 'Connected',
-                      value: 10,
+                      value: 0,
                     )),
                     Expanded(
                       child: CustomChildButton(
@@ -71,8 +70,6 @@ class _MyProfileHeaderState extends State<MyProfileHeader> {
                   ],
                 ),
               ),
-
-              // SizedBox(height: 16.0),
             ],
           ),
         ),
@@ -90,10 +87,10 @@ class _MyProfileHeaderState extends State<MyProfileHeader> {
         padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 4.0),
         margin: const EdgeInsets.only(right: 8.0),
         decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(radiusValue),
-            border:
-                Border.all(color: Theme.of(context).primaryColor, width: 1)),
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(radiusValue),
+          border: Border.all(color: Theme.of(context).primaryColor, width: 1),
+        ),
         child: child,
       ),
     );
@@ -103,11 +100,13 @@ class _MyProfileHeaderState extends State<MyProfileHeader> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Text(value,
-            style: Theme.of(context)
-                .textTheme
-                .titleLarge
-                ?.copyWith(fontWeight: FontWeight.bold)),
+        Text(
+          value,
+          style: Theme.of(context)
+              .textTheme
+              .titleLarge
+              ?.copyWith(fontWeight: FontWeight.bold),
+        ),
         Text(
           caption,
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
