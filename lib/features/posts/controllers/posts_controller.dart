@@ -4,9 +4,11 @@ import 'package:business_bosses_v2/common/widgets/text_widget.dart';
 import 'package:business_bosses_v2/features/posts/models/post_model.dart';
 import 'package:business_bosses_v2/features/posts/repository/post_repository.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
+import 'package:business_bosses_v2/utils/constants/constants.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 
 class PostsController extends GetxController {
   RxList<PostModel> posts = RxList<PostModel>(<PostModel>[]);
@@ -65,6 +67,8 @@ class PostsController extends GetxController {
 
   /// ADD NEW POST TO STATE
   void addNewPost(Map<String, dynamic> newPost) {
+    final sandBox = GetStorage();
+    final String uid = sandBox.read(Constants.USER_ID);
     PostModel modelizedNewPost = PostModel.fromMap({
       ...newPost,
       'coins': [],
@@ -73,7 +77,7 @@ class PostsController extends GetxController {
       'user': {
         'username': 'testUser1',
         'email': 'test1@gmail.com',
-        'uid': '4cc78ac9-df9b-43ad-b63e-de769b1fdfb1',
+        'uid': uid,
       }
     });
     // modelizedNewPost.coins = <String>[];

@@ -122,18 +122,26 @@ class _CodeVerificationScreenState extends State<CodeVerificationScreen> {
                 height: buttonHeight,
                 child: ElevatedButton(
                   onPressed: () async {
-                    if (widget.otp.isNotEmpty && widget.otp == currentText) {
-                      dynamic user = await _handleRegister();
-                      if (user['success'] == false) {
-                        Get.snackbar('Error', user['error']);
-                      } else {
-                        Get.snackbar(
-                            'Success', 'You have registered succesfully!');
-                        Get.toNamed(Routes.bottomNavigation);
-                      }
+                    if (_isProcessing) return;
+                    setState(() {
+                      _isProcessing = true;
+                    });
+                    // if (widget.otp.isNotEmpty && widget.otp == currentText) {
+                    dynamic user = await _handleRegister();
+                    if (user['success'] == false) {
+                      Get.snackbar('Error', user['error']);
                     } else {
-                      Get.snackbar('Error', 'Incorrect OTP');
+                      Get.snackbar(
+                          'Success', 'You have registered succesfully!');
+                      Get.toNamed(Routes.updateProfile);
                     }
+                    // } else {
+                    //   Get.snackbar('Error', 'Incorrect OTP');
+                    // }
+
+                    setState(() {
+                      _isProcessing = false;
+                    });
                   },
                   child: Text(
                     _isProcessing ? 'Verifying...' : 'Verify',

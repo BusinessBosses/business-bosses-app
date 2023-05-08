@@ -197,6 +197,9 @@ class _SignUpFormState extends State<SignUpForm> {
               if (agreedToTerms) {
                 setState(() {
                   _autoValidateMode = AutovalidateMode.always;
+                });
+                if (!_formKey.currentState!.validate()) return;
+                setState(() {
                   _isProcessing = true;
                 });
                 AuthController().sendOtp(

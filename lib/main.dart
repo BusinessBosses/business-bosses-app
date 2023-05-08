@@ -47,7 +47,6 @@ class MyApp extends StatelessWidget {
         if (snapshot.hasData) {
           final String? userId = data!.getString(Constants.USER_ID);
 
-
           return GetMaterialApp(
             navigatorObservers: <NavigatorObserver>[
               AnalyticsServices.getAnalyticObserver()
@@ -55,6 +54,8 @@ class MyApp extends StatelessWidget {
             initialRoute: userId == '' || userId == null
                 ? Routes.login
                 : Routes.bottomNavigation,
+
+            // initialRoute: Routes.updateProfile,
             getPages: Nav.routes,
             debugShowCheckedModeBanner: false,
             theme: appTheme,
