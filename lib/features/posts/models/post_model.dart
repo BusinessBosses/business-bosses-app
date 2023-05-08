@@ -77,10 +77,8 @@ class PostModel {
     return PostModel(
       postId: map['postId'] as String,
       title: map['title'] as String,
-      images: map['images'] != null
-          ? List<String>.from((map['images'] as List<String>))
-          : null,
-      timestamp: map['timestamp'] as int,
+      images: map['images'] != null ? List<String>.from((map['images'])) : null,
+      timestamp: int.parse(map['timestamp']),
       likes: List<String>.from((map['likes'])),
       coins: List<String>.from((map['coins'])),
       comments: List.from(map['comments'])
