@@ -1194,7 +1194,6 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
     final String token = sandBox.read(Constants.USER_ID);
     ApiResponseModel response =
         await ApiService.put(path: 'users/$token', body: updateData);
-    print(response.message);
     if (response.success) {
       Get.snackbar('Success', 'Profile Completed Succesfully');
       Get.toNamed(Routes.bottomNavigation);
