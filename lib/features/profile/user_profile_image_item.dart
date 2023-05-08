@@ -30,7 +30,6 @@ class UserProfileImageItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    void Function() onImagePick = onImagePicker();
     return SizedBox(
       height: height,
       width: width,
@@ -76,7 +75,7 @@ class UserProfileImageItem extends StatelessWidget {
                   bottom: 0.0,
                   right: 0.0,
                   child: GestureDetector(
-                    onTap: onImagePick,
+                    onTap: onImagePicker(),
                     child: Container(
                       padding: const EdgeInsets.all(5.0),
                       decoration: BoxDecoration(

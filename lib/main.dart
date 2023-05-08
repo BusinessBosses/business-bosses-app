@@ -49,7 +49,7 @@ class MyApp extends StatelessWidget {
           ],
           initialRoute: userId == '' || userId == null
               ? Routes.login
-              : Routes.bottomNavigation,
+              : Routes.updateProfile,
           getPages: Nav.routes,
           debugShowCheckedModeBanner: false,
           theme: appTheme,

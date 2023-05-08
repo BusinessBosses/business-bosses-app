@@ -154,7 +154,7 @@ class ApiService {
     try {
       final http.Response response = await http.put(
         Uri.parse('$baseUrl/$path'),
-        body: body,
+        body: jsonEncode(body),
         headers: <String, String>{
           'Content-type': 'application/json',
           'Accept': 'application/json',
