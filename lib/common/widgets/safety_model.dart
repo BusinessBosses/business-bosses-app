@@ -12,19 +12,20 @@ class SafetyModel extends StatelessWidget {
 
   final MainAxisAlignment mainAxisAlignment;
 
-  const SafetyModel({
-    Key? key,
-    this.isLoading = true,
-    this.icon = const Icon(
-      Icons.warning,
-      size: 0.0,
-      color: Colors.grey,
-    ),
-    this.title = 'No data found',
-    this.subTitle = '',
-    this.clickableText = '',
-    this.mainAxisAlignment = MainAxisAlignment.center,
-  }) : super(key: key);
+  const SafetyModel(
+      {Key? key,
+      this.isLoading = true,
+      this.icon = const Icon(
+        Icons.warning,
+        size: 0.0,
+        color: Colors.grey,
+      ),
+      this.title = 'No data found',
+      this.subTitle = '',
+      this.clickableText = '',
+      this.mainAxisAlignment = MainAxisAlignment.center,
+      this.onTap})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {

@@ -12,7 +12,7 @@ class MyTitle {
   factory MyTitle.toObject(Map<dynamic, dynamic> map) {
     return MyTitle(
       categoryId: map['categoryId'] as String,
-      timestamp: map['timestamp'] as int,
+      timestamp: int.parse(map['timestamp']),
       category: map['category'] as String,
     );
   }
@@ -33,5 +33,19 @@ class MyTitle {
       'timestamp': DateTime.now().millisecondsSinceEpoch,
       'category': category,
     } as Map<dynamic, dynamic>;
+  }
+
+  static List<MyTitle> toCategoriesList({
+    required List snapshot,
+  }) {
+    if (snapshot == null) return [];
+    List<MyTitle> cats = [];
+    // Map<dynamic, dynamic> values = snapshot.value;
+    for (var i = 0; i < snapshot.length; i++) {
+      final MyTitle cat = MyTitle.toObject(snapshot[i]);
+      cats.add(cat);
+    }
+
+    return cats;
   }
 }

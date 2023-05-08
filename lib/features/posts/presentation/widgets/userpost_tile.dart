@@ -1,10 +1,12 @@
 import 'package:business_bosses_v2/features/posts/controllers/posts_controller.dart';
 import 'package:business_bosses_v2/features/posts/models/post_model.dart';
 import 'package:business_bosses_v2/features/posts/presentation/widgets/post_images.dart';
+import 'package:business_bosses_v2/utils/constants/constants.dart';
 import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
 import 'package:detectable_text_field/widgets/detectable_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get_storage/get_storage.dart';
 
 import '../../../../common/widgets/ranking_badge.dart';
 import '../../../../common/widgets/text_widget.dart';
@@ -16,11 +18,15 @@ import '../../../../utils/time_format.dart';
 class PostTile extends StatelessWidget {
   final PostModel post;
   final PostsController controller;
+
+  ///
   const PostTile({Key? key, required this.post, required this.controller})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final sandBox = GetStorage();
+    final String uid = sandBox.read(Constants.USER_ID);
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -72,16 +78,17 @@ class PostTile extends StatelessWidget {
                         width: 10,
                       ),
                       Container(
-                          height: double.infinity,
-                          color: Colors.white,
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 15, right: 10),
-                            child: SvgPicture.asset(
-                              'assets/svgs/more.svg',
-                              width: 5,
-                              height: 3,
-                            ),
-                          )),
+                        height: double.infinity,
+                        color: Colors.white,
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 15, right: 10),
+                          child: SvgPicture.asset(
+                            'assets/svgs/more.svg',
+                            width: 5,
+                            height: 3,
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -151,9 +158,9 @@ class PostTile extends StatelessWidget {
                 children: [
                   TextButton.icon(
                     onPressed: () {
-                      controller.postLike(post.user!.uid, post.postId);
+                      controller.postLike(uid, post.postId);
                     },
-                    icon: post.likes?.contains(post.user!.uid) ?? false
+                    icon: post.likes?.contains(uid) ?? false
                         ? SvgPicture.asset('assets/svgs/likefilled.svg')
                         : SvgPicture.asset('assets/svgs/like.svg'),
                     label: Text(
@@ -177,9 +184,11 @@ class PostTile extends StatelessWidget {
                   ),
                   TextButton.icon(
                     onPressed: () async {
-                      controller.postCoin(post.user!.uid, post.postId);
+                      // final sandBox = GetStorage();
+                      // final String uid = sandBox.read(Constants.USER_ID);
+                      controller.postCoin(uid, post.postId);
                     },
-                    icon: post.coins?.contains(post.user!.uid) ?? false
+                    icon: post.coins?.contains(uid) ?? false
                         ? SvgPicture.asset('assets/svgs/coin.svg')
                         : SvgPicture.asset('assets/svgs/coin.svg'),
                     label: Text(

@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
+import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:country_list_pick/country_list_pick.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -8,6 +10,7 @@ import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../action/action.dart';
 import '../../common/models/analyser_data.dart';
@@ -31,7 +34,8 @@ import 'user_profile_image_item.dart';
 var isExpanded = false;
 
 class UpdateProfileScreen extends StatefulWidget {
-  const UpdateProfileScreen({super.key});
+  final UserModel? user;
+  const UpdateProfileScreen({Key? key, this.user}) : super(key: key);
 
   @override
   State<UpdateProfileScreen> createState() => _UpdateProfileScreenState();
@@ -61,25 +65,20 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
   String? _gender;
   String? _achievements;
   String? _productsandservices;
-
+// String? blas;
   bool _isInit = false;
-  bool _isNetworkImage = true;
+  bool _isNetworkImage = false;
+  bool _isUploading = false;
   bool _isProcessing = false;
   bool? _isUniqueName;
   bool? email;
 
-  File _imageFile = File('');
+  File? _imageFile;
   final ImagePicker picker = ImagePicker();
   bool _isEditingMode = false;
   List<String> _usersToCompareUsername = [''];
 
   List<String> achievements = <String>[];
-
-  @override
-  void initState() {
-    super.initState();
-    _scrollController = ScrollController();
-  }
 
   TextEditingController achievementController = TextEditingController();
   TextEditingController productsController = TextEditingController();
@@ -111,6 +110,40 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
         _productsandservices = productsandservices.join('+');
       });
     }
+  }
+
+  void onPickImage() async {
+    try {
+      final XFile? avatar = await picker.pickImage(source: ImageSource.gallery);
+
+      if (avatar != null) {
+        setState(() {
+          _imageFile = File(avatar.path);
+          _isUploading = true;
+        });
+
+        final dynamic res = await ApiService.uploadFile(File(avatar.path));
+        if (res != null) {
+          setState(() {
+            _photoUrl = res['fileUrl'];
+            _isUploading = false;
+          });
+        } else {
+          setState(() {
+            _imageFile = null;
+            _isUploading = false;
+          });
+          showSnackbar(
+              title: "OOPS!!", message: 'Could not upload Image. Try again');
+        }
+      }
+    } catch (e) {}
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController = ScrollController();
   }
 
   @override
@@ -165,9 +198,10 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                           imageUrl: _photoUrl,
                           imageFile: _imageFile,
                           isNetWorkImage: _isNetworkImage,
-                          onImagePicker: () {},
+                          onImagePicker: onPickImage,
                           height: 96.0,
                           width: 96.0,
+                          isUploading: _isUploading,
                         ),
                       ),
                       const SizedBox(height: 40.0),
@@ -374,11 +408,13 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                             const SizedBox(
                                               height: 20,
                                             ),
-                                            const Text('Company Name',
-                                                style: TextStyle(
-                                                    fontSize: 14,
-                                                    fontWeight:
-                                                        FontWeight.w700)),
+                                            const Text(
+                                              'Company Name',
+                                              style: TextStyle(
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w700,
+                                              ),
+                                            ),
                                             const SizedBox(
                                               height: 10,
                                             ),
@@ -1153,11 +1189,12 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
       MaterialPageRoute(
         builder: (BuildContext context) => DataSelectionScreen(
           analyser: analyser,
+          // list: list,
         ),
       ),
     );
 
-    if (res!.success) {
+    if (res != null && res.success) {
       if (analyser == Analyser.category) {
         MyTitle category = res.data;
         setState(() {
@@ -1175,6 +1212,11 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
   }
 
   Future<void> _attemptToComplete() async {
+    setState(() {
+      _isProcessing = true;
+    });
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+
     Map<String, dynamic> updateData = <String, dynamic>{
       'name': _name,
       'bio': _bio,
@@ -1191,9 +1233,11 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
       'gender': _gender,
       'photoURL': _photoUrl,
     };
-    final String token = sandBox.read(Constants.USER_ID);
+    final String? userId = prefs.getString(Constants.USER_ID);
+    // print('$userId token $updateData');
+    // return;
     ApiResponseModel response =
-        await ApiService.put(path: 'users/$token', body: updateData);
+        await ApiService.put(path: 'users/$userId', body: updateData);
     if (response.success) {
       Get.snackbar('Success', 'Profile Completed Succesfully');
       Get.toNamed(Routes.bottomNavigation);

@@ -54,12 +54,6 @@ class UserProfileImageItem extends StatelessWidget {
                         height: height,
                         width: width,
                       )
-                    // Image.network(
-                    //             imageUrl,
-                    //             fit: BoxFit.fill,
-                    //             height: height,
-                    //             width: width,
-                    //           )
                     : modelChild()
                 : imageFile != null
                     ? Image.file(
@@ -75,7 +69,9 @@ class UserProfileImageItem extends StatelessWidget {
                   bottom: 0.0,
                   right: 0.0,
                   child: GestureDetector(
-                    onTap: onImagePicker(),
+                    onTap: () async {
+                      await onImagePicker();
+                    },
                     child: Container(
                       padding: const EdgeInsets.all(5.0),
                       decoration: BoxDecoration(
