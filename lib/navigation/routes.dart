@@ -22,6 +22,7 @@ class Routes {
   static const String chat = '/chatScreen';
   static const String marketPlace = '/marketPlaceScreen';
   static const String createForum = '/createForumScreen';
+  static const String updateProfile = '/updateProfileScreen';
   static const String settings = '/settingsScreen';
   static const String notifications = '/notificationsScreen';
   static const String onboarding = '/onboardingScreen';

@@ -157,8 +157,13 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                       child: CustomButton(
                         buttonType: ButtonType.elevated,
                         label: 'Post',
-                        onPressed: () {},
-                        isProcessing: false,
+                        onPressed: () async {
+                          await controller.createPost({
+                            'title': _titleCtrl.text.trim(),
+                            'timestamp': DateTime.now().millisecondsSinceEpoch
+                          });
+                        },
+                        isProcessing: controller.loading.value,
                       ),
                     ),
                     const SizedBox(
