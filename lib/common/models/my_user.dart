@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+// ignore_for_file: public_member_api_docs, always_specify_types, unnecessary_null_comparison
 
 import 'my_refers.dart';
 
@@ -95,7 +95,7 @@ class MyUser {
     this.isRanked = false,
   });
 
-  toSignUpMap() {
+  Map<String, Object> toSignUpMap() {
     return {
       'username': username,
       'uid': uid,
@@ -110,25 +110,25 @@ class MyUser {
     };
   }
 
-  toTokenMap() {
+  Map<String, List<String>> toTokenMap() {
     return {
       'deviceTokens': deviceTokens,
     };
   }
 
-  static toReadNotificationMap() {
+  static Map<String, int> toReadNotificationMap() {
     return {
       'unReadCount': 0,
     };
   }
 
-  decreaseCoin() {
+  Map<String, num> decreaseCoin() {
     return {
       'coinscount': coinscount - 1,
     };
   }
 
-  toUpdateMap() {
+  Map<String, Object> toUpdateMap() {
     return {
       'companyName': companyName,
       'name': name,
@@ -152,17 +152,17 @@ class MyUser {
     };
   }
 
-  toPhotoUrlMap() {
+  Map<String, String> toPhotoUrlMap() {
     return {
       'photoUrl': photoUrl,
     };
   }
 
-  toDeactivatedMap(bool deactivatedValue) {
+  Map<String, bool> toDeactivatedMap(bool deactivatedValue) {
     return {'deactivated': deactivatedValue};
   }
 
-  toTokenUpdateMap() {
+  Map<String, List<String>> toTokenUpdateMap() {
     return {
       'deviceTokens': deviceTokens,
     };
@@ -299,8 +299,8 @@ class MyUser {
 
   bool hasToken(String token) {
     if (token == null) return false;
-    int? index = deviceTokens?.indexWhere((t) => t == token);
-    if (index! > -1) {
+    int? index = deviceTokens.indexWhere((t) => t == token);
+    if (index > -1) {
       return true;
     } else {
       return false;
@@ -309,8 +309,8 @@ class MyUser {
 
   List<String> removeToken(String token) {
     if (token == null) return deviceTokens;
-    int? index = deviceTokens?.indexWhere((String t) => t == token);
-    if (index! > -1) deviceTokens.removeAt(index);
+    int? index = deviceTokens.indexWhere((String t) => t == token);
+    if (index > -1) deviceTokens.removeAt(index);
     return deviceTokens;
   }
 
@@ -430,9 +430,9 @@ class Disconnection {
   static List<Disconnection> toListOfDisconnectionsFormMap({
     required Map map,
   }) {
-    if (map?.isEmpty ?? false) return [];
+    if (map.isEmpty) return [];
     List<Disconnection> disconnections = [];
-    map?.forEach((key, data) {
+    map.forEach((key, data) {
       final Disconnection ref = Disconnection.fromMap(data);
       disconnections.add(ref);
     });

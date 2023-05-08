@@ -1,11 +1,15 @@
+// ignore_for_file: public_member_api_docs, always_specify_types, unnecessary_null_comparison
+
 import 'package:flutter/material.dart';
 
+/// REFERAL CLASS
 class MyRefers {
   String referredUserUid;
   String referBy;
   List<String> referTo;
   int timestamp;
 
+  /// REFERAL CLASSS
   MyRefers({
     required this.referredUserUid,
     required this.referBy,
@@ -13,8 +17,9 @@ class MyRefers {
     required this.timestamp,
   });
 
+  /// TO MAP
   Map<dynamic, dynamic> toMap() {
-    return {
+    return <String, dynamic>{
       'referredUserUid': referredUserUid,
       'referBy': referBy,
       'referTo': referTo,
@@ -22,6 +27,7 @@ class MyRefers {
     };
   }
 
+  /// FROM MAP
   factory MyRefers.fromMap(Map<dynamic, dynamic> map) {
     return MyRefers(
       referredUserUid: map['referredUserUid'] as String,
@@ -34,9 +40,9 @@ class MyRefers {
   static List<MyRefers> toListFormMap({
     required Map map,
   }) {
-    if (map?.isEmpty ?? false) return [];
+    if (map.isEmpty) return [];
     List<MyRefers> myRefers = [];
-    map?.forEach((key, data) {
+    map.forEach((dynamic key, dynamic data) {
       final MyRefers ref = MyRefers.fromMap(data);
       myRefers.add(ref);
     });
@@ -51,7 +57,7 @@ class MyRefers {
       debugPrint(
           'MyRefers.uniqueUserUidList: ${ref.referTo != null} || ${ref.referTo.length}');
       if (ref.referTo != null || ref.referTo.isNotEmpty) {
-        for (var t in ref.referTo) {
+        for (String t in ref.referTo) {
           debugPrint('MyRefers.uniqueUserUidList: ${refsUids.contains(t)}');
           if (!refsUids.contains(t)) {
             refsUids.add(t);

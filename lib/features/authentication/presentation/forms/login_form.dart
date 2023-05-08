@@ -40,7 +40,6 @@ class _LoginFormState extends State<LoginForm> {
   String countryCode = '+447';
   final ApiService _apiService = ApiService();
 
-
   ///  COUNTRY CHANGE HANDLER
   void onChangeCountry(Country value) {
     List<String> spl = value.displayName.toString().split(' ');
@@ -245,7 +244,8 @@ class _LoginFormState extends State<LoginForm> {
       _password!,
     );
     return user;
-  void _handleLogin() async {
-    await AuthController().login(_authCred!, _password!);
+    void _handleLogin() async {
+      await AuthController().login(_authCred!, _password!);
+    }
   }
 }
