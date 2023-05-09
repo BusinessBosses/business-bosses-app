@@ -19,7 +19,7 @@ void showSnackBar(BuildContext context, {String message = Constants.STGW}) {
 
 Future<dynamic> navigateTo(
   BuildContext context, {
-  required String routeName,
+  String? routeName,
   var arguments,
   isRemoveUntil = false,
 }) async {

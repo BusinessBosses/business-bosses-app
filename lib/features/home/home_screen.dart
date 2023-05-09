@@ -20,7 +20,10 @@ class _HomeScreenState extends State<HomeScreen> {
       builder: (PostsController controller) {
         return Scaffold(
           backgroundColor: backgroundcolorinterface,
-          appBar: homeAppBar,
+          appBar: const PreferredSize(
+            preferredSize: Size.fromHeight(kToolbarHeight),
+            child: Homeappbar(),
+          ),
           body: ListView.builder(
             itemCount: controller.posts.length,
             // physics: NeverScrollableScrollPhysics(),

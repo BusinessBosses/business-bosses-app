@@ -2,6 +2,8 @@
 
 import 'package:business_bosses_v2/features/authentication/presentation/login_screen.dart';
 import 'package:business_bosses_v2/features/authentication/presentation/register_screen.dart';
+import 'package:business_bosses_v2/features/chat/chat_room_screen.dart';
+import 'package:business_bosses_v2/features/chat/chat_screen.dart';
 import 'package:business_bosses_v2/features/moreinfoscreens/bossuppartner.dart';
 import 'package:business_bosses_v2/features/notifications/notificationsscreen.dart';
 import 'package:business_bosses_v2/features/authentication/presentation/code_verification_screen.dart';
@@ -64,6 +66,14 @@ class Nav {
     GetPage(
       name: Routes.updateProfile,
       page: () => const UpdateProfileScreen(),
+    ),
+    GetPage(
+      name: Routes.chat,
+      page: () => const ChatScreen(),
+    ),
+    GetPage(
+      name: Routes.chatRoom,
+      page: () => const ChatRoomScreen(),
     ),
   ];
 }
