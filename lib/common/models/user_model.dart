@@ -36,7 +36,7 @@ class UserModel {
 
   // List<MyConnect> connects;
 
-  final int? connectionCount;
+  late final int? connectionCount;
   final int? connectedCount;
   final int? unReadCount;
   final bool? isRanked;

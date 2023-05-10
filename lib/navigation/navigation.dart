@@ -12,6 +12,7 @@ import 'package:business_bosses_v2/features/posts/presentation/create_post_scree
 import 'package:business_bosses_v2/features/profile/analysescreen.dart';
 import 'package:business_bosses_v2/features/profile/myprofilescreen.dart';
 import 'package:business_bosses_v2/features/profile/promotionscreen.dart';
+import 'package:business_bosses_v2/features/profile/publicprofilescreen.dart';
 import 'package:business_bosses_v2/features/profile/update_profile_screen.dart';
 import 'package:business_bosses_v2/features/settings/settingsscreen.dart';
 
@@ -74,6 +75,10 @@ class Nav {
     GetPage(
       name: Routes.chatRoom,
       page: () => const ChatRoomScreen(),
+    ),
+    GetPage(
+      name: Routes.publicProfile,
+      page: () => const PublicProfileScreen(),
     ),
   ];
 }
