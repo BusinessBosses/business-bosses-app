@@ -34,6 +34,7 @@ class SignUpForm extends StatefulWidget {
 }
 
 class _SignUpFormState extends State<SignUpForm> {
+  bool _isProcessing = false;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   AutovalidateMode _autoValidateMode = AutovalidateMode.disabled;
   String? _username, _authCred, _password;
@@ -52,8 +53,6 @@ class _SignUpFormState extends State<SignUpForm> {
       countryCode = spl[spl.length - 1].toString().split('[')[1].split(']')[0];
     });
   }
-
-  bool _isProcessing = false;
 
   @override
   Widget build(BuildContext context) {
@@ -95,12 +94,7 @@ class _SignUpFormState extends State<SignUpForm> {
                             Icons.check_circle,
                             color: Colors.green,
                           )
-                        : Icon(
-                            Icons.close,
-                            color: _isUniqueName == null
-                                ? Colors.transparent
-                                : Colors.red,
-                          ),
+                        : const SizedBox(),
                     filled: true,
                     fillColor: const Color(0xffF4F4F4)),
               ),
@@ -138,12 +132,7 @@ class _SignUpFormState extends State<SignUpForm> {
                             Icons.check_circle,
                             color: Colors.green,
                           )
-                        : Icon(
-                            Icons.close,
-                            color: _isUniqueEmail == null
-                                ? Colors.transparent
-                                : Colors.red,
-                          ),
+                        : const SizedBox(),
                   ),
                   validator: (String? val) => Validator.emailValidatorSignUp(
                     _authCred,
@@ -193,37 +182,43 @@ class _SignUpFormState extends State<SignUpForm> {
           const SizedBox(height: 24.0),
           CustomButton(
             label: 'Sign Up',
-            onPressed: () {
-              if (Validator.emailValidatorSignUp(_authCred,
-                          isUnique: _isUniqueEmail!) ==
-                      '' &&
-                  Validator.usernameValidator(_username!,
-                          isUnique: _isUniqueName!) ==
-                      '') {
-                if (agreedToTerms) {
-                  setState(() {
-                    _autoValidateMode = AutovalidateMode.always;
-                    _isProcessing = true;
-                  });
-                  AuthController().sendOtp(
-                      emailAddress: _authCred!,
-                      userName: _username!,
-                      password: _password!,
-                      onError: () {
-                        setState(() {
-                          _isProcessing = false;
-                        });
+            onPressed: () async {
+              // if (Validator.emailValidatorSignUp(_authCred,
+              //             isUnique: _isUniqueEmail!) ==
+              //         '' &&
+              //     Validator.usernameValidator(_username!,
+              //             isUnique: _isUniqueName!) ==
+              //         '') {
+              if (agreedToTerms) {
+                setState(() {
+                  _autoValidateMode = AutovalidateMode.always;
+                  _isProcessing = true;
+                });
+                AuthController().sendOtp(
+                    emailAddress: _authCred!,
+                    userName: _username!,
+                    password: _password!,
+                    onError: () {
+                      setState(() {
+                        _isProcessing = false;
                       });
-                  setState(() {
-                    _isProcessing = false;
-                  });
-                } else {
-                  Get.snackbar('Error',
-                      'Before signing up, you must agree to our Terms and Conditions');
-                }
+                    });
               } else {
-                Get.snackbar('Error', 'Invalid Entries in Form');
+                Get.snackbar('Error',
+                    'Before signing up, you must agree to our Terms and Conditions');
+                setState(() {
+                  _isProcessing = false;
+                });
               }
+              // } else {
+              //   Get.snackbar('Error', 'Invalid Entries in Form');
+              //   setState(() {
+              //     _isProcessing = false;
+              //   });
+              // }
+              setState(() {
+                _isProcessing = false;
+              });
             },
             isProcessing: _isProcessing,
             buttonType: ButtonType.elevated,

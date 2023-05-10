@@ -39,7 +39,6 @@ class ApiService {
       return jsonResponse;
     } else {
       final dynamic jsonResponse = json.decode(response.body);
-      print(jsonResponse);
       return jsonResponse;
     }
   }

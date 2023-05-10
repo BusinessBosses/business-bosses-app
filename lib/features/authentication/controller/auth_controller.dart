@@ -65,6 +65,53 @@ class AuthController extends GetxController {
     });
   }
 
+  /// SEND OTP TO USER EMAIL FOR FORGOT PASSWORD
+  void sendOtpPassword({
+    required String emailAddress,
+    required String userName,
+    required String password,
+    required VoidCallback onError,
+  }) {
+    Random rng = Random();
+    int code = rng.nextInt(900000) + 100000;
+    Mailer mailer = Mailer(dotenv.env['SENDGRILL_API_KEY']!);
+    Address toAddress = Address(emailAddress.trim());
+    Address fromAddress = Address(dotenv.env['SENDGRID_EMAIL_ADDRESS']!);
+    Content content = Content('text/plain', code.toString());
+    String subject = 'OTP Verification Code';
+    final Personalization personalization = Personalization(
+      <Address>[toAddress],
+      dynamicTemplateData: <String, dynamic>{
+        'username': userName,
+        'otp': code.toString()
+      },
+      subject: subject,
+    );
+
+    Email email = Email(
+      <Personalization>[personalization],
+      fromAddress,
+      subject,
+      content: <Content>[content],
+      templateId: dotenv.env['SENDGRID_TEMPLATE_ID'],
+      customArgs: {'username': userName, 'otp': code.toString()},
+    );
+    mailer.send(email).then((Result<void> result) {
+      if (result.isError) {
+        onError();
+      } else {
+        Get.to(() => CodeVerificationScreen(
+              otp: code.toString(),
+              userName: userName,
+              emailAddress: emailAddress,
+              password: password,
+            ));
+      }
+    }).catchError((dynamic e) {
+      onError();
+    });
+  }
+
   /// CREATE NONCE
   String generateNonce([int length = 32]) {
     const String charset =

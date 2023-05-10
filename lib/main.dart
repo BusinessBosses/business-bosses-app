@@ -51,7 +51,7 @@ class MyApp extends StatelessWidget {
 
           initialRoute: userId == '' || userId == null
               ? Routes.login
-              : Routes.bottomNavigation,
+              : Routes.updateProfile,
 
           initialBinding: RootBindings(),
           // initialRoute: userId == null ? Routes.login : Routes.bottomNavigation,

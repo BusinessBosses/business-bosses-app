@@ -129,7 +129,7 @@ class _CodeVerificationScreenState extends State<CodeVerificationScreen> {
                       } else {
                         Get.snackbar(
                             'Success', 'You have registered succesfully!');
-                        Get.toNamed(Routes.bottomNavigation);
+                        Get.toNamed(Routes.updateProfile);
                       }
                     } else {
                       Get.snackbar('Error', 'Incorrect OTP');
