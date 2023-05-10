@@ -13,6 +13,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
+import '../../../common/dialogs/snackbar.dart';
+
 /// CREATE POST SCREEN
 class CreatePostScreen extends StatefulWidget {
   /// SCREEN CONSTRUCTOR
@@ -174,10 +176,17 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                       buttonType: ButtonType.elevated,
                       label: 'Post',
                       onPressed: () async {
-                        await controller.createPost({
-                          'title': _titleCtrl.text.trim(),
-                          'timestamp': DateTime.now().millisecondsSinceEpoch
-                        });
+                        if (controller.imageCount > 5) {
+                          // If the user has selected more than five images, show an error message
+                          showSnackbar(
+                              message: 'You can select up to five images.');
+                        } else {
+                          // Otherwise, create the post
+                          await controller.createPost({
+                            'title': _titleCtrl.text.trim(),
+                            'timestamp': DateTime.now().millisecondsSinceEpoch,
+                          });
+                        }
                       },
                       isProcessing: controller.loading.value,
                     ),

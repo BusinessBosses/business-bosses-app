@@ -6,12 +6,16 @@ import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/features/posts/controllers/posts_controller.dart';
 import 'package:business_bosses_v2/features/posts/repository/post_repository.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
+import 'package:flutter/material.dart';
+
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
 /// CREATEPOSTCONTROLLER
 class CreatePostController extends GetxController {
   final PostsController _postsController = Get.find();
+
+  int imageCount = 0;
 
   /// ALL USERS FOR MENTIONS
   RxList<UserModel> users = RxList<UserModel>(<UserModel>[]);
@@ -53,8 +57,8 @@ class CreatePostController extends GetxController {
       final double kb = bytes / 1024;
       final double mb = kb / 1024;
 
-      if (mb >= 3) {
-        showSnackbar(message: 'Image size should be maximum 3 MB.');
+      if (mb >= 5) {
+        showSnackbar(message: 'Image size should be maximum 10 MB.');
         loading(false);
         return null;
       } else {
@@ -117,6 +121,7 @@ class CreatePostController extends GetxController {
     RxList<XFile> myAE = imageFileList;
     myAE.removeAt(index);
     imageFileList = myAE;
+    imageCount--;
     update();
   }
 
@@ -127,8 +132,9 @@ class CreatePostController extends GetxController {
       imageFileList =
           RxList<XFile>(<XFile>[...pickedFileList, ...imageFileList]);
       update();
+      imageCount += pickedFileList.length;
     } catch (e) {
-      //
+      // handle error
     }
   }
 
