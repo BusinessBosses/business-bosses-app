@@ -1,97 +1,85 @@
-class MyMessage {
-  String? messageId;
-  String? messageText;
-  int? timestamp;
-  List<String>? images = [];
-  List<String>? deletedBy = [];
-  List<String>? singleDeletedBy = [];
-  // List<MyAssetEntity> myAssetsEntitiesImages = [];
-  String? senderUid;
-  String? receiverUid;
-  // bool deleted;
-  bool? deletedTillHere;
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 
-  MyMessage({
-    this.messageId,
+import 'dart:convert';
+
+import 'package:flutter/foundation.dart';
+
+import 'package:business_bosses_v2/common/models/user_model.dart';
+
+class MessageModel {
+  final String messageId;
+  final String? messageText;
+  final int timestamp;
+  final String? image;
+  final List<String>? deleted;
+  final String senderUid;
+  final String receiverUid;
+  final bool seen;
+  final UserModel user;
+  MessageModel({
+    required this.messageId,
     this.messageText,
-    this.deletedBy,
-    this.singleDeletedBy,
-    this.timestamp,
-    this.images,
-    this.deletedTillHere,
-    // this.deleted,
-    this.senderUid,
-    this.receiverUid,
-    // this.myAssetsEntitiesImages,
+    required this.timestamp,
+    this.image,
+    this.deleted,
+    required this.senderUid,
+    required this.receiverUid,
+    required this.seen,
+    required this.user,
   });
 
-  factory MyMessage.toObject(Map<dynamic, dynamic> map) {
-    return MyMessage(
-      messageId: map['messageId'] as String,
-      messageText: map['messageText'] as String,
-      timestamp: map['timestamp'] as int,
-      images: map['images'] == null ? [] : List<String>.from(map['images']),
-      deletedBy:
-          map['deletedBy'] == null ? [] : List<String>.from(map['deletedBy']),
-      singleDeletedBy: map['singleDeletedBy'] == null
-          ? []
-          : List<String>.from(map['singleDeletedBy']),
-      senderUid: map['senderUid'] as String,
-      deletedTillHere: map['deletedTillHere'] as bool,
-      // deleted: map['deleted'] as bool,
-      receiverUid: map['receiverUid'] as String,
+  MessageModel copyWith({
+    String? messageId,
+    String? messageText,
+    int? timestamp,
+    String? image,
+    List<String>? deleted,
+    String? senderUid,
+    String? receiverUid,
+    bool? seen,
+    UserModel? user,
+  }) {
+    return MessageModel(
+      messageId: messageId ?? this.messageId,
+      messageText: messageText ?? this.messageText,
+      timestamp: timestamp ?? this.timestamp,
+      image: image ?? this.image,
+      deleted: deleted ?? this.deleted,
+      senderUid: senderUid ?? this.senderUid,
+      receiverUid: receiverUid ?? this.receiverUid,
+      seen: seen ?? this.seen,
+      user: user ?? this.user,
     );
   }
 
-  // factory MyMessage.toObjectFromSnapshot(DataSnapshot snapshot) {
-  //   Map<dynamic, dynamic> map = snapshot?.value;
-  //   return MyMessage(
-  //     messageId: map['messageId'] as String,
-  //     messageText: map['messageText'] as String,
-  //     timestamp: map['timestamp'] as int,
-  //     images: map['images'] == null ? [] : List<String>.from(map['images']),
-  //     deletedBy:
-  //         map['deletedBy'] == null ? [] : List<String>.from(map['deletedBy']),
-  //     singleDeletedBy: map['singleDeletedBy'] == null
-  //         ? []
-  //         : List<String>.from(map['singleDeletedBy']),
-  //     senderUid: map['senderUid'] as String,
-  //     deletedTillHere: map['deletedTillHere'] as bool ?? false,
-  //     // deleted: map['deleted'] as bool??false,
-  //     receiverUid: map['receiverUid'] as String,
-  //   );
-  // }
-
-  Map<dynamic, dynamic> toMap() {
-    // ignore: unnecessary_cast
-    return {
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
       'messageId': messageId,
       'messageText': messageText,
       'timestamp': timestamp,
-      'images': images,
-      'singleDeletedBy': singleDeletedBy,
+      'image': image,
+      'deleted': deleted,
       'senderUid': senderUid,
-      // 'deleted': this.deleted,
-      'deletedBy': deletedBy,
-      'deletedTillHere': deletedTillHere,
       'receiverUid': receiverUid,
-    } as Map<dynamic, dynamic>;
+      'seen': seen,
+      'user': user.toMap(),
+    };
   }
 
-  // Map<dynamic, dynamic> toSetMap() {
-  //   final MyFirebase _firebase = MyFirebase();
-  //   // ignore: unnecessary_cast
-  //   return {
-  //     'messageId': messageId,
-  //     'messageText': messageText,
-  //     'images': images,
-  //     'receiverUid': receiverUid,
-  //     'timestamp': timestamp,
-  //     // 'deleted': this.deleted,
-  //     'deletedTillHere': deletedTillHere,
-  //     'deletedBy': deletedBy,
-  //     'singleDeletedBy': singleDeletedBy,
-  //     'senderUid': _firebase.uid,
-  //   } as Map<dynamic, dynamic>;
-  // }
+  factory MessageModel.fromMap(Map<String, dynamic> map) {
+    return MessageModel(
+      messageId: map['messageId'] as String,
+      messageText:
+          map['messageText'] != null ? map['messageText'] as String : null,
+      timestamp: map['timestamp'] as int,
+      image: map['image'] != null ? map['image'] as String : null,
+      deleted: map['deleted'] != null
+          ? List<String>.from((map['deleted'] as List<String>))
+          : [],
+      senderUid: map['senderUid'] as String,
+      receiverUid: map['receiverUid'] as String,
+      seen: map['seen'] as bool,
+      user: UserModel.fromMap(map['user'] as Map<String, dynamic>),
+    );
+  }
 }

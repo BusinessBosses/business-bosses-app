@@ -52,7 +52,7 @@ class MyApp extends StatelessWidget {
               AnalyticsServices.getAnalyticObserver()
             ],
             initialRoute: userId == '' || userId == null
-                ? Routes.publicProfile
+                ? Routes.login
                 : Routes.bottomNavigation,
 
             // initialRoute: Routes.updateProfile,

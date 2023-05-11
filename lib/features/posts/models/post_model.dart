@@ -1,5 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'dart:convert';
+
 import 'package:business_bosses_v2/common/models/comment_model.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 
@@ -14,19 +14,25 @@ class PostModel {
   final UserModel? user;
   final String? videoUrl;
   final bool isRanked;
-  final dynamic isPromoted;
+  final bool? promote;
+  final dynamic promotionDuration;
+  final String? plan;
+  final bool? approved;
   PostModel({
     required this.postId,
     required this.title,
     this.images,
-    this.timestamp = 0,
+    required this.timestamp,
     this.likes,
     this.coins,
     this.comments,
     this.user,
     this.videoUrl,
     required this.isRanked,
-    this.isPromoted,
+    this.promote,
+    required this.promotionDuration,
+    this.plan,
+    this.approved,
   });
 
   PostModel copyWith({
@@ -40,7 +46,10 @@ class PostModel {
     UserModel? user,
     String? videoUrl,
     bool? isRanked,
-    dynamic isPromoted,
+    bool? promote,
+    dynamic? promotionDuration,
+    String? plan,
+    bool? approved,
   }) {
     return PostModel(
       postId: postId ?? this.postId,
@@ -53,7 +62,10 @@ class PostModel {
       user: user ?? this.user,
       videoUrl: videoUrl ?? this.videoUrl,
       isRanked: isRanked ?? this.isRanked,
-      isPromoted: isPromoted ?? this.isPromoted,
+      promote: promote ?? this.promote,
+      promotionDuration: promotionDuration ?? this.promotionDuration,
+      plan: plan ?? this.plan,
+      approved: approved ?? this.approved,
     );
   }
 
@@ -69,7 +81,10 @@ class PostModel {
       'user': user?.toMap(),
       'videoUrl': videoUrl,
       'isRanked': isRanked,
-      'isPromoted': isPromoted,
+      'promote': promote,
+      'promotionDuration': promotionDuration,
+      'plan': plan,
+      'approved': approved,
     };
   }
 
@@ -78,26 +93,21 @@ class PostModel {
       postId: map['postId'] as String,
       title: map['title'] as String,
       images: map['images'] != null ? List<String>.from((map['images'])) : null,
-      timestamp: int.parse(map['timestamp']),
-      likes: List<String>.from((map['likes'])),
-      coins: List<String>.from((map['coins'])),
+      timestamp: map['timestamp'] as int,
+      likes: map['likes'] != null ? List<String>.from((map['likes'])) : null,
+      coins: map['coins'] != null ? List<String>.from((map['coins'])) : null,
       comments: List.from(map['comments'])
           .map((e) => CommentModel.fromMap(e as Map<String, dynamic>))
           .toList(),
-      user: UserModel.fromMap(map['user'] as Map<String, dynamic>),
+      user: map['user'] != null
+          ? UserModel.fromMap(map['user'] as Map<String, dynamic>)
+          : null,
       videoUrl: map['videoUrl'] != null ? map['videoUrl'] as String : null,
       isRanked: map['isRanked'] as bool,
-      isPromoted: map['isPromoted'] as dynamic,
+      promote: map['promote'] != null ? map['promote'] as bool : null,
+      promotionDuration: map['promotionDuration'] as dynamic,
+      plan: map['plan'] != null ? map['plan'] as String : null,
+      approved: map['approved'] != null ? map['approved'] as bool : null,
     );
-  }
-
-  String toJson() => json.encode(toMap());
-
-  factory PostModel.fromJson(String source) =>
-      PostModel.fromMap(json.decode(source) as Map<String, dynamic>);
-
-  @override
-  String toString() {
-    return 'PostModel(postId: $postId, title: $title, images: $images, timestamp: $timestamp, likes: $likes, coins: $coins, comments: $comments, user: $user, videoUrl: $videoUrl, isRanked: $isRanked, isPromoted: $isPromoted)';
   }
 }

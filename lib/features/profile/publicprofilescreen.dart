@@ -34,7 +34,7 @@ class PublicProfileScreen extends StatefulWidget {
 class _PublicProfileScreenState extends State<PublicProfileScreen> {
   UserModel _publicUser = UserModel();
   bool _isInit = false;
-  bool _isLoading = true;
+  bool _isLoading = false;
   bool blocked = false;
 
   List<PostModel> _friendPosts = [];
@@ -51,38 +51,38 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
 
   Future<void> _loadMyPost() async {}
 
-  Widget _buildChoiceChips(String data) {
-    return SizedBox(
-        child: Padding(
-      padding: const EdgeInsets.only(left: 20, right: 20),
-      child: ListView.builder(
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
-        // ignore: unnecessary_null_comparison
-        itemCount: data == null ? 0 : data.split('+').length,
-        itemBuilder: (BuildContext context, int index) {
-          return Wrap(
-            spacing: 8.0, // gap between adjacent chips
-            runSpacing: 4.0, // gap between lines
-            children: <Widget>[
-              Chip(
-                backgroundColor: backgroundcolorinterface,
-                avatar: const CircleAvatar(
-                  backgroundColor: Colors.white,
-                  radius: 5,
-                ),
-                label: Text(
-                  data.split('+')[index],
-                  style: const TextStyle(
-                      fontSize: 15, fontWeight: FontWeight.w700),
-                ),
-              ),
-            ],
-          );
-        },
-      ),
-    ));
-  }
+  // Widget _buildChoiceChips(String data) {
+  //   return SizedBox(
+  //       child: Padding(
+  //     padding: const EdgeInsets.only(left: 20, right: 20),
+  //     child: ListView.builder(
+  //       shrinkWrap: true,
+  //       physics: const NeverScrollableScrollPhysics(),
+  //       // ignore: unnecessary_null_comparison
+  //       itemCount: data == null ? 0 : data.split('+').length,
+  //       itemBuilder: (BuildContext context, int index) {
+  //         return Wrap(
+  //           spacing: 8.0, // gap between adjacent chips
+  //           runSpacing: 4.0, // gap between lines
+  //           children: <Widget>[
+  //             Chip(
+  //               backgroundColor: backgroundcolorinterface,
+  //               avatar: const CircleAvatar(
+  //                 backgroundColor: Colors.white,
+  //                 radius: 5,
+  //               ),
+  //               label: Text(
+  //                 data.split('+')[index],
+  //                 style: const TextStyle(
+  //                     fontSize: 15, fontWeight: FontWeight.w700),
+  //               ),
+  //             ),
+  //           ],
+  //         );
+  //       },
+  //     ),
+  //   ));
+  // }
 
   @override
   Widget build(BuildContext context) {

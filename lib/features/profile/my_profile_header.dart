@@ -9,31 +9,9 @@ import '../../utils/theme/theme.dart';
 import '../posts/models/post_model.dart';
 import '../posts/presentation/widgets/userpost_tile.dart';
 
-class MyProfileHeader extends StatefulWidget {
-  const MyProfileHeader({Key? key}) : super(key: key);
-
-  @override
-  _MyProfileHeaderState createState() => _MyProfileHeaderState();
-}
-
-class _MyProfileHeaderState extends State<MyProfileHeader> {
-  late UserModel _user;
-
-  bool _isInit = false;
-  int _mRefersCount = 0;
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    if (!_isInit) {
-      _getMyReferrals();
-      _isInit = true;
-    }
-  }
-
-  Future<void> _getMyReferrals() async {}
-
-  bool isBioVisible = false;
+class MyProfileHeader extends StatelessWidget {
+  const MyProfileHeader({Key? key, required this.myProfile}) : super(key: key);
+  final UserModel myProfile;
 
   @override
   Widget build(BuildContext context) {
@@ -54,17 +32,18 @@ class _MyProfileHeaderState extends State<MyProfileHeader> {
                         child: CustomChildButton(
                       onPressed: () {},
                       caption: 'Connections',
-                      value: 0,
+                      value: myProfile.connectionCount ?? 0,
                     )),
                     Expanded(
                         child: CustomChildButton(
-                      onPressed: () {},
-                      caption: 'Connected',
-                      value: 0,
-                    )),
+                            onPressed: () {},
+                            caption: 'Connected',
+                            value: myProfile.connectedCount ?? 0)),
                     Expanded(
                       child: CustomChildButton(
-                        value: _mRefersCount,
+                        value: myProfile.refers != null
+                            ? myProfile.refers!.length
+                            : 0,
                         caption: 'Referrals',
                         onPressed: () {},
                       ),

@@ -29,6 +29,7 @@ class PostsController extends GetxController {
             psts[i]['likes'].map((coin) => coin['userId'].toString()).toList()
       }));
     }
+    update();
   }
 
   /// LIKE AND UNLIKE FUNCTION
@@ -71,18 +72,15 @@ class PostsController extends GetxController {
     final String uid = sandBox.read(Constants.USER_ID);
     PostModel modelizedNewPost = PostModel.fromMap({
       ...newPost,
-      'coins': [],
-      'likes': [],
-      'comments': [],
+      'coins': <String>[],
+      'likes': <String>[],
+      'comments': <CommentModel>[],
       'user': {
         'username': 'testUser1',
         'email': 'test1@gmail.com',
         'uid': uid,
       }
     });
-    // modelizedNewPost.coins = <String>[];
-    // modelizedNewPost.comments = <CommentModel>[];
-    // modelizedNewPost.likes = <String>[];
 
     posts.insert(0, modelizedNewPost);
 
@@ -138,7 +136,7 @@ class PostsController extends GetxController {
   @override
   void onInit() {
     // TODO: implement onInit
-    loadPosts();
+    // loadPosts();
     super.onInit();
   }
 }

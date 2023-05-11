@@ -19,7 +19,7 @@ class Routes {
   static const String createPost = '/createPostScreen';
   static const String postDetails = '/postDetailsScreen';
   static const String chatRoom = '/chatRoomScreen';
-  static const String chat = '/chatScreen';
+  static const String chat = '/chatsScreen';
   static const String marketPlace = '/marketPlaceScreen';
   static const String createForum = '/createForumScreen';
   static const String settings = '/settingsScreen';

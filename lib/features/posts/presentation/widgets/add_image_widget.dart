@@ -28,7 +28,7 @@ class AddImageWidget extends StatelessWidget {
           ),
           GestureDetector(
             onTap: () {
-              if (controller.imageCount < 5) {
+              if (controller.imageFileList.length < 5) {
                 controller.onPickImage();
               } else {
                 showSnackbar(message: 'You can only upload up to 5 images.');
