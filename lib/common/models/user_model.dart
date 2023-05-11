@@ -1,5 +1,8 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
+
+import 'package:flutter/foundation.dart';
+
 import 'package:business_bosses_v2/common/models/disconnections_models.dart';
 import 'package:business_bosses_v2/common/models/profile_viewer_model.dart';
 import 'package:business_bosses_v2/common/models/referrals_model.dart';
@@ -23,8 +26,8 @@ class UserModel {
   final String? industry;
   final String? category;
   final String? location;
-  final String? achievements;
-  final String? productsandservices;
+  final List<String>? achievements;
+  final List<String>? productsandservices;
   final List<ReferralsModel>? refers;
   final List<String>? deviceTokens;
   final List<DisconnectionsModel>? disconnections;
@@ -33,10 +36,7 @@ class UserModel {
   final String? ageRange;
   final String? gender;
   final List<ProfileViewerModel>? profileViews;
-
-  // List<MyConnect> connects;
-
-  late final int? connectionCount;
+  final int? connectionCount;
   final int? connectedCount;
   final int? unReadCount;
   final bool? isRanked;
@@ -94,8 +94,8 @@ class UserModel {
     String? industry,
     String? category,
     String? location,
-    String? achievements,
-    String? productsandservices,
+    List<String>? achievements,
+    List<String>? productsandservices,
     List<ReferralsModel>? refers,
     List<String>? deviceTokens,
     List<DisconnectionsModel>? disconnections,
@@ -211,15 +211,16 @@ class UserModel {
       industry: map['industry'] != null ? map['industry'] as String : null,
       category: map['category'] != null ? map['category'] as String : null,
       location: map['location'] != null ? map['location'] as String : null,
-      achievements:
-          map['achievements'] != null ? map['achievements'] as String : null,
+      achievements: map['achievements'] != null
+          ? List<String>.from((map['achievements']))
+          : null,
       productsandservices: map['productsandservices'] != null
-          ? map['productsandservices'] as String
+          ? List<String>.from((map['productsandservices']))
           : null,
       refers: map['refers'] != null
           ? List<ReferralsModel>.from(
               (map['refers'] as List<int>).map<ReferralsModel?>(
-                (int x) => ReferralsModel.fromMap(x as Map<String, dynamic>),
+                (x) => ReferralsModel.fromMap(x as Map<String, dynamic>),
               ),
             )
           : null,
@@ -229,8 +230,7 @@ class UserModel {
       disconnections: map['disconnections'] != null
           ? List<DisconnectionsModel>.from(
               (map['disconnections'] as List<int>).map<DisconnectionsModel?>(
-                (int x) =>
-                    DisconnectionsModel.fromMap(x as Map<String, dynamic>),
+                (x) => DisconnectionsModel.fromMap(x as Map<String, dynamic>),
               ),
             )
           : null,
@@ -242,8 +242,7 @@ class UserModel {
       profileViews: map['profileViews'] != null
           ? List<ProfileViewerModel>.from(
               (map['profileViews'] as List<int>).map<ProfileViewerModel?>(
-                (int x) =>
-                    ProfileViewerModel.fromMap(x as Map<String, dynamic>),
+                (x) => ProfileViewerModel.fromMap(x as Map<String, dynamic>),
               ),
             )
           : null,
@@ -265,5 +264,79 @@ class UserModel {
   @override
   String toString() {
     return 'UserModel(uid: $uid, username: $username, email: $email, timestamp: $timestamp, bossOfTheWeekTimeStamp: $bossOfTheWeekTimeStamp, bossOfTheWeekUpTimeStamp: $bossOfTheWeekUpTimeStamp, photoUrl: $photoUrl, coinscount: $coinscount, name: $name, companyName: $companyName, surname: $surname, bio: $bio, website: $website, instagram: $instagram, twitter: $twitter, industry: $industry, category: $category, location: $location, achievements: $achievements, productsandservices: $productsandservices, refers: $refers, deviceTokens: $deviceTokens, disconnections: $disconnections, active: $active, deactivated: $deactivated, ageRange: $ageRange, gender: $gender, profileViews: $profileViews, connectionCount: $connectionCount, connectedCount: $connectedCount, unReadCount: $unReadCount, isRanked: $isRanked)';
+  }
+
+  @override
+  bool operator ==(covariant UserModel other) {
+    if (identical(this, other)) return true;
+
+    return other.uid == uid &&
+        other.username == username &&
+        other.email == email &&
+        other.timestamp == timestamp &&
+        other.bossOfTheWeekTimeStamp == bossOfTheWeekTimeStamp &&
+        other.bossOfTheWeekUpTimeStamp == bossOfTheWeekUpTimeStamp &&
+        other.photoUrl == photoUrl &&
+        other.coinscount == coinscount &&
+        other.name == name &&
+        other.companyName == companyName &&
+        other.surname == surname &&
+        other.bio == bio &&
+        other.website == website &&
+        other.instagram == instagram &&
+        other.twitter == twitter &&
+        other.industry == industry &&
+        other.category == category &&
+        other.location == location &&
+        listEquals(other.achievements, achievements) &&
+        listEquals(other.productsandservices, productsandservices) &&
+        listEquals(other.refers, refers) &&
+        listEquals(other.deviceTokens, deviceTokens) &&
+        listEquals(other.disconnections, disconnections) &&
+        other.active == active &&
+        other.deactivated == deactivated &&
+        other.ageRange == ageRange &&
+        other.gender == gender &&
+        listEquals(other.profileViews, profileViews) &&
+        other.connectionCount == connectionCount &&
+        other.connectedCount == connectedCount &&
+        other.unReadCount == unReadCount &&
+        other.isRanked == isRanked;
+  }
+
+  @override
+  int get hashCode {
+    return uid.hashCode ^
+        username.hashCode ^
+        email.hashCode ^
+        timestamp.hashCode ^
+        bossOfTheWeekTimeStamp.hashCode ^
+        bossOfTheWeekUpTimeStamp.hashCode ^
+        photoUrl.hashCode ^
+        coinscount.hashCode ^
+        name.hashCode ^
+        companyName.hashCode ^
+        surname.hashCode ^
+        bio.hashCode ^
+        website.hashCode ^
+        instagram.hashCode ^
+        twitter.hashCode ^
+        industry.hashCode ^
+        category.hashCode ^
+        location.hashCode ^
+        achievements.hashCode ^
+        productsandservices.hashCode ^
+        refers.hashCode ^
+        deviceTokens.hashCode ^
+        disconnections.hashCode ^
+        active.hashCode ^
+        deactivated.hashCode ^
+        ageRange.hashCode ^
+        gender.hashCode ^
+        profileViews.hashCode ^
+        connectionCount.hashCode ^
+        connectedCount.hashCode ^
+        unReadCount.hashCode ^
+        isRanked.hashCode;
   }
 }

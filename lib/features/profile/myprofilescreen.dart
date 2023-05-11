@@ -131,7 +131,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
               length: 2,
               child: Column(
                 children: [
-                  OutlineButtonHeader(context),
+                  OutlineButtonHeader(context, _profileController.myProfile),
                   const SizedBox(height: 8.0),
 
                   TabBar(

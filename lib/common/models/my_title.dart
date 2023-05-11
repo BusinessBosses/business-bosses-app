@@ -12,7 +12,7 @@ class MyTitle {
   factory MyTitle.toObject(Map<dynamic, dynamic> map) {
     return MyTitle(
       categoryId: map['categoryId'] as String,
-      timestamp: int.parse(map['timestamp']),
+      timestamp: int.parse(map['timestamp'].toString()),
       category: map['category'] as String,
     );
   }

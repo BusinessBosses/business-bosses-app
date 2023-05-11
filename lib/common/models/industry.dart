@@ -31,7 +31,7 @@ class Industry {
       photo: map['photo'] as String,
       description: map['description'] as String,
       active: map['active'] as bool,
-      timestamp: int.parse(map['timestamp']),
+      timestamp: int.parse(map['timestamp'].toString()),
       categoryId: map['categoryId'] as String,
     );
   }

@@ -4,15 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:provider/provider.dart';
 import '../../action/action.dart';
 import '../../common/models/my_connect.dart';
 import '../../common/params.dart';
 import '../../common/widgets/buttons/custom_child_button.dart';
 import '../../common/widgets/buttons/my_outlined_button.dart';
 import '../../common/widgets/safety_model.dart';
-import '../../common/widgets/text_widget.dart';
-import '../../common/widgets/tiles/custom_tileinterests.dart';
 import '../../functions/my_native_functions.dart';
 import '../../utils/theme/theme.dart';
 import '../chat/chat_room_screen.dart';
@@ -86,7 +83,6 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // final theme = Theme.of(context).copyWith(dividerColor: Colors.transparent);
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -422,7 +418,7 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          UserProfileTile(),
+          // UserProfileTile(),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [

@@ -26,7 +26,7 @@ class MyProfileHeader extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              UserProfileTile(),
+              UserProfileTile(myProfile: myProfile),
               Container(
                 alignment: Alignment.center,
                 child: Row(
@@ -38,7 +38,7 @@ class MyProfileHeader extends StatelessWidget {
                         return navigateTo(
                           context,
                           routeName: AllConnectionsScreen.routeName,
-                          arguments: Params(arg1: _user),
+                          arguments: Params(arg1: myProfile),
                         );
                       },
                       caption: 'Connections',
@@ -46,14 +46,11 @@ class MyProfileHeader extends StatelessWidget {
                     )),
                     Expanded(
                         child: CustomChildButton(
-                            onPressed: () {},
-                            caption: 'Connected',
-                            value: myProfile.connectedCount ?? 0)),
                       onPressed: () {
                         navigateTo(
                           context,
                           routeName: AllConnectionsScreen.routeName,
-                          arguments: Params(arg1: _user, arg2: 1),
+                          arguments: Params(arg1: myProfile, arg2: 1),
                         );
                       },
                       caption: 'Connected',
@@ -69,7 +66,7 @@ class MyProfileHeader extends StatelessWidget {
                           navigateTo(
                             context,
                             routeName: ReferralsDetailsScreen.routeName,
-                            arguments: _user.refers,
+                            arguments: myProfile.refers,
                           );
                         },
                       ),
