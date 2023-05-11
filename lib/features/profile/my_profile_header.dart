@@ -4,10 +4,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../action/action.dart';
+import '../../common/params.dart';
 import '../../common/widgets/buttons/custom_child_button.dart';
 import '../../utils/theme/theme.dart';
+import '../connects/all_connections_screen.dart';
 import '../posts/models/post_model.dart';
 import '../posts/presentation/widgets/userpost_tile.dart';
+import '../referrals/referrals_details_screen.dart';
 
 class MyProfileHeader extends StatefulWidget {
   const MyProfileHeader({Key? key}) : super(key: key);
@@ -52,13 +56,25 @@ class _MyProfileHeaderState extends State<MyProfileHeader> {
                   children: [
                     Expanded(
                         child: CustomChildButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        return navigateTo(
+                          context,
+                          routeName: AllConnectionsScreen.routeName,
+                          arguments: Params(arg1: _user),
+                        );
+                      },
                       caption: 'Connections',
                       value: 0,
                     )),
                     Expanded(
                         child: CustomChildButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        navigateTo(
+                          context,
+                          routeName: AllConnectionsScreen.routeName,
+                          arguments: Params(arg1: _user, arg2: 1),
+                        );
+                      },
                       caption: 'Connected',
                       value: 0,
                     )),
@@ -66,7 +82,13 @@ class _MyProfileHeaderState extends State<MyProfileHeader> {
                       child: CustomChildButton(
                         value: _mRefersCount,
                         caption: 'Referrals',
-                        onPressed: () {},
+                        onPressed: () {
+                          navigateTo(
+                            context,
+                            routeName: ReferralsDetailsScreen.routeName,
+                            arguments: _user.refers,
+                          );
+                        },
                       ),
                     ),
                   ],

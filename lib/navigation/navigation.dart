@@ -4,6 +4,7 @@ import 'package:business_bosses_v2/features/authentication/presentation/login_sc
 import 'package:business_bosses_v2/features/authentication/presentation/register_screen.dart';
 import 'package:business_bosses_v2/features/chat/chat_room_screen.dart';
 import 'package:business_bosses_v2/features/chat/chat_screen.dart';
+import 'package:business_bosses_v2/features/connects/all_connections_screen.dart';
 import 'package:business_bosses_v2/features/moreinfoscreens/bossuppartner.dart';
 import 'package:business_bosses_v2/features/notifications/notificationsscreen.dart';
 import 'package:business_bosses_v2/features/authentication/presentation/code_verification_screen.dart';
@@ -14,6 +15,7 @@ import 'package:business_bosses_v2/features/profile/myprofilescreen.dart';
 import 'package:business_bosses_v2/features/profile/promotionscreen.dart';
 import 'package:business_bosses_v2/features/profile/publicprofilescreen.dart';
 import 'package:business_bosses_v2/features/profile/update_profile_screen.dart';
+import 'package:business_bosses_v2/features/referrals/refer_screen.dart';
 import 'package:business_bosses_v2/features/settings/settingsscreen.dart';
 
 import 'package:business_bosses_v2/navigation/routes.dart';
@@ -79,6 +81,14 @@ class Nav {
     GetPage(
       name: Routes.publicProfile,
       page: () => const PublicProfileScreen(),
+    ),
+    GetPage(
+      name: Routes.referscreen,
+      page: () => const ReferScreen(),
+    ),
+    GetPage(
+      name: Routes.allconnectionsscreen,
+      page: () => const AllConnectionsScreen(),
     ),
   ];
 }
