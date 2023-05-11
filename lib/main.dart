@@ -39,6 +39,7 @@ class MyApp extends StatelessWidget {
         statusBarIconBrightness: Brightness.dark,
       ),
     );
+    // ignore: always_specify_types
     return FutureBuilder(
       future: SharedPreferences.getInstance(),
       builder:
@@ -52,7 +53,7 @@ class MyApp extends StatelessWidget {
               AnalyticsServices.getAnalyticObserver()
             ],
             initialRoute: userId == '' || userId == null
-                ? Routes.publicProfile
+                ? Routes.bottomNavigation
                 : Routes.bottomNavigation,
 
             // initialRoute: Routes.updateProfile,

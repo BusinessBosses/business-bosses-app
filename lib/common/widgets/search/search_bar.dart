@@ -5,16 +5,16 @@ import '../../../utils/theme/theme.dart';
 
 class SearchBar extends StatelessWidget {
   final String hintText;
-  final Function(String val) onChange;
-  final Function(String val) onSubmit;
+  final Function(String val)? onChange;
+  final Function(String val)? onSubmit;
   final bool hasSearchIcon;
   final bool autofocus;
 
   const SearchBar({
     Key? key,
     this.hintText = 'Search',
-    required this.onChange,
-    required this.onSubmit,
+    this.onChange,
+    this.onSubmit,
     this.hasSearchIcon = true,
     this.autofocus = true,
   }) : super(key: key);

@@ -1,9 +1,9 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../../../utils/theme/theme.dart';
 
+// ignore: non_constant_identifier_names, public_member_api_docs
 Container OutlineButtonHeader(BuildContext context) {
   return Container(
     height: 50.0,
@@ -18,7 +18,10 @@ Container OutlineButtonHeader(BuildContext context) {
         ),
         Expanded(
           child: OutlinedButton(
-            onPressed: () async {},
+            onPressed: () async {
+              Navigator.pushNamed(context, '/updateProfileScreen',
+                  arguments: true);
+            },
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [

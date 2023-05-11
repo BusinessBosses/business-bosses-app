@@ -28,4 +28,6 @@ class Routes {
   static const String bossuppartner = '/bossuppartner';
   static const String promotionscreen = '/promotionScreen';
   static const String analysescreen = '/analyseScreen';
+  static const String referscreen = '/referScreen';
+  static const String allconnectionsscreen = '/allconnectionsScreen';
 }
