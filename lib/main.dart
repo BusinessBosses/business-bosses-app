@@ -39,6 +39,7 @@ class MyApp extends StatelessWidget {
         statusBarIconBrightness: Brightness.dark,
       ),
     );
+    // ignore: always_specify_types
     return FutureBuilder(
       future: SharedPreferences.getInstance(),
       builder:
