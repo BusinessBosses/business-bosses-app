@@ -24,7 +24,7 @@ class _UserProfileTileState extends State<UserProfileTile> {
   @override
   void initState() {
     super.initState();
-    fetchData();
+    // fetchData();
   }
 
   dynamic fetchData() async {
@@ -41,8 +41,8 @@ class _UserProfileTileState extends State<UserProfileTile> {
 
   @override
   Widget build(BuildContext context) {
-    fetchData();
-    setState(() {});
+    // fetchData();
+    // setState(() {});
     return Container(
       width: double.infinity,
       height: 140.0,
@@ -130,7 +130,7 @@ class _UserProfileTileState extends State<UserProfileTile> {
                 children: [
                   const SizedBox(height: 6.0),
                   Text(
-                    name!,
+                    name ?? '',
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
@@ -138,14 +138,14 @@ class _UserProfileTileState extends State<UserProfileTile> {
                         ),
                   ),
                   Text(
-                    category!,
+                    category ?? '',
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                           fontWeight: FontWeight.bold,
                         ),
                   ),
-                  Text(companyName!,
+                  Text(companyName ?? '',
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: Theme.of(context)
@@ -153,7 +153,7 @@ class _UserProfileTileState extends State<UserProfileTile> {
                           .bodyLarge
                           ?.copyWith(fontWeight: FontWeight.normal)),
                   Text(
-                    location!,
+                    location ?? '',
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(

@@ -130,7 +130,9 @@ class _LoginFormState extends State<LoginForm> {
             ),
             const SizedBox(height: 30.0),
             GestureDetector(
-              onTap: () {},
+              onTap: () {
+                Get.toNamed(Routes.resetPassword);
+              },
               child: Container(
                 width: double.infinity,
                 alignment: Alignment.centerRight,
@@ -205,10 +207,11 @@ class _LoginFormState extends State<LoginForm> {
 
             if (Platform.isIOS)
               SignInWithAppleButton(
+                height: 55,
                 onPressed: () async {
                   AuthController().appleAuthentication();
                 },
-              ),
+              )
           ],
         ),
       ),

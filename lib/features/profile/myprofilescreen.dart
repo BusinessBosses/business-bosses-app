@@ -1,5 +1,6 @@
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/features/posts/models/post_model.dart';
+import 'package:business_bosses_v2/features/posts/presentation/widgets/userpost_tile.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';

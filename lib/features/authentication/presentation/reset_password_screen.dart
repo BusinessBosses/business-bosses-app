@@ -1,28 +1,33 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 import '../../../action/action.dart';
 import '../../../common/widgets/buttons/custom_button.dart';
 import '../../../functions/validators/validator.dart';
+import '../../../navigation/routes.dart';
 import '../../../services/api_service.dart';
 import '../../../utils/theme/theme.dart';
 import '../controller/auth_controller.dart';
 
-class ForgotPasswordScreen extends StatefulWidget {
-  const ForgotPasswordScreen({Key? key}) : super(key: key);
+class ResetPasswordScreen extends StatefulWidget {
+  const ResetPasswordScreen({Key? key, required this.email}) : super(key: key);
+
+  final String email;
 
   @override
-  _ForgotPasswordScreenState createState() => _ForgotPasswordScreenState();
+  _ResetPasswordScreenState createState() => _ResetPasswordScreenState();
 }
 
-class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
+class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
   final _formKey = GlobalKey<FormState>();
 
   AutovalidateMode _autovalidateMode = AutovalidateMode.disabled;
 
   String? _email;
-  bool? _isUniqueEmail;
+  String? _password;
   ApiService _apiService = ApiService();
+  bool _invisiblePassword = true;
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +35,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       onTap: () => unFocusKeyboard(context),
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Forgot password'),
+          title: const Text('Change password'),
         ),
         body: Form(
           key: _formKey,
@@ -55,19 +60,9 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                           ),
                     ),
                   ),
-
                   const SizedBox(height: 36.0),
                   Text(
-                    // 'Enter your email for the verification process, and we will send 4 digits code to your email for the verification.',
-                    'Enter your email for the verification process, we\'ll send you a reset password email.',
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyLarge!
-                        .copyWith(color: textColor.withOpacity(0.8)),
-                  ),
-                  const SizedBox(height: 36.0),
-                  Text(
-                    'E-mail',
+                    'Password',
                     style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                           fontWeight: FontWeight.w600,
                         ),
@@ -75,23 +70,31 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   const SizedBox(height: 12.0),
                   TextFormField(
                     onChanged: (String val) {
-                      _email = val;
+                      _password = val;
+                      setState(() {});
                     },
-                    validator: Validator.emailValidator,
-                    keyboardType: TextInputType.emailAddress,
-                    textInputAction: TextInputAction.next,
+                    validator: Validator.passwordValidator,
+                    textInputAction: TextInputAction.done,
+                    obscureText: _invisiblePassword,
+                    keyboardType: TextInputType.visiblePassword,
                     decoration: inputDecoration.copyWith(
-                      hintText: 'Enter your email',
+                      hintText: 'Enter a new password',
+                      suffixIcon: showHideIcon(),
+                      hintStyle: const TextStyle(
+                        color: iconColor,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                      ),
+                      filled: true,
+                      fillColor: const Color(0xffF4F4F4),
                     ),
                   ),
-                  //field user name or email
-
                   const SizedBox(height: 48.0),
                   SizedBox(
                     width: double.infinity,
                     height: buttonHeight,
                     child: CustomButton(
-                      label: 'Continue',
+                      label: 'Reset',
                       onPressed: () async {
                         _formKey.currentState?.save();
                         setState(() {
@@ -100,27 +103,17 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                         setState(() {
                           _isProcessing = true;
                         });
-                        bool? result = await _verifyUnique('', _email!);
-                        setState(() {
-                          _isUniqueEmail = result;
-                        });
-                        if (_isUniqueEmail == false) {
-                          AuthController().sendOtpPassword(
-                              emailAddress: _email!,
-                              onError: () {
-                                setState(() {
-                                  _isProcessing = false;
-                                });
-                              });
-                        } else {
-                          Get.snackbar('Error', 'Email Does Not Exist');
+                        dynamic user = await _handleChange();
+                        if (user['success'] == false) {
+                          Get.snackbar('Error', user['error']);
                           setState(() {
                             _isProcessing = false;
                           });
+                        } else {
+                          Get.snackbar(
+                              'Success', 'Password changed succesfully!');
+                          Get.toNamed(Routes.login);
                         }
-                        setState(() {
-                          _isProcessing = false;
-                        });
                       },
                       isProcessing: _isProcessing,
                     ),
@@ -137,11 +130,31 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
 
   bool _isProcessing = false;
 
-  Future<bool?> _verifyUnique(String username, String email) async {
-    bool? user = await _apiService.verifyUnique(
-      username,
-      email,
+  Widget showHideIcon() {
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          _invisiblePassword = !_invisiblePassword;
+        });
+      },
+      child: Container(
+        height: 40.0,
+        width: 40.0,
+        padding: const EdgeInsets.symmetric(vertical: 12),
+        margin: const EdgeInsets.only(right: 10),
+        child: SvgPicture.asset(
+          _invisiblePassword
+              ? 'assets/svgs/private.svg'
+              : 'assets/svgs/eye.svg',
+          // ignore: deprecated_member_use
+          color: hintColor,
+        ),
+      ),
     );
+  }
+
+  Future<dynamic> _handleChange() async {
+    dynamic user = await _apiService.changePassword(widget.email, _password!);
     return user;
   }
 }

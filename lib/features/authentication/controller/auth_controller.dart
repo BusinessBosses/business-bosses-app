@@ -5,6 +5,8 @@ import 'dart:developer' as dartdeveloper;
 import 'package:async/async.dart';
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/features/authentication/presentation/code_verification_screen.dart';
+import 'package:business_bosses_v2/features/authentication/presentation/forgot_password_screen.dart';
+import 'package:business_bosses_v2/features/authentication/presentation/forgot_password_verification.dart';
 import 'package:business_bosses_v2/features/authentication/repository/auth_repository.dart';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
@@ -49,7 +51,7 @@ class AuthController extends GetxController {
       templateId: dotenv.env['SENDGRID_TEMPLATE_ID'],
       customArgs: {'username': userName, 'otp': code.toString()},
     );
-    mailer.send(email).then((Result<void> result) {
+    mailer.send(email).then((result) {
       if (result.isError) {
         onError();
       } else {
@@ -68,8 +70,6 @@ class AuthController extends GetxController {
   /// SEND OTP TO USER EMAIL FOR FORGOT PASSWORD
   void sendOtpPassword({
     required String emailAddress,
-    required String userName,
-    required String password,
     required VoidCallback onError,
   }) {
     Random rng = Random();
@@ -82,7 +82,7 @@ class AuthController extends GetxController {
     final Personalization personalization = Personalization(
       <Address>[toAddress],
       dynamicTemplateData: <String, dynamic>{
-        'username': userName,
+        'username': emailAddress,
         'otp': code.toString()
       },
       subject: subject,
@@ -94,17 +94,15 @@ class AuthController extends GetxController {
       subject,
       content: <Content>[content],
       templateId: dotenv.env['SENDGRID_TEMPLATE_ID'],
-      customArgs: {'username': userName, 'otp': code.toString()},
+      customArgs: {'username': emailAddress, 'otp': code.toString()},
     );
     mailer.send(email).then((Result<void> result) {
       if (result.isError) {
         onError();
       } else {
-        Get.to(() => CodeVerificationScreen(
+        Get.to(() => ForgotPasswordVerificationScreen(
               otp: code.toString(),
-              userName: userName,
               emailAddress: emailAddress,
-              password: password,
             ));
       }
     }).catchError((dynamic e) {

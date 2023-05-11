@@ -16,7 +16,7 @@ class UserModel {
   final String? name;
   final String? companyName;
   final String? surname;
-  final String bio;
+  final String? bio;
   final String? website;
   final String? instagram;
   final String? twitter;
@@ -41,9 +41,9 @@ class UserModel {
   final int? unReadCount;
   final bool? isRanked;
   UserModel({
-    required this.uid,
-    required this.username,
-    required this.email,
+    this.uid = '',
+    this.username = '',
+    this.email = '',
     this.timestamp,
     this.bossOfTheWeekTimeStamp,
     this.bossOfTheWeekUpTimeStamp,
@@ -52,7 +52,7 @@ class UserModel {
     this.name,
     this.companyName,
     this.surname,
-    required this.bio,
+    this.bio,
     this.website,
     this.instagram,
     this.twitter,
@@ -204,7 +204,7 @@ class UserModel {
       companyName:
           map['companyName'] != null ? map['companyName'] as String : null,
       surname: map['surname'] != null ? map['surname'] as String : null,
-      bio: map['bio'] as String,
+      bio: map['bio'] != null ? map['bio'] as String : null,
       website: map['website'] != null ? map['website'] as String : null,
       instagram: map['instagram'] != null ? map['instagram'] as String : null,
       twitter: map['twitter'] != null ? map['twitter'] as String : null,

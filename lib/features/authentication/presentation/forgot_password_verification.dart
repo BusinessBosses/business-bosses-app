@@ -6,30 +6,27 @@ import 'package:pin_code_fields/pin_code_fields.dart';
 import '../../../navigation/routes.dart';
 import '../../../services/api_service.dart';
 import '../../../utils/theme/theme.dart';
+import 'reset_password_screen.dart';
 
 /// VERIFY CODE AFTER SIGNUP
-class CodeVerificationScreen extends StatefulWidget {
+class ForgotPasswordVerificationScreen extends StatefulWidget {
   /// KEY CONSTRUCTOR
-  const CodeVerificationScreen({
+  const ForgotPasswordVerificationScreen({
     Key? key,
     required this.otp,
-    required this.userName,
     required this.emailAddress,
-    required this.password,
   }) : super(key: key);
   // ignore: public_member_api_docs
   final String otp;
   // ignore: public_member_api_docs
-  final String userName;
-  // ignore: public_member_api_docs
-  final String password;
-  // ignore: public_member_api_docs
   final String emailAddress;
   @override
-  State<CodeVerificationScreen> createState() => _CodeVerificationScreenState();
+  State<ForgotPasswordVerificationScreen> createState() =>
+      _ForgotPasswordVerificationScreenState();
 }
 
-class _CodeVerificationScreenState extends State<CodeVerificationScreen> {
+class _ForgotPasswordVerificationScreenState
+    extends State<ForgotPasswordVerificationScreen> {
   String currentText = "";
   bool _isProcessing = false;
 
@@ -72,7 +69,7 @@ class _CodeVerificationScreenState extends State<CodeVerificationScreen> {
 
               const SizedBox(height: 36.0),
               Text(
-                'Enter the 6 digits code that you received on your email so you can continue your account creation. ',
+                'Enter the 6 digits code that you received on your email so you can continue to reset your account password. ',
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                       color: textColor.withOpacity(0.8),
                       fontWeight: FontWeight.normal,
@@ -84,7 +81,6 @@ class _CodeVerificationScreenState extends State<CodeVerificationScreen> {
                 appContext: context,
                 length: 6,
                 mainAxisAlignment: MainAxisAlignment.center,
-
                 pinTheme: PinTheme(
                   shape: PinCodeFieldShape.box,
                   borderRadius: BorderRadius.circular(10),
@@ -100,17 +96,13 @@ class _CodeVerificationScreenState extends State<CodeVerificationScreen> {
                   fieldOuterPadding: const EdgeInsets.all(6.0),
                 ),
                 textStyle: const TextStyle(fontSize: 20, height: 1.6),
-
                 onCompleted: (v) {},
-                // onTap: () {
-                //   print("Pressed");
-                // },
-                onChanged: (value) {
+                onChanged: (String value) {
                   setState(() {
                     currentText = value;
                   });
                 },
-                beforeTextPaste: (text) {
+                beforeTextPaste: (String? text) {
                   return true;
                 },
               ),
@@ -126,18 +118,14 @@ class _CodeVerificationScreenState extends State<CodeVerificationScreen> {
                     setState(() {
                       _isProcessing = true;
                     });
-                    // if (widget.otp.isNotEmpty && widget.otp == currentText) {
-                    dynamic user = await _handleRegister();
-                    if (user['success'] == false) {
-                      Get.snackbar('Error', user['error']);
+                    if (widget.otp.isNotEmpty && widget.otp == currentText) {
+                      Get.snackbar('Success', 'You have verified succesfully!');
+                      Get.to(() => ResetPasswordScreen(
+                            email: widget.emailAddress,
+                          ));
                     } else {
-                      Get.snackbar(
-                          'Success', 'You have registered succesfully!');
-                      Get.toNamed(Routes.updateProfile);
+                      Get.snackbar('Error', 'Incorrect OTP');
                     }
-                    // } else {
-                    //   Get.snackbar('Error', 'Incorrect OTP');
-                    // }
 
                     setState(() {
                       _isProcessing = false;
@@ -159,15 +147,4 @@ class _CodeVerificationScreenState extends State<CodeVerificationScreen> {
       ),
     );
   }
-
-  Future<dynamic> _handleRegister() async {
-    dynamic user = await _apiService.register(
-      widget.emailAddress,
-      widget.password,
-      widget.userName,
-    );
-    return user;
-  }
 }
-
-enum VerififationType { email, phone }

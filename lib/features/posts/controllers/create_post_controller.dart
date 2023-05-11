@@ -5,6 +5,7 @@ import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/features/posts/controllers/posts_controller.dart';
 import 'package:business_bosses_v2/features/posts/repository/post_repository.dart';
+import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -27,10 +28,11 @@ class CreatePostController extends GetxController {
 
   ///   VALIDATE CREATE POST DATA
   bool validateCreatePostData(Map<String, dynamic> data) {
-    if (data['title'] == null && imageFileList.isEmpty) {
+    if (data['title'].toString().isEmpty && imageFileList.isEmpty) {
       return false;
+    } else {
+      return true;
     }
-    return true;
   }
 
   /// UPLOAD FILE TO REMOTE SERVER
@@ -56,7 +58,7 @@ class CreatePostController extends GetxController {
         loading(false);
         return null;
       } else {
-        final dynamic res = await PostRepository.uploadFile(resourceFile[i]);
+        final dynamic res = await ApiService.uploadFile(resourceFile[i]);
 
         if (res == null) {
           return null;
@@ -73,11 +75,13 @@ class CreatePostController extends GetxController {
   Future<void> createPost(Map<String, dynamic> body) async {
     if (validateCreatePostData(body)) {
       loading(true);
+      update();
       if (imageFileList.isEmpty) {
         final ApiResponseModel response = await PostRepository.createPost(body);
 
         if (response.success) {
           _postsController.addNewPost(response.data);
+          Get.back();
         }
       } else {
         if (await uploadFile() == null) {
@@ -96,6 +100,8 @@ class CreatePostController extends GetxController {
       loading(false);
       update();
     } else {
+      showSnackbar(
+          message: 'Post can\'t be empty', title: 'OOPS!', error: true);
       return;
     }
   }

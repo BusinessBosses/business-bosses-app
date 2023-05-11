@@ -46,7 +46,9 @@ Container OutlineButtonHeader(BuildContext context) {
         ),
         Expanded(
           child: OutlinedButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.pushNamed(context, '/promotionScreen');
+            },
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -72,7 +74,9 @@ Container OutlineButtonHeader(BuildContext context) {
         ),
         Expanded(
           child: OutlinedButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.pushNamed(context, '/analyseScreen');
+            },
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [

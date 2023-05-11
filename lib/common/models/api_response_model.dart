@@ -34,7 +34,9 @@ class ApiResponseModel {
   factory ApiResponseModel.fromMap(Map<String, dynamic> map) {
     return ApiResponseModel(
       success: map['success'] as bool,
-      message: map['message'] as String,
+      message: map['error'] != null
+          ? map['error'] as String
+          : map['message'] as String,
       data: map['data'] as dynamic,
     );
   }

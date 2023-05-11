@@ -1,5 +1,6 @@
 // ignore_for_file: always_specify_types
 
+import 'package:business_bosses_v2/features/authentication/presentation/forgot_password_screen.dart';
 import 'package:business_bosses_v2/features/authentication/presentation/login_screen.dart';
 import 'package:business_bosses_v2/features/authentication/presentation/register_screen.dart';
 import 'package:business_bosses_v2/features/moreinfoscreens/bossuppartner.dart';
@@ -64,6 +65,10 @@ class Nav {
     GetPage(
       name: Routes.updateProfile,
       page: () => const UpdateProfileScreen(),
+    ),
+    GetPage(
+      name: Routes.resetPassword,
+      page: () => const ForgotPasswordScreen(),
     ),
   ];
 }

@@ -2,8 +2,6 @@ import 'dart:io';
 
 // import 'package:apple_sign_in_safety/apple_sign_in.dart';
 // import 'package:apple_sign_in_safety/apple_sign_in_button.dart';
-import 'package:business_bosses_v2/common/widgets/buttons/custom_button.dart'
-    as custombuttom;
 import 'package:business_bosses_v2/features/authentication/controller/auth_controller.dart';
 
 import 'package:country_picker/country_picker.dart';
@@ -78,7 +76,7 @@ class _SignUpFormState extends State<SignUpForm> {
                 },
                 validator: (String? val) => Validator.usernameValidator(
                   val!,
-                  isUnique: _isUniqueName!,
+                  isUnique: true,
                 ),
                 keyboardType: TextInputType.name,
                 textInputAction: TextInputAction.next,
@@ -98,7 +96,7 @@ class _SignUpFormState extends State<SignUpForm> {
                     filled: true,
                     fillColor: const Color(0xffF4F4F4)),
               ),
-              const SizedBox(height: 24.0),
+              const SizedBox(height: 15.0),
               TextWidget(
                 text: isEmailAuth ? 'Email' : 'Phone',
                 size: 0,
@@ -136,7 +134,7 @@ class _SignUpFormState extends State<SignUpForm> {
                   ),
                   validator: (String? val) => Validator.emailValidatorSignUp(
                     _authCred,
-                    isUnique: _isUniqueEmail!,
+                    isUnique: true,
                   ),
                 )
               else
@@ -183,12 +181,12 @@ class _SignUpFormState extends State<SignUpForm> {
           CustomButton(
             label: 'Sign Up',
             onPressed: () async {
-              // if (Validator.emailValidatorSignUp(_authCred,
-              //             isUnique: _isUniqueEmail!) ==
-              //         '' &&
-              //     Validator.usernameValidator(_username!,
-              //             isUnique: _isUniqueName!) ==
-              //         '') {
+              if (Validator.emailValidatorSignUp(_authCred,
+                          isUnique: _isUniqueEmail!) ==
+                      '' &&
+                  Validator.usernameValidator(_username!,
+                          isUnique: _isUniqueName!) ==
+                      '') {
               if (agreedToTerms) {
                 setState(() {
                   _autoValidateMode = AutovalidateMode.always;
@@ -210,12 +208,12 @@ class _SignUpFormState extends State<SignUpForm> {
                   _isProcessing = false;
                 });
               }
-              // } else {
-              //   Get.snackbar('Error', 'Invalid Entries in Form');
-              //   setState(() {
-              //     _isProcessing = false;
-              //   });
-              // }
+              } else {
+                Get.snackbar('Error', 'Invalid Entries in Form');
+                setState(() {
+                  _isProcessing = false;
+                });
+              }
               setState(() {
                 _isProcessing = false;
               });
@@ -273,12 +271,15 @@ class _SignUpFormState extends State<SignUpForm> {
           ),
           const SizedBox(height: 10.0),
           if (Platform.isIOS)
-            SignInWithAppleButton(
-              text: 'Sign up with Apple',
-              onPressed: () async {
-                AuthController().appleAuthentication();
-              },
-            )
+            Stack(children: [
+              SignInWithAppleButton(
+                height: 55,
+                text: 'SIgn up with Apple',
+                onPressed: () async {
+                  AuthController().appleAuthentication();
+                },
+              ),
+            ])
         ],
       ),
     );

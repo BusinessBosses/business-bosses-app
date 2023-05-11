@@ -1,3 +1,8 @@
+import 'package:business_bosses_v2/common/models/api_response_model.dart';
+import 'package:business_bosses_v2/common/models/for_data_picker.dart';
+import 'package:business_bosses_v2/common/models/industry_model.dart';
+import 'package:business_bosses_v2/common/models/my_response.dart';
+import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:flutter/material.dart';
 
 import '../../features/profile/analysescreen.dart';
@@ -10,14 +15,11 @@ class DataSelectionScreen extends StatefulWidget {
   final Analyser analyser;
   final bool hasSearchBar;
 
-  // final List<dynamic> list;
-
   /// DATA SELECTION SCREEN
   const DataSelectionScreen({
     Key? key,
     required this.analyser,
     this.hasSearchBar = true,
-    // this.list = const [],
   }) : super(key: key);
 
   @override
@@ -25,72 +27,80 @@ class DataSelectionScreen extends StatefulWidget {
 }
 
 class _DataSelectionScreenState extends State<DataSelectionScreen> {
-  // List<ForDataPicker> newList = [];
-  List<Map<String, dynamic>> _categories = <Map<String, dynamic>>[
-    <String, dynamic>{
-      'categoryId': 'shgdghgdshds',
-      'timestamp': 16621621,
-      'category': 'Developer',
-    },
-  ];
-  List<Map<String, dynamic>> _industries = [];
+  List<MyTitle> _categories = [];
+
+  List<Industry> _industries = [];
   List<String> _searchableData = [];
   List<String> listData = [];
   String _title = '';
-  bool _isInit = false;
+  // bool _isInit = false;
   bool _isLoading = true;
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    if (!_isInit) {
-      if (widget.analyser == Analyser.category) {
-        _title = 'Profession';
-        _loadCategories();
-      } else if (widget.analyser == Analyser.industry) {
-        _title = 'Industries';
-        _loadIndustries();
-      }
-      _isInit = true;
+  // @override
+  // void didChangeDependencies() {
+  //   super.didChangeDependencies();
+  //   if (!_isInit) {
+  //     if (widget.analyser == Analyser.category) {
+  //       _title = 'Profession';
+  //       _loadCategories();
+  //     } else if (widget.analyser == Analyser.industry) {
+  //       _title = 'Industries';
+  //       _loadIndustries();
+  //     }
+  //     _isInit = true;
+  //   }
+  // }
+
+  Future<void> _loadCategories() async {
+    setState(() {
+      _isLoading = true;
+    });
+    final ApiResponseModel response =
+        await ApiService.get(path: 'category/get?page=0&size=20');
+    if (response.success) {
+      _categories = MyTitle.toCategoriesList(snapshot: response.data['rows']);
+      setState(() {
+        _isLoading = false;
+      });
+      toStringList(_categories);
+    } else {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
+  Future<void> _loadIndustries() async {
+    setState(() {
+      _isLoading = true;
+    });
+    final ApiResponseModel response =
+        await ApiService.get(path: 'industry/get');
+    if (response.success) {
+      _industries = Industry.toIndustries(snapshot: response.data['rows']);
+      _industries.sort((a, b) => a.industry.compareTo(b.industry));
+
+      setState(() {
+        _isLoading = false;
+      });
+      toStringList(_industries);
+    } else {
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 
   @override
   void initState() {
     super.initState();
-  }
-
-  Future<void> _loadCategories() async {
-    _categories = [
-      {
-        'categoryId': 'shgdghgdshds',
-        'timestamp': 16621621,
-        'category': 'Developer',
-      },
-    ];
-    setState(() {
-      _isLoading = false;
-    });
-    toStringList(_categories);
-    setState(() {
-      _isLoading = false;
-    });
-  }
-
-  Future<void> _loadIndustries() async {
-    _industries = [
-      {
-        'categoryId': '6b93f3b8-4305-4487-9e1c-35f3f7952cd6',
-        'description': 'Discussions about Media & Entertainment',
-        'industry': 'Media & Entertainment',
-        'photo': 'http://44.210.87.234/learningImages/media.jpg',
-        'timestamp': 123456666
-      },
-    ];
-    setState(() {
-      _isLoading = false;
-    });
-    toStringList(_industries);
+    if (widget.analyser == Analyser.category) {
+      _title = 'Profession';
+      _loadCategories();
+    } else if (widget.analyser == Analyser.industry) {
+      _title = 'Industries';
+      _loadIndustries();
+    }
   }
 
   @override
@@ -124,14 +134,22 @@ class _DataSelectionScreenState extends State<DataSelectionScreen> {
                     title: 'There is $_title found',
                     clickableText: 'Reload',
                     isLoading: _isLoading,
-                    onTap: _loadCategories,
+                    onTap: widget.analyser == Analyser.category
+                        ? _loadCategories
+                        : _loadIndustries,
                   )
                 : ListView.builder(
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
                     itemCount: _searchableData.length,
                     itemBuilder: (BuildContext context, int i) {
                       return ListTile(
-                        onTap: () {},
+                        onTap: () {
+                          MyResponse res = MyResponse(
+                              success: true,
+                              message: 'Item selected',
+                              data: _getObject(_searchableData[i]));
+                          Navigator.of(context).pop(res);
+                        },
                         title: Text(_searchableData[i]),
                       );
                     },
@@ -154,24 +172,24 @@ class _DataSelectionScreenState extends State<DataSelectionScreen> {
   dynamic _getObject(String title) {
     if (widget.analyser == Analyser.category) {
       for (int i = 0; i < _categories.length; i++) {
-        if (_categories[i]['category'] == title) return _categories[i];
-        debugPrint('i: $i: ${_categories[i]['category']}');
+        if (_categories[i].category == title) return _categories[i];
+        debugPrint('i: $i: ${_categories[i].category}');
       }
     } else {
       for (int i = 0; i < _industries.length; i++) {
-        if (_industries[i]['industry'] == title) return _industries[i];
-        debugPrint('i: $i: ${_industries[i]['industry']}');
+        if (_industries[i].industry == title) return _industries[i];
+        // debugPrint('i: $i: ${_industries[i].industry}');
       }
     }
   }
 
   void toStringList(List<dynamic> list) {
     if (widget.analyser == Analyser.category) {
-      List<String> data = ['Developer', 'Doctor', 'Business'];
-      // for (int i = 0; i < list.length; i++) {
-      //   MyTitle cat = list[i];
-      //   data.add(cat.category);
-      // }
+      List<String> data = [];
+      for (int i = 0; i < list.length; i++) {
+        MyTitle cat = list[i];
+        data.add(cat.category);
+      }
       listData = data;
     } else {
       List<String> data = [];
@@ -181,6 +199,7 @@ class _DataSelectionScreenState extends State<DataSelectionScreen> {
       }
       listData = data;
     }
+
     setState(() {
       _searchableData = listData;
     });
