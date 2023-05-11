@@ -1,6 +1,12 @@
 import 'dart:async';
+import 'package:business_bosses_v2/features/chat/controllers/chat_controller.dart';
+import 'package:business_bosses_v2/features/chat/models/my_message.dart';
+import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
+import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
+import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import '../../action/action.dart';
 import '../../common/dialogs/snackbar.dart';
@@ -31,8 +37,8 @@ class _ChatScreenState extends State<ChatScreen> {
   bool _isInit = false;
   bool _isLoading = true;
   bool _isSearching = false;
-  List<LastMessage> _myChatUsers = [];
-  List<LastMessage> _searchedChats = [];
+  List<LastMessage> _myChats = [];
+  List<MessageModel> _searchedChats = [];
 
   Future<void> _listenMyChatUsers() async {}
 
@@ -49,7 +55,6 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // _myChatUsers = appChat.myChats;
     return WillPopScope(
       onWillPop: () async {
         if (_isSearching) {
@@ -59,81 +64,87 @@ class _ChatScreenState extends State<ChatScreen> {
         navigateTo(context);
         return true;
       },
-      child: Scaffold(
-        appBar: _isSearching
-            ? SearchAppBar(
-                hintText: 'Search messages',
-                onClose: _onChangeSearching,
-                onChange: _onSearch,
-              )
-            : AppBar(
-                leading: IconButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
-                ),
-                centerTitle: true,
-                title: const Text('Chats'),
-                actions: [
-                  IconButton(
-                    onPressed: _onChangeSearching,
-                    icon: SvgPicture.asset('assets/svgs/search.svg'),
+      child: GetBuilder<ChatController>(
+        builder: (controller) {
+          return Scaffold(
+            appBar: _isSearching
+                ? SearchAppBar(
+                    hintText: 'Search messages',
+                    onClose: _onChangeSearching,
+                    onChange: _onSearch,
                   )
-                ],
-              ),
-        body: Stack(
-          children: [
-            _myChatUsers.isEmpty
-                ? SafetyModel(
-                    isLoading: _isLoading,
-                    icon: const Icon(
-                      Icons.person,
-                      size: 80.0,
-                      color: Colors.grey,
+                : AppBar(
+                    leading: IconButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
                     ),
-                    title: 'No chat found',
-                    subTitle:
-                        'Search for friends or connections and chat with them',
-                    clickableText: 'Search connections',
-                    // onTap: () => navigateTo(
-                    //   context,
-                    //   routeName: UsersSearchScreen.routeName,
-                    // ),
-                  )
-                : ListView.builder(
-                    itemCount: _myChatUsers.length,
-                    itemBuilder: (BuildContext context, int i) {
-                      return ChatItem(
-                        myChatUser: _myChatUsers[i],
-                        // key: ValueKey(_myChatUsers[i].user?.uid),
-                      );
-                    },
+                    centerTitle: true,
+                    title: const Text('Chats'),
+                    actions: [
+                      IconButton(
+                        onPressed: _onChangeSearching,
+                        icon: SvgPicture.asset('assets/svgs/search.svg'),
+                      )
+                    ],
                   ),
-            if (_isSearching)
-              Container(
-                color: Theme.of(context).scaffoldBackgroundColor,
-                child: _searchedChats.isEmpty
+            body: Stack(
+              children: [
+                controller.chatMessages.isEmpty
                     ? SafetyModel(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        isLoading: _isLoading,
-                        icon: SvgPicture.asset('assets/svgs/search.svg',
-                            color: hintColor, height: 80.0, width: 80.0),
-                        title: 'Search for chats',
-                        subTitle: 'Search with name to find',
+                        isLoading: false,
+                        icon: const Icon(
+                          Icons.person,
+                          size: 80.0,
+                          color: Colors.grey,
+                        ),
+                        title: 'No chat found',
+                        subTitle:
+                            'Search for friends or connections and chat with them',
+                        clickableText: 'Search connections',
+                        // onTap: () => navigateTo(
+                        //   context,
+                        //   routeName: UsersSearchScreen.routeName,
+                        // ),
                       )
                     : ListView.builder(
-                        itemCount: _searchedChats.length,
+                        itemCount: controller.chats.length,
                         itemBuilder: (BuildContext context, int i) {
                           return ChatItem(
-                            myChatUser: _searchedChats[i],
-                            key: ValueKey(_searchedChats[i].user?.uid),
+                            myChatUser: controller.chats[i],
+                            chatController: controller,
+                            // key: ValueKey(_myChats[i].user?.uid),
                           );
                         },
                       ),
-              )
-          ],
-        ),
+                if (_isSearching)
+                  Container(
+                    color: Theme.of(context).scaffoldBackgroundColor,
+                    child: _searchedChats.isEmpty
+                        ? SafetyModel(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            isLoading: _isLoading,
+                            icon: SvgPicture.asset('assets/svgs/search.svg',
+                                color: hintColor, height: 80.0, width: 80.0),
+                            title: 'Search for chats',
+                            subTitle: 'Search with name to find',
+                          )
+                        : ListView.builder(
+                            itemCount: _searchedChats.length,
+                            itemBuilder: (BuildContext context, int i) {
+                              return ChatItem(
+                                myChatUser: _searchedChats[i],
+                                key: ValueKey(_searchedChats[i].user?.uid),
+                                chatController: controller,
+                              );
+                            },
+                          ),
+                  )
+              ],
+            ),
+          );
+        },
       ),
     );
   }
@@ -147,11 +158,11 @@ class _ChatScreenState extends State<ChatScreen> {
 
   void _onSearch(String val) {
     if (val == null || val.trim().isEmpty) return;
-    final List<LastMessage> data = _myChatUsers.where((LastMessage e) {
+    final List<LastMessage> data = _myChats.where((LastMessage e) {
       return e.user!.name!.toLowerCase().contains(val.trim().toLowerCase());
     }).toList();
     setState(() {
-      _searchedChats = data;
+      // _searchedChats = data;
     });
   }
 
@@ -167,12 +178,14 @@ class _ChatScreenState extends State<ChatScreen> {
 class ChatItem extends StatefulWidget {
   // const ChatItem({Key? key}) : super(key: key);
   // ignore: public_member_api_docs
-  final LastMessage myChatUser;
+  final MessageModel myChatUser;
+  final ChatController chatController;
   // final Key key;
   // ignore: public_member_api_docs
   const ChatItem({
     Key? key,
     required this.myChatUser,
+    required this.chatController,
   }) : super(key: key);
   @override
   // ignore: library_private_types_in_public_api
@@ -190,22 +203,30 @@ class _ChatItemState extends State<ChatItem> {
     ),
   ];
 
+  final ProfileController _profileController = Get.find();
+  final HomeController _homeController = Get.find();
+
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        navigateTo(
-          context,
-          routeName: ChatRoomScreen.routeName,
-          arguments: widget.myChatUser.user,
-        );
+        if (widget.chatController != null) {
+          widget.chatController!
+              .seen(widget.myChatUser.user.uid, _homeController.socket);
+        }
+        Get.toNamed(Routes.chatRoom, arguments: widget.myChatUser.user);
       },
       child: Container(
         key: widget.key,
         padding: const EdgeInsets.all(16.0),
         child: Row(
           children: [
-            widget.myChatUser.isRead ?? true ? Container() : const UnReadDot(),
+            if (widget.myChatUser.receiverUid ==
+                    _profileController.myProfile.uid &&
+                !widget.myChatUser.seen)
+              const UnReadDot()
+            else
+              Container(),
             Container(
               width: 80.0,
               alignment: Alignment.center,
@@ -225,12 +246,13 @@ class _ChatItemState extends State<ChatItem> {
                     children: [
                       Expanded(
                         child: Text(
-                          widget.myChatUser.user?.name ?? "",
+                          widget.myChatUser.user.name ??
+                              widget.myChatUser.user.username,
                           style: Theme.of(context).textTheme.bodyLarge,
                         ),
                       ),
                       Text(
-                        TimeFormat.formatString(widget.myChatUser.timestamp!),
+                        TimeFormat.formatString(widget.myChatUser.timestamp),
                         style: bodyText2.copyWith(
                           color: hintColor,
                         ),
@@ -264,7 +286,9 @@ class _ChatItemState extends State<ChatItem> {
                                     ),
                               )
                             : Text(
-                                widget.myChatUser.text!,
+                                widget.myChatUser.messageText ??
+                                    widget.myChatUser.image ??
+                                    '',
                                 maxLines: 1,
                                 style: Theme.of(context)
                                     .textTheme

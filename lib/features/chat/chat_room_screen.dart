@@ -1,7 +1,12 @@
 import 'dart:async';
+import 'package:business_bosses_v2/features/chat/controllers/chat_controller.dart';
+import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
+import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
+import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 import '../../action/action.dart';
 import '../../common/models/user_model.dart';
 import '../../common/params.dart';
@@ -27,13 +32,11 @@ class ChatRoomScreen extends StatefulWidget {
 }
 
 class _ChatRoomScreenState extends State<ChatRoomScreen> {
-  UserModel? _user;
-  AppChats? appChats;
-
-  final List<MyMessage> _messages = [];
-
-  bool _isInit = false;
-  bool _isLoading = true;
+  final ProfileController _profileController = Get.find();
+  final HomeController _homeController = Get.find();
+  final ChatController _chatController = Get.find();
+  late UserModel args;
+  late TextEditingController _textEditingController;
   final List<PopupMenuEntry<String>> _popupItemForumMore = [
     const PopupMenuItem<String>(
       value: 'Delete Chat',
@@ -43,24 +46,17 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
       ),
     ),
   ];
-  String? _chatRoomId;
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    if (!_isInit) {
-      _user = ModalRoute.of(context)?.settings.arguments as UserModel?;
-      _readMessages();
-      _listenChatMessages();
-      _isInit = true;
-    }
-  }
-
-  void _navigateTo(BuildContext context, {String? routeName, var argument}) {
-    if (routeName != null) {
-      Navigator.of(context).pushNamed(routeName, arguments: argument);
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    if (Get.arguments == null) {
+      Get.back();
     } else {
-      Navigator.of(context).pop();
+      _textEditingController = TextEditingController();
+      args = Get.arguments;
+      // _chatController.seen(args.uid);
     }
   }
 
@@ -71,182 +67,214 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
         navigateTo(context);
         return true;
       },
-      child: Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
-          ),
-          title: Container(
-            alignment: Alignment.centerRight,
-            child: ListTile(
-              onTap: () {
-                _navigateTo(
-                  context,
-                  routeName: PublicProfileScreen.routeName,
-                  argument: Params(arg1: _user?.uid),
-                );
-              },
-              trailing: SizedBox(
-                height: 22,
-                width: 22,
-                child: MyPopupMenuButton(
-                  popupItems: _popupItemForumMore,
-                  icon: const Icon(Icons.more_vert),
-                  onSelected: (val) {
-                    deleteChat();
+      child: GetBuilder<ChatController>(
+        builder: (controller) {
+          return Scaffold(
+            appBar: AppBar(
+              leading: IconButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
+              ),
+              title: Container(
+                alignment: Alignment.centerRight,
+                child: ListTile(
+                  onTap: () {
+                    Get.toNamed(Routes.publicProfile, arguments: args);
                   },
+                  trailing: SizedBox(
+                    height: 22,
+                    width: 22,
+                    child: MyPopupMenuButton(
+                      popupItems: _popupItemForumMore,
+                      icon: const Icon(Icons.more_vert),
+                      onSelected: (val) {
+                        deleteChat();
+                      },
+                    ),
+                  ),
+                  contentPadding: const EdgeInsets.only(left: 0),
+                  title: Text(
+                    args.username,
+                    style: Theme.of(context).textTheme.bodyLarge,
+                  ),
+                  leading: UserAvatarWithBadge(
+                    user: args,
+                    height: 52.0,
+                    width: 52.0,
+                    radius: 50.0,
+                    placeHolder: Icons.person,
+                    iconSize: 36.0,
+                  ),
+                  subtitle: Text('${args.bio}',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color: textColor.withOpacity(0.6),
+                          )),
                 ),
               ),
-              contentPadding: const EdgeInsets.only(left: 0),
-              title: Text(
-                '_user.name',
-                style: Theme.of(context).textTheme.bodyLarge,
-              ),
-              leading: UserAvatarWithBadge(
-                user: _user,
-                height: 52.0,
-                width: 52.0,
-                radius: 50.0,
-                placeHolder: Icons.person,
-                iconSize: 36.0,
-              ),
-              subtitle: Text('_user.bio',
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: textColor.withOpacity(0.6),
-                      )),
+              toolbarHeight: 48.0 + 28.0,
             ),
-          ),
-          toolbarHeight: 48.0 + 28.0,
-        ),
-        body: SizedBox(
-          width: double.infinity,
-          height: double.infinity,
-          child: Stack(
-            children: [
-              Container(
-                child: _messages.isEmpty
-                    ? SafetyModel(
-                        isLoading: _isLoading,
-                        icon: const Icon(
-                          Icons.edit,
-                          size: 80.0,
-                          color: Colors.grey,
-                        ),
-                        title: 'Initiate conversation now!',
-                        subTitle: 'No message sent to ${"_user!.name"} yet',
-                      )
-                    : ListView.builder(
-                        padding: const EdgeInsets.only(
-                            left: 16.0, right: 16.0, bottom: 75.0, top: 16.0),
-                        reverse: true,
-                        itemCount: _messages.length,
-                        itemBuilder: (context, i) {
-                          final reversedIndex = _messages.length - 1 - i;
-                          return InkWell(
-                              onLongPress: () {
-                                FocusScopeNode currentFocus =
-                                    FocusScope.of(context);
-                                if (!currentFocus.hasPrimaryFocus) {
-                                  currentFocus.unfocus();
-                                }
+            body: SizedBox(
+              width: double.infinity,
+              height: double.infinity,
+              child: Stack(
+                children: [
+                  Container(
+                    child: controller
+                            .extractConversations(
+                                args.uid, _profileController.myProfile.uid)
+                            .isEmpty
+                        ? SafetyModel(
+                            isLoading: false,
+                            icon: const Icon(
+                              Icons.edit,
+                              size: 80.0,
+                              color: Colors.grey,
+                            ),
+                            title: 'Initiate conversation now!',
+                            subTitle: 'No message sent to ${args.username} yet',
+                          )
+                        : ListView.builder(
+                            padding: const EdgeInsets.only(
+                                left: 16.0,
+                                right: 16.0,
+                                bottom: 75.0,
+                                top: 16.0),
+                            reverse: true,
+                            itemCount: controller
+                                .extractConversations(
+                                    args.uid, _profileController.myProfile.uid)
+                                .length,
+                            itemBuilder: (context, i) {
+                              final MessageModel _message =
+                                  controller.extractConversations(args.uid,
+                                      _profileController.myProfile.uid)[i];
+                              // final reversedIndex = _messages.length - 1 - i;
+                              return InkWell(
+                                  onLongPress: () {
+                                    FocusScopeNode currentFocus =
+                                        FocusScope.of(context);
+                                    if (!currentFocus.hasPrimaryFocus) {
+                                      currentFocus.unfocus();
+                                    }
 
-                                showDialog(
-                                  context: context,
-                                  builder: (context) => AlertDialog(
-                                    content: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        ListTile(
-                                          onTap: () async {
-                                            navigateTo(context);
-                                            await Clipboard.setData(
-                                              ClipboardData(
-                                                text: _messages[reversedIndex]
-                                                    .messageText,
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) => AlertDialog(
+                                        content: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            ListTile(
+                                              onTap: () async {
+                                                navigateTo(context);
+                                                await Clipboard.setData(
+                                                  ClipboardData(
+                                                    text: _message.messageText,
+                                                  ),
+                                                );
+                                                showSnackBar(context,
+                                                    message: 'Text Copied!');
+                                              },
+                                              contentPadding: EdgeInsets.zero,
+                                              title: const TextWidget(
+                                                text: 'Copy Text',
                                               ),
-                                            );
-                                            showSnackBar(context,
-                                                message: 'Text Copied!');
-                                          },
-                                          contentPadding: EdgeInsets.zero,
-                                          title: const TextWidget(
-                                            text: 'Copy Text',
-                                          ),
+                                            ),
+                                            ListTile(
+                                              onTap: () {
+                                                navigateTo(context);
+                                                optionsDialog(context, () {
+                                                  // _isLoading = true;
+                                                  Navigator.pop(context);
+                                                  // deleteMessage(
+                                                  //     _messages[reversedIndex],
+                                                  //     reversedIndex);
+                                                  // if (reversedIndex ==
+                                                  //     _messages.length - 1) {
+                                                  //   DeleteLastMessage(_messages[
+                                                  //       reversedIndex]);
+                                                  // }
+                                                });
+                                              },
+                                              contentPadding: EdgeInsets.zero,
+                                              title: const TextWidget(
+                                                text: 'Delete Message',
+                                                color: Colors.red,
+                                              ),
+                                            )
+                                          ],
                                         ),
-                                        ListTile(
-                                          onTap: () {
-                                            navigateTo(context);
-                                            optionsDialog(context, () {
-                                              _isLoading = true;
-                                              Navigator.pop(context);
-                                              deleteMessage(
-                                                  _messages[reversedIndex],
-                                                  reversedIndex);
-                                              if (reversedIndex ==
-                                                  _messages.length - 1) {
-                                                DeleteLastMessage(
-                                                    _messages[reversedIndex]);
-                                              }
-                                            });
-                                          },
-                                          contentPadding: EdgeInsets.zero,
-                                          title: const TextWidget(
-                                            text: 'Delete Message',
-                                            color: Colors.red,
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                );
+                                      ),
+                                    );
 
-                                // deleteMessage(_messages[reversedIndex]);
-                              },
-                              child: ChatBox(_messages[reversedIndex]));
-                        },
-                      ),
+                                    // deleteMessage(_messages[reversedIndex]);
+                                  },
+                                  child: ChatBox(
+                                    _message,
+                                    myUid: _profileController.myProfile.uid,
+                                  ));
+                            },
+                          ),
+                  ),
+                  Positioned(
+                    bottom: 20.0,
+                    left: 10.0,
+                    right: 10.0,
+                    child: SendMessageBox(
+                      onSendMessage: (
+                        String message,
+                      ) {
+                        controller.addNewChat(
+                          <String, dynamic>{
+                            'senderUid': _profileController.myProfile.uid,
+                            'receiverUid': args.uid,
+                            'messageText': message
+                          },
+                          args,
+                          _homeController.socket,
+                        );
+
+                        _textEditingController.clear();
+                      },
+                      textEditingController: _textEditingController,
+                    ),
+                  )
+                ],
               ),
-              Positioned(
-                bottom: 20.0,
-                left: 10.0,
-                right: 10.0,
-                child: SendMessageBox(onSendMessage: _onSendMessage),
-              )
-            ],
-          ),
-        ),
+            ),
+          );
+        },
       ),
     );
   }
 
-  Future<void> _listenChatMessages() async {
-    debugPrint('_ChatRoomScreenState._listenChatMessages');
-    String path = '${Constants.CHAT_ROOMS}/$_chatRoomId';
-  }
+  // Future<void> _listenChatMessages() async {
+  //   debugPrint('_ChatRoomScreenState._listenChatMessages');
+  //   String path = '${Constants.CHAT_ROOMS}/$_chatRoomId';
+  // }
 
-  Future<void> deleteMessage(MyMessage message, int index) async {
-    String path = '${Constants.CHAT_ROOMS}/$_chatRoomId';
-  }
+  // Future<void> deleteMessage(MessageModel message, int index) async {
+  //   String path = '${Constants.CHAT_ROOMS}/$_chatRoomId';
+  // }
 
   @override
   void dispose() {
+    _textEditingController.dispose();
     super.dispose();
   }
 
-  Future<void> _onSendMessage(MyMessage message) async {
-    String chatRoomPath = '${Constants.CHAT_ROOMS}/$_chatRoomId';
-  }
+  // Future<void> _onSendMessage(MessageModel message) async {
+  //   String chatRoomPath = '${Constants.CHAT_ROOMS}/$_chatRoomId';
+  // }
 
-  Future<void> _sendNotification(MyMessage message) async {}
+  Future<void> _sendNotification(MessageModel message) async {}
 
-  void _setLastMessage(MyMessage message) {}
+  void _setLastMessage(MessageModel message) {}
 
-  void DeleteLastMessage(MyMessage message) {
+  void DeleteLastMessage(MessageModel message) {
     String senderPath = '${Constants.USERS_CHATS}/${message.senderUid}';
   }
 
@@ -263,24 +291,14 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
   }
 }
 
-class SendMessageBox extends StatefulWidget {
-  final Function(MyMessage) onSendMessage;
-
-  const SendMessageBox({
-    required this.onSendMessage,
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  _SendMessageBoxState createState() => _SendMessageBoxState();
-}
-
-class _SendMessageBoxState extends State<SendMessageBox> {
-  final _messageController = TextEditingController();
-  List<bool>? _fileProcessing;
-  // List<MyAssetEntity> _myAssetsEntities = [];
-  bool _isSending = false;
-
+class SendMessageBox extends StatelessWidget {
+  final Function(String) onSendMessage;
+  final TextEditingController textEditingController;
+  const SendMessageBox(
+      {Key? key,
+      required this.onSendMessage,
+      required this.textEditingController})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -315,7 +333,7 @@ class _SendMessageBoxState extends State<SendMessageBox> {
                 ),
                 Expanded(
                   child: TextFormField(
-                    controller: _messageController,
+                    controller: textEditingController,
                     textInputAction: TextInputAction.newline,
                     maxLines: null,
                     decoration: messageBoxDecoration.copyWith(
@@ -325,10 +343,8 @@ class _SendMessageBoxState extends State<SendMessageBox> {
                 ),
                 IconButton(
                   onPressed: () {
-                    debugPrint('_SendMessageBoxState.build');
-                    // if ((_messageController?.text?.trim()?.isNotEmpty ??
-                    //         false) ||
-                    //     _myAssetsEntities.isNotEmpty) _sendMessage();
+                    if (textEditingController.text.trim().isEmpty) return;
+                    onSendMessage(textEditingController.text.trim());
                   },
                   icon: SvgPicture.asset('assets/svgs/send.svg'),
                 ),
@@ -339,10 +355,6 @@ class _SendMessageBoxState extends State<SendMessageBox> {
       ],
     );
   }
-
-  Future<void> _sendMessage() async {}
-
-  _onImagePicker() async {}
 }
 
 optionsDialog(BuildContext context, Function() ontap) {

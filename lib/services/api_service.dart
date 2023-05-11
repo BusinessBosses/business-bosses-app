@@ -6,18 +6,16 @@ import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/utils/validators/validator.dart';
 import 'package:business_bosses_v2/utils/constants/constants.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../common/models/user_model.dart';
 import '../navigation/routes.dart';
 
 /// SERVER BASE URL
-const String baseUrl = 'https://businessbosses-api.vercel.app/api/v1';
-// const String baseUrl = 'http://192.168.1.176:3000/api/v1';
+// const String {Constants.baseUrl} = 'https://businessbosses-api.vercel.app/api/v1';
+// const String {Constants.baseUrl} = 'http://192.168.1.176:3000/api/v1';
 
 /// LOCAL STORAGE SANDBOX
 final GetStorage sandBox = GetStorage();
@@ -33,7 +31,7 @@ class ApiService {
       'password': password,
     };
     final http.Response response = await http.post(
-      Uri.parse('$baseUrl/auth/sign-in'),
+      Uri.parse('${Constants.baseUrl}/auth/sign-in'),
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode(data),
     );
@@ -87,7 +85,7 @@ class ApiService {
       'password': password,
     };
     final http.Response response = await http.post(
-      Uri.parse('$baseUrl/auth/sign-up'),
+      Uri.parse('${Constants.baseUrl}/auth/sign-up'),
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode(data),
     );
@@ -112,7 +110,7 @@ class ApiService {
       'email': email,
     };
     final http.Response response = await http.post(
-      Uri.parse('$baseUrl/auth/email-exist'),
+      Uri.parse('${Constants.baseUrl}/auth/email-exist'),
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode(data),
     );
@@ -151,7 +149,7 @@ class ApiService {
     log(token);
     try {
       final http.Response response = await http.post(
-        Uri.parse('$baseUrl/$path'),
+        Uri.parse('${Constants.baseUrl}/$path'),
         body: jsonEncode(body),
         headers: <String, String>{
           'Content-Type': 'application/json',
@@ -173,7 +171,7 @@ class ApiService {
     final String token = sandBox.read(Constants.ACCESS_TOKEN);
     try {
       final http.Response response = await http.get(
-        Uri.parse('$baseUrl/$path'),
+        Uri.parse('${Constants.baseUrl}/$path'),
         headers: <String, String>{
           'Content-type': 'application/json',
           'Accept': 'application/json',
@@ -197,7 +195,7 @@ class ApiService {
     final String token = sandBox.read(Constants.ACCESS_TOKEN);
     try {
       final http.Response response = await http.put(
-        Uri.parse('$baseUrl/$path'),
+        Uri.parse('${Constants.baseUrl}/$path'),
         body: jsonEncode(body),
         headers: <String, String>{
           'Content-type': 'application/json',
@@ -221,7 +219,7 @@ class ApiService {
     final String token = sandBox.read(Constants.ACCESS_TOKEN);
     try {
       final http.Response response = await http.delete(
-        Uri.parse('$baseUrl/$path'),
+        Uri.parse('${Constants.baseUrl}/$path'),
         body: jsonEncode(body),
         headers: <String, String>{
           'Content-type': 'application/json',

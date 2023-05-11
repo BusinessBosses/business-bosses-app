@@ -1,13 +1,16 @@
 import 'package:business_bosses_v2/action/action.dart';
 import 'package:business_bosses_v2/features/chat/chat_screen.dart';
+import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 
 // ignore: public_member_api_docs
 class Homeappbar extends StatelessWidget {
   // ignore: public_member_api_docs
-  const Homeappbar({Key? key}) : super(key: key);
+  const Homeappbar({Key? key, this.hasBadge = false}) : super(key: key);
+  final bool hasBadge;
 
   /// HOME SCREEN APP BAR
   @override
@@ -45,7 +48,8 @@ class Homeappbar extends StatelessWidget {
       ),
       leading: InkWell(
         onTap: () {
-          navigateTo(context, routeName: ChatScreen.routeName);
+          Get.toNamed(Routes.chat);
+          // navigateTo(context, routeName: ChatScreen.routeName);
         },
         child: SizedBox(
           width: 55,
@@ -73,7 +77,7 @@ class Homeappbar extends StatelessWidget {
                       // height: 30.0,
                     ),
                   ),
-                  if (1 > 0)
+                  if (hasBadge)
                     const Positioned(
                       top: 0,
                       right: -5,

@@ -7,26 +7,28 @@ import '../../utils/time_format.dart';
 import 'network_image_with_placeholder.dart';
 
 class ChatBox extends StatelessWidget {
-  final MyMessage message;
+  final MessageModel message;
   final ChatTextSize? chatTextSize;
+  final String myUid;
   final Function()? onTap;
 
   const ChatBox(
     this.message, {
     Key? key,
     this.chatTextSize,
+    required this.myUid,
     this.onTap,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
-    return message.senderUid != 'FirebaseAuth.instance.currentUser.uid'
+    return message.senderUid != myUid
         ? Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              message.singleDeletedBy!.contains('myId') ||
-                      message.singleDeletedBy!.contains(message.senderUid)
+              message.deleted!.contains('myId') ||
+                      message.deleted!.contains(message.senderUid)
                   ? Text(
                       'This message was deleted.',
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
@@ -63,19 +65,18 @@ class ChatBox extends StatelessWidget {
                                 Flexible(
                                   //We only want to wrap the text message with flexible widget
                                   child: Column(
-                                    crossAxisAlignment:
-                                        (message.images?.length ?? -1) > 0
-                                            ? CrossAxisAlignment.start
-                                            : CrossAxisAlignment.end,
+                                    crossAxisAlignment: message.image != null
+                                        ? CrossAxisAlignment.start
+                                        : CrossAxisAlignment.end,
                                     children: [
-                                      if ((message.images?.length ?? -1) > 0)
+                                      if (message.image != null)
                                         GestureDetector(
                                           onTap: () {
                                             Navigator.of(context).push(
                                               MaterialPageRoute(
                                                 builder: (context) =>
                                                     ImagesViewerScreen(
-                                                  urls: message.images,
+                                                  urls: [message.image!],
                                                 ),
                                               ),
                                             );
@@ -83,7 +84,7 @@ class ChatBox extends StatelessWidget {
                                           child: Stack(
                                             children: [
                                               NetworkImageWithPlaceHolder(
-                                                imageUrl: message.images![0],
+                                                imageUrl: message.image,
                                                 width: size.width * 0.6,
                                                 height: size.width * 0.6,
                                                 cacheHeight: 90,
@@ -91,7 +92,7 @@ class ChatBox extends StatelessWidget {
                                                 placeHolder: Icons.photo,
                                                 iconSize: 36.0,
                                               ),
-                                              multiImageIcon(message.images!)
+                                              // multiImageIcon(message.images!)
                                             ],
                                           ),
                                         ),
@@ -140,7 +141,7 @@ class ChatBox extends StatelessWidget {
                   padding: const EdgeInsets.all(16.0),
                   child: Text(TimeFormat.formatString(message.timestamp!)),
                 ),
-              message.singleDeletedBy!.contains('myId')
+              message.deleted!.contains('myId')
                   ? Text(
                       'This message was deleted.',
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
@@ -169,19 +170,18 @@ class ChatBox extends StatelessWidget {
                             Flexible(
                               //We only want to wrap the text message with flexible widget
                               child: Column(
-                                crossAxisAlignment:
-                                    (message.images?.length ?? -1) > 0
-                                        ? CrossAxisAlignment.start
-                                        : CrossAxisAlignment.end,
+                                crossAxisAlignment: message.deleted != null
+                                    ? CrossAxisAlignment.start
+                                    : CrossAxisAlignment.end,
                                 children: [
-                                  if ((message.images?.length ?? -1) > 0)
+                                  if (message.image != null)
                                     GestureDetector(
                                       onTap: () {
                                         Navigator.of(context).push(
                                           MaterialPageRoute(
                                             builder: (context) =>
                                                 ImagesViewerScreen(
-                                              urls: message.images,
+                                              urls: [message.image!],
                                             ),
                                           ),
                                         );
@@ -189,7 +189,7 @@ class ChatBox extends StatelessWidget {
                                       child: Stack(
                                         children: [
                                           NetworkImageWithPlaceHolder(
-                                            imageUrl: message.images![0],
+                                            imageUrl: message.image,
                                             width: size.width * 0.6,
                                             cacheHeight: 90,
                                             cacheWidth: 90,
@@ -197,7 +197,7 @@ class ChatBox extends StatelessWidget {
                                             placeHolder: Icons.photo,
                                             iconSize: 36.0,
                                           ),
-                                          multiImageIcon(message.images!)
+                                          // multiImageIcon(message.images!)
                                         ],
                                       ),
                                     ),
@@ -232,37 +232,37 @@ class ChatBox extends StatelessWidget {
           );
   }
 
-  Widget multiImageIcon(List<String> images) {
-    return images.length <= 1
-        ? Container()
-        : Positioned(
-            bottom: 8.0,
-            right: 8.0,
-            child: Container(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
-              decoration: BoxDecoration(
-                  color: primaryColorLT.withOpacity(0.5),
-                  borderRadius: BorderRadius.circular(30.0)),
-              child: Row(
-                children: [
-                  const Icon(
-                    Icons.content_copy,
-                    size: 18.0,
-                    color: Colors.white,
-                  ),
-                  const SizedBox(width: 8.0),
-                  Text(
-                    '${message.images!.length - 1}',
-                    style: bodyText1.copyWith(
-                      color: Colors.white,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          );
-  }
+  // Widget multiImageIcon(List<String> images) {
+  //   return images.length <= 1
+  //       ? Container()
+  //       : Positioned(
+  //           bottom: 8.0,
+  //           right: 8.0,
+  //           child: Container(
+  //             padding:
+  //                 const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
+  //             decoration: BoxDecoration(
+  //                 color: primaryColorLT.withOpacity(0.5),
+  //                 borderRadius: BorderRadius.circular(30.0)),
+  //             child: Row(
+  //               children: [
+  //                 const Icon(
+  //                   Icons.content_copy,
+  //                   size: 18.0,
+  //                   color: Colors.white,
+  //                 ),
+  //                 const SizedBox(width: 8.0),
+  //                 Text(
+  //                   '${message.images!.length - 1}',
+  //                   style: bodyText1.copyWith(
+  //                     color: Colors.white,
+  //                   ),
+  //                 ),
+  //               ],
+  //             ),
+  //           ),
+  //         );
+  // }
 }
 
 enum ChatTextSize { normal, medium, large }

@@ -161,27 +161,18 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                     height: 1,
                     child: ColoredBox(color: backgroundcolorinterface),
                   ),
-                  // Padding(
-                  //   padding:
-                  //       const EdgeInsets.only(left: 20, right: 20, top: 20),
-                  //   child: CustomButton(
-                  //     buttonType: ButtonType.elevated,
-                  //     label: 'Post',
-                  //     onPressed: () {},
-                  //     isProcessing: false,
-                  //   ),),
                   Padding(
                     padding: const EdgeInsets.only(left: 15, right: 15),
                     child: CustomButton(
                       buttonType: ButtonType.elevated,
                       label: 'Post',
                       onPressed: () async {
-                        if (controller.imageCount > 5) {
-                          // If the user has selected more than five images, show an error message
+                        if (controller.imageFileList.length > 5) {
+                          /// If the user has selected more than five images, show an error message
                           showSnackbar(
                               message: 'You can select up to five images.');
                         } else {
-                          // Otherwise, create the post
+                          /// Otherwise, create the post
                           await controller.createPost({
                             'title': _titleCtrl.text.trim(),
                             'timestamp': DateTime.now().millisecondsSinceEpoch,
@@ -191,7 +182,6 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                       isProcessing: controller.loading.value,
                     ),
                   ),
-
                   const SizedBox(
                     height: 50,
                   )
