@@ -119,9 +119,9 @@ class Homeappbar extends StatelessWidget {
                           const SizedBox(
                             width: 5,
                           ),
-                          const Text(
-                            '200',
-                            style: TextStyle(
+                          Text(
+                            200.toString(),
+                            style: const TextStyle(
                               color: Color.fromRGBO(133, 133, 133, 1),
                               fontSize: 15,
                               fontWeight: FontWeight.w700,

@@ -1,13 +1,16 @@
 import 'package:business_bosses_v2/features/posts/controllers/posts_controller.dart';
 import 'package:business_bosses_v2/features/posts/models/post_model.dart';
 import 'package:business_bosses_v2/features/posts/presentation/widgets/post_images.dart';
+import 'package:business_bosses_v2/features/posts/presentation/widgets/post_like_comment.dart';
 import 'package:business_bosses_v2/utils/constants/constants.dart';
 import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
 import 'package:detectable_text_field/widgets/detectable_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:flutter/src/widgets/framework.dart';
 
+import '../../../../common/models/comment_model.dart';
 import '../../../../common/widgets/ranking_badge.dart';
 import '../../../../common/widgets/text_widget.dart';
 import '../../../../common/widgets/user_avatar_with_badge.dart';
@@ -25,7 +28,7 @@ class PostTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final sandBox = GetStorage();
+    final GetStorage sandBox = GetStorage();
     final String uid = sandBox.read(Constants.USER_ID);
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
@@ -173,7 +176,19 @@ class PostTile extends StatelessWidget {
                     ),
                   ),
                   TextButton.icon(
-                    onPressed: _showBottomSheet,
+                    onPressed: () {
+                      showModalBottomSheet(
+                        context: context,
+                        builder: (BuildContext context) => PostLikeCommentItem(
+                          post: post,
+                          onComment: (CommentModel newComment) async {
+                            // _post.comments?.add(newComment);
+                            // widget.onComment(_post);
+                            // setState(() {});
+                          },
+                        ),
+                      );
+                    },
                     icon: SvgPicture.asset('assets/svgs/comment.svg'),
                     label: Text(
                       '${post.comments?.length ?? 0}',
@@ -230,13 +245,13 @@ class PostTile extends StatelessWidget {
       ],
     );
   }
+
+  void _showBottomSheet(BuildContext context) {}
 }
 
 _sharePost(PostModel? post) {}
 
 void _onLikeTap() {}
-
-void _showBottomSheet() {}
 
 double leadingWidth(PostModel p) {
   double w = 0;

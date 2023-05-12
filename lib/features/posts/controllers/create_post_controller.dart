@@ -86,7 +86,14 @@ class CreatePostController extends GetxController {
 
         if (response.success) {
           _postsController.addNewPost(response.data);
-          Get.back();
+          if (shouldPromote.value == true) {
+            Get.to(() => BoostPost(
+                  postId: response.data['postId'],
+                  postTitle: response.data['title'],
+                ));
+          } else {
+            Get.back();
+          }
         }
       } else {
         if (await uploadFile() == null) {
@@ -97,15 +104,15 @@ class CreatePostController extends GetxController {
 
           if (response.success) {
             imageFileList.clear();
-            print('test ${shouldPromote.value}');
             _postsController.addNewPost(response.data);
-            if (shouldPromote.value) {
+            if (shouldPromote.value == true) {
               Get.to(() => BoostPost(
                     postId: response.data['postId'],
                     postTitle: response.data['title'],
                   ));
+            } else {
+              Get.back();
             }
-            Get.back();
           }
         }
       }
@@ -121,7 +128,6 @@ class CreatePostController extends GetxController {
   /// CHANGE PROMOTE STATE VALUE
   void togglePromote() {
     shouldPromote(!shouldPromote.value);
-    _promote = !_promote;
     update();
   }
 

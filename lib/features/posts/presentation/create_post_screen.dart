@@ -173,7 +173,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                               message: 'You can select up to five images.');
                         } else {
                           /// Otherwise, create the post
-                          await controller.createPost({
+                          await controller.createPost(<String, dynamic>{
                             'title': _titleCtrl.text.trim(),
                             'timestamp': DateTime.now().millisecondsSinceEpoch,
                           });
