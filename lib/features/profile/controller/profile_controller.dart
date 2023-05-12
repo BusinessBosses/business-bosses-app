@@ -12,4 +12,10 @@ class ProfileController extends GetxController {
     myProfile = modelizedData;
     update();
   }
+
+  void updateCoinCount(int num) {
+    myProfile = UserModel.fromMap(
+        {...myProfile.toMap(), 'coinscount': myProfile.coinscount! + num});
+    update();
+  }
 }
