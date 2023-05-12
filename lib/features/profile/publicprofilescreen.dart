@@ -92,7 +92,7 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
           },
           icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
         ),
-        title: Text('@${_publicUser?.username ?? ''}'),
+        title: Text('@${_publicUser.username ?? ''}'),
         actions: [
           _publicUser.uid != '_firebase.uid'
               ? Padding(
