@@ -1,4 +1,7 @@
+import 'package:business_bosses_v2/features/chat/controllers/chat_controller.dart';
+import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/posts/controllers/posts_controller.dart';
+import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/features/profile/myprofilescreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -17,7 +20,6 @@ import '../profile/myprofilescreen.dart';
 class BottomNavScreen extends StatefulWidget {
   /// Constructor
   const BottomNavScreen({super.key});
-  static const String routeName = '/bottom_nav_screen';
 
   @override
   State<BottomNavScreen> createState() => _BottomNavScreenState();
@@ -25,6 +27,9 @@ class BottomNavScreen extends StatefulWidget {
 
 class _BottomNavScreenState extends State<BottomNavScreen> {
   final PostsController _postsController = Get.put(PostsController());
+  final ProfileController _profileController = Get.put(ProfileController());
+  final ChatController _chatController = Get.put(ChatController());
+  final HomeController _homeController = Get.put(HomeController());
   int _activeIndex = 0;
   @override
   Widget build(BuildContext context) {

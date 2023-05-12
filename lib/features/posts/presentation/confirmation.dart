@@ -1,5 +1,7 @@
+import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 
 import '../../../common/widgets/buttons/my_button.dart';
 import '../../../common/widgets/text_widget.dart';
@@ -150,10 +152,12 @@ class Confirmation extends StatelessWidget {
                       ),
                       label: 'Ok',
                       onPressed: () {
-                        Navigator.of(context).pushNamedAndRemoveUntil(
-                          BottomNavScreen.routeName,
-                          (Route route) => false,
-                        );
+                        Get.offNamedUntil(
+                            Routes.bottomNavigation, (Route route) => false);
+                        // Navigator.of(context).pushNamedAndRemoveUntil(
+                        //   BottomNavScreen.routeName,
+                        //   (Route route) => false,
+                        // );
                       },
                     ),
                   ],

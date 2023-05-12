@@ -9,8 +9,10 @@ import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class PostsController extends GetxController {
+  late IO.Socket socket;
   RxList<PostModel> posts = RxList<PostModel>(<PostModel>[]);
   RxInt paginationPage = RxInt(0);
   final int postsSize = 20;
@@ -23,12 +25,15 @@ class PostsController extends GetxController {
     for (int i = 0; i < psts.length; i++) {
       posts.add(PostModel.fromMap({
         ...psts[i],
-        'likes':
-            psts[i]['likes'].map((like) => like['userId'].toString()).toList(),
-        'coins':
-            psts[i]['likes'].map((coin) => coin['userId'].toString()).toList()
+        'likes': psts[i]['likes']
+            .map((dynamic like) => like['userId'].toString())
+            .toList(),
+        'coins': psts[i]['likes']
+            .map((dynamic coin) => coin['userId'].toString())
+            .toList()
       }));
     }
+    update();
   }
 
   /// LIKE AND UNLIKE FUNCTION
@@ -46,6 +51,10 @@ class PostsController extends GetxController {
       }
     }
     update();
+    socket.emit('like', {
+      postId: postId,
+      userId: userId,
+    });
   }
 
   /// COIN AND UNCOIN FUNCTION
@@ -61,6 +70,10 @@ class PostsController extends GetxController {
       } else {
         posts[postIndex].coins!.add(userId);
       }
+      socket.emit('coin', {
+        postId: postId,
+        userId: userId,
+      });
     }
     update();
   }
@@ -71,18 +84,15 @@ class PostsController extends GetxController {
     final String uid = sandBox.read(Constants.USER_ID);
     PostModel modelizedNewPost = PostModel.fromMap({
       ...newPost,
-      'coins': [],
-      'likes': [],
-      'comments': [],
+      'coins': <String>[],
+      'likes': <String>[],
+      'comments': <CommentModel>[],
       'user': {
         'username': 'testUser1',
         'email': 'test1@gmail.com',
         'uid': uid,
       }
     });
-    // modelizedNewPost.coins = <String>[];
-    // modelizedNewPost.comments = <CommentModel>[];
-    // modelizedNewPost.likes = <String>[];
 
     posts.insert(0, modelizedNewPost);
 
@@ -105,12 +115,12 @@ class PostsController extends GetxController {
           barrierDismissible: false,
           context: Get.context!,
           builder: (BuildContext context) => AlertDialog(
-            title: TextWidget(
+            title: const TextWidget(
               text: 'Access token expired',
               fontWeight: FontWeight.w700,
               size: 18,
             ),
-            content: TextWidget(
+            content: const TextWidget(
               text:
                   'Your access token has expired. therefore, you will be required to login again to generate a new one. ',
             ),
@@ -120,8 +130,8 @@ class PostsController extends GetxController {
                   ApiService().logout();
                   Navigator.of(context).pop(context);
                 },
-                child: TextWidget(
-                  text: "Create new Access Token",
+                child: const TextWidget(
+                  text: 'Create new Access Token',
                   color: primaryColorLT,
                 ),
               )
@@ -135,10 +145,33 @@ class PostsController extends GetxController {
     update();
   }
 
+  initSocket() {
+    socket = IO.io(Constants.socketUrl, <String, dynamic>{
+      'autoConnect': false,
+      'transports': ['websocket'],
+    });
+    socket.connect();
+    socket.onConnect((_) {
+      print('Connection established');
+    });
+
+    socket.onDisconnect((_) => print('Connection Disconnection'));
+    socket.onConnectError((err) => print(err));
+    socket.onError((err) => print(err));
+  }
+
   @override
   void onInit() {
     // TODO: implement onInit
-    loadPosts();
+    initSocket();
     super.onInit();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    socket.disconnect();
+    socket.dispose();
+    super.dispose();
   }
 }

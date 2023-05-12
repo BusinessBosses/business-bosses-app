@@ -10,6 +10,9 @@ import '../../utils/constants/constants.dart';
 
 // ignore: public_member_api_docs
 class UserProfileTile extends StatefulWidget {
+  final UserModel myProfile;
+
+  const UserProfileTile({Key? key, required this.myProfile}) : super(key: key);
   @override
   State<UserProfileTile> createState() => _UserProfileTileState();
 }
@@ -62,8 +65,8 @@ class _UserProfileTileState extends State<UserProfileTile> {
                   alignment: Alignment.topLeft,
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(1000),
-                    child: const NetworkImageWithPlaceHolder(
-                      imageUrl:
+                    child: NetworkImageWithPlaceHolder(
+                      imageUrl: widget.myProfile.photoUrl ??
                           'https://w7.pngwing.com/pngs/831/88/png-transparent-user-profile-computer-icons-user-interface-mystique-miscellaneous-user-interface-design-smile-thumbnail.png',
                       height: 105.0,
                       width: 105.0,
@@ -130,7 +133,7 @@ class _UserProfileTileState extends State<UserProfileTile> {
                 children: [
                   const SizedBox(height: 6.0),
                   Text(
-                    name ?? '',
+                    widget.myProfile.name ?? '',
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
@@ -138,14 +141,14 @@ class _UserProfileTileState extends State<UserProfileTile> {
                         ),
                   ),
                   Text(
-                    category ?? '',
+                    widget.myProfile.category ?? '',
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                           fontWeight: FontWeight.bold,
                         ),
                   ),
-                  Text(companyName ?? '',
+                  Text(widget.myProfile.companyName ?? '',
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: Theme.of(context)
@@ -153,7 +156,7 @@ class _UserProfileTileState extends State<UserProfileTile> {
                           .bodyLarge
                           ?.copyWith(fontWeight: FontWeight.normal)),
                   Text(
-                    location ?? '',
+                    widget.myProfile.location ?? '',
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(

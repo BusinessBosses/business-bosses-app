@@ -63,8 +63,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
   String? _twitter;
   String? _ageRange;
   String? _gender;
-  String? _achievements;
-  String? _productsandservices;
+  List<String>? _productsandservices;
 // String? blas;
   bool _isInit = false;
   bool _isNetworkImage = false;
@@ -89,7 +88,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
         achievements.length <= 2) {
       setState(() {
         achievements.insert(0, achievementController.text);
-        _achievements = achievements.join('+');
+        // _achievements = achievements.join('+');
       });
     }
   }
@@ -100,14 +99,14 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
     if (_productsandservices == null) {
       setState(() {
         productsandservices.insert(0, productsController.text);
-        _productsandservices = productsandservices.join('+');
+        // _productsandservices = productsandservices.join('+');
       });
     } else if (productsController.text.isNotEmpty &&
         productsController.text.trim().isNotEmpty &&
         productsandservices.length <= 6) {
       setState(() {
         productsandservices.insert(0, productsController.text);
-        _productsandservices = productsandservices.join('+');
+        // _productsandservices = productsandservices.join('+');
       });
     }
   }
@@ -140,10 +139,34 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
     } catch (e) {}
   }
 
+  void setVariableValues(UserModel args) {
+    _location = args.location;
+    _category = args.category;
+    _industry = args.industry;
+    _photoUrl = args.photoUrl;
+    _companyName = args.companyName;
+    _username = args.username;
+    _name = args.name;
+    _surname = args.surname;
+    _bio = args.bio;
+    _website = args.website;
+    _instagram = args.instagram;
+    _twitter = args.twitter;
+    _ageRange = args.ageRange;
+    _gender = args.gender;
+    achievements = args.achievements ?? [];
+    productsandservices = args.productsandservices ?? [];
+
+    // print(args.achievements);
+  }
+
   @override
   void initState() {
     super.initState();
     _scrollController = ScrollController();
+    if (Get.arguments != null) {
+      setVariableValues(Get.arguments);
+    }
   }
 
   @override
@@ -197,7 +220,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                         child: UserProfileImageItem(
                           imageUrl: _photoUrl,
                           imageFile: _imageFile,
-                          isNetWorkImage: _isNetworkImage,
+                          isNetWorkImage: _photoUrl != null ? true : false,
                           onImagePicker: onPickImage,
                           height: 96.0,
                           width: 96.0,
@@ -1227,11 +1250,11 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
       'industry': _industry,
       'category': _category,
       'location': _location,
-      'achievements': achievements,
-      'productsandservices': productsandservices,
+      'achievements': achievements.isEmpty ? null : achievements,
+      'productsandservices': productsandservices.isEmpty ? null : achievements,
       'ageRange': _ageRange,
       'gender': _gender,
-      'photoURL': _photoUrl,
+      'photoUrl': _photoUrl,
     };
     final String? userId = prefs.getString(Constants.USER_ID);
     // print('$userId token $updateData');

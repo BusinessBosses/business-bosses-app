@@ -14,9 +14,13 @@ import '../../../utils/constants/constants.dart';
 import '../../../utils/theme/theme.dart';
 import 'confirmation.dart';
 
+/// BOOST POST SCREEN
 class BoostPost extends StatefulWidget {
-  const BoostPost({Key? key, required this.postId, this.postTitle = ""})
-      : super(key: key);
+  const BoostPost({
+    Key? key,
+    required this.postId,
+    this.postTitle = '',
+  }) : super(key: key);
   final String postTitle;
   final String postId;
   @override
@@ -85,13 +89,13 @@ class _BoostPostState extends State<BoostPost> {
         });
         log(' =>> $error');
         showSnackBar(context,
-            message: "Opps!! Something went wrong. Try again");
+            message: 'Opps!! Something went wrong. Try again');
       });
     } on StripeException {
       setState(() {
         _isProcessing = false;
       });
-      showSnackBar(context, message: "Opps!! Something went wrong. Try again");
+      showSnackBar(context, message: 'Opps!! Something went wrong. Try again');
       // print('Here ->>>>>> $e');
     } catch (e) {
       setState(() {
@@ -142,7 +146,7 @@ class _BoostPostState extends State<BoostPost> {
           .initPaymentSheet(
         paymentSheetParameters: SetupPaymentSheetParameters(
           paymentIntentClientSecret: paymantIntent!['client_secret'],
-          merchantDisplayName: 'Adam',
+          merchantDisplayName: 'Business Bosses',
         ),
       )
           .then((value) {
@@ -321,7 +325,7 @@ class _BoostPostState extends State<BoostPost> {
                     fontWeight: FontWeight.w700,
                     fontSize: 18,
                   ),
-                  label: "Continue",
+                  label: 'Continue',
                   onPressed: () async {
                     await makePayment();
                   }),
@@ -426,7 +430,7 @@ class BoostPlanCard extends StatelessWidget {
                     color: Color(0xFF777777),
                     fontWeight: FontWeight.w400,
                     size: 12,
-                  )
+                  ),
           ],
         ),
       ),

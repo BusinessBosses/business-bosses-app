@@ -105,23 +105,24 @@ class PostTile extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 5,
-                        horizontal: 15,
-                      ),
-                      decoration: const BoxDecoration(
-                        color: backgroundcolorinterface,
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(5),
+                    if (post.promote ?? false)
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 5,
+                          horizontal: 15,
+                        ),
+                        decoration: const BoxDecoration(
+                          color: backgroundcolorinterface,
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(5),
+                          ),
+                        ),
+                        child: const TextWidget(
+                          text: 'Sponsored',
+                          fontWeight: FontWeight.w700,
+                          size: 10,
                         ),
                       ),
-                      child: const TextWidget(
-                        text: 'Sponsored',
-                        fontWeight: FontWeight.w700,
-                        size: 10,
-                      ),
-                    ),
                     const SizedBox(
                       height: 10,
                     ),

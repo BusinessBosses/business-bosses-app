@@ -39,26 +39,32 @@ class MyApp extends StatelessWidget {
         statusBarIconBrightness: Brightness.dark,
       ),
     );
-    final GetStorage sandBox = GetStorage();
-    sandBox.writeIfNull(Constants.USER_ID, '');
-    return SimpleBuilder(
-      builder: (_) {
-        final String? userId = sandBox.read(Constants.USER_ID);
-        return GetMaterialApp(
-          navigatorObservers: <NavigatorObserver>[
-            AnalyticsServices.getAnalyticObserver()
-          ],
+    // ignore: always_specify_types
+    return FutureBuilder(
+      future: SharedPreferences.getInstance(),
+      builder:
+          (BuildContext context, AsyncSnapshot<SharedPreferences> snapshot) {
+        final SharedPreferences? data = snapshot.data;
+        if (snapshot.hasData) {
+          final String? userId = data!.getString(Constants.USER_ID);
 
-          initialRoute: userId == '' || userId == null
-              ? Routes.login
-              : Routes.bottomNavigation,
+          return GetMaterialApp(
+            navigatorObservers: <NavigatorObserver>[
+              AnalyticsServices.getAnalyticObserver()
+            ],
+            initialRoute: userId == '' || userId == null
+                ? Routes.login
+                : Routes.bottomNavigation,
 
-          // initialRoute: Routes.updateProfile,
-          getPages: Nav.routes,
-          debugShowCheckedModeBanner: false,
-          theme: appTheme,
-          title: 'Business Bosses',
-        );
+            // initialRoute: Routes.updateProfile,
+            getPages: Nav.routes,
+            debugShowCheckedModeBanner: false,
+            theme: appTheme,
+            title: 'Business Bosses',
+          );
+        } else {
+          return Container();
+        }
       },
     );
   }
