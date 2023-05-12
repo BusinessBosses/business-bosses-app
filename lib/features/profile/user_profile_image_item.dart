@@ -76,7 +76,7 @@ class UserProfileImageItem extends StatelessWidget {
                       padding: const EdgeInsets.all(5.0),
                       decoration: BoxDecoration(
                           border: Border.all(color: Colors.white, width: 0),
-                          color: Theme.of(context).primaryColor,
+                          color: primaryColorLT,
                           borderRadius: BorderRadius.circular(50.0)),
                       child: SvgPicture.asset('assets/svgs/add.svg'),
                     ),

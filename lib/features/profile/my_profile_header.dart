@@ -2,11 +2,13 @@ import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/features/profile/user_profile_tile.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 import '../../action/action.dart';
 import '../../common/params.dart';
 import '../../common/widgets/buttons/custom_child_button.dart';
+import '../../navigation/routes.dart';
 import '../../utils/theme/theme.dart';
 import '../connects/all_connections_screen.dart';
 import '../posts/models/post_model.dart';
@@ -26,7 +28,9 @@ class MyProfileHeader extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              UserProfileTile(myProfile: myProfile),
+              UserProfileTile(
+                myProfile: myProfile,
+              ),
               Container(
                 alignment: Alignment.center,
                 child: Row(
@@ -35,11 +39,12 @@ class MyProfileHeader extends StatelessWidget {
                     Expanded(
                         child: CustomChildButton(
                       onPressed: () {
-                        return navigateTo(
-                          context,
-                          routeName: AllConnectionsScreen.routeName,
-                          arguments: Params(arg1: myProfile),
-                        );
+                        Get.toNamed(Routes.allconnectionsscreen);
+                        // return navigateTo(
+                        //   context,
+                        //   routeName: AllConnectionsScreen.routeName,
+                        //   arguments: Params(arg1: myProfile),
+                        // );
                       },
                       caption: 'Connections',
                       value: myProfile.connectionCount ?? 0,
@@ -47,14 +52,15 @@ class MyProfileHeader extends StatelessWidget {
                     Expanded(
                         child: CustomChildButton(
                       onPressed: () {
-                        navigateTo(
-                          context,
-                          routeName: AllConnectionsScreen.routeName,
-                          arguments: Params(arg1: myProfile, arg2: 1),
-                        );
+                        Get.toNamed(Routes.allconnectionsscreen);
+                        // navigateTo(
+                        //   context,
+                        //   routeName: AllConnectionsScreen.routeName,
+                        //   arguments: Params(arg1: myProfile, arg2: 1),
+                        // );
                       },
                       caption: 'Connected',
-                      value: 0,
+                      value: myProfile.connectedCount ?? 0,
                     )),
                     Expanded(
                       child: CustomChildButton(
@@ -63,11 +69,12 @@ class MyProfileHeader extends StatelessWidget {
                             : 0,
                         caption: 'Referrals',
                         onPressed: () {
-                          navigateTo(
-                            context,
-                            routeName: ReferralsDetailsScreen.routeName,
-                            arguments: myProfile.refers,
-                          );
+                          Get.toNamed(Routes.allconnectionsscreen);
+                          // navigateTo(
+                          //   context,
+                          //   routeName: ReferralsDetailsScreen.routeName,
+                          //   arguments: myProfile.refers,
+                          // );
                         },
                       ),
                     ),

@@ -19,6 +19,7 @@ import '../../../common/dialogs/snackbar.dart';
 class CreatePostScreen extends StatefulWidget {
   /// SCREEN CONSTRUCTOR
   const CreatePostScreen({Key? key}) : super(key: key);
+  static const String routeName = '/create-post';
 
   @override
   State<CreatePostScreen> createState() => _CreatePostScreenState();

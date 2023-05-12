@@ -19,7 +19,7 @@ import '../profile/myprofilescreen.dart';
 /// Bottom Nav Screen is basically where all home screens are navigated through
 class BottomNavScreen extends StatefulWidget {
   /// Constructor
-  const BottomNavScreen({super.key});
+  const BottomNavScreen(int i, bool bool, {super.key});
 
   @override
   State<BottomNavScreen> createState() => _BottomNavScreenState();

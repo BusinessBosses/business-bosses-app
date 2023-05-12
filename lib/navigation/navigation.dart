@@ -49,7 +49,7 @@ class Nav {
     ),
     GetPage(
       name: Routes.bottomNavigation,
-      page: () => const BottomNavScreen(),
+      page: () => const BottomNavScreen(0, true),
       // binding: BindingsBuilder(
       //   () {
       //     Get.put(ProfileController());
@@ -89,7 +89,7 @@ class Nav {
     ),
     GetPage(
       name: Routes.publicProfile,
-      page: () => const PublicProfileScreen(),
+      page: () => PublicProfileScreen(),
     ),
     GetPage(
       name: Routes.referscreen,

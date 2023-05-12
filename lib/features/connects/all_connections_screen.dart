@@ -37,15 +37,15 @@ class _AllConnectionsScreenState extends State<AllConnectionsScreen> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     if (!_isInit) {
-      final Params params =
-          ModalRoute.of(context)?.settings.arguments as Params;
-      if (params.arg1 == null) {
-        navigateTo(context);
-        return;
-      }
-      _initialIndex = params?.arg2 ?? 0;
+      // final Params params =
+      //     ModalRoute.of(context)?.settings.arguments as Params;
+      // if (params.arg1 == null) {
+      //   navigateTo(context);
+      //   return;
+      // }
+      // _initialIndex = params?.arg2 ?? 0;
 
-      _specificUser = params.arg1;
+      // _specificUser = params.arg1;
 
       _loadUsers();
 
@@ -120,6 +120,7 @@ class _AllConnectionsScreenState extends State<AllConnectionsScreen> {
                             Material(
                               color: Colors.white,
                               child: TabBar(
+                                indicatorColor: primaryColorLT,
                                 tabs: [
                                   Tab(
                                     child: FittedBox(
