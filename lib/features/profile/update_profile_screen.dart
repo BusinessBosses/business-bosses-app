@@ -134,7 +134,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
             _isUploading = false;
           });
           showSnackbar(
-              title: "OOPS!!", message: 'Could not upload Image. Try again');
+              title: 'OOPS!!', message: 'Could not upload Image. Try again');
         }
       }
     } catch (e) {}
