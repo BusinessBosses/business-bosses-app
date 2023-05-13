@@ -1,19 +1,34 @@
 import 'package:business_bosses_v2/common/models/comment_model.dart';
+import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
+import 'package:get/get.dart';
 
-import '../../../../action/action.dart';
+import '../../../../common/models/api_response_model.dart';
 import '../../../../common/models/my_response.dart';
+import '../../../../common/models/user_model.dart';
 import '../../../../common/widgets/user_avatar_with_badge.dart';
 import '../../../../functions/my_native_functions.dart';
 import '../../../../utils/theme/theme.dart';
 import '../../../../utils/time_format.dart';
 import 'my_container.dart';
 
-class CommentItem extends StatelessWidget {
+class CommentItem extends StatefulWidget {
   final CommentModel comment;
 
   const CommentItem(this.comment, {Key? key}) : super(key: key);
+
+  @override
+  State<CommentItem> createState() => _CommentItemState();
+}
+
+class _CommentItemState extends State<CommentItem> {
+  UserModel user = UserModel();
+  @override
+  void initState() {
+    getUser();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,21 +43,21 @@ class CommentItem extends StatelessWidget {
                 const EdgeInsets.only(bottom: 12.0, left: 12.0, right: 12.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
+              children: <Widget>[
                 ListTile(
                   leading: UserAvatarWithBadge(
-                    user: comment.user,
+                    user: user,
                     height: 36.0,
                     width: 36.0,
                     radius: 30.0,
                     placeHolder: Icons.person,
                   ),
-                  title: const Text(
-                    'text',
+                  title: Text(
+                    '${user.name}',
                     style: bodyText1,
                   ),
                   subtitle: Text(
-                    TimeFormat.formatString(12222444334),
+                    TimeFormat.formatString(widget.comment.timestamp!),
                     style: bodyText2.copyWith(
                       fontSize: 11.0,
                       color: hintColor,
@@ -51,7 +66,7 @@ class CommentItem extends StatelessWidget {
                   contentPadding: const EdgeInsets.all(0.0),
                 ),
                 Linkify(
-                  text: 'Comment here',
+                  text: '${widget.comment.comment}',
                   style: bodyText2.copyWith(
                     fontWeight: FontWeight.normal,
                   ),
@@ -63,10 +78,6 @@ class CommentItem extends StatelessWidget {
                     fontWeight: FontWeight.normal,
                   ),
                 ),
-                // Text(
-                //   '${comment?.comment ?? ''}',
-                //   style: bodyText2,
-                // ),
                 const SizedBox(height: 4.0),
               ],
             ),
@@ -80,7 +91,20 @@ class CommentItem extends StatelessWidget {
       BuildContext context, LinkableElement linkableElement) async {
     MyResponse res = await MyNativeFunctions.onUrlLaunch(linkableElement.url);
     if (!res.success) {
-      showSnackBar(context, message: res.message);
+      Get.snackbar('Error', res.message);
     }
+  }
+
+  void getUser() async {
+    final ApiResponseModel response =
+        await ApiService.get(path: 'users/${widget.comment.userId}');
+    setState(() {
+      user = UserModel.fromMap(response.data);
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 }

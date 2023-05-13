@@ -3,9 +3,12 @@ import 'package:business_bosses_v2/features/posts/models/post_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
+import '../../../../common/models/api_response_model.dart';
 import '../../../../common/models/my_user.dart';
+import '../../../../common/models/user_model.dart';
 import '../../../../common/widgets/safety_model.dart';
 import '../../../../common/widgets/user_avatar_with_badge.dart';
+import '../../../../services/api_service.dart';
 import '../../../../utils/constants/constants.dart';
 import '../../../../utils/theme/theme.dart';
 import '../../../profile/controller/profile_controller.dart';
@@ -68,9 +71,10 @@ class _PostLikeCommentItemState extends State<PostLikeCommentItem> {
             ),
             Expanded(
               child: TabBarView(
-                children: [
+                children: <Widget>[
                   Column(
-                    children: [
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
                       Expanded(
                         child: _comments.isEmpty
                             ? SafetyModel(
@@ -123,9 +127,9 @@ class _PostLikeCommentItemState extends State<PostLikeCommentItem> {
                                 radius: 30.0,
                                 placeHolder: Icons.person,
                               ),
-                              title: Text(_users[i].name),
+                              title: Text('${_users[i].name}'),
                               subtitle: Text(
-                                _users[i].bio,
+                                '${_users[i].bio}',
                                 maxLines: 1,
                               ),
                             );
@@ -140,43 +144,35 @@ class _PostLikeCommentItemState extends State<PostLikeCommentItem> {
     );
   }
 
-  // final MyFirebase _firebase = MyFirebase();
-  final List<CommentModel> _comments = [];
+  final List<CommentModel> _comments = <CommentModel>[];
 
   Future<void> _loadCommentWithDetails() async {
-    // for (CommentModel c in widget.post?.comments ?? []) {
-    //   // MyResponse res =
-    //   //     await _firebase.fetchANode(id: c.uid, path: Constants.USERS);
-    //   // if (res.success && res.data != null) {
-    //   //   MyUser user = MyUser.fromSnapshot(res.data);
-    //   //   _comments.add(Comment(
-    //   //     user: user,
-    //   //     commentId: c.commentId,
-    //   //     uid: c.uid,
-    //   //     // userName: user?.name,
-    //   //     // userPhotoUrl: user?.photoUrl,
-    //   //     // userBio: user?.bio,
-    //   //     comment: c.comment,
-    //   //     timestamp: c.timestamp,
-    //   //   ));
-    //   }
-    // }
-    _isLoadingComments = false;
-    setState(() {});
+    for (CommentModel c in widget.post.comments ?? []) {
+      _comments.add(CommentModel(
+        commentId: c.commentId,
+        userId: c.userId,
+        comment: c.comment,
+        timestamp: c.timestamp,
+      ));
+    }
+    setState(() {
+      _isLoadingComments = false;
+    });
   }
 
-  final List<MyUser> _users = [];
+  final List<UserModel> _users = [];
 
   Future<void> _loadLikesWithDetails() async {
-    // for (String uid in widget.post.likes ?? []) {
-    //   MyResponse res =
-    //       await _firebase.fetchANode(id: uid, path: Constants.USERS);
-    //   if (res.success) {
-    //     MyUser user = MyUser.fromSnapshot(res.data);
-    //     _users.add(user);
-    //   }
-    // }
-    _isLoadingLikes = false;
-    setState(() {});
+    final ApiResponseModel response =
+        await ApiService.get(path: 'users/${widget.post.user!.uid}');
+    for (dynamic l in widget.post.likes ?? []) {
+      _users.add(UserModel(
+          uid: widget.post.user!.uid,
+          name: response.data['name'],
+          bio: response.data['bio']));
+    }
+    setState(() {
+      _isLoadingLikes = false;
+    });
   }
 }

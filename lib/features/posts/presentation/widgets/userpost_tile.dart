@@ -2,14 +2,16 @@ import 'package:business_bosses_v2/features/posts/controllers/posts_controller.d
 import 'package:business_bosses_v2/features/posts/models/post_model.dart';
 import 'package:business_bosses_v2/features/posts/presentation/widgets/post_images.dart';
 import 'package:business_bosses_v2/features/posts/presentation/widgets/post_like_comment.dart';
+import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/utils/constants/constants.dart';
 import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
 import 'package:detectable_text_field/widgets/detectable_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:flutter/src/widgets/framework.dart';
 
+import '../../../../action/action.dart';
 import '../../../../common/models/comment_model.dart';
 import '../../../../common/widgets/ranking_badge.dart';
 import '../../../../common/widgets/text_widget.dart';
@@ -28,8 +30,9 @@ class PostTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final GetStorage sandBox = GetStorage();
-    final String uid = sandBox.read(Constants.USER_ID);
+    final ProfileController profileController = Get.find();
+    // final sandBox = GetStorage();
+    // final String uid = sandBox.read(Constants.USER_ID);
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -59,7 +62,7 @@ class PostTile extends StatelessWidget {
                 title: GestureDetector(
                   onTap: () {},
                   child: Text(
-                    '${post.user?.username}',
+                    '${post.user?.name}',
                     style: Theme.of(context).textTheme.bodyLarge,
                   ),
                 ),
@@ -161,12 +164,15 @@ class PostTile extends StatelessWidget {
               Row(
                 children: [
                   TextButton.icon(
-                    onPressed: () {
-                      controller.postLike(uid, post.postId);
+                    onPressed: () async {
+                      controller.postLike(
+                          profileController.myProfile.uid, post.postId);
                     },
-                    icon: post.likes?.contains(uid) ?? false
-                        ? SvgPicture.asset('assets/svgs/likefilled.svg')
-                        : SvgPicture.asset('assets/svgs/like.svg'),
+                    icon:
+                        post.likes?.contains(profileController.myProfile.uid) ??
+                                false
+                            ? SvgPicture.asset('assets/svgs/likefilled.svg')
+                            : SvgPicture.asset('assets/svgs/like.svg'),
                     label: Text(
                       '${post.likes?.length ?? 0}',
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
@@ -201,12 +207,15 @@ class PostTile extends StatelessWidget {
                   TextButton.icon(
                     onPressed: () async {
                       // final sandBox = GetStorage();
-                      // final String uid = sandBox.read(Constants.USER_ID);
-                      controller.postCoin(uid, post.postId);
+                      // final String profileController.myProfile.uid = sandBox.read(Constants.USER_ID);
+                      controller.postCoin(profileController.myProfile.uid,
+                          post.postId, profileController);
                     },
-                    icon: post.coins?.contains(uid) ?? false
-                        ? SvgPicture.asset('assets/svgs/coin.svg')
-                        : SvgPicture.asset('assets/svgs/coin.svg'),
+                    icon:
+                        post.coins?.contains(profileController.myProfile.uid) ??
+                                false
+                            ? SvgPicture.asset('assets/svgs/coin.svg')
+                            : SvgPicture.asset('assets/svgs/coin.svg'),
                     label: Text(
                       '${post.coins?.length ?? 0}',
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
@@ -217,7 +226,7 @@ class PostTile extends StatelessWidget {
                   ),
                   const SizedBox(width: 8.0),
                   GestureDetector(
-                    onTap: () => _sharePost(post),
+                    onTap: () => _sharePost(),
                     child: SvgPicture.asset(
                       'assets/svgs/share.svg',
                       height: 18.0,
@@ -246,12 +255,13 @@ class PostTile extends StatelessWidget {
     );
   }
 
-  void _showBottomSheet(BuildContext context) {}
+  void _sharePost() {
+    String message =
+        'Have a look at ${post.user?.username ?? 'Business Bosses'}\'s post on Business Bosses\n'
+        'https://businessbosses.onelink.me/xLWk/36a2ff16';
+    socialShare(message);
+  }
 }
-
-_sharePost(PostModel? post) {}
-
-void _onLikeTap() {}
 
 double leadingWidth(PostModel p) {
   double w = 0;

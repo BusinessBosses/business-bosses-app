@@ -2,7 +2,6 @@ import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/features/profile/user_profile_tile.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import '../../action/action.dart';
 import '../../common/params.dart';

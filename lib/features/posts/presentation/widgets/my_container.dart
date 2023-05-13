@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 
 class MyContainer extends StatelessWidget {
-  final double height, width, radius;
+  final double? height, width, radius;
   final Color color;
   final Widget child;
   final EdgeInsets padding;
   final EdgeInsets margin;
 
+  // ignore: public_member_api_docs
   const MyContainer({
     Key? key,
-    this.height = 0,
+    this.height,
     this.width = double.infinity,
     this.radius = 10.0,
     this.color = Colors.white,
@@ -27,7 +28,7 @@ class MyContainer extends StatelessWidget {
       padding: padding,
       decoration: BoxDecoration(
         color: color,
-        borderRadius: BorderRadius.circular(radius),
+        borderRadius: BorderRadius.circular(radius!),
       ),
       child: child,
     );

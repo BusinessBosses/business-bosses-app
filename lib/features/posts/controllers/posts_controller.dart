@@ -3,6 +3,7 @@ import 'package:business_bosses_v2/common/models/comment_model.dart';
 import 'package:business_bosses_v2/common/widgets/text_widget.dart';
 import 'package:business_bosses_v2/features/posts/models/post_model.dart';
 import 'package:business_bosses_v2/features/posts/repository/post_repository.dart';
+import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:business_bosses_v2/utils/constants/constants.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
@@ -52,27 +53,30 @@ class PostsController extends GetxController {
     }
     update();
     socket.emit('like', {
-      postId: postId,
-      userId: userId,
+      'postId': postId,
+      'userId': userId,
     });
   }
 
   /// COIN AND UNCOIN FUNCTION
-  void postCoin(String userId, String postId) {
+  void postCoin(
+      String userId, String postId, ProfileController profileController) {
     final int postIndex =
         posts.indexWhere((PostModel element) => element.postId == postId);
     if (postIndex != -1) {
       final bool checkIfCoined = posts[postIndex].coins!.contains(userId);
       if (checkIfCoined) {
+        profileController.updateCoinCount(1);
         posts[postIndex]
             .coins!
             .removeWhere((String element) => element == userId);
       } else {
+        profileController.updateCoinCount(-1);
         posts[postIndex].coins!.add(userId);
       }
       socket.emit('coin', {
-        postId: postId,
-        userId: userId,
+        'postId': postId,
+        'userId': userId,
       });
     }
     update();

@@ -33,8 +33,12 @@ class _HomeScreenState extends State<HomeScreen> {
                       !element.seen)
                   .toList();
               final bool hasBadge = unseenChats.isNotEmpty;
-              return Homeappbar(
-                hasBadge: hasBadge,
+              return GetBuilder<ProfileController>(
+                builder: (ProfileController profileController) => Homeappbar(
+                  hasBadge: hasBadge,
+                  coinsCount:
+                      profileController.myProfile.coinscount?.toString() ?? '',
+                ),
               );
             }),
           ),
