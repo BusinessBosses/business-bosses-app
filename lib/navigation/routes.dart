@@ -31,5 +31,6 @@ class Routes {
   static const String analysescreen = '/analyseScreen';
   static const String referscreen = '/referScreen';
   static const String changePassword = '/changePasswordScreen';
+  static const String deleteAccount = '/deleteAccountScreen';
   static const String allconnectionsscreen = '/allconnectionsScreen';
 }

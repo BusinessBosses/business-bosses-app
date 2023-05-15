@@ -84,18 +84,12 @@ class PostsController extends GetxController {
 
   /// ADD NEW POST TO STATE
   void addNewPost(Map<String, dynamic> newPost) {
-    final sandBox = GetStorage();
-    final String uid = sandBox.read(Constants.USER_ID);
     PostModel modelizedNewPost = PostModel.fromMap({
       ...newPost,
       'coins': <String>[],
       'likes': <String>[],
       'comments': <CommentModel>[],
-      'user': {
-        'username': 'testUser1',
-        'email': 'test1@gmail.com',
-        'uid': uid,
-      }
+      'user': {'username': '', 'email': '', 'uid': '', 'name': ''}
     });
 
     posts.insert(0, modelizedNewPost);

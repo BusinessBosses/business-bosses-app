@@ -50,7 +50,9 @@ class MyButton extends StatelessWidget {
               ),
             )
           : ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                onPressed();
+              },
               child: Text(
                 label,
                 style: labelStyle,

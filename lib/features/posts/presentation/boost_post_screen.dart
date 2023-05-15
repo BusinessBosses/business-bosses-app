@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
@@ -16,6 +17,7 @@ import 'confirmation.dart';
 
 /// BOOST POST SCREEN
 class BoostPost extends StatefulWidget {
+  // ignore: public_member_api_docs
   const BoostPost({
     Key? key,
     required this.postId,
@@ -46,34 +48,21 @@ class _BoostPostState extends State<BoostPost> {
   ];
 
   Future<void> updatePost() async {
-    // MyResponse res = await _firebase.updateNode(
-    //   id: widget.postId,
-    //   path: Constants.POSTS,
-    //   map: {
-    //     'amount': initPlan,
-    //     'paid': true,
-    //     'promote': true,
-    //     'approved': true,
-    //     'promoted_at': DateTime.now().millisecondsSinceEpoch,
-    //     'promotion_duration': DateTime.now()
-    //         .add(
-    //           Duration(
-    //             days: int.parse(initPlan),
-    //           ),
-    //         )
-    //         .millisecondsSinceEpoch,
-    //     'promotion_views': 0
-    //   },
-    // );
+    ApiService.put(
+        path: 'post/update-post/${widget.postId}',
+        body: <String, dynamic>{
+          'promote': true,
+          'plan': '$initPlan dollars',
+        });
   }
 
   late String initPlan;
-  calculateAmount(String amount) {
+  String calculateAmount(String amount) {
     final int calculatedAmount = (int.parse(amount)) * 100;
     return calculatedAmount.toString();
   }
 
-  displaySheet() async {
+  void displaySheet() async {
     try {
       await Stripe.instance.presentPaymentSheet().then((value) async {
         await updatePost();
@@ -103,11 +92,11 @@ class _BoostPostState extends State<BoostPost> {
       });
       log('Here ->>>>>> $e');
 
-      showSnackBar(context, message: "Opps!! Something went wrong. Try again");
+      showSnackBar(context, message: 'Opps!! Something went wrong. Try again');
     }
   }
 
-  createPaymentIntent(String amount, String currency) async {
+  Future<dynamic> createPaymentIntent(String amount, String currency) async {
     try {
       Map<String, dynamic> body = {
         'amount': calculateAmount(amount),
@@ -132,7 +121,7 @@ class _BoostPostState extends State<BoostPost> {
       });
       log('Here ->>>>>> $e');
 
-      showSnackBar(context, message: "Opps!! Something went wrong. Try again");
+      showSnackBar(context, message: 'Opps!! Something went wrong. Try again');
     }
   }
 

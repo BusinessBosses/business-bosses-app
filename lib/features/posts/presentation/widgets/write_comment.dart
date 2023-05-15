@@ -1,16 +1,22 @@
 import 'package:business_bosses_v2/common/models/comment_model.dart';
+import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
+import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../common/widgets/user_avatar_with_badge.dart';
+import '../../../../utils/constants/constants.dart';
 import '../../../../utils/theme/theme.dart';
 import 'my_container.dart';
 
 class WriteAComment extends StatefulWidget {
   final Function(CommentModel) onCommentSend;
+  final String? postId;
 
-  const WriteAComment({Key? key, required this.onCommentSend})
+  const WriteAComment({Key? key, required this.onCommentSend, this.postId})
       : super(key: key);
 
   @override
@@ -19,6 +25,7 @@ class WriteAComment extends StatefulWidget {
 
 class _WriteACommentState extends State<WriteAComment> {
   final _commentController = TextEditingController();
+  final ProfileController _profileController = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +38,7 @@ class _WriteACommentState extends State<WriteAComment> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           UserAvatarWithBadge(
-            user: ProfileController().myProfile,
+            user: _profileController.myProfile,
             height: 32.0,
             width: 32.0,
             radius: 30.0,
@@ -57,13 +64,23 @@ class _WriteACommentState extends State<WriteAComment> {
           ),
           const SizedBox(width: 4.0),
           IconButton(
-            onPressed: () {
+            onPressed: () async {
               if (_commentController.text.isEmpty) {
                 return;
               }
               String text = _commentController.text;
-              final appUser = ProfileController().myProfile;
-
+              final SharedPreferences snapshot =
+                  await SharedPreferences.getInstance();
+              final SharedPreferences data = snapshot;
+              final String? userId = data.getString(Constants.USER_ID);
+              CommentModel comment = CommentModel(
+                postId: widget.postId,
+                comment: text,
+                timestamp: DateTime.now().millisecondsSinceEpoch,
+              );
+              debugPrint('COMMENT: ${comment.toMap()}');
+              ApiService.post(path: 'comments', body: comment.toMap());
+              widget.onCommentSend(comment);
               setState(() {
                 _commentController.text = '';
               });

@@ -26,6 +26,7 @@ import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:get/get.dart';
 
 import '../features/posts/presentation/boost_post_screen.dart';
+import '../features/settings/delete_account_screen.dart';
 
 ///NAV INITIALIZATIONS
 class Nav {
@@ -110,6 +111,10 @@ class Nav {
     GetPage(
       name: Routes.changePassword,
       page: () => const ChangePasswordScreen(),
+    ),
+    GetPage(
+      name: Routes.deleteAccount,
+      page: () => const DeleteAccountScreen(),
     ),
   ];
 }

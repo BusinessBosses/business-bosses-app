@@ -98,9 +98,11 @@ class _CommentItemState extends State<CommentItem> {
   void getUser() async {
     final ApiResponseModel response =
         await ApiService.get(path: 'users/${widget.comment.userId}');
-    setState(() {
-      user = UserModel.fromMap(response.data);
-    });
+    if (mounted) {
+      setState(() {
+        user = UserModel.fromMap(response.data as Map<String, dynamic>);
+      });
+    }
   }
 
   @override

@@ -42,7 +42,6 @@ class ApiService {
       await prefs.setString(
           Constants.USER_ID, jsonResponse['data']['uid'].toString());
       // sandBox.write(Constants.USER_ID, jsonResponse['data']['uid'].toString());
-      Get.toNamed(Routes.bottomNavigation);
       return jsonResponse;
     } else {
       final dynamic jsonResponse = json.decode(response.body);
@@ -232,19 +231,18 @@ class ApiService {
   /// HTTP DELETE CALL
   static Future<ApiResponseModel> delete({
     required String path,
-    required Map<String, dynamic> body,
   }) async {
     final String token = sandBox.read(Constants.ACCESS_TOKEN);
     try {
       final http.Response response = await http.delete(
         Uri.parse('${Constants.baseUrl}/$path'),
-        body: jsonEncode(body),
         headers: <String, String>{
           'Content-type': 'application/json',
           'Accept': 'application/json',
           'Authorization': 'bearer $token'
         },
       );
+      log(response.body);
       return ApiResponseModel.fromMap(jsonDecode(response.body));
     } catch (e) {
       throw e.toString();

@@ -97,12 +97,15 @@ class _PostLikeCommentItemState extends State<PostLikeCommentItem> {
                                 itemCount: _comments.length,
                               ),
                       ),
-                      WriteAComment(onCommentSend: (CommentModel comment) {
-                        widget.onComment(comment);
-                        setState(() {
-                          _comments.add(comment);
-                        });
-                      })
+                      WriteAComment(
+                        onCommentSend: (CommentModel comment) {
+                          widget.onComment(comment);
+                          setState(() {
+                            _comments.add(comment);
+                          });
+                        },
+                        postId: widget.post.postId,
+                      )
                     ],
                   ),
                   _users.isEmpty
