@@ -5,10 +5,8 @@ import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:provider/provider.dart';
 import '../../action/action.dart';
 import '../../common/models/my_connect.dart';
-import '../../common/models/my_refers.dart';
 import '../../common/models/my_response.dart';
 import '../../common/models/my_user.dart';
 import '../../common/params.dart';
@@ -21,12 +19,9 @@ import '../../navigation/routes.dart';
 import '../../utils/constants/constants.dart';
 import '../../utils/theme/theme.dart';
 import '../chat/chat_room_screen.dart';
-import '../connects/all_connections_screen.dart';
 import '../posts/models/post_model.dart';
 import '../posts/presentation/widgets/post_grid_item.dart';
-import '../referrals/refer_screen.dart';
 import '../referrals/referrals_details_screen.dart';
-import 'controller/profile_controller.dart';
 
 bool isExpanded = false;
 
@@ -42,7 +37,7 @@ class PublicProfileScreen extends StatefulWidget {
 class _PublicProfileScreenState extends State<PublicProfileScreen> {
   bool connectedbutton = true;
   final UserModel _publicUser = UserModel(
-      achievements: 'jnkknmmk,llllml,hjjkhkh'.split(','),
+      achievements: 'jnkknmmk+llllmlhj+jkhkh'.split('+'),
       active: true,
       ageRange: '10',
       bio: 'sdxsdddddfff',
@@ -58,7 +53,7 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
       location: 'DGG',
       name: 'GGG',
       photoUrl: '',
-      productsandservices: 'sdffgg,s,ksf'.split(','),
+      productsandservices: 'sdffgg+s+ksf'.split('+'),
       surname: 'kkk',
       timestamp: 100394,
       twitter: '',

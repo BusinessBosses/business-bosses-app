@@ -112,7 +112,7 @@ class _AllConnectionsScreenState extends State<AllConnectionsScreen> {
                         ],
                       ),
                 body: Stack(children: [
-                  _isLoading
+                  !_isLoading
                       ? const Center(
                           child: CircularProgressIndicator.adaptive())
                       : Column(
@@ -157,27 +157,28 @@ class _AllConnectionsScreenState extends State<AllConnectionsScreen> {
                                 ],
                               ),
                             ),
-                            const Expanded(
+                            Expanded(
                                 child: TabBarView(
-                              children: [],
+                              children: [
+                                if (!_isSearching)
+                                  Container(
+                                      height: double.infinity,
+                                      width: double.infinity,
+                                      color: Theme.of(context)
+                                          .scaffoldBackgroundColor,
+                                      child: SafetyModel(
+                                        isLoading: false,
+                                        icon: SvgPicture.asset(
+                                          'assets/svgs/search.svg',
+                                          color: hintColor,
+                                          height: 80.0,
+                                        ),
+                                        title: 'Search users',
+                                        subTitle:
+                                            'Matched users will be displayed here!',
+                                      ))
+                              ],
                             )),
-                            if (_isSearching)
-                              Container(
-                                  height: double.infinity,
-                                  width: double.infinity,
-                                  color:
-                                      Theme.of(context).scaffoldBackgroundColor,
-                                  child: SafetyModel(
-                                    isLoading: false,
-                                    icon: SvgPicture.asset(
-                                      'assets/svgs/search.svg',
-                                      color: hintColor,
-                                      height: 80.0,
-                                    ),
-                                    title: 'Search users',
-                                    subTitle:
-                                        'Matched users will be displayed here!',
-                                  ))
                           ],
                         )
                 ]))));

@@ -133,7 +133,7 @@ class _UserProfileTileState extends State<UserProfileTile> {
                 children: [
                   const SizedBox(height: 6.0),
                   Text(
-                    widget.myProfile.name ?? '',
+                    widget.myProfile.name ?? 'name',
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
@@ -141,14 +141,14 @@ class _UserProfileTileState extends State<UserProfileTile> {
                         ),
                   ),
                   Text(
-                    widget.myProfile.category ?? '',
+                    widget.myProfile.category ?? 'title',
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                           fontWeight: FontWeight.bold,
                         ),
                   ),
-                  Text(widget.myProfile.companyName ?? '',
+                  Text(widget.myProfile.companyName ?? 'companyname',
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: Theme.of(context)
@@ -156,7 +156,7 @@ class _UserProfileTileState extends State<UserProfileTile> {
                           .bodyLarge
                           ?.copyWith(fontWeight: FontWeight.normal)),
                   Text(
-                    widget.myProfile.location ?? '',
+                    widget.myProfile.location ?? 'location',
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
