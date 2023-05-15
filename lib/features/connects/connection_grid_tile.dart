@@ -6,7 +6,7 @@ import '../../common/params.dart';
 import '../../common/widgets/buttons/my_outlined_button.dart';
 import '../../common/widgets/user_avatar_with_badge.dart';
 import '../../utils/theme/theme.dart';
-import '../profile/publicprofilescreen.dart';
+import '../profile/presentation/publicprofilescreen.dart';
 
 class ConnectionGridTile extends StatelessWidget {
   final UserModel user;

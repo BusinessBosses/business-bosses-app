@@ -1,19 +1,19 @@
 import 'package:business_bosses_v2/common/models/user_model.dart';
-import 'package:business_bosses_v2/features/profile/user_profile_tile.dart';
+import 'package:business_bosses_v2/features/profile/widgets/user_profile_tile.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
-import '../../action/action.dart';
-import '../../common/params.dart';
-import '../../common/widgets/buttons/custom_child_button.dart';
-import '../../navigation/routes.dart';
-import '../../utils/theme/theme.dart';
-import '../connects/all_connections_screen.dart';
-import '../posts/models/post_model.dart';
-import '../posts/presentation/widgets/userpost_tile.dart';
-import '../referrals/referrals_details_screen.dart';
+import '../../../action/action.dart';
+import '../../../common/params.dart';
+import '../../../common/widgets/buttons/custom_child_button.dart';
+import '../../../navigation/routes.dart';
+import '../../../utils/theme/theme.dart';
+import '../../connects/all_connections_screen.dart';
+import '../../posts/models/post_model.dart';
+import '../../posts/presentation/widgets/userpost_tile.dart';
+import '../../referrals/referrals_details_screen.dart';
 
 class MyProfileHeader extends StatelessWidget {
   const MyProfileHeader({Key? key, required this.myProfile}) : super(key: key);

@@ -11,7 +11,7 @@ import '../../common/widgets/safety_model.dart';
 import '../../common/widgets/search/search_bar.dart';
 import '../../utils/constants/constants.dart';
 import '../../utils/theme/theme.dart';
-import '../profile/promotionscreen.dart';
+import '../promotions/presentation/promotionscreen.dart';
 
 class ReferScreen extends StatefulWidget {
   static const routeName = '/refer-screen';

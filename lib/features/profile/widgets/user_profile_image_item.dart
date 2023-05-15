@@ -3,8 +3,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import '../../common/widgets/network_image_with_placeholder.dart';
-import '../../utils/theme/theme.dart';
+import '../../../common/widgets/network_image_with_placeholder.dart';
+import '../../../utils/theme/theme.dart';
 
 class UserProfileImageItem extends StatelessWidget {
   final String? imageUrl;

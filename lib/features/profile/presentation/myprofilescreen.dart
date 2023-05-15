@@ -7,13 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import '../../action/action.dart';
-import '../../common/widgets/safety_model.dart';
-import '../../common/widgets/tiles/outlinebuttonheader.dart';
-import '../../functions/my_native_functions.dart';
-import '../../navigation/routes.dart';
-import '../posts/presentation/create_post_screen.dart';
-import 'my_profile_header.dart';
+import '../../../common/widgets/tiles/outlinebuttonheader.dart';
+import '../../../navigation/routes.dart';
+import '../widgets/my_profile_header.dart';
 
 bool isExpanded = false;
 

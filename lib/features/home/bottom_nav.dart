@@ -2,7 +2,7 @@ import 'package:business_bosses_v2/features/chat/controllers/chat_controller.dar
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/posts/controllers/posts_controller.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
-import 'package:business_bosses_v2/features/profile/myprofilescreen.dart';
+import 'package:business_bosses_v2/features/profile/presentation/myprofilescreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -14,7 +14,7 @@ import 'all_communities_screen.dart';
 import 'home_screen.dart';
 import 'marketplace_screen.dart';
 
-import '../profile/myprofilescreen.dart';
+import '../profile/presentation/myprofilescreen.dart';
 
 /// Bottom Nav Screen is basically where all home screens are navigated through
 class BottomNavScreen extends StatefulWidget {

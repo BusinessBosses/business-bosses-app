@@ -18,7 +18,7 @@ import '../../common/widgets/text_widget.dart';
 import '../../common/widgets/user_avatar_with_badge.dart';
 import '../../utils/constants/constants.dart';
 import '../../utils/theme/theme.dart';
-import '../profile/publicprofilescreen.dart';
+import '../profile/presentation/publicprofilescreen.dart';
 import 'app_chats.dart';
 import 'models/my_message.dart';
 

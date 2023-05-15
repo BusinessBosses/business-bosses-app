@@ -9,7 +9,7 @@ import '../../../common/models/my_title.dart';
 import '../../../common/widgets/data_selection_screen.dart';
 import '../../../utils/theme/theme.dart';
 import '../analysescreen.dart';
-import '../myprofilescreen.dart';
+import '../presentation/myprofilescreen.dart';
 
 class AdditionalInfoTile extends StatefulWidget {
   const AdditionalInfoTile({Key? key}) : super(key: key);

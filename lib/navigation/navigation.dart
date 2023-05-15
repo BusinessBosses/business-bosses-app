@@ -14,10 +14,10 @@ import 'package:business_bosses_v2/features/posts/controllers/posts_controller.d
 import 'package:business_bosses_v2/features/posts/presentation/create_post_screen.dart';
 import 'package:business_bosses_v2/features/profile/analysescreen.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
-import 'package:business_bosses_v2/features/profile/myprofilescreen.dart';
-import 'package:business_bosses_v2/features/profile/promotionscreen.dart';
-import 'package:business_bosses_v2/features/profile/publicprofilescreen.dart';
-import 'package:business_bosses_v2/features/profile/update_profile_screen.dart';
+import 'package:business_bosses_v2/features/profile/presentation/myprofilescreen.dart';
+import 'package:business_bosses_v2/features/promotions/presentation/promotionscreen.dart';
+import 'package:business_bosses_v2/features/profile/presentation/publicprofilescreen.dart';
+import 'package:business_bosses_v2/features/profile/presentation/update_profile_screen.dart';
 import 'package:business_bosses_v2/features/referrals/refer_screen.dart';
 import 'package:business_bosses_v2/features/settings/settingsscreen.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
@@ -89,7 +89,7 @@ class Nav {
     ),
     GetPage(
       name: Routes.publicProfile,
-      page: () => PublicProfileScreen(),
+      page: () => const PublicProfileScreen(),
     ),
     GetPage(
       name: Routes.referscreen,
