@@ -10,7 +10,7 @@ import '../../../common/params.dart';
 import '../../../common/widgets/buttons/custom_child_button.dart';
 import '../../../navigation/routes.dart';
 import '../../../utils/theme/theme.dart';
-import '../../connects/all_connections_screen.dart';
+import '../../connects/presentation/all_connections_screen.dart';
 import '../../posts/models/post_model.dart';
 import '../../posts/presentation/widgets/userpost_tile.dart';
 import '../../referrals/referrals_details_screen.dart';

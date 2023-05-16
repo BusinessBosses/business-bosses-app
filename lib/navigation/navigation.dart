@@ -6,7 +6,7 @@ import 'package:business_bosses_v2/features/chat/chat_room_screen.dart';
 import 'package:business_bosses_v2/features/chat/chat_screen.dart';
 import 'package:business_bosses_v2/features/chat/controllers/chat_controller.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
-import 'package:business_bosses_v2/features/connects/all_connections_screen.dart';
+import 'package:business_bosses_v2/features/connects/presentation/all_connections_screen.dart';
 import 'package:business_bosses_v2/features/moreinfoscreens/bossuppartner.dart';
 import 'package:business_bosses_v2/features/notifications/notificationsscreen.dart';
 import 'package:business_bosses_v2/features/home/bottom_nav.dart';
@@ -97,7 +97,7 @@ class Nav {
     ),
     GetPage(
       name: Routes.allconnectionsscreen,
-      page: () => const AllConnectionsScreen(),
+      page: () => AllConnectionsScreen(),
     ),
   ];
 }

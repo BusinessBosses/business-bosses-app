@@ -4,24 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 
-import '../../action/action.dart';
-import '../../common/models/my_connect.dart';
-import '../../common/models/user_model.dart';
-import '../../common/params.dart';
-import '../../common/widgets/safety_model.dart';
-import '../../utils/theme/theme.dart';
-import '../search/search_app_bar.dart';
+import '../../../action/action.dart';
+import '../../../common/models/my_connect.dart';
+import '../../../common/models/user_model.dart';
+import '../../../common/params.dart';
+import '../../../common/widgets/safety_model.dart';
+import '../../../utils/theme/theme.dart';
+import '../../search/search_app_bar.dart';
 
-class AllConnectionsScreen extends StatefulWidget {
-  static const routeName = '/all-connections-screen';
-
-  const AllConnectionsScreen({Key? key}) : super(key: key);
-
-  @override
-  _AllConnectionsScreenState createState() => _AllConnectionsScreenState();
-}
-
-class _AllConnectionsScreenState extends State<AllConnectionsScreen> {
+class AllConnectionsScreen extends StatelessWidget {
   List<UserModel> _allUsers = [];
   final List<UserModel> _suggestedUsers = [];
   List<UserModel> _searchedUsers = [];
@@ -33,26 +24,6 @@ class _AllConnectionsScreenState extends State<AllConnectionsScreen> {
   bool _isSearching = false;
   UserModel? _specificUser;
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    if (!_isInit) {
-      // final Params params =
-      //     ModalRoute.of(context)?.settings.arguments as Params;
-      // if (params.arg1 == null) {
-      //   navigateTo(context);
-      //   return;
-      // }
-      // _initialIndex = params?.arg2 ?? 0;
-
-      // _specificUser = params.arg1;
-
-      _loadUsers();
-
-      _isInit = true;
-    }
-  }
-
   Future<void> _loadUsers() async {}
 
   void _loadConnections() async {}
@@ -61,23 +32,41 @@ class _AllConnectionsScreenState extends State<AllConnectionsScreen> {
 
   int _initialIndex = 0;
 
-  void _onChangeSearching() {
-    setState(() {
-      _isSearching = !_isSearching;
-      _searchedUsers = [];
-    });
+  void _onChangeSearching() {}
+
+  void _onChange(String val) {}
+
+  void _suggestionList() {}
+
+  Widget getSafetyModel(String title) {
+    return SafetyModel(
+      isLoading: false,
+      icon: SvgPicture.asset(
+        'assets/svgs/group.svg',
+        color: hintColor,
+        height: 80.0,
+      ),
+      title: title,
+      subTitle: '',
+    );
   }
+
+  void _sendNotification(UserModel user) {}
+
+  static const routeName = '/all-connections-screen';
+
+  AllConnectionsScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
         onWillPop: () async {
-          if (_isSearching) {
-            setState(() {
-              _isSearching = false;
-            });
-            return false;
-          }
+          // if (_isSearching) {
+          //   setState(() {
+          //     _isSearching = false;
+          //   });
+          //   return false;
+          // }
           navigateTo(context);
           return false;
         },
@@ -183,23 +172,4 @@ class _AllConnectionsScreenState extends State<AllConnectionsScreen> {
                         )
                 ]))));
   }
-
-  void _onChange(String val) {}
-
-  void _suggestionList() {}
-
-  Widget getSafetyModel(String title) {
-    return SafetyModel(
-      isLoading: false,
-      icon: SvgPicture.asset(
-        'assets/svgs/group.svg',
-        color: hintColor,
-        height: 80.0,
-      ),
-      title: title,
-      subTitle: '',
-    );
-  }
-
-  void _sendNotification(UserModel user) {}
 }
