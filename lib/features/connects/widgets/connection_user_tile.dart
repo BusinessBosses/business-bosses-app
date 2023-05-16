@@ -1,3 +1,4 @@
+import 'package:business_bosses_v2/common/models/my_user.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:flutter/material.dart';
 

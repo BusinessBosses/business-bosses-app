@@ -36,7 +36,7 @@ class UserModel {
   final String? ageRange;
   final String? gender;
   final List<ProfileViewerModel>? profileViews;
-  final int? connectionCount;
+  late final int? connectionCount;
   final int? connectedCount;
   final int? unReadCount;
   final bool? isRanked;

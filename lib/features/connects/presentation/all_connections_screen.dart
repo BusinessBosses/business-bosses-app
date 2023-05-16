@@ -1,42 +1,491 @@
-import 'dart:math';
-import 'package:flutter/cupertino.dart';
+import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
-
 import '../../../action/action.dart';
 import '../../../common/models/my_connect.dart';
-import '../../../common/models/user_model.dart';
-import '../../../common/params.dart';
 import '../../../common/widgets/safety_model.dart';
+import '../../../utils/constants/constants.dart';
 import '../../../utils/theme/theme.dart';
 import '../../search/search_app_bar.dart';
+import '../widgets/connection_user_tile.dart';
 
 class AllConnectionsScreen extends StatelessWidget {
-  List<UserModel> _allUsers = [];
-  final List<UserModel> _suggestedUsers = [];
-  List<UserModel> _searchedUsers = [];
-  List<MyConnect> _myConnections = [];
-  List<MyConnect> _myConnected = [];
+  static const String routeName = '/all-connections-screen';
 
-  bool _isInit = false;
-  bool _isLoading = true;
   bool _isSearching = false;
+
   UserModel? _specificUser;
 
-  Future<void> _loadUsers() async {}
+  final bool _isLoading = true;
 
-  void _loadConnections() async {}
+  final List<UserModel> _allUsers = [];
+  final List<UserModel> _suggestedUsers = [];
+  final List<UserModel> _searchedUsers = [];
+  final List<MyConnect> _myConnections = [];
+  final List<MyConnect> _myConnected = [];
 
-  void _loadConnecteds() async {}
+  AllConnectionsScreen({Key? key}) : super(key: key);
 
-  int _initialIndex = 0;
+  @override
+  Widget build(BuildContext context) {
+    int initialIndex = 0;
+    return WillPopScope(
+      onWillPop: () async {
+        if (_isSearching) {
+          _isSearching = false;
+          return false;
+        }
+        navigateTo(context);
+        return false;
+      },
+      child: DefaultTabController(
+        length: 3,
+        initialIndex: initialIndex,
+        child: Scaffold(
+          appBar: _isSearching
+              ? SearchAppBar(
+                  hintText: 'Search person by name',
+                  onClose: _onChangeSearching,
+                  onChange: _onChange,
+                )
+              : AppBar(
+                  leading: IconButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
+                  ),
+                  centerTitle: true,
+                  title: const Text(
+                    'Connections',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 20),
+                  ),
+                  actions: [
+                    IconButton(
+                      onPressed: _onChangeSearching,
+                      icon: SvgPicture.asset('assets/svgs/search.svg'),
+                    )
+                  ],
+                ),
+          body: Stack(
+            children: [
+              _isLoading
+                  ? const Center(child: CircularProgressIndicator.adaptive())
+                  : Column(
+                      children: [
+                        Material(
+                          color: Colors.white,
+                          child: TabBar(
+                            tabs: [
+                              Tab(
+                                child: FittedBox(
+                                  child: Text(
+                                    'Connections',
+                                    style:
+                                        Theme.of(context).textTheme.bodyLarge,
+                                  ),
+                                ),
+                              ),
+                              Tab(
+                                child: FittedBox(
+                                  child: Text(
+                                    'Connected',
+                                    style:
+                                        Theme.of(context).textTheme.bodyLarge,
+                                  ),
+                                ),
+                              ),
+                              Tab(
+                                child: FittedBox(
+                                  child: Text(
+                                    'Suggested',
+                                    style:
+                                        Theme.of(context).textTheme.bodyLarge,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Expanded(
+                          child: TabBarView(children: [
+                            _myConnections.isEmpty
+                                ? getSafetyModel(
+                                    '@${_specificUser?.username} has not connections yet')
+                                : ListView.separated(
+                                    separatorBuilder: (_, __) =>
+                                        const Divider(height: 0.0),
+                                    itemCount: _myConnections.length,
+                                    itemBuilder: (context, i) {
+                                      UserModel specificUser =
+                                          _allUsers.firstWhere(
+                                              (u) =>
+                                                  u.uid ==
+                                                  _myConnections[i].connectedBy,
+                                              orElse: () => null);
+                                      if (specificUser == null) {
+                                        const ListTile(
+                                          title: Text(
+                                              'Something may not exit any more'),
+                                          subtitle: Text(
+                                              'Your may be blocked or delete'),
+                                        );
+                                      }
+                                      return Consumer<UserController>(
+                                        builder: (_, userCtrl, __) {
+                                          bool isConnected = userCtrl
+                                              .isConnected(specificUser.uid);
+                                          return ConnectionUserItem(
+                                            user: specificUser,
+                                            status: userCtrl
+                                                .isConnected(specificUser.uid),
+                                            onChangeConnectionStatus: () async {
+                                              String connectId =
+                                                  MyConnect.connectId(
+                                                      userCtrl.user.uid,
+                                                      specificUser.uid);
+                                              String puCountPath =
+                                                  '${Constants.USERS}/${specificUser.uid}/connectionCount';
+                                              String myCountPath =
+                                                  '${Constants.USERS + '/' + _firebase.uid}/connectedCount';
+                                              Map<String, dynamic> map = {};
+                                              if (isConnected) {
+                                                userCtrl.removeConnect(
+                                                    specificUser.uid);
+                                                if (specificUser
+                                                        .connectionCount! >
+                                                    0) {
+                                                  specificUser
+                                                      .connectionCount--;
+                                                }
+                                                map[puCountPath] = specificUser
+                                                    .connectionCount;
+                                                map[myCountPath] = userCtrl
+                                                    .user.connectedCount;
+                                                map['${Constants.CONNECTIONS}/$connectId'] =
+                                                    null;
+                                              } else {
+                                                MyConnect newConnect =
+                                                    MyConnect(
+                                                  id: connectId,
+                                                  connectedTo: specificUser.uid,
+                                                  connectedBy: _firebase.uid,
+                                                  timestamp: DateTime.now()
+                                                      .millisecondsSinceEpoch,
+                                                );
+                                                userCtrl
+                                                    .updateConnect(newConnect);
+                                                map['${Constants.CONNECTIONS}/$connectId'] =
+                                                    newConnect.toMap();
+                                                _sendNotification(specificUser);
+                                                specificUser.connectionCount++;
 
-  void _onChangeSearching() {}
+                                                map[puCountPath] = specificUser
+                                                    .connectionCount;
+                                                map[myCountPath] = userCtrl
+                                                    .user.connectedCount;
+                                              }
+                                              await _firebase
+                                                  .updateDisconnected(
+                                                      isConnected,
+                                                      specificUser.uid,
+                                                      userCtrl.user);
+                                              await _firebase
+                                                  .updateWithBatch(map);
+                                            },
+                                          );
+                                        },
+                                      );
+                                    },
+                                  ),
+                            _myConnected.isEmpty
+                                ? getSafetyModel(
+                                    '@${_specificUser?.username} is not connected yet')
+                                : ListView.separated(
+                                    separatorBuilder: (_, __) =>
+                                        const Divider(height: 0.0),
+                                    itemCount: _myConnected.length,
+                                    itemBuilder: (BuildContext context, int i) {
+                                      UserModel specificUser =
+                                          _allUsers.firstWhere(
+                                              (u) =>
+                                                  u.uid ==
+                                                  _myConnected[i].connectedTo,
+                                              orElse: () => null);
+                                      if (specificUser == null) {
+                                        const ListTile(
+                                          title: Text(
+                                              'Something may not exit any more'),
+                                          subtitle: Text(
+                                              'Your may be blocked or delete'),
+                                        );
+                                      }
 
-  void _onChange(String val) {}
+                                      return Consumer<UserController>(
+                                        builder: (_, userCtrl, __) {
+                                          bool isConnected = userCtrl
+                                              .isConnected(specificUser.uid);
+                                          return ConnectionUserItem(
+                                            user: specificUser,
+                                            status: userCtrl
+                                                .isConnected(specificUser.uid),
+                                            onChangeConnectionStatus: () async {
+                                              String connectId =
+                                                  MyConnect.connectId(
+                                                      userCtrl.user.uid,
+                                                      specificUser.uid);
+                                              String puCountPath =
+                                                  '${Constants.USERS}/${specificUser.uid}/connectionCount';
+                                              String myCountPath =
+                                                  '${Constants.USERS + '/' + _firebase.uid}/connectedCount';
+                                              Map<String, dynamic> map = {};
+                                              if (isConnected) {
+                                                userCtrl.removeConnect(
+                                                    specificUser.uid);
+                                                if (specificUser
+                                                        .connectionCount! >
+                                                    0) {
+                                                  specificUser
+                                                      .connectionCount--;
+                                                }
 
-  void _suggestionList() {}
+                                                map[puCountPath] = specificUser
+                                                    .connectionCount;
+                                                map[myCountPath] = userCtrl
+                                                    .user.connectedCount;
+                                                map[Constants.CONNECTIONS +
+                                                    '/' +
+                                                    connectId] = null;
+                                              } else {
+                                                MyConnect newConnect =
+                                                    MyConnect(
+                                                  id: connectId,
+                                                  connectedTo: specificUser.uid,
+                                                  connectedBy: _firebase.uid,
+                                                  timestamp: DateTime.now()
+                                                      .millisecondsSinceEpoch,
+                                                );
+                                                userCtrl
+                                                    .updateConnect(newConnect);
+                                                map['${Constants.CONNECTIONS}/$connectId'] =
+                                                    newConnect.toMap();
+                                                _sendNotification(specificUser);
+                                                specificUser.connectionCount++;
+                                                map[puCountPath] = specificUser
+                                                    .connectionCount;
+                                                map[myCountPath] = userCtrl
+                                                    .user.connectedCount;
+                                              }
+                                              await _firebase
+                                                  .updateDisconnected(
+                                                      isConnected,
+                                                      specificUser.uid,
+                                                      userCtrl.user);
+                                              await _firebase
+                                                  .updateWithBatch(map);
+                                            },
+                                          );
+                                        },
+                                        // child:
+                                        // ,
+                                      );
+                                    },
+                                  ),
+                            _suggestedUsers.isEmpty
+                                ? getSafetyModel(
+                                    'We\'ve not users to suggest you!')
+                                : ListView.separated(
+                                    separatorBuilder: (_, __) =>
+                                        const Divider(height: 0.0),
+                                    itemCount: _suggestedUsers.length,
+                                    itemBuilder: (context, i) {
+                                      UserModel specificUser =
+                                          _suggestedUsers.firstWhere(
+                                              (u) =>
+                                                  u.uid ==
+                                                  _suggestedUsers[i].uid,
+                                              orElse: () => null);
+                                      if (specificUser == null) {
+                                        const ListTile(
+                                          title: Text(
+                                              'Something may not exit any more'),
+                                          subtitle: Text(
+                                              'Your may be blocked or delete'),
+                                        );
+                                      }
+                                      return Consumer<UserController>(
+                                        builder: (_, userCtrl, __) {
+                                          bool isConnected = userCtrl
+                                              .isConnected(specificUser.uid);
+                                          return ConnectionUserItem(
+                                            user: specificUser,
+                                            status: userCtrl
+                                                .isConnected(specificUser.uid),
+                                            onChangeConnectionStatus: () async {
+                                              String connectId =
+                                                  MyConnect.connectId(
+                                                      userCtrl.user.uid,
+                                                      specificUser.uid);
+                                              String puCountPath =
+                                                  '${Constants.USERS}/${specificUser.uid}/connectionCount';
+                                              String myCountPath =
+                                                  '${Constants.USERS + '/' + _firebase.uid}/connectedCount';
+                                              Map<String, dynamic> map = {};
+                                              if (isConnected) {
+                                                userCtrl.removeConnect(
+                                                    specificUser.uid);
+                                                if (specificUser
+                                                        .connectionCount! >
+                                                    0) {
+                                                  specificUser
+                                                      .connectionCount--;
+                                                }
+
+                                                map[puCountPath] = specificUser
+                                                    .connectionCount;
+                                                map[myCountPath] = userCtrl
+                                                    .user.connectedCount;
+                                                map['${Constants.CONNECTIONS}/$connectId'] =
+                                                    null;
+                                              } else {
+                                                MyConnect newConnect =
+                                                    MyConnect(
+                                                  id: connectId,
+                                                  connectedTo: specificUser.uid,
+                                                  connectedBy: _firebase.uid,
+                                                  timestamp: DateTime.now()
+                                                      .millisecondsSinceEpoch,
+                                                );
+                                                userCtrl
+                                                    .updateConnect(newConnect);
+                                                map[Constants.CONNECTIONS +
+                                                        '/' +
+                                                        connectId] =
+                                                    newConnect.toMap();
+                                                _sendNotification(specificUser);
+                                                specificUser.connectionCount++;
+                                                map[puCountPath] = specificUser
+                                                    .connectionCount;
+                                                map[myCountPath] = userCtrl
+                                                    .user.connectedCount;
+                                              }
+
+                                              await _firebase
+                                                  .updateDisconnected(
+                                                      isConnected,
+                                                      specificUser.uid,
+                                                      userCtrl.user);
+                                              await _firebase
+                                                  .updateWithBatch(map);
+                                            },
+                                          );
+                                        },
+                                      );
+                                    },
+                                  ),
+                          ]),
+                        )
+                      ],
+                    ),
+              if (_isSearching)
+                Container(
+                  height: double.infinity,
+                  width: double.infinity,
+                  color: Theme.of(context).scaffoldBackgroundColor,
+                  child: _searchedUsers.isEmpty
+                      ? SafetyModel(
+                          isLoading: false,
+                          icon: SvgPicture.asset(
+                            'assets/svgs/search.svg',
+                            color: hintColor,
+                            height: 80.0,
+                          ),
+                          title: 'Search users',
+                          subTitle: 'Matched users will be displayed here!',
+                        )
+                      : ListView.builder(
+                          itemCount: _searchedUsers?.length,
+                          itemBuilder: (context, i) {
+                            UserModel specificUser = _searchedUsers.firstWhere(
+                                (u) => u.uid == _searchedUsers[i].uid,
+                                orElse: () => null);
+                            if (specificUser == null) {
+                              const ListTile(
+                                title: Text('Something may not exit any more'),
+                                subtitle: Text('Your may be blocked or delete'),
+                              );
+                            }
+
+                            return Consumer<UserController>(
+                              builder: (_, userCtrl, __) {
+                                bool isConnected =
+                                    userCtrl.isConnected(specificUser.uid);
+                                return ConnectionUserItem(
+                                  user: specificUser,
+                                  status:
+                                      userCtrl.isConnected(specificUser.uid),
+                                  onChangeConnectionStatus: () async {
+                                    String connectId = MyConnect.connectId(
+                                        userCtrl.user.uid, specificUser.uid);
+                                    String puCountPath =
+                                        '${Constants.USERS}/${specificUser.uid}/connectionCount';
+                                    String myCountPath = Constants.USERS +
+                                        '/' +
+                                        _firebase.uid +
+                                        '/' +
+                                        'connectedCount';
+                                    Map<String, dynamic> map = {};
+                                    if (isConnected) {
+                                      userCtrl.removeConnect(specificUser.uid);
+                                      if (specificUser.connectionCount! > 0) {
+                                        specificUser.connectionCount--;
+                                      }
+                                      map[puCountPath] =
+                                          specificUser.connectionCount;
+                                      map[myCountPath] =
+                                          userCtrl.user.connectedCount;
+                                      map[Constants.CONNECTIONS +
+                                          '/' +
+                                          connectId] = null;
+                                    } else {
+                                      MyConnect newConnect = MyConnect(
+                                        id: connectId,
+                                        connectedTo: specificUser.uid,
+                                        connectedBy: _firebase.uid,
+                                        timestamp: DateTime.now()
+                                            .millisecondsSinceEpoch,
+                                      );
+                                      userCtrl.updateConnect(newConnect);
+                                      map[Constants.CONNECTIONS +
+                                          '/' +
+                                          connectId] = newConnect.toMap();
+                                      _sendNotification(specificUser);
+                                      specificUser.connectionCount++;
+                                      map[puCountPath] =
+                                          specificUser.connectionCount;
+                                      map[myCountPath] =
+                                          userCtrl.user.connectedCount;
+                                    }
+                                    await _firebase.updateDisconnected(
+                                        isConnected,
+                                        specificUser.uid,
+                                        userCtrl.user);
+                                    await _firebase.updateWithBatch(map);
+                                  },
+                                );
+                              },
+                            );
+                          },
+                        ),
+                ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 
   Widget getSafetyModel(String title) {
     return SafetyModel(
@@ -51,125 +500,9 @@ class AllConnectionsScreen extends StatelessWidget {
     );
   }
 
-  void _sendNotification(UserModel user) {}
+  void _sendNotification(UserModel specificUser) {}
 
-  static const routeName = '/all-connections-screen';
+  void _onChangeSearching() {}
 
-  AllConnectionsScreen({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return WillPopScope(
-        onWillPop: () async {
-          // if (_isSearching) {
-          //   setState(() {
-          //     _isSearching = false;
-          //   });
-          //   return false;
-          // }
-          navigateTo(context);
-          return false;
-        },
-        child: DefaultTabController(
-            length: 3,
-            initialIndex: _initialIndex,
-            child: Scaffold(
-                appBar: _isSearching
-                    ? SearchAppBar(
-                        hintText: 'Search with name',
-                        onClose: _onChangeSearching,
-                        onChange: _onChange,
-                      )
-                    : AppBar(
-                        leading: IconButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
-                        ),
-                        centerTitle: true,
-                        title: const Text(
-                          'Connections',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(fontSize: 20),
-                        ),
-                        actions: [
-                          IconButton(
-                            onPressed: _onChangeSearching,
-                            icon: SvgPicture.asset('assets/svgs/search.svg'),
-                          )
-                        ],
-                      ),
-                body: Stack(children: [
-                  !_isLoading
-                      ? const Center(
-                          child: CircularProgressIndicator.adaptive())
-                      : Column(
-                          children: [
-                            Material(
-                              color: Colors.white,
-                              child: TabBar(
-                                indicatorColor: primaryColorLT,
-                                tabs: [
-                                  Tab(
-                                    child: FittedBox(
-                                      child: Text(
-                                        'Connections',
-                                        // 'Connections',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodyLarge,
-                                      ),
-                                    ),
-                                  ),
-                                  Tab(
-                                    child: FittedBox(
-                                      child: Text(
-                                        'Connected',
-                                        // 'Connected',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodyLarge,
-                                      ),
-                                    ),
-                                  ),
-                                  Tab(
-                                    child: FittedBox(
-                                      child: Text(
-                                        'Suggested',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodyLarge,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Expanded(
-                                child: TabBarView(
-                              children: [
-                                if (!_isSearching)
-                                  Container(
-                                      height: double.infinity,
-                                      width: double.infinity,
-                                      color: Theme.of(context)
-                                          .scaffoldBackgroundColor,
-                                      child: SafetyModel(
-                                        isLoading: false,
-                                        icon: SvgPicture.asset(
-                                          'assets/svgs/search.svg',
-                                          color: hintColor,
-                                          height: 80.0,
-                                        ),
-                                        title: 'Search users',
-                                        subTitle:
-                                            'Matched users will be displayed here!',
-                                      ))
-                              ],
-                            )),
-                          ],
-                        )
-                ]))));
-  }
+  _onChange(String val) {}
 }

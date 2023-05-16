@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs
 
+import 'package:business_bosses_v2/common/models/my_user.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/common/widgets/ranking_badge.dart';
