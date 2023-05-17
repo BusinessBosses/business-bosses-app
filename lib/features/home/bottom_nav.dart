@@ -7,7 +7,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 
+import '../../common/widgets/typography/text_widget.dart';
+import '../../services/api_service.dart';
 import '../../utils/theme/theme.dart';
 import '../posts/presentation/create_post_screen.dart';
 import 'all_communities_screen.dart';
@@ -31,6 +34,50 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
   final ChatController _chatController = Get.put(ChatController());
   final HomeController _homeController = Get.put(HomeController());
   int _activeIndex = 0;
+  int currentTimestamp = DateTime.now().millisecondsSinceEpoch;
+  final GetStorage sandBox = GetStorage();
+
+  /// Show daily coin dialog
+  void showCoinDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        title: const TextWidget(
+          text: 'Congratulations',
+          fontWeight: FontWeight.bold,
+          size: 20,
+        ),
+        content: TextWidget(
+          text: 'You have earned 1 coin for logging into Business Bosses today',
+          color: Colors.black.withOpacity(.8),
+        ),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const TextWidget(
+              text: 'OK',
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      addCoinDaily();
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -202,6 +249,23 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
       _activeIndex = currentIndex;
     });
     return;
+  }
+
+  /// DailyCoin
+  void addCoinDaily() {
+    int lastExecutionTimestamp = sandBox.read('lastExecutionTimestamp') ?? 0;
+    if (currentTimestamp - lastExecutionTimestamp >= 24 * 60 * 60 * 1000) {
+      // The action hasn't been executed today, save the current timestamp
+      sandBox.write('lastExecutionTimestamp', currentTimestamp);
+      ApiService.put(
+        path: 'users/${_profileController.myProfile.uid}',
+        body: <String, dynamic>{
+          'coinscount': _profileController.myProfile.coinscount! + 1,
+        },
+      );
+      _profileController.updateCoinCount(1);
+      showCoinDialog();
+    }
   }
 }
 

@@ -5,14 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
 import '../../../action/action.dart';
-import '../../../common/models/my_response.dart';
 import '../../../common/widgets/buttons/my_button.dart';
 import '../../../common/widgets/text_widget.dart';
-import '../../../utils/constants/constants.dart';
 import '../../../utils/theme/theme.dart';
+import '../../profile/controller/profile_controller.dart';
 import 'confirmation.dart';
 
 /// BOOST POST SCREEN
@@ -23,7 +23,9 @@ class BoostPost extends StatefulWidget {
     required this.postId,
     this.postTitle = '',
   }) : super(key: key);
+  // ignore: public_member_api_docs
   final String postTitle;
+  // ignore: public_member_api_docs
   final String postId;
   @override
   State<BoostPost> createState() => _BoostPostState();
@@ -31,16 +33,18 @@ class BoostPost extends StatefulWidget {
 
 class _BoostPostState extends State<BoostPost> {
   bool _isProcessing = false;
+  bool isCoin = false;
   late Map<String, dynamic>? paymantIntent;
+  final ProfileController profileController = Get.find();
 
   late String duration;
-  List<Map<String, dynamic>> plans = [
-    {
+  List<Map<String, dynamic>> plans = <Map<String, dynamic>>[
+    <String, dynamic>{
       'amount': '3',
       'duration': 'Duration 3 days',
       'reach': 'Reach 500 to 850 people'
     },
-    {
+    <String, dynamic>{
       'amount': '5',
       'duration': 'Duration 5 Days',
       'reach': 'Reach 900 to 1.2k people'
@@ -126,25 +130,52 @@ class _BoostPostState extends State<BoostPost> {
   }
 
   Future<void> makePayment() async {
-    try {
-      setState(() {
-        _isProcessing = true;
-      });
-      paymantIntent = await createPaymentIntent(initPlan, 'USD');
-      await Stripe.instance
-          .initPaymentSheet(
-        paymentSheetParameters: SetupPaymentSheetParameters(
-          paymentIntentClientSecret: paymantIntent!['client_secret'],
-          merchantDisplayName: 'Business Bosses',
-        ),
-      )
-          .then((value) {
-        // log(value.toString());
-      });
+    if (isCoin) {
+      try {
+        setState(() {
+          _isProcessing = true;
+        });
+        await ApiService.put(
+          path: 'users/${profileController.myProfile.uid}',
+          body: <String, dynamic>{
+            'coinscount': profileController.myProfile.coinscount! -
+                (int.parse(initPlan) * 100),
+          },
+        );
 
-      displaySheet();
-    } catch (e) {
-      log(e.toString());
+        await updatePost();
+        profileController.updateCoinCount(-(int.parse(initPlan) * 100));
+
+        setState(() {
+          _isProcessing = false;
+        });
+        Navigator.of(context).push(MaterialPageRoute(
+          builder: (BuildContext context) => const Confirmation(),
+        ));
+      } catch (e) {
+        log(e.toString());
+      }
+    } else {
+      try {
+        setState(() {
+          _isProcessing = true;
+        });
+        paymantIntent = await createPaymentIntent(initPlan, 'USD');
+        await Stripe.instance
+            .initPaymentSheet(
+          paymentSheetParameters: SetupPaymentSheetParameters(
+            paymentIntentClientSecret: paymantIntent!['client_secret'],
+            merchantDisplayName: 'Business Bosses',
+          ),
+        )
+            .then((value) {
+          // log(value.toString());
+        });
+
+        displaySheet();
+      } catch (e) {
+        log(e.toString());
+      }
     }
   }
 
@@ -198,7 +229,7 @@ class _BoostPostState extends State<BoostPost> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const TextWidget(
-                        text: "Reach\na Wider Audience",
+                        text: 'Reach\na Wider Audience',
                         color: Color(0xFFFFFFFF),
                         fontWeight: FontWeight.w800,
                         size: 20,
@@ -207,7 +238,7 @@ class _BoostPostState extends State<BoostPost> {
                         height: 10,
                       ),
                       Row(
-                        children: const [
+                        children: const <Widget>[
                           Icon(
                             Icons.check_box,
                             color: Colors.white,
@@ -217,13 +248,13 @@ class _BoostPostState extends State<BoostPost> {
                             width: 10,
                           ),
                           TextWidget(
-                            text: "More likes on posts",
+                            text: 'More likes on posts',
                             color: Colors.white,
                           ),
                         ],
                       ),
                       Row(
-                        children: const [
+                        children: const <Widget>[
                           Icon(
                             Icons.check_box,
                             color: Colors.white,
@@ -233,13 +264,13 @@ class _BoostPostState extends State<BoostPost> {
                             width: 10,
                           ),
                           TextWidget(
-                            text: "More connections",
+                            text: 'More connections',
                             color: Colors.white,
                           )
                         ],
                       ),
                       Row(
-                        children: const [
+                        children: const <Widget>[
                           Icon(
                             Icons.check_box,
                             color: Colors.white,
@@ -249,22 +280,11 @@ class _BoostPostState extends State<BoostPost> {
                             width: 10,
                           ),
                           TextWidget(
-                            text: "More referrals",
+                            text: 'More referrals',
                             color: Colors.white,
                           )
                         ],
                       ),
-
-                      // ListTile(
-                      //   leading: Icon(
-                      //     Icons.check_box,
-                      //     color: Colors.white,
-                      //   ),
-                      //   title: TextWidget(
-                      //     text: "More likes",
-                      //     color: Colors.white,
-                      //   ),
-                      // )
                     ],
                   ),
                 )
@@ -300,29 +320,64 @@ class _BoostPostState extends State<BoostPost> {
                     .toList(),
               ),
             ),
-
+            const SizedBox(
+              height: 15,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      Checkbox(
+                        value: isCoin,
+                        onChanged: (bool? value) {
+                          setState(() {
+                            isCoin = value!;
+                          });
+                        },
+                      ),
+                      const Text(
+                        'Pay With Coin (100 Coins = \$1)',
+                      ),
+                    ],
+                  ),
+                  isCoin
+                      ? profileController.myProfile.coinscount! <
+                              (int.parse(initPlan) * 100)
+                          ? const Text(
+                              'You do not have enough coins to promote')
+                          : Container()
+                      : Container(),
+                ],
+              ),
+            ),
             const SizedBox(
               height: 30,
             ),
-
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: MyButton(
-                  isProcessing: _isProcessing,
-                  labelStyle: const TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w700,
-                    fontSize: 18,
-                  ),
-                  label: 'Continue',
-                  onPressed: () async {
-                    await makePayment();
-                  }),
-            ),
+            (isCoin &&
+                        profileController.myProfile.coinscount! >=
+                            (int.parse(initPlan) * 100)) ||
+                    !isCoin
+                ? Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: MyButton(
+                      isProcessing: _isProcessing,
+                      labelStyle: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w700,
+                        fontSize: 18,
+                      ),
+                      label: 'Continue',
+                      onPressed: () async {
+                        await makePayment();
+                      },
+                    ),
+                  )
+                : Container(),
             const SizedBox(
               height: 50,
             )
-            // BoostPlanCard()
           ],
         ),
       ),
