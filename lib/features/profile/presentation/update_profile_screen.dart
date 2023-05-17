@@ -16,7 +16,7 @@ import '../../../action/action.dart';
 import '../../../common/models/analyser_data.dart';
 import '../../../common/models/api_response_model.dart';
 import '../../../common/models/for_data_picker.dart';
-import '../../../common/models/industry.dart';
+import '../../forum/models/industry.dart';
 import '../../../common/models/my_response.dart';
 import '../../../common/models/my_title.dart';
 import '../../../common/models/my_user.dart';

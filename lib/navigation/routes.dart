@@ -30,4 +30,5 @@ class Routes {
   static const String analysescreen = '/analyseScreen';
   static const String referscreen = '/referScreen';
   static const String allconnectionsscreen = '/allconnectionsScreen';
+  static const String allforumscreen = '/allforumScreen';
 }

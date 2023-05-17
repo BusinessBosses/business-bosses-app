@@ -162,6 +162,7 @@ class Homeappbar extends StatelessWidget {
                           height: 40,
                         ),
                         onPressed: () {
+                          Get.toNamed(Routes.notifications);
                           //  Get.toNamed('/notifications');
                         },
                       ),

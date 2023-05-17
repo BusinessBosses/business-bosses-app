@@ -3,19 +3,21 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 
+import '../../action/action.dart';
 import '../../common/widgets/tiles/custom_tile.dart';
+import '../../navigation/routes.dart';
 import '../../utils/theme/theme.dart';
 import '../../common/widgets/popup/bossup_challenge_popup.dart';
+import '../forum/presentation/all_forum_screen.dart';
+import '../forum/widgets/joinedbutton.dart';
 
-class AllCommunitiesScreen extends StatefulWidget {
+// ignore: public_member_api_docs
+class AllCommunitiesScreen extends StatelessWidget {
+  // ignore: public_member_api_docs
   const AllCommunitiesScreen({super.key});
 
-  @override
-  State<AllCommunitiesScreen> createState() => _AllCommunitiesScreenState();
-}
-
-class _AllCommunitiesScreenState extends State<AllCommunitiesScreen> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -336,7 +338,7 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen> {
                                                               MainAxisAlignment
                                                                   .end,
                                                           children: [
-                                                            joinedButton(),
+                                                            JoinedButton(),
                                                           ],
                                                         )),
                                                   )),
@@ -511,85 +513,69 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen> {
               //       ),
             ),
             // content of Tab 2
-            GridView.count(
-              crossAxisCount: 2,
-              children: List<Widget>.generate(
-                6,
-                (int index) => CustomTile(
-                  label: 'Title',
-                  photo: 'http://44.210.87.234/learningImages/events.jpg',
-                  onTap: () {
-                    // industries[i].industryId.contains('-MsUPNEHnp8-An5VLI_v')
-                    //     ? Navigator.push(
-                    //         context,
-                    //         MaterialPageRoute(
-                    //           builder: (context) => BottomNavScreen(2, true),
-                    //         ),
-                    //       )
-                    //     : navigateTo(
-                    //         context,
-                    //         routeName: AllForumScreen.routeName,
-                    //         arguments: industries[i].industryId,
-                    //       );
-                  },
+            Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: GridView.count(
+                mainAxisSpacing: 10.0,
+                crossAxisSpacing: 15.0,
+                crossAxisCount: 2,
+                children: List<Widget>.generate(
+                  6,
+                  (int index) => CustomTile(
+                    label: 'Title',
+                    photo: 'http://44.210.87.234/learningImages/events.jpg',
+                    onTap: () {
+                      // industries[i].industryId.contains('-MsUPNEHnp8-An5VLI_v')
+                      //     ? Navigator.push(
+                      //         context,
+                      //         MaterialPageRoute(
+                      //           builder: (context) => BottomNavScreen(2, true),
+                      //         ),
+                      //       )
+                      //     : navigateTo(
+                      //         context,
+                      //         routeName: AllForumScreen.routeName,
+                      //         arguments: industries[i].industryId,
+                      //       );
+                      Get.toNamed(Routes.allforumscreen);
+                    },
+                  ),
                 ),
               ),
             ),
             // content of Tab 3
-            GridView.count(
-              crossAxisCount: 2,
-              children: List<Widget>.generate(
-                6,
-                (int index) => CustomTile(
-                  label: 'Title',
-                  photo: 'http://44.210.87.234/learningImages/events.jpg',
-                  onTap: () {
-                    // industries[i].industryId.contains('-MsUPNEHnp8-An5VLI_v')
-                    //     ? Navigator.push(
-                    //         context,
-                    //         MaterialPageRoute(
-                    //           builder: (context) => BottomNavScreen(2, true),
-                    //         ),
-                    //       )
-                    //     : navigateTo(
-                    //         context,
-                    //         routeName: AllForumScreen.routeName,
-                    //         arguments: industries[i].industryId,
-                    //       );
-                  },
+            Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: GridView.count(
+                mainAxisSpacing: 10.0,
+                crossAxisSpacing: 15.0,
+                crossAxisCount: 2,
+                children: List<Widget>.generate(
+                  6,
+                  (int index) => CustomTile(
+                    label: 'Title',
+                    photo: 'http://44.210.87.234/learningImages/events.jpg',
+                    onTap: () {
+                      // industries[i].industryId.contains('-MsUPNEHnp8-An5VLI_v')
+                      //     ? Navigator.push(
+                      //         context,
+                      //         MaterialPageRoute(
+                      //           builder: (context) => BottomNavScreen(2, true),
+                      //         ),
+                      //       )
+                      //     :
+                      // navigateTo(
+                      //   context,
+                      //   routeName: AllForumScreen.routeName,
+                      //   arguments: 'industries[i].industryId',
+                      // );
+                      Get.toNamed(Routes.allforumscreen);
+                    },
+                  ),
                 ),
               ),
             ),
           ],
-        ),
-      ),
-    );
-  }
-
-  Widget joinedButton() {
-    return GestureDetector(
-      onTap: () {},
-      child: Container(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 12.0,
-        ),
-        alignment: Alignment.center,
-        child: Container(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 20.0,
-            vertical: 10.0,
-          ),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: const Text(
-            'Join',
-            style: TextStyle(
-              fontSize: 13,
-              fontWeight: FontWeight.w700,
-            ),
-          ),
         ),
       ),
     );

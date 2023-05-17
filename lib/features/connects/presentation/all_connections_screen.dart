@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import '../../../action/action.dart';
 import '../../../common/models/my_connect.dart';
+import '../../../common/models/my_user.dart';
 import '../../../common/widgets/safety_model.dart';
 import '../../../utils/constants/constants.dart';
 import '../../../utils/theme/theme.dart';
@@ -111,15 +112,121 @@ class AllConnectionsScreen extends StatelessWidget {
                             _myConnections.isEmpty
                                 ? getSafetyModel(
                                     '@${_specificUser?.username} has not connections yet')
-                                : Container(),
+                                : ListView.separated(
+                                    separatorBuilder: (_, __) =>
+                                        const Divider(height: 0.0),
+                                    itemCount: _myConnections.length,
+                                    itemBuilder: (context, i) {
+                                      UserModel specificUser =
+                                          _allUsers.firstWhere(
+                                        (UserModel u) =>
+                                            u.uid ==
+                                            _myConnections[i].connectedBy,
+                                        orElse: () => UserModel(),
+                                      );
+
+                                      if (specificUser == null) {
+                                        const ListTile(
+                                          title: Text(
+                                              'Something may not exist any more'),
+                                          subtitle: Text(
+                                              'Your may be blocked or delete'),
+                                        );
+                                      }
+                                      return Consumer<UserController>(
+                                        builder: (_, userCtrl, __) {
+                                          bool isConnected = userCtrl
+                                              .isConnected(specificUser.uid);
+                                          return ConnectionUserItem(
+                                            user: specificUser,
+                                            status: userCtrl
+                                                .isConnected(specificUser.uid),
+                                            onChangeConnectionStatus:
+                                                () async {},
+                                          );
+                                        },
+                                      );
+                                    },
+                                  ),
                             _myConnected.isEmpty
                                 ? getSafetyModel(
                                     '@${_specificUser?.username} is not connected yet')
-                                : Container(),
+                                : ListView.separated(
+                                    separatorBuilder: (_, __) =>
+                                        const Divider(height: 0.0),
+                                    itemCount: _myConnected.length,
+                                    itemBuilder: (context, i) {
+                                      UserModel specificUser =
+                                          _allUsers.firstWhere(
+                                              (u) =>
+                                                  u.uid ==
+                                                  _myConnected[i].connectedTo,
+                                              orElse: () => UserModel());
+                                      if (specificUser == null) {
+                                        const ListTile(
+                                          title: Text(
+                                              'Something may not exit any more'),
+                                          subtitle: Text(
+                                              'Your may be blocked or delete'),
+                                        );
+                                      }
+
+                                      return Consumer<UserController>(
+                                        builder: (_, userCtrl, __) {
+                                          bool isConnected = userCtrl
+                                              .isConnected(specificUser.uid);
+                                          return ConnectionUserItem(
+                                            user: specificUser,
+                                            status: userCtrl
+                                                .isConnected(specificUser.uid),
+                                            onChangeConnectionStatus:
+                                                () async {},
+                                          );
+                                        },
+                                        // child:
+                                        // ,
+                                      );
+                                    },
+                                  ),
                             _suggestedUsers.isEmpty
                                 ? getSafetyModel(
                                     'We\'ve not users to suggest you!')
-                                : Container()
+                                : ListView.separated(
+                                    separatorBuilder: (_, __) =>
+                                        const Divider(height: 0.0),
+                                    itemCount: _suggestedUsers.length,
+                                    itemBuilder: (context, i) {
+                                      UserModel specificUser =
+                                          _suggestedUsers.firstWhere(
+                                              (u) =>
+                                                  u.uid ==
+                                                  _suggestedUsers[i].uid,
+                                              orElse: () => UserModel());
+                                      if (specificUser == null) {
+                                        const ListTile(
+                                          title: Text(
+                                              'Something may not exit any more'),
+                                          subtitle: Text(
+                                              'Your may be blocked or delete'),
+                                        );
+                                      }
+                                      return Consumer<UserController>(
+                                        builder: (_, userCtrl, __) {
+                                          bool isConnected = userCtrl
+                                              .isConnected(specificUser.uid);
+                                          return ConnectionUserItem(
+                                            user: specificUser,
+                                            status: userCtrl
+                                                .isConnected(specificUser.uid),
+                                            onChangeConnectionStatus:
+                                                () async {},
+                                          );
+                                        },
+                                        // child:
+                                        // ,
+                                      );
+                                    },
+                                  ),
                           ]),
                         )
                       ],
@@ -141,7 +248,31 @@ class AllConnectionsScreen extends StatelessWidget {
                           subTitle: 'Matched users will be displayed here!',
                         )
                       : ListView.builder(
-                          itemBuilder: (BuildContext context, int index) {},
+                          itemCount: _searchedUsers.length,
+                          itemBuilder: (context, i) {
+                            UserModel specificUser = _searchedUsers.firstWhere(
+                                (u) => u.uid == _searchedUsers[i].uid,
+                                orElse: () => UserModel());
+                            if (specificUser == null) {
+                              const ListTile(
+                                title: Text('Something may not exit any more'),
+                                subtitle: Text('Your may be blocked or delete'),
+                              );
+                            }
+
+                            return Consumer<UserController>(
+                              builder: (_, userCtrl, __) {
+                                bool isConnected =
+                                    userCtrl.isConnected(specificUser.uid);
+                                return ConnectionUserItem(
+                                  user: specificUser,
+                                  status:
+                                      userCtrl.isConnected(specificUser.uid),
+                                  onChangeConnectionStatus: () async {},
+                                );
+                              },
+                            );
+                          },
                         ),
                 ),
             ],
