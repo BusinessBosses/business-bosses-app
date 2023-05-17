@@ -33,7 +33,9 @@ class AllConnectionsScreen extends StatelessWidget {
     return WillPopScope(
       onWillPop: () async {
         if (_isSearching) {
-          _isSearching = false;
+          setState(() {
+            _isSearching = false;
+          });
           return false;
         }
         navigateTo(context);
@@ -180,7 +182,13 @@ class AllConnectionsScreen extends StatelessWidget {
                                                 map['${Constants.CONNECTIONS}/$connectId'] =
                                                     newConnect.toMap();
                                                 _sendNotification(specificUser);
-                                                specificUser.connectionCount++;
+                                                specificUser.connectionCount ??=
+                                                    0;
+                                                specificUser.connectionCount =
+                                                    (specificUser
+                                                                .connectionCount ??
+                                                            0) +
+                                                        1;
 
                                                 map[puCountPath] = specificUser
                                                     .connectionCount;
