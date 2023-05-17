@@ -75,10 +75,11 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
                 color: Colors.white,
                 child: IndexedStack(
                   index: _activeIndex,
-                  children: const <Widget>[
+                  children: <Widget>[
                     HomeScreen(),
                     AllCommunitiesScreen(),
                     MarketplaceScreen(),
+                    // Container()
                     MyProfileScreen(),
                   ],
                 ),

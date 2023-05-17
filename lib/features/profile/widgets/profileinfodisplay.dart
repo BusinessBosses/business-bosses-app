@@ -1,3 +1,4 @@
+import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/features/profile/widgets/productandserviceschip.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
@@ -9,8 +10,8 @@ import '../../../functions/my_native_functions.dart';
 import '../../../utils/theme/theme.dart';
 import '../controller/profile_controller.dart';
 
-Widget profileinfodisplay(BuildContext context) {
-  final ProfileController _profileController = Get.find();
+Widget profileinfodisplay(BuildContext context, UserModel publicUser) {
+  // final ProfileController _profileController = Get.find();
   return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -29,7 +30,7 @@ Widget profileinfodisplay(BuildContext context) {
         Padding(
           padding: const EdgeInsets.only(left: 15, right: 15),
           child: Linkify(
-            text: 'bio text here',
+            text: publicUser.bio ?? '',
             maxLines: 5,
             overflow: TextOverflow.ellipsis,
             style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
@@ -52,58 +53,61 @@ Widget profileinfodisplay(BuildContext context) {
               //         ?.trim()
               //         .isNotEmpty ??
               //     false)
-              InkWell(
-                onTap: () {
-                  // String url =
-                  //     MyNativeFunctions
-                  //         .completeURL(
-                  //             _user
-                  //                 .website!,
-                  //             MyUrl.url);
-                  // _onUrlLaunch(
-                  //     context, url);
-                },
-                child: Row(
-                  children: [
-                    SvgPicture.asset(
-                      'assets/svgs/link.svg',
-                      height: 14.0,
-                      width: 15.0,
-                    ),
-                    const SizedBox(width: 4.0),
-                    Text(
-                      '_user.website!',
-                      style: const TextStyle(
-                          decoration: TextDecoration.underline, fontSize: 11.0),
-                    ),
-                    const SizedBox(width: 8.0),
-                  ],
+              if (publicUser.website != null)
+                InkWell(
+                  onTap: () {
+                    // String url =
+                    //     MyNativeFunctions
+                    //         .completeURL(
+                    //             _user
+                    //                 .website!,
+                    //             MyUrl.url);
+                    // _onUrlLaunch(
+                    //     context, url);
+                  },
+                  child: Row(
+                    children: [
+                      SvgPicture.asset(
+                        'assets/svgs/link.svg',
+                        height: 14.0,
+                        width: 15.0,
+                      ),
+                      const SizedBox(width: 4.0),
+                      Text(
+                        publicUser.website!,
+                        style: const TextStyle(
+                            decoration: TextDecoration.underline,
+                            fontSize: 11.0),
+                      ),
+                      const SizedBox(width: 8.0),
+                    ],
+                  ),
                 ),
-              ),
               // if (_profileController
               //         .myProfile.twitter
               //         ?.trim()
               //         .isNotEmpty ??
               //     false) ...{
               const SizedBox(width: 8.0),
-              GestureDetector(
-                onTap: () {
-                  // String url =
-                  //     MyNativeFunctions.completeURL(_user.twitter!, MyUrl.twitter);
-                  // _onUrlLaunch(context, url);
-                },
-                child: Container(
-                  height: 25.0,
-                  width: 25.0,
-                  padding: const EdgeInsets.all(6.0),
-                  decoration: BoxDecoration(
-                      color: backgroundcolorinterface,
-                      borderRadius: BorderRadius.circular(30.0)),
-                  child: SvgPicture.asset(
-                    'assets/svgs/twitter_o.svg',
+              if (publicUser.twitter != null)
+                GestureDetector(
+                  onTap: () {
+                    // String url =
+                    //     MyNativeFunctions.completeURL(_user.twitter!, MyUrl.twitter);
+                    // _onUrlLaunch(context, url);
+                  },
+                  child: Container(
+                    height: 25.0,
+                    width: 25.0,
+                    padding: const EdgeInsets.all(6.0),
+                    decoration: BoxDecoration(
+                        color: backgroundcolorinterface,
+                        borderRadius: BorderRadius.circular(30.0)),
+                    child: SvgPicture.asset(
+                      'assets/svgs/twitter_o.svg',
+                    ),
                   ),
                 ),
-              ),
               // },
               // if (_profileController
               //         .myProfile.instagram
@@ -111,24 +115,25 @@ Widget profileinfodisplay(BuildContext context) {
               //         .isNotEmpty ??
               //     false) ...{
               const SizedBox(width: 8.0),
-              GestureDetector(
-                onTap: () {
-                  // String url = MyNativeFunctions.completeURL(
-                  //     _user.instagram!, MyUrl.instagram);
-                  // _onUrlLaunch(context, url);
-                },
-                child: Container(
-                  height: 25.0,
-                  width: 25.0,
-                  padding: const EdgeInsets.all(6.0),
-                  decoration: BoxDecoration(
-                      color: backgroundcolorinterface,
-                      borderRadius: BorderRadius.circular(30.0)),
-                  child: SvgPicture.asset(
-                    'assets/svgs/instagram_o.svg',
+              if (publicUser.instagram != null)
+                GestureDetector(
+                  onTap: () {
+                    // String url = MyNativeFunctions.completeURL(
+                    //     _user.instagram!, MyUrl.instagram);
+                    // _onUrlLaunch(context, url);
+                  },
+                  child: Container(
+                    height: 25.0,
+                    width: 25.0,
+                    padding: const EdgeInsets.all(6.0),
+                    decoration: BoxDecoration(
+                        color: backgroundcolorinterface,
+                        borderRadius: BorderRadius.circular(30.0)),
+                    child: SvgPicture.asset(
+                      'assets/svgs/instagram_o.svg',
+                    ),
                   ),
                 ),
-              ),
               //},
             ],
           ),
@@ -170,9 +175,9 @@ Widget profileinfodisplay(BuildContext context) {
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 scrollDirection: Axis.vertical,
-                itemCount: _profileController.myProfile.achievements == null
-                    ? 1
-                    : 'fofo+ff+Ff'.split('+').length,
+                itemCount: publicUser.achievements == null
+                    ? 0
+                    : publicUser.achievements!.length,
                 // : _profileController.myProfile.achievements
                 //     .toString()
                 //     .split('+')
@@ -199,7 +204,7 @@ Widget profileinfodisplay(BuildContext context) {
                                   width: 10,
                                 ),
                                 Text(
-                                  'fofo+ff+Ff'.split('+')[index],
+                                  publicUser.achievements![index],
                                   // _profileController.myProfile.achievements
                                   //     .toString()
                                   //     .split('+')[index],
@@ -244,7 +249,9 @@ Widget profileinfodisplay(BuildContext context) {
             const SizedBox(
               height: 10,
             ),
-            buildChoiceChips('sksj+jhdjd+jsksk')
+            buildChoiceChips(publicUser.productsandservices != null
+                ? publicUser.productsandservices!
+                : [])
           ],
         ),
         const SizedBox(

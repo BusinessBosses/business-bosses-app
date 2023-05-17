@@ -11,14 +11,14 @@ import '../../../../utils/theme/theme.dart';
 import 'images_viewer_screen.dart';
 
 class PostGridItem extends StatelessWidget {
-  final PostModel? post;
+  final PostModel post;
   final Function(String postId)? onDeletePost;
   final bool hasMore;
   final Function? onTap;
 
   PostGridItem({
     Key? key,
-    this.post,
+    required this.post,
     this.onDeletePost,
     this.onTap,
     this.hasMore = true,
@@ -78,7 +78,7 @@ class PostGridItem extends StatelessWidget {
                       ),
               ),
             ),
-            if (post!.images!.isNotEmpty)
+            if (post.images != null && post.images!.isNotEmpty)
               Positioned(
                 bottom: 10.0,
                 right: 10.0,
@@ -87,8 +87,8 @@ class PostGridItem extends StatelessWidget {
                     Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (context) => ImagesViewerScreen(
-                          urls: post!.images,
-                          text: post!.title,
+                          urls: post.images,
+                          text: post.title,
                         ),
                       ),
                     );

@@ -1,4 +1,5 @@
 import 'package:business_bosses_v2/common/models/user_model.dart';
+import 'package:business_bosses_v2/features/posts/models/post_model.dart';
 import 'package:business_bosses_v2/features/profile/widgets/profileinfodisplay.dart';
 import 'package:business_bosses_v2/features/profile/widgets/profilepostsdisplay.dart';
 import 'package:flutter/material.dart';
@@ -14,49 +15,60 @@ import '../widgets/friendoutlinebuttonheader.dart';
 import '../widgets/friendprofileheader.dart';
 
 // ignore: public_member_api_docs
-class PublicProfileScreen extends StatelessWidget {
-  final ProfileController _profileController = Get.put(ProfileController());
-
-  // ignore: public_member_api_docs
+class PublicProfileScreen extends StatefulWidget {
   static const String routeName = '/public-profile-screen';
 
   // ignore: public_member_api_docs
   PublicProfileScreen({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    bool isLoading = true;
-    bool blocked = false;
-    bool hasUser = true;
-    Future<void> report(
-        BuildContext context, String type, String publicUserUid) async {}
-    final UserModel publicUser = UserModel(
-        achievements: 'jnkknmmk+llllmlhj+jkhkh'.split('+'),
-        active: true,
-        ageRange: '10',
-        bio: 'sdxsdddddfff',
-        category: 'wee',
-        companyName: 'ee',
-        website: 'ee',
-        username: '2mrt',
-        deactivated: false,
-        email: 'DFFG',
-        gender: 'GGG',
-        industry: 'FF',
-        instagram: 'GGG',
-        location: 'DGG',
-        name: 'GGG',
-        photoUrl: '',
-        productsandservices: 'sdffgg+s+ksf'.split('+'),
-        surname: 'kkk',
-        timestamp: 100394,
-        twitter: '',
-        uid: 'kkk',
-        unReadCount: 12,
-        bossOfTheWeekUpTimeStamp: 3455,
-        bossOfTheWeekTimeStamp: 677);
+  State<PublicProfileScreen> createState() => _PublicProfileScreenState();
+}
 
-    return (Scaffold(
+class _PublicProfileScreenState extends State<PublicProfileScreen> {
+  final ProfileController _profileController = Get.find();
+  List<PostModel> _posts = [];
+  late UserModel publicUser;
+  bool isLoading = true;
+  bool blocked = false;
+
+  bool hasUser = true;
+
+  Future<void> loadData() async {
+    setState(() {
+      isLoading = true;
+    });
+    final res = await ProfileController.loadData(publicUser.uid);
+
+    _posts = res;
+
+    setState(() {
+      isLoading = false;
+    });
+  }
+
+  Future<void> report(
+      BuildContext context, String type, String publicUserUid) async {}
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    if (Get.arguments == null) {
+      // print("back");
+      Get.back();
+    } else {
+      // print("yo");
+
+      publicUser = Get.arguments;
+      // print(publicUser.username);
+      loadData();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
         leading: IconButton(
@@ -65,9 +77,9 @@ class PublicProfileScreen extends StatelessWidget {
           },
           icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
         ),
-        title: Text('publicUser.username'),
+        title: Text(publicUser.username),
         actions: [
-          publicUser.uid != '_profileController.myProfile.uid'
+          publicUser.uid != _profileController.myProfile.uid
               ? Padding(
                   padding: const EdgeInsets.only(right: 15.0),
                   child: InkWell(
@@ -233,83 +245,81 @@ class PublicProfileScreen extends StatelessWidget {
               : Container()
         ],
       ),
-      body: !hasUser == true
-          ? SafetyModel(
-              isLoading: false,
-              icon: SvgPicture.asset(
-                'assets/svgs/person.svg',
-                color: hintColor,
-                height: 80.0,
-              ),
-              title: 'User not found',
-              subTitle: 'User may not exit',
+      body: NestedScrollView(
+        headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+          return <Widget>[
+            SliverStickyHeader(
+              sticky: false,
+              header: FriendProfileHeader(publicUser),
             )
-          : !isLoading == true
-              ? const Center(child: CircularProgressIndicator.adaptive())
-              : NestedScrollView(
-                  headerSliverBuilder:
-                      (BuildContext context, bool innerBoxIsScrolled) {
-                    return <Widget>[
-                      SliverStickyHeader(
-                        sticky: false,
-                        header: FriendProfileHeader(),
-                      )
-                    ];
-                  },
-                  body: DefaultTabController(
-                    length: 2,
-                    child: Column(
-                      children: [
-                        // if (_publicUser.uid !=
-                        //     'FirebaseAuth.instance.currentUser.uid') ...{
-                        OutlineButtonHeader(),
-                        // const SizedBox(height: 8.0),
-                        // },
+          ];
+        },
+        body: DefaultTabController(
+          length: 2,
+          child: Column(
+            children: [
+              // if (_publicUser.uid !=
+              //     'FirebaseAuth.instance.currentUser.uid') ...{
+              OutlineButtonHeader(publicUser),
+              // const SizedBox(height: 8.0),
+              // },
 
-                        Material(
-                          color: Colors.white,
-                          child: TabBar(
-                            indicatorColor: primaryColorLT,
-                            labelStyle:
-                                const TextStyle(fontWeight: FontWeight.w500),
-                            labelColor: Colors.black,
-                            tabs: [
-                              Tab(
-                                icon: SvgPicture.asset(
-                                    'assets/svgs/portfolio.svg'),
-                              ),
-                              Tab(
-                                  icon: SvgPicture.asset(
-                                      'assets/svgs/posts.svg')),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(
-                          width: double.infinity,
-                          height: 1.5,
-                          child: ColoredBox(color: backgroundcolorinterface),
-                        ), // Container(
-
-                        Expanded(
-                          child: TabBarView(children: [
-                            SingleChildScrollView(
-                              child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    const SizedBox(
-                                      height: 30,
-                                    ),
-                                    profileinfodisplay(context),
-                                  ]),
-                            ),
-                            profilepostsdisplay(context)
-                          ]),
-                        ),
-                      ],
+              Material(
+                color: Colors.white,
+                child: TabBar(
+                  indicatorColor: primaryColorLT,
+                  labelStyle: const TextStyle(fontWeight: FontWeight.w500),
+                  labelColor: Colors.black,
+                  tabs: [
+                    Tab(
+                      icon: SvgPicture.asset(
+                        'assets/svgs/portfolio.svg',
+                      ),
                     ),
-                  ),
+                    Tab(
+                      icon: SvgPicture.asset(
+                        'assets/svgs/posts.svg',
+                      ),
+                    ),
+                  ],
                 ),
-    ));
+              ),
+              const SizedBox(
+                width: double.infinity,
+                height: 1.5,
+                child: ColoredBox(color: backgroundcolorinterface),
+              ), // Container(
+
+              Expanded(
+                child: TabBarView(
+                  children: [
+                    // Container(),
+                    SingleChildScrollView(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const SizedBox(
+                            height: 30,
+                          ),
+                          profileinfodisplay(context, publicUser),
+                        ],
+                      ),
+                    ),
+                    // Container()
+                    profilepostsdisplay(
+                      context,
+                      publicUser,
+                      _posts,
+                      loading: isLoading,
+                    )
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }

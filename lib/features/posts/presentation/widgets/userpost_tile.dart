@@ -1,11 +1,14 @@
 import 'package:business_bosses_v2/features/posts/controllers/posts_controller.dart';
 import 'package:business_bosses_v2/features/posts/models/post_model.dart';
 import 'package:business_bosses_v2/features/posts/presentation/widgets/post_images.dart';
+import 'package:business_bosses_v2/features/profile/presentation/publicprofilescreen.dart';
+import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/utils/constants/constants.dart';
 import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
 import 'package:detectable_text_field/widgets/detectable_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
 import '../../../../common/widgets/ranking_badge.dart';
@@ -26,7 +29,7 @@ class PostTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final sandBox = GetStorage();
-    final String uid = sandBox.read(Constants.USER_ID);
+    final uid = sandBox.read(Constants.USER_ID);
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -54,7 +57,11 @@ class PostTile extends StatelessWidget {
                   ),
                 ),
                 title: GestureDetector(
-                  onTap: () {},
+                  onTap: () {
+                    // Get.to(() => PublicProfileScreen());
+                    if()
+                    Get.toNamed(Routes.publicProfile, arguments: post.user);
+                  },
                   child: Text(
                     '${post.user?.username}',
                     style: Theme.of(context).textTheme.bodyLarge,

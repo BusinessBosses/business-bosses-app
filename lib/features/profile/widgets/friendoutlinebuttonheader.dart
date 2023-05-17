@@ -5,33 +5,34 @@ import '../../../common/models/user_model.dart';
 import '../../../common/widgets/buttons/my_outlined_button.dart';
 import '../../../utils/theme/theme.dart';
 
-Widget OutlineButtonHeader() {
+Widget OutlineButtonHeader(UserModel _publicUser) {
   bool connectedbutton = true;
-  final UserModel _publicUser = UserModel(
-      achievements: 'jnkknmmk+llllmlhj+jkhkh'.split('+'),
-      active: true,
-      ageRange: '10',
-      bio: 'sdxsdddddfff',
-      category: 'wee',
-      companyName: 'ee',
-      website: 'ee',
-      username: '2mrt',
-      deactivated: false,
-      email: 'DFFG',
-      gender: 'GGG',
-      industry: 'FF',
-      instagram: 'GGG',
-      location: 'DGG',
-      name: 'GGG',
-      photoUrl: '',
-      productsandservices: 'sdffgg+s+ksf'.split('+'),
-      surname: 'kkk',
-      timestamp: 100394,
-      twitter: '',
-      uid: '',
-      unReadCount: 12,
-      bossOfTheWeekUpTimeStamp: 3455,
-      bossOfTheWeekTimeStamp: 677);
+  // final UserModel _publicUser = UserModel(
+  //     achievements: 'jnkknmmk+llllmlhj+jkhkh'.split('+'),
+  //     active: true,
+  //     ageRange: '10',
+  //     bio: 'sdxsdddddfff',
+  //     category: 'wee',
+  //     companyName: 'ee',
+  //     website: 'ee',
+  //     username: '2mrt',
+  //     deactivated: false,
+  //     email: 'DFFG',
+  //     gender: 'GGG',
+  //     industry: 'FF',
+  //     instagram: 'GGG',
+  //     location: 'DGG',
+  //     name: 'GGG',
+  //     photoUrl: '',
+  //     productsandservices: 'sdffgg+s+ksf'.split('+'),
+  //     surname: 'kkk',
+  //     timestamp: 100394,
+  //     twitter: '',
+  //     uid: '',
+  //     unReadCount: 12,
+  //     bossOfTheWeekUpTimeStamp: 3455,
+  //     bossOfTheWeekTimeStamp: 677);
+
   return Container(
     height: 50.0,
     padding: const EdgeInsets.all(4.0),
