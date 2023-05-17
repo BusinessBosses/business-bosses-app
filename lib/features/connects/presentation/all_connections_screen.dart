@@ -69,7 +69,7 @@ class AllConnectionsScreen extends StatelessWidget {
                 ),
           body: Stack(
             children: [
-              _isLoading
+              _isLoading == false
                   ? const Center(child: CircularProgressIndicator.adaptive())
                   : Column(
                       children: [
@@ -111,7 +111,7 @@ class AllConnectionsScreen extends StatelessWidget {
                           child: TabBarView(children: [
                             _myConnections.isEmpty
                                 ? getSafetyModel(
-                                    '@${_specificUser?.username} has not connections yet')
+                                    '@${_specificUser?.username} has no connections yet')
                                 : ListView.separated(
                                     separatorBuilder: (_, __) =>
                                         const Divider(height: 0.0),
@@ -166,16 +166,15 @@ class AllConnectionsScreen extends StatelessWidget {
                                       }
 
                                       return ConnectionUserItem(
-                                        label: 'skd',
                                         user: specificUser,
-                                        status: false,
+                                        status: true,
                                         onChangeConnectionStatus: () async {},
                                       );
                                     },
                                   ),
                             _suggestedUsers.isEmpty
                                 ? getSafetyModel(
-                                    'We\'ve not users to suggest you!')
+                                    'We\'ve no users to suggest you!')
                                 : ListView.separated(
                                     separatorBuilder: (_, __) =>
                                         const Divider(height: 0.0),
