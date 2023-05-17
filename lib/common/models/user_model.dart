@@ -40,75 +40,76 @@ class UserModel {
   final int? connectedCount;
   final int? unReadCount;
   final bool? isRanked;
-  UserModel({
-    this.uid = '',
-    this.username = '',
-    this.email = '',
-    this.timestamp,
-    this.bossOfTheWeekTimeStamp,
-    this.bossOfTheWeekUpTimeStamp,
-    this.photoUrl,
-    this.coinscount,
-    this.name,
-    this.companyName,
-    this.surname,
-    this.bio,
-    this.website,
-    this.instagram,
-    this.twitter,
-    this.industry,
-    this.category,
-    this.location,
-    this.achievements,
-    this.productsandservices,
-    this.refers,
-    this.deviceTokens,
-    this.disconnections,
-    this.active,
-    this.deactivated,
-    this.ageRange,
-    this.gender,
-    this.profileViews,
-    this.connectionCount,
-    this.connectedCount,
-    this.unReadCount,
-    this.isRanked,
-  });
+  final String? inviteId;
+  UserModel(
+      {this.uid = '',
+      this.username = '',
+      this.email = '',
+      this.timestamp,
+      this.bossOfTheWeekTimeStamp,
+      this.bossOfTheWeekUpTimeStamp,
+      this.photoUrl,
+      this.coinscount,
+      this.name,
+      this.companyName,
+      this.surname,
+      this.bio,
+      this.website,
+      this.instagram,
+      this.twitter,
+      this.industry,
+      this.category,
+      this.location,
+      this.achievements,
+      this.productsandservices,
+      this.refers,
+      this.deviceTokens,
+      this.disconnections,
+      this.active,
+      this.deactivated,
+      this.ageRange,
+      this.gender,
+      this.profileViews,
+      this.connectionCount,
+      this.connectedCount,
+      this.unReadCount,
+      this.isRanked,
+      this.inviteId});
 
-  UserModel copyWith({
-    String? uid,
-    String? username,
-    String? email,
-    int? timestamp,
-    int? bossOfTheWeekTimeStamp,
-    int? bossOfTheWeekUpTimeStamp,
-    String? photoUrl,
-    int? coinscount,
-    String? name,
-    String? companyName,
-    String? surname,
-    String? bio,
-    String? website,
-    String? instagram,
-    String? twitter,
-    String? industry,
-    String? category,
-    String? location,
-    List<String>? achievements,
-    List<String>? productsandservices,
-    List<ReferralsModel>? refers,
-    List<String>? deviceTokens,
-    List<DisconnectionsModel>? disconnections,
-    bool? active,
-    bool? deactivated,
-    String? ageRange,
-    String? gender,
-    List<ProfileViewerModel>? profileViews,
-    int? connectionCount,
-    int? connectedCount,
-    int? unReadCount,
-    bool? isRanked,
-  }) {
+  UserModel copyWith(
+      {String? uid,
+      String? username,
+      String? email,
+      int? timestamp,
+      int? bossOfTheWeekTimeStamp,
+      int? bossOfTheWeekUpTimeStamp,
+      String? photoUrl,
+      int? coinscount,
+      String? name,
+      String? companyName,
+      String? surname,
+      String? bio,
+      String? website,
+      String? instagram,
+      String? twitter,
+      String? industry,
+      String? category,
+      String? location,
+      List<String>? achievements,
+      List<String>? productsandservices,
+      List<ReferralsModel>? refers,
+      List<String>? deviceTokens,
+      List<DisconnectionsModel>? disconnections,
+      bool? active,
+      bool? deactivated,
+      String? ageRange,
+      String? gender,
+      List<ProfileViewerModel>? profileViews,
+      int? connectionCount,
+      int? connectedCount,
+      int? unReadCount,
+      bool? isRanked,
+      String? inviteId}) {
     return UserModel(
       uid: uid ?? this.uid,
       username: username ?? this.username,
@@ -144,6 +145,7 @@ class UserModel {
       connectedCount: connectedCount ?? this.connectedCount,
       unReadCount: unReadCount ?? this.unReadCount,
       isRanked: isRanked ?? this.isRanked,
+      inviteId: inviteId ?? this.inviteId,
     );
   }
 
@@ -183,6 +185,7 @@ class UserModel {
       'connectedCount': connectedCount,
       'unReadCount': unReadCount,
       'isRanked': isRanked,
+      'inviteId': inviteId,
     };
   }
 
@@ -253,6 +256,7 @@ class UserModel {
       unReadCount:
           map['unReadCount'] != null ? map['unReadCount'] as int : null,
       isRanked: map['isRanked'] != null ? map['isRanked'] as bool : null,
+      inviteId: map['inviteId'] != null ? map['inviteId'] as String : null,
     );
   }
 
@@ -301,7 +305,8 @@ class UserModel {
         other.connectionCount == connectionCount &&
         other.connectedCount == connectedCount &&
         other.unReadCount == unReadCount &&
-        other.isRanked == isRanked;
+        other.isRanked == isRanked &&
+        other.inviteId == inviteId;
   }
 
   @override
@@ -337,6 +342,7 @@ class UserModel {
         connectionCount.hashCode ^
         connectedCount.hashCode ^
         unReadCount.hashCode ^
+        inviteId.hashCode ^
         isRanked.hashCode;
   }
 }

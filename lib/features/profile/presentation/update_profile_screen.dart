@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
+import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:country_list_pick/country_list_pick.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -1351,7 +1352,8 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
       'category': _category,
       'location': _location,
       'achievements': achievements.isEmpty ? null : achievements,
-      'productsandservices': productsandservices.isEmpty ? null : achievements,
+      'productsandservices':
+          productsandservices.isEmpty ? null : productsandservices,
       'ageRange': _ageRange,
       'gender': _gender,
       'photoUrl': _photoUrl,
@@ -1363,6 +1365,13 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
         await ApiService.put(path: 'users/$userId', body: updateData);
     if (response.success) {
       Get.snackbar('Success', 'Profile Completed Succesfully');
+      if (Get.isRegistered<ProfileController>()) {
+        final ProfileController _profileController = Get.find();
+        _profileController.updateProfile(
+            {..._profileController.myProfile.toMap(), ...updateData});
+        // Get.back();
+        // return;
+      }
       Get.toNamed(Routes.bottomNavigation);
     } else {
       Get.snackbar('Error', response.message);

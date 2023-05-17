@@ -1,5 +1,7 @@
+import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../../../common/models/user_model.dart';
 import '../../../common/widgets/buttons/my_outlined_button.dart';
@@ -112,7 +114,9 @@ Widget OutlineButtonHeader(UserModel _publicUser) {
       Expanded(
         child: MCustomButton(
           margin: const EdgeInsets.symmetric(horizontal: 4.0),
-          onPressed: () {}
+          onPressed: () {
+            Get.toNamed(Routes.chatRoom, arguments: _publicUser);
+          }
           // => navigateTo(
           //   context,
           //   routeName: ChatRoomScreen.routeName,

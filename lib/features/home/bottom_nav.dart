@@ -30,7 +30,15 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
   final ProfileController _profileController = Get.put(ProfileController());
   final ChatController _chatController = Get.put(ChatController());
   final HomeController _homeController = Get.put(HomeController());
+
   int _activeIndex = 0;
+
+  void onPageChange(int page) {
+    setState(() {
+      _activeIndex = page;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -76,7 +84,7 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
                 child: IndexedStack(
                   index: _activeIndex,
                   children: <Widget>[
-                    HomeScreen(),
+                    HomeScreen(onPageChange: _onChangePage),
                     AllCommunitiesScreen(),
                     MarketplaceScreen(),
                     // Container()

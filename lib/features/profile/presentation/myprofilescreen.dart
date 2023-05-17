@@ -1,13 +1,16 @@
 import 'package:business_bosses_v2/common/models/user_model.dart';
+import 'package:business_bosses_v2/features/posts/models/post_model.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/features/profile/widgets/friendprofileheader.dart';
 import 'package:business_bosses_v2/features/profile/widgets/profileinfodisplay.dart';
 import 'package:business_bosses_v2/features/profile/widgets/profilepostsdisplay.dart';
+import 'package:business_bosses_v2/utils/constants/constants.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../../common/widgets/tiles/outlinebuttonheader.dart';
 import '../../../navigation/routes.dart';
 import '../widgets/my_profile_header.dart';
@@ -15,7 +18,7 @@ import '../widgets/my_profile_header.dart';
 bool isExpanded = false;
 
 // ignore: public_member_api_docs
-class MyProfileScreen extends StatelessWidget {
+class MyProfileScreen extends StatefulWidget {
   // ignore: public_member_api_docs
   static const String routeName = '/my-profile-screen';
 
@@ -23,9 +26,41 @@ class MyProfileScreen extends StatelessWidget {
   const MyProfileScreen({Key? key}) : super(key: key);
 
   @override
+  State<MyProfileScreen> createState() => _MyProfileScreenState();
+}
+
+class _MyProfileScreenState extends State<MyProfileScreen> {
+  bool isLoading = true;
+  List<PostModel> _posts = [];
+
+  final ProfileController profileController = Get.find();
+
+  Future<void> loadData(String uid) async {
+    setState(() {
+      isLoading = true;
+    });
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final res =
+        await ProfileController.loadData(prefs.getString(Constants.USER_ID)!);
+
+    _posts = res;
+
+    setState(() {
+      isLoading = false;
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    loadData(profileController.myProfile.uid);
+  }
+
+  @override
   Widget build(BuildContext context) {
     // ignore: no_leading_underscores_for_local_identifiers
-    // final ProfileController _profileController = Get.find();
     return GetBuilder<ProfileController>(
       builder: (ProfileController _profileController) {
         return Scaffold(
@@ -51,7 +86,9 @@ class MyProfileScreen extends StatelessWidget {
               return <Widget>[
                 SliverStickyHeader(
                   sticky: false,
-                  header: FriendProfileHeader(_profileController.myProfile),
+                  header: MyProfileHeader(
+                    myProfile: _profileController.myProfile,
+                  ),
                 )
               ];
             },
@@ -112,8 +149,8 @@ class MyProfileScreen extends StatelessWidget {
                         profilepostsdisplay(
                           context,
                           _profileController.myProfile,
-                          [],
-                          loading: false,
+                          _posts,
+                          loading: isLoading,
                         )
                       ],
                     ),

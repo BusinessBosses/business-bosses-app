@@ -72,18 +72,18 @@ Future<void> onDetectableTextTap(
   showSnackBar(context, message: val);
 }
 
-Future<MyResponse> socialShare(String message) async {
-  debugPrint('socialShare: $message');
+Future<void> socialShare(String message) async {
+  // debugPrint('socialShare: $message');
   try {
-    bool? data = await SocialShare.shareOptions(message);
-    debugPrint('socialShare: $data');
-    if (data == null || !data) {
-      return MyResponse(success: false);
-    } else {
-      return MyResponse(success: true);
-    }
+    await SocialShare.shareOptions(message);
+    // debugPrint('socialShare: $data');
+    // if (data == null || !data) {
+    //   return MyResponse(success: false);
+    // } else {
+    //   return MyResponse(success: true);
+    // }
   } catch (e) {
     debugPrint('socialShare: $e');
-    return MyResponse(success: false, message: e.toString());
+    // return MyResponse(success: false, message: e.toString());
   }
 }

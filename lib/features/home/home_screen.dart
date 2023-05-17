@@ -10,7 +10,9 @@ import 'package:get/get.dart';
 import '../../utils/theme/theme.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  const HomeScreen({super.key, this.onPageChange});
+
+  final Function(int)? onPageChange;
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -45,6 +47,11 @@ class _HomeScreenState extends State<HomeScreen> {
               return PostTile(
                 controller: controller,
                 post: controller.posts[index],
+                onPageChange: (int page) {
+                  if (widget.onPageChange != null) {
+                    widget.onPageChange!(page);
+                  }
+                },
               );
             },
           ),

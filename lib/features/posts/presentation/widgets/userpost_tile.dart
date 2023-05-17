@@ -1,6 +1,7 @@
 import 'package:business_bosses_v2/features/posts/controllers/posts_controller.dart';
 import 'package:business_bosses_v2/features/posts/models/post_model.dart';
 import 'package:business_bosses_v2/features/posts/presentation/widgets/post_images.dart';
+import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/features/profile/presentation/publicprofilescreen.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/utils/constants/constants.dart';
@@ -21,15 +22,20 @@ import '../../../../utils/time_format.dart';
 class PostTile extends StatelessWidget {
   final PostModel post;
   final PostsController controller;
+  final Function(int)? onPageChange;
 
   ///
-  const PostTile({Key? key, required this.post, required this.controller})
+  const PostTile(
+      {Key? key,
+      required this.post,
+      required this.controller,
+      this.onPageChange})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final sandBox = GetStorage();
-    final uid = sandBox.read(Constants.USER_ID);
+    final ProfileController profileController = Get.find();
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -59,8 +65,13 @@ class PostTile extends StatelessWidget {
                 title: GestureDetector(
                   onTap: () {
                     // Get.to(() => PublicProfileScreen());
-                    if()
-                    Get.toNamed(Routes.publicProfile, arguments: post.user);
+                    if (profileController.myProfile.uid == post.user!.uid) {
+                      if (onPageChange != null) {
+                        onPageChange!(3);
+                      }
+                    } else {
+                      Get.toNamed(Routes.publicProfile, arguments: post.user);
+                    }
                   },
                   child: Text(
                     '${post.user?.username}',
@@ -166,11 +177,14 @@ class PostTile extends StatelessWidget {
                 children: [
                   TextButton.icon(
                     onPressed: () {
-                      controller.postLike(uid, post.postId);
+                      controller.postLike(
+                          profileController.myProfile.uid, post.postId);
                     },
-                    icon: post.likes?.contains(uid) ?? false
-                        ? SvgPicture.asset('assets/svgs/likefilled.svg')
-                        : SvgPicture.asset('assets/svgs/like.svg'),
+                    icon:
+                        post.likes?.contains(profileController.myProfile.uid) ??
+                                false
+                            ? SvgPicture.asset('assets/svgs/likefilled.svg')
+                            : SvgPicture.asset('assets/svgs/like.svg'),
                     label: Text(
                       '${post.likes?.length ?? 0}',
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
@@ -194,11 +208,14 @@ class PostTile extends StatelessWidget {
                     onPressed: () async {
                       // final sandBox = GetStorage();
                       // final String uid = sandBox.read(Constants.USER_ID);
-                      controller.postCoin(uid, post.postId);
+                      controller.postCoin(
+                          profileController.myProfile.uid, post.postId);
                     },
-                    icon: post.coins?.contains(uid) ?? false
-                        ? SvgPicture.asset('assets/svgs/coin.svg')
-                        : SvgPicture.asset('assets/svgs/coin.svg'),
+                    icon:
+                        post.coins?.contains(profileController.myProfile.uid) ??
+                                false
+                            ? SvgPicture.asset('assets/svgs/coin.svg')
+                            : SvgPicture.asset('assets/svgs/coin.svg'),
                     label: Text(
                       '${post.coins?.length ?? 0}',
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(

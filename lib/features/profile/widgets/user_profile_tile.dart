@@ -18,30 +18,6 @@ class UserProfileTile extends StatefulWidget {
 }
 
 class _UserProfileTileState extends State<UserProfileTile> {
-  String? name = '';
-  String? category = '';
-  String? companyName = '';
-  String? location = '';
-  bool? isRanked = false;
-
-  @override
-  void initState() {
-    super.initState();
-    // fetchData();
-  }
-
-  dynamic fetchData() async {
-    final String userID = sandBox.read(Constants.USER_ID);
-    final ApiResponseModel response =
-        await ApiService.get(path: 'users/$userID');
-    setState(() {
-      name = response.data['name'];
-      category = response.data['category'];
-      companyName = response.data['companyName'];
-      location = response.data['location'];
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     // fetchData();
@@ -79,7 +55,7 @@ class _UserProfileTileState extends State<UserProfileTile> {
                   ),
                 ),
               ),
-              isRanked!
+              widget.myProfile.isRanked ?? false
                   ? Positioned(
                       right: 0.0,
                       bottom: 0.0,
@@ -133,7 +109,7 @@ class _UserProfileTileState extends State<UserProfileTile> {
                 children: [
                   const SizedBox(height: 6.0),
                   Text(
-                    widget.myProfile.name ?? 'name',
+                    widget.myProfile.name ?? '',
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
@@ -141,14 +117,14 @@ class _UserProfileTileState extends State<UserProfileTile> {
                         ),
                   ),
                   Text(
-                    widget.myProfile.category ?? 'title',
+                    widget.myProfile.category ?? '',
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                           fontWeight: FontWeight.bold,
                         ),
                   ),
-                  Text(widget.myProfile.companyName ?? 'companyname',
+                  Text(widget.myProfile.companyName ?? '',
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: Theme.of(context)
@@ -156,7 +132,7 @@ class _UserProfileTileState extends State<UserProfileTile> {
                           .bodyLarge
                           ?.copyWith(fontWeight: FontWeight.normal)),
                   Text(
-                    widget.myProfile.location ?? 'location',
+                    widget.myProfile.location ?? '',
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(

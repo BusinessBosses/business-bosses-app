@@ -16,6 +16,12 @@ class ProfileController extends GetxController {
     update();
   }
 
+  /// UPDATE USER DATA
+  void updateProfile(Map<String, dynamic> newData) {
+    myProfile = UserModel.fromMap(newData);
+    update();
+  }
+
   static Future<List<PostModel>> loadData(String userId) async {
     List<PostModel> posts = [];
     final ApiResponseModel response =
