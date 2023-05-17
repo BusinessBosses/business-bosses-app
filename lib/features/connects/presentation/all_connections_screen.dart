@@ -133,18 +133,12 @@ class AllConnectionsScreen extends StatelessWidget {
                                               'Your may be blocked or delete'),
                                         );
                                       }
-                                      return Consumer<UserController>(
-                                        builder: (_, userCtrl, __) {
-                                          bool isConnected = userCtrl
-                                              .isConnected(specificUser.uid);
-                                          return ConnectionUserItem(
-                                            user: specificUser,
-                                            status: userCtrl
-                                                .isConnected(specificUser.uid),
-                                            onChangeConnectionStatus:
-                                                () async {},
-                                          );
-                                        },
+
+                                      return ConnectionUserItem(
+                                        label: 'skd',
+                                        user: specificUser,
+                                        status: false,
+                                        onChangeConnectionStatus: () async {},
                                       );
                                     },
                                   ),
@@ -171,20 +165,11 @@ class AllConnectionsScreen extends StatelessWidget {
                                         );
                                       }
 
-                                      return Consumer<UserController>(
-                                        builder: (_, userCtrl, __) {
-                                          bool isConnected = userCtrl
-                                              .isConnected(specificUser.uid);
-                                          return ConnectionUserItem(
-                                            user: specificUser,
-                                            status: userCtrl
-                                                .isConnected(specificUser.uid),
-                                            onChangeConnectionStatus:
-                                                () async {},
-                                          );
-                                        },
-                                        // child:
-                                        // ,
+                                      return ConnectionUserItem(
+                                        label: 'skd',
+                                        user: specificUser,
+                                        status: false,
+                                        onChangeConnectionStatus: () async {},
                                       );
                                     },
                                   ),
@@ -210,20 +195,11 @@ class AllConnectionsScreen extends StatelessWidget {
                                               'Your may be blocked or delete'),
                                         );
                                       }
-                                      return Consumer<UserController>(
-                                        builder: (_, userCtrl, __) {
-                                          bool isConnected = userCtrl
-                                              .isConnected(specificUser.uid);
-                                          return ConnectionUserItem(
-                                            user: specificUser,
-                                            status: userCtrl
-                                                .isConnected(specificUser.uid),
-                                            onChangeConnectionStatus:
-                                                () async {},
-                                          );
-                                        },
-                                        // child:
-                                        // ,
+                                      return ConnectionUserItem(
+                                        label: 'skd',
+                                        user: specificUser,
+                                        status: false,
+                                        onChangeConnectionStatus: () async {},
                                       );
                                     },
                                   ),
@@ -260,17 +236,11 @@ class AllConnectionsScreen extends StatelessWidget {
                               );
                             }
 
-                            return Consumer<UserController>(
-                              builder: (_, userCtrl, __) {
-                                bool isConnected =
-                                    userCtrl.isConnected(specificUser.uid);
-                                return ConnectionUserItem(
-                                  user: specificUser,
-                                  status:
-                                      userCtrl.isConnected(specificUser.uid),
-                                  onChangeConnectionStatus: () async {},
-                                );
-                              },
+                            return ConnectionUserItem(
+                              label: 'skd',
+                              user: specificUser,
+                              status: false,
+                              onChangeConnectionStatus: () async {},
                             );
                           },
                         ),
