@@ -51,53 +51,7 @@ class RelevantUsersScreen extends StatelessWidget {
               itemCount: _relevantUsers.length,
               itemBuilder: (context, index) {
                 UserModel specificUser = _relevantUsers[index];
-                return Consumer<UserController>(
-                  builder: (_, userCtrl, __) {
-                    bool isConnected = userCtrl.isConnected(specificUser.uid);
-                    return ConnectionGridTile(
-                        user: specificUser,
-                        status: userCtrl.isConnected(specificUser.uid),
-                        onChangeConnectionStatus: () async {
-                          String connectId = MyConnect.connectId(
-                              userCtrl.user.uid, specificUser.uid);
-                          String puCountPath =
-                              '${Constants.USERS}/${specificUser.uid}/connectionCount';
-                          String myCountPath =
-                              '${Constants.USERS}//connectedCount';
-                          Map<String, dynamic> map = {};
-                          if (isConnected) {
-                            userCtrl.removeConnect(specificUser.uid);
-                            if (specificUser.connectionCount! > 0) {
-                              specificUser?.connectionCount =
-                                  (specificUser?.connectionCount ?? 0) - 1;
-                            }
-
-                            map[puCountPath] = specificUser.connectionCount;
-                            map[myCountPath] = userCtrl.user.connectedCount;
-                            map['${Constants.CONNECTIONS}/$connectId'] = null;
-                          } else {
-                            // MyConnect newConnect = MyConnect(
-                            //   id: connectId,
-                            //   connectedTo: specificUser.uid,
-                            //   connectedBy: _firebase.uid,
-                            //   timestamp: DateTime.now().millisecondsSinceEpoch,
-                            // );
-                            // userCtrl.updateConnect(newConnect);
-                            // map[Constants.CONNECTIONS + '/' + connectId] =
-                            //     newConnect.toMap();
-                            // _sendNotification(specificUser);
-                            // specificUser.connectionCount++;
-                            // setState(() {});
-                            // debugPrint(
-                            //     'asdfasdf ${specificUser.connectionCount}');
-                            // map[puCountPath] = specificUser.connectionCount;
-                            // map[myCountPath] = userCtrl.user.connectedCount;
-                          }
-
-                          // await _firebase.updateWithBatch(map);
-                        });
-                  },
-                );
+                return Container();
               },
               staggeredTileBuilder: (_) => const StaggeredTile.fit(1),
             ),
