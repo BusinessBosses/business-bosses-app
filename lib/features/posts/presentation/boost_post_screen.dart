@@ -130,7 +130,9 @@ class _BoostPostState extends State<BoostPost> {
   }
 
   Future<void> makePayment() async {
-    if (isCoin) {
+    if (isCoin &&
+        profileController.myProfile.coinscount! >=
+            (int.parse(initPlan) * 100)) {
       try {
         setState(() {
           _isProcessing = true;
@@ -149,7 +151,7 @@ class _BoostPostState extends State<BoostPost> {
         setState(() {
           _isProcessing = false;
         });
-        Navigator.of(context).push(MaterialPageRoute(
+        Navigator.of(context).push(MaterialPageRoute<dynamic>(
           builder: (BuildContext context) => const Confirmation(),
         ));
       } catch (e) {
@@ -168,7 +170,7 @@ class _BoostPostState extends State<BoostPost> {
             merchantDisplayName: 'Business Bosses',
           ),
         )
-            .then((value) {
+            .then((void value) {
           // log(value.toString());
         });
 
@@ -177,6 +179,9 @@ class _BoostPostState extends State<BoostPost> {
         log(e.toString());
       }
     }
+    setState(() {
+      _isProcessing = false;
+    });
   }
 
   @override
@@ -342,39 +347,49 @@ class _BoostPostState extends State<BoostPost> {
                       ),
                     ],
                   ),
-                  isCoin
-                      ? profileController.myProfile.coinscount! <
-                              (int.parse(initPlan) * 100)
-                          ? const Text(
-                              'You do not have enough coins to promote')
-                          : Container()
-                      : Container(),
+                  Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 3),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFF4F4F4),
+                      borderRadius: BorderRadius.circular(3.5),
+                    ),
+                    child: isCoin
+                        ? profileController.myProfile.coinscount! <
+                                (int.parse(initPlan) * 100)
+                            ? const TextWidget(
+                                text: 'You do not have enough coins to promote',
+                                color: Color(0xFF232324),
+                                fontWeight: FontWeight.w600,
+                                size: 12)
+                            : Container()
+                        : Container(),
+                  ),
                 ],
               ),
             ),
             const SizedBox(
               height: 30,
             ),
-            (isCoin &&
-                        profileController.myProfile.coinscount! >=
-                            (int.parse(initPlan) * 100)) ||
-                    !isCoin
-                ? Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: MyButton(
-                      isProcessing: _isProcessing,
-                      labelStyle: const TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w700,
-                        fontSize: 18,
-                      ),
-                      label: 'Continue',
-                      onPressed: () async {
-                        await makePayment();
-                      },
-                    ),
-                  )
-                : Container(),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: MyButton(
+                isProcessing: _isProcessing,
+                labelStyle: const TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w700,
+                  fontSize: 18,
+                ),
+                label: (isCoin &&
+                        profileController.myProfile.coinscount! <
+                            (int.parse(initPlan) * 100))
+                    ? 'Pay With Card'
+                    : 'Continue',
+                onPressed: () async {
+                  await makePayment();
+                },
+              ),
+            ),
             const SizedBox(
               height: 50,
             )
@@ -385,7 +400,9 @@ class _BoostPostState extends State<BoostPost> {
   }
 }
 
+/// BOOST CARD
 class BoostPlanCard extends StatelessWidget {
+  /// CONSTRUCTOR
   const BoostPlanCard({
     Key? key,
     required this.plan,

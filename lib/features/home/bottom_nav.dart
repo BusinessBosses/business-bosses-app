@@ -222,7 +222,7 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
                               // log("Hello world");
                               Navigator.push(
                                 context,
-                                MaterialPageRoute(
+                                MaterialPageRoute<dynamic>(
                                   builder: (BuildContext context) =>
                                       const CreatePostScreen(),
                                 ),
