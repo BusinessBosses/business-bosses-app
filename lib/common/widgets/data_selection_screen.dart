@@ -7,7 +7,7 @@ import '../../features/profile/analysescreen.dart';
 import '../../features/forum/models/industry.dart';
 import '../models/my_title.dart';
 import 'safety_model.dart';
-import 'search/search_bar.dart';
+import 'search/search_bar.dart' as searchBar;
 
 class DataSelectionScreen extends StatefulWidget {
   final Analyser analyser;
@@ -114,7 +114,7 @@ class _DataSelectionScreenState extends State<DataSelectionScreen> {
               ? Container()
               : Container(
                   margin: const EdgeInsets.all(16.0),
-                  child: SearchBar(
+                  child: searchBar.SearchBar(
                     hintText: _title,
                     onChange: onChange,
                     onSubmit: (String val) {},

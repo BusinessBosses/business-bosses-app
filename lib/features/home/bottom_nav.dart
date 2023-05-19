@@ -2,7 +2,6 @@ import 'package:business_bosses_v2/features/chat/controllers/chat_controller.dar
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/posts/controllers/posts_controller.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
-import 'package:business_bosses_v2/features/profile/presentation/myprofilescreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -13,11 +12,10 @@ import '../../common/widgets/typography/text_widget.dart';
 import '../../services/api_service.dart';
 import '../../utils/theme/theme.dart';
 import '../posts/presentation/create_post_screen.dart';
+import '../profile/presentation/myprofilescreen.dart';
 import 'all_communities_screen.dart';
 import 'home_screen.dart';
 import 'marketplace_screen.dart';
-
-import '../profile/presentation/myprofilescreen.dart';
 
 /// Bottom Nav Screen is basically where all home screens are navigated through
 class BottomNavScreen extends StatefulWidget {
@@ -33,15 +31,49 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
   final ProfileController _profileController = Get.put(ProfileController());
   final ChatController _chatController = Get.put(ChatController());
   final HomeController _homeController = Get.put(HomeController());
-
   int _activeIndex = 0;
   int currentTimestamp = DateTime.now().millisecondsSinceEpoch;
   final GetStorage sandBox = GetStorage();
 
-  void onPageChange(int page) {
-    setState(() {
-      _activeIndex = page;
+  /// Show daily coin dialog
+  void showCoinDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        title: const TextWidget(
+          text: 'Congratulations',
+          fontWeight: FontWeight.bold,
+          size: 20,
+        ),
+        content: TextWidget(
+          text: 'You have earned 1 coin for logging into Business Bosses today',
+          color: Colors.black.withOpacity(.8),
+        ),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const TextWidget(
+              text: 'OK',
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      addCoinDaily();
     });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override
@@ -88,11 +120,10 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
                 color: Colors.white,
                 child: IndexedStack(
                   index: _activeIndex,
-                  children: <Widget>[
-                    HomeScreen(onPageChange: _onChangePage),
+                  children: const <Widget>[
+                    HomeScreen(),
                     AllCommunitiesScreen(),
                     MarketplaceScreen(),
-                    // Container()
                     MyProfileScreen(),
                   ],
                 ),
@@ -216,6 +247,24 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
       _activeIndex = currentIndex;
     });
     return;
+  }
+
+  /// DailyCoin
+  void addCoinDaily() {
+    int lastExecutionTimestamp = sandBox.read('lastExecutionTimestamp') ?? 0;
+    print('Last: ${lastExecutionTimestamp}');
+    if (currentTimestamp - lastExecutionTimestamp >= 24 * 60 * 60 * 1000) {
+      // The action hasn't been executed today, save the current timestamp
+      sandBox.write('lastExecutionTimestamp', currentTimestamp);
+      ApiService.put(
+        path: 'users/${_profileController.myProfile.uid}',
+        body: <String, dynamic>{
+          'coinscount': _profileController.myProfile.coinscount! + 1,
+        },
+      );
+      _profileController.updateCoinCount(1);
+      showCoinDialog();
+    }
   }
 }
 

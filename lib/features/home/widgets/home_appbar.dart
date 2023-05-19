@@ -110,26 +110,31 @@ class Homeappbar extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.only(
                           left: 8, top: 5, right: 8, bottom: 5),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          SvgPicture.asset(
-                            'assets/svgs/coin.svg',
-                            height: 22,
-                          ),
-                          const SizedBox(
-                            width: 5,
-                          ),
-                          Text(
-                            coinsCount,
-                            style: TextStyle(
-                              color: Color.fromRGBO(133, 133, 133, 1),
-                              fontSize: 15,
-                              fontWeight: FontWeight.w700,
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.pushNamed(context, '/promotionScreen');
+                        },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            SvgPicture.asset(
+                              'assets/svgs/coin.svg',
+                              height: 22,
                             ),
-                          )
-                        ],
+                            const SizedBox(
+                              width: 5,
+                            ),
+                            Text(
+                              coinsCount,
+                              style: TextStyle(
+                                color: Color.fromRGBO(133, 133, 133, 1),
+                                fontSize: 15,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            )
+                          ],
+                        ),
                       ),
                     )
                   ],
