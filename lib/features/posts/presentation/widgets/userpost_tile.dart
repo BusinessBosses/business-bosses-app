@@ -208,8 +208,8 @@ class PostTile extends StatelessWidget {
                     onPressed: () async {
                       // final sandBox = GetStorage();
                       // final String uid = sandBox.read(Constants.USER_ID);
-                      controller.postCoin(
-                          profileController.myProfile.uid, post.postId);
+                      controller.postCoin(profileController.myProfile.uid,
+                          post.postId, profileController);
                     },
                     icon:
                         post.coins?.contains(profileController.myProfile.uid) ??

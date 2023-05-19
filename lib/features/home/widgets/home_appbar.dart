@@ -9,8 +9,10 @@ import 'package:get/get.dart';
 // ignore: public_member_api_docs
 class Homeappbar extends StatelessWidget {
   // ignore: public_member_api_docs
-  const Homeappbar({Key? key, this.hasBadge = false}) : super(key: key);
+  const Homeappbar({Key? key, this.hasBadge = false, required this.coinsCount})
+      : super(key: key);
   final bool hasBadge;
+  final String coinsCount;
 
   /// HOME SCREEN APP BAR
   @override
@@ -119,8 +121,8 @@ class Homeappbar extends StatelessWidget {
                           const SizedBox(
                             width: 5,
                           ),
-                          const Text(
-                            '200',
+                          Text(
+                            coinsCount,
                             style: TextStyle(
                               color: Color.fromRGBO(133, 133, 133, 1),
                               fontSize: 15,

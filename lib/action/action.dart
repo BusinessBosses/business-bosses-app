@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:social_share/social_share.dart';
 
 import '../common/models/my_response.dart';
@@ -21,7 +22,7 @@ Future<dynamic> navigateTo(
   BuildContext context, {
   String? routeName,
   var arguments,
-  isRemoveUntil = false,
+  bool isRemoveUntil = false,
 }) async {
   // print("=====>>>> $routeName");
   if (routeName == null) {
@@ -32,8 +33,7 @@ Future<dynamic> navigateTo(
         routeName, (route) => false,
         arguments: arguments);
   } else {
-    return await Navigator.of(context)
-        .pushNamed(routeName, arguments: arguments);
+    return await Get.toNamed(routeName, arguments: arguments);
   }
 }
 

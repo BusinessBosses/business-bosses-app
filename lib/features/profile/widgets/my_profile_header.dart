@@ -3,7 +3,6 @@ import 'package:business_bosses_v2/features/profile/widgets/user_profile_tile.da
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:provider/provider.dart';
 
 import '../../../action/action.dart';
 import '../../../common/params.dart';

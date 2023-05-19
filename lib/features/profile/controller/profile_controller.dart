@@ -20,6 +20,12 @@ class ProfileController extends GetxController {
     update();
   }
 
+  void updateCoinCount(int num) {
+    myProfile = UserModel.fromMap(
+        {...myProfile.toMap(), 'coinscount': myProfile.coinscount! + num});
+    update();
+  }
+
   /// UPDATE USER DATA
   void updateProfile(Map<String, dynamic> newData) {
     myProfile = UserModel.fromMap(newData);

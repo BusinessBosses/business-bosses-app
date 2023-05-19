@@ -3,7 +3,6 @@ import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:provider/provider.dart';
 
 import '../../action/action.dart';
 import '../../functions/my_native_functions.dart';
@@ -58,7 +57,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               primary: false,
               padding: const EdgeInsets.all(16.0),
               itemCount: item.length,
-              itemBuilder: (context, i) => SettingsItem(
+              itemBuilder: (BuildContext context, i) => SettingsItem(
                 isTitle: item[i].isTitle,
                 label: item[i].label,
                 hasSwitch: item[i].hasSwitch,
@@ -72,7 +71,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
               child: InkWell(
                 onTap: () {
                   logout();
-                  Get.toNamed(Routes.login);
                 },
                 borderRadius: BorderRadius.circular(radiusValue),
                 child: Ink(
@@ -107,11 +105,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
   void _onTab(String label) {
     if ('Edit Profile' == label) {
     } else if ('Change password' == label) {
+      Get.toNamed(Routes.changePassword);
     } else if (label == 'Community Rules') {
     } else if (label == 'Invite a friend terms & conditions') {
     } else if ('Contact us' == label) {
       _contactUs();
-    } else if ('Delete Account' == label) {}
+    } else if ('Delete Account' == label) {
+      Get.toNamed(Routes.deleteAccount);
+    }
   }
 
   Future<void> _contactUs() async {
@@ -140,12 +141,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
     MySettingsItem(
       isTitle: false,
       label: 'Change password',
-      routeName: 'ChangePasswordScreen.routeName',
+      routeName: Routes.changePassword,
     ),
     MySettingsItem(
       isTitle: false,
       label: 'Delete Account',
-      routeName: 'ChangePasswordScreen.routeName',
+      routeName: Routes.deleteAccount,
     ),
   ];
 

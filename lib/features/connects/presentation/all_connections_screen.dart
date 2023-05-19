@@ -4,7 +4,6 @@ import 'package:business_bosses_v2/features/profile/controller/profile_controlle
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:provider/provider.dart';
 import '../../../action/action.dart';
 import '../../../common/models/my_connect.dart';
 import '../../../common/models/my_user.dart';

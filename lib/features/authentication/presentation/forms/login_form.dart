@@ -130,7 +130,9 @@ class _LoginFormState extends State<LoginForm> {
             ),
             const SizedBox(height: 30.0),
             GestureDetector(
-              onTap: () {},
+              onTap: () {
+                Get.toNamed(Routes.resetPassword);
+              },
               child: Container(
                 width: double.infinity,
                 alignment: Alignment.centerRight,
@@ -155,6 +157,12 @@ class _LoginFormState extends State<LoginForm> {
                   dynamic user = await _handleLogin();
                   if (user['success'] == false) {
                     Get.snackbar('Error', user['error']);
+                  } else {
+                    if (user['data']['hasUpdatedProfile'] == true) {
+                      Get.offAndToNamed(Routes.bottomNavigation);
+                    } else {
+                      Get.offAndToNamed(Routes.updateProfile);
+                    }
                   }
                 }
                 setState(() {
@@ -245,9 +253,5 @@ class _LoginFormState extends State<LoginForm> {
       _password!,
     );
     return user;
-
-    // void _handleLogin() async {
-    //   await AuthController().login(_authCred!, _password!);
-    // }
   }
 }
