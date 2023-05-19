@@ -54,7 +54,7 @@ class CommentModel {
       userId: map['userId'] as String,
       postId: map['postId'] as String,
       comment: map['comment'] != null ? map['comment'] as String : null,
-      timestamp: int.parse(map['timestamp']),
+      timestamp: int.parse(map['timestamp'].toString()),
       user: map['user'] != null
           ? UserModel.fromMap(map['user'] as Map<String, dynamic>)
           : null,
