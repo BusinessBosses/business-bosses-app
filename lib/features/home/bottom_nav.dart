@@ -2,7 +2,6 @@ import 'package:business_bosses_v2/features/chat/controllers/chat_controller.dar
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/posts/controllers/posts_controller.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
-import 'package:business_bosses_v2/features/profile/myprofilescreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -13,6 +12,7 @@ import '../../common/widgets/typography/text_widget.dart';
 import '../../services/api_service.dart';
 import '../../utils/theme/theme.dart';
 import '../posts/presentation/create_post_screen.dart';
+import '../profile/presentation/myprofilescreen.dart';
 import 'all_communities_screen.dart';
 import 'home_screen.dart';
 import 'marketplace_screen.dart';
@@ -20,7 +20,7 @@ import 'marketplace_screen.dart';
 /// Bottom Nav Screen is basically where all home screens are navigated through
 class BottomNavScreen extends StatefulWidget {
   /// Constructor
-  const BottomNavScreen({super.key});
+  const BottomNavScreen(int i, bool bool, {super.key});
 
   @override
   State<BottomNavScreen> createState() => _BottomNavScreenState();

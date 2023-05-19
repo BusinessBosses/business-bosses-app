@@ -28,87 +28,98 @@ class UserModel {
   final String? location;
   final List<String>? achievements;
   final List<String>? productsandservices;
-  final List<ReferralsModel>? refers;
+  final List<ReferralsModel>? referals;
   final List<String>? deviceTokens;
+  final List<String>? connections;
+  final List<String>? connecteds;
   final List<DisconnectionsModel>? disconnections;
   final bool? active;
   final bool? deactivated;
   final String? ageRange;
   final String? gender;
   final List<ProfileViewerModel>? profileViews;
-  final int? connectionCount;
+  late final int? connectionCount;
   final int? connectedCount;
+  final int? referalCount;
   final int? unReadCount;
   final bool? isRanked;
-  UserModel({
-    this.uid = '',
-    this.username = '',
-    this.email = '',
-    this.timestamp,
-    this.bossOfTheWeekTimeStamp,
-    this.bossOfTheWeekUpTimeStamp,
-    this.photoUrl,
-    this.coinscount,
-    this.name,
-    this.companyName,
-    this.surname,
-    this.bio,
-    this.website,
-    this.instagram,
-    this.twitter,
-    this.industry,
-    this.category,
-    this.location,
-    this.achievements,
-    this.productsandservices,
-    this.refers,
-    this.deviceTokens,
-    this.disconnections,
-    this.active,
-    this.deactivated,
-    this.ageRange,
-    this.gender,
-    this.profileViews,
-    this.connectionCount,
-    this.connectedCount,
-    this.unReadCount,
-    this.isRanked,
-  });
+  final String? inviteId;
 
-  UserModel copyWith({
-    String? uid,
-    String? username,
-    String? email,
-    int? timestamp,
-    int? bossOfTheWeekTimeStamp,
-    int? bossOfTheWeekUpTimeStamp,
-    String? photoUrl,
-    int? coinscount,
-    String? name,
-    String? companyName,
-    String? surname,
-    String? bio,
-    String? website,
-    String? instagram,
-    String? twitter,
-    String? industry,
-    String? category,
-    String? location,
-    List<String>? achievements,
-    List<String>? productsandservices,
-    List<ReferralsModel>? refers,
-    List<String>? deviceTokens,
-    List<DisconnectionsModel>? disconnections,
-    bool? active,
-    bool? deactivated,
-    String? ageRange,
-    String? gender,
-    List<ProfileViewerModel>? profileViews,
-    int? connectionCount,
-    int? connectedCount,
-    int? unReadCount,
-    bool? isRanked,
-  }) {
+  UserModel(
+      {this.uid = '',
+      this.username = '',
+      this.email = '',
+      this.timestamp,
+      this.bossOfTheWeekTimeStamp,
+      this.bossOfTheWeekUpTimeStamp,
+      this.photoUrl,
+      this.coinscount,
+      this.name,
+      this.companyName,
+      this.surname,
+      this.bio,
+      this.website,
+      this.instagram,
+      this.twitter,
+      this.industry,
+      this.category,
+      this.location,
+      this.achievements,
+      this.productsandservices,
+      this.referals,
+      this.deviceTokens,
+      this.disconnections,
+      this.active,
+      this.deactivated,
+      this.ageRange,
+      this.gender,
+      this.profileViews,
+      this.connectionCount,
+      this.connectedCount,
+      this.unReadCount,
+      this.isRanked,
+      this.connections,
+      this.connecteds,
+      this.referalCount,
+      this.inviteId});
+
+  UserModel copyWith(
+      {String? uid,
+      String? username,
+      String? email,
+      int? timestamp,
+      int? bossOfTheWeekTimeStamp,
+      int? bossOfTheWeekUpTimeStamp,
+      String? photoUrl,
+      int? coinscount,
+      String? name,
+      String? companyName,
+      String? surname,
+      String? bio,
+      String? website,
+      String? instagram,
+      String? twitter,
+      String? industry,
+      String? category,
+      String? location,
+      List<String>? achievements,
+      List<String>? productsandservices,
+      List<ReferralsModel>? referals,
+      List<String>? deviceTokens,
+      List<String>? connections,
+      List<String>? connecteds,
+      List<DisconnectionsModel>? disconnections,
+      bool? active,
+      bool? deactivated,
+      String? ageRange,
+      String? gender,
+      List<ProfileViewerModel>? profileViews,
+      int? connectionCount,
+      int? referalCount,
+      int? connectedCount,
+      int? unReadCount,
+      bool? isRanked,
+      String? inviteId}) {
     return UserModel(
       uid: uid ?? this.uid,
       username: username ?? this.username,
@@ -132,7 +143,7 @@ class UserModel {
       location: location ?? this.location,
       achievements: achievements ?? this.achievements,
       productsandservices: productsandservices ?? this.productsandservices,
-      refers: refers ?? this.refers,
+      referals: referals ?? this.referals,
       deviceTokens: deviceTokens ?? this.deviceTokens,
       disconnections: disconnections ?? this.disconnections,
       active: active ?? this.active,
@@ -141,9 +152,13 @@ class UserModel {
       gender: gender ?? this.gender,
       profileViews: profileViews ?? this.profileViews,
       connectionCount: connectionCount ?? this.connectionCount,
+      referalCount: referalCount ?? this.referalCount,
       connectedCount: connectedCount ?? this.connectedCount,
       unReadCount: unReadCount ?? this.unReadCount,
       isRanked: isRanked ?? this.isRanked,
+      inviteId: inviteId ?? this.inviteId,
+      connections: connections ?? this.connections,
+      connecteds: connecteds ?? this.connecteds,
     );
   }
 
@@ -169,8 +184,10 @@ class UserModel {
       'location': location,
       'achievements': achievements,
       'productsandservices': productsandservices,
-      'refers': refers?.map((ReferralsModel x) => x.toMap()).toList(),
+      'referals': referals?.map((ReferralsModel x) => x.toMap()).toList(),
       'deviceTokens': deviceTokens,
+      'connections': connections,
+      'connecteds': connecteds,
       'disconnections':
           disconnections?.map((DisconnectionsModel x) => x.toMap()).toList(),
       'active': active,
@@ -180,13 +197,15 @@ class UserModel {
       'profileViews':
           profileViews?.map((ProfileViewerModel x) => x.toMap()).toList(),
       'connectionCount': connectionCount,
+      'referalCount': referalCount,
       'connectedCount': connectedCount,
       'unReadCount': unReadCount,
       'isRanked': isRanked,
+      'inviteId': inviteId,
     };
   }
 
-  factory UserModel.fromMap(Map<String, dynamic> map) {
+  factory UserModel.fromMap(Map<dynamic, dynamic> map) {
     return UserModel(
       uid: map['uid'] as String,
       username: map['username'] as String,
@@ -217,15 +236,19 @@ class UserModel {
       productsandservices: map['productsandservices'] != null
           ? List<String>.from((map['productsandservices']))
           : null,
-      refers: map['refers'] != null
-          ? List<ReferralsModel>.from(
-              (map['refers'] as List<int>).map<ReferralsModel?>(
-                (x) => ReferralsModel.fromMap(x as Map<String, dynamic>),
-              ),
-            )
+      referals: map['referals'] != null
+          ? List.from(map['referals'])
+              .map((e) => ReferralsModel.fromMap(e as Map<String, dynamic>))
+              .toList()
           : null,
       deviceTokens: map['deviceTokens'] != null
           ? List<String>.from((map['deviceTokens'] as List<String>))
+          : null,
+      connections: map['connections'] != null
+          ? List<String>.from((map['connections']))
+          : null,
+      connecteds: map['connecteds'] != null
+          ? List<String>.from((map['connecteds']))
           : null,
       disconnections: map['disconnections'] != null
           ? List<DisconnectionsModel>.from(
@@ -248,11 +271,14 @@ class UserModel {
           : null,
       connectionCount:
           map['connectionCount'] != null ? map['connectionCount'] as int : null,
+      referalCount:
+          map['referalCount'] != null ? map['referalCount'] as int : null,
       connectedCount:
           map['connectedCount'] != null ? map['connectedCount'] as int : null,
       unReadCount:
           map['unReadCount'] != null ? map['unReadCount'] as int : null,
       isRanked: map['isRanked'] != null ? map['isRanked'] as bool : null,
+      inviteId: map['inviteId'] != null ? map['inviteId'] as String : null,
     );
   }
 
@@ -263,7 +289,7 @@ class UserModel {
 
   @override
   String toString() {
-    return 'UserModel(uid: $uid, username: $username, email: $email, timestamp: $timestamp, bossOfTheWeekTimeStamp: $bossOfTheWeekTimeStamp, bossOfTheWeekUpTimeStamp: $bossOfTheWeekUpTimeStamp, photoUrl: $photoUrl, coinscount: $coinscount, name: $name, companyName: $companyName, surname: $surname, bio: $bio, website: $website, instagram: $instagram, twitter: $twitter, industry: $industry, category: $category, location: $location, achievements: $achievements, productsandservices: $productsandservices, refers: $refers, deviceTokens: $deviceTokens, disconnections: $disconnections, active: $active, deactivated: $deactivated, ageRange: $ageRange, gender: $gender, profileViews: $profileViews, connectionCount: $connectionCount, connectedCount: $connectedCount, unReadCount: $unReadCount, isRanked: $isRanked)';
+    return 'UserModel(uid: $uid, username: $username, email: $email, timestamp: $timestamp, bossOfTheWeekTimeStamp: $bossOfTheWeekTimeStamp, bossOfTheWeekUpTimeStamp: $bossOfTheWeekUpTimeStamp, photoUrl: $photoUrl, coinscount: $coinscount, name: $name, companyName: $companyName, surname: $surname, bio: $bio, website: $website, instagram: $instagram, twitter: $twitter, industry: $industry, category: $category, location: $location, achievements: $achievements, productsandservices: $productsandservices, referals: $referals, deviceTokens: $deviceTokens, disconnections: $disconnections, active: $active, deactivated: $deactivated, ageRange: $ageRange, gender: $gender, profileViews: $profileViews, connectionCount: $connectionCount, connectedCount: $connectedCount, unReadCount: $unReadCount, isRanked: $isRanked)';
   }
 
   @override
@@ -290,8 +316,10 @@ class UserModel {
         other.location == location &&
         listEquals(other.achievements, achievements) &&
         listEquals(other.productsandservices, productsandservices) &&
-        listEquals(other.refers, refers) &&
+        listEquals(other.referals, referals) &&
         listEquals(other.deviceTokens, deviceTokens) &&
+        listEquals(other.connections, connections) &&
+        listEquals(other.connecteds, connecteds) &&
         listEquals(other.disconnections, disconnections) &&
         other.active == active &&
         other.deactivated == deactivated &&
@@ -299,9 +327,11 @@ class UserModel {
         other.gender == gender &&
         listEquals(other.profileViews, profileViews) &&
         other.connectionCount == connectionCount &&
+        other.referalCount == referalCount &&
         other.connectedCount == connectedCount &&
         other.unReadCount == unReadCount &&
-        other.isRanked == isRanked;
+        other.isRanked == isRanked &&
+        other.inviteId == inviteId;
   }
 
   @override
@@ -326,8 +356,10 @@ class UserModel {
         location.hashCode ^
         achievements.hashCode ^
         productsandservices.hashCode ^
-        refers.hashCode ^
+        referals.hashCode ^
         deviceTokens.hashCode ^
+        connections.hashCode ^
+        connecteds.hashCode ^
         disconnections.hashCode ^
         active.hashCode ^
         deactivated.hashCode ^
@@ -335,8 +367,10 @@ class UserModel {
         gender.hashCode ^
         profileViews.hashCode ^
         connectionCount.hashCode ^
+        referalCount.hashCode ^
         connectedCount.hashCode ^
         unReadCount.hashCode ^
+        inviteId.hashCode ^
         isRanked.hashCode;
   }
 }

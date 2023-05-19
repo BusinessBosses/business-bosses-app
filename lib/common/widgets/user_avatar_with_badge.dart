@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs
 
+import 'package:business_bosses_v2/common/models/my_user.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/common/widgets/ranking_badge.dart';
@@ -51,7 +52,7 @@ class UserAvatarWithBadge extends StatelessWidget {
       children: <Widget>[
         NetworkImageWithPlaceHolder(
           imageUrl: user!.photoUrl ??
-              'https://img.freepik.com/premium-psd/3d-rendering-detective-profession-male-avatar_52659-1091.jpg?size=626&ext=jpg',
+              'https://w7.pngwing.com/pngs/831/88/png-transparent-user-profile-computer-icons-user-interface-mystique-miscellaneous-user-interface-design-smile-thumbnail.png',
           height: height!,
           width: width!,
           radius: radius!,

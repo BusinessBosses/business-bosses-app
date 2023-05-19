@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class PostsController extends GetxController {
   late IO.Socket socket;
@@ -19,6 +20,7 @@ class PostsController extends GetxController {
   final int postsSize = 20;
   RxBool error = RxBool(false);
   RxBool loading = RxBool(false);
+  // final ProfileController _profileController = Get.find();
 
   /// PROCESS RAW API DATA, MODELIZE AND SAVE TO STATE
   void processPostsToState(dynamic post) {
@@ -85,13 +87,18 @@ class PostsController extends GetxController {
   }
 
   /// ADD NEW POST TO STATE
-  void addNewPost(Map<String, dynamic> newPost) {
+  void addNewPost(Map<String, dynamic> newPost) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
     PostModel modelizedNewPost = PostModel.fromMap({
       ...newPost,
       'coins': <String>[],
       'likes': <String>[],
       'comments': <CommentModel>[],
-      'user': {'username': '', 'email': '', 'uid': '', 'name': ''}
+      'user': {
+        'username': 'testUser1',
+        'email': 'test1@gmail.com',
+        'uid': prefs.getString(Constants.USER_ID),
+      }
     });
 
     posts.insert(0, modelizedNewPost);

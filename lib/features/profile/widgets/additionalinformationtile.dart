@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../../../common/models/analyser_data.dart';
 import '../../../common/models/for_data_picker.dart';
-import '../../../common/models/industry.dart';
+import '../../forum/models/industry.dart';
 import '../../../common/models/my_response.dart';
 import '../../../common/models/my_title.dart';
 import '../../../common/widgets/data_selection_screen.dart';
 import '../../../utils/theme/theme.dart';
 import '../analysescreen.dart';
-import '../myprofilescreen.dart';
+import '../presentation/myprofilescreen.dart';
 
 class AdditionalInfoTile extends StatefulWidget {
   const AdditionalInfoTile({Key? key}) : super(key: key);

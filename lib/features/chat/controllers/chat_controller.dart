@@ -11,6 +11,8 @@ class ChatController extends GetxController {
   bool _isSearching = false;
   List<MessageModel> chatMessages = [];
   List<MessageModel> chats = [];
+  List<MessageModel> searchedChats = [];
+
   final ProfileController _profileController = Get.find();
 
   /// GET USER CONVERSATIONS WITH A SECOND PARTY
@@ -46,6 +48,21 @@ class ChatController extends GetxController {
     update();
   }
 
+  /// EXTRACT UNIQUE CHATS ON SEARCH (REMOVE DUPLICATES)
+  void searchChats(String query) {
+    searchedChats = chats
+        .where((element) =>
+            element.user.username.toLowerCase().contains(query.toLowerCase()))
+        .toList();
+
+    update();
+  }
+
+  void clearSearch() {
+    searchedChats.clear();
+    update();
+  }
+
   /// EXTRACT UNIQUE CHATS (REMOVE DUPLICATES)
   void extractChats(String myId) {
     final List<String> counterIds = chatMessages
@@ -62,7 +79,7 @@ class ChatController extends GetxController {
           .where((MessageModel element) =>
               element.senderUid == e || element.receiverUid == e)
           .toList();
-      chats.add(chat[0]);
+      chats.add(chat[i]);
     }
   }
 

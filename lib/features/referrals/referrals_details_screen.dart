@@ -7,7 +7,7 @@ import '../../common/models/my_user.dart';
 import '../../common/params.dart';
 import '../../common/widgets/safety_model.dart';
 import '../../common/widgets/user_avatar_with_badge.dart';
-import '../profile/publicprofilescreen.dart';
+import '../profile/presentation/publicprofilescreen.dart';
 
 class ReferralsDetailsScreen extends StatefulWidget {
   static const routeName = '/referrals-details-screen';

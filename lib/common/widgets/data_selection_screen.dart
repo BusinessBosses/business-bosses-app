@@ -4,7 +4,7 @@ import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:flutter/material.dart';
 
 import '../../features/profile/analysescreen.dart';
-import '../models/industry.dart';
+import '../../features/forum/models/industry.dart';
 import '../models/my_title.dart';
 import 'safety_model.dart';
 import 'search/search_bar.dart' as searchBar;
@@ -76,7 +76,8 @@ class _DataSelectionScreenState extends State<DataSelectionScreen> {
         await ApiService.get(path: 'industry/get');
     if (response.success) {
       _industries = Industry.toIndustries(snapshot: response.data['rows']);
-      _industries.sort((a, b) => a.industry.compareTo(b.industry));
+      _industries
+          .sort((Industry a, Industry b) => a.industry!.compareTo(b.industry!));
 
       setState(() {
         _isLoading = false;
@@ -193,7 +194,7 @@ class _DataSelectionScreenState extends State<DataSelectionScreen> {
       List<String> data = [];
       for (int i = 0; i < list.length; i++) {
         Industry industry = list[i];
-        data.add(industry.industry);
+        data.add(industry.industry!);
       }
       listData = data;
     }
