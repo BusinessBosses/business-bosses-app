@@ -57,7 +57,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               primary: false,
               padding: const EdgeInsets.all(16.0),
               itemCount: item.length,
-              itemBuilder: (context, i) => SettingsItem(
+              itemBuilder: (BuildContext context, i) => SettingsItem(
                 isTitle: item[i].isTitle,
                 label: item[i].label,
                 hasSwitch: item[i].hasSwitch,
@@ -110,7 +110,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
     } else if (label == 'Invite a friend terms & conditions') {
     } else if ('Contact us' == label) {
       _contactUs();
-    } else if ('Delete Account' == label) {}
+    } else if ('Delete Account' == label) {
+      Get.toNamed(Routes.deleteAccount);
+    }
   }
 
   Future<void> _contactUs() async {
@@ -139,12 +141,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
     MySettingsItem(
       isTitle: false,
       label: 'Change password',
-      routeName: 'ChangePasswordScreen.routeName',
+      routeName: Routes.changePassword,
     ),
     MySettingsItem(
       isTitle: false,
       label: 'Delete Account',
-      routeName: 'ChangePasswordScreen.routeName',
+      routeName: Routes.deleteAccount,
     ),
   ];
 

@@ -35,7 +35,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
       onTap: () => unFocusKeyboard(context),
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Change password'),
+          title: const Text('Reset password'),
         ),
         body: Form(
           key: _formKey,
@@ -60,9 +60,21 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                           ),
                     ),
                   ),
+                  Container(
+                    padding: const EdgeInsets.all(16.0),
+                    width: double.infinity,
+                    child: Text(
+                      'Reset Password For\n ${widget.email}',
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                            fontWeight: FontWeight.w600,
+                            color: Colors.black,
+                          ),
+                    ),
+                  ),
                   const SizedBox(height: 36.0),
                   Text(
-                    'Password',
+                    'Set New Password',
                     style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                           fontWeight: FontWeight.w600,
                         ),
@@ -78,7 +90,29 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                     obscureText: _invisiblePassword,
                     keyboardType: TextInputType.visiblePassword,
                     decoration: inputDecoration.copyWith(
-                      hintText: 'Enter a new password',
+                      hintText: 'Enter Your Password',
+                      suffixIcon: showHideIcon(),
+                      hintStyle: const TextStyle(
+                        color: iconColor,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                      ),
+                      filled: true,
+                      fillColor: const Color(0xffF4F4F4),
+                    ),
+                  ),
+                  const SizedBox(height: 12.0),
+                  TextFormField(
+                    onChanged: (String val) {
+                      _password = val;
+                      setState(() {});
+                    },
+                    validator: Validator.passwordValidator,
+                    textInputAction: TextInputAction.done,
+                    obscureText: _invisiblePassword,
+                    keyboardType: TextInputType.visiblePassword,
+                    decoration: inputDecoration.copyWith(
+                      hintText: 'Confirm Your Password',
                       suffixIcon: showHideIcon(),
                       hintStyle: const TextStyle(
                         color: iconColor,
