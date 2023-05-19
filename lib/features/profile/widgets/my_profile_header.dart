@@ -66,12 +66,10 @@ class MyProfileHeader extends StatelessWidget {
                     )),
                     Expanded(
                       child: CustomChildButton(
-                        value: myProfile.refers != null
-                            ? myProfile.refers!.length
-                            : 0,
+                        value: myProfile.referalCount ?? 0,
                         caption: 'Referrals',
                         onPressed: () {
-                          Get.toNamed(Routes.referscreen);
+                          // Get.toNamed(Routes.referscreen);
                           // navigateTo(
                           //   context,
                           //   routeName: ReferralsDetailsScreen.routeName,

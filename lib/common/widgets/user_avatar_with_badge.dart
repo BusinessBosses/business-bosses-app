@@ -52,7 +52,7 @@ class UserAvatarWithBadge extends StatelessWidget {
       children: <Widget>[
         NetworkImageWithPlaceHolder(
           imageUrl: user!.photoUrl ??
-              'https://img.freepik.com/premium-psd/3d-rendering-detective-profession-male-avatar_52659-1091.jpg?size=626&ext=jpg',
+              'https://w7.pngwing.com/pngs/831/88/png-transparent-user-profile-computer-icons-user-interface-mystique-miscellaneous-user-interface-design-smile-thumbnail.png',
           height: height!,
           width: width!,
           radius: radius!,

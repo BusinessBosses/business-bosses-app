@@ -40,8 +40,9 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
       isLoading = true;
     });
     final res = await ProfileController.loadData(publicUser.uid);
-
-    _posts = res;
+    final modelizedUser = UserModel.fromMap(res['user']);
+    publicUser = modelizedUser;
+    _posts = res['posts'];
 
     setState(() {
       isLoading = false;
@@ -63,6 +64,16 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
       'userId': _profileController.myProfile.uid,
       'connectedId': userId
     });
+  }
+
+  void updateReferals(int refs) {
+    publicUser = UserModel.fromMap({
+      ...publicUser.toMap(),
+      'referalCount': publicUser.referals == null
+          ? refs
+          : publicUser.referals!.length + refs
+    });
+    setState(() {});
   }
 
   void connectToUser() async {
@@ -293,82 +304,89 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
               : Container()
         ],
       ),
-      body: NestedScrollView(
-        headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-          return <Widget>[
-            SliverStickyHeader(
-              sticky: false,
-              header: FriendProfileHeader(publicUser),
-            )
-          ];
-        },
-        body: DefaultTabController(
-          length: 2,
-          child: Column(
-            children: [
-              // if (_publicUser.uid !=
-              //     'FirebaseAuth.instance.currentUser.uid') ...{
-              OutlineButtonHeader(
-                  publicUser, _profileController.myProfile, connectToUser),
-              // const SizedBox(height: 8.0),
-              // },
-
-              Material(
-                color: Colors.white,
-                child: TabBar(
-                  indicatorColor: primaryColorLT,
-                  labelStyle: const TextStyle(fontWeight: FontWeight.w500),
-                  labelColor: Colors.black,
-                  tabs: [
-                    Tab(
-                      icon: SvgPicture.asset(
-                        'assets/svgs/portfolio.svg',
-                      ),
-                    ),
-                    Tab(
-                      icon: SvgPicture.asset(
-                        'assets/svgs/posts.svg',
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(
-                width: double.infinity,
-                height: 1.5,
-                child: ColoredBox(color: backgroundcolorinterface),
-              ), // Container(
-
-              Expanded(
-                child: TabBarView(
+      body: isLoading
+          ? const Center(child: CircularProgressIndicator.adaptive())
+          : NestedScrollView(
+              headerSliverBuilder:
+                  (BuildContext context, bool innerBoxIsScrolled) {
+                return <Widget>[
+                  SliverStickyHeader(
+                    sticky: false,
+                    header: FriendProfileHeader(publicUser),
+                  )
+                ];
+              },
+              body: DefaultTabController(
+                length: 2,
+                child: Column(
                   children: [
-                    // Container(),
-                    SingleChildScrollView(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const SizedBox(
-                            height: 30,
+                    // if (_publicUser.uid !=
+                    //     'FirebaseAuth.instance.currentUser.uid') ...{
+                    OutlineButtonHeader(
+                        publicUser, _profileController.myProfile, connectToUser,
+                        (refs) {
+                      updateReferals(refs);
+                    }),
+                    // const SizedBox(height: 8.0),
+                    // },
+
+                    Material(
+                      color: Colors.white,
+                      child: TabBar(
+                        indicatorColor: primaryColorLT,
+                        labelStyle:
+                            const TextStyle(fontWeight: FontWeight.w500),
+                        labelColor: Colors.black,
+                        tabs: [
+                          Tab(
+                            icon: SvgPicture.asset(
+                              'assets/svgs/portfolio.svg',
+                            ),
                           ),
-                          profileinfodisplay(context, publicUser),
+                          Tab(
+                            icon: SvgPicture.asset(
+                              'assets/svgs/posts.svg',
+                            ),
+                          ),
                         ],
                       ),
                     ),
-                    // Container()
-                    profilepostsdisplay(
-                      context,
-                      publicUser,
-                      _posts,
-                      loading: isLoading,
-                    )
+                    const SizedBox(
+                      width: double.infinity,
+                      height: 1.5,
+                      child: ColoredBox(color: backgroundcolorinterface),
+                    ), // Container(
+
+                    Expanded(
+                      child: TabBarView(
+                        children: [
+                          // Container(),
+                          SingleChildScrollView(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const SizedBox(
+                                  height: 30,
+                                ),
+                                profileinfodisplay(context, publicUser),
+                              ],
+                            ),
+                          ),
+                          // Container()
+                          profilepostsdisplay(
+                            context,
+                            publicUser,
+                            _posts,
+                            loading: isLoading,
+                          )
+                        ],
+                      ),
+                    ),
                   ],
                 ),
               ),
-            ],
-          ),
-        ),
-      ),
+            ),
     );
   }
 }
