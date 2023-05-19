@@ -81,6 +81,7 @@ class ConnectionController extends GetxController {
   void connectToUser(UserModel user) async {
     final checkConnected =
         connecteds.indexWhere((element) => element.uid == user.uid);
+    _profileController.updateConnections(user.uid);
     if (checkConnected == -1) {
       connecteds.add(user);
       await connect(user.uid);
@@ -89,7 +90,6 @@ class ConnectionController extends GetxController {
       await disconnect(user.uid);
     }
     update();
-    _profileController.updateConnections(user.uid);
   }
 
   @override

@@ -57,6 +57,7 @@ class PostsController extends GetxController {
     socket.emit('like', {
       'postId': postId,
       'userId': userId,
+      'type': 'post',
     });
   }
 
@@ -79,6 +80,7 @@ class PostsController extends GetxController {
       socket.emit('coin', {
         'postId': postId,
         'userId': userId,
+        'type': 'post',
       });
     }
     update();

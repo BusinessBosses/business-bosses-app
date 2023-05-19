@@ -172,7 +172,8 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                                                 navigateTo(context);
                                                 await Clipboard.setData(
                                                   ClipboardData(
-                                                    text: _message.messageText,
+                                                    text: _message.messageText
+                                                        .toString(),
                                                   ),
                                                 );
                                                 showSnackBar(context,
