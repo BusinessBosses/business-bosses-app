@@ -1,24 +1,33 @@
+import 'dart:developer';
+
 import 'package:business_bosses_v2/features/posts/controllers/posts_controller.dart';
 import 'package:business_bosses_v2/features/posts/models/post_model.dart';
 import 'package:business_bosses_v2/features/posts/presentation/widgets/post_images.dart';
+import 'package:business_bosses_v2/features/posts/presentation/widgets/post_like_comment.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
-import 'package:business_bosses_v2/features/profile/presentation/publicprofilescreen.dart';
-import 'package:business_bosses_v2/navigation/routes.dart';
+import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:business_bosses_v2/utils/constants/constants.dart';
 import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
 import 'package:detectable_text_field/widgets/detectable_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 
+import '../../../../action/action.dart';
+import '../../../../common/models/comment_model.dart';
+import '../../../../common/widgets/popup/my_popup_menu_button.dart';
 import '../../../../common/widgets/ranking_badge.dart';
 import '../../../../common/widgets/text_widget.dart';
 import '../../../../common/widgets/user_avatar_with_badge.dart';
+import '../../../../navigation/routes.dart';
 import '../../../../utils/theme/theme.dart';
 import '../../../../utils/time_format.dart';
+import '../boost_post_screen.dart';
+import '../create_post_screen.dart';
 
 // import 'rep';
-class PostTile extends StatelessWidget {
+class PostTile extends StatefulWidget {
   final PostModel post;
   final PostsController controller;
   final Function(int)? onPageChange;
@@ -32,242 +41,541 @@ class PostTile extends StatelessWidget {
       : super(key: key);
 
   @override
+  State<PostTile> createState() => _PostTileState();
+}
+
+class _PostTileState extends State<PostTile> {
+  bool hide = false;
+  @override
   Widget build(BuildContext context) {
     final ProfileController profileController = Get.find();
+    if (hide == false) {
+      final List<PopupMenuEntry<String>> myPopupMore = <PopupMenuEntry<String>>[
+        const PopupMenuItem<String>(
+          value: 'Edit',
+          child: Text(
+            'Edit',
+            style: bodyText2,
+          ),
+        ),
+        const PopupMenuDivider(
+          height: 0.0,
+        ),
+        const PopupMenuItem<String>(
+          value: 'Delete',
+          child: Text(
+            'Delete',
+            style: bodyText2,
+          ),
+        ),
+        if (widget.post.promote == false)
+          const PopupMenuDivider(
+            height: 0.0,
+          ),
+        if (widget.post.promote == false)
+          const PopupMenuItem<String>(
+            value: 'Boost',
+            child: Text(
+              'Boost',
+              style: bodyText2,
+            ),
+          ),
+      ];
 
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Container(
-          padding: const EdgeInsets.all(0.0),
-          margin: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 0.0),
-          width: double.infinity,
-          decoration: BoxDecoration(
-              color: Colors.white, borderRadius: BorderRadius.circular(0)),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              ListTile(
-                contentPadding: const EdgeInsets.only(left: 15, right: 15),
-                leading: GestureDetector(
-                  onTap: () {
-                    if (profileController.myProfile.uid == post.user!.uid) {
-                      if (onPageChange != null) {
-                        onPageChange!(3);
+      final List<PopupMenuEntry<String>> myPopup = <PopupMenuEntry<String>>[
+        const PopupMenuItem<String>(
+          value: 'Hide',
+          child: Text(
+            'Hide',
+            style: bodyText2,
+          ),
+        ),
+        const PopupMenuDivider(
+          height: 0.0,
+        ),
+        const PopupMenuItem<String>(
+          value: 'Report',
+          child: Text(
+            'Report',
+            style: bodyText2,
+          ),
+        )
+      ];
+
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Container(
+            padding: const EdgeInsets.all(0.0),
+            margin: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 0.0),
+            width: double.infinity,
+            decoration: BoxDecoration(
+                color: Colors.white, borderRadius: BorderRadius.circular(0)),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ListTile(
+                  contentPadding: const EdgeInsets.only(left: 15, right: 15),
+                  leading: GestureDetector(
+                    onTap: () {
+                      if (profileController.myProfile.uid ==
+                          widget.post.user!.uid) {
+                        if (widget.onPageChange != null) {
+                          widget.onPageChange!(3);
+                        }
+                      } else {
+                        Get.toNamed(Routes.publicProfile,
+                            arguments: widget.post.user);
                       }
-                    } else {
-                      Get.toNamed(Routes.publicProfile, arguments: post.user);
-                    }
-                  },
-                  child: UserAvatarWithBadge(
-                    user: post.user,
-                    height: 55.0,
-                    width: 55.0,
-                    radius: 50.0,
-                    placeHolder: Icons.person,
-                    iconSize: 24.0,
+                    },
+                    child: UserAvatarWithBadge(
+                      user: widget.post.user,
+                      height: 55.0,
+                      width: 55.0,
+                      radius: 50.0,
+                      placeHolder: Icons.person,
+                      iconSize: 24.0,
+                    ),
                   ),
-                ),
-                title: GestureDetector(
-                  onTap: () {
-                    // Get.to(() => PublicProfileScreen());
-                    if (profileController.myProfile.uid == post.user!.uid) {
-                      if (onPageChange != null) {
-                        onPageChange!(3);
+                  title: GestureDetector(
+                    onTap: () {
+                      if (profileController.myProfile.uid ==
+                          widget.post.user!.uid) {
+                        if (widget.onPageChange != null) {
+                          widget.onPageChange!(3);
+                        }
+                      } else {
+                        Get.toNamed(Routes.publicProfile,
+                            arguments: widget.post.user);
                       }
-                    } else {
-                      Get.toNamed(Routes.publicProfile, arguments: post.user);
-                    }
-                  },
-                  child: Text(
-                    '${post.user?.username}',
-                    style: Theme.of(context).textTheme.bodyLarge,
+                    },
+                    child: Text(
+                      '${widget.post.user?.name}',
+                      style: Theme.of(context).textTheme.bodyLarge,
+                    ),
                   ),
-                ),
-                trailing: SizedBox(
-                  height: 30,
-                  width: 80,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      post.isRanked
-                          ? Container()
-                          : Container(
-                              width: leadingWidth(post),
-                              height: double.infinity,
-                              alignment: Alignment.center,
-                              child: const RankingBadge(),
-                            ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      Container(
-                        height: double.infinity,
-                        color: Colors.white,
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 15, right: 10),
-                          child: SvgPicture.asset(
-                            'assets/svgs/more.svg',
-                            width: 5,
-                            height: 3,
+                  trailing: SizedBox(
+                    height: 30,
+                    width: 80,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        widget.post.isRanked
+                            ? Container()
+                            : Container(
+                                width: leadingWidth(widget.post),
+                                height: double.infinity,
+                                alignment: Alignment.center,
+                                child: const RankingBadge(),
+                              ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        Container(
+                          height: double.infinity,
+                          color: Colors.white,
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 15),
+                            child: widget.post.user!.uid ==
+                                    profileController.myProfile.uid
+                                ? MyPopupMenuButton(
+                                    popupItems: myPopupMore,
+                                    icon:
+                                        const Icon(Icons.more_horiz, size: 20),
+                                    onSelected: (String val) {
+                                      if (val == 'Edit') {
+                                        Get.to(() => CreatePostScreen(
+                                              postId: widget.post.postId,
+                                              post: widget.post.title,
+                                            ));
+                                      } else if (val == 'Delete') {
+                                        showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) =>
+                                              AlertDialog(
+                                            title: const Text(
+                                              'Delete Post',
+                                              style: bodyText1,
+                                            ),
+                                            content: const Text(
+                                                'Are you sure to delete this post?'),
+                                            actions: <Widget>[
+                                              TextButton(
+                                                onPressed: () => Get.back(),
+                                                child: const Text('No'),
+                                              ),
+                                              TextButton(
+                                                onPressed: () {
+                                                  ApiService.delete(
+                                                      path:
+                                                          'post/delete-post/${widget.post.postId}');
+                                                  setState(() {
+                                                    hide = true;
+                                                  });
+                                                  Get.back();
+                                                },
+                                                child: const Text('Yes'),
+                                              ),
+                                            ],
+                                          ),
+                                        );
+                                      } else if (val == 'Boost') {
+                                        Get.to(() => BoostPost(
+                                              postId: widget.post.postId,
+                                              postTitle: widget.post.title,
+                                            ));
+                                      }
+                                    },
+                                  )
+                                : widget.post.promote!
+                                    ? MyPopupMenuButton(
+                                        popupItems: myPopup,
+                                        icon: const Icon(Icons.more_horiz,
+                                            size: 20),
+                                        onSelected: (String val) {
+                                          if (val == 'Hide') {
+                                            ApiService.post(
+                                              path: 'blockedpost',
+                                              body: <String, dynamic>{
+                                                'postId': widget.post.postId
+                                              },
+                                            );
+                                            setState(() {
+                                              hide = true;
+                                            });
+                                          } else if (val == 'Report') {
+                                            _showDialog();
+                                          }
+                                        },
+                                      )
+                                    : Padding(
+                                        padding:
+                                            const EdgeInsets.only(right: 15.0),
+                                        child: InkWell(
+                                          onTap: () {
+                                            _showDialog();
+                                          },
+                                          child: const Icon(Icons.more_horiz,
+                                              size: 20),
+                                        ),
+                                      ),
                           ),
                         ),
+                      ],
+                    ),
+                  ),
+                  subtitle: Text(
+                    widget.post.user?.bio ?? '',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(
+                      left: 15, right: 15, bottom: 0, top: 0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      if (widget.post.promote ?? false)
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 5,
+                            horizontal: 15,
+                          ),
+                          decoration: const BoxDecoration(
+                            color: backgroundcolorinterface,
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(5),
+                            ),
+                          ),
+                          child: const TextWidget(
+                            text: 'Sponsored',
+                            fontWeight: FontWeight.w700,
+                            size: 10,
+                          ),
+                        ),
+                      const SizedBox(
+                        height: 10,
                       ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          DetectableText(
+                            text: widget.post.title,
+                            detectionRegExp: detectionRegExp(hashtag: false)!,
+                            detectedStyle: bodyText2.copyWith(
+                              color: Colors.blue,
+                            ),
+                            moreStyle: bodyText2.copyWith(
+                              color: Colors.redAccent,
+                            ),
+                            lessStyle: bodyText2.copyWith(
+                              color: Colors.redAccent,
+                            ),
+                            trimExpandedText: '  show less',
+                            basicStyle: bodyText2.copyWith(color: textColor),
+                            onTap: (_) {},
+                          ),
+                          const SizedBox(height: 16),
+                        ],
+                      ),
+                      if (widget.post.images?.isNotEmpty ?? false)
+                        PostImages(
+                          post: widget.post,
+                        ),
                     ],
                   ),
                 ),
-                subtitle: Text(
-                  post.user?.bio ?? '',
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(
-                    left: 15, right: 15, bottom: 0, top: 0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                Row(
                   children: [
-                    if (post.promote ?? false)
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 5,
-                          horizontal: 15,
-                        ),
-                        decoration: const BoxDecoration(
-                          color: backgroundcolorinterface,
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(5),
-                          ),
-                        ),
-                        child: const TextWidget(
-                          text: 'Sponsored',
-                          fontWeight: FontWeight.w700,
-                          size: 10,
-                        ),
+                    TextButton.icon(
+                      onPressed: () async {
+                        widget.controller.postLike(
+                            profileController.myProfile.uid,
+                            widget.post.postId);
+                      },
+                      icon: widget.post.likes
+                                  ?.contains(profileController.myProfile.uid) ==
+                              true
+                          ? SvgPicture.asset('assets/svgs/likefilled.svg')
+                          : SvgPicture.asset('assets/svgs/like.svg'),
+                      label: Text(
+                        '${widget.post.likes?.length ?? 0}',
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                              fontWeight: FontWeight.w700,
+                              color: textColor.withOpacity(0.8),
+                            ),
                       ),
-                    const SizedBox(
-                      height: 10,
                     ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        DetectableText(
-                          text: post.title,
-                          detectionRegExp: detectionRegExp(hashtag: false)!,
-                          detectedStyle: bodyText2.copyWith(
-                            color: Colors.blue,
+                    TextButton.icon(
+                      onPressed: () {
+                        showModalBottomSheet(
+                          context: context,
+                          builder: (BuildContext context) =>
+                              PostLikeCommentItem(
+                            post: widget.post,
+                            onComment: (CommentModel newComment) async {},
                           ),
-                          moreStyle: bodyText2.copyWith(
-                            color: Colors.redAccent,
-                          ),
-                          lessStyle: bodyText2.copyWith(
-                            color: Colors.redAccent,
-                          ),
-                          trimExpandedText: '  show less',
-                          basicStyle: bodyText2.copyWith(color: textColor),
-                          onTap: (_) {},
-                        ),
-                        const SizedBox(height: 16),
-                      ],
-                    ),
-                    if (post.images?.isNotEmpty ?? false)
-                      PostImages(
-                        post: post,
+                        );
+                      },
+                      icon: SvgPicture.asset('assets/svgs/comment.svg'),
+                      label: Text(
+                        '${widget.post.comments?.length ?? 0}',
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                              fontWeight: FontWeight.w700,
+                              color: textColor.withOpacity(0.8),
+                            ),
                       ),
+                    ),
+                    widget.post.user!.uid != profileController.myProfile.uid
+                        ? TextButton.icon(
+                            onPressed: () async {
+                              widget.controller.postCoin(
+                                  profileController.myProfile.uid,
+                                  widget.post.postId,
+                                  profileController);
+                            },
+                            icon: widget.post.coins?.contains(
+                                        profileController.myProfile.uid) ==
+                                    true
+                                ? SvgPicture.asset('assets/svgs/coin.svg')
+                                : SvgPicture.asset('assets/svgs/coin.svg'),
+                            label: Text(
+                              '${widget.post.coins?.length ?? 0}',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium
+                                  ?.copyWith(
+                                    fontWeight: FontWeight.w700,
+                                    color: textColor.withOpacity(0.8),
+                                  ),
+                            ),
+                          )
+                        : const SizedBox(),
+                    const SizedBox(width: 8.0),
+                    GestureDetector(
+                      onTap: () => _sharePost(),
+                      child: SvgPicture.asset(
+                        'assets/svgs/share.svg',
+                        height: 18.0,
+                        width: 18.0,
+                      ),
+                    ),
+                    const Spacer(),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 15),
+                      child: Text(
+                        TimeFormat.formatString(widget.post.timestamp),
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                              color: textColor.withOpacity(0.4),
+                            ),
+                      ),
+                    )
                   ],
+                )
+              ],
+            ),
+          ),
+          const SizedBox(
+            height: 7,
+          )
+        ],
+      );
+    } else {
+      return const SizedBox();
+    }
+  }
+
+  void _sharePost() {
+    String message =
+        'Have a look at ${widget.post.user?.username ?? 'Business Bosses'}\'s post on Business Bosses\n'
+        'https://businessbosses.onelink.me/xLWk/36a2ff16';
+    socialShare(message);
+  }
+
+  void _showDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(
+              onTap: () {
+                navigateTo(context);
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) => AlertDialog(
+                    title: const TextWidget(
+                      text: 'Do you want to block user?',
+                      centralize: true,
+                      fontWeight: FontWeight.w700,
+                      size: 20,
+                    ),
+                    content: TextWidget(
+                      text:
+                          'You will no longer see undefined posts and comments on your feed',
+                      centralize: true,
+                      color: Colors.black.withOpacity(.6),
+                    ),
+                    actions: [
+                      TextButton(
+                        onPressed: () => navigateTo(context),
+                        child: const TextWidget(
+                          text: 'Cancel',
+                          fontWeight: FontWeight.w700,
+                          size: 18,
+                          color: Colors.grey,
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          navigateTo(context);
+                          showSnackBar(context,
+                              message: 'User has been blocked');
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 7,
+                            horizontal: 14,
+                          ),
+                          decoration: BoxDecoration(
+                            color: primaryColorLT,
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                          child: const TextWidget(
+                            text: 'Block',
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                );
+              },
+              contentPadding: EdgeInsets.zero,
+              title: GestureDetector(
+                child: TextWidget(
+                  text: 'Block @${widget.post.user!.username}',
+                  color: Colors.blue,
                 ),
               ),
-              Row(
-                children: [
-                  TextButton.icon(
-                    onPressed: () {
-                      controller.postLike(
-                          profileController.myProfile.uid, post.postId);
-                    },
-                    icon:
-                        post.likes?.contains(profileController.myProfile.uid) ??
-                                false
-                            ? SvgPicture.asset('assets/svgs/likefilled.svg')
-                            : SvgPicture.asset('assets/svgs/like.svg'),
-                    label: Text(
-                      '${post.likes?.length ?? 0}',
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            fontWeight: FontWeight.w700,
-                            color: textColor.withOpacity(0.8),
+            ),
+            ListTile(
+              onTap: () {
+                navigateTo(context);
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) => AlertDialog(
+                    title: const TextWidget(
+                      text: 'Do you want to report post?',
+                      centralize: true,
+                      fontWeight: FontWeight.w700,
+                      size: 20,
+                    ),
+                    content: TextWidget(
+                      text:
+                          'The post will be reported to admin to evaluate if it violates any community policy',
+                      centralize: true,
+                      color: Colors.black.withOpacity(.6),
+                    ),
+                    actions: [
+                      TextButton(
+                        onPressed: () => navigateTo(context),
+                        child: const TextWidget(
+                          text: 'Cancel',
+                          fontWeight: FontWeight.w700,
+                          size: 18,
+                          color: Colors.grey,
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          navigateTo(context);
+                          ApiService.post(
+                              path: 'reportedpost',
+                              body: <String, dynamic>{
+                                'postId': widget.post.postId,
+                                'reason': 'This is a bad post',
+                              });
+                          showSnackBar(context,
+                              message: 'Post has been Reported');
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 7,
+                            horizontal: 14,
                           ),
-                    ),
-                  ),
-                  TextButton.icon(
-                    onPressed: _showBottomSheet,
-                    icon: SvgPicture.asset('assets/svgs/comment.svg'),
-                    label: Text(
-                      '${post.comments?.length ?? 0}',
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            fontWeight: FontWeight.w700,
-                            color: textColor.withOpacity(0.8),
+                          decoration: BoxDecoration(
+                            color: primaryColorLT,
+                            borderRadius: BorderRadius.circular(5),
                           ),
-                    ),
-                  ),
-                  TextButton.icon(
-                    onPressed: () async {
-                      // final sandBox = GetStorage();
-                      // final String uid = sandBox.read(Constants.USER_ID);
-                      controller.postCoin(profileController.myProfile.uid,
-                          post.postId, profileController);
-                    },
-                    icon:
-                        post.coins?.contains(profileController.myProfile.uid) ??
-                                false
-                            ? SvgPicture.asset('assets/svgs/coin.svg')
-                            : SvgPicture.asset('assets/svgs/coin.svg'),
-                    label: Text(
-                      '${post.coins?.length ?? 0}',
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            fontWeight: FontWeight.w700,
-                            color: textColor.withOpacity(0.8),
+                          child: const TextWidget(
+                            text: 'Report',
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
                           ),
-                    ),
+                        ),
+                      )
+                    ],
                   ),
-                  const SizedBox(width: 8.0),
-                  GestureDetector(
-                    onTap: () => _sharePost(post),
-                    child: SvgPicture.asset(
-                      'assets/svgs/share.svg',
-                      height: 18.0,
-                      width: 18.0,
-                    ),
-                  ),
-                  const Spacer(),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 15),
-                    child: Text(
-                      TimeFormat.formatString(post.timestamp),
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: textColor.withOpacity(0.4),
-                          ),
-                    ),
-                  )
-                ],
-              )
-            ],
-          ),
+                );
+              },
+              contentPadding: EdgeInsets.zero,
+              title: const TextWidget(
+                text: 'Report this post',
+                color: Colors.red,
+              ),
+            )
+          ],
         ),
-        const SizedBox(
-          height: 7,
-        )
-      ],
+      ),
     );
   }
 }
-
-_sharePost(PostModel? post) {}
-
-void _onLikeTap() {}
-
-void _showBottomSheet() {}
 
 double leadingWidth(PostModel p) {
   double w = 0;
