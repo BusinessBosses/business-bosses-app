@@ -17,8 +17,6 @@ import 'all_communities_screen.dart';
 import 'home_screen.dart';
 import 'marketplace_screen.dart';
 
-import '../profile/myprofilescreen.dart';
-
 /// Bottom Nav Screen is basically where all home screens are navigated through
 class BottomNavScreen extends StatefulWidget {
   /// Constructor
@@ -254,6 +252,7 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
   /// DailyCoin
   void addCoinDaily() {
     int lastExecutionTimestamp = sandBox.read('lastExecutionTimestamp') ?? 0;
+    print('Last: ${lastExecutionTimestamp}');
     if (currentTimestamp - lastExecutionTimestamp >= 24 * 60 * 60 * 1000) {
       // The action hasn't been executed today, save the current timestamp
       sandBox.write('lastExecutionTimestamp', currentTimestamp);

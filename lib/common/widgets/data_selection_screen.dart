@@ -1,6 +1,4 @@
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
-import 'package:business_bosses_v2/common/models/for_data_picker.dart';
-import 'package:business_bosses_v2/common/models/industry_model.dart';
 import 'package:business_bosses_v2/common/models/my_response.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +7,7 @@ import '../../features/profile/analysescreen.dart';
 import '../models/industry.dart';
 import '../models/my_title.dart';
 import 'safety_model.dart';
-import 'search/search_bar.dart';
+import 'search/search_bar.dart' as searchBar;
 
 class DataSelectionScreen extends StatefulWidget {
   final Analyser analyser;
@@ -115,7 +113,7 @@ class _DataSelectionScreenState extends State<DataSelectionScreen> {
               ? Container()
               : Container(
                   margin: const EdgeInsets.all(16.0),
-                  child: SearchBar(
+                  child: searchBar.SearchBar(
                     hintText: _title,
                     onChange: onChange,
                     onSubmit: (String val) {},

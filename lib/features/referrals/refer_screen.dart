@@ -3,11 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../../action/action.dart';
-import '../../common/models/my_refers.dart';
 import '../../common/models/my_user.dart';
 import '../../common/widgets/network_image_with_placeholder.dart';
 import '../../common/widgets/safety_model.dart';
-import '../../common/widgets/search/search_bar.dart';
+import '../../common/widgets/search/search_bar.dart' as searchBar;
 import '../../utils/constants/constants.dart';
 import '../../utils/theme/theme.dart';
 import '../profile/promotionscreen.dart';
@@ -65,7 +64,7 @@ class _ReferScreenState extends State<ReferScreen> {
           },
           icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
         ),
-        title: SearchBar(
+        title: searchBar.SearchBar(
           onChange: _onSearch,
           hasSearchIcon: false,
           autofocus: false,
