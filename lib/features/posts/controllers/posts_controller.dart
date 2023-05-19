@@ -4,7 +4,6 @@ import 'package:business_bosses_v2/common/widgets/text_widget.dart';
 import 'package:business_bosses_v2/features/posts/models/post_model.dart';
 import 'package:business_bosses_v2/features/posts/repository/post_repository.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
-import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:business_bosses_v2/utils/constants/constants.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
@@ -86,9 +85,8 @@ class PostsController extends GetxController {
   }
 
   /// ADD NEW POST TO STATE
-  void addNewPost(Map<String, dynamic> newPost) {
-    final sandBox = GetStorage();
-    final String uid = sandBox.read(Constants.USER_ID);
+  void addNewPost(Map<String, dynamic> newPost) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
     PostModel modelizedNewPost = PostModel.fromMap({
       ...newPost,
       'coins': <String>[],
@@ -97,7 +95,7 @@ class PostsController extends GetxController {
       'user': {
         'username': 'testUser1',
         'email': 'test1@gmail.com',
-        'uid': uid,
+        'uid': prefs.getString(Constants.USER_ID),
       }
     });
 

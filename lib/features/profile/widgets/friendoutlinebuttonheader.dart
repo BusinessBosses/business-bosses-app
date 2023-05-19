@@ -7,8 +7,8 @@ import '../../../common/models/user_model.dart';
 import '../../../common/widgets/buttons/my_outlined_button.dart';
 import '../../../utils/theme/theme.dart';
 
-Widget OutlineButtonHeader(
-    UserModel _publicUser, UserModel myProfile, VoidCallback onConnect) {
+Widget OutlineButtonHeader(UserModel _publicUser, UserModel myProfile,
+    VoidCallback onConnect, onRefer) {
   bool connectedbutton = true;
   // final UserModel _publicUser = UserModel(
   //     achievements: 'jnkknmmk+llllmlhj+jkhkh'.split('+'),
@@ -133,14 +133,17 @@ Widget OutlineButtonHeader(
         child: MCustomButton(
             margin: const EdgeInsets.symmetric(horizontal: 4.0),
             onPressed: () async {
+              Get.toNamed(Routes.referscreen,
+                  arguments: {'user': _publicUser, 'onRefer': onRefer});
+
               // final fUser =
               //     Provider.of<UserController>(context, listen: false);
               // if (fUser.user.connectedCount == 0 &&
               //     fUser.user.connectionCount == 0) {
-              String message =
-                  'Have a look at ${_publicUser.username ?? 'Business Bosses'} on Business Bosses\n'
-                  'https://businessbosses.onelink.me/xLWk/36a2ff16';
-              _sharePost(message);
+              // String message =
+              //     'Have a look at ${_publicUser.username ?? 'Business Bosses'} on Business Bosses\n'
+              //     'https://businessbosses.onelink.me/xLWk/36a2ff16';
+              // _sharePost(message);
               // }
             },
             child: const Text('Refer')
