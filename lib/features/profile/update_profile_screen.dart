@@ -172,7 +172,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
   @override
   Widget build(BuildContext context) {
     ModalRoute? currentRoute = ModalRoute.of(context);
-    String? nameValidator = Validator.nameValidator(_name!);
+    // String? nameValidator = Validator.nameValidator(_name!);
     return GestureDetector(
       onTap: () => unFocusKeyboard(context),
       child: Scaffold(

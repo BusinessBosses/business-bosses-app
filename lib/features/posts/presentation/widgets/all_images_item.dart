@@ -1,6 +1,5 @@
 import 'package:business_bosses_v2/features/posts/models/post_model.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import '../../../../common/widgets/network_image_with_placeholder.dart';
 import '../../../../utils/theme/theme.dart';

@@ -1,11 +1,13 @@
 import 'package:business_bosses_v2/features/posts/controllers/posts_controller.dart';
 import 'package:business_bosses_v2/features/posts/models/post_model.dart';
 import 'package:business_bosses_v2/features/posts/presentation/widgets/post_images.dart';
+import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/utils/constants/constants.dart';
 import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
 import 'package:detectable_text_field/widgets/detectable_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
 import '../../../../common/widgets/ranking_badge.dart';
@@ -25,8 +27,9 @@ class PostTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final sandBox = GetStorage();
-    final String uid = sandBox.read(Constants.USER_ID);
+    final ProfileController profileController = Get.find();
+    // final sandBox = GetStorage();
+    // final String uid = sandBox.read(Constants.USER_ID);
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -158,12 +161,15 @@ class PostTile extends StatelessWidget {
               Row(
                 children: [
                   TextButton.icon(
-                    onPressed: () {
-                      controller.postLike(uid, post.postId);
+                    onPressed: () async {
+                      controller.postLike(
+                          profileController.myProfile.uid, post.postId);
                     },
-                    icon: post.likes?.contains(uid) ?? false
-                        ? SvgPicture.asset('assets/svgs/likefilled.svg')
-                        : SvgPicture.asset('assets/svgs/like.svg'),
+                    icon:
+                        post.likes?.contains(profileController.myProfile.uid) ??
+                                false
+                            ? SvgPicture.asset('assets/svgs/likefilled.svg')
+                            : SvgPicture.asset('assets/svgs/like.svg'),
                     label: Text(
                       '${post.likes?.length ?? 0}',
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
@@ -186,12 +192,15 @@ class PostTile extends StatelessWidget {
                   TextButton.icon(
                     onPressed: () async {
                       // final sandBox = GetStorage();
-                      // final String uid = sandBox.read(Constants.USER_ID);
-                      controller.postCoin(uid, post.postId);
+                      // final String profileController.myProfile.uid = sandBox.read(Constants.USER_ID);
+                      controller.postCoin(profileController.myProfile.uid,
+                          post.postId, profileController);
                     },
-                    icon: post.coins?.contains(uid) ?? false
-                        ? SvgPicture.asset('assets/svgs/coin.svg')
-                        : SvgPicture.asset('assets/svgs/coin.svg'),
+                    icon:
+                        post.coins?.contains(profileController.myProfile.uid) ??
+                                false
+                            ? SvgPicture.asset('assets/svgs/coin.svg')
+                            : SvgPicture.asset('assets/svgs/coin.svg'),
                     label: Text(
                       '${post.coins?.length ?? 0}',
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(

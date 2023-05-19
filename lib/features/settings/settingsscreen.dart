@@ -3,7 +3,6 @@ import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:provider/provider.dart';
 
 import '../../action/action.dart';
 import '../../functions/my_native_functions.dart';
@@ -72,7 +71,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
               child: InkWell(
                 onTap: () {
                   logout();
-                  Get.toNamed(Routes.login);
                 },
                 borderRadius: BorderRadius.circular(radiusValue),
                 child: Ink(
@@ -107,6 +105,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   void _onTab(String label) {
     if ('Edit Profile' == label) {
     } else if ('Change password' == label) {
+      Get.toNamed(Routes.changePassword);
     } else if (label == 'Community Rules') {
     } else if (label == 'Invite a friend terms & conditions') {
     } else if ('Contact us' == label) {

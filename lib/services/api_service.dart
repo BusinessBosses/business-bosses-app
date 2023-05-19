@@ -46,7 +46,6 @@ class ApiService {
       return jsonResponse;
     } else {
       final dynamic jsonResponse = json.decode(response.body);
-      print(jsonResponse);
       return jsonResponse;
     }
   }
@@ -95,7 +94,26 @@ class ApiService {
           Constants.ACCESS_TOKEN, jsonResponse['data']['accessToken']);
       await prefs.setString(
           Constants.USER_ID, jsonResponse['data']['uid'].toString());
-      // sandBox.write(Constants.USER_ID, jsonResponse['data']['uid']);
+      return jsonResponse;
+    } else {
+      final dynamic jsonResponse = json.decode(response.body);
+      return jsonResponse;
+    }
+  }
+
+  /// CHANGE PASSWORD
+  Future<dynamic> changePassword(String email, String password) async {
+    Map<String, dynamic> data = {
+      'email': email,
+      'newPassword': password,
+    };
+    final http.Response response = await http.post(
+      Uri.parse('${Constants.baseUrl}/auth/reset-password'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode(data),
+    );
+    if (response.statusCode == 200) {
+      final dynamic jsonResponse = json.decode(response.body);
       return jsonResponse;
     } else {
       final dynamic jsonResponse = json.decode(response.body);
@@ -168,7 +186,7 @@ class ApiService {
   static Future<ApiResponseModel> get({
     required String path,
   }) async {
-    final String token = sandBox.read(Constants.ACCESS_TOKEN);
+    final String? token = sandBox.read(Constants.ACCESS_TOKEN);
     try {
       final http.Response response = await http.get(
         Uri.parse('${Constants.baseUrl}/$path'),
