@@ -10,20 +10,22 @@ import '../../../utils/theme/theme.dart';
 import '../../profile/presentation/publicprofilescreen.dart';
 
 class ConnectionUserItem extends StatelessWidget {
-  final UserModel? user;
+  final UserModel user;
   final bool status;
   final String? label;
-  final Function()? onChangeConnectionStatus;
+  final Function(UserModel)? onChangeConnectionStatus;
   final Function()? onTap;
+  final bool? isMe;
 
-  const ConnectionUserItem({
-    Key? key,
-    @required this.user,
-    this.status = false,
-    this.label,
-    this.onChangeConnectionStatus,
-    this.onTap,
-  }) : super(key: key);
+  const ConnectionUserItem(
+      {Key? key,
+      required this.user,
+      this.status = false,
+      this.label,
+      this.onChangeConnectionStatus,
+      this.onTap,
+      this.isMe})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -51,11 +53,11 @@ class ConnectionUserItem extends StatelessWidget {
               iconSize: 24.0,
             ),
             title: Text(
-              'user.name',
+              user.username,
               maxLines: 1,
             ),
             subtitle: Text(
-              'user?.category ?? user?.companyName ?? user?.bio!'!,
+              user.category ?? user.companyName ?? user.bio ?? '',
               overflow: TextOverflow.ellipsis,
               maxLines: 1,
             ),
@@ -64,21 +66,26 @@ class ConnectionUserItem extends StatelessWidget {
                 //     FirebaseAuth.instance.currentUser.uid == user.uid
                 // ? const SizedBox()
                 // :
-                MCustomButton(
-              buttonType: status ? ButtonType.outline : ButtonType.elevated,
-              child: status
-                  ? const Text(
-                      'Connected',
-                      style: TextStyle(color: primaryColorLT),
-                    )
-                  : const Text(
-                      'Connect',
-                      style: TextStyle(color: Colors.white),
-                    ),
-              onPressed: onChangeConnectionStatus,
-              height: 36.0,
-              width: 120.0,
-            ),
+                isMe != null && isMe!
+                    ? null
+                    : MCustomButton(
+                        buttonType:
+                            status ? ButtonType.outline : ButtonType.elevated,
+                        child: status
+                            ? const Text(
+                                'Connected',
+                                style: TextStyle(color: primaryColorLT),
+                              )
+                            : const Text(
+                                'Connect',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                        onPressed: () {
+                          onChangeConnectionStatus!(user);
+                        },
+                        height: 36.0,
+                        width: 120.0,
+                      ),
           );
   }
 }

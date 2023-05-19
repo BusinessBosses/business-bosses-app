@@ -39,7 +39,8 @@ class MyProfileHeader extends StatelessWidget {
                     Expanded(
                         child: CustomChildButton(
                       onPressed: () {
-                        Get.toNamed(Routes.allconnectionsscreen);
+                        Get.toNamed(Routes.allconnectionsscreen,
+                            arguments: {'uid': myProfile.uid, 'pageIndex': 0});
                         // return navigateTo(
                         //   context,
                         //   routeName: AllConnectionsScreen.routeName,
@@ -52,7 +53,9 @@ class MyProfileHeader extends StatelessWidget {
                     Expanded(
                         child: CustomChildButton(
                       onPressed: () {
-                        Get.toNamed(Routes.allconnectionsscreen);
+                        Get.toNamed(Routes.allconnectionsscreen,
+                            arguments: {'uid': myProfile.uid, 'pageIndex': 1});
+                        // Get.toNamed(Routes.allconnectionsscreen);
                         // navigateTo(
                         //   context,
                         //   routeName: AllConnectionsScreen.routeName,
@@ -69,7 +72,7 @@ class MyProfileHeader extends StatelessWidget {
                             : 0,
                         caption: 'Referrals',
                         onPressed: () {
-                          Get.toNamed(Routes.allconnectionsscreen);
+                          Get.toNamed(Routes.referscreen);
                           // navigateTo(
                           //   context,
                           //   routeName: ReferralsDetailsScreen.routeName,

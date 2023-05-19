@@ -56,7 +56,8 @@ Widget FriendProfileHeader(UserModel _publicUser) {
                 caption: 'Connections',
                 /*'Connections',*/
                 onPressed: () {
-                  Get.toNamed(Routes.allconnectionsscreen);
+                  Get.toNamed(Routes.allconnectionsscreen,
+                      arguments: {'uid': _publicUser.uid, 'pageIndex': 0});
                   // navigateTo(
                   //   context,
                   //   routeName: AllConnectionsScreen.routeName,
@@ -78,7 +79,9 @@ Widget FriendProfileHeader(UserModel _publicUser) {
               caption: 'Connected',
               // 'Connected',
               onPressed: () {
-                Get.toNamed(Routes.allconnectionsscreen);
+                Get.toNamed(Routes.allconnectionsscreen,
+                    arguments: {'uid': _publicUser.uid, 'pageIndex': 1});
+                // Get.toNamed(Routes.allconnectionsscreen);
                 // navigateTo(
                 //   context,
                 //   routeName: AllConnectionsScreen.routeName,

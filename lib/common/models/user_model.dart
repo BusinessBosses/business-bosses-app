@@ -30,6 +30,8 @@ class UserModel {
   final List<String>? productsandservices;
   final List<ReferralsModel>? refers;
   final List<String>? deviceTokens;
+  final List<String>? connections;
+  final List<String>? connecteds;
   final List<DisconnectionsModel>? disconnections;
   final bool? active;
   final bool? deactivated;
@@ -41,6 +43,7 @@ class UserModel {
   final int? unReadCount;
   final bool? isRanked;
   final String? inviteId;
+
   UserModel(
       {this.uid = '',
       this.username = '',
@@ -74,6 +77,8 @@ class UserModel {
       this.connectedCount,
       this.unReadCount,
       this.isRanked,
+      this.connections,
+      this.connecteds,
       this.inviteId});
 
   UserModel copyWith(
@@ -99,6 +104,8 @@ class UserModel {
       List<String>? productsandservices,
       List<ReferralsModel>? refers,
       List<String>? deviceTokens,
+      List<String>? connections,
+      List<String>? connecteds,
       List<DisconnectionsModel>? disconnections,
       bool? active,
       bool? deactivated,
@@ -146,6 +153,8 @@ class UserModel {
       unReadCount: unReadCount ?? this.unReadCount,
       isRanked: isRanked ?? this.isRanked,
       inviteId: inviteId ?? this.inviteId,
+      connections: connections ?? this.connections,
+      connecteds: connecteds ?? this.connecteds,
     );
   }
 
@@ -173,6 +182,8 @@ class UserModel {
       'productsandservices': productsandservices,
       'refers': refers?.map((ReferralsModel x) => x.toMap()).toList(),
       'deviceTokens': deviceTokens,
+      'connections': connections,
+      'connecteds': connecteds,
       'disconnections':
           disconnections?.map((DisconnectionsModel x) => x.toMap()).toList(),
       'active': active,
@@ -229,6 +240,12 @@ class UserModel {
           : null,
       deviceTokens: map['deviceTokens'] != null
           ? List<String>.from((map['deviceTokens'] as List<String>))
+          : null,
+      connections: map['connections'] != null
+          ? List<String>.from((map['connections']))
+          : null,
+      connecteds: map['connecteds'] != null
+          ? List<String>.from((map['connecteds']))
           : null,
       disconnections: map['disconnections'] != null
           ? List<DisconnectionsModel>.from(
@@ -296,6 +313,8 @@ class UserModel {
         listEquals(other.productsandservices, productsandservices) &&
         listEquals(other.refers, refers) &&
         listEquals(other.deviceTokens, deviceTokens) &&
+        listEquals(other.connections, connections) &&
+        listEquals(other.connecteds, connecteds) &&
         listEquals(other.disconnections, disconnections) &&
         other.active == active &&
         other.deactivated == deactivated &&
@@ -333,6 +352,8 @@ class UserModel {
         productsandservices.hashCode ^
         refers.hashCode ^
         deviceTokens.hashCode ^
+        connections.hashCode ^
+        connecteds.hashCode ^
         disconnections.hashCode ^
         active.hashCode ^
         deactivated.hashCode ^

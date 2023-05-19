@@ -30,7 +30,7 @@ class _ReferScreenState extends State<ReferScreen> {
   final List<MyUser> _selectedUsers = [];
 
   bool _isProcessing = false;
-  bool _isLoading = true;
+  bool _isLoading = false;
 
   bool _isInit = false;
   final List<String> _alreadyReferredUsers = [];

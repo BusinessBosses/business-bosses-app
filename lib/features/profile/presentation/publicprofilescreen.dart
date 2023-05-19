@@ -2,6 +2,7 @@ import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/features/posts/models/post_model.dart';
 import 'package:business_bosses_v2/features/profile/widgets/profileinfodisplay.dart';
 import 'package:business_bosses_v2/features/profile/widgets/profilepostsdisplay.dart';
+import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -49,6 +50,53 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
 
   Future<void> report(
       BuildContext context, String type, String publicUserUid) async {}
+
+  Future<void> connect(String userId) async {
+    final res = await ApiService.post(path: '/connection/connect', body: {
+      'userId': _profileController.myProfile.uid,
+      'connectedId': userId
+    });
+  }
+
+  Future<void> disconnect(String userId) async {
+    final res = await ApiService.post(path: '/connection/disconnect', body: {
+      'userId': _profileController.myProfile.uid,
+      'connectedId': userId
+    });
+  }
+
+  void connectToUser() async {
+    final checkConnected = _profileController.myProfile.connecteds == null
+        ? -1
+        : _profileController.myProfile.connecteds!
+            .indexWhere((element) => element == publicUser.uid);
+    if (checkConnected == -1) {
+      // connecteds.add(user);
+      _profileController.updateConnections(publicUser.uid);
+      setState(() {
+        publicUser = UserModel.fromMap({
+          ...publicUser.toMap(),
+          'connectionCount': publicUser.connectionCount == null
+              ? 1
+              : publicUser.connectionCount! + 1
+        });
+      });
+      await connect(publicUser.uid);
+    } else {
+      _profileController.updateConnections(publicUser.uid);
+
+      setState(() {
+        publicUser = UserModel.fromMap({
+          ...publicUser.toMap(),
+          'connectionCount': publicUser.connectionCount == null
+              ? null
+              : publicUser.connectionCount! - 1
+        });
+      });
+      // connecteds.removeAt(checkConnected);
+      await disconnect(publicUser.uid);
+    }
+  }
 
   @override
   void initState() {
@@ -260,7 +308,8 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
             children: [
               // if (_publicUser.uid !=
               //     'FirebaseAuth.instance.currentUser.uid') ...{
-              OutlineButtonHeader(publicUser),
+              OutlineButtonHeader(
+                  publicUser, _profileController.myProfile, connectToUser),
               // const SizedBox(height: 8.0),
               // },
 

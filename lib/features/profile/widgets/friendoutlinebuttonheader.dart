@@ -7,7 +7,8 @@ import '../../../common/models/user_model.dart';
 import '../../../common/widgets/buttons/my_outlined_button.dart';
 import '../../../utils/theme/theme.dart';
 
-Widget OutlineButtonHeader(UserModel _publicUser) {
+Widget OutlineButtonHeader(
+    UserModel _publicUser, UserModel myProfile, VoidCallback onConnect) {
   bool connectedbutton = true;
   // final UserModel _publicUser = UserModel(
   //     achievements: 'jnkknmmk+llllmlhj+jkhkh'.split('+'),
@@ -50,17 +51,19 @@ Widget OutlineButtonHeader(UserModel _publicUser) {
                   : ButtonType.elevated,
               margin: const EdgeInsets.symmetric(horizontal: 4.0),
               child: FittedBox(
-                child: connectedbutton == true
+                child: myProfile.connecteds != null &&
+                        myProfile.connecteds!.contains(_publicUser.uid)
                     ? const Text(
                         'Connected',
                         style: TextStyle(color: primaryColorLT),
                       )
                     : const Text(
                         'Connect',
-                        style: TextStyle(color: Colors.white),
+                        style: TextStyle(color: primaryColorLT),
                       ),
               ),
               onPressed: () async {
+                onConnect();
                 //   String connectId =
                 //       MyConnect.connectId(userCtrl.user.uid, _publicUser.uid);
                 //   String puCountPath = Constants.USERS +

@@ -11,7 +11,11 @@ class ProfileController extends GetxController {
 
   ///MODELIZE RAW DATA AND PUSH TO STATE
   void processDataToState(dynamic userData) {
-    final UserModel modelizedData = UserModel.fromMap(userData);
+    final UserModel modelizedData = UserModel.fromMap({
+      ...userData,
+      'connections': userData['connections']['connections'],
+      'connecteds': userData['connecteds']
+    });
     myProfile = modelizedData;
     update();
   }
@@ -19,6 +23,26 @@ class ProfileController extends GetxController {
   /// UPDATE USER DATA
   void updateProfile(Map<String, dynamic> newData) {
     myProfile = UserModel.fromMap(newData);
+    update();
+  }
+
+  void updateConnections(String uid) {
+    final checkIfConnected = myProfile.connecteds == null
+        ? false
+        : myProfile.connecteds!.contains(uid);
+    final newConnecteds = checkIfConnected
+        ? myProfile.connecteds?.where((element) => element != uid).toList()
+        : myProfile.connecteds == null
+            ? [uid]
+            : [...myProfile.connecteds!, uid];
+    myProfile = UserModel.fromMap({
+      ...myProfile.toMap(),
+      'connecteds': newConnecteds,
+      'connectedCount': checkIfConnected
+          ? myProfile.connectedCount! - 1
+          : myProfile.connectedCount! + 1
+    });
+
     update();
   }
 
