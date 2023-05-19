@@ -4,6 +4,7 @@ import 'package:business_bosses_v2/common/widgets/text_widget.dart';
 import 'package:business_bosses_v2/features/posts/models/post_model.dart';
 import 'package:business_bosses_v2/features/posts/repository/post_repository.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
+import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:business_bosses_v2/utils/constants/constants.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
@@ -11,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class PostsController extends GetxController {
   late IO.Socket socket;
@@ -19,6 +21,7 @@ class PostsController extends GetxController {
   final int postsSize = 20;
   RxBool error = RxBool(false);
   RxBool loading = RxBool(false);
+  // final ProfileController _profileController = Get.find();
 
   /// PROCESS RAW API DATA, MODELIZE AND SAVE TO STATE
   void processPostsToState(dynamic post) {
@@ -84,12 +87,18 @@ class PostsController extends GetxController {
 
   /// ADD NEW POST TO STATE
   void addNewPost(Map<String, dynamic> newPost) {
+    final sandBox = GetStorage();
+    final String uid = sandBox.read(Constants.USER_ID);
     PostModel modelizedNewPost = PostModel.fromMap({
       ...newPost,
       'coins': <String>[],
       'likes': <String>[],
       'comments': <CommentModel>[],
-      'user': {'username': '', 'email': '', 'uid': '', 'name': ''}
+      'user': {
+        'username': 'testUser1',
+        'email': 'test1@gmail.com',
+        'uid': uid,
+      }
     });
 
     posts.insert(0, modelizedNewPost);

@@ -30,6 +30,7 @@ class CreatePostScreen extends StatefulWidget {
     this.post,
     this.images,
   }) : super(key: key);
+  static const String routeName = '/create-post';
 
   @override
   State<CreatePostScreen> createState() => _CreatePostScreenState();

@@ -1,5 +1,4 @@
 import 'package:business_bosses_v2/common/models/user_model.dart';
-import 'package:business_bosses_v2/features/profile/user_profile_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';

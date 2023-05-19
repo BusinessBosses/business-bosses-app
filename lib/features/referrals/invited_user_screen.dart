@@ -6,7 +6,7 @@ import '../../common/models/my_user.dart';
 import '../../common/params.dart';
 import '../../common/widgets/safety_model.dart';
 import '../../common/widgets/user_avatar_with_badge.dart';
-import '../profile/publicprofilescreen.dart';
+import '../profile/presentation/publicprofilescreen.dart';
 import '../promotions/invite.dart';
 
 class InvitedUsersScreen extends StatefulWidget {

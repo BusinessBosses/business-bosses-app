@@ -10,7 +10,7 @@ import '../../common/widgets/safety_model.dart';
 import '../../common/widgets/search/search_bar.dart';
 import '../../utils/constants/constants.dart';
 import '../../utils/theme/theme.dart';
-import '../profile/promotionscreen.dart';
+import '../promotions/presentation/promotionscreen.dart';
 
 class ReferScreen extends StatefulWidget {
   static const routeName = '/refer-screen';
@@ -29,22 +29,22 @@ class _ReferScreenState extends State<ReferScreen> {
   final List<MyUser> _selectedUsers = [];
 
   bool _isProcessing = false;
-  bool _isLoading = true;
+  bool _isLoading = false;
 
   bool _isInit = false;
   final List<String> _alreadyReferredUsers = [];
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    if (!_isInit) {
-      _specificUser = ModalRoute.of(context)?.settings.arguments as UserModel;
+  // @override
+  // void didChangeDependencies() {
+  //   super.didChangeDependencies();
+  //   if (!_isInit) {
+  //     _specificUser = ModalRoute.of(context)?.settings.arguments as UserModel;
 
-      _fetchMyConnections();
+  //     _fetchMyConnections();
 
-      _isInit = true;
-    }
-  }
+  //     _isInit = true;
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {

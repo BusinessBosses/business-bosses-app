@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import '../myprofilescreen.dart';
+import '../presentation/myprofilescreen.dart';
 
 class ProductsandServicesExpansionTile extends StatefulWidget {
   const ProductsandServicesExpansionTile({Key? key}) : super(key: key);

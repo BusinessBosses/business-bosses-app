@@ -33,4 +33,5 @@ class Routes {
   static const String changePassword = '/changePasswordScreen';
   static const String deleteAccount = '/deleteAccountScreen';
   static const String allconnectionsscreen = '/allconnectionsScreen';
+  static const String allforumscreen = '/allforumScreen';
 }

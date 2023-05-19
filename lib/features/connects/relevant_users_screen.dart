@@ -9,8 +9,6 @@ import '../../common/params.dart';
 import '../../common/widgets/safety_model.dart';
 import '../../utils/constants/constants.dart';
 import '../../utils/theme/theme.dart';
-import '../profile/update_profile_screen.dart';
-import 'connection_grid_tile.dart';
 
 class RelevantUsersScreen extends StatefulWidget {
   static const routeName = '/relevant-users-screen';

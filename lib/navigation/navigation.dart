@@ -5,21 +5,18 @@ import 'package:business_bosses_v2/features/authentication/presentation/login_sc
 import 'package:business_bosses_v2/features/authentication/presentation/register_screen.dart';
 import 'package:business_bosses_v2/features/chat/chat_room_screen.dart';
 import 'package:business_bosses_v2/features/chat/chat_screen.dart';
-import 'package:business_bosses_v2/features/chat/controllers/chat_controller.dart';
-import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
-import 'package:business_bosses_v2/features/connects/all_connections_screen.dart';
+import 'package:business_bosses_v2/features/connects/presentation/all_connections_screen.dart';
+import 'package:business_bosses_v2/features/forum/presentation/all_forum_screen.dart';
 import 'package:business_bosses_v2/features/moreinfoscreens/bossuppartner.dart';
 import 'package:business_bosses_v2/features/notifications/notificationsscreen.dart';
 import 'package:business_bosses_v2/features/home/bottom_nav.dart';
-import 'package:business_bosses_v2/features/posts/controllers/posts_controller.dart';
 import 'package:business_bosses_v2/features/posts/presentation/create_post_screen.dart';
 import 'package:business_bosses_v2/features/profile/analysescreen.dart';
 import 'package:business_bosses_v2/features/profile/change_password_screen.dart';
-import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
-import 'package:business_bosses_v2/features/profile/myprofilescreen.dart';
-import 'package:business_bosses_v2/features/profile/promotionscreen.dart';
-import 'package:business_bosses_v2/features/profile/publicprofilescreen.dart';
-import 'package:business_bosses_v2/features/profile/update_profile_screen.dart';
+import 'package:business_bosses_v2/features/profile/presentation/myprofilescreen.dart';
+import 'package:business_bosses_v2/features/promotions/presentation/promotionscreen.dart';
+import 'package:business_bosses_v2/features/profile/presentation/publicprofilescreen.dart';
+import 'package:business_bosses_v2/features/profile/presentation/update_profile_screen.dart';
 import 'package:business_bosses_v2/features/referrals/refer_screen.dart';
 import 'package:business_bosses_v2/features/settings/settingsscreen.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
@@ -54,7 +51,7 @@ class Nav {
     ),
     GetPage(
       name: Routes.bottomNavigation,
-      page: () => const BottomNavScreen(),
+      page: () => const BottomNavScreen(0, true),
       // binding: BindingsBuilder(
       //   () {
       //     Get.put(ProfileController());
@@ -98,7 +95,7 @@ class Nav {
     ),
     GetPage(
       name: Routes.publicProfile,
-      page: () => const PublicProfileScreen(),
+      page: () => PublicProfileScreen(),
     ),
     GetPage(
       name: Routes.referscreen,
@@ -106,7 +103,11 @@ class Nav {
     ),
     GetPage(
       name: Routes.allconnectionsscreen,
-      page: () => const AllConnectionsScreen(),
+      page: () => AllConnectionsScreen(),
+    ),
+    GetPage(
+      name: Routes.allforumscreen,
+      page: () => const AllForumScreen(),
     ),
     GetPage(
       name: Routes.changePassword,
