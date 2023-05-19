@@ -1,11 +1,15 @@
 import 'package:business_bosses_v2/features/posts/controllers/posts_controller.dart';
 import 'package:business_bosses_v2/features/posts/models/post_model.dart';
 import 'package:business_bosses_v2/features/posts/presentation/widgets/post_images.dart';
+import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
+import 'package:business_bosses_v2/features/profile/presentation/publicprofilescreen.dart';
+import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/utils/constants/constants.dart';
 import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
 import 'package:detectable_text_field/widgets/detectable_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
 import '../../../../common/widgets/ranking_badge.dart';
@@ -18,15 +22,20 @@ import '../../../../utils/time_format.dart';
 class PostTile extends StatelessWidget {
   final PostModel post;
   final PostsController controller;
+  final Function(int)? onPageChange;
 
   ///
-  const PostTile({Key? key, required this.post, required this.controller})
+  const PostTile(
+      {Key? key,
+      required this.post,
+      required this.controller,
+      this.onPageChange})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final sandBox = GetStorage();
-    final String uid = sandBox.read(Constants.USER_ID);
+    final ProfileController profileController = Get.find();
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -43,7 +52,15 @@ class PostTile extends StatelessWidget {
               ListTile(
                 contentPadding: const EdgeInsets.only(left: 15, right: 15),
                 leading: GestureDetector(
-                  onTap: () {},
+                  onTap: () {
+                    if (profileController.myProfile.uid == post.user!.uid) {
+                      if (onPageChange != null) {
+                        onPageChange!(3);
+                      }
+                    } else {
+                      Get.toNamed(Routes.publicProfile, arguments: post.user);
+                    }
+                  },
                   child: UserAvatarWithBadge(
                     user: post.user,
                     height: 55.0,
@@ -54,7 +71,16 @@ class PostTile extends StatelessWidget {
                   ),
                 ),
                 title: GestureDetector(
-                  onTap: () {},
+                  onTap: () {
+                    // Get.to(() => PublicProfileScreen());
+                    if (profileController.myProfile.uid == post.user!.uid) {
+                      if (onPageChange != null) {
+                        onPageChange!(3);
+                      }
+                    } else {
+                      Get.toNamed(Routes.publicProfile, arguments: post.user);
+                    }
+                  },
                   child: Text(
                     '${post.user?.username}',
                     style: Theme.of(context).textTheme.bodyLarge,
@@ -105,23 +131,24 @@ class PostTile extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 5,
-                        horizontal: 15,
-                      ),
-                      decoration: const BoxDecoration(
-                        color: backgroundcolorinterface,
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(5),
+                    if (post.promote ?? false)
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 5,
+                          horizontal: 15,
+                        ),
+                        decoration: const BoxDecoration(
+                          color: backgroundcolorinterface,
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(5),
+                          ),
+                        ),
+                        child: const TextWidget(
+                          text: 'Sponsored',
+                          fontWeight: FontWeight.w700,
+                          size: 10,
                         ),
                       ),
-                      child: const TextWidget(
-                        text: 'Sponsored',
-                        fontWeight: FontWeight.w700,
-                        size: 10,
-                      ),
-                    ),
                     const SizedBox(
                       height: 10,
                     ),
@@ -158,11 +185,14 @@ class PostTile extends StatelessWidget {
                 children: [
                   TextButton.icon(
                     onPressed: () {
-                      controller.postLike(uid, post.postId);
+                      controller.postLike(
+                          profileController.myProfile.uid, post.postId);
                     },
-                    icon: post.likes?.contains(uid) ?? false
-                        ? SvgPicture.asset('assets/svgs/likefilled.svg')
-                        : SvgPicture.asset('assets/svgs/like.svg'),
+                    icon:
+                        post.likes?.contains(profileController.myProfile.uid) ??
+                                false
+                            ? SvgPicture.asset('assets/svgs/likefilled.svg')
+                            : SvgPicture.asset('assets/svgs/like.svg'),
                     label: Text(
                       '${post.likes?.length ?? 0}',
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
@@ -186,11 +216,14 @@ class PostTile extends StatelessWidget {
                     onPressed: () async {
                       // final sandBox = GetStorage();
                       // final String uid = sandBox.read(Constants.USER_ID);
-                      controller.postCoin(uid, post.postId);
+                      controller.postCoin(profileController.myProfile.uid,
+                          post.postId, profileController);
                     },
-                    icon: post.coins?.contains(uid) ?? false
-                        ? SvgPicture.asset('assets/svgs/coin.svg')
-                        : SvgPicture.asset('assets/svgs/coin.svg'),
+                    icon:
+                        post.coins?.contains(profileController.myProfile.uid) ??
+                                false
+                            ? SvgPicture.asset('assets/svgs/coin.svg')
+                            : SvgPicture.asset('assets/svgs/coin.svg'),
                     label: Text(
                       '${post.coins?.length ?? 0}',
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(

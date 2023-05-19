@@ -23,7 +23,7 @@ class CreatePostUserTile extends StatelessWidget {
         const SizedBox(width: 16.0),
         Expanded(
           child: Text(
-            user.name!,
+            user.username,
             style: Theme.of(context)
                 .textTheme
                 .titleLarge!

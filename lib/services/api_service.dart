@@ -6,18 +6,16 @@ import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/utils/validators/validator.dart';
 import 'package:business_bosses_v2/utils/constants/constants.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../common/models/user_model.dart';
 import '../navigation/routes.dart';
 
 /// SERVER BASE URL
-const String baseUrl = 'https://businessbosses-api.vercel.app/api/v1';
-// const String baseUrl = 'http://192.168.1.176:3000/api/v1';
+// const String {Constants.baseUrl} = 'https://businessbosses-api.vercel.app/api/v1';
+// const String {Constants.baseUrl} = 'http://192.168.1.176:3000/api/v1';
 
 /// LOCAL STORAGE SANDBOX
 final GetStorage sandBox = GetStorage();
@@ -33,7 +31,7 @@ class ApiService {
       'password': password,
     };
     final http.Response response = await http.post(
-      Uri.parse('$baseUrl/auth/sign-in'),
+      Uri.parse('${Constants.baseUrl}/auth/sign-in'),
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode(data),
     );
@@ -44,11 +42,9 @@ class ApiService {
       await prefs.setString(
           Constants.USER_ID, jsonResponse['data']['uid'].toString());
       // sandBox.write(Constants.USER_ID, jsonResponse['data']['uid'].toString());
-      Get.toNamed(Routes.bottomNavigation);
       return jsonResponse;
     } else {
       final dynamic jsonResponse = json.decode(response.body);
-      print(jsonResponse);
       return jsonResponse;
     }
   }
@@ -87,7 +83,7 @@ class ApiService {
       'password': password,
     };
     final http.Response response = await http.post(
-      Uri.parse('$baseUrl/auth/sign-up'),
+      Uri.parse('${Constants.baseUrl}/auth/sign-up'),
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode(data),
     );
@@ -97,7 +93,26 @@ class ApiService {
           Constants.ACCESS_TOKEN, jsonResponse['data']['accessToken']);
       await prefs.setString(
           Constants.USER_ID, jsonResponse['data']['uid'].toString());
-      // sandBox.write(Constants.USER_ID, jsonResponse['data']['uid']);
+      return jsonResponse;
+    } else {
+      final dynamic jsonResponse = json.decode(response.body);
+      return jsonResponse;
+    }
+  }
+
+  /// CHANGE PASSWORD
+  Future<dynamic> changePassword(String email, String password) async {
+    Map<String, dynamic> data = {
+      'email': email,
+      'newPassword': password,
+    };
+    final http.Response response = await http.post(
+      Uri.parse('${Constants.baseUrl}/auth/reset-password'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode(data),
+    );
+    if (response.statusCode == 200) {
+      final dynamic jsonResponse = json.decode(response.body);
       return jsonResponse;
     } else {
       final dynamic jsonResponse = json.decode(response.body);
@@ -112,7 +127,7 @@ class ApiService {
       'email': email,
     };
     final http.Response response = await http.post(
-      Uri.parse('$baseUrl/auth/email-exist'),
+      Uri.parse('${Constants.baseUrl}/auth/email-exist'),
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode(data),
     );
@@ -146,12 +161,12 @@ class ApiService {
     required String path,
     required Map<String, dynamic> body,
   }) async {
-    log(body.toString());
+    // log(body.toString());
     final String token = sandBox.read(Constants.ACCESS_TOKEN);
-    log(token);
+    // log(token);
     try {
       final http.Response response = await http.post(
-        Uri.parse('$baseUrl/$path'),
+        Uri.parse('${Constants.baseUrl}/$path'),
         body: jsonEncode(body),
         headers: <String, String>{
           'Content-Type': 'application/json',
@@ -170,10 +185,10 @@ class ApiService {
   static Future<ApiResponseModel> get({
     required String path,
   }) async {
-    final String token = sandBox.read(Constants.ACCESS_TOKEN);
+    final String? token = sandBox.read(Constants.ACCESS_TOKEN);
     try {
       final http.Response response = await http.get(
-        Uri.parse('$baseUrl/$path'),
+        Uri.parse('${Constants.baseUrl}/$path'),
         headers: <String, String>{
           'Content-type': 'application/json',
           'Accept': 'application/json',
@@ -185,7 +200,7 @@ class ApiService {
 
       return ApiResponseModel.fromMap(jsonDecode(response.body));
     } catch (e) {
-      throw e.toString();
+      rethrow;
     }
   }
 
@@ -197,7 +212,7 @@ class ApiService {
     final String token = sandBox.read(Constants.ACCESS_TOKEN);
     try {
       final http.Response response = await http.put(
-        Uri.parse('$baseUrl/$path'),
+        Uri.parse('${Constants.baseUrl}/$path'),
         body: jsonEncode(body),
         headers: <String, String>{
           'Content-type': 'application/json',
@@ -216,19 +231,18 @@ class ApiService {
   /// HTTP DELETE CALL
   static Future<ApiResponseModel> delete({
     required String path,
-    required Map<String, dynamic> body,
   }) async {
     final String token = sandBox.read(Constants.ACCESS_TOKEN);
     try {
       final http.Response response = await http.delete(
-        Uri.parse('$baseUrl/$path'),
-        body: jsonEncode(body),
+        Uri.parse('${Constants.baseUrl}/$path'),
         headers: <String, String>{
           'Content-type': 'application/json',
           'Accept': 'application/json',
           'Authorization': 'bearer $token'
         },
       );
+      log(response.body);
       return ApiResponseModel.fromMap(jsonDecode(response.body));
     } catch (e) {
       throw e.toString();

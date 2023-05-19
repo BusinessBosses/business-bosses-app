@@ -1,22 +1,28 @@
+import 'package:business_bosses_v2/features/chat/controllers/chat_controller.dart';
+import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/posts/controllers/posts_controller.dart';
-import 'package:business_bosses_v2/features/profile/myprofilescreen.dart';
+import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
+import 'package:business_bosses_v2/features/profile/presentation/myprofilescreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 
+import '../../common/widgets/typography/text_widget.dart';
+import '../../services/api_service.dart';
 import '../../utils/theme/theme.dart';
 import '../posts/presentation/create_post_screen.dart';
 import 'all_communities_screen.dart';
 import 'home_screen.dart';
 import 'marketplace_screen.dart';
 
-import '../profile/myprofilescreen.dart';
+import '../profile/presentation/myprofilescreen.dart';
 
 /// Bottom Nav Screen is basically where all home screens are navigated through
 class BottomNavScreen extends StatefulWidget {
   /// Constructor
-  const BottomNavScreen({super.key});
+  const BottomNavScreen(int i, bool bool, {super.key});
 
   @override
   State<BottomNavScreen> createState() => _BottomNavScreenState();
@@ -24,7 +30,20 @@ class BottomNavScreen extends StatefulWidget {
 
 class _BottomNavScreenState extends State<BottomNavScreen> {
   final PostsController _postsController = Get.put(PostsController());
+  final ProfileController _profileController = Get.put(ProfileController());
+  final ChatController _chatController = Get.put(ChatController());
+  final HomeController _homeController = Get.put(HomeController());
+
   int _activeIndex = 0;
+  int currentTimestamp = DateTime.now().millisecondsSinceEpoch;
+  final GetStorage sandBox = GetStorage();
+
+  void onPageChange(int page) {
+    setState(() {
+      _activeIndex = page;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -69,10 +88,11 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
                 color: Colors.white,
                 child: IndexedStack(
                   index: _activeIndex,
-                  children: const <Widget>[
-                    HomeScreen(),
+                  children: <Widget>[
+                    HomeScreen(onPageChange: _onChangePage),
                     AllCommunitiesScreen(),
                     MarketplaceScreen(),
+                    // Container()
                     MyProfileScreen(),
                   ],
                 ),
@@ -169,7 +189,7 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
                               // log("Hello world");
                               Navigator.push(
                                 context,
-                                MaterialPageRoute(
+                                MaterialPageRoute<dynamic>(
                                   builder: (BuildContext context) =>
                                       const CreatePostScreen(),
                                 ),

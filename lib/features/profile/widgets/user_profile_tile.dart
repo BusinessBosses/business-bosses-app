@@ -3,42 +3,21 @@ import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import '../../common/models/api_response_model.dart';
-import '../../common/widgets/network_image_with_placeholder.dart';
-import '../../services/api_service.dart';
-import '../../utils/constants/constants.dart';
+import '../../../common/models/api_response_model.dart';
+import '../../../common/widgets/network_image_with_placeholder.dart';
+import '../../../services/api_service.dart';
+import '../../../utils/constants/constants.dart';
 
 // ignore: public_member_api_docs
 class UserProfileTile extends StatefulWidget {
+  final UserModel myProfile;
+
+  const UserProfileTile({Key? key, required this.myProfile}) : super(key: key);
   @override
   State<UserProfileTile> createState() => _UserProfileTileState();
 }
 
 class _UserProfileTileState extends State<UserProfileTile> {
-  String? name = '';
-  String? category = '';
-  String? companyName = '';
-  String? location = '';
-  bool? isRanked = false;
-
-  @override
-  void initState() {
-    super.initState();
-    // fetchData();
-  }
-
-  dynamic fetchData() async {
-    final String userID = sandBox.read(Constants.USER_ID);
-    final ApiResponseModel response =
-        await ApiService.get(path: 'users/$userID');
-    setState(() {
-      name = response.data['name'];
-      category = response.data['category'];
-      companyName = response.data['companyName'];
-      location = response.data['location'];
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     // fetchData();
@@ -62,8 +41,8 @@ class _UserProfileTileState extends State<UserProfileTile> {
                   alignment: Alignment.topLeft,
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(1000),
-                    child: const NetworkImageWithPlaceHolder(
-                      imageUrl:
+                    child: NetworkImageWithPlaceHolder(
+                      imageUrl: widget.myProfile.photoUrl ??
                           'https://w7.pngwing.com/pngs/831/88/png-transparent-user-profile-computer-icons-user-interface-mystique-miscellaneous-user-interface-design-smile-thumbnail.png',
                       height: 105.0,
                       width: 105.0,
@@ -76,7 +55,7 @@ class _UserProfileTileState extends State<UserProfileTile> {
                   ),
                 ),
               ),
-              isRanked!
+              widget.myProfile.isRanked ?? false
                   ? Positioned(
                       right: 0.0,
                       bottom: 0.0,
@@ -130,7 +109,7 @@ class _UserProfileTileState extends State<UserProfileTile> {
                 children: [
                   const SizedBox(height: 6.0),
                   Text(
-                    name ?? '',
+                    widget.myProfile.name ?? '',
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
@@ -138,14 +117,14 @@ class _UserProfileTileState extends State<UserProfileTile> {
                         ),
                   ),
                   Text(
-                    category ?? '',
+                    widget.myProfile.category ?? '',
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                           fontWeight: FontWeight.bold,
                         ),
                   ),
-                  Text(companyName ?? '',
+                  Text(widget.myProfile.companyName ?? '',
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: Theme.of(context)
@@ -153,7 +132,7 @@ class _UserProfileTileState extends State<UserProfileTile> {
                           .bodyLarge
                           ?.copyWith(fontWeight: FontWeight.normal)),
                   Text(
-                    location ?? '',
+                    widget.myProfile.location ?? '',
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(

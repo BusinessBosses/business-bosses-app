@@ -6,6 +6,8 @@ import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
+import '../../../../common/dialogs/snackbar.dart';
+
 class AddImageWidget extends StatelessWidget {
   const AddImageWidget({Key? key, required this.controller}) : super(key: key);
   final CreatePostController controller;
@@ -26,7 +28,11 @@ class AddImageWidget extends StatelessWidget {
           ),
           GestureDetector(
             onTap: () {
-              controller.onPickImage();
+              if (controller.imageFileList.length < 5) {
+                controller.onPickImage();
+              } else {
+                showSnackbar(message: 'You can only upload up to 5 images.');
+              }
             },
             child: CircleAvatar(
               radius: 26 / 1.38,
@@ -39,7 +45,7 @@ class AddImageWidget extends StatelessWidget {
           ),
           const Spacer(),
           const Text(
-            'Max file size for images is 3MB',
+            'Max file size for images is 10Mb',
             style: TextStyle(fontSize: 11, color: Colors.red),
           )
         ],

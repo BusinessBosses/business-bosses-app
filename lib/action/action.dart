@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:social_share/social_share.dart';
 
 import '../common/models/my_response.dart';
@@ -19,9 +20,9 @@ void showSnackBar(BuildContext context, {String message = Constants.STGW}) {
 
 Future<dynamic> navigateTo(
   BuildContext context, {
-  required String routeName,
+  String? routeName,
   var arguments,
-  isRemoveUntil = false,
+  bool isRemoveUntil = false,
 }) async {
   // print("=====>>>> $routeName");
   if (routeName == null) {
@@ -32,8 +33,7 @@ Future<dynamic> navigateTo(
         routeName, (route) => false,
         arguments: arguments);
   } else {
-    return await Navigator.of(context)
-        .pushNamed(routeName, arguments: arguments);
+    return await Get.toNamed(routeName, arguments: arguments);
   }
 }
 
@@ -72,18 +72,18 @@ Future<void> onDetectableTextTap(
   showSnackBar(context, message: val);
 }
 
-Future<MyResponse> socialShare(String message) async {
-  debugPrint('socialShare: $message');
+Future<void> socialShare(String message) async {
+  // debugPrint('socialShare: $message');
   try {
-    bool? data = await SocialShare.shareOptions(message);
-    debugPrint('socialShare: $data');
-    if (data == null || !data) {
-      return MyResponse(success: false);
-    } else {
-      return MyResponse(success: true);
-    }
+    await SocialShare.shareOptions(message);
+    // debugPrint('socialShare: $data');
+    // if (data == null || !data) {
+    //   return MyResponse(success: false);
+    // } else {
+    //   return MyResponse(success: true);
+    // }
   } catch (e) {
     debugPrint('socialShare: $e');
-    return MyResponse(success: false, message: e.toString());
+    // return MyResponse(success: false, message: e.toString());
   }
 }

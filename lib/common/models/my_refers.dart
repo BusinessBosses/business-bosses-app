@@ -65,7 +65,7 @@ class MyRefers {
         }
       }
     }
-    debugPrint('MyRefers.uniqueUserUidList ${refsUids.length}');
+
     return refsUids;
   }
 }

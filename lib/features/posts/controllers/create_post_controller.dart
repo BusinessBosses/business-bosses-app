@@ -6,8 +6,11 @@ import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/features/posts/controllers/posts_controller.dart';
 import 'package:business_bosses_v2/features/posts/repository/post_repository.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+
+import '../presentation/boost_post_screen.dart';
 
 /// CREATEPOSTCONTROLLER
 class CreatePostController extends GetxController {
@@ -21,6 +24,8 @@ class CreatePostController extends GetxController {
 
   /// PROMOTE STATE
   RxBool shouldPromote = false.obs;
+
+  bool _promote = false;
 
   /// LOADING STATE
   RxBool loading = false.obs;
@@ -53,8 +58,8 @@ class CreatePostController extends GetxController {
       final double kb = bytes / 1024;
       final double mb = kb / 1024;
 
-      if (mb >= 3) {
-        showSnackbar(message: 'Image size should be maximum 3 MB.');
+      if (mb >= 5) {
+        showSnackbar(message: 'Image size should be maximum 10 MB.');
         loading(false);
         return null;
       } else {
@@ -81,7 +86,14 @@ class CreatePostController extends GetxController {
 
         if (response.success) {
           _postsController.addNewPost(response.data);
-          Get.back();
+          if (shouldPromote.value == true) {
+            Get.to(() => BoostPost(
+                  postId: response.data['postId'],
+                  postTitle: response.data['title'],
+                ));
+          } else {
+            Get.back();
+          }
         }
       } else {
         if (await uploadFile() == null) {
@@ -93,7 +105,14 @@ class CreatePostController extends GetxController {
           if (response.success) {
             imageFileList.clear();
             _postsController.addNewPost(response.data);
-            Get.back();
+            if (shouldPromote.value == true) {
+              Get.to(() => BoostPost(
+                    postId: response.data['postId'],
+                    postTitle: response.data['title'],
+                  ));
+            } else {
+              Get.back();
+            }
           }
         }
       }
@@ -128,7 +147,7 @@ class CreatePostController extends GetxController {
           RxList<XFile>(<XFile>[...pickedFileList, ...imageFileList]);
       update();
     } catch (e) {
-      //
+      // handle error
     }
   }
 

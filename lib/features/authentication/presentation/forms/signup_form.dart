@@ -2,8 +2,6 @@ import 'dart:io';
 
 // import 'package:apple_sign_in_safety/apple_sign_in.dart';
 // import 'package:apple_sign_in_safety/apple_sign_in_button.dart';
-import 'package:business_bosses_v2/common/widgets/buttons/custom_button.dart'
-    as custombuttom;
 import 'package:business_bosses_v2/features/authentication/controller/auth_controller.dart';
 
 import 'package:country_picker/country_picker.dart';
@@ -34,6 +32,7 @@ class SignUpForm extends StatefulWidget {
 }
 
 class _SignUpFormState extends State<SignUpForm> {
+  bool _isProcessing = false;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   AutovalidateMode _autoValidateMode = AutovalidateMode.disabled;
   String? _username, _authCred, _password;
@@ -53,8 +52,6 @@ class _SignUpFormState extends State<SignUpForm> {
     });
   }
 
-  bool _isProcessing = false;
-
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -71,11 +68,11 @@ class _SignUpFormState extends State<SignUpForm> {
               TextFormField(
                 onChanged: (String val) async {
                   _username = val;
-                  // bool? result = await _verifyUnique(val, '');
-                  // setState(() {
-                  //   _isUniqueName = result;
-                  // });
-                  // _autoValidateMode = AutovalidateMode.always;
+                  bool? result = await _verifyUnique(val, '');
+                  setState(() {
+                    _isUniqueName = result;
+                  });
+                  _autoValidateMode = AutovalidateMode.always;
                 },
                 validator: (String? val) => Validator.usernameValidator(
                   val!,
@@ -95,16 +92,11 @@ class _SignUpFormState extends State<SignUpForm> {
                             Icons.check_circle,
                             color: Colors.green,
                           )
-                        : Icon(
-                            Icons.close,
-                            color: _isUniqueName == null
-                                ? Colors.transparent
-                                : Colors.red,
-                          ),
+                        : const SizedBox(),
                     filled: true,
                     fillColor: const Color(0xffF4F4F4)),
               ),
-              const SizedBox(height: 24.0),
+              const SizedBox(height: 15.0),
               TextWidget(
                 text: isEmailAuth ? 'Email' : 'Phone',
                 size: 0,
@@ -117,10 +109,10 @@ class _SignUpFormState extends State<SignUpForm> {
                 TextFormField(
                   onChanged: (String val) async {
                     _authCred = val;
-                    // bool? result = await _verifyUnique('', val);
-                    // setState(() {
-                    //   _isUniqueEmail = result;
-                    // });
+                    bool? result = await _verifyUnique('', val);
+                    setState(() {
+                      _isUniqueEmail = result;
+                    });
                   },
                   textInputAction: TextInputAction.next,
                   keyboardType: TextInputType.emailAddress,
@@ -138,12 +130,7 @@ class _SignUpFormState extends State<SignUpForm> {
                             Icons.check_circle,
                             color: Colors.green,
                           )
-                        : Icon(
-                            Icons.close,
-                            color: _isUniqueEmail == null
-                                ? Colors.transparent
-                                : Colors.red,
-                          ),
+                        : const SizedBox(),
                   ),
                   validator: (String? val) => Validator.emailValidatorSignUp(
                     _authCred,
@@ -193,13 +180,16 @@ class _SignUpFormState extends State<SignUpForm> {
           const SizedBox(height: 24.0),
           CustomButton(
             label: 'Sign Up',
-            onPressed: () {
+            onPressed: () async {
+              if (Validator.emailValidatorSignUp(_authCred,
+                          isUnique: _isUniqueEmail!) ==
+                      '' &&
+                  Validator.usernameValidator(_username!,
+                          isUnique: _isUniqueName!) ==
+                      '') {
               if (agreedToTerms) {
                 setState(() {
                   _autoValidateMode = AutovalidateMode.always;
-                });
-                if (!_formKey.currentState!.validate()) return;
-                setState(() {
                   _isProcessing = true;
                 });
                 AuthController().sendOtp(
@@ -211,13 +201,22 @@ class _SignUpFormState extends State<SignUpForm> {
                         _isProcessing = false;
                       });
                     });
-                setState(() {
-                  _isProcessing = false;
-                });
               } else {
                 Get.snackbar('Error',
                     'Before signing up, you must agree to our Terms and Conditions');
+                setState(() {
+                  _isProcessing = false;
+                });
               }
+              } else {
+                Get.snackbar('Error', 'Invalid Entries in Form');
+                setState(() {
+                  _isProcessing = false;
+                });
+              }
+              setState(() {
+                _isProcessing = false;
+              });
             },
             isProcessing: _isProcessing,
             buttonType: ButtonType.elevated,
@@ -272,12 +271,15 @@ class _SignUpFormState extends State<SignUpForm> {
           ),
           const SizedBox(height: 10.0),
           if (Platform.isIOS)
-            SignInWithAppleButton(
-              text: 'Sign up with Apple',
-              onPressed: () async {
-                AuthController().appleAuthentication();
-              },
-            )
+            Stack(children: [
+              SignInWithAppleButton(
+                height: 55,
+                text: 'SIgn up with Apple',
+                onPressed: () async {
+                  AuthController().appleAuthentication();
+                },
+              ),
+            ])
         ],
       ),
     );
@@ -371,13 +373,13 @@ class _SignUpFormState extends State<SignUpForm> {
     );
   }
 
-  // Future<bool?> _verifyUnique(String username, String email) async {
-  //   bool? user = await _apiService.verifyUnique(
-  //     username,
-  //     email,
-  //   );
-  //   return user;
-  // }
+  Future<bool?> _verifyUnique(String username, String email) async {
+    bool? user = await _apiService.verifyUnique(
+      username,
+      email,
+    );
+    return user;
+  }
 
   Future<void> launchPolicy() async {
     String url = Constants.PRIVACY_POLICY_LINK;

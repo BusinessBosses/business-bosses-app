@@ -1,39 +1,22 @@
 import 'package:business_bosses_v2/common/models/user_model.dart';
-import 'package:business_bosses_v2/features/profile/user_profile_tile.dart';
+import 'package:business_bosses_v2/features/profile/widgets/user_profile_tile.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:get/get.dart';
 
-import '../../common/widgets/buttons/custom_child_button.dart';
-import '../../utils/theme/theme.dart';
-import '../posts/models/post_model.dart';
-import '../posts/presentation/widgets/userpost_tile.dart';
+import '../../../action/action.dart';
+import '../../../common/params.dart';
+import '../../../common/widgets/buttons/custom_child_button.dart';
+import '../../../navigation/routes.dart';
+import '../../../utils/theme/theme.dart';
+import '../../connects/presentation/all_connections_screen.dart';
+import '../../posts/models/post_model.dart';
+import '../../posts/presentation/widgets/userpost_tile.dart';
+import '../../referrals/referrals_details_screen.dart';
 
-class MyProfileHeader extends StatefulWidget {
-  const MyProfileHeader({Key? key}) : super(key: key);
-
-  @override
-  _MyProfileHeaderState createState() => _MyProfileHeaderState();
-}
-
-class _MyProfileHeaderState extends State<MyProfileHeader> {
-  late UserModel _user;
-
-  bool _isInit = false;
-  int _mRefersCount = 0;
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    if (!_isInit) {
-      _getMyReferrals();
-      _isInit = true;
-    }
-  }
-
-  Future<void> _getMyReferrals() async {}
-
-  bool isBioVisible = false;
+class MyProfileHeader extends StatelessWidget {
+  const MyProfileHeader({Key? key, required this.myProfile}) : super(key: key);
+  final UserModel myProfile;
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +27,9 @@ class _MyProfileHeaderState extends State<MyProfileHeader> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              UserProfileTile(),
+              UserProfileTile(
+                myProfile: myProfile,
+              ),
               Container(
                 alignment: Alignment.center,
                 child: Row(
@@ -52,21 +37,45 @@ class _MyProfileHeaderState extends State<MyProfileHeader> {
                   children: [
                     Expanded(
                         child: CustomChildButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Get.toNamed(Routes.allconnectionsscreen,
+                            arguments: {'uid': myProfile.uid, 'pageIndex': 0});
+                        // return navigateTo(
+                        //   context,
+                        //   routeName: AllConnectionsScreen.routeName,
+                        //   arguments: Params(arg1: myProfile),
+                        // );
+                      },
                       caption: 'Connections',
-                      value: 0,
+                      value: myProfile.connectionCount ?? 0,
                     )),
                     Expanded(
                         child: CustomChildButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Get.toNamed(Routes.allconnectionsscreen,
+                            arguments: {'uid': myProfile.uid, 'pageIndex': 1});
+                        // Get.toNamed(Routes.allconnectionsscreen);
+                        // navigateTo(
+                        //   context,
+                        //   routeName: AllConnectionsScreen.routeName,
+                        //   arguments: Params(arg1: myProfile, arg2: 1),
+                        // );
+                      },
                       caption: 'Connected',
-                      value: 0,
+                      value: myProfile.connectedCount ?? 0,
                     )),
                     Expanded(
                       child: CustomChildButton(
-                        value: _mRefersCount,
+                        value: myProfile.referalCount ?? 0,
                         caption: 'Referrals',
-                        onPressed: () {},
+                        onPressed: () {
+                          // Get.toNamed(Routes.referscreen);
+                          // navigateTo(
+                          //   context,
+                          //   routeName: ReferralsDetailsScreen.routeName,
+                          //   arguments: myProfile.refers,
+                          // );
+                        },
                       ),
                     ),
                   ],
