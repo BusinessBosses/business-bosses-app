@@ -101,6 +101,7 @@ class HomeController extends GetxController {
   Future<void> loadData() async {
     loading(true);
     error(false);
+    update();
     final ApiResponseModel response = await HomeRepository.fetchData();
     if (response.success) {
       _postsController.processPostsToState(response.data['posts']['rows']);
