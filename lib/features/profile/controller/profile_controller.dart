@@ -52,7 +52,7 @@ class ProfileController extends GetxController {
     update();
   }
 
-  static Future<List<PostModel>> loadData(String userId) async {
+  static Future<Map<String, dynamic>> loadData(String userId) async {
     List<PostModel> posts = [];
     final ApiResponseModel response =
         // ProfileRepos
@@ -69,10 +69,28 @@ class ProfileController extends GetxController {
               psts[i]['likes'].map((coin) => coin['userId'].toString()).toList()
         }));
       }
-
-      return posts;
+      // print({
+      //   ...response.data['user']['data'],
+      //   'connections': response.data['user']['data']['connections']
+      //       ['connections']
+      // });
+      return {
+        'posts': posts,
+        'user': {
+          ...response.data['user']['data'],
+          'connections': response.data['user']['data']['connections']
+              ['connections']
+        }
+      };
     } else {
-      return [];
+      return {
+        'posts': [],
+        'user': {
+          ...response.data['user']['data'],
+          'connections': response.data['user']['data']['connections']
+              ['connections']
+        }
+      };
     }
   }
 }

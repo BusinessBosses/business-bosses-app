@@ -5,25 +5,25 @@ class ReferralsModel {
   final String referredUserUid;
   final String referBy;
   final List<String> referTo;
-  final int timestamp;
+  // final int timestamp;
   ReferralsModel({
     required this.referredUserUid,
     required this.referBy,
     required this.referTo,
-    required this.timestamp,
+    // required this.timestamp,
   });
 
   ReferralsModel copyWith({
     String? referredUserUid,
     String? referBy,
     List<String>? referTo,
-    int? timestamp,
+    // int? timestamp,
   }) {
     return ReferralsModel(
       referredUserUid: referredUserUid ?? this.referredUserUid,
       referBy: referBy ?? this.referBy,
       referTo: referTo ?? this.referTo,
-      timestamp: timestamp ?? this.timestamp,
+      // timestamp: timestamp ?? this.timestamp,
     );
   }
 
@@ -32,7 +32,7 @@ class ReferralsModel {
       'referredUserUid': referredUserUid,
       'referBy': referBy,
       'referTo': referTo,
-      'timestamp': timestamp,
+      // 'timestamp': timestamp,
     };
   }
 
@@ -40,8 +40,8 @@ class ReferralsModel {
     return ReferralsModel(
       referredUserUid: map['referredUserUid'] as String,
       referBy: map['referBy'] as String,
-      referTo: List<String>.from((map['referTo'] as List<String>)),
-      timestamp: map['timestamp'] as int,
+      referTo: List<String>.from((map['referTo'])),
+      // timestamp: map['timestamp'] as int,
     );
   }
 
@@ -52,6 +52,6 @@ class ReferralsModel {
 
   @override
   String toString() {
-    return 'ReferralsModel(referredUserUid: $referredUserUid, referBy: $referBy, referTo: $referTo, timestamp: $timestamp)';
+    return 'ReferralsModel(referredUserUid: $referredUserUid, referBy: $referBy, referTo: $referTo, )';
   }
 }

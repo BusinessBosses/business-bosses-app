@@ -43,7 +43,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
     final res =
         await ProfileController.loadData(prefs.getString(Constants.USER_ID)!);
 
-    _posts = res;
+    _posts = res['posts'];
 
     setState(() {
       isLoading = false;

@@ -1,63 +1,104 @@
+import 'package:business_bosses_v2/common/models/user_model.dart';
+import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
+import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 
+import '../../action/action.dart';
+import '../../common/models/my_refers.dart';
 import '../../common/models/my_user.dart';
 import '../../common/widgets/network_image_with_placeholder.dart';
 import '../../common/widgets/safety_model.dart';
 import '../../common/widgets/search/search_bar.dart';
+import '../../utils/constants/constants.dart';
 import '../../utils/theme/theme.dart';
 import '../promotions/presentation/promotionscreen.dart';
 
-// ignore: public_member_api_docs
-class ReferScreen extends StatelessWidget {
-  // ignore: public_member_api_docs
-  static const String routeName = '/refer-screen';
+class ReferScreen extends StatefulWidget {
+  static const routeName = '/refer-screen';
 
-  final List<MyUser> _selectedUsers = [];
+  const ReferScreen({Key? key}) : super(key: key);
 
-  MyUser _specificUser = MyUser(
-      achievements: '',
-      active: true,
-      ageRange: '',
-      bio: 'bio',
-      bossOfTheWeekTimeStamp: 122,
-      bossOfTheWeekUpTimeStamp: 3444,
-      category: '',
-      website: '',
-      companyName: '',
-      deactivated: false,
-      email: 'test@gmail.com',
-      gender: '',
-      industry: '',
-      instagram: '',
-      location: '',
-      name: 'name',
-      photoUrl: 'eee',
-      productsandservices: '',
-      surname: '',
-      timestamp: 2324,
-      twitter: '',
-      uid: '',
-      unReadCount: 3,
-      username: 'username');
+  @override
+  _ReferScreenState createState() => _ReferScreenState();
+}
 
-  final List<MyUser> _searchedList = [];
-  late bool isLoading;
-  late bool isProcessing;
+class _ReferScreenState extends State<ReferScreen> {
+  final List<UserModel> _referrableConnections = [];
+  final ProfileController _profileController = Get.find();
+  late UserModel _specificUser;
+
+  final List<String> _selectedUsers = [];
+
+  bool _isProcessing = false;
+  bool _isLoading = false;
+
+  bool _isInit = false;
+  final List<String> _alreadyReferredUsers = [];
+
+  // @override
+  // void didChangeDependencies() {
+  //   super.didChangeDependencies();
+  //   if (!_isInit) {
+  //     _specificUser = ModalRoute.of(context)?.settings.arguments as UserModel;
+
+  //     _fetchMyConnections();
+
+  //     _isInit = true;
+  //   }
+  // }
+
+  Future<void> getData() async {
+    setState(() {
+      _isLoading = true;
+    });
+    final res = await ApiService.get(
+        path: '/connection/connecteds/${_profileController.myProfile.uid}');
+
+    for (var i = 0; i < res.data.length; i++) {
+      final mapData = res.data[i];
+      final modelizedConnection = UserModel.fromMap(mapData);
+      // print(_specificUser.connections);
+      // _referrableConnections.add(modelizedConnection);
+      if (_specificUser.connections == null) {
+        if (_specificUser.uid != modelizedConnection.uid) {
+          _referrableConnections.add(modelizedConnection);
+        }
+      } else {
+        if (!_specificUser.connections!.contains(modelizedConnection.uid) &&
+            _specificUser.uid != modelizedConnection.uid) {
+          _referrableConnections.add(modelizedConnection);
+        }
+      }
+    }
+    setState(() {
+      _isLoading = false;
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    if (Get.arguments == null) {
+      Get.back();
+    } else {
+      _specificUser = Get.arguments['user'];
+      getData();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    if (_specificUser.connectedCount == 0 &&
-        _specificUser.connectionCount == 0) {
-      Navigator.push(
-        context,
-        // ignore: always_specify_types
-        MaterialPageRoute(
-            builder: (BuildContext context) => const PromotionScreen()),
-      );
-    }
-    debugPrint('_AllConnectionsScreenState.build');
-
+    // if (_specificUser.connectedCount == 0 &&
+    //     _specificUser.connectionCount == 0) {
+    //   Navigator.push(
+    //     context,
+    //     MaterialPageRoute(builder: (context) => const PromotionScreen()),
+    //   );
+    // }
+    // debugPrint('_AllConnectionsScreenState.build');
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -73,7 +114,7 @@ class ReferScreen extends StatelessWidget {
           autofocus: false,
         ),
       ),
-      floatingActionButton: (_selectedUsers?.isEmpty ?? true) && !isProcessing
+      floatingActionButton: (_selectedUsers?.isEmpty ?? true) && !_isProcessing
           ? null
           : FloatingActionButton.extended(
               onPressed: _onReferringToYourConnections,
@@ -83,9 +124,9 @@ class ReferScreen extends StatelessWidget {
                 style: const TextStyle(fontWeight: FontWeight.bold),
               ),
             ),
-      body: _searchedList?.isEmpty ?? true
+      body: _referrableConnections.isEmpty
           ? SafetyModel(
-              isLoading: isLoading,
+              isLoading: _isLoading,
               icon: const Icon(
                 Icons.person,
                 size: 80.0,
@@ -98,16 +139,16 @@ class ReferScreen extends StatelessWidget {
           : ListView.builder(
               padding: const EdgeInsets.only(bottom: 80.0),
               // controller: _controller,
-              itemCount: _searchedList.length,
-              itemBuilder: (BuildContext context, int i) {
+              itemCount: _referrableConnections.length,
+              itemBuilder: (context, i) {
                 return Column(
                   children: [
                     ListTile(
                       onTap: () {
-                        _addRemoveUser(_searchedList[i]);
+                        _addRemoveUser(_referrableConnections[i].uid);
                       },
                       leading: NetworkImageWithPlaceHolder(
-                        imageUrl: _searchedList[i].photoUrl,
+                        imageUrl: _referrableConnections[i].photoUrl,
                         height: 48.0,
                         width: 48.0,
                         cacheHeight: 90,
@@ -115,13 +156,13 @@ class ReferScreen extends StatelessWidget {
                         radius: 30.0,
                         placeHolder: Icons.person,
                       ),
-                      title: Text(_searchedList[i].name),
+                      title: Text(_referrableConnections[i].username),
                       subtitle: Text(
-                        _searchedList[i].bio,
+                        _referrableConnections[i].bio ?? '',
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
-                      trailing: _isSelected(_searchedList[i])
+                      trailing: _isSelected(_referrableConnections[i].uid)
                           ? const Icon(
                               Icons.check_box,
                               color: primaryColorLT,
@@ -136,11 +177,57 @@ class ReferScreen extends StatelessWidget {
     );
   }
 
-  _onSearch(String val) {}
+  Future<void> _fetchMyConnections() async {}
 
-  void _onReferringToYourConnections() {}
+  List<MyUser> _searchedList = [];
 
-  _isSelected(MyUser searchedList) {}
+  void _onSearch(String val) {}
 
-  void _addRemoveUser(MyUser searchedList) {}
+  void _onReferringToYourConnections() async {
+    unFocusKeyboard(context);
+
+    final res = await ApiService.post(path: '/referal/refer', body: {
+      'referredUserUid': _specificUser.uid,
+      'referBy': _profileController.myProfile.uid,
+      'referTo': _selectedUsers
+    });
+    Get.arguments['onRefer'](_selectedUsers.length);
+    Get.back();
+    // setState(() {
+    //   _isProcessing = true;
+    // });
+  }
+
+  Future<void> _sendNotificationToReferTo(
+      List<String> tokens, List<String> receivers) async {}
+
+  Future<void> _sendNotificationToMainUser(
+      List<String> tokens, List<String> receivers) async {}
+
+  Future<void> _createMyReferrals(List<String> referToUsers) async {
+    String path =
+        Constants.USERS + '/' + _specificUser.uid + '/' + Constants.REFERS;
+  }
+
+  void _addRemoveUser(String uid) {
+    int index = _selectedUsers.indexWhere((u) => u == uid);
+    if (index == -1) {
+      setState(() {
+        _selectedUsers.add(uid);
+      });
+    } else {
+      setState(() {
+        _selectedUsers.removeAt(index);
+      });
+    }
+  }
+
+  bool _isSelected(String uid) {
+    int index = _selectedUsers.indexWhere((u) => u == uid);
+    if (index == -1) {
+      return false;
+    } else {
+      return true;
+    }
+  }
 }

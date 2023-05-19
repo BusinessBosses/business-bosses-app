@@ -91,14 +91,13 @@ Widget FriendProfileHeader(UserModel _publicUser) {
             )),
             Expanded(
               child: CustomChildButton(
-                value:
-                    _publicUser.refers != null ? _publicUser.refers!.length : 0,
+                value: _publicUser.referalCount ?? 0,
                 //_publicUser.refers == null
                 //     ? 0
                 //     : MyUser.refCount(_publicUser.refers),
                 caption: 'Referrals',
                 onPressed: () {
-                  Get.toNamed(Routes.referscreen);
+                  // Get.toNamed(Routes.referscreen);
                   // navigateTo(
                   //   context,
                   //   routeName: ReferralsDetailsScreen.routeName,

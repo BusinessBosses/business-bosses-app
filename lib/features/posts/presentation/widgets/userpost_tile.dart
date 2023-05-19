@@ -52,7 +52,15 @@ class PostTile extends StatelessWidget {
               ListTile(
                 contentPadding: const EdgeInsets.only(left: 15, right: 15),
                 leading: GestureDetector(
-                  onTap: () {},
+                  onTap: () {
+                    if (profileController.myProfile.uid == post.user!.uid) {
+                      if (onPageChange != null) {
+                        onPageChange!(3);
+                      }
+                    } else {
+                      Get.toNamed(Routes.publicProfile, arguments: post.user);
+                    }
+                  },
                   child: UserAvatarWithBadge(
                     user: post.user,
                     height: 55.0,
