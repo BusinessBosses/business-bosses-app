@@ -20,6 +20,7 @@ class Constants {
       'https://businessbosses.co.uk/privacy/';
   static const String HTTPS = 'https://';
   static const String HTTPS_WWW = 'https://www.';
+
   // static const String socketUrl = 'http://192.168.1.176:3000';
   // static const String baseUrl = 'http://192.168.1.176:3000/api/v1';
   static const String socketUrl = 'https://orca-app-5dg8w.ondigitalocean.app';
