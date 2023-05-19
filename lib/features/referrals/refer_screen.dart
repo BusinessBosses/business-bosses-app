@@ -1,50 +1,49 @@
-import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
-import '../../action/action.dart';
-import '../../common/models/my_refers.dart';
 import '../../common/models/my_user.dart';
 import '../../common/widgets/network_image_with_placeholder.dart';
 import '../../common/widgets/safety_model.dart';
 import '../../common/widgets/search/search_bar.dart';
-import '../../utils/constants/constants.dart';
 import '../../utils/theme/theme.dart';
 import '../promotions/presentation/promotionscreen.dart';
 
-class ReferScreen extends StatefulWidget {
-  static const routeName = '/refer-screen';
-
-  const ReferScreen({Key? key}) : super(key: key);
-
-  @override
-  _ReferScreenState createState() => _ReferScreenState();
-}
-
-class _ReferScreenState extends State<ReferScreen> {
-  final List<UserModel> _referrableConnections = [];
-
-  UserModel _specificUser = UserModel();
+// ignore: public_member_api_docs
+class ReferScreen extends StatelessWidget {
+  // ignore: public_member_api_docs
+  static const String routeName = '/refer-screen';
 
   final List<MyUser> _selectedUsers = [];
 
-  bool _isProcessing = false;
-  bool _isLoading = false;
+  MyUser _specificUser = MyUser(
+      achievements: '',
+      active: true,
+      ageRange: '',
+      bio: 'bio',
+      bossOfTheWeekTimeStamp: 122,
+      bossOfTheWeekUpTimeStamp: 3444,
+      category: '',
+      website: '',
+      companyName: '',
+      deactivated: false,
+      email: 'test@gmail.com',
+      gender: '',
+      industry: '',
+      instagram: '',
+      location: '',
+      name: 'name',
+      photoUrl: 'eee',
+      productsandservices: '',
+      surname: '',
+      timestamp: 2324,
+      twitter: '',
+      uid: '',
+      unReadCount: 3,
+      username: 'username');
 
-  bool _isInit = false;
-  final List<String> _alreadyReferredUsers = [];
-
-  // @override
-  // void didChangeDependencies() {
-  //   super.didChangeDependencies();
-  //   if (!_isInit) {
-  //     _specificUser = ModalRoute.of(context)?.settings.arguments as UserModel;
-
-  //     _fetchMyConnections();
-
-  //     _isInit = true;
-  //   }
-  // }
+  final List<MyUser> _searchedList = [];
+  late bool isLoading;
+  late bool isProcessing;
 
   @override
   Widget build(BuildContext context) {
@@ -52,10 +51,13 @@ class _ReferScreenState extends State<ReferScreen> {
         _specificUser.connectionCount == 0) {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => const PromotionScreen()),
+        // ignore: always_specify_types
+        MaterialPageRoute(
+            builder: (BuildContext context) => const PromotionScreen()),
       );
     }
     debugPrint('_AllConnectionsScreenState.build');
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -71,7 +73,7 @@ class _ReferScreenState extends State<ReferScreen> {
           autofocus: false,
         ),
       ),
-      floatingActionButton: (_selectedUsers?.isEmpty ?? true) && !_isProcessing
+      floatingActionButton: (_selectedUsers?.isEmpty ?? true) && !isProcessing
           ? null
           : FloatingActionButton.extended(
               onPressed: _onReferringToYourConnections,
@@ -83,7 +85,7 @@ class _ReferScreenState extends State<ReferScreen> {
             ),
       body: _searchedList?.isEmpty ?? true
           ? SafetyModel(
-              isLoading: _isLoading,
+              isLoading: isLoading,
               icon: const Icon(
                 Icons.person,
                 size: 80.0,
@@ -97,7 +99,7 @@ class _ReferScreenState extends State<ReferScreen> {
               padding: const EdgeInsets.only(bottom: 80.0),
               // controller: _controller,
               itemCount: _searchedList.length,
-              itemBuilder: (context, i) {
+              itemBuilder: (BuildContext context, int i) {
                 return Column(
                   children: [
                     ListTile(
@@ -134,49 +136,11 @@ class _ReferScreenState extends State<ReferScreen> {
     );
   }
 
-  Future<void> _fetchMyConnections() async {}
+  _onSearch(String val) {}
 
-  List<MyUser> _searchedList = [];
+  void _onReferringToYourConnections() {}
 
-  void _onSearch(String val) {}
+  _isSelected(MyUser searchedList) {}
 
-  void _onReferringToYourConnections() {
-    unFocusKeyboard(context);
-    setState(() {
-      _isProcessing = true;
-    });
-  }
-
-  Future<void> _sendNotificationToReferTo(
-      List<String> tokens, List<String> receivers) async {}
-
-  Future<void> _sendNotificationToMainUser(
-      List<String> tokens, List<String> receivers) async {}
-
-  Future<void> _createMyReferrals(List<String> referToUsers) async {
-    String path =
-        Constants.USERS + '/' + _specificUser.uid + '/' + Constants.REFERS;
-  }
-
-  void _addRemoveUser(MyUser user) {
-    int index = _selectedUsers.indexWhere((u) => u.uid == user.uid);
-    if (index == -1) {
-      setState(() {
-        _selectedUsers.add(user);
-      });
-    } else {
-      setState(() {
-        _selectedUsers.removeAt(index);
-      });
-    }
-  }
-
-  bool _isSelected(MyUser user) {
-    int index = _selectedUsers.indexWhere((u) => u.uid == user.uid);
-    if (index == -1) {
-      return false;
-    } else {
-      return true;
-    }
-  }
+  void _addRemoveUser(MyUser searchedList) {}
 }

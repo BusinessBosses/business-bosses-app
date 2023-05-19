@@ -99,7 +99,7 @@ class Nav {
     ),
     GetPage(
       name: Routes.referscreen,
-      page: () => const ReferScreen(),
+      page: () => ReferScreen(),
     ),
     GetPage(
       name: Routes.allconnectionsscreen,
