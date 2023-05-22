@@ -3,14 +3,14 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../utils/theme/theme.dart';
 
-class SearchBar extends StatelessWidget {
+class SearchBarWidget extends StatelessWidget {
   final String hintText;
   final Function(String val)? onChange;
   final Function(String val)? onSubmit;
   final bool hasSearchIcon;
   final bool autofocus;
 
-  const SearchBar({
+  const SearchBarWidget({
     Key? key,
     this.hintText = 'Search',
     this.onChange,

@@ -66,7 +66,7 @@ class _ReferScreenState extends State<ReferScreen> {
           },
           icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
         ),
-        title: SearchBar(
+        title: SearchBarWidget(
           onChange: _onSearch,
           hasSearchIcon: false,
           autofocus: false,
