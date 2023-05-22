@@ -66,9 +66,9 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      addCoinDaily();
-    });
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   addCoinDaily();
+    // });
   }
 
   @override

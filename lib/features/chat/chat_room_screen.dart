@@ -107,12 +107,15 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                     placeHolder: Icons.person,
                     iconSize: 36.0,
                   ),
-                  subtitle: Text('${args.bio}',
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: textColor.withOpacity(0.6),
-                          )),
+                  subtitle: Text(
+                    args.bio ?? '',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyMedium
+                        ?.copyWith(color: textColor.withOpacity(0.6)),
+                  ),
                 ),
               ),
               toolbarHeight: 48.0 + 28.0,
@@ -125,7 +128,9 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                   Container(
                     child: controller
                             .extractConversations(
-                                args.uid, _profileController.myProfile.uid)
+                              args.uid,
+                              _profileController.myProfile.uid,
+                            )
                             .isEmpty
                         ? SafetyModel(
                             isLoading: false,

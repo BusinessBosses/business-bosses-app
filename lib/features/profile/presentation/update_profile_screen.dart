@@ -57,6 +57,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
   String? _companyName;
   String? _username;
   String? _name = '';
+  String? _email = '';
   String? _surname;
   String? _bio;
   String? _website;
@@ -141,6 +142,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
   }
 
   void setVariableValues(UserModel args) {
+    _email = args.email;
     _location = args.location;
     _category = args.category;
     _industry = args.industry;
@@ -1364,7 +1366,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
     ApiResponseModel response =
         await ApiService.put(path: 'users/$userId', body: updateData);
     if (response.success) {
-      Get.snackbar('Success', 'Profile Completed Succesfully');
+      Get.snackbar('Success', 'Profile Upppppdated Succesfully');
       if (Get.isRegistered<ProfileController>()) {
         final ProfileController _profileController = Get.find();
         _profileController.updateProfile(

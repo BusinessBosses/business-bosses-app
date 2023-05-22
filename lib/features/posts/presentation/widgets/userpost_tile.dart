@@ -266,7 +266,10 @@ class _PostTileState extends State<PostTile> {
                     ),
                   ),
                   subtitle: Text(
-                    widget.post.user?.bio ?? '',
+                    widget.post.user?.bio != null &&
+                            widget.post.user!.bio!.isNotEmpty
+                        ? widget.post.user!.bio!
+                        : '',
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
