@@ -147,7 +147,7 @@ class PostGridItem extends StatelessWidget {
                         // );
                       } else if (val == 'Delete') {
                         _showDialog(context);
-                      } else if (val == 'Promote') {
+                      } else if (val == 'Boost') {
                         // Navigator.of(context).push(
                         //   MaterialPageRoute(
                         //     builder: (context) => BoostP.ost(
@@ -201,16 +201,6 @@ class PostGridItem extends StatelessWidget {
 
   final List<PopupMenuEntry<String>> _popupItemPostMore = [
     const PopupMenuItem<String>(
-      value: 'Promote',
-      child: Text(
-        'Promote',
-        style: bodyText2,
-      ),
-    ),
-    const PopupMenuDivider(
-      height: 0.0,
-    ),
-    const PopupMenuItem<String>(
       value: 'Edit',
       child: Text(
         'Edit',
@@ -226,6 +216,16 @@ class PostGridItem extends StatelessWidget {
         'Delete',
         style: bodyText2,
       ),
-    )
+    ),
+    const PopupMenuDivider(
+      height: 0.0,
+    ),
+    const PopupMenuItem<String>(
+      value: 'Boost',
+      child: Text(
+        'Boost',
+        style: bodyText2,
+      ),
+    ),
   ];
 }

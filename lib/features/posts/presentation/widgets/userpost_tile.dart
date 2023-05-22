@@ -181,8 +181,12 @@ class _PostTileState extends State<PostTile> {
                                     profileController.myProfile.uid
                                 ? MyPopupMenuButton(
                                     popupItems: myPopupMore,
-                                    icon:
-                                        const Icon(Icons.more_horiz, size: 20),
+                                    icon: const Icon(
+                                      Icons.more_horiz,
+                                      size: 20,
+                                      color: Colors.black,
+                                      weight: 100,
+                                    ),
                                     onSelected: (String val) {
                                       if (val == 'Edit') {
                                         Get.to(() => CreatePostScreen(
@@ -231,8 +235,12 @@ class _PostTileState extends State<PostTile> {
                                 : widget.post.promote!
                                     ? MyPopupMenuButton(
                                         popupItems: myPopup,
-                                        icon: const Icon(Icons.more_horiz,
-                                            size: 20),
+                                        icon: const Icon(
+                                          Icons.more_horiz,
+                                          size: 20,
+                                          color: Colors.black,
+                                          weight: 100,
+                                        ),
                                         onSelected: (String val) {
                                           if (val == 'Hide') {
                                             ApiService.post(
@@ -256,8 +264,12 @@ class _PostTileState extends State<PostTile> {
                                           onTap: () {
                                             _showDialog();
                                           },
-                                          child: const Icon(Icons.more_horiz,
-                                              size: 20),
+                                          child: const Icon(
+                                            Icons.more_horiz,
+                                            size: 20,
+                                            color: Colors.black,
+                                            weight: 100,
+                                          ),
                                         ),
                                       ),
                           ),

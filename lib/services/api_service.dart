@@ -186,6 +186,7 @@ class ApiService {
     required String path,
   }) async {
     final String? token = sandBox.read(Constants.ACCESS_TOKEN);
+    log(token!);
     try {
       final http.Response response = await http.get(
         Uri.parse('${Constants.baseUrl}/$path'),

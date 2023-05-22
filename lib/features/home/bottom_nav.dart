@@ -6,10 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
-
-import '../../common/widgets/typography/text_widget.dart';
-import '../../services/api_service.dart';
 import '../../utils/theme/theme.dart';
 import '../posts/presentation/create_post_screen.dart';
 import '../profile/presentation/myprofilescreen.dart';
@@ -75,6 +71,7 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
   void dispose() {
     super.dispose();
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -247,24 +244,6 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
       _activeIndex = currentIndex;
     });
     return;
-  }
-
-  /// DailyCoin
-  void addCoinDaily() {
-    int lastExecutionTimestamp = sandBox.read('lastExecutionTimestamp') ?? 0;
-    print('Last: ${lastExecutionTimestamp}');
-    if (currentTimestamp - lastExecutionTimestamp >= 24 * 60 * 60 * 1000) {
-      // The action hasn't been executed today, save the current timestamp
-      sandBox.write('lastExecutionTimestamp', currentTimestamp);
-      ApiService.put(
-        path: 'users/${_profileController.myProfile.uid}',
-        body: <String, dynamic>{
-          'coinscount': _profileController.myProfile.coinscount! + 1,
-        },
-      );
-      _profileController.updateCoinCount(1);
-      showCoinDialog();
-    }
   }
 }
 
