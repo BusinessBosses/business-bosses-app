@@ -6,6 +6,7 @@ import 'package:country_list_pick/country_list_pick.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../../common/widgets/popup/bossup_challenge_popup.dart';
+import '../../utils/size_config.dart';
 import '../../utils/theme/theme.dart';
 
 /// Buying and Selling screen
@@ -227,13 +228,13 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                               showDialog(
                                 context: context,
                                 builder: (BuildContext context) =>
-                                    const BossUpChallangePopUpcopy(),
+                                    sellingGuide(),
                               );
                             }),
                             child: Row(
                               children: [
                                 const Text(
-                                  'About ',
+                                  'Guidelines ',
                                   style: TextStyle(
                                       fontSize: 12,
                                       fontWeight: FontWeight.w700),
@@ -259,32 +260,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                     minimumSize: const Size(150,
                                         45) // put the width and height you want
                                     ),
-                                onPressed: () {
-                                  // int now = DateTime.now()
-                                  //     .millisecondsSinceEpoch;
-                                  // int previousStamp = user.user
-                                  //         .bossOfTheWeekTimeStamp ??
-                                  //     0;
-                                  // if ((previousStamp + 2419200000) >
-                                  //         now &&
-                                  //     _industry.industry.contains(
-                                  //         "Boss Up Challenge")) {
-                                  //   const snackBar = SnackBar(
-                                  //     duration: Duration(seconds: 4),
-                                  //     content: Text(
-                                  //         'You may have posted in Boss Up Challenge'
-                                  //         ' in the past 4 weeks. You Can only post once in 4 weeks.'),
-                                  //   );
-                                  //   ScaffoldMessenger.of(context)
-                                  //       .showSnackBar(snackBar);
-                                  // } else {
-                                  //   navigateWithReplaceTo(context,
-                                  //       routeName:
-                                  //           CreateForumScreen.routeName,
-                                  //       arguments:
-                                  //           Params(arg1: _industry));
-                                  // }
-                                },
+                                onPressed: () {},
                                 child: Row(
                                   mainAxisSize: MainAxisSize.min,
                                   children: <Widget>[
@@ -645,6 +621,142 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
               fontWeight: FontWeight.w700,
             ),
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget sellingGuide() {
+    return Dialog(
+      backgroundColor: backgroundColor,
+      elevation: 5,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      insetPadding: const EdgeInsets.all(10),
+      child: Container(
+        padding: const EdgeInsets.all(15),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            SizedBox(
+              height: SizeConfig.safeBlockVertical * 3,
+            ),
+            const Text(
+                'All listings created on Business Bosses must meet the following guidelines or the listing and the user account will be deleted and banned permanently.'),
+            const SizedBox(
+              height: 20,
+            ),
+            Text(
+              'GUIDELINES',
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyLarge
+                  ?.copyWith(fontWeight: FontWeight.w900, color: Colors.black),
+            ),
+            SizedBox(
+              height: SizeConfig.safeBlockVertical * 3,
+            ),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: const [
+                Text("🚫 ", style: bodyText2),
+                Expanded(
+                  child: Text(
+                      "Weapons, ammunitions, explosives, and hazardous goods listings are not allowed",
+                      style: bodyText2),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: SizeConfig.safeBlockVertical * 2,
+            ),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: const [
+                Text("🚫  ", style: bodyText2),
+                Expanded(
+                  child: Text(
+                      "Human trafficking, prostitution, escort, sexual services or pornographer listings are not allowed",
+                      style: bodyText2),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: SizeConfig.safeBlockVertical * 2,
+            ),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: const [
+                Text("🚫  ", style: bodyText2),
+                Expanded(
+                  child: Text(
+                      "Illegal Drugs, Prescription or Recreational Drugs, Other Drug paraphernalia and alcohol listings is not allowed",
+                      style: bodyText2),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: SizeConfig.safeBlockVertical * 2,
+            ),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: const [
+                Text("🚫  ", style: bodyText2),
+                Expanded(
+                  child: Text(
+                      "You cannot list stolen goods and your listing must not infringe intellectual property rights of a third-party (e.g. copyright)",
+                      style: bodyText2),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: SizeConfig.safeBlockVertical * 2,
+            ),
+            const Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text("🚫  ", style: bodyText2),
+                Expanded(
+                  child: Text(
+                      'Selling animals and posting about animals for adoption listings are not allowed',
+                      style: bodyText2),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: SizeConfig.safeBlockVertical * 3,
+            ),
+            SizedBox(
+              height: SizeConfig.safeBlockVertical * 2,
+            ),
+            const Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('✅  ', style: bodyText2),
+                Expanded(
+                  child: Text(
+                      'Ensure any image and description are honest and fair.',
+                      style: bodyText2),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: SizeConfig.safeBlockVertical * 2,
+            ),
+            const Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('✅  ', style: bodyText2),
+                Expanded(
+                  child: Text(
+                      "Business Bosses does not offer an in-built payment feature yet, it's down to you to choose a payment provider that offers buyer protection (e.g PayPal or escrow)",
+                      style: bodyText2),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: SizeConfig.safeBlockHorizontal * 3,
+            ),
+          ],
         ),
       ),
     );
