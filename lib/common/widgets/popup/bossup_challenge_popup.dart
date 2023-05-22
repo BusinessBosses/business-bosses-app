@@ -40,9 +40,9 @@ class BossUpChallangePopUpcopy extends StatelessWidget {
             SizedBox(
               height: SizeConfig.safeBlockVertical * 3,
             ),
-            Row(
+            const Row(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: const <Widget>[
+              children: <Widget>[
                 Text('●  ', style: bodyText2),
                 Expanded(
                   child: Text(
@@ -54,9 +54,9 @@ class BossUpChallangePopUpcopy extends StatelessWidget {
             SizedBox(
               height: SizeConfig.safeBlockVertical * 2,
             ),
-            Row(
+            const Row(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: const <Widget>[
+              children: <Widget>[
                 Text('●  ', style: bodyText2),
                 Expanded(
                   child: Text(
@@ -68,9 +68,9 @@ class BossUpChallangePopUpcopy extends StatelessWidget {
             SizedBox(
               height: SizeConfig.safeBlockVertical * 2,
             ),
-            Row(
+            const Row(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: const [
+              children: [
                 Text('●  ', style: bodyText2),
                 Expanded(
                   child: Text(
@@ -82,10 +82,10 @@ class BossUpChallangePopUpcopy extends StatelessWidget {
             SizedBox(
               height: SizeConfig.safeBlockVertical * 2,
             ),
-            Row(
+            const Row(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: const <Widget>[
-                Text("●  ", style: bodyText2),
+              children: <Widget>[
+                Text('●  ', style: bodyText2),
                 Expanded(
                   child: Text(
                       'Users can enter the challenge once every 12 weeks',

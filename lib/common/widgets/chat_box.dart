@@ -74,7 +74,7 @@ class ChatBox extends StatelessWidget {
                                           onTap: () {
                                             Navigator.of(context).push(
                                               MaterialPageRoute(
-                                                builder: (context) =>
+                                                builder: (BuildContext context) =>
                                                     ImagesViewerScreen(
                                                   urls: [message.image!],
                                                 ),
@@ -129,7 +129,7 @@ class ChatBox extends StatelessWidget {
               if (message.timestamp != null)
                 Padding(
                   padding: const EdgeInsets.all(16.0),
-                  child: Text(TimeFormat.formatString(message.timestamp!)),
+                  child: Text(TimeFormat.formatString(message.timestamp)),
                 ),
             ],
           )
@@ -139,7 +139,7 @@ class ChatBox extends StatelessWidget {
               if (message.timestamp != null)
                 Padding(
                   padding: const EdgeInsets.all(16.0),
-                  child: Text(TimeFormat.formatString(message.timestamp!)),
+                  child: Text(TimeFormat.formatString(message.timestamp)),
                 ),
               message.deleted!.contains('myId')
                   ? Text(
@@ -179,7 +179,7 @@ class ChatBox extends StatelessWidget {
                                       onTap: () {
                                         Navigator.of(context).push(
                                           MaterialPageRoute(
-                                            builder: (context) =>
+                                            builder: (BuildContext context) =>
                                                 ImagesViewerScreen(
                                               urls: [message.image!],
                                             ),

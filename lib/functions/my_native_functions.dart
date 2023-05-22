@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
@@ -11,13 +10,13 @@ import '../utils/constants/constants.dart';
 class MyNativeFunctions {
   static Future<MyResponse> onImagePick(ImageSource imageSource) async {
     MyResponse res;
-    File _image;
-    final picker = ImagePicker();
+    File image;
+    final ImagePicker picker = ImagePicker();
     try {
-      final pickedImage = await picker.pickImage(source: imageSource);
+      final XFile? pickedImage = await picker.pickImage(source: imageSource);
       if (pickedImage != null) {
-        _image = File(pickedImage.path);
-        res = MyResponse(success: true, message: 'Image picked', data: _image);
+        image = File(pickedImage.path);
+        res = MyResponse(success: true, message: 'Image picked', data: image);
         return res;
       } else {
         res = MyResponse(success: false, message: 'Image not selected');
@@ -63,7 +62,7 @@ class MyNativeFunctions {
     List<File> files = [];
     if (result != null) {
       List<PlatformFile> platformFiles = result.files;
-      for (var plf in platformFiles) {
+      for (PlatformFile plf in platformFiles) {
         files.add(File(plf.path.toString()));
       }
       return files;
@@ -96,7 +95,7 @@ class MyNativeFunctions {
       if (cUrl.contains(Constants.HTTPS_WWW)) {
         return cUrl;
       } else if (cUrl.contains('www.')) {
-        return 'https://' + cUrl;
+        return 'https://$cUrl';
       } else {
         return 'https://www.$cUrl';
       }

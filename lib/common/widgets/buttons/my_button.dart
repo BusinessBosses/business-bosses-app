@@ -2,14 +2,22 @@ import 'package:flutter/material.dart';
 
 import '../../../utils/theme/theme.dart';
 
+/// MyButton Widget
 class MyButton extends StatelessWidget {
+  // ignore: public_member_api_docs
   final String label;
+  // ignore: public_member_api_docs
   final TextStyle labelStyle;
+  // ignore: public_member_api_docs
   final double height;
+  // ignore: public_member_api_docs
   final double width;
+  // ignore: public_member_api_docs
   final Function onPressed;
+  // ignore: public_member_api_docs
   final bool isProcessing;
 
+  /// MyButton Widget
   const MyButton({
     Key? key,
     required this.label,
@@ -42,9 +50,11 @@ class MyButton extends StatelessWidget {
               ),
             )
           : ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                onPressed();
+              },
               child: Text(
-                label ?? 'Continue',
+                label,
                 style: labelStyle,
               ),
             ),

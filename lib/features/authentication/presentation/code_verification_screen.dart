@@ -30,7 +30,7 @@ class CodeVerificationScreen extends StatefulWidget {
 }
 
 class _CodeVerificationScreenState extends State<CodeVerificationScreen> {
-  String currentText = "";
+  String currentText = '';
   bool _isProcessing = false;
 
   final ApiService _apiService = ApiService();
@@ -65,14 +65,14 @@ class _CodeVerificationScreenState extends State<CodeVerificationScreen> {
                   style: Theme.of(context).textTheme.titleLarge?.copyWith(
                         fontWeight: FontWeight.w900,
                         fontSize: 28.0,
-                        color: Theme.of(context).primaryColor,
+                        color: Colors.red,
                       ),
                 ),
               ),
 
               const SizedBox(height: 36.0),
               Text(
-                'Enter the 6 digits code that you received on your email so you can continue to reset your account password. ',
+                'Enter the 6 digits code that you received on your email so you can continue your account creation. ',
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                       color: textColor.withOpacity(0.8),
                       fontWeight: FontWeight.normal,
@@ -101,16 +101,16 @@ class _CodeVerificationScreenState extends State<CodeVerificationScreen> {
                 ),
                 textStyle: const TextStyle(fontSize: 20, height: 1.6),
 
-                onCompleted: (v) {},
+                onCompleted: (String v) {},
                 // onTap: () {
                 //   print("Pressed");
                 // },
-                onChanged: (value) {
+                onChanged: (String value) {
                   setState(() {
                     currentText = value;
                   });
                 },
-                beforeTextPaste: (text) {
+                beforeTextPaste: (String? text) {
                   return true;
                 },
               ),

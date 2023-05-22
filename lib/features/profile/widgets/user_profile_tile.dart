@@ -3,10 +3,7 @@ import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import '../../common/models/api_response_model.dart';
-import '../../common/widgets/network_image_with_placeholder.dart';
-import '../../services/api_service.dart';
-import '../../utils/constants/constants.dart';
+import '../../../common/widgets/network_image_with_placeholder.dart';
 
 // ignore: public_member_api_docs
 class UserProfileTile extends StatefulWidget {
@@ -18,30 +15,6 @@ class UserProfileTile extends StatefulWidget {
 }
 
 class _UserProfileTileState extends State<UserProfileTile> {
-  String? name = '';
-  String? category = '';
-  String? companyName = '';
-  String? location = '';
-  bool? isRanked = false;
-
-  @override
-  void initState() {
-    super.initState();
-    // fetchData();
-  }
-
-  dynamic fetchData() async {
-    final String userID = sandBox.read(Constants.USER_ID);
-    final ApiResponseModel response =
-        await ApiService.get(path: 'users/$userID');
-    setState(() {
-      name = response.data['name'];
-      category = response.data['category'];
-      companyName = response.data['companyName'];
-      location = response.data['location'];
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     // fetchData();
@@ -79,7 +52,7 @@ class _UserProfileTileState extends State<UserProfileTile> {
                   ),
                 ),
               ),
-              isRanked!
+              widget.myProfile.isRanked ?? false
                   ? Positioned(
                       right: 0.0,
                       bottom: 0.0,

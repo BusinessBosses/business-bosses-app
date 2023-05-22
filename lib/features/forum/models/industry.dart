@@ -1,27 +1,29 @@
 import 'dart:convert';
 
-import '../../services/api_service.dart';
-import 'api_response_model.dart';
+import '../../../services/api_service.dart';
+import '../../../common/models/api_response_model.dart';
 
 /// INDUSTRY MODEL
 class Industry {
-  String industryId;
-  String industry;
-  String photo;
-  String description;
-  int timestamp;
-  bool active;
-  String categoryId;
+  String? industryId;
+  String? industry;
+  String? photo;
+  String? description;
+  int? timestamp;
+  bool? active;
+  String? categoryId;
+  List<String>? joinedUsers;
 
   /// INDUSTRY MODEL
   Industry({
-    required this.industryId,
-    required this.industry,
-    required this.photo,
-    required this.description,
-    required this.timestamp,
-    required this.active,
-    required this.categoryId,
+    this.industryId,
+    this.industry,
+    this.photo,
+    this.description,
+    this.timestamp,
+    this.active,
+    this.categoryId,
+    this.joinedUsers,
   });
 
   factory Industry.toObject(Map<dynamic, dynamic> map) {
@@ -33,6 +35,9 @@ class Industry {
       active: map['active'] as bool,
       timestamp: int.parse(map['timestamp'].toString()),
       categoryId: map['categoryId'] as String,
+      joinedUsers: map['joinedUsers'] == null
+          ? []
+          : List<String>.from(map['joinedUsers']),
     );
   }
 
@@ -40,7 +45,7 @@ class Industry {
     required List snapshot,
   }) {
     List<Industry> industries = [];
-    for (var i = 0; i < snapshot.length; i++) {
+    for (int i = 0; i < snapshot.length; i++) {
       final Industry industry = Industry.toObject(snapshot[i]);
       industries.add(industry);
     }
@@ -58,7 +63,8 @@ class Industry {
       Industry pt = Industry.toObject(postJson);
       items.add(pt);
     }
-    items.sort((Industry a, Industry b) => b.timestamp.compareTo(a.timestamp));
+    items.sort(
+        (Industry a, Industry b) => b.timestamp!.compareTo(a.timestamp as num));
     return items;
   }
 

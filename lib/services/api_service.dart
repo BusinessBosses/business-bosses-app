@@ -42,11 +42,9 @@ class ApiService {
       await prefs.setString(
           Constants.USER_ID, jsonResponse['data']['uid'].toString());
       // sandBox.write(Constants.USER_ID, jsonResponse['data']['uid'].toString());
-      Get.toNamed(Routes.bottomNavigation);
       return jsonResponse;
     } else {
       final dynamic jsonResponse = json.decode(response.body);
-      print(jsonResponse);
       return jsonResponse;
     }
   }
@@ -95,7 +93,26 @@ class ApiService {
           Constants.ACCESS_TOKEN, jsonResponse['data']['accessToken']);
       await prefs.setString(
           Constants.USER_ID, jsonResponse['data']['uid'].toString());
-      // sandBox.write(Constants.USER_ID, jsonResponse['data']['uid']);
+      return jsonResponse;
+    } else {
+      final dynamic jsonResponse = json.decode(response.body);
+      return jsonResponse;
+    }
+  }
+
+  /// CHANGE PASSWORD
+  Future<dynamic> changePassword(String email, String password) async {
+    Map<String, dynamic> data = {
+      'email': email,
+      'newPassword': password,
+    };
+    final http.Response response = await http.post(
+      Uri.parse('${Constants.baseUrl}/auth/reset-password'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode(data),
+    );
+    if (response.statusCode == 200) {
+      final dynamic jsonResponse = json.decode(response.body);
       return jsonResponse;
     } else {
       final dynamic jsonResponse = json.decode(response.body);
@@ -144,9 +161,9 @@ class ApiService {
     required String path,
     required Map<String, dynamic> body,
   }) async {
-    log(body.toString());
+    // log(body.toString());
     final String token = sandBox.read(Constants.ACCESS_TOKEN);
-    log(token);
+    // log(token);
     try {
       final http.Response response = await http.post(
         Uri.parse('${Constants.baseUrl}/$path'),
@@ -168,7 +185,8 @@ class ApiService {
   static Future<ApiResponseModel> get({
     required String path,
   }) async {
-    final String token = sandBox.read(Constants.ACCESS_TOKEN);
+    final String? token = sandBox.read(Constants.ACCESS_TOKEN);
+    log(token!);
     try {
       final http.Response response = await http.get(
         Uri.parse('${Constants.baseUrl}/$path'),
@@ -183,7 +201,7 @@ class ApiService {
 
       return ApiResponseModel.fromMap(jsonDecode(response.body));
     } catch (e) {
-      throw e.toString();
+      rethrow;
     }
   }
 
@@ -214,19 +232,18 @@ class ApiService {
   /// HTTP DELETE CALL
   static Future<ApiResponseModel> delete({
     required String path,
-    required Map<String, dynamic> body,
   }) async {
     final String token = sandBox.read(Constants.ACCESS_TOKEN);
     try {
       final http.Response response = await http.delete(
         Uri.parse('${Constants.baseUrl}/$path'),
-        body: jsonEncode(body),
         headers: <String, String>{
           'Content-type': 'application/json',
           'Accept': 'application/json',
           'Authorization': 'bearer $token'
         },
       );
+      log(response.body);
       return ApiResponseModel.fromMap(jsonDecode(response.body));
     } catch (e) {
       throw e.toString();

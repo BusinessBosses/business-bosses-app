@@ -15,7 +15,6 @@ import 'package:url_launcher/url_launcher_string.dart';
 import '../../../../common/widgets/buttons/custom_button.dart';
 import '../../../../common/widgets/buttons/icon_text_button.dart';
 import '../../../../common/widgets/text_widget.dart';
-import '../../../../navigation/routes.dart';
 import '../../../../services/api_service.dart';
 import '../../../../utils/constants/constants.dart';
 import '../../../../utils/theme/theme.dart';
@@ -32,6 +31,7 @@ class SignUpForm extends StatefulWidget {
 }
 
 class _SignUpFormState extends State<SignUpForm> {
+  bool _isProcessing = false;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   AutovalidateMode _autoValidateMode = AutovalidateMode.disabled;
   String? _username, _authCred, _password;
@@ -51,8 +51,6 @@ class _SignUpFormState extends State<SignUpForm> {
     });
   }
 
-  bool _isProcessing = false;
-
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -69,11 +67,11 @@ class _SignUpFormState extends State<SignUpForm> {
               TextFormField(
                 onChanged: (String val) async {
                   _username = val;
-                  // bool? result = await _verifyUnique(val, '');
-                  // setState(() {
-                  //   _isUniqueName = result;
-                  // });
-                  // _autoValidateMode = AutovalidateMode.always;
+                  bool? result = await _verifyUnique(val, '');
+                  setState(() {
+                    _isUniqueName = result;
+                  });
+                  _autoValidateMode = AutovalidateMode.always;
                 },
                 validator: (String? val) => Validator.usernameValidator(
                   val!,
@@ -93,12 +91,7 @@ class _SignUpFormState extends State<SignUpForm> {
                             Icons.check_circle,
                             color: Colors.green,
                           )
-                        : Icon(
-                            Icons.close,
-                            color: _isUniqueName == null
-                                ? Colors.transparent
-                                : Colors.red,
-                          ),
+                        : const SizedBox(),
                     filled: true,
                     fillColor: const Color(0xffF4F4F4)),
               ),
@@ -115,10 +108,10 @@ class _SignUpFormState extends State<SignUpForm> {
                 TextFormField(
                   onChanged: (String val) async {
                     _authCred = val;
-                    // bool? result = await _verifyUnique('', val);
-                    // setState(() {
-                    //   _isUniqueEmail = result;
-                    // });
+                    bool? result = await _verifyUnique('', val);
+                    setState(() {
+                      _isUniqueEmail = result;
+                    });
                   },
                   textInputAction: TextInputAction.next,
                   keyboardType: TextInputType.emailAddress,
@@ -136,12 +129,7 @@ class _SignUpFormState extends State<SignUpForm> {
                             Icons.check_circle,
                             color: Colors.green,
                           )
-                        : Icon(
-                            Icons.close,
-                            color: _isUniqueEmail == null
-                                ? Colors.transparent
-                                : Colors.red,
-                          ),
+                        : const SizedBox(),
                   ),
                   validator: (String? val) => Validator.emailValidatorSignUp(
                     _authCred,
@@ -191,13 +179,16 @@ class _SignUpFormState extends State<SignUpForm> {
           const SizedBox(height: 24.0),
           CustomButton(
             label: 'Sign Up',
-            onPressed: () {
+            onPressed: () async {
+              if (Validator.emailValidatorSignUp(_authCred,
+                          isUnique: _isUniqueEmail!) ==
+                      '' &&
+                  Validator.usernameValidator(_username!,
+                          isUnique: _isUniqueName!) ==
+                      '') {
               if (agreedToTerms) {
                 setState(() {
                   _autoValidateMode = AutovalidateMode.always;
-                });
-                if (!_formKey.currentState!.validate()) return;
-                setState(() {
                   _isProcessing = true;
                 });
                 AuthController().sendOtp(
@@ -209,13 +200,22 @@ class _SignUpFormState extends State<SignUpForm> {
                         _isProcessing = false;
                       });
                     });
-                setState(() {
-                  _isProcessing = false;
-                });
               } else {
                 Get.snackbar('Error',
                     'Before signing up, you must agree to our Terms and Conditions');
+                setState(() {
+                  _isProcessing = false;
+                });
               }
+              } else {
+                Get.snackbar('Error', 'Invalid Entries in Form');
+                setState(() {
+                  _isProcessing = false;
+                });
+              }
+              setState(() {
+                _isProcessing = false;
+              });
             },
             isProcessing: _isProcessing,
             buttonType: ButtonType.elevated,
@@ -372,13 +372,13 @@ class _SignUpFormState extends State<SignUpForm> {
     );
   }
 
-  // Future<bool?> _verifyUnique(String username, String email) async {
-  //   bool? user = await _apiService.verifyUnique(
-  //     username,
-  //     email,
-  //   );
-  //   return user;
-  // }
+  Future<bool?> _verifyUnique(String username, String email) async {
+    bool? user = await _apiService.verifyUnique(
+      username,
+      email,
+    );
+    return user;
+  }
 
   Future<void> launchPolicy() async {
     String url = Constants.PRIVACY_POLICY_LINK;

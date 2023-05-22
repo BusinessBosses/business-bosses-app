@@ -47,7 +47,7 @@ class PostModel {
     String? videoUrl,
     bool? isRanked,
     bool? promote,
-    dynamic? promotionDuration,
+    dynamic promotionDuration,
     String? plan,
     bool? approved,
   }) {
@@ -93,7 +93,7 @@ class PostModel {
       postId: map['postId'] as String,
       title: map['title'] as String,
       images: map['images'] != null ? List<String>.from((map['images'])) : null,
-      timestamp: map['timestamp'] as int,
+      timestamp: int.parse(map['timestamp'].toString()),
       likes: map['likes'] != null ? List<String>.from((map['likes'])) : null,
       coins: map['coins'] != null ? List<String>.from((map['coins'])) : null,
       comments: List.from(map['comments'])

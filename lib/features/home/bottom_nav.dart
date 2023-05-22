@@ -1,25 +1,23 @@
+import 'package:business_bosses_v2/common/widgets/text_widget.dart';
 import 'package:business_bosses_v2/features/chat/controllers/chat_controller.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/posts/controllers/posts_controller.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
-import 'package:business_bosses_v2/features/profile/myprofilescreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-
 import '../../utils/theme/theme.dart';
 import '../posts/presentation/create_post_screen.dart';
+import '../profile/presentation/myprofilescreen.dart';
 import 'all_communities_screen.dart';
 import 'home_screen.dart';
 import 'marketplace_screen.dart';
 
-import '../profile/myprofilescreen.dart';
-
 /// Bottom Nav Screen is basically where all home screens are navigated through
 class BottomNavScreen extends StatefulWidget {
   /// Constructor
-  const BottomNavScreen({super.key});
+  const BottomNavScreen(int i, bool bool, {super.key});
 
   @override
   State<BottomNavScreen> createState() => _BottomNavScreenState();
@@ -31,6 +29,50 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
   final ChatController _chatController = Get.put(ChatController());
   final HomeController _homeController = Get.put(HomeController());
   int _activeIndex = 0;
+  int currentTimestamp = DateTime.now().millisecondsSinceEpoch;
+  // final GetStorage sandBox = GetStorage();
+
+  /// Show daily coin dialog
+  void showCoinDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        title: const TextWidget(
+          text: 'Congratulations',
+          fontWeight: FontWeight.bold,
+          size: 20,
+        ),
+        content: TextWidget(
+          text: 'You have earned 1 coin for logging into Business Bosses today',
+          color: Colors.black.withOpacity(.8),
+        ),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const TextWidget(
+              text: 'OK',
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   addCoinDaily();
+    // });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -175,7 +217,7 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
                               // log("Hello world");
                               Navigator.push(
                                 context,
-                                MaterialPageRoute(
+                                MaterialPageRoute<dynamic>(
                                   builder: (BuildContext context) =>
                                       const CreatePostScreen(),
                                 ),

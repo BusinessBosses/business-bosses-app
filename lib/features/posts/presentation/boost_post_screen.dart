@@ -1,23 +1,31 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
 import '../../../action/action.dart';
-import '../../../common/models/my_response.dart';
 import '../../../common/widgets/buttons/my_button.dart';
 import '../../../common/widgets/text_widget.dart';
-import '../../../utils/constants/constants.dart';
 import '../../../utils/theme/theme.dart';
+import '../../profile/controller/profile_controller.dart';
 import 'confirmation.dart';
 
+/// BOOST POST SCREEN
 class BoostPost extends StatefulWidget {
-  const BoostPost({Key? key, required this.postId, this.postTitle = ""})
-      : super(key: key);
+  // ignore: public_member_api_docs
+  const BoostPost({
+    Key? key,
+    required this.postId,
+    this.postTitle = '',
+  }) : super(key: key);
+  // ignore: public_member_api_docs
   final String postTitle;
+  // ignore: public_member_api_docs
   final String postId;
   @override
   State<BoostPost> createState() => _BoostPostState();
@@ -25,16 +33,18 @@ class BoostPost extends StatefulWidget {
 
 class _BoostPostState extends State<BoostPost> {
   bool _isProcessing = false;
+  bool isCoin = false;
   late Map<String, dynamic>? paymantIntent;
+  final ProfileController profileController = Get.find();
 
   late String duration;
-  List<Map<String, dynamic>> plans = [
-    {
+  List<Map<String, dynamic>> plans = <Map<String, dynamic>>[
+    <String, dynamic>{
       'amount': '3',
       'duration': 'Duration 3 days',
       'reach': 'Reach 500 to 850 people'
     },
-    {
+    <String, dynamic>{
       'amount': '5',
       'duration': 'Duration 5 Days',
       'reach': 'Reach 900 to 1.2k people'
@@ -42,34 +52,21 @@ class _BoostPostState extends State<BoostPost> {
   ];
 
   Future<void> updatePost() async {
-    // MyResponse res = await _firebase.updateNode(
-    //   id: widget.postId,
-    //   path: Constants.POSTS,
-    //   map: {
-    //     'amount': initPlan,
-    //     'paid': true,
-    //     'promote': true,
-    //     'approved': true,
-    //     'promoted_at': DateTime.now().millisecondsSinceEpoch,
-    //     'promotion_duration': DateTime.now()
-    //         .add(
-    //           Duration(
-    //             days: int.parse(initPlan),
-    //           ),
-    //         )
-    //         .millisecondsSinceEpoch,
-    //     'promotion_views': 0
-    //   },
-    // );
+    ApiService.put(
+        path: 'post/update-post/${widget.postId}',
+        body: <String, dynamic>{
+          'promote': true,
+          'plan': '$initPlan dollars',
+        });
   }
 
   late String initPlan;
-  calculateAmount(String amount) {
+  String calculateAmount(String amount) {
     final int calculatedAmount = (int.parse(amount)) * 100;
     return calculatedAmount.toString();
   }
 
-  displaySheet() async {
+  void displaySheet() async {
     try {
       await Stripe.instance.presentPaymentSheet().then((value) async {
         await updatePost();
@@ -85,13 +82,13 @@ class _BoostPostState extends State<BoostPost> {
         });
         log(' =>> $error');
         showSnackBar(context,
-            message: "Opps!! Something went wrong. Try again");
+            message: 'Opps!! Something went wrong. Try again');
       });
     } on StripeException {
       setState(() {
         _isProcessing = false;
       });
-      showSnackBar(context, message: "Opps!! Something went wrong. Try again");
+      showSnackBar(context, message: 'Opps!! Something went wrong. Try again');
       // print('Here ->>>>>> $e');
     } catch (e) {
       setState(() {
@@ -99,11 +96,11 @@ class _BoostPostState extends State<BoostPost> {
       });
       log('Here ->>>>>> $e');
 
-      showSnackBar(context, message: "Opps!! Something went wrong. Try again");
+      showSnackBar(context, message: 'Opps!! Something went wrong. Try again');
     }
   }
 
-  createPaymentIntent(String amount, String currency) async {
+  Future<dynamic> createPaymentIntent(String amount, String currency) async {
     try {
       Map<String, dynamic> body = {
         'amount': calculateAmount(amount),
@@ -128,31 +125,63 @@ class _BoostPostState extends State<BoostPost> {
       });
       log('Here ->>>>>> $e');
 
-      showSnackBar(context, message: "Opps!! Something went wrong. Try again");
+      showSnackBar(context, message: 'Opps!! Something went wrong. Try again');
     }
   }
 
   Future<void> makePayment() async {
-    try {
-      setState(() {
-        _isProcessing = true;
-      });
-      paymantIntent = await createPaymentIntent(initPlan, 'USD');
-      await Stripe.instance
-          .initPaymentSheet(
-        paymentSheetParameters: SetupPaymentSheetParameters(
-          paymentIntentClientSecret: paymantIntent!['client_secret'],
-          merchantDisplayName: 'Adam',
-        ),
-      )
-          .then((value) {
-        // log(value.toString());
-      });
+    if (isCoin &&
+        profileController.myProfile.coinscount! >=
+            (int.parse(initPlan) * 100)) {
+      try {
+        setState(() {
+          _isProcessing = true;
+        });
+        await ApiService.put(
+          path: 'users/${profileController.myProfile.uid}',
+          body: <String, dynamic>{
+            'coinscount': profileController.myProfile.coinscount! -
+                (int.parse(initPlan) * 100),
+          },
+        );
 
-      displaySheet();
-    } catch (e) {
-      log(e.toString());
+        await updatePost();
+        profileController.updateCoinCount(-(int.parse(initPlan) * 100));
+
+        setState(() {
+          _isProcessing = false;
+        });
+        Navigator.of(context).push(MaterialPageRoute<dynamic>(
+          builder: (BuildContext context) => const Confirmation(),
+        ));
+      } catch (e) {
+        log(e.toString());
+      }
+    } else {
+      try {
+        setState(() {
+          _isProcessing = true;
+        });
+        paymantIntent = await createPaymentIntent(initPlan, 'USD');
+        await Stripe.instance
+            .initPaymentSheet(
+          paymentSheetParameters: SetupPaymentSheetParameters(
+            paymentIntentClientSecret: paymantIntent!['client_secret'],
+            merchantDisplayName: 'Business Bosses',
+          ),
+        )
+            .then((void value) {
+          // log(value.toString());
+        });
+
+        displaySheet();
+      } catch (e) {
+        log(e.toString());
+      }
     }
+    setState(() {
+      _isProcessing = false;
+    });
   }
 
   @override
@@ -198,23 +227,23 @@ class _BoostPostState extends State<BoostPost> {
                   height: size.width / 2,
                   fit: BoxFit.cover,
                 ),
-                Positioned(
+                const Positioned(
                   bottom: 20,
                   left: 20,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const TextWidget(
-                        text: "Reach\na Wider Audience",
+                      TextWidget(
+                        text: 'Reach\na Wider Audience',
                         color: Color(0xFFFFFFFF),
                         fontWeight: FontWeight.w800,
                         size: 20,
                       ),
-                      const SizedBox(
+                      SizedBox(
                         height: 10,
                       ),
                       Row(
-                        children: const [
+                        children: <Widget>[
                           Icon(
                             Icons.check_box,
                             color: Colors.white,
@@ -224,13 +253,13 @@ class _BoostPostState extends State<BoostPost> {
                             width: 10,
                           ),
                           TextWidget(
-                            text: "More likes on posts",
+                            text: 'More likes on posts',
                             color: Colors.white,
                           ),
                         ],
                       ),
                       Row(
-                        children: const [
+                        children: <Widget>[
                           Icon(
                             Icons.check_box,
                             color: Colors.white,
@@ -240,13 +269,13 @@ class _BoostPostState extends State<BoostPost> {
                             width: 10,
                           ),
                           TextWidget(
-                            text: "More connections",
+                            text: 'More connections',
                             color: Colors.white,
                           )
                         ],
                       ),
                       Row(
-                        children: const [
+                        children: <Widget>[
                           Icon(
                             Icons.check_box,
                             color: Colors.white,
@@ -256,22 +285,11 @@ class _BoostPostState extends State<BoostPost> {
                             width: 10,
                           ),
                           TextWidget(
-                            text: "More referrals",
+                            text: 'More referrals',
                             color: Colors.white,
                           )
                         ],
                       ),
-
-                      // ListTile(
-                      //   leading: Icon(
-                      //     Icons.check_box,
-                      //     color: Colors.white,
-                      //   ),
-                      //   title: TextWidget(
-                      //     text: "More likes",
-                      //     color: Colors.white,
-                      //   ),
-                      // )
                     ],
                   ),
                 )
@@ -307,29 +325,74 @@ class _BoostPostState extends State<BoostPost> {
                     .toList(),
               ),
             ),
-
+            const SizedBox(
+              height: 15,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      Checkbox(
+                        value: isCoin,
+                        onChanged: (bool? value) {
+                          setState(() {
+                            isCoin = value!;
+                          });
+                        },
+                      ),
+                      const Text(
+                        'Pay With Coin (100 Coins = \$1)',
+                      ),
+                    ],
+                  ),
+                  Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 3),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFF4F4F4),
+                      borderRadius: BorderRadius.circular(3.5),
+                    ),
+                    child: isCoin
+                        ? profileController.myProfile.coinscount! <
+                                (int.parse(initPlan) * 100)
+                            ? const TextWidget(
+                                text: 'You do not have enough coins to promote',
+                                color: Color(0xFF232324),
+                                fontWeight: FontWeight.w600,
+                                size: 12)
+                            : Container()
+                        : Container(),
+                  ),
+                ],
+              ),
+            ),
             const SizedBox(
               height: 30,
             ),
-
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: MyButton(
-                  isProcessing: _isProcessing,
-                  labelStyle: const TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w700,
-                    fontSize: 18,
-                  ),
-                  label: "Continue",
-                  onPressed: () async {
-                    await makePayment();
-                  }),
+                isProcessing: _isProcessing,
+                labelStyle: const TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w700,
+                  fontSize: 18,
+                ),
+                label: (isCoin &&
+                        profileController.myProfile.coinscount! <
+                            (int.parse(initPlan) * 100))
+                    ? 'Pay With Card'
+                    : 'Continue',
+                onPressed: () async {
+                  await makePayment();
+                },
+              ),
             ),
             const SizedBox(
               height: 50,
             )
-            // BoostPlanCard()
           ],
         ),
       ),
@@ -337,7 +400,9 @@ class _BoostPostState extends State<BoostPost> {
   }
 }
 
+/// BOOST CARD
 class BoostPlanCard extends StatelessWidget {
+  /// CONSTRUCTOR
   const BoostPlanCard({
     Key? key,
     required this.plan,
@@ -426,7 +491,7 @@ class BoostPlanCard extends StatelessWidget {
                     color: Color(0xFF777777),
                     fontWeight: FontWeight.w400,
                     size: 12,
-                  )
+                  ),
           ],
         ),
       ),

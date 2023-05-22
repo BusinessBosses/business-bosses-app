@@ -3,8 +3,8 @@ import 'dart:math';
 
 import 'dart:developer' as dartdeveloper;
 import 'package:async/async.dart';
-import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/features/authentication/presentation/code_verification_screen.dart';
+import 'package:business_bosses_v2/features/authentication/presentation/forgot_password_verification.dart';
 import 'package:business_bosses_v2/features/authentication/repository/auth_repository.dart';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
@@ -49,7 +49,7 @@ class AuthController extends GetxController {
       templateId: dotenv.env['SENDGRID_TEMPLATE_ID'],
       customArgs: {'username': userName, 'otp': code.toString()},
     );
-    mailer.send(email).then((result) {
+    mailer.send(email).then((Result<void> result) {
       if (result.isError) {
         onError();
       } else {
@@ -58,6 +58,49 @@ class AuthController extends GetxController {
               userName: userName,
               emailAddress: emailAddress,
               password: password,
+            ));
+      }
+    }).catchError((dynamic e) {
+      onError();
+    });
+  }
+
+  /// SEND OTP TO USER EMAIL FOR FORGOT PASSWORD
+  void sendOtpPassword({
+    required String emailAddress,
+    required VoidCallback onError,
+  }) {
+    Random rng = Random();
+    int code = rng.nextInt(900000) + 100000;
+    Mailer mailer = Mailer(dotenv.env['SENDGRILL_API_KEY']!);
+    Address toAddress = Address(emailAddress.trim());
+    Address fromAddress = Address(dotenv.env['SENDGRID_EMAIL_ADDRESS']!);
+    Content content = Content('text/plain', code.toString());
+    String subject = 'OTP Verification Code';
+    final Personalization personalization = Personalization(
+      <Address>[toAddress],
+      dynamicTemplateData: <String, dynamic>{
+        'username': emailAddress,
+        'otp': code.toString()
+      },
+      subject: subject,
+    );
+
+    Email email = Email(
+      <Personalization>[personalization],
+      fromAddress,
+      subject,
+      content: <Content>[content],
+      templateId: dotenv.env['SENDGRID_TEMPLATE_ID'],
+      customArgs: {'username': emailAddress, 'otp': code.toString()},
+    );
+    mailer.send(email).then((Result<void> result) {
+      if (result.isError) {
+        onError();
+      } else {
+        Get.to(() => ForgotPasswordVerificationScreen(
+              otp: code.toString(),
+              emailAddress: emailAddress,
             ));
       }
     }).catchError((dynamic e) {
@@ -101,7 +144,7 @@ class AuthController extends GetxController {
 
       // print(appleCredential.email);
     } catch (e) {
-      throw e;
+      rethrow;
     }
   }
 

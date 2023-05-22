@@ -1,15 +1,14 @@
 import 'package:business_bosses_v2/utils/theme/theme.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:provider/provider.dart';
 
-import '../../common/models/quote.dart';
 import '../../common/widgets/safety_model.dart';
 
 class NotificationsScreen extends StatefulWidget {
-  static const routeName = '/notifications-screen';
+  static const String routeName = '/notifications-screen';
+
+  const NotificationsScreen({super.key});
 
   @override
   _NotificationsScreenState createState() => _NotificationsScreenState();

@@ -9,7 +9,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import '../../action/action.dart';
 import '../../common/models/user_model.dart';
-import '../../common/params.dart';
 import '../../common/widgets/buttons/button.dart';
 import '../../common/widgets/chat_box.dart';
 import '../../common/widgets/popup/my_popup_menu_button.dart';
@@ -18,12 +17,10 @@ import '../../common/widgets/text_widget.dart';
 import '../../common/widgets/user_avatar_with_badge.dart';
 import '../../utils/constants/constants.dart';
 import '../../utils/theme/theme.dart';
-import '../profile/publicprofilescreen.dart';
-import 'app_chats.dart';
 import 'models/my_message.dart';
 
 class ChatRoomScreen extends StatefulWidget {
-  static const routeName = '/chat-room-screen';
+  static const String routeName = '/chat-room-screen';
 
   const ChatRoomScreen({Key? key}) : super(key: key);
 
@@ -68,7 +65,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
         return true;
       },
       child: GetBuilder<ChatController>(
-        builder: (controller) {
+        builder: (ChatController controller) {
           return Scaffold(
             appBar: AppBar(
               leading: IconButton(
@@ -89,7 +86,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                     child: MyPopupMenuButton(
                       popupItems: _popupItemForumMore,
                       icon: const Icon(Icons.more_vert),
-                      onSelected: (val) {
+                      onSelected: (String val) {
                         deleteChat();
                       },
                     ),
@@ -107,12 +104,15 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                     placeHolder: Icons.person,
                     iconSize: 36.0,
                   ),
-                  subtitle: Text('${args.bio}',
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: textColor.withOpacity(0.6),
-                          )),
+                  subtitle: Text(
+                    args.bio ?? '',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyMedium
+                        ?.copyWith(color: textColor.withOpacity(0.6)),
+                  ),
                 ),
               ),
               toolbarHeight: 48.0 + 28.0,
@@ -125,7 +125,9 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                   Container(
                     child: controller
                             .extractConversations(
-                                args.uid, _profileController.myProfile.uid)
+                              args.uid,
+                              _profileController.myProfile.uid,
+                            )
                             .isEmpty
                         ? SafetyModel(
                             isLoading: false,
@@ -148,8 +150,8 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                                 .extractConversations(
                                     args.uid, _profileController.myProfile.uid)
                                 .length,
-                            itemBuilder: (context, i) {
-                              final MessageModel _message =
+                            itemBuilder: (BuildContext context, int i) {
+                              final MessageModel message =
                                   controller.extractConversations(args.uid,
                                       _profileController.myProfile.uid)[i];
                               // final reversedIndex = _messages.length - 1 - i;
@@ -163,7 +165,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
 
                                     showDialog(
                                       context: context,
-                                      builder: (context) => AlertDialog(
+                                      builder: (BuildContext context) => AlertDialog(
                                         content: Column(
                                           mainAxisSize: MainAxisSize.min,
                                           children: [
@@ -172,7 +174,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                                                 navigateTo(context);
                                                 await Clipboard.setData(
                                                   ClipboardData(
-                                                    text: _message.messageText!,
+                                                    text: message.messageText!,
                                                   ),
                                                 );
                                                 showSnackBar(context,
@@ -213,7 +215,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                                     // deleteMessage(_messages[reversedIndex]);
                                   },
                                   child: ChatBox(
-                                    _message,
+                                    message,
                                     myUid: _profileController.myProfile.uid,
                                   ));
                             },
@@ -318,7 +320,7 @@ class SendMessageBox extends StatelessWidget {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                Stack(
+                const Stack(
                   children: [
                     // IconButton(
                     //   onPressed: _onImagePicker,
@@ -357,10 +359,10 @@ class SendMessageBox extends StatelessWidget {
   }
 }
 
-optionsDialog(BuildContext context, Function() ontap) {
+Future optionsDialog(BuildContext context, Function() ontap) {
   return showDialog(
       context: context,
-      builder: (ctx) {
+      builder: (BuildContext ctx) {
         return AlertDialog(
           title: Text(
             'Delete this message',

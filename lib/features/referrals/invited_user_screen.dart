@@ -1,16 +1,14 @@
-import 'dart:math';
 import 'package:flutter/material.dart';
 
 import '../../action/action.dart';
 import '../../common/models/my_user.dart';
 import '../../common/params.dart';
 import '../../common/widgets/safety_model.dart';
-import '../../common/widgets/user_avatar_with_badge.dart';
-import '../profile/publicprofilescreen.dart';
+import '../profile/presentation/publicprofilescreen.dart';
 import '../promotions/invite.dart';
 
 class InvitedUsersScreen extends StatefulWidget {
-  static const routeName = '/invited-users-screen';
+  static const String routeName = '/invited-users-screen';
 
   const InvitedUsersScreen({Key? key}) : super(key: key);
 
@@ -24,9 +22,9 @@ class _InvitedUsersScreenState extends State<InvitedUsersScreen> {
   final List<MyUser> _users = [];
   List<Invite> invitedUsers = [];
 
-  int _loadedItems = 0;
+  final int _loadedItems = 0;
 
-  bool _isLoadingNext = false;
+  final bool _isLoadingNext = false;
   bool _isInit = false;
 
   @override
@@ -36,7 +34,7 @@ class _InvitedUsersScreenState extends State<InvitedUsersScreen> {
       _controller.addListener(_scrollListener);
       invitedUsers = ModalRoute.of(context)!.settings.arguments as List<Invite>;
       if (invitedUsers.isEmpty) navigateTo(context);
-      invitedUsers.sort((a, b) => b.timestamp!.compareTo(a.timestamp as num));
+      invitedUsers.sort((Invite a, Invite b) => b.timestamp!.compareTo(a.timestamp as num));
       _loadNextConnections();
       _isInit = true;
     }
@@ -67,7 +65,7 @@ class _InvitedUsersScreenState extends State<InvitedUsersScreen> {
                   padding: const EdgeInsets.only(bottom: 48.0),
                   controller: _controller,
                   itemCount: _users.length,
-                  itemBuilder: (context, i) {
+                  itemBuilder: (BuildContext context, int i) {
                     return Column(
                       children: [
                         ListTile(

@@ -1,5 +1,3 @@
-import 'package:business_bosses_v2/action/action.dart';
-import 'package:business_bosses_v2/features/chat/chat_screen.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
@@ -9,8 +7,10 @@ import 'package:get/get.dart';
 // ignore: public_member_api_docs
 class Homeappbar extends StatelessWidget {
   // ignore: public_member_api_docs
-  const Homeappbar({Key? key, this.hasBadge = false}) : super(key: key);
+  const Homeappbar({Key? key, this.hasBadge = false, required this.coinsCount})
+      : super(key: key);
   final bool hasBadge;
+  final String coinsCount;
 
   /// HOME SCREEN APP BAR
   @override
@@ -108,26 +108,31 @@ class Homeappbar extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.only(
                           left: 8, top: 5, right: 8, bottom: 5),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          SvgPicture.asset(
-                            'assets/svgs/coin.svg',
-                            height: 22,
-                          ),
-                          const SizedBox(
-                            width: 5,
-                          ),
-                          const Text(
-                            '200',
-                            style: TextStyle(
-                              color: Color.fromRGBO(133, 133, 133, 1),
-                              fontSize: 15,
-                              fontWeight: FontWeight.w700,
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.pushNamed(context, '/promotionScreen');
+                        },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            SvgPicture.asset(
+                              'assets/svgs/coin.svg',
+                              height: 22,
                             ),
-                          )
-                        ],
+                            const SizedBox(
+                              width: 5,
+                            ),
+                            Text(
+                              coinsCount,
+                              style: const TextStyle(
+                                color: Color.fromRGBO(133, 133, 133, 1),
+                                fontSize: 15,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            )
+                          ],
+                        ),
                       ),
                     )
                   ],
@@ -162,6 +167,7 @@ class Homeappbar extends StatelessWidget {
                           height: 40,
                         ),
                         onPressed: () {
+                          Get.toNamed(Routes.notifications);
                           //  Get.toNamed('/notifications');
                         },
                       ),

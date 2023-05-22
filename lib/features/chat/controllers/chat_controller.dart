@@ -1,16 +1,17 @@
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/features/chat/models/my_message.dart';
-import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:get/get.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 import 'package:uuid/uuid.dart';
 
 class ChatController extends GetxController {
-  bool _isLoading = true;
-  bool _isSearching = false;
+  final bool _isLoading = true;
+  final bool _isSearching = false;
   List<MessageModel> chatMessages = [];
   List<MessageModel> chats = [];
+  List<MessageModel> searchedChats = [];
+
   final ProfileController _profileController = Get.find();
 
   /// GET USER CONVERSATIONS WITH A SECOND PARTY
@@ -25,7 +26,7 @@ class ChatController extends GetxController {
   /// SET SEEN STATUS TO A CHAT TO TRUE
   void seen(String counterId, Socket socket) {
     final List<MessageModel> userConversations = chatMessages
-        .where((element) =>
+        .where((MessageModel element) =>
             element.senderUid == counterId &&
             element.receiverUid == _profileController.myProfile.uid &&
             !element.seen)
@@ -34,15 +35,30 @@ class ChatController extends GetxController {
       'senderUid': counterId,
       'receiverUid': _profileController.myProfile.uid
     });
-    for (var i = 0; i < userConversations.length; i++) {
+    for (int i = 0; i < userConversations.length; i++) {
       final int chatIndex = chatMessages.indexWhere(
-          (element) => element.messageId == userConversations[i].messageId);
+          (MessageModel element) => element.messageId == userConversations[i].messageId);
       chatMessages[chatIndex] = MessageModel.fromMap(
           {...chatMessages[chatIndex].toMap(), 'seen': true});
     }
 
     extractChats(_profileController.myProfile.uid);
 
+    update();
+  }
+
+  /// EXTRACT UNIQUE CHATS ON SEARCH (REMOVE DUPLICATES)
+  void searchChats(String query) {
+    searchedChats = chats
+        .where((MessageModel element) =>
+            element.user.username.toLowerCase().contains(query.toLowerCase()))
+        .toList();
+
+    update();
+  }
+
+  void clearSearch() {
+    searchedChats.clear();
     update();
   }
 
@@ -55,14 +71,14 @@ class ChatController extends GetxController {
     final Set<String> chatIds = <String>{...counterIds};
     final List<String> uniqueChatIds = chatIds.toList();
     chats.clear();
-    for (var i = 0; i < uniqueChatIds.length; i++) {
-      final e = uniqueChatIds[i];
+    for (int i = 0; i < uniqueChatIds.length; i++) {
+      final String e = uniqueChatIds[i];
 
       final List<MessageModel> chat = chatMessages
           .where((MessageModel element) =>
               element.senderUid == e || element.receiverUid == e)
           .toList();
-      chats.add(chat[0]);
+      chats.add(chat[i]);
     }
   }
 
@@ -84,10 +100,10 @@ class ChatController extends GetxController {
   }
 
   void addNewChat(Map<String, dynamic> data, UserModel user, Socket socket) {
-    final body = {
+    final Map<String, dynamic> body = {
       ...data,
       'timestamp': DateTime.now().millisecondsSinceEpoch,
-      'messageId': Uuid().v4(),
+      'messageId': const Uuid().v4(),
       'seen': false
     };
 

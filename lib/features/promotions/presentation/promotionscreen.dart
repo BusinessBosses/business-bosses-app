@@ -1,12 +1,14 @@
+import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 
-import '../../action/action.dart';
+import '../../../action/action.dart';
 
 class PromotionScreen extends StatefulWidget {
-  static const routeName = '/promotion-screen';
+  static const String routeName = '/promotion-screen';
 
   const PromotionScreen({Key? key}) : super(key: key);
 
@@ -16,15 +18,21 @@ class PromotionScreen extends StatefulWidget {
 
 class _PromotionScreenState extends State<PromotionScreen> {
   late String _referralId;
-
+  final ProfileController _profileController = Get.find();
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
   }
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _referralId = _profileController.myProfile.inviteId!;
+  }
+
+  @override
   Widget build(BuildContext context) {
-    _referralId = 'appUser.referralId';
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -173,13 +181,11 @@ class _PromotionScreenState extends State<PromotionScreen> {
             ),
             InkWell(
               onTap: () {
-                if (_referralId != null) {
-                  Clipboard.setData(ClipboardData(text: _referralId))
-                      .then((value) {
-                    showSnackBar(context,
-                        message: 'Your reference id is copied to clipboard.');
-                  });
-                }
+                Clipboard.setData(ClipboardData(text: _referralId))
+                    .then((value) {
+                  showSnackBar(context,
+                      message: 'Your reference id is copied to clipboard.');
+                });
               },
               child: Ink(
                 padding:
@@ -235,7 +241,9 @@ class _PromotionScreenState extends State<PromotionScreen> {
                           minimumSize: const Size(
                               150, 45) // put the width and height you want
                           ),
-                      onPressed: () {},
+                      onPressed: () {
+                        _shareWithFriends();
+                      },
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [

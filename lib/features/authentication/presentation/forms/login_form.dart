@@ -1,8 +1,5 @@
 import 'dart:io';
 // import 'package:apple_sign_in_safety/apple_sign_in.dart';
-import 'package:business_bosses_v2/common/models/user_model.dart';
-import 'package:business_bosses_v2/common/widgets/buttons/custom_button.dart'
-    as custombuttom;
 import 'package:business_bosses_v2/common/widgets/buttons/custom_button.dart';
 
 import 'package:business_bosses_v2/common/widgets/text_widget.dart'
@@ -15,7 +12,6 @@ import 'package:get/get.dart';
 
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
-import '../../../../action/action.dart';
 import '../../../../common/widgets/buttons/icon_text_button.dart';
 import '../../../../navigation/routes.dart';
 import '../../../../services/api_service.dart';
@@ -130,7 +126,9 @@ class _LoginFormState extends State<LoginForm> {
             ),
             const SizedBox(height: 30.0),
             GestureDetector(
-              onTap: () {},
+              onTap: () {
+                Get.toNamed(Routes.resetPassword);
+              },
               child: Container(
                 width: double.infinity,
                 alignment: Alignment.centerRight,
@@ -155,6 +153,12 @@ class _LoginFormState extends State<LoginForm> {
                   dynamic user = await _handleLogin();
                   if (user['success'] == false) {
                     Get.snackbar('Error', user['error']);
+                  } else {
+                    if (user['data']['hasUpdatedProfile'] == true) {
+                      Get.offAndToNamed(Routes.bottomNavigation);
+                    } else {
+                      Get.offAndToNamed(Routes.updateProfile);
+                    }
                   }
                 }
                 setState(() {
@@ -245,9 +249,5 @@ class _LoginFormState extends State<LoginForm> {
       _password!,
     );
     return user;
-
-    // void _handleLogin() async {
-    //   await AuthController().login(_authCred!, _password!);
-    // }
   }
 }

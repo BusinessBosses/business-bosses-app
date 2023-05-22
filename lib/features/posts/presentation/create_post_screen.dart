@@ -8,6 +8,7 @@ import 'package:business_bosses_v2/features/posts/presentation/widgets/promote_s
 import 'package:business_bosses_v2/features/posts/presentation/widgets/text_input.dart';
 import 'package:business_bosses_v2/features/posts/presentation/widgets/user_details_widget.dart';
 import 'package:business_bosses_v2/functions/unfocus_keyboard.dart';
+import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -17,8 +18,18 @@ import '../../../common/dialogs/snackbar.dart';
 
 /// CREATE POST SCREEN
 class CreatePostScreen extends StatefulWidget {
+  final String? postId;
+  final String? post;
+  final List<String?>? images;
+
   /// SCREEN CONSTRUCTOR
-  const CreatePostScreen({Key? key}) : super(key: key);
+  const CreatePostScreen({
+    Key? key,
+    this.postId,
+    this.post,
+    this.images,
+  }) : super(key: key);
+  static const String routeName = '/create-post';
 
   @override
   State<CreatePostScreen> createState() => _CreatePostScreenState();
@@ -42,6 +53,9 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
 
   @override
   Widget build(BuildContext context) {
+    if (widget.postId != null) {
+      _titleCtrl.text = widget.post!;
+    }
     return GetBuilder<CreatePostController>(
       builder: (CreatePostController controller) => WillPopScope(
         onWillPop: () async {
@@ -66,7 +80,9 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
               icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
             ),
             centerTitle: true,
-            title: const Text('Create Post'),
+            title: widget.postId == null
+                ? const Text('Create Post')
+                : const Text('Update Post'),
           ),
           body: GestureDetector(
             onTap: () => unFocusKeyboard(context),
@@ -155,7 +171,9 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                     height: 1,
                     child: ColoredBox(color: backgroundcolorinterface),
                   ),
-                  PromoteSection(controller: controller),
+                  widget.postId == null
+                      ? PromoteSection(controller: controller)
+                      : const SizedBox(),
                   const SizedBox(
                     width: double.infinity,
                     height: 1,
@@ -165,7 +183,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                     padding: const EdgeInsets.only(left: 15, right: 15),
                     child: CustomButton(
                       buttonType: ButtonType.elevated,
-                      label: 'Post',
+                      label: widget.postId == null ? 'Post' : 'Edit',
                       onPressed: () async {
                         if (controller.imageFileList.length > 5) {
                           /// If the user has selected more than five images, show an error message
@@ -173,10 +191,21 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                               message: 'You can select up to five images.');
                         } else {
                           /// Otherwise, create the post
-                          await controller.createPost({
-                            'title': _titleCtrl.text.trim(),
-                            'timestamp': DateTime.now().millisecondsSinceEpoch,
-                          });
+                          if (widget.postId == null) {
+                            await controller.createPost(<String, dynamic>{
+                              'title': _titleCtrl.text.trim(),
+                              'timestamp':
+                                  DateTime.now().millisecondsSinceEpoch,
+                            });
+                          } else {
+                            ApiService.put(
+                              path: 'post/update-post/${widget.postId}',
+                              body: {
+                                'title': _titleCtrl.text.trim(),
+                              },
+                            );
+                            Get.back();
+                          }
                         }
                       },
                       isProcessing: controller.loading.value,

@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../../../common/models/analyser_data.dart';
 import '../../../common/models/for_data_picker.dart';
-import '../../../common/models/industry.dart';
+import '../../forum/models/industry.dart';
 import '../../../common/models/my_response.dart';
 import '../../../common/models/my_title.dart';
 import '../../../common/widgets/data_selection_screen.dart';
 import '../../../utils/theme/theme.dart';
 import '../analysescreen.dart';
-import '../myprofilescreen.dart';
+import '../presentation/myprofilescreen.dart';
 
 class AdditionalInfoTile extends StatefulWidget {
   const AdditionalInfoTile({Key? key}) : super(key: key);
@@ -83,7 +83,7 @@ class _AdditionalInfoTileState extends State<AdditionalInfoTile> {
                       ),
                       TextFormField(
                         initialValue: _companyName,
-                        onChanged: (val) {
+                        onChanged: (String val) {
                           debugPrint('_companyName $_companyName');
                           _companyName = val;
                         },
@@ -161,7 +161,7 @@ class _AdditionalInfoTileState extends State<AdditionalInfoTile> {
                           ),
                           TextFormField(
                             initialValue: _website,
-                            onChanged: (val) {
+                            onChanged: (String val) {
                               _website = val;
                             },
                             keyboardType: TextInputType.url,
@@ -199,7 +199,7 @@ class _AdditionalInfoTileState extends State<AdditionalInfoTile> {
                           ),
                           TextFormField(
                             initialValue: _instagram,
-                            onChanged: (val) {
+                            onChanged: (String val) {
                               _instagram = val;
                             },
                             // validator: (val) =>
@@ -247,7 +247,7 @@ class _AdditionalInfoTileState extends State<AdditionalInfoTile> {
                           ),
                           TextFormField(
                             initialValue: _twitter,
-                            onChanged: (val) {
+                            onChanged: (String val) {
                               _twitter = val;
                             },
                             // validator: (val) =>
@@ -351,7 +351,7 @@ class _AdditionalInfoTileState extends State<AdditionalInfoTile> {
                         height: 10,
                       ),
                       TextFormField(
-                        onChanged: (val) {
+                        onChanged: (String val) {
                           _referralId = val;
                         },
                         textInputAction: TextInputAction.done,

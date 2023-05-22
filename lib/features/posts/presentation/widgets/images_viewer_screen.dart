@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_swiper_plus/flutter_swiper_plus.dart';
 
 import '../../../../common/widgets/network_image_with_placeholder.dart';
 import '../../../../utils/theme/theme.dart';
@@ -34,26 +35,27 @@ class _ImagesViewerScreenState extends State<ImagesViewerScreen> {
       backgroundColor: Colors.black,
       body: Stack(
         children: [
-          widget.urls == null ? Container() : Container(),
-          // : Swiper(
-          //     index: widget.index,
-          //     loop: false,
-          //     itemCount: widget.urls.length,
-          //     itemBuilder: (context, i) => InteractiveViewer(
-          //       child: NetworkImageWithPlaceHolder(
-          //         cacheHeight: 2200,
-          //         imageUrl: widget.urls[i],
-          //         width: double.infinity,
-          //         height: MediaQuery.of(context).size.height,
-          //         // placeHolder: Icons.photo,
-          //         placeHolderType: PlaceHolderType.progress,
-          //         progressCircleColor: Colors.white,
-          //         iconSize: 56.0,
-          //         radius: 0.0,
-          //         fit: BoxFit.fitWidth,
-          //       ),
-          //     ),
-          //   ),
+          widget.urls == null
+              ? Container()
+              : Swiper(
+                  index: widget.index,
+                  loop: false,
+                  itemCount: widget.urls!.length,
+                  itemBuilder: (BuildContext context, int i) => InteractiveViewer(
+                    child: NetworkImageWithPlaceHolder(
+                      cacheHeight: 2200,
+                      imageUrl: widget.urls![i],
+                      width: double.infinity,
+                      height: MediaQuery.of(context).size.height,
+                      // placeHolder: Icons.photo,
+                      placeHolderType: PlaceHolderType.progress,
+                      progressCircleColor: Colors.white,
+                      iconSize: 56.0,
+                      radius: 0.0,
+                      fit: BoxFit.fitWidth,
+                    ),
+                  ),
+                ),
           if (widget.text != null && widget.text!.isNotEmpty)
             Positioned(
               bottom: 20.0,

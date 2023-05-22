@@ -9,6 +9,8 @@ import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../presentation/boost_post_screen.dart';
+
 /// CREATEPOSTCONTROLLER
 class CreatePostController extends GetxController {
   final PostsController _postsController = Get.find();
@@ -21,6 +23,8 @@ class CreatePostController extends GetxController {
 
   /// PROMOTE STATE
   RxBool shouldPromote = false.obs;
+
+  final bool _promote = false;
 
   /// LOADING STATE
   RxBool loading = false.obs;
@@ -81,7 +85,14 @@ class CreatePostController extends GetxController {
 
         if (response.success) {
           _postsController.addNewPost(response.data);
-          Get.back();
+          if (shouldPromote.value == true) {
+            Get.to(() => BoostPost(
+                  postId: response.data['postId'],
+                  postTitle: response.data['title'],
+                ));
+          } else {
+            Get.back();
+          }
         }
       } else {
         if (await uploadFile() == null) {
@@ -93,7 +104,14 @@ class CreatePostController extends GetxController {
           if (response.success) {
             imageFileList.clear();
             _postsController.addNewPost(response.data);
-            Get.back();
+            if (shouldPromote.value == true) {
+              Get.to(() => BoostPost(
+                    postId: response.data['postId'],
+                    postTitle: response.data['title'],
+                  ));
+            } else {
+              Get.back();
+            }
           }
         }
       }

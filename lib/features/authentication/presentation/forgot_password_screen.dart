@@ -1,0 +1,147 @@
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
+import '../../../action/action.dart';
+import '../../../common/widgets/buttons/custom_button.dart';
+import '../../../functions/validators/validator.dart';
+import '../../../services/api_service.dart';
+import '../../../utils/theme/theme.dart';
+import '../controller/auth_controller.dart';
+
+class ForgotPasswordScreen extends StatefulWidget {
+  const ForgotPasswordScreen({Key? key}) : super(key: key);
+
+  @override
+  _ForgotPasswordScreenState createState() => _ForgotPasswordScreenState();
+}
+
+class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  AutovalidateMode _autovalidateMode = AutovalidateMode.disabled;
+
+  String? _email;
+  bool? _isUniqueEmail;
+  final ApiService _apiService = ApiService();
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () => unFocusKeyboard(context),
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Forgot password'),
+        ),
+        body: Form(
+          key: _formKey,
+          autovalidateMode: _autovalidateMode,
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(16.0),
+            child: AbsorbPointer(
+              absorbing: _isProcessing,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(16.0),
+                    width: double.infinity,
+                    child: Text(
+                      'Business\nBosses',
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                            fontWeight: FontWeight.w900,
+                            fontSize: 28.0,
+                            color: Colors.red,
+                          ),
+                    ),
+                  ),
+
+                  const SizedBox(height: 36.0),
+                  Text(
+                    // 'Enter your email for the verification process, and we will send 4 digits code to your email for the verification.',
+                    'Enter your email for the verification process, we\'ll send you a reset password email.',
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyLarge!
+                        .copyWith(color: textColor.withOpacity(0.8)),
+                  ),
+                  const SizedBox(height: 36.0),
+                  Text(
+                    'E-mail',
+                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                          fontWeight: FontWeight.w600,
+                        ),
+                  ),
+                  const SizedBox(height: 12.0),
+                  TextFormField(
+                    onChanged: (String val) {
+                      _email = val;
+                    },
+                    validator: Validator.emailValidator,
+                    keyboardType: TextInputType.emailAddress,
+                    textInputAction: TextInputAction.next,
+                    decoration: inputDecoration.copyWith(
+                      hintText: 'Enter your email',
+                    ),
+                  ),
+                  //field user name or email
+
+                  const SizedBox(height: 48.0),
+                  SizedBox(
+                    width: double.infinity,
+                    height: buttonHeight,
+                    child: CustomButton(
+                      label: 'Continue',
+                      onPressed: () async {
+                        _formKey.currentState?.save();
+                        setState(() {
+                          _autovalidateMode = AutovalidateMode.always;
+                        });
+                        setState(() {
+                          _isProcessing = true;
+                        });
+                        bool? result = await _verifyUnique('', _email!);
+                        setState(() {
+                          _isUniqueEmail = result;
+                        });
+                        if (_isUniqueEmail == false) {
+                          AuthController().sendOtpPassword(
+                              emailAddress: _email!,
+                              onError: () {
+                                setState(() {
+                                  _isProcessing = false;
+                                });
+                              });
+                        } else {
+                          Get.snackbar('Error', 'Email Does Not Exist');
+                          setState(() {
+                            _isProcessing = false;
+                          });
+                        }
+                        setState(() {
+                          _isProcessing = false;
+                        });
+                      },
+                      isProcessing: _isProcessing,
+                    ),
+                  ),
+                  const SizedBox(height: 24.0),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  bool _isProcessing = false;
+
+  Future<bool?> _verifyUnique(String username, String email) async {
+    bool? user = await _apiService.verifyUnique(
+      username,
+      email,
+    );
+    return user;
+  }
+}

@@ -47,8 +47,8 @@ class RegisterScreen extends StatelessWidget {
                       ],
                     ),
                     const SizedBox(width: 46),
-                    Column(
-                      children: const <Widget>[
+                    const Column(
+                      children: <Widget>[
                         TextWidget(
                           text: 'Sign Up',
                           color: primaryColorLT,

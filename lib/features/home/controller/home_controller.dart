@@ -51,10 +51,57 @@ class HomeController extends GetxController {
     );
   }
 
+  void showCoinDialog() {
+    showDialog(
+      context: Get.context!,
+      builder: (BuildContext context) => AlertDialog(
+        title: const TextWidget(
+          text: 'Congratulations',
+          fontWeight: FontWeight.bold,
+          size: 20,
+        ),
+        content: TextWidget(
+          text: 'You have earned 1 coin for logging into Business Bosses today',
+          color: Colors.black.withOpacity(.8),
+        ),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const TextWidget(
+              text: 'OK',
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  /// DailyCoin
+  void addCoinDaily() {
+    int currentTimestamp = DateTime.now().millisecondsSinceEpoch;
+
+    int lastExecutionTimestamp = sandBox.read('lastExecutionTimestamp') ?? 0;
+    if (currentTimestamp - lastExecutionTimestamp >= 24 * 60 * 60 * 1000) {
+      // The action hasn't been executed today, save the current timestamp
+      sandBox.write('lastExecutionTimestamp', currentTimestamp);
+      ApiService.put(
+        path: 'users/${_profileController.myProfile.uid}',
+        body: <String, dynamic>{
+          'coinscount': _profileController.myProfile.coinscount! + 1,
+        },
+      );
+      _profileController.updateCoinCount(1);
+      showCoinDialog();
+    }
+  }
+
   /// LOAD POSTS FROM REMOTE SOURCE
   Future<void> loadData() async {
     loading(true);
     error(false);
+    update();
     final ApiResponseModel response = await HomeRepository.fetchData();
     if (response.success) {
       _postsController.processPostsToState(response.data['posts']['rows']);
@@ -62,6 +109,7 @@ class HomeController extends GetxController {
       _chatController.processDataToState(
           response.data['chats'], _profileController.myProfile.uid);
       socket.emit('handshake', _profileController.myProfile.uid);
+      addCoinDaily();
     } else {
       error(true);
       socket.disconnect();
