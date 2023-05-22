@@ -28,6 +28,50 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
   final ChatController _chatController = Get.put(ChatController());
   final HomeController _homeController = Get.put(HomeController());
   int _activeIndex = 0;
+  int currentTimestamp = DateTime.now().millisecondsSinceEpoch;
+  final GetStorage sandBox = GetStorage();
+
+  /// Show daily coin dialog
+  void showCoinDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        title: const TextWidget(
+          text: 'Congratulations',
+          fontWeight: FontWeight.bold,
+          size: 20,
+        ),
+        content: TextWidget(
+          text: 'You have earned 1 coin for logging into Business Bosses today',
+          color: Colors.black.withOpacity(.8),
+        ),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const TextWidget(
+              text: 'OK',
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   addCoinDaily();
+    // });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
 
   @override
   Widget build(BuildContext context) {
