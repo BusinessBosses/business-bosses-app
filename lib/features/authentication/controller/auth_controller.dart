@@ -8,12 +8,15 @@ import 'package:business_bosses_v2/features/authentication/presentation/code_ver
 import 'package:business_bosses_v2/features/authentication/presentation/forgot_password_screen.dart';
 import 'package:business_bosses_v2/features/authentication/presentation/forgot_password_verification.dart';
 import 'package:business_bosses_v2/features/authentication/repository/auth_repository.dart';
+import 'package:business_bosses_v2/features/home/bottom_nav.dart';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:sendgrid_mailer/sendgrid_mailer.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
+
+import '../../../navigation/routes.dart';
 
 /// Initalize Auth controller
 class AuthController extends GetxController {
@@ -143,6 +146,8 @@ class AuthController extends GetxController {
 
       dartdeveloper.log(
           'email: ${appleCredential.email}, name: ${appleCredential.familyName}');
+
+      Get.toNamed(Routes.updateProfile);
 
       // print(appleCredential.email);
     } catch (e) {
