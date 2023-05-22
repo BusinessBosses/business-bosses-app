@@ -212,7 +212,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
   @override
   Widget build(BuildContext context) {
     ModalRoute? currentRoute = ModalRoute.of(context);
-    String? nameValidator = Validator.nameValidator(_name);
+    // String? nameValidator = Validator.nameValidator(_name);
     return WillPopScope(
       onWillPop: _onBackPressed,
       child: GestureDetector(
@@ -344,6 +344,98 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                         keyboardType: TextInputType.name,
                                         textInputAction: TextInputAction.next,
                                         validator: Validator.nameValidator,
+                                        decoration: inputDecoration.copyWith(
+                                          hintStyle: const TextStyle(
+                                            color: iconColor,
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                          suffixIcon: _name != null
+                                              ? const Icon(
+                                                  Icons.check_circle,
+                                                  color: Colors.green,
+                                                )
+                                              : Icon(
+                                                  Icons.close,
+                                                  color: _isUniqueName == null
+                                                      ? Colors.transparent
+                                                      : Colors.red,
+                                                ),
+                                          filled: true,
+                                          fillColor: const Color(0xffF4F4F4),
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        height: 20,
+                                      ),
+                                      const SizedBox(
+                                        height: 20,
+                                      ),
+                                      const Text(
+                                        'Username',
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        height: 10,
+                                      ),
+                                      TextFormField(
+                                        initialValue: _username,
+                                        onChanged: (String val) {
+                                          _username = val;
+                                          setState(() {});
+                                        },
+                                        keyboardType: TextInputType.name,
+                                        textInputAction: TextInputAction.next,
+                                        validator: Validator.nameValidator,
+                                        decoration: inputDecoration.copyWith(
+                                          hintStyle: const TextStyle(
+                                            color: iconColor,
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                          suffixIcon: _name != null
+                                              ? const Icon(
+                                                  Icons.check_circle,
+                                                  color: Colors.green,
+                                                )
+                                              : Icon(
+                                                  Icons.close,
+                                                  color: _isUniqueName == null
+                                                      ? Colors.transparent
+                                                      : Colors.red,
+                                                ),
+                                          filled: true,
+                                          fillColor: const Color(0xffF4F4F4),
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        height: 20,
+                                      ),
+                                      const SizedBox(
+                                        height: 20,
+                                      ),
+                                      const Text(
+                                        'Email',
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        height: 10,
+                                      ),
+                                      TextFormField(
+                                        initialValue: _email,
+                                        onChanged: (String val) {
+                                          _email = val;
+                                          setState(() {});
+                                        },
+                                        keyboardType: TextInputType.name,
+                                        textInputAction: TextInputAction.next,
+                                        validator: Validator.emailValidator,
                                         decoration: inputDecoration.copyWith(
                                           hintStyle: const TextStyle(
                                             color: iconColor,
@@ -1338,14 +1430,22 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
   }
 
   Future<void> _attemptToComplete() async {
+    _formKey.currentState!.save();
+    setState(() {
+      _autoValidateMode = AutovalidateMode.always;
+    });
+    if (!_formKey.currentState!.validate()) return;
     setState(() {
       _isProcessing = true;
     });
+
     final SharedPreferences prefs = await SharedPreferences.getInstance();
 
     Map<String, dynamic> updateData = <String, dynamic>{
       'name': _name,
       'bio': _bio,
+      'username': _username,
+      'email': _email!.trim(),
       'companyName': _companyName,
       'website': _website,
       'instagram': _instagram,
@@ -1366,7 +1466,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
     ApiResponseModel response =
         await ApiService.put(path: 'users/$userId', body: updateData);
     if (response.success) {
-      Get.snackbar('Success', 'Profile Upppppdated Succesfully');
+      Get.snackbar('Success', 'Profile Updated Succesfully');
       if (Get.isRegistered<ProfileController>()) {
         final ProfileController _profileController = Get.find();
         _profileController.updateProfile(
@@ -1378,17 +1478,14 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
     } else {
       Get.snackbar('Error', response.message);
     }
-    _formKey.currentState!.save();
-    setState(() {
-      _autoValidateMode = AutovalidateMode.always;
-    });
-    if (!_formKey.currentState!.validate()) {
-      _scrollController.animateTo(
-        3,
-        duration: const Duration(seconds: 1),
-        curve: Curves.easeInOut,
-      );
-    }
+
+    // if (!_formKey.currentState!.validate()) {
+    //   _scrollController.animateTo(
+    //     3,
+    //     duration: const Duration(seconds: 1),
+    //     curve: Curves.easeInOut,
+    //   );
+    // }
     setState(() {
       _isProcessing = true;
     });

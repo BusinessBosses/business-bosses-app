@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:get/get.dart';
 
 /// Validate Form Fields
 class Validator {
@@ -24,12 +25,12 @@ class Validator {
   }
 
   /// VAlidate Field to be email
-  static String emailValidator(String? val) {
+  static String? emailValidator(String? val) {
     if (val == null) return 'Email cannot be empty';
-    if (!isValidEmail(val)) {
+    if (!val.isEmail) {
       return 'Invalid email';
     } else {
-      return '';
+      return null;
     }
   }
 
@@ -128,15 +129,15 @@ class Validator {
       return 'Name cannot be empty';
     }
     if (val!.length < 2) return 'Name is too short';
-    return '';
+    return null;
   }
 
   /// VAlidate bio is not empty
   static String? bioValidator(String? val) {
-    if ((val?.trim().isEmpty ?? true)) {
+    if (val!.trim().isEmpty) {
       return 'Bio cannot be empty';
     }
-    if (val!.length < 12) return 'Bio is too short';
+    if (val.length < 12) return 'Bio is too short';
     return null;
   }
 
