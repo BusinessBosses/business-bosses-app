@@ -19,10 +19,6 @@ class PromotionScreen extends StatefulWidget {
 class _PromotionScreenState extends State<PromotionScreen> {
   late String _referralId;
   final ProfileController _profileController = Get.find();
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-  }
 
   @override
   void initState() {
@@ -72,8 +68,8 @@ class _PromotionScreenState extends State<PromotionScreen> {
                     const SizedBox(
                       width: 2,
                     ),
-                    const Text(
-                      '200',
+                    Text(
+                      '${_profileController.myProfile.coinscount ?? 0}',
                       style: TextStyle(
                         color: textColor,
                         fontSize: 14,
@@ -298,7 +294,7 @@ class _PromotionScreenState extends State<PromotionScreen> {
                           ),
                     ),
                     Text(
-                      '200',
+                      '${_profileController.myProfile.referalCount ?? 0}',
                       textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                             fontWeight: FontWeight.normal,

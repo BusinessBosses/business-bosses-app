@@ -1,5 +1,7 @@
 import 'package:business_bosses_v2/common/models/user_model.dart';
+import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../../../action/action.dart';
 import '../../../common/params.dart';
@@ -34,14 +36,15 @@ class ConnectionUserItem extends StatelessWidget {
           )
         : ListTile(
             onTap: () async {
-              var result = await navigateTo(
-                context,
-                routeName: PublicProfileScreen.routeName,
-                arguments: Params(arg1: user.uid),
-              );
-              if (result == null) {
-                Navigator.of(context).pop();
-              }
+              Get.toNamed(Routes.publicProfile, arguments: user);
+              // var result = await navigateTo(
+              //   context,
+              //   routeName: PublicProfileScreen.routeName,
+              //   arguments: Params(arg1: user.uid),
+              // );
+              // if (result == null) {
+              //   Navigator.of(context).pop();
+              // }
             },
             leading: UserAvatarWithBadge(
               user: user,
