@@ -1364,7 +1364,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
     ApiResponseModel response =
         await ApiService.put(path: 'users/$userId', body: updateData);
     if (response.success) {
-      Get.snackbar('Success', 'Profile Completed Succesfully');
+      Get.snackbar('Success', 'Profile Updated Succesfully');
       if (Get.isRegistered<ProfileController>()) {
         final ProfileController _profileController = Get.find();
         _profileController.updateProfile(
