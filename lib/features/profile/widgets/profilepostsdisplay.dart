@@ -1,6 +1,6 @@
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/features/posts/models/post_model.dart';
-import 'package:business_bosses_v2/features/posts/presentation/widgets/post_grid_item.dart';
+import 'package:business_bosses_v2/features/posts/widgets/post_grid_item.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

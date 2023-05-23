@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 
-import '../../../../utils/theme/theme.dart';
+import '../../../utils/theme/theme.dart';
 
 class SettingsItem extends StatefulWidget {
   final bool isTitle;

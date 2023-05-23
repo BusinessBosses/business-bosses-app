@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 Widget deleteImage(int index) {
-  var _isProcessing;
+  bool _isProcessing = false;
   return Positioned(
     right: 5.0,
     top: 5.0,

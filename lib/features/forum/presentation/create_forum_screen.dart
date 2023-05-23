@@ -36,7 +36,8 @@ class CreateForumScreen extends StatelessWidget {
       child: Scaffold(
         key: scaffoldKey,
         appBar: AppBar(
-          title: Text('Start a Topic'),
+          title: //Text(Provider.of<AppCommunities>(context, listen: false).label(_industry.categoryId, isUpdating: _isUpdating)),
+              Text('Start a Topic'),
           automaticallyImplyLeading: false, // Used for removing back buttoon.
           actions: [
             IconButton(

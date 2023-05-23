@@ -1,8 +1,8 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../common/widgets/network_image_with_placeholder.dart';
-import '../../../../utils/theme/theme.dart';
+import '../../../common/widgets/network_image_with_placeholder.dart';
+import '../../../utils/theme/theme.dart';
 
 class ImagesViewerScreen extends StatefulWidget {
   final List<String>? urls;

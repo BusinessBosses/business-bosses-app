@@ -9,7 +9,7 @@ import '../../functions/my_native_functions.dart';
 import '../../navigation/routes.dart';
 import '../../services/api_service.dart';
 import '../../utils/constants/constants.dart';
-import '../posts/presentation/widgets/settings_item.dart';
+import '../posts/widgets/settings_item.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({Key? key}) : super(key: key);

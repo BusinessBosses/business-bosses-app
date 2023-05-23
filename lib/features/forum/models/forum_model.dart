@@ -5,37 +5,37 @@ import 'package:business_bosses_v2/common/models/comment_model.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 
 class ForumModel {
-  final String forumId;
-  final String categoryId;
-  final String industryId;
-  final String description;
+  final String? forumId;
+  final String? categoryId;
+  final String? industryId;
+  late final String? description;
   final bool? isArchived;
-  final String marketCategory; // new field
+  final String? marketCategory; // new field
   final String? location;
-  final String title;
+  late final String? title;
   final List<String>? images;
-  final int timestamp;
-  final List<String> likes;
-  final List<String> coins;
-  final List<CommentModel> comments;
-  final UserModel user;
-  final bool isRanked;
+  final int? timestamp;
+  final List<String>? likes;
+  final List<String>? coins;
+  final List<CommentModel>? comments;
+  final UserModel? user;
+  final bool? isRanked;
   ForumModel({
-    required this.forumId,
-    required this.categoryId,
-    required this.industryId,
-    required this.description,
+    this.forumId,
+    this.categoryId,
+    this.industryId,
+    this.description,
     this.isArchived,
-    required this.marketCategory,
+    this.marketCategory,
     this.location,
-    required this.title,
+    this.title,
     this.images,
-    required this.timestamp,
-    required this.likes,
-    required this.coins,
-    required this.comments,
-    required this.user,
-    required this.isRanked,
+    this.timestamp,
+    this.likes,
+    this.coins,
+    this.comments,
+    this.user,
+    this.isRanked,
   });
 
   ForumModel copyWith({
@@ -88,8 +88,8 @@ class ForumModel {
       'timestamp': timestamp,
       'likes': likes,
       'coins': coins,
-      'comments': comments.map((CommentModel x) => x.toMap()).toList(),
-      'user': user.toMap(),
+      'comments': comments!.map((CommentModel x) => x.toMap()).toList(),
+      'user': user!.toMap(),
       'isRanked': isRanked,
     };
   }

@@ -11,7 +11,7 @@ import '../../../navigation/routes.dart';
 import '../../../utils/theme/theme.dart';
 import '../../connects/presentation/all_connections_screen.dart';
 import '../../posts/models/post_model.dart';
-import '../../posts/presentation/widgets/userpost_tile.dart';
+import '../../posts/widgets/userpost_tile.dart';
 import '../../referrals/referrals_details_screen.dart';
 
 class MyProfileHeader extends StatelessWidget {

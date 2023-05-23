@@ -1,5 +1,6 @@
-import 'package:business_bosses/theme/theme.dart';
 import 'package:flutter/material.dart';
+
+import '../../../utils/theme/theme.dart';
 
 class FieldContainer extends StatelessWidget {
   final Color color;
@@ -8,15 +9,15 @@ class FieldContainer extends StatelessWidget {
   final Widget child;
   final EdgeInsetsGeometry padding;
   final Alignment alignment;
-  final String message;
+  final String? message;
   final TextStyle messageStyle;
   final double bottomSpace;
   final double topSpace;
   final bool isError;
 
   const FieldContainer({
-    Key key,
-    @required this.child,
+    Key? key,
+    required this.child,
     this.color = Colors.white,
     this.height = fieldHeight,
     this.radius = radiusValue,
@@ -49,7 +50,7 @@ class FieldContainer extends StatelessWidget {
         const SizedBox(height: 8.0),
         if (message != null)
           Text(
-            message,
+            message!,
             style: messageStyle.copyWith(
               color: isError ? Colors.red : textColor,
               fontSize: 12.0,
