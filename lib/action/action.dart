@@ -30,7 +30,7 @@ Future<dynamic> navigateTo(
     Navigator.of(context).pop(arguments);
   } else if (isRemoveUntil) {
     return await Navigator.of(context).pushNamedAndRemoveUntil(
-        routeName, (route) => false,
+        routeName, (Route route) => false,
         arguments: arguments);
   } else {
     return await Get.toNamed(routeName, arguments: arguments);

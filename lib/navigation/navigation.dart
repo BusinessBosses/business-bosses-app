@@ -24,7 +24,6 @@ import 'package:business_bosses_v2/features/settings/settingsscreen.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:get/get.dart';
 
-import '../features/posts/presentation/boost_post_screen.dart';
 import '../features/settings/delete_account_screen.dart';
 
 ///NAV INITIALIZATIONS
@@ -65,7 +64,7 @@ class Nav {
     ),
     GetPage(
       name: Routes.notifications,
-      page: () => NotificationsScreen(),
+      page: () => const NotificationsScreen(),
     ),
     GetPage(
       name: Routes.promotionscreen,
@@ -97,11 +96,11 @@ class Nav {
     ),
     GetPage(
       name: Routes.publicProfile,
-      page: () => PublicProfileScreen(),
+      page: () => const PublicProfileScreen(),
     ),
     GetPage(
       name: Routes.referscreen,
-      page: () => ReferScreen(),
+      page: () => const ReferScreen(),
     ),
     GetPage(
       name: Routes.allconnectionsscreen,

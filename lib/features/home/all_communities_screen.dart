@@ -5,12 +5,10 @@ import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
-import '../../action/action.dart';
 import '../../common/widgets/tiles/custom_tile.dart';
 import '../../navigation/routes.dart';
 import '../../utils/theme/theme.dart';
 import '../../common/widgets/popup/bossup_challenge_popup.dart';
-import '../forum/presentation/all_forum_screen.dart';
 import '../forum/widgets/joinedbutton.dart';
 
 // ignore: public_member_api_docs

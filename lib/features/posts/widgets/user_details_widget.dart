@@ -1,6 +1,5 @@
 // ignore_for_file: public_member_api_docs
 
-import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/features/posts/widgets/create_post_user_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

@@ -253,7 +253,7 @@ class UserModel {
       disconnections: map['disconnections'] != null
           ? List<DisconnectionsModel>.from(
               (map['disconnections'] as List<int>).map<DisconnectionsModel?>(
-                (x) => DisconnectionsModel.fromMap(x as Map<String, dynamic>),
+                (int x) => DisconnectionsModel.fromMap(x as Map<String, dynamic>),
               ),
             )
           : null,
@@ -265,7 +265,7 @@ class UserModel {
       profileViews: map['profileViews'] != null
           ? List<ProfileViewerModel>.from(
               (map['profileViews'] as List<int>).map<ProfileViewerModel?>(
-                (x) => ProfileViewerModel.fromMap(x as Map<String, dynamic>),
+                (int x) => ProfileViewerModel.fromMap(x as Map<String, dynamic>),
               ),
             )
           : null,

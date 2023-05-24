@@ -74,9 +74,9 @@ class AllForumScreen extends StatelessWidget {
                                 child: Row(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
-                                    Text(
+                                    const Text(
                                       'Start a Topic' ?? 'Create Opportunities',
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                           fontSize: 15,
                                           color: Colors.white,
                                           fontWeight: FontWeight.w500),
@@ -300,7 +300,9 @@ class AllForumScreen extends StatelessWidget {
                   ),
                 )
               : ListView.builder(
-                  itemBuilder: (BuildContext context, int index) {},
+                  itemBuilder: (BuildContext context, int index) {
+                    return null;
+                  },
                 ),
         ));
   }

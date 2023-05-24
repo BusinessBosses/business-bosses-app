@@ -64,7 +64,7 @@ class Validator {
 
   /// Validate if username
   static String? usernameValidator(String val) {
-    if (val == "") return 'Username cannot be empty';
+    if (val == '') return 'Username cannot be empty';
     if (val.length <= 3) return 'Username is too short';
     if (val.contains(' ')) return 'You can\'t enter space';
     // if (isUnique) return 'Enter a unique username';

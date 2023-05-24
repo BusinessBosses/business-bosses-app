@@ -1,3 +1,4 @@
+import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
@@ -12,10 +13,9 @@ import '../../common/widgets/safety_model.dart';
 import '../../common/widgets/search/search_bar.dart' as searchBar;
 import '../../utils/constants/constants.dart';
 import '../../utils/theme/theme.dart';
-import '../promotions/presentation/promotionscreen.dart';
 
 class ReferScreen extends StatefulWidget {
-  static const routeName = '/refer-screen';
+  static const String routeName = '/refer-screen';
 
   const ReferScreen({Key? key}) : super(key: key);
 
@@ -30,10 +30,10 @@ class _ReferScreenState extends State<ReferScreen> {
 
   final List<String> _selectedUsers = [];
 
-  bool _isProcessing = false;
+  final bool _isProcessing = false;
   bool _isLoading = false;
 
-  bool _isInit = false;
+  final bool _isInit = false;
   final List<String> _alreadyReferredUsers = [];
 
   // @override
@@ -52,12 +52,12 @@ class _ReferScreenState extends State<ReferScreen> {
     setState(() {
       _isLoading = true;
     });
-    final res = await ApiService.get(
+    final ApiResponseModel res = await ApiService.get(
         path: '/connection/connecteds/${_profileController.myProfile.uid}');
 
-    for (var i = 0; i < res.data.length; i++) {
+    for (int i = 0; i < res.data.length; i++) {
       final mapData = res.data[i];
-      final modelizedConnection = UserModel.fromMap(mapData);
+      final UserModel modelizedConnection = UserModel.fromMap(mapData);
       // print(_specificUser.connections);
       // _referrableConnections.add(modelizedConnection);
       if (_specificUser.connections == null) {
@@ -107,13 +107,13 @@ class _ReferScreenState extends State<ReferScreen> {
           },
           icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
         ),
-        title: searchBar.SearchBar(
+        title: searchBar.SearchBarWidget(
           onChange: _onSearch,
           hasSearchIcon: false,
           autofocus: false,
         ),
       ),
-      floatingActionButton: (_selectedUsers?.isEmpty ?? true) && !_isProcessing
+      floatingActionButton: (_selectedUsers.isEmpty ?? true) && !_isProcessing
           ? null
           : FloatingActionButton.extended(
               onPressed: _onReferringToYourConnections,
@@ -139,7 +139,7 @@ class _ReferScreenState extends State<ReferScreen> {
               padding: const EdgeInsets.only(bottom: 80.0),
               // controller: _controller,
               itemCount: _referrableConnections.length,
-              itemBuilder: (context, i) {
+              itemBuilder: (BuildContext context, int i) {
                 return Column(
                   children: [
                     ListTile(
@@ -178,14 +178,14 @@ class _ReferScreenState extends State<ReferScreen> {
 
   Future<void> _fetchMyConnections() async {}
 
-  List<MyUser> _searchedList = [];
+  final List<MyUser> _searchedList = [];
 
   void _onSearch(String val) {}
 
   void _onReferringToYourConnections() async {
     unFocusKeyboard(context);
 
-    final res = await ApiService.post(path: '/referal/refer', body: {
+    final ApiResponseModel res = await ApiService.post(path: '/referal/refer', body: {
       'referredUserUid': _specificUser.uid,
       'referBy': _profileController.myProfile.uid,
       'referTo': _selectedUsers
@@ -205,11 +205,11 @@ class _ReferScreenState extends State<ReferScreen> {
 
   Future<void> _createMyReferrals(List<String> referToUsers) async {
     String path =
-        Constants.USERS + '/' + _specificUser.uid + '/' + Constants.REFERS;
+        '${Constants.USERS}/${_specificUser.uid}/${Constants.REFERS}';
   }
 
   void _addRemoveUser(String uid) {
-    int index = _selectedUsers.indexWhere((u) => u == uid);
+    int index = _selectedUsers.indexWhere((String u) => u == uid);
     if (index == -1) {
       setState(() {
         _selectedUsers.add(uid);
@@ -222,7 +222,7 @@ class _ReferScreenState extends State<ReferScreen> {
   }
 
   bool _isSelected(String uid) {
-    int index = _selectedUsers.indexWhere((u) => u == uid);
+    int index = _selectedUsers.indexWhere((String u) => u == uid);
     if (index == -1) {
       return false;
     } else {

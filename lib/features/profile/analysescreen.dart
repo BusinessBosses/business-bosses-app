@@ -6,7 +6,7 @@ import 'package:flutter_svg/svg.dart';
 import '../../utils/theme/theme.dart';
 
 class AnalyserScreen extends StatefulWidget {
-  static const routeName = '/analyser-screen';
+  static const String routeName = '/analyser-screen';
 
   const AnalyserScreen({Key? key}) : super(key: key);
 

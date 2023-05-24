@@ -47,7 +47,7 @@ class PostModel {
     String? videoUrl,
     bool? isRanked,
     bool? promote,
-    dynamic? promotionDuration,
+    dynamic promotionDuration,
     String? plan,
     bool? approved,
   }) {

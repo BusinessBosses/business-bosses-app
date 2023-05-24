@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
@@ -6,8 +5,6 @@ import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:country_list_pick/country_list_pick.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -20,7 +17,6 @@ import '../../../common/models/for_data_picker.dart';
 import '../../forum/models/industry.dart';
 import '../../../common/models/my_response.dart';
 import '../../../common/models/my_title.dart';
-import '../../../common/models/my_user.dart';
 import '../../../common/widgets/buttons/custom_button.dart';
 import '../../../common/widgets/data_selection_screen.dart';
 import '../../../navigation/routes.dart';
@@ -29,10 +25,9 @@ import '../../../utils/constants/constants.dart';
 import '../../../utils/validators/validator.dart';
 import '../../../utils/theme/theme.dart';
 import '../analysescreen.dart';
-import 'myprofilescreen.dart';
 import '../widgets/user_profile_image_item.dart';
 
-var isExpanded = false;
+bool isExpanded = false;
 
 class UpdateProfileScreen extends StatefulWidget {
   final UserModel? user;
@@ -57,6 +52,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
   String? _companyName;
   String? _username;
   String? _name = '';
+  String? _email = '';
   String? _surname;
   String? _bio;
   String? _website;
@@ -66,7 +62,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
   String? _gender;
   List<String>? _productsandservices;
 // String? blas;
-  bool _isInit = false;
+  final bool _isInit = false;
   bool _isNetworkImage = false;
   bool _isUploading = false;
   bool _isProcessing = false;
@@ -75,8 +71,8 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
 
   File? _imageFile;
   final ImagePicker picker = ImagePicker();
-  bool _isEditingMode = false;
-  List<String> _usersToCompareUsername = [''];
+  final bool _isEditingMode = false;
+  final List<String> _usersToCompareUsername = [''];
 
   List<String> achievements = <String>[];
 
@@ -141,6 +137,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
   }
 
   void setVariableValues(UserModel args) {
+    _email = args.email;
     _location = args.location;
     _category = args.category;
     _industry = args.industry;
@@ -210,7 +207,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
   @override
   Widget build(BuildContext context) {
     ModalRoute? currentRoute = ModalRoute.of(context);
-    String? nameValidator = Validator.nameValidator(_name);
+    // String? nameValidator = Validator.nameValidator(_name);
     return WillPopScope(
       onWillPop: _onBackPressed,
       child: GestureDetector(
@@ -366,6 +363,98 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                       const SizedBox(
                                         height: 20,
                                       ),
+                                      const SizedBox(
+                                        height: 20,
+                                      ),
+                                      const Text(
+                                        'Username',
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        height: 10,
+                                      ),
+                                      TextFormField(
+                                        initialValue: _username,
+                                        onChanged: (String val) {
+                                          _username = val;
+                                          setState(() {});
+                                        },
+                                        keyboardType: TextInputType.name,
+                                        textInputAction: TextInputAction.next,
+                                        validator: Validator.nameValidator,
+                                        decoration: inputDecoration.copyWith(
+                                          hintStyle: const TextStyle(
+                                            color: iconColor,
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                          suffixIcon: _name != null
+                                              ? const Icon(
+                                                  Icons.check_circle,
+                                                  color: Colors.green,
+                                                )
+                                              : Icon(
+                                                  Icons.close,
+                                                  color: _isUniqueName == null
+                                                      ? Colors.transparent
+                                                      : Colors.red,
+                                                ),
+                                          filled: true,
+                                          fillColor: const Color(0xffF4F4F4),
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        height: 20,
+                                      ),
+                                      const SizedBox(
+                                        height: 20,
+                                      ),
+                                      const Text(
+                                        'Email',
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        height: 10,
+                                      ),
+                                      TextFormField(
+                                        initialValue: _email,
+                                        onChanged: (String val) {
+                                          _email = val;
+                                          setState(() {});
+                                        },
+                                        keyboardType: TextInputType.name,
+                                        textInputAction: TextInputAction.next,
+                                        validator: Validator.emailValidator,
+                                        decoration: inputDecoration.copyWith(
+                                          hintStyle: const TextStyle(
+                                            color: iconColor,
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                          suffixIcon: _name != null
+                                              ? const Icon(
+                                                  Icons.check_circle,
+                                                  color: Colors.green,
+                                                )
+                                              : Icon(
+                                                  Icons.close,
+                                                  color: _isUniqueName == null
+                                                      ? Colors.transparent
+                                                      : Colors.red,
+                                                ),
+                                          filled: true,
+                                          fillColor: const Color(0xffF4F4F4),
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        height: 20,
+                                      ),
                                       const Text(
                                         'Title',
                                         style: TextStyle(
@@ -422,7 +511,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                       ),
                                       TextFormField(
                                         initialValue: _bio,
-                                        onChanged: (val) {
+                                        onChanged: (String val) {
                                           _bio = val;
                                         },
                                         maxLength: 150,
@@ -520,7 +609,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                               ),
                                               TextFormField(
                                                 initialValue: _companyName,
-                                                onChanged: (val) {
+                                                onChanged: (String val) {
                                                   debugPrint(
                                                       '_companyName $_companyName');
                                                   _companyName = val;
@@ -617,7 +706,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                                   ),
                                                   TextFormField(
                                                     initialValue: _website,
-                                                    onChanged: (val) {
+                                                    onChanged: (String val) {
                                                       _website = val;
                                                     },
                                                     keyboardType:
@@ -668,7 +757,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                                   ),
                                                   TextFormField(
                                                     initialValue: _instagram,
-                                                    onChanged: (val) {
+                                                    onChanged: (String val) {
                                                       _instagram = val;
                                                     },
                                                     // validator: (val) =>
@@ -723,7 +812,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                                   ),
                                                   TextFormField(
                                                     initialValue: _twitter,
-                                                    onChanged: (val) {
+                                                    onChanged: (String val) {
                                                       _twitter = val;
                                                     },
                                                     // validator: (val) =>
@@ -849,7 +938,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                                 height: 10,
                                               ),
                                               TextFormField(
-                                                onChanged: (val) {
+                                                onChanged: (String val) {
                                                   _referralId = val;
                                                 },
                                                 textInputAction:
@@ -976,15 +1065,15 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Padding(
-                                    padding: const EdgeInsets.only(
+                                  const Padding(
+                                    padding: EdgeInsets.only(
                                         left: 20, right: 20),
                                     child: Column(
                                       mainAxisAlignment:
                                           MainAxisAlignment.start,
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
-                                      children: const [
+                                      children: [
                                         Text(
                                           'You can add up to 3 Achievements',
                                           style: TextStyle(color: subtextColor),
@@ -1117,15 +1206,15 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      Padding(
-                                        padding: const EdgeInsets.only(
+                                      const Padding(
+                                        padding: EdgeInsets.only(
                                             left: 20, right: 20),
                                         child: Column(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.start,
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.start,
-                                            children: const [
+                                            children: [
                                               Text(
                                                 'You can add up to 7 products and services',
                                                 style: TextStyle(
@@ -1289,7 +1378,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
 
   void _onImagePick(ImageSource imageSource) async {
     try {
-      final pickedImage = await picker.pickImage(source: imageSource);
+      final XFile? pickedImage = await picker.pickImage(source: imageSource);
       if (pickedImage != null) {
         _imageFile = File(pickedImage.path);
         setState(() {
@@ -1336,14 +1425,22 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
   }
 
   Future<void> _attemptToComplete() async {
+    _formKey.currentState!.save();
+    setState(() {
+      _autoValidateMode = AutovalidateMode.always;
+    });
+    if (!_formKey.currentState!.validate()) return;
     setState(() {
       _isProcessing = true;
     });
+
     final SharedPreferences prefs = await SharedPreferences.getInstance();
 
     Map<String, dynamic> updateData = <String, dynamic>{
       'name': _name,
       'bio': _bio,
+      'username': _username,
+      'email': _email!.trim(),
       'companyName': _companyName,
       'website': _website,
       'instagram': _instagram,
@@ -1366,9 +1463,9 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
     if (response.success) {
       Get.snackbar('Success', 'Profile Updated Succesfully');
       if (Get.isRegistered<ProfileController>()) {
-        final ProfileController _profileController = Get.find();
-        _profileController.updateProfile(
-            {..._profileController.myProfile.toMap(), ...updateData});
+        final ProfileController profileController = Get.find();
+        profileController.updateProfile(
+            {...profileController.myProfile.toMap(), ...updateData});
         // Get.back();
         // return;
       }
@@ -1376,17 +1473,14 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
     } else {
       Get.snackbar('Error', response.message);
     }
-    _formKey.currentState!.save();
-    setState(() {
-      _autoValidateMode = AutovalidateMode.always;
-    });
-    if (!_formKey.currentState!.validate()) {
-      _scrollController.animateTo(
-        3,
-        duration: const Duration(seconds: 1),
-        curve: Curves.easeInOut,
-      );
-    }
+
+    // if (!_formKey.currentState!.validate()) {
+    //   _scrollController.animateTo(
+    //     3,
+    //     duration: const Duration(seconds: 1),
+    //     curve: Curves.easeInOut,
+    //   );
+    // }
     setState(() {
       _isProcessing = true;
     });

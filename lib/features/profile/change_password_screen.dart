@@ -1,8 +1,6 @@
 import 'package:business_bosses_v2/common/widgets/buttons/custom_button.dart';
-import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:get/get.dart';
 
 import '../../action/action.dart';
 import '../../functions/validators/validator.dart';
@@ -18,9 +16,9 @@ class ChangePasswordScreen extends StatefulWidget {
 
 class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   AutovalidateMode _autovalidateMode = AutovalidateMode.disabled;
-  final _formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool _isProcessing = false;
-  ApiService _apiService = ApiService();
+  final ApiService _apiService = ApiService();
   String? _currentPassword, _newPassword;
 
   @override
@@ -80,7 +78,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                         .copyWith(fontWeight: FontWeight.w600),
                   ),
                   TextFormField(
-                    onChanged: (val) => _newPassword = val,
+                    onChanged: (String val) => _newPassword = val,
                     validator: Validator.passwordValidator,
                     textInputAction: TextInputAction.next,
                     obscureText: true,

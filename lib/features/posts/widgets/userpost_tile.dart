@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:business_bosses_v2/features/posts/controllers/posts_controller.dart';
 import 'package:business_bosses_v2/features/posts/models/post_model.dart';
@@ -6,13 +5,11 @@ import 'package:business_bosses_v2/features/posts/widgets/post_images.dart';
 import 'package:business_bosses_v2/features/posts/widgets/post_like_comment.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
-import 'package:business_bosses_v2/utils/constants/constants.dart';
 import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
 import 'package:detectable_text_field/widgets/detectable_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 
 import '../../../action/action.dart';
 import '../../../common/models/comment_model.dart';
@@ -181,8 +178,12 @@ class _PostTileState extends State<PostTile> {
                                     profileController.myProfile.uid
                                 ? MyPopupMenuButton(
                                     popupItems: myPopupMore,
-                                    icon:
-                                        const Icon(Icons.more_horiz, size: 20),
+                                    icon: const Icon(
+                                      Icons.more_horiz,
+                                      size: 20,
+                                      color: Colors.black,
+                                      weight: 100,
+                                    ),
                                     onSelected: (String val) {
                                       if (val == 'Edit') {
                                         Get.to(() => CreatePostScreen(
@@ -231,8 +232,12 @@ class _PostTileState extends State<PostTile> {
                                 : widget.post.promote!
                                     ? MyPopupMenuButton(
                                         popupItems: myPopup,
-                                        icon: const Icon(Icons.more_horiz,
-                                            size: 20),
+                                        icon: const Icon(
+                                          Icons.more_horiz,
+                                          size: 20,
+                                          color: Colors.black,
+                                          weight: 100,
+                                        ),
                                         onSelected: (String val) {
                                           if (val == 'Hide') {
                                             ApiService.post(
@@ -256,8 +261,12 @@ class _PostTileState extends State<PostTile> {
                                           onTap: () {
                                             _showDialog();
                                           },
-                                          child: const Icon(Icons.more_horiz,
-                                              size: 20),
+                                          child: const Icon(
+                                            Icons.more_horiz,
+                                            size: 20,
+                                            color: Colors.black,
+                                            weight: 100,
+                                          ),
                                         ),
                                       ),
                           ),
@@ -266,7 +275,10 @@ class _PostTileState extends State<PostTile> {
                     ),
                   ),
                   subtitle: Text(
-                    widget.post.user?.bio ?? '',
+                    widget.post.user?.bio != null &&
+                            widget.post.user!.bio!.isNotEmpty
+                        ? widget.post.user!.bio!
+                        : '',
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),

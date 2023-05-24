@@ -3,6 +3,8 @@ import 'package:business_bosses_v2/features/posts/models/post_model.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 
+import 'images_viewer_screen.dart';
+
 class PostImages extends StatelessWidget {
   final PostModel post;
   const PostImages({Key? key, required this.post}) : super(key: key);
@@ -15,15 +17,14 @@ class PostImages extends StatelessWidget {
           children: [
             GestureDetector(
               onTap: () {
-                // Navigator.of(context).push(
-                //   MaterialPageRoute(
-                //     builder: (context) => ImagesViewerScreen(
-                //       urls: fileUrls,
-                //       text: text,
-                //     ),
-                //   ),
-                // );
-                // }
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => ImagesViewerScreen(
+                      urls: post.images,
+                      text: post.title,
+                    ),
+                  ),
+                );
               },
               child: Padding(
                 padding: const EdgeInsets.only(left: 0, right: 0),
@@ -49,21 +50,21 @@ class PostImages extends StatelessWidget {
                   children: [
                     ...[2, 3, 4, 5]
                         .map(
-                          (i) => Expanded(
+                          (int i) => Expanded(
                             flex: 1,
                             child: post.images!.length >= i
                                 ? GestureDetector(
                                     onTap: () {
-                                      // Navigator.of(context).push(
-                                      //   MaterialPageRoute(
-                                      //     builder: (context) =>
-                                      //         ImagesViewerScreen(
-                                      //       urls: fileUrls,
-                                      //       index: i - 1,
-                                      //       text: text,
-                                      //     ),
-                                      //   ),
-                                      // );
+                                      Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                          builder: (BuildContext context) =>
+                                              ImagesViewerScreen(
+                                            urls: post.images,
+                                            index: i - 1,
+                                            text: post.title,
+                                          ),
+                                        ),
+                                      );
                                     },
                                     child: Stack(
                                       children: [

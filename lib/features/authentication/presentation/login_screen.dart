@@ -27,8 +27,8 @@ class LoginScreen extends StatelessWidget {
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Column(
-                      children: const [
+                    const Column(
+                      children: [
                         TextWidget(
                           text: 'Log In',
                           color: primaryColorLT,
@@ -105,7 +105,7 @@ class LoginScreen extends StatelessWidget {
       Navigator.of(context).pop(arguments);
     } else if (isRemoveUntil) {
       return await Navigator.of(context).pushNamedAndRemoveUntil(
-          routeName, (route) => false,
+          routeName, (Route route) => false,
           arguments: arguments);
     } else {
       return await Navigator.of(context)

@@ -2,18 +2,17 @@ import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import '../../../common/models/my_connect.dart';
 import '../../../common/models/my_user.dart';
 import '../../../common/widgets/safety_model.dart';
-import '../../../utils/constants/constants.dart';
 import '../../../utils/theme/theme.dart';
-import '../widgets/connection_grid_tile.dart';
 
 class RelevantUsersScreen extends StatelessWidget {
-  bool _isInit = false;
-  bool _isLoading = true;
+  final bool _isInit = false;
+  final bool _isLoading = true;
   late MyUser _user;
-  List<UserModel> _relevantUsers = [];
+  final List<UserModel> _relevantUsers = [];
+
+  RelevantUsersScreen({super.key});
   Future<void> _loadRelevantUsers() async {}
 
   void _sendNotification(UserModel user) {
@@ -48,7 +47,7 @@ class RelevantUsersScreen extends StatelessWidget {
               crossAxisSpacing: 8.0,
               mainAxisSpacing: 8.0,
               itemCount: _relevantUsers.length,
-              itemBuilder: (context, index) {
+              itemBuilder: (BuildContext context, int index) {
                 UserModel specificUser = _relevantUsers[index];
                 return Container();
               },
@@ -58,7 +57,7 @@ class RelevantUsersScreen extends StatelessWidget {
   }
 
   Widget _safetyModal(MyUser user) {
-    if ((user.category?.isEmpty ?? true) && (user.industry?.isEmpty ?? true)) {
+    if ((user.category.isEmpty ?? true) && (user.industry.isEmpty ?? true)) {
       return SafetyModel(
         icon: const Icon(
           Icons.info_outline,

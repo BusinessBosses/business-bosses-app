@@ -3,7 +3,6 @@ import 'dart:math';
 import 'dart:developer' as dartdeveloper;
 import 'package:async/async.dart';
 import 'package:business_bosses_v2/features/authentication/presentation/code_verification_screen.dart';
-import 'package:business_bosses_v2/features/authentication/presentation/forgot_password_screen.dart';
 import 'package:business_bosses_v2/features/authentication/presentation/forgot_password_verification.dart';
 import 'package:business_bosses_v2/features/authentication/repository/auth_repository.dart';
 import 'package:crypto/crypto.dart';
@@ -49,7 +48,7 @@ class AuthController extends GetxController {
       templateId: dotenv.env['SENDGRID_TEMPLATE_ID'],
       customArgs: {'username': userName, 'otp': code.toString()},
     );
-    mailer.send(email).then((result) {
+    mailer.send(email).then((Result<void> result) {
       if (result.isError) {
         onError();
       } else {
@@ -144,7 +143,7 @@ class AuthController extends GetxController {
 
       // print(appleCredential.email);
     } catch (e) {
-      throw e;
+      rethrow;
     }
   }
 

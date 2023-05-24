@@ -1,5 +1,3 @@
-import 'dart:math';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -12,7 +10,7 @@ import '../../utils/theme/theme.dart';
 import '../search/search_app_bar.dart';
 
 class AllConnectionsScreen extends StatefulWidget {
-  static const routeName = '/all-connections-screen';
+  static const String routeName = '/all-connections-screen';
 
   const AllConnectionsScreen({Key? key}) : super(key: key);
 
@@ -21,14 +19,14 @@ class AllConnectionsScreen extends StatefulWidget {
 }
 
 class _AllConnectionsScreenState extends State<AllConnectionsScreen> {
-  List<UserModel> _allUsers = [];
+  final List<UserModel> _allUsers = [];
   final List<UserModel> _suggestedUsers = [];
   List<UserModel> _searchedUsers = [];
-  List<MyConnect> _myConnections = [];
-  List<MyConnect> _myConnected = [];
+  final List<MyConnect> _myConnections = [];
+  final List<MyConnect> _myConnected = [];
 
   bool _isInit = false;
-  bool _isLoading = true;
+  final bool _isLoading = true;
   bool _isSearching = false;
   UserModel? _specificUser;
 
@@ -42,7 +40,7 @@ class _AllConnectionsScreenState extends State<AllConnectionsScreen> {
         navigateTo(context);
         return;
       }
-      _initialIndex = params?.arg2 ?? 0;
+      _initialIndex = params.arg2 ?? 0;
 
       _specificUser = params.arg1;
 

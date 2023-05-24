@@ -1,4 +1,3 @@
-import 'package:business_bosses_v2/common/models/my_user.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:flutter/material.dart';
 
@@ -38,7 +37,7 @@ class ConnectionUserItem extends StatelessWidget {
               var result = await navigateTo(
                 context,
                 routeName: PublicProfileScreen.routeName,
-                arguments: Params(arg1: user?.uid),
+                arguments: Params(arg1: user.uid),
               );
               if (result == null) {
                 Navigator.of(context).pop();
@@ -71,6 +70,11 @@ class ConnectionUserItem extends StatelessWidget {
                     : MCustomButton(
                         buttonType:
                             status ? ButtonType.outline : ButtonType.elevated,
+                        onPressed: () {
+                          onChangeConnectionStatus!(user);
+                        },
+                        height: 36.0,
+                        width: 120.0,
                         child: status
                             ? const Text(
                                 'Connected',
@@ -80,11 +84,6 @@ class ConnectionUserItem extends StatelessWidget {
                                 'Connect',
                                 style: TextStyle(color: Colors.white),
                               ),
-                        onPressed: () {
-                          onChangeConnectionStatus!(user);
-                        },
-                        height: 36.0,
-                        width: 120.0,
                       ),
           );
   }

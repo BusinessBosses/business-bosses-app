@@ -1,3 +1,4 @@
+import 'package:business_bosses_v2/common/widgets/text_widget.dart';
 import 'package:business_bosses_v2/features/chat/controllers/chat_controller.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/posts/controllers/posts_controller.dart';
@@ -6,10 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
-
-import '../../common/widgets/typography/text_widget.dart';
-import '../../services/api_service.dart';
 import '../../utils/theme/theme.dart';
 import '../posts/presentation/create_post_screen.dart';
 import '../profile/presentation/myprofilescreen.dart';
@@ -33,7 +30,7 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
   final HomeController _homeController = Get.put(HomeController());
   int _activeIndex = 0;
   int currentTimestamp = DateTime.now().millisecondsSinceEpoch;
-  final GetStorage sandBox = GetStorage();
+  // final GetStorage sandBox = GetStorage();
 
   /// Show daily coin dialog
   void showCoinDialog() {
@@ -66,9 +63,9 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      addCoinDaily();
-    });
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   addCoinDaily();
+    // });
   }
 
   @override
@@ -247,24 +244,6 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
       _activeIndex = currentIndex;
     });
     return;
-  }
-
-  /// DailyCoin
-  void addCoinDaily() {
-    int lastExecutionTimestamp = sandBox.read('lastExecutionTimestamp') ?? 0;
-    print('Last: ${lastExecutionTimestamp}');
-    if (currentTimestamp - lastExecutionTimestamp >= 24 * 60 * 60 * 1000) {
-      // The action hasn't been executed today, save the current timestamp
-      sandBox.write('lastExecutionTimestamp', currentTimestamp);
-      ApiService.put(
-        path: 'users/${_profileController.myProfile.uid}',
-        body: <String, dynamic>{
-          'coinscount': _profileController.myProfile.coinscount! + 1,
-        },
-      );
-      _profileController.updateCoinCount(1);
-      showCoinDialog();
-    }
   }
 }
 

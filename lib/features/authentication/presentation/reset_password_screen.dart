@@ -8,7 +8,6 @@ import '../../../functions/validators/validator.dart';
 import '../../../navigation/routes.dart';
 import '../../../services/api_service.dart';
 import '../../../utils/theme/theme.dart';
-import '../controller/auth_controller.dart';
 
 class ResetPasswordScreen extends StatefulWidget {
   const ResetPasswordScreen({Key? key, required this.email}) : super(key: key);
@@ -20,13 +19,13 @@ class ResetPasswordScreen extends StatefulWidget {
 }
 
 class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
-  final _formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   AutovalidateMode _autovalidateMode = AutovalidateMode.disabled;
 
   String? _email;
   String? _password;
-  ApiService _apiService = ApiService();
+  final ApiService _apiService = ApiService();
   bool _invisiblePassword = true;
 
   @override

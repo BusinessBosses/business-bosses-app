@@ -1,17 +1,13 @@
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../action/action.dart';
-import '../../common/models/my_connect.dart';
 import '../../common/params.dart';
-import '../../common/widgets/safety_model.dart';
-import '../../utils/constants/constants.dart';
 import '../../utils/theme/theme.dart';
 
 class RelevantUsersScreen extends StatefulWidget {
-  static const routeName = '/relevant-users-screen';
+  static const String routeName = '/relevant-users-screen';
 
   const RelevantUsersScreen({Key? key}) : super(key: key);
 
@@ -22,7 +18,7 @@ class RelevantUsersScreen extends StatefulWidget {
 class _RelevantUsersScreenState extends State<RelevantUsersScreen> {
   bool _isInit = false;
   UserModel? _user;
-  List<UserModel> _relevantUsers = [];
+  final List<UserModel> _relevantUsers = [];
 
   @override
   void didChangeDependencies() {
@@ -30,7 +26,7 @@ class _RelevantUsersScreenState extends State<RelevantUsersScreen> {
     if (!_isInit) {
       _isInit = true;
       final Params data = ModalRoute.of(context)?.settings.arguments as Params;
-      if (data?.arg1 != null) {
+      if (data.arg1 != null) {
         _user = data.arg1;
       } else {
         navigateTo(context);

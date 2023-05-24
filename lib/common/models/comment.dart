@@ -61,7 +61,7 @@ class Comment {
 
   static List<Comment> toCommentList(Map map) {
     List<Comment> comments = [];
-    map?.forEach((key, data) {
+    map.forEach((key, data) {
       final Comment comment = Comment.toObject(data);
       comments.add(comment);
     });
@@ -70,7 +70,7 @@ class Comment {
 
   static Map toMapList(List<Comment> items) {
     Map map = {};
-    for (var element in items) {
+    for (Comment element in items) {
       map[element.commentId] = element.toMap();
     }
     return map;

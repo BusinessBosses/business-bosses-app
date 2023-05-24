@@ -15,7 +15,6 @@ import 'package:url_launcher/url_launcher_string.dart';
 import '../../../../common/widgets/buttons/custom_button.dart';
 import '../../../../common/widgets/buttons/icon_text_button.dart';
 import '../../../../common/widgets/text_widget.dart';
-import '../../../../navigation/routes.dart';
 import '../../../../services/api_service.dart';
 import '../../../../utils/constants/constants.dart';
 import '../../../../utils/theme/theme.dart';

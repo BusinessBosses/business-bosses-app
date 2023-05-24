@@ -114,7 +114,7 @@ class _DataSelectionScreenState extends State<DataSelectionScreen> {
               ? Container()
               : Container(
                   margin: const EdgeInsets.all(16.0),
-                  child: searchBar.SearchBar(
+                  child: searchBar.SearchBarWidget(
                     hintText: _title,
                     onChange: onChange,
                     onSubmit: (String val) {},

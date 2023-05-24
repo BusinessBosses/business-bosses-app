@@ -3,10 +3,7 @@ import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import '../../../common/models/api_response_model.dart';
 import '../../../common/widgets/network_image_with_placeholder.dart';
-import '../../../services/api_service.dart';
-import '../../../utils/constants/constants.dart';
 
 // ignore: public_member_api_docs
 class UserProfileTile extends StatefulWidget {

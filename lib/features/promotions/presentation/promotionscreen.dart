@@ -8,7 +8,7 @@ import 'package:get/get.dart';
 import '../../../action/action.dart';
 
 class PromotionScreen extends StatefulWidget {
-  static const routeName = '/promotion-screen';
+  static const String routeName = '/promotion-screen';
 
   const PromotionScreen({Key? key}) : super(key: key);
 
@@ -181,13 +181,11 @@ class _PromotionScreenState extends State<PromotionScreen> {
             ),
             InkWell(
               onTap: () {
-                if (_referralId != null) {
-                  Clipboard.setData(ClipboardData(text: _referralId))
-                      .then((value) {
-                    showSnackBar(context,
-                        message: 'Your reference id is copied to clipboard.');
-                  });
-                }
+                Clipboard.setData(ClipboardData(text: _referralId))
+                    .then((value) {
+                  showSnackBar(context,
+                      message: 'Your reference id is copied to clipboard.');
+                });
               },
               child: Ink(
                 padding:

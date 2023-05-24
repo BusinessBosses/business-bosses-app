@@ -45,7 +45,7 @@ class Industry {
     required List snapshot,
   }) {
     List<Industry> industries = [];
-    for (var i = 0; i < snapshot.length; i++) {
+    for (int i = 0; i < snapshot.length; i++) {
       final Industry industry = Industry.toObject(snapshot[i]);
       industries.add(industry);
     }

@@ -1,13 +1,11 @@
 import 'package:business_bosses_v2/features/profile/widgets/user_profile_tile.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import '../../../action/action.dart';
 import '../../../common/models/user_model.dart';
 import '../../../common/widgets/buttons/custom_child_button.dart';
 import '../../../navigation/routes.dart';
-import '../../referrals/referrals_details_screen.dart';
 
-Widget FriendProfileHeader(UserModel _publicUser) {
+Widget FriendProfileHeader(UserModel publicUser) {
   // final UserModel _publicUser = UserModel(
   //     achievements: 'jnkknmmk+llllmlhj+jkhkh'.split('+'),
   //     active: true,
@@ -39,7 +37,7 @@ Widget FriendProfileHeader(UserModel _publicUser) {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         UserProfileTile(
-          myProfile: _publicUser,
+          myProfile: publicUser,
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -47,7 +45,7 @@ Widget FriendProfileHeader(UserModel _publicUser) {
             Expanded(
               child: CustomChildButton(
                 // TODO: CONNECTS
-                value: _publicUser.connectionCount ?? 0,
+                value: publicUser.connectionCount ?? 0,
                 // value: _friendUser?.connects
                 //           ?.where((e) => e.status == Constants.CONNECTION)
                 //           ?.toList()
@@ -57,7 +55,7 @@ Widget FriendProfileHeader(UserModel _publicUser) {
                 /*'Connections',*/
                 onPressed: () {
                   Get.toNamed(Routes.allconnectionsscreen,
-                      arguments: {'uid': _publicUser.uid, 'pageIndex': 0});
+                      arguments: {'uid': publicUser.uid, 'pageIndex': 0});
                   // navigateTo(
                   //   context,
                   //   routeName: AllConnectionsScreen.routeName,
@@ -69,7 +67,7 @@ Widget FriendProfileHeader(UserModel _publicUser) {
             Expanded(
                 child: CustomChildButton(
               // TODO: CONNECTS
-              value: _publicUser.connectedCount ?? 0,
+              value: publicUser.connectedCount ?? 0,
 
               // value: _friendUser?.connects
               //           ?.where((e) => e.status != Constants.CONNECTION)
@@ -80,7 +78,7 @@ Widget FriendProfileHeader(UserModel _publicUser) {
               // 'Connected',
               onPressed: () {
                 Get.toNamed(Routes.allconnectionsscreen,
-                    arguments: {'uid': _publicUser.uid, 'pageIndex': 1});
+                    arguments: {'uid': publicUser.uid, 'pageIndex': 1});
                 // Get.toNamed(Routes.allconnectionsscreen);
                 // navigateTo(
                 //   context,
@@ -91,7 +89,7 @@ Widget FriendProfileHeader(UserModel _publicUser) {
             )),
             Expanded(
               child: CustomChildButton(
-                value: _publicUser.referalCount ?? 0,
+                value: publicUser.referalCount ?? 0,
                 //_publicUser.refers == null
                 //     ? 0
                 //     : MyUser.refCount(_publicUser.refers),

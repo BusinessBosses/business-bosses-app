@@ -2,16 +2,14 @@ import 'package:business_bosses_v2/common/models/comment_model.dart';
 import 'package:business_bosses_v2/features/posts/models/post_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
+import '../../../../common/models/api_response_model.dart';
+import '../../../../common/models/user_model.dart';
+import '../../../../common/widgets/safety_model.dart';
+import '../../../../common/widgets/user_avatar_with_badge.dart';
+import '../../../../services/api_service.dart';
+import '../../../../utils/theme/theme.dart';
 
-import '../../../common/models/api_response_model.dart';
-import '../../../common/models/my_user.dart';
-import '../../../common/models/user_model.dart';
-import '../../../common/widgets/safety_model.dart';
-import '../../../common/widgets/user_avatar_with_badge.dart';
-import '../../../services/api_service.dart';
-import '../../../utils/constants/constants.dart';
-import '../../../utils/theme/theme.dart';
-import '../../profile/controller/profile_controller.dart';
 import 'comment_item.dart';
 import 'write_comment.dart';
 
@@ -57,13 +55,13 @@ class _PostLikeCommentItemState extends State<PostLikeCommentItem> {
                   Tab(
                     child: Text(
                       'Comments',
-                      style: Theme.of(context).textTheme.bodyText1,
+                      style: Theme.of(context).textTheme.bodyLarge,
                     ),
                   ),
                   Tab(
                     child: Text(
                       'Likes',
-                      style: Theme.of(context).textTheme.bodyText1,
+                      style: Theme.of(context).textTheme.bodyLarge,
                     ),
                   ),
                 ],
@@ -124,7 +122,7 @@ class _PostLikeCommentItemState extends State<PostLikeCommentItem> {
                           itemBuilder: (BuildContext context, int i) {
                             return ListTile(
                               leading: UserAvatarWithBadge(
-                                user: ProfileController().myProfile,
+                                user: ProfileController.myProfile,
                                 height: 48.0,
                                 width: 48.0,
                                 radius: 30.0,

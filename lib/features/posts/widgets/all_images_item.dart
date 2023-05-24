@@ -48,7 +48,7 @@ class AllImagesItem extends StatelessWidget {
                 // } else {
                 Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (context) => ImagesViewerScreen(
+                    builder: (BuildContext context) => ImagesViewerScreen(
                       urls: fileUrls,
                       text: text,
                     ),
@@ -111,14 +111,14 @@ class AllImagesItem extends StatelessWidget {
                   children: [
                     ...[2, 3, 4, 5]
                         .map(
-                          (i) => Expanded(
+                          (int i) => Expanded(
                             flex: 1,
                             child: fileUrls.length >= i
                                 ? GestureDetector(
                                     onTap: () {
                                       Navigator.of(context).push(
                                         MaterialPageRoute(
-                                          builder: (context) =>
+                                          builder: (BuildContext context) =>
                                               ImagesViewerScreen(
                                             urls: fileUrls,
                                             index: i - 1,

@@ -1,7 +1,5 @@
-import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/features/posts/models/post_model.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
-import 'package:business_bosses_v2/features/profile/widgets/friendprofileheader.dart';
 import 'package:business_bosses_v2/features/profile/widgets/profileinfodisplay.dart';
 import 'package:business_bosses_v2/features/profile/widgets/profilepostsdisplay.dart';
 import 'package:business_bosses_v2/utils/constants/constants.dart';
@@ -40,7 +38,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
       isLoading = true;
     });
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final res =
+    final Map<String, dynamic> res =
         await ProfileController.loadData(prefs.getString(Constants.USER_ID)!);
 
     _posts = res['posts'];
@@ -62,12 +60,12 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
   Widget build(BuildContext context) {
     // ignore: no_leading_underscores_for_local_identifiers
     return GetBuilder<ProfileController>(
-      builder: (ProfileController _profileController) {
+      builder: (ProfileController profileController) {
         return Scaffold(
           backgroundColor: Colors.white,
           appBar: AppBar(
             automaticallyImplyLeading: false,
-            title: Text('@${_profileController.myProfile.username}'),
+            title: Text('@${profileController.myProfile.username}'),
             actions: [
               IconButton(
                   icon: SvgPicture.asset(
@@ -87,7 +85,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                 SliverStickyHeader(
                   sticky: false,
                   header: MyProfileHeader(
-                    myProfile: _profileController.myProfile,
+                    myProfile: profileController.myProfile,
                   ),
                 )
               ];
@@ -98,7 +96,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                 children: [
                   // if (_publicUser.uid !=
                   //     'FirebaseAuth.instance.currentUser.uid') ...{
-                  OutlineButtonHeader(context, _profileController.myProfile),
+                  OutlineButtonHeader(context, profileController.myProfile),
                   // const SizedBox(height: 8.0),
                   // },
 
@@ -141,14 +139,14 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                 height: 30,
                               ),
                               profileinfodisplay(
-                                  context, _profileController.myProfile),
+                                  context, profileController.myProfile),
                             ],
                           ),
                         ),
                         // Container()
                         profilepostsdisplay(
                           context,
-                          _profileController.myProfile,
+                          profileController.myProfile,
                           _posts,
                           loading: isLoading,
                         )

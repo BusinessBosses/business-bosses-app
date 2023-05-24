@@ -37,7 +37,7 @@ class SafetyModel extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             NotificationListener<OverscrollIndicatorNotification>(
-              onNotification: (overscroll) {
+              onNotification: (OverscrollIndicatorNotification overscroll) {
                 overscroll.disallowIndicator();
                 return true;
               },
@@ -47,9 +47,9 @@ class SafetyModel extends StatelessWidget {
                   children: [
                     isLoading
                         ? const SizedBox(
-                            child: CircularProgressIndicator.adaptive(),
                             height: 24.0,
                             width: 24.0,
+                            child: CircularProgressIndicator.adaptive(),
                           )
                         : Column(
                             crossAxisAlignment: CrossAxisAlignment.center,

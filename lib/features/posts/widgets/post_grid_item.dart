@@ -42,9 +42,9 @@ class PostGridItem extends StatelessWidget {
               height: double.infinity,
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(radiusValue),
-                child: post!.images?.isNotEmpty == true
+                child: post.images?.isNotEmpty == true
                     ? NetworkImageWithPlaceHolder(
-                        imageUrl: post?.images![0],
+                        imageUrl: post.images![0],
                         fit: BoxFit.cover,
                         placeHolder: Icons.photo,
                         iconSize: 48.0,
@@ -56,7 +56,7 @@ class PostGridItem extends StatelessWidget {
                               ? const EdgeInsets.only(right: 26.0)
                               : const EdgeInsets.all(0.0),
                           child: Linkify(
-                            text: post!.title,
+                            text: post.title,
                             style: bodyText2.copyWith(
                               fontWeight: FontWeight.normal,
                             ),
@@ -86,7 +86,7 @@ class PostGridItem extends StatelessWidget {
                   onTap: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (context) => ImagesViewerScreen(
+                        builder: (BuildContext context) => ImagesViewerScreen(
                           urls: post.images,
                           text: post.title,
                         ),
@@ -112,7 +112,7 @@ class PostGridItem extends StatelessWidget {
                           width: 8.0,
                         ),
                         Text(
-                          '${post!.images?.length}',
+                          '${post.images?.length}',
                           style: bodyText1.copyWith(color: Colors.white),
                         ),
                       ],
@@ -138,7 +138,7 @@ class PostGridItem extends StatelessWidget {
                       color: Colors.white,
                       size: 16.0,
                     ),
-                    onSelected: (val) {
+                    onSelected: (String val) {
                       if (val == 'Edit') {
                         // navigateTo(
                         //   context,
@@ -147,7 +147,7 @@ class PostGridItem extends StatelessWidget {
                         // );
                       } else if (val == 'Delete') {
                         _showDialog(context);
-                      } else if (val == 'Promote') {
+                      } else if (val == 'Boost') {
                         // Navigator.of(context).push(
                         //   MaterialPageRoute(
                         //     builder: (context) => BoostP.ost(
@@ -176,9 +176,9 @@ class PostGridItem extends StatelessWidget {
   void _showDialog(BuildContext context) {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
+      builder: (BuildContext context) => AlertDialog(
         title: const Text(
-          "Delete Post",
+          'Delete Post',
           style: bodyText1,
         ),
         content: const Text('Are you sure to delete this post?'),
@@ -201,16 +201,6 @@ class PostGridItem extends StatelessWidget {
 
   final List<PopupMenuEntry<String>> _popupItemPostMore = [
     const PopupMenuItem<String>(
-      value: 'Promote',
-      child: Text(
-        'Promote',
-        style: bodyText2,
-      ),
-    ),
-    const PopupMenuDivider(
-      height: 0.0,
-    ),
-    const PopupMenuItem<String>(
       value: 'Edit',
       child: Text(
         'Edit',
@@ -226,6 +216,16 @@ class PostGridItem extends StatelessWidget {
         'Delete',
         style: bodyText2,
       ),
-    )
+    ),
+    const PopupMenuDivider(
+      height: 0.0,
+    ),
+    const PopupMenuItem<String>(
+      value: 'Boost',
+      child: Text(
+        'Boost',
+        style: bodyText2,
+      ),
+    ),
   ];
 }

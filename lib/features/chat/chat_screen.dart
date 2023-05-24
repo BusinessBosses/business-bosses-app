@@ -16,8 +16,6 @@ import '../../common/widgets/user_avatar_with_badge.dart';
 import '../../utils/theme/theme.dart';
 import '../../utils/time_format.dart';
 import '../search/search_app_bar.dart';
-import 'app_chats.dart';
-import 'chat_room_screen.dart';
 import 'models/last_message.dart';
 
 // ignore: public_member_api_docs
@@ -34,10 +32,10 @@ class ChatScreen extends StatefulWidget {
 
 class _ChatScreenState extends State<ChatScreen> {
   final ChatController _chatController = Get.find();
-  bool _isInit = false;
-  bool _isLoading = true;
+  final bool _isInit = false;
+  final bool _isLoading = true;
   bool _isSearching = false;
-  List<LastMessage> _myChats = [];
+  final List<LastMessage> _myChats = [];
 
   Future<void> _listenMyChatUsers() async {}
 
@@ -65,7 +63,7 @@ class _ChatScreenState extends State<ChatScreen> {
         return true;
       },
       child: GetBuilder<ChatController>(
-        builder: (controller) {
+        builder: (ChatController controller) {
           return Scaffold(
             appBar: _isSearching
                 ? SearchAppBar(
@@ -94,9 +92,9 @@ class _ChatScreenState extends State<ChatScreen> {
             body: Stack(
               children: [
                 controller.chatMessages.isEmpty
-                    ? SafetyModel(
+                    ? const SafetyModel(
                         isLoading: false,
-                        icon: const Icon(
+                        icon: Icon(
                           Icons.person,
                           size: 80.0,
                           color: Colors.grey,
@@ -138,7 +136,7 @@ class _ChatScreenState extends State<ChatScreen> {
                               return ChatItem(
                                 myChatUser: controller.searchedChats[i],
                                 key: ValueKey(
-                                    controller.searchedChats[i].user?.uid),
+                                    controller.searchedChats[i].user.uid),
                                 chatController: controller,
                               );
                             },
@@ -161,7 +159,7 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   void _onSearch(String val) {
-    if (val == null || val.trim().isEmpty) return;
+    if (val.trim().isEmpty) return;
     final List<LastMessage> data = _myChats.where((LastMessage e) {
       return e.user!.name!.toLowerCase().contains(val.trim().toLowerCase());
     }).toList();
@@ -214,10 +212,7 @@ class _ChatItemState extends State<ChatItem> {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        if (widget.chatController != null) {
-          widget.chatController!
-              .seen(widget.myChatUser.user.uid, _homeController.socket);
-        }
+        widget.chatController.seen(widget.myChatUser.user.uid, _homeController.socket);
         Get.toNamed(Routes.chatRoom, arguments: widget.myChatUser.user);
       },
       child: Container(

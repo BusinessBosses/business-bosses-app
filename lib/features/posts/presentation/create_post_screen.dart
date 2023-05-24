@@ -15,7 +15,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 import '../../../common/dialogs/snackbar.dart';
-import '../../profile/controller/profile_controller.dart';
 
 /// CREATE POST SCREEN
 class CreatePostScreen extends StatefulWidget {
