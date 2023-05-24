@@ -113,7 +113,7 @@ class PostsController extends GetxController {
         await PostRepository.fetchPosts(paginationPage.value, postsSize);
     if (response.success) {
       paginationPage(paginationPage.value + 1);
-      processPostsToState(response.data['rows']);
+      processPostsToState(response.data['posts']['posts']['rows']);
     } else {
       error(true);
       if (response.message == 'send a valid token') {

@@ -70,7 +70,7 @@ class ForumModel {
       'timestamp': timestamp,
       'likes': likes,
       'coins': coins,
-      'comments': comments.map((x) => x.toMap()).toList(),
+      'comments': comments.map((CommentModel x) => x.toMap()).toList(),
       'user': user.toMap(),
       'isRanked': isRanked,
     };
@@ -91,7 +91,7 @@ class ForumModel {
       coins: List<String>.from((map['coins'] as List<String>)),
       comments: List<CommentModel>.from(
         (map['comments'] as List<int>).map<CommentModel>(
-          (x) => CommentModel.fromMap(x as Map<String, dynamic>),
+          (int x) => CommentModel.fromMap(x as Map<String, dynamic>),
         ),
       ),
       user: UserModel.fromMap(map['user'] as Map<String, dynamic>),

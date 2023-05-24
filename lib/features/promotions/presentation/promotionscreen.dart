@@ -70,7 +70,7 @@ class _PromotionScreenState extends State<PromotionScreen> {
                     ),
                     Text(
                       '${_profileController.myProfile.coinscount ?? 0}',
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: textColor,
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
