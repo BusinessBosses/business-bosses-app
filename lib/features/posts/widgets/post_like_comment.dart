@@ -122,7 +122,7 @@ class _PostLikeCommentItemState extends State<PostLikeCommentItem> {
                           itemBuilder: (BuildContext context, int i) {
                             return ListTile(
                               leading: UserAvatarWithBadge(
-                                user: ProfileController.myProfile,
+                                user: ProfileController().myProfile,
                                 height: 48.0,
                                 width: 48.0,
                                 radius: 30.0,
