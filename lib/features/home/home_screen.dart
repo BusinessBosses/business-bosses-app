@@ -34,9 +34,9 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      addCoinDaily();
-    });
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   addCoinDaily();
+    // });
   }
 
   @override
@@ -54,7 +54,8 @@ class _HomeScreenState extends State<HomeScreen> {
               backgroundColor: backgroundcolorinterface,
               appBar: PreferredSize(
                 preferredSize: const Size.fromHeight(kToolbarHeight),
-                child: GetBuilder<ChatController>(builder: (ChatController controller) {
+                child: GetBuilder<ChatController>(
+                    builder: (ChatController controller) {
                   final List<MessageModel> unseenChats = controller.chats
                       .where((MessageModel element) =>
                           element.receiverUid ==
@@ -98,6 +99,9 @@ class _HomeScreenState extends State<HomeScreen> {
                               );
                             },
                           ),
+                          SizedBox(
+                            height: 100,
+                          )
                         ],
                       ),
                     ),
@@ -108,56 +112,56 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  /// DailyCoin
-  void addCoinDaily() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    int lastExecutionTimestamp = sandBox.read('lastExecutionTimestamp') ?? 0;
-    DateTime currentDateTime =
-        DateTime.fromMillisecondsSinceEpoch(currentTimestamp);
-    DateTime lastExecutionDateTime =
-        DateTime.fromMillisecondsSinceEpoch(lastExecutionTimestamp);
-    if (currentDateTime.year != lastExecutionDateTime.year ||
-        currentDateTime.month != lastExecutionDateTime.month ||
-        currentDateTime.day != lastExecutionDateTime.day) {
-      // The action hasn't been executed today, save the current timestamp
-      ApiResponseModel user = await ApiService.get(
-          path: 'users/${prefs.getString(Constants.USER_ID)}');
-      sandBox.write('lastExecutionTimestamp', currentTimestamp);
-      await ApiService.put(
-        path: 'users/${prefs.getString(Constants.USER_ID)}',
-        body: <String, dynamic>{
-          'coinscount': (user.data['coinscount']) + 1,
-        },
-      );
-      showCoinDialog();
-    }
-  }
+  // /// DailyCoin
+  // void addCoinDaily() async {
+  //   final SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   int lastExecutionTimestamp = sandBox.read('lastExecutionTimestamp') ?? 0;
+  //   DateTime currentDateTime =
+  //       DateTime.fromMillisecondsSinceEpoch(currentTimestamp);
+  //   DateTime lastExecutionDateTime =
+  //       DateTime.fromMillisecondsSinceEpoch(lastExecutionTimestamp);
+  //   if (currentDateTime.year != lastExecutionDateTime.year ||
+  //       currentDateTime.month != lastExecutionDateTime.month ||
+  //       currentDateTime.day != lastExecutionDateTime.day) {
+  //     // The action hasn't been executed today, save the current timestamp
+  //     ApiResponseModel user = await ApiService.get(
+  //         path: 'users/${prefs.getString(Constants.USER_ID)}');
+  //     sandBox.write('lastExecutionTimestamp', currentTimestamp);
+  //     await ApiService.put(
+  //       path: 'users/${prefs.getString(Constants.USER_ID)}',
+  //       body: <String, dynamic>{
+  //         'coinscount': (user.data['coinscount']) + 1,
+  //       },
+  //     );
+  //     showCoinDialog();
+  //   }
+  // }
 
-  /// Show daily coin dialog
-  void showCoinDialog() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) => AlertDialog(
-        title: const TextWidget(
-          text: 'Congratulations',
-          fontWeight: FontWeight.bold,
-          size: 20,
-        ),
-        content: TextWidget(
-          text: 'You have earned 1 coin for logging into Business Bosses today',
-          color: Colors.black.withOpacity(.8),
-        ),
-        actions: <Widget>[
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            child: const TextWidget(
-              text: 'OK',
-            ),
-          )
-        ],
-      ),
-    );
-  }
+  // /// Show daily coin dialog
+  // void showCoinDialog() {
+  //   showDialog(
+  //     context: context,
+  //     builder: (BuildContext context) => AlertDialog(
+  //       title: const TextWidget(
+  //         text: 'Congratulations',
+  //         fontWeight: FontWeight.bold,
+  //         size: 20,
+  //       ),
+  //       content: TextWidget(
+  //         text: 'You have earned 1 coin for logging into Business Bosses today',
+  //         color: Colors.black.withOpacity(.8),
+  //       ),
+  //       actions: <Widget>[
+  //         TextButton(
+  //           onPressed: () {
+  //             Navigator.of(context).pop();
+  //           },
+  //           child: const TextWidget(
+  //             text: 'OK',
+  //           ),
+  //         )
+  //       ],
+  //     ),
+  //   );
+  // }
 }

@@ -1,6 +1,7 @@
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/common/models/comment_model.dart';
 import 'package:business_bosses_v2/common/widgets/text_widget.dart';
+import 'package:business_bosses_v2/features/posts/models/forum_model.dart';
 import 'package:business_bosses_v2/features/posts/models/post_model.dart';
 import 'package:business_bosses_v2/features/posts/repository/post_repository.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
@@ -11,10 +12,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:math' as math;
 
 class PostsController extends GetxController {
   late IO.Socket socket;
   RxList<PostModel> posts = RxList<PostModel>(<PostModel>[]);
+  RxList<ForumModel> forums = RxList<ForumModel>(<ForumModel>[]);
+  List<Map<String, dynamic>> mixedPosts = [];
   RxInt paginationPage = RxInt(0);
   final int postsSize = 20;
   RxBool error = RxBool(false);
@@ -35,6 +39,41 @@ class PostsController extends GetxController {
             .toList()
       }));
     }
+    // update();
+  }
+
+  /// PROCESS RAW API Forums, MODELIZE AND SAVE TO STATE
+  void processForumsToState(dynamic forum) {
+    final List frms = forum;
+    for (int i = 0; i < frms.length; i++) {
+      forums.add(ForumModel.fromMap({
+        ...frms[i],
+        'likes': frms[i]['likes']
+            .map((dynamic like) => like['userId'].toString())
+            .toList(),
+        'coins': frms[i]['likes']
+            .map((dynamic coin) => coin['userId'].toString())
+            .toList()
+      }));
+    }
+    // update();
+  }
+
+  void joinPostsAndForums() {
+    mixedPosts = Iterable.generate(math.max(posts.length, forums.length))
+        .expand((i) sync* {
+      if (i < posts.length) {
+        yield {'isForum': false, 'data': posts[i]};
+      }
+      if (i < forums.length) yield {'isForum': true, 'data': forums[i]};
+    }).toList();
+    // update();
+  }
+
+  void processPostsAndForumsData(dynamic data) {
+    processPostsToState(data['posts']['rows']);
+    processForumsToState(data['forums']['rows']);
+    joinPostsAndForums();
     update();
   }
 
@@ -113,7 +152,7 @@ class PostsController extends GetxController {
         await PostRepository.fetchPosts(paginationPage.value, postsSize);
     if (response.success) {
       paginationPage(paginationPage.value + 1);
-      processPostsToState(response.data['posts']['posts']['rows']);
+      processPostsToState(response.data['rows']);
     } else {
       error(true);
       if (response.message == 'send a valid token') {
@@ -169,7 +208,7 @@ class PostsController extends GetxController {
   @override
   void onInit() {
     // TODO: implement onInit
-    initSocket();
+    // initSocket();
     super.onInit();
   }
 

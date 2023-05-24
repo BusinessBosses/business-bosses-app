@@ -1,4 +1,3 @@
-
 import 'package:business_bosses_v2/features/posts/controllers/posts_controller.dart';
 import 'package:business_bosses_v2/features/posts/models/post_model.dart';
 import 'package:business_bosses_v2/features/posts/presentation/widgets/post_images.dart';
@@ -148,7 +147,7 @@ class _PostTileState extends State<PostTile> {
                       }
                     },
                     child: Text(
-                      '${widget.post.user?.name}',
+                      widget.post.user!.name ?? widget.post.user!.username,
                       style: Theme.of(context).textTheme.bodyLarge,
                     ),
                   ),
