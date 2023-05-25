@@ -51,7 +51,7 @@ class PostsController extends GetxController {
         'likes': frms[i]['likes']
             .map((dynamic like) => like['userId'].toString())
             .toList(),
-        'coins': frms[i]['likes']
+        'coins': frms[i]['coins']
             .map((dynamic coin) => coin['userId'].toString())
             .toList()
       }));
@@ -78,48 +78,86 @@ class PostsController extends GetxController {
   }
 
   /// LIKE AND UNLIKE FUNCTION
-  void postLike(String userId, String postId) {
-    final int postIndex =
-        posts.indexWhere((PostModel element) => element.postId == postId);
-    if (postIndex != -1) {
-      final bool checkLiked = posts[postIndex].likes!.contains(userId);
-      if (checkLiked) {
-        posts[postIndex]
-            .likes!
-            .removeWhere((String element) => element == userId);
-      } else {
-        posts[postIndex].likes!.add(userId);
+  void postLike(String userId, String postId, String type) {
+    print(type);
+    if (type == 'post') {
+      final int postIndex =
+          posts.indexWhere((PostModel element) => element.postId == postId);
+      if (postIndex != -1) {
+        final bool checkLiked = posts[postIndex].likes!.contains(userId);
+        if (checkLiked) {
+          posts[postIndex]
+              .likes!
+              .removeWhere((String element) => element == userId);
+        } else {
+          posts[postIndex].likes!.add(userId);
+        }
+      }
+    } else {
+      final int postIndex =
+          forums.indexWhere((ForumModel element) => element.forumId == postId);
+      if (postIndex != -1) {
+        final bool checkLiked = forums[postIndex].likes!.contains(userId);
+        if (checkLiked) {
+          forums[postIndex]
+              .likes!
+              .removeWhere((String element) => element == userId);
+        } else {
+          forums[postIndex].likes!.add(userId);
+        }
       }
     }
     update();
     socket.emit('like', {
       'postId': postId,
       'userId': userId,
-      'type': 'post',
+      'type': type,
     });
   }
 
   /// COIN AND UNCOIN FUNCTION
-  void postCoin(
-      String userId, String postId, ProfileController profileController) {
-    final int postIndex =
-        posts.indexWhere((PostModel element) => element.postId == postId);
-    if (postIndex != -1) {
-      final bool checkIfCoined = posts[postIndex].coins!.contains(userId);
-      if (checkIfCoined) {
-        profileController.updateCoinCount(1);
-        posts[postIndex]
-            .coins!
-            .removeWhere((String element) => element == userId);
-      } else {
-        profileController.updateCoinCount(-1);
-        posts[postIndex].coins!.add(userId);
+  void postCoin(String userId, String postId,
+      ProfileController profileController, String type) {
+    if (type == 'post') {
+      final int postIndex =
+          posts.indexWhere((PostModel element) => element.postId == postId);
+      if (postIndex != -1) {
+        final bool checkIfCoined = posts[postIndex].coins!.contains(userId);
+        if (checkIfCoined) {
+          profileController.updateCoinCount(1);
+          posts[postIndex]
+              .coins!
+              .removeWhere((String element) => element == userId);
+        } else {
+          profileController.updateCoinCount(-1);
+          posts[postIndex].coins!.add(userId);
+        }
+        socket.emit('coin', {
+          'postId': postId,
+          'userId': userId,
+          'type': type,
+        });
       }
-      socket.emit('coin', {
-        'postId': postId,
-        'userId': userId,
-        'type': 'post',
-      });
+    } else {
+      final int postIndex =
+          forums.indexWhere((ForumModel element) => element.forumId == postId);
+      if (postIndex != -1) {
+        final bool checkIfCoined = forums[postIndex].coins!.contains(userId);
+        if (checkIfCoined) {
+          profileController.updateCoinCount(1);
+          forums[postIndex]
+              .coins!
+              .removeWhere((String element) => element == userId);
+        } else {
+          profileController.updateCoinCount(-1);
+          forums[postIndex].coins!.add(userId);
+        }
+        socket.emit('coin', {
+          'postId': postId,
+          'userId': userId,
+          'type': type,
+        });
+      }
     }
     update();
   }
@@ -208,7 +246,7 @@ class PostsController extends GetxController {
   @override
   void onInit() {
     // TODO: implement onInit
-    // initSocket();
+    initSocket();
     super.onInit();
   }
 

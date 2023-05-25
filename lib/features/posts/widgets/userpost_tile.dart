@@ -345,7 +345,8 @@ class _PostTileState extends State<PostTile> {
                       onPressed: () async {
                         widget.controller.postLike(
                             profileController.myProfile.uid,
-                            widget.post.postId);
+                            widget.post.postId,
+                            'post');
                       },
                       icon: widget.post.likes
                                   ?.contains(profileController.myProfile.uid) ==
@@ -384,9 +385,11 @@ class _PostTileState extends State<PostTile> {
                         ? TextButton.icon(
                             onPressed: () async {
                               widget.controller.postCoin(
-                                  profileController.myProfile.uid,
-                                  widget.post.postId,
-                                  profileController);
+                                profileController.myProfile.uid,
+                                widget.post.postId,
+                                profileController,
+                                'post',
+                              );
                             },
                             icon: widget.post.coins?.contains(
                                         profileController.myProfile.uid) ==

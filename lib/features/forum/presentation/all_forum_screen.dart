@@ -311,18 +311,18 @@ class AllForumScreen extends StatelessWidget {
                   //controller: differentController,
 
                   itemBuilder: (BuildContext context, int i) => ForumItem(
-                        forums[i],
+                        forum: forums[i],
                         key: ValueKey(forums[i].forumId),
-                        onUpdateForum: () {
-                          navigateWithReplaceTo(
-                            context,
-                            routeName: CreateForumScreen.routeName,
-                            arguments: Params(
-                              arg1: industry,
-                              arg2: forums[i],
-                            ),
-                          );
-                        },
+                        // onUpdateForum: () {
+                        //   navigateWithReplaceTo(
+                        //     context,
+                        //     routeName: CreateForumScreen.routeName,
+                        //     arguments: Params(
+                        //       arg1: industry,
+                        //       arg2: forums[i],
+                        //     ),
+                        //   );
+                        // },
                         controller: null,
                       )),
         ));

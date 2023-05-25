@@ -1,9 +1,12 @@
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/features/chat/controllers/chat_controller.dart';
 import 'package:business_bosses_v2/features/chat/models/my_message.dart';
+import 'package:business_bosses_v2/features/forum/models/forum_model.dart';
+import 'package:business_bosses_v2/features/forum/widgets/forum_item.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/home/widgets/home_appbar.dart';
 import 'package:business_bosses_v2/features/posts/controllers/posts_controller.dart';
+import 'package:business_bosses_v2/features/posts/models/post_model.dart';
 import 'package:business_bosses_v2/features/posts/widgets/userpost_tile.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/features/profile/widgets/boss_of_the_week_tile.dart';
@@ -85,18 +88,35 @@ class _HomeScreenState extends State<HomeScreen> {
                               myProfile: _profileController.myProfile),
                           ListView.builder(
                             shrinkWrap: true,
-                            itemCount: controller.posts.length,
+                            itemCount: controller.mixedPosts.length,
                             physics: const NeverScrollableScrollPhysics(),
                             itemBuilder: (BuildContext context, int index) {
-                              return PostTile(
-                                controller: controller,
-                                post: controller.posts[index],
-                                onPageChange: (int page) {
-                                  if (widget.onPageChange != null) {
-                                    widget.onPageChange!(page);
-                                  }
-                                },
-                              );
+                              bool currentIndexIsForum =
+                                  controller.mixedPosts[index]['isForum'];
+
+                              ForumModel? forumDetails = currentIndexIsForum
+                                  ? controller.mixedPosts[index]['data']
+                                  : null;
+                              PostModel? postDetails = currentIndexIsForum
+                                  ? null
+                                  : controller.mixedPosts[index]['data'];
+
+                              if (currentIndexIsForum) {
+                                return ForumItem(
+                                  forum: forumDetails!,
+                                  controller: controller,
+                                );
+                              } else {
+                                return PostTile(
+                                  controller: controller,
+                                  post: postDetails!,
+                                  onPageChange: (int page) {
+                                    if (widget.onPageChange != null) {
+                                      widget.onPageChange!(page);
+                                    }
+                                  },
+                                );
+                              }
                             },
                           ),
                           SizedBox(

@@ -20,21 +20,21 @@ import '../../profile/presentation/publicprofilescreen.dart';
 import '../presentation/forum_like_comment_screen.dart';
 
 class ForumItem extends StatefulWidget {
-  final ForumModel? forum;
-  final VoidCallback? commented;
-  final Function? likeUnlikeForum;
-  final Function? onUpdateForum;
-  final Function? coinUncoinForum;
+  final ForumModel forum;
+  // final VoidCallback? commented;
+  // final Function? likeUnlikeForum;
+  // final Function? onUpdateForum;
+  // final Function? coinUncoinForum;
 
   final PostsController? controller;
 
-  const ForumItem(
-    this.forum, {
+  const ForumItem({
     Key? key,
-    this.commented,
-    this.likeUnlikeForum,
-    this.coinUncoinForum,
-    this.onUpdateForum,
+    required this.forum,
+    // this.commented,
+    // this.likeUnlikeForum,
+    // this.coinUncoinForum,
+    // this.onUpdateForum,
     this.controller,
   }) : super(key: key);
 
@@ -271,7 +271,8 @@ class _ForumItemState extends State<ForumItem> {
                               // color: Colors.redAccent,
                             )
                           : SizedBox(
-                              width: leadingWidth(widget.forum),
+                              width: 60,
+                              // width: leadingWidth(widget.forum),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
@@ -284,7 +285,7 @@ class _ForumItemState extends State<ForumItem> {
                                               size: 20),
                                           onSelected: (String val) {
                                             if (val == 'Edit') {
-                                              widget.onUpdateForum!();
+                                              // widget.onUpdateForum!();
                                             } else if (val == 'Delete') {
                                               _showDialog();
                                             }
@@ -445,7 +446,7 @@ class _ForumItemState extends State<ForumItem> {
                                   onDetectableTextTap(context, val),
                             ),
                           ),
-                    widget.forum!.images!.isEmpty
+                    widget.forum.images == null
                         ? Container()
                         : Padding(
                             padding: const EdgeInsets.only(
@@ -460,7 +461,8 @@ class _ForumItemState extends State<ForumItem> {
                           onPressed: () async {
                             widget.controller!.postLike(
                                 profileController.myProfile.uid,
-                                widget.forum!.forumId!);
+                                widget.forum.forumId,
+                                'forum');
                           },
                           icon: widget.forum!.likes?.contains(
                                       profileController.myProfile.uid) ==
@@ -468,7 +470,7 @@ class _ForumItemState extends State<ForumItem> {
                               ? SvgPicture.asset('assets/svgs/likefilled.svg')
                               : SvgPicture.asset('assets/svgs/like.svg'),
                           label: Text(
-                            '${widget.forum!.likes?.length ?? 0}',
+                            '${widget.forum.likes?.length ?? 0}',
                             style: Theme.of(context)
                                 .textTheme
                                 .bodyMedium
@@ -485,7 +487,7 @@ class _ForumItemState extends State<ForumItem> {
                                   ForumLikeCommentScreen(
                                 forum: widget.forum!,
                                 commented: () {
-                                  widget.commented!();
+                                  // widget.commented!();
                                   setState(() {});
                                 },
                               ),
@@ -506,17 +508,19 @@ class _ForumItemState extends State<ForumItem> {
                         TextButton.icon(
                             onPressed: () async {
                               widget.controller!.postCoin(
-                                  profileController.myProfile.uid,
-                                  widget.forum!.forumId!,
-                                  profileController);
+                                profileController.myProfile.uid,
+                                widget.forum!.forumId!,
+                                profileController,
+                                'forum',
+                              );
                             },
-                            icon: widget.forum!.coins?.contains(
+                            icon: widget.forum.coins?.contains(
                                         profileController.myProfile.uid) ==
                                     true
                                 ? SvgPicture.asset('assets/svgs/coin.svg')
                                 : SvgPicture.asset('assets/svgs/coin.svg'),
                             label: Text(
-                              '${widget.forum?.coins?.length ?? 0}',
+                              '${widget.forum.coins?.length ?? 0}',
                               style: Theme.of(context)
                                   .textTheme
                                   .bodyMedium

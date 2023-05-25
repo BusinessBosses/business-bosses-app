@@ -97,7 +97,7 @@ class ForumModel {
       user: map['user'] != null
           ? UserModel.fromMap(map['user'] as Map<String, dynamic>)
           : null,
-      isRanked: map['isRanked'] as bool,
+      isRanked: map['isRanked'] == null ? false : true,
     );
   }
 
