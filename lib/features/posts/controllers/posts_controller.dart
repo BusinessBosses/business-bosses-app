@@ -10,7 +10,6 @@ import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
-import 'package:shared_preferences/shared_preferences.dart';
 
 class PostsController extends GetxController {
   late IO.Socket socket;
@@ -86,17 +85,18 @@ class PostsController extends GetxController {
   }
 
   /// ADD NEW POST TO STATE
-  void addNewPost(Map<String, dynamic> newPost) async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
+  void addNewPost(
+      Map<String, dynamic> newPost, ProfileController profileController) async {
     PostModel modelizedNewPost = PostModel.fromMap({
       ...newPost,
       'coins': <String>[],
       'likes': <String>[],
       'comments': <CommentModel>[],
       'user': {
-        'username': 'testUser1',
-        'email': 'test1@gmail.com',
-        'uid': prefs.getString(Constants.USER_ID),
+        'username': profileController.myProfile.username,
+        'email': profileController.myProfile.email,
+        'uid': profileController.myProfile.uid,
+        'name': profileController.myProfile.name,
       }
     });
 

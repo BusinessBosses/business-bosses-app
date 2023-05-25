@@ -32,13 +32,10 @@ class _PostLikeCommentItemState extends State<PostLikeCommentItem> {
   bool _isLoadingLikes = true, _isLoadingComments = true;
 
   @override
-  void didChangeDependencies() {
-    if (!_isInit) {
-      _loadCommentWithDetails();
-      _loadLikesWithDetails();
-      _isInit = true;
-    }
-    super.didChangeDependencies();
+  void initState() {
+    _loadCommentWithDetails();
+    _loadLikesWithDetails();
+    super.initState();
   }
 
   @override
@@ -122,7 +119,7 @@ class _PostLikeCommentItemState extends State<PostLikeCommentItem> {
                           itemBuilder: (BuildContext context, int i) {
                             return ListTile(
                               leading: UserAvatarWithBadge(
-                                user: ProfileController().myProfile,
+                                user: _users[i],
                                 height: 48.0,
                                 width: 48.0,
                                 radius: 30.0,
@@ -149,12 +146,14 @@ class _PostLikeCommentItemState extends State<PostLikeCommentItem> {
 
   Future<void> _loadCommentWithDetails() async {
     for (CommentModel c in widget.post.comments ?? []) {
-      _comments.add(CommentModel(
-        commentId: c.commentId,
-        userId: c.userId,
-        comment: c.comment,
-        timestamp: c.timestamp,
-      ));
+      _comments.add(
+        CommentModel(
+          commentId: c.commentId,
+          userId: c.userId,
+          comment: c.comment,
+          timestamp: c.timestamp,
+        ),
+      );
     }
     setState(() {
       _isLoadingComments = false;
@@ -164,16 +163,17 @@ class _PostLikeCommentItemState extends State<PostLikeCommentItem> {
   final List<UserModel> _users = [];
 
   Future<void> _loadLikesWithDetails() async {
-    final ApiResponseModel response =
-        await ApiService.get(path: 'users/${widget.post.user!.uid}');
     for (dynamic l in widget.post.likes ?? []) {
+      final Map<String, dynamic> response = await ProfileController.loadData(l);
       _users.add(UserModel(
-          uid: widget.post.user!.uid,
-          name: response.data['name'],
-          bio: response.data['bio']));
+          uid: l,
+          name: response['user']['name'],
+          bio: response['user']['bio']));
     }
-    setState(() {
-      _isLoadingLikes = false;
-    });
+    if (mounted) {
+      setState(() {
+        _isLoadingLikes = false;
+      });
+    }
   }
 }

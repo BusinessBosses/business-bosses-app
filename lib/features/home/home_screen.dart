@@ -54,7 +54,8 @@ class _HomeScreenState extends State<HomeScreen> {
               backgroundColor: backgroundcolorinterface,
               appBar: PreferredSize(
                 preferredSize: const Size.fromHeight(kToolbarHeight),
-                child: GetBuilder<ChatController>(builder: (ChatController controller) {
+                child: GetBuilder<ChatController>(
+                    builder: (ChatController controller) {
                   final List<MessageModel> unseenChats = controller.chats
                       .where((MessageModel element) =>
                           element.receiverUid ==
@@ -80,8 +81,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   : SingleChildScrollView(
                       child: Column(
                         children: <Widget>[
-                          BossOfWeekProfileTile(_profileController.myProfile,
-                              myProfile: _profileController.myProfile),
+                          // BossOfWeekProfileTile(_profileController.myProfile),
                           ListView.builder(
                             shrinkWrap: true,
                             itemCount: controller.posts.length,

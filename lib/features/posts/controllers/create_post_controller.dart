@@ -9,6 +9,7 @@ import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../../profile/controller/profile_controller.dart';
 import '../presentation/boost_post_screen.dart';
 
 /// CREATEPOSTCONTROLLER
@@ -76,7 +77,8 @@ class CreatePostController extends GetxController {
   }
 
   /// CREATE POST CONTROLLER (REGISTER NEW POST TO REMOTE DATA SOURCE)
-  Future<void> createPost(Map<String, dynamic> body) async {
+  Future<void> createPost(
+      Map<String, dynamic> body, ProfileController profileController) async {
     if (validateCreatePostData(body)) {
       loading(true);
       update();
@@ -84,7 +86,7 @@ class CreatePostController extends GetxController {
         final ApiResponseModel response = await PostRepository.createPost(body);
 
         if (response.success) {
-          _postsController.addNewPost(response.data);
+          _postsController.addNewPost(response.data, profileController);
           if (shouldPromote.value == true) {
             Get.to(() => BoostPost(
                   postId: response.data['postId'],
@@ -103,7 +105,7 @@ class CreatePostController extends GetxController {
 
           if (response.success) {
             imageFileList.clear();
-            _postsController.addNewPost(response.data);
+            _postsController.addNewPost(response.data, profileController);
             if (shouldPromote.value == true) {
               Get.to(() => BoostPost(
                     postId: response.data['postId'],

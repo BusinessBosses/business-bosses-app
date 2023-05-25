@@ -10,7 +10,6 @@ import '../../../utils/theme/theme.dart';
 Widget OutlineButtonHeader(UserModel publicUser, UserModel myProfile,
     VoidCallback onConnect, onRefer) {
   bool connectedbutton = true;
-
   return Container(
     height: 50.0,
     padding: const EdgeInsets.all(4.0),
