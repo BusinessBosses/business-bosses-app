@@ -5,6 +5,7 @@ import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:get/get.dart';
 
 import '../../../common/models/api_response_model.dart';
+import '../../../common/models/comment.dart';
 import '../../../common/models/my_response.dart';
 import '../../../common/models/user_model.dart';
 import '../../../common/widgets/user_avatar_with_badge.dart';

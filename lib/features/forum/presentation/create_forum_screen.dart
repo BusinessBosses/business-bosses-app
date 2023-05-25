@@ -9,7 +9,6 @@ import '../../../common/widgets/network_image_with_placeholder.dart';
 import '../../../utils/theme/theme.dart';
 import '../../home/bottom_nav.dart';
 import '../models/industry.dart';
-import '../widgets/deleteimage.dart';
 import '../widgets/field_container.dart';
 import '../widgets/optionsdialog.dart';
 import 'all_forum_screen.dart';
