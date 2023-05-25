@@ -1,9 +1,9 @@
 class Quote {
-  String id;
-  int expireIn;
-  int timestamp;
-  String by;
-  String message;
+  String? id;
+  int? expireIn;
+  int? timestamp;
+  String? by;
+  String? message;
 
   Quote({
     this.id = '',
