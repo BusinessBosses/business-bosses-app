@@ -25,7 +25,7 @@ class CreateForumScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final scaffoldKey = GlobalKey<ScaffoldState>();
     Industry? industry;
-    final ForumModel forum = ForumModel();
+    final ForumModel forum = ForumModel(forumId: 'sdf', industryId: 'sdfad');
     bool isProcessing = false;
     bool isUpdating = false;
     String isbossup = 'true';
@@ -67,7 +67,7 @@ class CreateForumScreen extends StatelessWidget {
                   ? TextFormField(
                       // controller: _titleController,
                       initialValue: forum.title,
-                      onChanged: (String val) => forum.title = val,
+                      onChanged: (String val) {},
                       textInputAction: TextInputAction.next,
                       keyboardType: TextInputType.text,
                       maxLength: 50,
@@ -78,7 +78,7 @@ class CreateForumScreen extends StatelessWidget {
                   : TextFormField(
                       // controller: _titleController,
                       initialValue: forum.title,
-                      onChanged: (val) => forum.title = val,
+                      onChanged: (val) {},
                       textInputAction: TextInputAction.next,
                       keyboardType: TextInputType.text,
                       maxLength: 50,
@@ -102,7 +102,7 @@ class CreateForumScreen extends StatelessWidget {
                       maxLength: 1000,
                       maxLines: 5,
                       basicStyle: Theme.of(context).textTheme.bodyMedium,
-                      onChanged: (String val) => forum.description = val,
+                      onChanged: (String val) {},
 
                       decoration: inputDecoration.copyWith(
                         hintText: 'Describe your Business',
@@ -122,7 +122,7 @@ class CreateForumScreen extends StatelessWidget {
                       maxLength: 1000,
                       maxLines: 5,
                       basicStyle: Theme.of(context).textTheme.bodyMedium,
-                      onChanged: (val) => forum.description = val,
+                      onChanged: (val) {},
 
                       decoration: inputDecoration.copyWith(
                         hintText: 'Enter your Description',

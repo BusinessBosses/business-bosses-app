@@ -40,7 +40,7 @@ class Validator {
     if (!isValidEmail(val)) {
       return 'Invalid email';
     } else {
-      return '';
+      return null;
     }
   }
 
@@ -54,7 +54,7 @@ class Validator {
   }
 
   /// Validate password fields to be password
-  static String passwordValidator(String? val) {
+  static String? passwordValidator(String? val) {
     if (val == null) {
       return 'Enter a valid password';
     }
@@ -62,9 +62,9 @@ class Validator {
       return 'Password must be 8 character long';
     }
     if (!isValidPassword(val)) {
-      return 'Invalid p';
+      return 'Invalid password';
     } else {
-      return '';
+      return null;
     }
   }
 
@@ -90,7 +90,7 @@ class Validator {
     if (!isUnique) if (val.length < 2) return 'username is too short';
     if (!isUnique) return 'User name already exist';
 
-    return '';
+    return null;
   }
 
   /// Validate Social media accounts
