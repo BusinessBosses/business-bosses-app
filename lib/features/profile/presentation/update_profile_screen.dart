@@ -467,7 +467,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                       GestureDetector(
                                         onTap: () => onDataPicker(
                                           analyser: Analyser.category,
-                                          title: 'Title',
+                                          title: 'Profession',
                                           list: AnalyserData.industries,
                                         ),
                                         child: Container(

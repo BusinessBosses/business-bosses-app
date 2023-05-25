@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../features/chat/models/my_message.dart';
-import '../../features/posts/presentation/widgets/images_viewer_screen.dart';
+import '../../features/posts/widgets/images_viewer_screen.dart';
 import '../../utils/theme/theme.dart';
 import '../../utils/time_format.dart';
 import 'network_image_with_placeholder.dart';

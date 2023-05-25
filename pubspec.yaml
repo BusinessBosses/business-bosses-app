@@ -68,6 +68,7 @@ dependencies:
   url_launcher: ^6.0.6
   uuid: ^3.0.7
 
+
 flutter_native_splash:
   color: "#FFFFFF"
   image: assets/images/app_logo.png

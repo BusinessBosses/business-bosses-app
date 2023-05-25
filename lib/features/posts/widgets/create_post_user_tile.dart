@@ -5,9 +5,9 @@ import 'package:business_bosses_v2/common/widgets/user_avatar_with_badge.dart';
 import 'package:flutter/material.dart';
 
 class CreatePostUserTile extends StatelessWidget {
-  const CreatePostUserTile({Key? key, required this.user}) : super(key: key);
+  const CreatePostUserTile({Key? key, this.user}) : super(key: key);
 
-  final UserModel user;
+  final UserModel? user;
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +23,7 @@ class CreatePostUserTile extends StatelessWidget {
         const SizedBox(width: 16.0),
         Expanded(
           child: Text(
-            user.username,
+            user!.username,
             style: Theme.of(context)
                 .textTheme
                 .titleLarge!

@@ -295,8 +295,7 @@ class AllCommunitiesScreen extends StatelessWidget {
                                                             'assets/svgs/entries.svg'),
                                                         RichText(
                                                           text: const TextSpan(
-                                                            children: <
-                                                                InlineSpan>[
+                                                            children: <InlineSpan>[
                                                               TextSpan(
                                                                 text:
                                                                     'Entries: (0)',

@@ -12,24 +12,24 @@ class ForumModel {
   final String? description;
   final String? title;
   final List<String>? images;
-  final int timestamp;
-  final List<String> likes;
-  final List<String> coins;
-  final List<CommentModel> comments;
-  final UserModel user;
-  final bool isRanked;
+  final int? timestamp;
+  final List<String>? likes;
+  final List<String>? coins;
+  final List<CommentModel>? comments;
+  final UserModel? user;
+  final bool? isRanked;
   ForumModel({
     required this.forumId,
     required this.industryId,
     this.description,
     this.title,
     this.images,
-    required this.timestamp,
-    required this.likes,
-    required this.coins,
-    required this.comments,
-    required this.user,
-    required this.isRanked,
+    this.timestamp,
+    this.likes,
+    this.coins,
+    this.comments,
+    this.user,
+    this.isRanked,
   });
 
   ForumModel copyWith({
@@ -70,8 +70,8 @@ class ForumModel {
       'timestamp': timestamp,
       'likes': likes,
       'coins': coins,
-      'comments': comments.map((CommentModel x) => x.toMap()).toList(),
-      'user': user.toMap(),
+      'comments': comments!.map((CommentModel x) => x.toMap()).toList(),
+      'user': user!.toMap(),
       'isRanked': isRanked,
     };
   }
@@ -86,15 +86,17 @@ class ForumModel {
       images: map['images'] != null
           ? List<String>.from((map['images'] as List<String>))
           : null,
-      timestamp: map['timestamp'] as int,
-      likes: List<String>.from((map['likes'] as List<String>)),
-      coins: List<String>.from((map['coins'] as List<String>)),
-      comments: List<CommentModel>.from(
-        (map['comments'] as List<int>).map<CommentModel>(
-          (int x) => CommentModel.fromMap(x as Map<String, dynamic>),
-        ),
-      ),
-      user: UserModel.fromMap(map['user'] as Map<String, dynamic>),
+      timestamp: map['timestamp'] != null
+          ? int.parse(map['timestamp'].toString())
+          : null,
+      likes: map['likes'] != null ? List<String>.from((map['likes'])) : null,
+      coins: map['coins'] != null ? List<String>.from((map['coins'])) : null,
+      comments: List.from(map['comments'])
+          .map((e) => CommentModel.fromMap(e as Map<String, dynamic>))
+          .toList(),
+      user: map['user'] != null
+          ? UserModel.fromMap(map['user'] as Map<String, dynamic>)
+          : null,
       isRanked: map['isRanked'] as bool,
     );
   }

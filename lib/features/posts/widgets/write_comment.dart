@@ -6,9 +6,9 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../../../common/widgets/user_avatar_with_badge.dart';
-import '../../../../utils/constants/constants.dart';
-import '../../../../utils/theme/theme.dart';
+import '../../../common/widgets/user_avatar_with_badge.dart';
+import '../../../utils/constants/constants.dart';
+import '../../../utils/theme/theme.dart';
 import 'my_container.dart';
 
 class WriteAComment extends StatefulWidget {
