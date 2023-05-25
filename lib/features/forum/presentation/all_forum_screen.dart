@@ -6,10 +6,14 @@ import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
+import '../../../action/action.dart';
+import '../../../common/params.dart';
 import '../../../navigation/routes.dart';
 import '../models/industry.dart';
 import '../../../utils/theme/theme.dart';
+import '../widgets/forum_item.dart';
 import '../widgets/joinedbutton.dart';
+import 'create_forum_screen.dart';
 
 // ignore: public_member_api_docs
 class AllForumScreen extends StatelessWidget {
@@ -300,10 +304,27 @@ class AllForumScreen extends StatelessWidget {
                   ),
                 )
               : ListView.builder(
-                  itemBuilder: (BuildContext context, int index) {
-                    return null;
-                  },
-                ),
+                  itemCount: forums.length,
+
+                  // <-- this will disable scroll
+
+                  //controller: differentController,
+
+                  itemBuilder: (BuildContext context, int i) => ForumItem(
+                        forums[i],
+                        key: ValueKey(forums[i].forumId),
+                        onUpdateForum: () {
+                          navigateWithReplaceTo(
+                            context,
+                            routeName: CreateForumScreen.routeName,
+                            arguments: Params(
+                              arg1: industry,
+                              arg2: forums[i],
+                            ),
+                          );
+                        },
+                        controller: null,
+                      )),
         ));
   }
 }
