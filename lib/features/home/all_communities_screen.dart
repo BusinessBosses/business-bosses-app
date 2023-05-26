@@ -7,22 +7,28 @@ import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
+import '../../action/action.dart';
 import '../../common/widgets/safety_model.dart';
 import '../../common/widgets/tiles/custom_tile.dart';
 import '../../navigation/routes.dart';
 import '../../utils/theme/theme.dart';
 import '../../common/widgets/popup/bossup_challenge_popup.dart';
 import '../forum/models/industry.dart';
+import '../forum/presentation/all_forum_screen.dart';
 import '../forum/widgets/joinedbutton.dart';
 import '../search/search_bar.dart';
 
 // ignore: public_member_api_docs
 class AllCommunitiesScreen extends StatefulWidget {
   // ignore: public_member_api_docs
-  const AllCommunitiesScreen({super.key});
+  static const String routeName = '/all-communities-screen';
+
+  // ignore: public_member_api_docs
+  const AllCommunitiesScreen({Key? key}) : super(key: key);
 
   @override
-  State<AllCommunitiesScreen> createState() => _AllCommunitiesScreenState();
+  // ignore: library_private_types_in_public_api
+  _AllCommunitiesScreenState createState() => _AllCommunitiesScreenState();
 }
 
 class _AllCommunitiesScreenState extends State<AllCommunitiesScreen> {
@@ -33,7 +39,7 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen> {
   List<Widget> get mActions {
     return [
       IconButton(
-        icon: !_isSearching
+        icon: _isSearching
             ? const Icon(Icons.close)
             : SvgPicture.asset(
                 'assets/svgs/search.svg',
@@ -57,7 +63,7 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen> {
           backgroundColor: backgroundcolorinterface,
           appBar: AppBar(
               automaticallyImplyLeading: false,
-              title: !_isSearching
+              title: _isSearching
                   ? Searchbar(
                       hintText: 'Search',
                       onChange: _onChanged,
@@ -610,7 +616,13 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen> {
                             //         routeName: AllForumScreen.routeName,
                             //         arguments: industries[i].industryId,
                             //       );
-                            Get.toNamed(Routes.allforumscreen);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (BuildContext context) =>
+                                    const AllForumScreen(),
+                              ),
+                            );
                           },
                         ),
                       ),
@@ -638,12 +650,11 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen> {
                             //         ),
                             //       )
                             //     :
-                            // navigateTo(
-                            //   context,
-                            //   routeName: AllForumScreen.routeName,
-                            //   arguments: 'industries[i].industryId',
-                            // );
-                            Get.toNamed(Routes.allforumscreen);
+                            navigateTo(
+                              context,
+                              routeName: AllForumScreen.routeName,
+                              arguments: 'industries[i].industryId',
+                            );
                           },
                         ),
                       ),
