@@ -9,14 +9,19 @@ import 'package:get/get.dart';
 import 'package:photo_manager/photo_manager.dart';
 
 import '../../../action/action.dart';
+import '../../../common/models/api_response_model.dart';
 import '../../../common/widgets/buttons/my_outlined_button.dart';
 import '../../../common/widgets/field_container.dart';
 import '../../../common/widgets/gallery_screen.dart';
 import '../../../common/widgets/network_image_with_placeholder.dart';
+import '../../../common/widgets/text_widget.dart';
+import '../../../services/api_service.dart';
 import '../../../utils/theme/theme.dart';
 import '../../home/bottom_nav.dart';
 import '../../profile/controller/profile_controller.dart';
+import '../controllers/market_controller.dart';
 import '../models/market_model.dart';
+import 'boost_market_screen.dart';
 
 class CreateSellingitemScreen extends StatefulWidget {
   CreateSellingitemScreen({Key? key, this.market, required this.isUpd})
@@ -34,6 +39,7 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   final ProfileController _profileController = Get.find();
+  final MarketController _marketController = Get.find();
   List<File>? _resourceFile;
   List<bool>? _fileProcessing;
 
@@ -41,8 +47,17 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
 
   MarketModel? _market;
 
+  String? description;
+  String? price;
+  String? _selectedCategory;
+  String? _selectedLocation;
+  String? filterCode;
+  String? filterLocation;
+  String? filterCategory;
+
   bool _isProcessing = false;
   bool? _isUpdating;
+  bool _shouldPromote = false;
 
   @override
   void initState() {
@@ -54,7 +69,7 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
           marketId: '',
           category: '',
           userId: '',
-          price: 1,
+          price: '1',
           description: '',
           location: '',
           user: UserModel());
@@ -65,6 +80,7 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return GestureDetector(
       onTap: () => unFocusKeyboard(context),
       child: Scaffold(
@@ -87,8 +103,8 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               TextFormField(
-                initialValue: _market?.price.toString(),
-                onChanged: (val) => _market!.price = int.parse(val),
+                initialValue: price,
+                onChanged: (String val) => price = val,
                 textInputAction: TextInputAction.next,
                 keyboardType: TextInputType.text,
                 maxLength: 15,
@@ -98,17 +114,17 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
               ),
               const SizedBox(height: 24.0),
               DetectableTextField(
-                controller: TextEditingController(text: _market?.description),
+                controller: TextEditingController(text: description),
 
                 detectionRegExp: detectionRegExp(hashtag: false)!,
-                onDetectionTyped: (text) {},
+                onDetectionTyped: (String text) {},
                 onDetectionFinished: () {},
                 keyboardType: TextInputType.multiline,
                 // minLines: 5,
                 maxLength: 300,
                 maxLines: 5,
-                basicStyle: Theme.of(context).textTheme.bodyText2,
-                onChanged: (String val) => _market!.description = val,
+                basicStyle: Theme.of(context).textTheme.bodyMedium,
+                onChanged: (String val) => description = val,
 
                 decoration: inputDecoration.copyWith(
                   hintText: 'Describe your Listing',
@@ -129,14 +145,14 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
                 margin: const EdgeInsets.only(left: 10, right: 10),
                 child: DropdownButton<String>(
                   underline: Container(),
-                  value: _market?.category,
+                  value: _selectedCategory,
                   isExpanded: true,
                   icon: const Icon(Icons.keyboard_arrow_right),
                   iconSize: 24,
                   elevation: 16,
                   onChanged: (String? newValue) {
                     setState(() {
-                      _market!.category = newValue!;
+                      _selectedCategory = newValue!;
                     });
                   },
                   items: <String?>[
@@ -185,7 +201,7 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
                     style: const TextStyle(fontSize: 20),
                   ),
                 ),
-                initialSelection: _market?.location,
+                initialSelection: _selectedLocation,
                 pickerBuilder:
                     (BuildContext context, CountryCode? countryCode) {
                   return Container(
@@ -194,8 +210,8 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
                       borderRadius: BorderRadius.circular(radiusValue),
                     ),
                     child: ListTile(
-                      leading: _market?.location != null
-                          ? Text(_market!.location)
+                      leading: _selectedLocation != null
+                          ? Text(_selectedLocation!)
                           : Text(
                               'Location',
                               style: bodyText2.copyWith(color: hintColor),
@@ -206,7 +222,7 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
                 },
                 onChanged: (CountryCode? code) {
                   setState(() {
-                    _market?.location = code!.name!;
+                    _selectedLocation = code!.name!;
                   });
                 },
                 useSafeArea: false,
@@ -334,15 +350,115 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
                     );
                   },
                 ),
-              const SizedBox(height: 24.0),
+              Column(
+                children: [
+                  SizedBox(
+                    height: 55,
+                    child: Align(
+                      alignment: Alignment.center,
+                      child: SwitchListTile(
+                        value: _shouldPromote,
+                        onChanged: (bool value) {
+                          setState(() {
+                            _shouldPromote = value;
+                          });
+                        },
+                        title: Row(
+                          children: [
+                            SvgPicture.asset('assets/svgs/rocket.svg'),
+                            const SizedBox(
+                              width: 30,
+                            ),
+                            const Text(
+                              'Boost Post',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w600, fontSize: 18),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  if (_shouldPromote)
+                    Padding(
+                      padding: const EdgeInsets.only(left: 20.0, right: 20),
+                      child: Stack(
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: Image.asset(
+                              'assets/images/boostbanner.png',
+                              width: size.width,
+                              height: size.width / 2,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                          const Positioned(
+                            bottom: 20,
+                            left: 20,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                TextWidget(
+                                  text: 'Reach\na Wider Audience',
+                                  color: Color(0xFFFFFFFF),
+                                  fontWeight: FontWeight.w800,
+                                  size: 20,
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Row(
+                                  children: [
+                                    Icon(
+                                      Icons.check_box,
+                                      color: Colors.white,
+                                      size: 20,
+                                    ),
+                                    SizedBox(
+                                      width: 10,
+                                    ),
+                                    TextWidget(
+                                      text: 'More Goods/Service Sale',
+                                      color: Colors.white,
+                                    ),
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    Icon(
+                                      Icons.check_box,
+                                      color: Colors.white,
+                                      size: 20,
+                                    ),
+                                    SizedBox(
+                                      width: 10,
+                                    ),
+                                    TextWidget(
+                                      text: 'More connections',
+                                      color: Colors.white,
+                                    )
+                                  ],
+                                ),
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  const SizedBox(height: 24.0),
+                ],
+              ),
               MCustomButton(
-                onPressed: () {
-                  if ((_market!.description.isEmpty) ||
-                      (_market!.description.isEmpty)) {
+                onPressed: () async {
+                  if ((description?.isEmpty == true) ||
+                      (price?.isEmpty == true)) {
                     showSnackBar(context,
                         message:
-                            'Please select title and description to create a listing');
+                            'Please select price and description to create a listing');
                     return;
+                  } else {
+                    await _onChangeForum();
                   }
                 },
                 label: _isUpdating! ? 'Update' : 'Sell',
@@ -357,6 +473,75 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
   }
 
   Future<void> _onChangeForum() async {
+    _resourceFile?.clear();
+    unFocusKeyboard(context);
+    setState(() {
+      _isProcessing = true;
+    });
+    Map<String, dynamic> data = <String, dynamic>{
+      'category': _selectedCategory,
+      'location': _selectedLocation,
+      'description': description,
+      'price': price,
+      'timestamp': DateTime.now().millisecondsSinceEpoch,
+      'images': <dynamic>[]
+    };
+    ApiResponseModel response =
+        await ApiService.post(path: 'markets', body: data);
+    setState(() {
+      _isProcessing = false;
+    });
+    dynamic mId = response.data['marketId'];
+    _marketController.addNewPost({
+      ...data,
+      'marketId': mId,
+    }, _profileController);
+    setState(() {});
+    if (_shouldPromote) {
+      Get.to(() => BoostMarket(
+            postId: mId,
+          ));
+    } else {
+      Get.back();
+    }
+
+    // setState(() {
+    //   _isProcessing = true;
+    // });
+
+    // List<String> fileUrls = [];
+
+    // for (int i = 0; i < _myAssetsEntities.length; i++) {
+    //   File? file = await toFile(_myAssetsEntities[i]);
+    //   _resourceFile?.add(file!);
+    // }
+
+    // for (int i = 0; i < _resourceFile!.length; i++) {
+    //   final int bytes = _resourceFile![i].readAsBytesSync().lengthInBytes;
+    //   final double kb = bytes / 1024;
+    //   final double mb = kb / 1024;
+    //   if (mb >= 3) {
+    //     setState(() {
+    //       _isProcessing = false;
+    //     });
+    //     showSnackBar(context, message: 'Image size should be maximum 3 MB.');
+    //     return;
+    //   }
+
+    //   // Call the image upload API and obtain the image URL
+    //   final dynamic res = await ApiService.uploadFile(_resourceFile![i]);
+    //   if (res == null) {
+    //     return;
+    //   } else {
+    //     fileUrls.add(res['fileUrl']);
+    //   }
+    // }
+    // print(fileUrls);
+
+    // setState(() {
+    //   _isProcessing = false;
+    // });
+
     // final appUser = Provider.of<UserController>(context, listen: false);
     // final appForums = Provider.of<AppCommunities>(context, listen: false);
     // _resourceFile?.clear();

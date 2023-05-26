@@ -6,7 +6,7 @@ import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
-import '../../../../common/dialogs/snackbar.dart';
+import '../../../common/dialogs/snackbar.dart';
 
 class AddImageWidget extends StatelessWidget {
   const AddImageWidget({Key? key, required this.controller}) : super(key: key);

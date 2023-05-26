@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import '../../../action/action.dart';
-import '../../../common/models/my_connect.dart';
+// import '../../../common/models/my_connect.dart';
 import '../../../common/widgets/safety_model.dart';
 import '../../../utils/theme/theme.dart';
 import '../../search/search_app_bar.dart';
@@ -18,15 +18,15 @@ class AllConnectionsScreen extends StatelessWidget {
   final ProfileController _profileController = Get.find();
   // bool _isSearching = true;
 
-  UserModel? _specificUser;
+  // UserModel? _specificUser;
 
-  final bool _isLoading = false;
+  // final bool _isLoading = false;
 
-  final List<UserModel> _allUsers = [];
-  final List<UserModel> _suggestedUsers = [];
-  final List<UserModel> _searchedUsers = [];
-  final List<MyConnect> _myConnections = [];
-  final List<MyConnect> _myConnected = [];
+  // final List<UserModel> _allUsers = [];
+  // final List<UserModel> _suggestedUsers = [];
+  // final List<UserModel> _searchedUsers = [];
+  // final List<MyConnect> _myConnections = [];
+  // final List<MyConnect> _myConnected = [];
 
   AllConnectionsScreen({Key? key}) : super(key: key);
 
@@ -131,7 +131,8 @@ class AllConnectionsScreen extends StatelessWidget {
                                             const Divider(height: 0.0),
                                         itemCount:
                                             controller.connections.length,
-                                        itemBuilder: (BuildContext context, int i) {
+                                        itemBuilder:
+                                            (BuildContext context, int i) {
                                           final int checkConnected = controller
                                               .connecteds
                                               .indexWhere((UserModel element) =>
@@ -164,7 +165,8 @@ class AllConnectionsScreen extends StatelessWidget {
                                         separatorBuilder: (_, __) =>
                                             const Divider(height: 0.0),
                                         itemCount: controller.connecteds.length,
-                                        itemBuilder: (BuildContext context, int i) {
+                                        itemBuilder:
+                                            (BuildContext context, int i) {
                                           final int checkConnected = controller
                                               .connecteds
                                               .indexWhere((UserModel element) =>
@@ -197,7 +199,8 @@ class AllConnectionsScreen extends StatelessWidget {
                                             const Divider(height: 0.0),
                                         itemCount:
                                             controller.suggestedUsers.length,
-                                        itemBuilder: (BuildContext context, int i) {
+                                        itemBuilder:
+                                            (BuildContext context, int i) {
                                           final int checkConnected = controller
                                               .connecteds
                                               .indexWhere((UserModel element) =>

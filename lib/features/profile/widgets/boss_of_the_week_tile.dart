@@ -51,7 +51,7 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
         color: backgroundcolorinterface,
         padding:
             const EdgeInsets.only(top: 0.0, bottom: 15.0, left: 15, right: 15),
-        child: user.active == true
+        child: user.isRanked == true
             ? Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[

@@ -3,7 +3,7 @@
 import 'dart:io';
 
 import 'package:business_bosses_v2/features/posts/controllers/create_post_controller.dart';
-import 'package:business_bosses_v2/features/posts/presentation/widgets/image_item.dart';
+import 'package:business_bosses_v2/features/posts/widgets/image_item.dart';
 import 'package:flutter/material.dart';
 
 class Preview extends StatelessWidget {

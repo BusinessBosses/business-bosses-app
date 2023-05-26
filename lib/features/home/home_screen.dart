@@ -1,10 +1,13 @@
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/features/chat/controllers/chat_controller.dart';
 import 'package:business_bosses_v2/features/chat/models/my_message.dart';
+import 'package:business_bosses_v2/features/forum/models/forum_model.dart';
+import 'package:business_bosses_v2/features/forum/widgets/forum_item.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/home/widgets/home_appbar.dart';
 import 'package:business_bosses_v2/features/posts/controllers/posts_controller.dart';
-import 'package:business_bosses_v2/features/posts/presentation/widgets/userpost_tile.dart';
+import 'package:business_bosses_v2/features/posts/models/post_model.dart';
+import 'package:business_bosses_v2/features/posts/widgets/userpost_tile.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/features/profile/widgets/boss_of_the_week_tile.dart';
 import 'package:flutter/material.dart';
@@ -34,9 +37,9 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      addCoinDaily();
-    });
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   addCoinDaily();
+    // });
   }
 
   @override
@@ -81,23 +84,43 @@ class _HomeScreenState extends State<HomeScreen> {
                   : SingleChildScrollView(
                       child: Column(
                         children: <Widget>[
-                          // BossOfWeekProfileTile(_profileController.myProfile),
+                          BossOfWeekProfileTile(_profileController.myProfile),
                           ListView.builder(
                             shrinkWrap: true,
-                            itemCount: controller.posts.length,
+                            itemCount: controller.mixedPosts.length,
                             physics: const NeverScrollableScrollPhysics(),
                             itemBuilder: (BuildContext context, int index) {
-                              return PostTile(
-                                controller: controller,
-                                post: controller.posts[index],
-                                onPageChange: (int page) {
-                                  if (widget.onPageChange != null) {
-                                    widget.onPageChange!(page);
-                                  }
-                                },
-                              );
+                              bool currentIndexIsForum =
+                                  controller.mixedPosts[index]['isForum'];
+
+                              ForumModel? forumDetails = currentIndexIsForum
+                                  ? controller.mixedPosts[index]['data']
+                                  : null;
+                              PostModel? postDetails = currentIndexIsForum
+                                  ? null
+                                  : controller.mixedPosts[index]['data'];
+
+                              if (currentIndexIsForum) {
+                                return ForumItem(
+                                  forum: forumDetails!,
+                                  controller: controller,
+                                );
+                              } else {
+                                return PostTile(
+                                  controller: controller,
+                                  post: postDetails!,
+                                  onPageChange: (int page) {
+                                    if (widget.onPageChange != null) {
+                                      widget.onPageChange!(page);
+                                    }
+                                  },
+                                );
+                              }
                             },
                           ),
+                          const SizedBox(
+                            height: 100,
+                          )
                         ],
                       ),
                     ),
@@ -108,56 +131,56 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  /// DailyCoin
-  void addCoinDaily() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    int lastExecutionTimestamp = sandBox.read('lastExecutionTimestamp') ?? 0;
-    DateTime currentDateTime =
-        DateTime.fromMillisecondsSinceEpoch(currentTimestamp);
-    DateTime lastExecutionDateTime =
-        DateTime.fromMillisecondsSinceEpoch(lastExecutionTimestamp);
-    if (currentDateTime.year != lastExecutionDateTime.year ||
-        currentDateTime.month != lastExecutionDateTime.month ||
-        currentDateTime.day != lastExecutionDateTime.day) {
-      // The action hasn't been executed today, save the current timestamp
-      ApiResponseModel user = await ApiService.get(
-          path: 'users/${prefs.getString(Constants.USER_ID)}');
-      sandBox.write('lastExecutionTimestamp', currentTimestamp);
-      await ApiService.put(
-        path: 'users/${prefs.getString(Constants.USER_ID)}',
-        body: <String, dynamic>{
-          'coinscount': (user.data['coinscount']) + 1,
-        },
-      );
-      showCoinDialog();
-    }
-  }
+  // /// DailyCoin
+  // void addCoinDaily() async {
+  //   final SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   int lastExecutionTimestamp = sandBox.read('lastExecutionTimestamp') ?? 0;
+  //   DateTime currentDateTime =
+  //       DateTime.fromMillisecondsSinceEpoch(currentTimestamp);
+  //   DateTime lastExecutionDateTime =
+  //       DateTime.fromMillisecondsSinceEpoch(lastExecutionTimestamp);
+  //   if (currentDateTime.year != lastExecutionDateTime.year ||
+  //       currentDateTime.month != lastExecutionDateTime.month ||
+  //       currentDateTime.day != lastExecutionDateTime.day) {
+  //     // The action hasn't been executed today, save the current timestamp
+  //     ApiResponseModel user = await ApiService.get(
+  //         path: 'users/${prefs.getString(Constants.USER_ID)}');
+  //     sandBox.write('lastExecutionTimestamp', currentTimestamp);
+  //     await ApiService.put(
+  //       path: 'users/${prefs.getString(Constants.USER_ID)}',
+  //       body: <String, dynamic>{
+  //         'coinscount': (user.data['coinscount']) + 1,
+  //       },
+  //     );
+  //     showCoinDialog();
+  //   }
+  // }
 
-  /// Show daily coin dialog
-  void showCoinDialog() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) => AlertDialog(
-        title: const TextWidget(
-          text: 'Congratulations',
-          fontWeight: FontWeight.bold,
-          size: 20,
-        ),
-        content: TextWidget(
-          text: 'You have earned 1 coin for logging into Business Bosses today',
-          color: Colors.black.withOpacity(.8),
-        ),
-        actions: <Widget>[
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            child: const TextWidget(
-              text: 'OK',
-            ),
-          )
-        ],
-      ),
-    );
-  }
+  // /// Show daily coin dialog
+  // void showCoinDialog() {
+  //   showDialog(
+  //     context: context,
+  //     builder: (BuildContext context) => AlertDialog(
+  //       title: const TextWidget(
+  //         text: 'Congratulations',
+  //         fontWeight: FontWeight.bold,
+  //         size: 20,
+  //       ),
+  //       content: TextWidget(
+  //         text: 'You have earned 1 coin for logging into Business Bosses today',
+  //         color: Colors.black.withOpacity(.8),
+  //       ),
+  //       actions: <Widget>[
+  //         TextButton(
+  //           onPressed: () {
+  //             Navigator.of(context).pop();
+  //           },
+  //           child: const TextWidget(
+  //             text: 'OK',
+  //           ),
+  //         )
+  //       ],
+  //     ),
+  //   );
+  // }
 }

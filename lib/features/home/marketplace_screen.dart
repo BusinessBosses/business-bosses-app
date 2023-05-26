@@ -11,8 +11,11 @@ import '../../services/api_service.dart';
 import '../../utils/constants/constants.dart';
 import '../../utils/size_config.dart';
 import '../../utils/theme/theme.dart';
+import '../marketplace/controllers/market_controller.dart';
+import '../marketplace/models/market_model.dart';
 import '../marketplace/presentation/market_members.dart';
 import '../marketplace/presentation/sell_screen.dart';
+import '../marketplace/widgets/marketplace_item.dart';
 import '../profile/controller/profile_controller.dart';
 
 /// Buying and Selling screen
@@ -26,6 +29,7 @@ class MarketplaceScreen extends StatefulWidget {
 
 class _MarketplaceScreenState extends State<MarketplaceScreen> {
   final ProfileController _profileController = Get.find();
+  final MarketController _marketController = Get.find();
   String? _selectedCategory;
   String? _selectedLocation;
   final bool _isSearching = false;
@@ -47,7 +51,6 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
       _users.add(user);
     }
     bool isJoined = _users.any((UserModel user) => user.uid == userId);
-
     setState(() {
       if (isJoined) {
         _isJoined = true;
@@ -493,13 +496,13 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                                           ),
                                                         ),
                                                         RichText(
-                                                          text: const TextSpan(
+                                                          text: TextSpan(
                                                             children: <InlineSpan>[
                                                               TextSpan(
                                                                 text:
-                                                                    'Listings: (0)',
+                                                                    'Listings: ${_marketController.markets.length}',
                                                                 style:
-                                                                    TextStyle(
+                                                                    const TextStyle(
                                                                   fontSize: 11,
                                                                 ),
                                                               ),
@@ -544,119 +547,6 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                         const SizedBox(
                                           height: 5,
                                         ),
-                                        // Padding(
-                                        //   padding: const EdgeInsets.only(
-                                        //     left: 20.0,
-                                        //     right: 5,
-                                        //   ),
-                                        //   child: StreamBuilder<Event>(
-                                        //     stream: FirebaseDatabase.instance
-                                        //         .reference()
-                                        //         .child(
-                                        //             "/settings/BossUp/companyName")
-                                        //         .onValue,
-                                        //     builder: (BuildContext context,
-                                        //         AsyncSnapshot snapshot) {
-                                        //       if (snapshot.hasData &&
-                                        //           snapshot.data.snapshot
-                                        //                   .value !=
-                                        //               null) {
-                                        //         var data = snapshot
-                                        //             .data.snapshot.value;
-                                        //         return GestureDetector(
-                                        //           onTap: () {
-                                        //             Navigator.push(
-                                        //               context,
-                                        //               MaterialPageRoute(
-                                        //                   builder: (BuildContext
-                                        //                           context) =>
-                                        //                       const Bossuppartner()),
-                                        //             );
-                                        //           },
-                                        //           child: Padding(
-                                        //             padding:
-                                        //                 const EdgeInsets.only(
-                                        //                     right: 15, top: 5),
-                                        //             child: Container(
-                                        //               height: 40,
-                                        //               decoration: BoxDecoration(
-                                        //                 color: const Color(
-                                        //                     0xFFF4F4F4),
-                                        //                 borderRadius:
-                                        //                     BorderRadius
-                                        //                         .circular(10),
-                                        //                 boxShadow: [
-                                        //                   BoxShadow(
-                                        //                     color: Colors.grey
-                                        //                         .withOpacity(
-                                        //                             0.3),
-                                        //                     spreadRadius: 20,
-                                        //                     blurRadius: 500,
-                                        //                     offset:
-                                        //                         const Offset(
-                                        //                             0, 3),
-                                        //                   ),
-                                        //                 ],
-                                        //               ),
-                                        //               child: Row(
-                                        //                 children: [
-                                        //                   Padding(
-                                        //                     padding:
-                                        //                         const EdgeInsets
-                                        //                             .only(
-                                        //                       left: 10,
-                                        //                     ),
-                                        //                     child: Container(
-                                        //                       height: 25,
-                                        //                       width: 100,
-                                        //                       decoration:
-                                        //                           BoxDecoration(
-                                        //                         color: const Color(
-                                        //                             0xFFEAEAEA),
-                                        //                         borderRadius:
-                                        //                             BorderRadius
-                                        //                                 .circular(
-                                        //                                     20),
-                                        //                       ),
-                                        //                       child:
-                                        //                           const Center(
-                                        //                         child: Padding(
-                                        //                           padding:
-                                        //                               EdgeInsets
-                                        //                                   .all(
-                                        //                                       2),
-                                        //                           child: Text(
-                                        //                               "Boss Up by"),
-                                        //                         ),
-                                        //                       ),
-                                        //                     ),
-                                        //                   ),
-                                        //                   const SizedBox(
-                                        //                       width: 10),
-                                        //                   Text(
-                                        //                     data.toString(),
-                                        //                     style:
-                                        //                         const TextStyle(
-                                        //                       fontSize: 15,
-                                        //                       fontWeight:
-                                        //                           FontWeight
-                                        //                               .bold,
-                                        //                       decoration:
-                                        //                           TextDecoration
-                                        //                               .underline,
-                                        //                     ),
-                                        //                   ),
-                                        //                 ],
-                                        //               ),
-                                        //             ),
-                                        //           ),
-                                        //         );
-                                        //       } else {
-                                        //         return Container();
-                                        //       }
-                                        //     },
-                                        //   ),
-                                        // ),
                                       ],
                                     )
                                   ],
@@ -670,7 +560,20 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                   )
                 ];
               },
-              body: Container(),
+              body: Padding(
+                padding: const EdgeInsets.only(bottom: 100, top: 20),
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: _marketController.markets.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    final MarketModel market = _marketController.markets[index];
+
+                    return MarketTile(
+                      post: market,
+                    );
+                  },
+                ),
+              ),
             ),
     );
   }
@@ -680,18 +583,14 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
       onTap: () async {
         final SharedPreferences prefs = await SharedPreferences.getInstance();
         final String? userId = prefs.getString(Constants.USER_ID);
+        await ApiService.post(path: 'members', body: <String, dynamic>{
+          'type': 'marketplace',
+        });
         setState(() {
           if (_isJoined) {
             _users.removeWhere((UserModel user) => user.uid == userId);
           } else {
-            _users.add(UserModel(
-                username: 'wadaskid',
-                email: 'wadaskid@gmail.com',
-                uid: 'ea668a54-5391-4e0e-85e1-119927f6e8b0',
-                bio: 'Testing bio',
-                companyName: 'Files Ng',
-                name: 'Abdullahi Wada',
-                coinscount: 208));
+            _users.add(_profileController.myProfile);
           }
           _isJoined = !_isJoined;
         });

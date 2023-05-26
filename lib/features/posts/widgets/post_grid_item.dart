@@ -2,12 +2,12 @@ import 'package:business_bosses_v2/features/posts/models/post_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 
-import '../../../../action/action.dart';
-import '../../../../common/models/my_response.dart';
-import '../../../../common/widgets/network_image_with_placeholder.dart';
-import '../../../../common/widgets/popup/my_popup_menu_button.dart';
-import '../../../../functions/my_native_functions.dart';
-import '../../../../utils/theme/theme.dart';
+import '../../../action/action.dart';
+import '../../../common/models/my_response.dart';
+import '../../../common/widgets/network_image_with_placeholder.dart';
+import '../../../common/widgets/popup/my_popup_menu_button.dart';
+import '../../../functions/my_native_functions.dart';
+import '../../../utils/theme/theme.dart';
 import 'images_viewer_screen.dart';
 
 class PostGridItem extends StatelessWidget {
@@ -27,7 +27,9 @@ class PostGridItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {},
+      onTap: () {
+        onTap!();
+      },
       child: Container(
         key: key,
         margin: const EdgeInsets.all(7.0),

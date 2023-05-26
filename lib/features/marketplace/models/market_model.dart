@@ -1,7 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
-import 'package:business_bosses_v2/common/models/comment_model.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 
 class MarketModel {
@@ -10,11 +9,8 @@ class MarketModel {
   String location;
   String description;
   String userId;
-  List<String>? images;
-  int price;
-  List<String>? likes;
-  List<String>? coins;
-  List<CommentModel>? comments;
+  List<dynamic>? images;
+  String price;
   UserModel user;
   bool promote;
   MarketModel({
@@ -25,9 +21,6 @@ class MarketModel {
     required this.description,
     required this.location,
     this.images,
-    this.likes,
-    this.coins,
-    this.comments,
     required this.user,
     this.promote = false,
   });
@@ -39,10 +32,7 @@ class MarketModel {
     String? description,
     String? userId,
     List<String>? images,
-    int? price,
-    List<String>? likes,
-    List<String>? coins,
-    List<CommentModel>? comments,
+    String? price,
     UserModel? user,
     bool? promote,
   }) {
@@ -50,9 +40,6 @@ class MarketModel {
       description: description ?? this.description,
       location: location ?? this.location,
       images: images ?? this.images,
-      likes: likes ?? this.likes,
-      coins: coins ?? this.coins,
-      comments: comments ?? this.comments,
       user: user ?? this.user,
       category: category ?? this.category,
       marketId: marketId ?? this.marketId,
@@ -67,9 +54,6 @@ class MarketModel {
       'description': description,
       'location': location,
       'images': images,
-      'likes': likes,
-      'coins': coins,
-      'comments': comments?.map((CommentModel x) => x.toMap()).toList(),
       'user': user.toMap(),
       'category': category,
       'marketId': marketId,
@@ -83,20 +67,13 @@ class MarketModel {
     return MarketModel(
       description: map['description'] as String,
       images: map['images'] != null
-          ? List<String>.from((map['images'] as List<String>))
+          ? List<dynamic>.from((map['images'] as List<dynamic>))
           : null,
-      likes: List<String>.from((map['likes'] as List<String>)),
-      coins: List<String>.from((map['coins'] as List<String>)),
-      comments: List<CommentModel>.from(
-        (map['comments'] as List<int>).map<CommentModel>(
-          (int x) => CommentModel.fromMap(x as Map<String, dynamic>),
-        ),
-      ),
       user: UserModel.fromMap(map['user'] as Map<String, dynamic>),
       category: map['category'] as String,
       location: map['location'] as String,
       marketId: map['marketId'] as String,
-      price: map['price'] as int,
+      price: map['price'] as String,
       userId: map['userId'] as String,
       promote: map['promote'] as bool,
     );
@@ -109,6 +86,6 @@ class MarketModel {
 
   @override
   String toString() {
-    return 'MarketModel(description: $description, location: $location, images: $images, likes: $likes, coins: $coins, comments: $comments, user: $user, category: $category, marketId: $marketId, price: $price, userId: $userId, promote: $promote)';
+    return 'MarketModel(description: $description, location: $location, images: $images, user: $user, category: $category, marketId: $marketId, price: $price, userId: $userId, promote: $promote)';
   }
 }

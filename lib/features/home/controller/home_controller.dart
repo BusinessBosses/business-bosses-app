@@ -104,7 +104,7 @@ class HomeController extends GetxController {
     update();
     final ApiResponseModel response = await HomeRepository.fetchData();
     if (response.success) {
-      _postsController.processPostsToState(response.data['posts']['rows']);
+      _postsController.processPostsAndForumsData(response.data['posts']);
       _profileController.processDataToState(response.data['user']);
       _chatController.processDataToState(
           response.data['chats'], _profileController.myProfile.uid);

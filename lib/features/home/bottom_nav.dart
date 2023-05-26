@@ -8,6 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import '../../utils/theme/theme.dart';
+import '../marketplace/controllers/market_controller.dart';
 import '../posts/presentation/create_post_screen.dart';
 import '../profile/presentation/myprofilescreen.dart';
 import 'all_communities_screen.dart';
@@ -28,6 +29,7 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
   final ProfileController _profileController = Get.put(ProfileController());
   final ChatController _chatController = Get.put(ChatController());
   final HomeController _homeController = Get.put(HomeController());
+  final MarketController _marketController = Get.put(MarketController());
   int _activeIndex = 0;
   int currentTimestamp = DateTime.now().millisecondsSinceEpoch;
   // final GetStorage sandBox = GetStorage();

@@ -1,7 +1,6 @@
+import 'package:business_bosses_v2/features/marketplace/presentation/boost_market_screen.dart';
 import 'package:business_bosses_v2/features/posts/controllers/posts_controller.dart';
 import 'package:business_bosses_v2/features/posts/models/post_model.dart';
-import 'package:business_bosses_v2/features/posts/presentation/widgets/post_images.dart';
-import 'package:business_bosses_v2/features/posts/presentation/widgets/post_like_comment.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
@@ -20,20 +19,17 @@ import '../../../../navigation/routes.dart';
 import '../../../../utils/theme/theme.dart';
 import '../../posts/presentation/boost_post_screen.dart';
 import '../../posts/presentation/create_post_screen.dart';
+import '../../posts/widgets/post_images.dart';
+import '../../posts/widgets/post_like_comment.dart';
 import '../models/market_model.dart';
 
 /// import 'rep';
 class MarketTile extends StatefulWidget {
   final MarketModel post;
-  final PostsController controller;
   final Function(int)? onPageChange;
 
   ///
-  const MarketTile(
-      {Key? key,
-      required this.post,
-      required this.controller,
-      this.onPageChange})
+  const MarketTile({Key? key, required this.post, this.onPageChange})
       : super(key: key);
 
   @override
@@ -157,14 +153,6 @@ class _MarketTileState extends State<MarketTile> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        // widget.post.isRanked
-                        //     ? Container()
-                        //     : Container(
-                        //         width: leadingWidth(widget.post),
-                        //         height: double.infinity,
-                        //         alignment: Alignment.center,
-                        //         child: const RankingBadge(),
-                        //       ),
                         const SizedBox(
                           width: 10,
                         ),
@@ -185,21 +173,17 @@ class _MarketTileState extends State<MarketTile> {
                                     ),
                                     onSelected: (String val) {
                                       if (val == 'Edit') {
-                                        Get.to(() => CreatePostScreen(
-                                              postId: widget.post.marketId,
-                                              post: widget.post.description,
-                                            ));
                                       } else if (val == 'Delete') {
                                         showDialog(
                                           context: context,
                                           builder: (BuildContext context) =>
                                               AlertDialog(
                                             title: const Text(
-                                              'Delete Post',
+                                              'Delete Listing',
                                               style: bodyText1,
                                             ),
                                             content: const Text(
-                                                'Are you sure to delete this post?'),
+                                                'Are you sure to delete this listing?'),
                                             actions: <Widget>[
                                               TextButton(
                                                 onPressed: () => Get.back(),
@@ -209,7 +193,7 @@ class _MarketTileState extends State<MarketTile> {
                                                 onPressed: () {
                                                   ApiService.delete(
                                                       path:
-                                                          'post/delete-post/${widget.post.marketId}');
+                                                          'markets/${widget.post.marketId}');
                                                   setState(() {
                                                     hide = true;
                                                   });
@@ -221,11 +205,10 @@ class _MarketTileState extends State<MarketTile> {
                                           ),
                                         );
                                       } else if (val == 'Boost') {
-                                        Get.to(() => BoostPost(
-                                              postId: widget.post.marketId,
-                                              postTitle:
-                                                  widget.post.description,
-                                            ));
+                                        Get.to(
+                                          () => BoostMarket(
+                                              postId: widget.post.marketId),
+                                        );
                                       }
                                     },
                                   )
@@ -314,6 +297,49 @@ class _MarketTileState extends State<MarketTile> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Text(
+                                widget.post.price.toString(),
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.w800,
+                                ),
+                              ),
+                              Row(
+                                children: [
+                                  const Icon(
+                                    Icons.star,
+                                    color: Color.fromRGBO(255, 202, 40, 1),
+                                    size: 16,
+                                  ),
+                                  const Text(
+                                    '3.5',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    width: 2,
+                                  ),
+                                  TextButton(
+                                    onPressed: () {},
+                                    child: const Text(
+                                      'See seller reviews',
+                                      style: TextStyle(
+                                        fontSize: 11,
+                                        fontWeight: FontWeight.bold,
+                                        decoration: TextDecoration.underline,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 5,
+                          ),
                           DetectableText(
                             text: widget.post.description,
                             detectionRegExp: detectionRegExp(hashtag: false)!,
@@ -331,91 +357,62 @@ class _MarketTileState extends State<MarketTile> {
                             onTap: (_) {},
                           ),
                           const SizedBox(height: 16),
+                          Row(
+                            children: [
+                              const Icon(
+                                Icons.location_pin,
+                                size: 13,
+                              ),
+                              const SizedBox(
+                                width: 3,
+                              ),
+                              Text(
+                                widget.post.location,
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 10,
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 15,
+                              ),
+                              const Icon(
+                                Icons.category,
+                                size: 13,
+                              ),
+                              const SizedBox(
+                                width: 3,
+                              ),
+                              Text(
+                                widget.post.category,
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 10,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 16),
                         ],
                       ),
-                      if (widget.post.images?.isNotEmpty ?? false)
-                        PostImages(
-                          post: PostModel.fromMap(widget.post.toMap()),
-                        ),
+                      widget.post.images?.isNotEmpty == true
+                          ? const SizedBox()
+                          : PostImages(post: widget.post),
                     ],
                   ),
                 ),
-                Row(
+                const Row(
                   children: [
-                    TextButton.icon(
-                      onPressed: () async {
-                        widget.controller.postLike(
-                            profileController.myProfile.uid,
-                            widget.post.marketId);
-                      },
-                      icon: widget.post.likes
-                                  ?.contains(profileController.myProfile.uid) ==
-                              true
-                          ? SvgPicture.asset('assets/svgs/likefilled.svg')
-                          : SvgPicture.asset('assets/svgs/like.svg'),
-                      label: Text(
-                        '${widget.post.likes?.length ?? 0}',
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              fontWeight: FontWeight.w700,
-                              color: textColor.withOpacity(0.8),
-                            ),
-                      ),
-                    ),
-                    TextButton.icon(
-                      onPressed: () {
-                        showModalBottomSheet(
-                          context: context,
-                          builder: (BuildContext context) =>
-                              PostLikeCommentItem(
-                            post: PostModel.fromMap(widget.post.toMap()),
-                            onComment: (CommentModel newComment) async {},
-                          ),
-                        );
-                      },
-                      icon: SvgPicture.asset('assets/svgs/comment.svg'),
-                      label: Text(
-                        '${widget.post.comments?.length ?? 0}',
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              fontWeight: FontWeight.w700,
-                              color: textColor.withOpacity(0.8),
-                            ),
-                      ),
-                    ),
-                    widget.post.user.uid != profileController.myProfile.uid
-                        ? TextButton.icon(
-                            onPressed: () async {
-                              widget.controller.postCoin(
-                                  profileController.myProfile.uid,
-                                  widget.post.marketId,
-                                  profileController);
-                            },
-                            icon: widget.post.coins?.contains(
-                                        profileController.myProfile.uid) ==
-                                    true
-                                ? SvgPicture.asset('assets/svgs/coin.svg')
-                                : SvgPicture.asset('assets/svgs/coin.svg'),
-                            label: Text(
-                              '${widget.post.coins?.length ?? 0}',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium
-                                  ?.copyWith(
-                                    fontWeight: FontWeight.w700,
-                                    color: textColor.withOpacity(0.8),
-                                  ),
-                            ),
-                          )
-                        : const SizedBox(),
-                    const SizedBox(width: 8.0),
-                    GestureDetector(
-                      onTap: () => _sharePost(),
-                      child: SvgPicture.asset(
-                        'assets/svgs/share.svg',
-                        height: 18.0,
-                        width: 18.0,
-                      ),
-                    ),
-                    const Spacer(),
+                    // const SizedBox(width: 8.0),
+                    // GestureDetector(
+                    //   onTap: () => _sharePost(),
+                    //   child: SvgPicture.asset(
+                    //     'assets/svgs/share.svg',
+                    //     height: 18.0,
+                    //     width: 18.0,
+                    //   ),
+                    // ),
+                    // const Spacer(),
                     // Padding(
                     //   padding: const EdgeInsets.only(right: 15),
                     //   child: Text(

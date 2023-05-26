@@ -1,8 +1,7 @@
-
 import 'package:business_bosses_v2/features/posts/controllers/posts_controller.dart';
 import 'package:business_bosses_v2/features/posts/models/post_model.dart';
-import 'package:business_bosses_v2/features/posts/presentation/widgets/post_images.dart';
-import 'package:business_bosses_v2/features/posts/presentation/widgets/post_like_comment.dart';
+import 'package:business_bosses_v2/features/posts/widgets/post_images.dart';
+import 'package:business_bosses_v2/features/posts/widgets/post_like_comment.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
@@ -11,17 +10,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
-import '../../../../action/action.dart';
-import '../../../../common/models/comment_model.dart';
-import '../../../../common/widgets/popup/my_popup_menu_button.dart';
-import '../../../../common/widgets/ranking_badge.dart';
-import '../../../../common/widgets/text_widget.dart';
-import '../../../../common/widgets/user_avatar_with_badge.dart';
-import '../../../../navigation/routes.dart';
-import '../../../../utils/theme/theme.dart';
-import '../../../../utils/time_format.dart';
-import '../boost_post_screen.dart';
-import '../create_post_screen.dart';
+import '../../../action/action.dart';
+import '../../../common/models/comment_model.dart';
+import '../../../common/widgets/popup/my_popup_menu_button.dart';
+import '../../../common/widgets/ranking_badge.dart';
+import '../../../common/widgets/text_widget.dart';
+import '../../../common/widgets/user_avatar_with_badge.dart';
+import '../../../navigation/routes.dart';
+import '../../../utils/theme/theme.dart';
+import '../../../utils/time_format.dart';
+import '../presentation/boost_post_screen.dart';
+import '../presentation/create_post_screen.dart';
 
 // import 'rep';
 class PostTile extends StatefulWidget {
@@ -148,7 +147,7 @@ class _PostTileState extends State<PostTile> {
                       }
                     },
                     child: Text(
-                      '${widget.post.user?.name}',
+                      widget.post.user!.name ?? widget.post.user!.username,
                       style: Theme.of(context).textTheme.bodyLarge,
                     ),
                   ),
@@ -346,7 +345,8 @@ class _PostTileState extends State<PostTile> {
                       onPressed: () async {
                         widget.controller.postLike(
                             profileController.myProfile.uid,
-                            widget.post.postId);
+                            widget.post.postId,
+                            'post');
                       },
                       icon: widget.post.likes
                                   ?.contains(profileController.myProfile.uid) ==
@@ -385,9 +385,11 @@ class _PostTileState extends State<PostTile> {
                         ? TextButton.icon(
                             onPressed: () async {
                               widget.controller.postCoin(
-                                  profileController.myProfile.uid,
-                                  widget.post.postId,
-                                  profileController);
+                                profileController.myProfile.uid,
+                                widget.post.postId,
+                                profileController,
+                                'post',
+                              );
                             },
                             icon: widget.post.coins?.contains(
                                         profileController.myProfile.uid) ==

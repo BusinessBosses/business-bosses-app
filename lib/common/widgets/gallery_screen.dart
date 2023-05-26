@@ -42,7 +42,7 @@ class _GalleryPhotosScreenState extends State<GalleryPhotosScreen> {
     super.didChangeDependencies();
     if (!_isInit) {
       _checkPermission();
-      _selectedAssetEntities = widget.selectedMyAssetEntities ?? [];
+      _selectedAssetEntities = widget.selectedMyAssetEntities;
       if (widget.galleryType == GalleryType.images) {
         _selectedTabIndex = 0;
         _getGalleryData(RequestType.image);
@@ -425,7 +425,7 @@ class _GalleryPhotosScreenState extends State<GalleryPhotosScreen> {
         i++) {
       debugPrint('FOR LOOP');
       Uint8List? thumbnail = await _asVideos[i]
-          ?.thumbnailDataWithSize(const ThumbnailSize.square(100), quality: 50);
+          .thumbnailDataWithSize(const ThumbnailSize.square(100), quality: 50);
       AssetEntity assetEntity = _asVideos[i];
 
       newVideos.add(MyAssetEntity(
@@ -596,9 +596,9 @@ class GallerySafety extends StatelessWidget {
 
 enum GalleryType { videos, images, all }
 
-Future<Future<File?>?> toFile(MyAssetEntity myAssetEntity) async {
+Future<File?> toFile(MyAssetEntity myAssetEntity) async {
   AssetEntity? ae = myAssetEntity.assetEntity;
 
-  Future<File?>? file = ae?.file;
+  Future<File?>? file = ae.file;
   return file;
 }
