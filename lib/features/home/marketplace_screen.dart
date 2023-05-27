@@ -61,7 +61,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
 
   @override
   void initState() {
-    _loadNextConnections();
+    // _loadNextConnections();
     super.initState();
   }
 
