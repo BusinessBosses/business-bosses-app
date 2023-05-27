@@ -20,11 +20,13 @@ class CustomTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return SizedBox(
       child: Wrap(children: [
         GestureDetector(
           onTap: onTap, // Added onTap property to GestureDetector
           child: Container(
+
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(20),
@@ -77,8 +79,8 @@ class CustomTile extends StatelessWidget {
               ),
             ),
           ),
-        ),
-      ]),
+        ]),
+      ),
     );
   }
 }

@@ -1,0 +1,18 @@
+import 'package:business_bosses_v2/common/models/api_response_model.dart';
+import 'package:business_bosses_v2/services/api_service.dart';
+
+class ForumRepository {
+  static Future<ApiResponseModel> getForums(int page, String industryId) async {
+    final ApiResponseModel response = await ApiService.get(
+        path: 'forum/get-industry-forums/$industryId?size=50&page=$page');
+    return response;
+  }
+
+  /// CREATE POST REPOSITORY
+  static Future<ApiResponseModel> createForum(Map<String, dynamic> body) async {
+    final ApiResponseModel response =
+        await ApiService.post(path: 'forum/create', body: body);
+
+    return response;
+  }
+}

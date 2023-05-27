@@ -6,6 +6,8 @@ import 'package:business_bosses_v2/features/authentication/presentation/register
 import 'package:business_bosses_v2/features/chat/chat_room_screen.dart';
 import 'package:business_bosses_v2/features/chat/chat_screen.dart';
 import 'package:business_bosses_v2/features/connects/presentation/all_connections_screen.dart';
+import 'package:business_bosses_v2/features/forum/controller/create_forum_controller.dart';
+import 'package:business_bosses_v2/features/forum/controller/forum_controller.dart';
 import 'package:business_bosses_v2/features/forum/presentation/all_forum_screen.dart';
 import 'package:business_bosses_v2/features/forum/presentation/create_forum_screen.dart';
 import 'package:business_bosses_v2/features/moreinfoscreens/bossuppartner.dart';
@@ -107,9 +109,9 @@ class Nav {
       page: () => AllConnectionsScreen(),
     ),
     GetPage(
-      name: Routes.allforumscreen,
-      page: () => const AllForumScreen(),
-    ),
+        name: Routes.allforumscreen,
+        page: () => const AllForumScreen(),
+        binding: BindingsBuilder.put(() => ForumController())),
     GetPage(
       name: Routes.changePassword,
       page: () => const ChangePasswordScreen(),
@@ -121,6 +123,7 @@ class Nav {
     GetPage(
       name: Routes.createForum,
       page: () => const CreateForumScreen(),
+      binding: BindingsBuilder.put(() => CreateForumController()),
     ),
     GetPage(
       name: Routes.postDetails,

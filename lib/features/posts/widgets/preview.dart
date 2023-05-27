@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 
 class Preview extends StatelessWidget {
   const Preview({Key? key, required this.controller}) : super(key: key);
-  final CreatePostController controller;
+  final dynamic controller;
   @override
   Widget build(BuildContext context) {
     return Padding(
