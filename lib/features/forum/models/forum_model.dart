@@ -13,7 +13,7 @@ class ForumModel {
   final String? title;
   final List<String>? images;
   final int? timestamp;
-  final List<String>? likes;
+  late final List<String>? likes;
   final List<String>? coins;
   final List<CommentModel>? comments;
   final UserModel? user;

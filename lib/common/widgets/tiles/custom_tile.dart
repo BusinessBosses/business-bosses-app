@@ -1,19 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
-
 import 'package:flutter/material.dart';
 
 /// Custom Tile For Forums Categories GridView
 class CustomTile extends StatelessWidget {
-  /// What happens when it is tapped
-
   final Function() onTap;
-
   final String label;
   final String photo;
   final bool hideIcon;
   final bool showBorder;
-
-  /// Custom tile constructor
 
   const CustomTile({
     Key? key,
@@ -26,13 +20,13 @@ class CustomTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        onTap();
-      },
-      child: SizedBox(
-        child: Wrap(children: [
-          Container(
+
+    return SizedBox(
+      child: Wrap(children: [
+        GestureDetector(
+          onTap: onTap, // Added onTap property to GestureDetector
+          child: Container(
+
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(20),

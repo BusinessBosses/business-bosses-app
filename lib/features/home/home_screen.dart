@@ -84,8 +84,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   : SingleChildScrollView(
                       child: Column(
                         children: <Widget>[
-                          BossOfWeekProfileTile(_profileController.myProfile,
-                              myProfile: _profileController.myProfile),
+                          BossOfWeekProfileTile(_profileController.myProfile),
                           ListView.builder(
                             shrinkWrap: true,
                             itemCount: controller.mixedPosts.length,
@@ -119,7 +118,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               }
                             },
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 100,
                           )
                         ],

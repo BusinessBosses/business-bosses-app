@@ -39,7 +39,8 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
     setState(() {
       isLoading = true;
     });
-    final Map<String, dynamic> res = await ProfileController.loadData(publicUser.uid);
+    final Map<String, dynamic> res =
+        await ProfileController.loadData(publicUser.uid);
     final UserModel modelizedUser = UserModel.fromMap(res['user']);
     publicUser = modelizedUser;
     _posts = res['posts'];
@@ -53,17 +54,21 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
       BuildContext context, String type, String publicUserUid) async {}
 
   Future<void> connect(String userId) async {
-    final ApiResponseModel res = await ApiService.post(path: '/connection/connect', body: {
-      'userId': _profileController.myProfile.uid,
-      'connectedId': userId
-    });
+    final ApiResponseModel res = await ApiService.post(
+        path: '/connection/connect',
+        body: {
+          'userId': _profileController.myProfile.uid,
+          'connectedId': userId
+        });
   }
 
   Future<void> disconnect(String userId) async {
-    final ApiResponseModel res = await ApiService.post(path: '/connection/disconnect', body: {
-      'userId': _profileController.myProfile.uid,
-      'connectedId': userId
-    });
+    final ApiResponseModel res = await ApiService.post(
+        path: '/connection/disconnect',
+        body: {
+          'userId': _profileController.myProfile.uid,
+          'connectedId': userId
+        });
   }
 
   void updateReferals(int refs) {

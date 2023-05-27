@@ -4,7 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../../utils/theme/theme.dart';
 
 // ignore: public_member_api_docs
-class SearchBar extends StatelessWidget {
+class Searchbar extends StatelessWidget {
   // ignore: public_member_api_docs
   final String hintText;
   // ignore: public_member_api_docs
@@ -17,7 +17,7 @@ class SearchBar extends StatelessWidget {
   final bool autofocus;
 
   // ignore: public_member_api_docs
-  const SearchBar({
+  const Searchbar({
     Key? key,
     this.hintText = 'Search',
     this.onChange,
