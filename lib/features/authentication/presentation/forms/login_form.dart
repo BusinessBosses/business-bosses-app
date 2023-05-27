@@ -154,11 +154,7 @@ class _LoginFormState extends State<LoginForm> {
                   if (user['success'] == false) {
                     Get.snackbar('Error', user['error']);
                   } else {
-                    if (user['data']['hasUpdatedProfile'] == true) {
-                      Get.offAndToNamed(Routes.bottomNavigation);
-                    } else {
-                      Get.offAndToNamed(Routes.updateProfile);
-                    }
+                    Get.offAndToNamed(Routes.bottomNavigation);
                   }
                 }
                 setState(() {

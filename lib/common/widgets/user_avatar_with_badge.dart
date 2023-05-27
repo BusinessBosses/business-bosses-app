@@ -46,12 +46,12 @@ class UserAvatarWithBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print(user!.photoUrl);
     return Stack(
       clipBehavior: Clip.none,
       children: <Widget>[
         NetworkImageWithPlaceHolder(
-          imageUrl: user!.photoUrl ??
-              'https://w7.pngwing.com/pngs/831/88/png-transparent-user-profile-computer-icons-user-interface-mystique-miscellaneous-user-interface-design-smile-thumbnail.png',
+          imageUrl: user!.photoUrl,
           height: height!,
           width: width!,
           radius: radius!,

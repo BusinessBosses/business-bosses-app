@@ -15,6 +15,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 import '../../../common/dialogs/snackbar.dart';
+import '../../profile/controller/profile_controller.dart';
 
 /// CREATE POST SCREEN
 class CreatePostScreen extends StatefulWidget {
@@ -38,6 +39,7 @@ class CreatePostScreen extends StatefulWidget {
 class _CreatePostScreenState extends State<CreatePostScreen> {
   dynamic _overlayEntry;
   final TextEditingController _titleCtrl = TextEditingController();
+  final ProfileController _profileController = Get.find();
 
   void onDetectionFinished() {
     _overlayEntry?.remove();
@@ -196,7 +198,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                               'title': _titleCtrl.text.trim(),
                               'timestamp':
                                   DateTime.now().millisecondsSinceEpoch,
-                            });
+                            }, _profileController);
                           } else {
                             ApiService.put(
                               path: 'post/update-post/${widget.postId}',
