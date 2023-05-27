@@ -6,15 +6,14 @@ import '../../posts/widgets/comment_item.dart';
 class AllComments extends StatelessWidget {
   final List<CommentModel> comments;
 
-  AllComments(this.comments, {Key? key}) : super(key: key);
+  const AllComments(this.comments, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    debugPrint('AllComments.build asdf');
     return ListView.builder(
       padding: const EdgeInsets.all(16.0),
       itemCount: comments.length,
-      itemBuilder: (context, i) {
+      itemBuilder: (BuildContext context, int i) {
         return CommentItem(comments[i]);
         //   Padding(
         //   padding: const EdgeInsets.all(8.0),

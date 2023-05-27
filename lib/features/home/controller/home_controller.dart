@@ -139,7 +139,7 @@ class HomeController extends GetxController {
     });
 
     socket.on('new-message', (data) {
-      print(data);
+      // print(data);
       _chatController.newMessage(data);
     });
 

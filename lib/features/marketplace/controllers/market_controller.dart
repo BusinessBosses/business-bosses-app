@@ -1,11 +1,11 @@
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
-import 'package:business_bosses_v2/utils/constants/constants.dart';
 import 'package:get/get.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 import '../../../common/models/comment_model.dart';
+import '../../../utils/constants/constants.dart';
 import '../models/market_model.dart';
 
 class MarketController extends GetxController {

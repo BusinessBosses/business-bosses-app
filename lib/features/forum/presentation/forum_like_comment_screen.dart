@@ -1,4 +1,3 @@
-import 'package:business_bosses_v2/common/models/comment.dart';
 import 'package:business_bosses_v2/common/models/comment_model.dart';
 import 'package:business_bosses_v2/features/forum/models/all_comments.dart';
 import 'package:business_bosses_v2/features/forum/models/forum_model.dart';
@@ -14,7 +13,7 @@ import '../../../utils/theme/theme.dart';
 import '../models/all_likes.dart';
 
 class ForumLikeCommentScreen extends StatefulWidget {
-  static const routeName = '/forum-like-comment-screen';
+  static const String routeName = '/forum-like-comment-screen';
 
   const ForumLikeCommentScreen({Key? key, this.forum, this.commented})
       : super(key: key);
@@ -28,7 +27,7 @@ class _ForumLikeCommentScreenState extends State<ForumLikeCommentScreen> {
   String? commentBasePath;
   ForumModel? _forum;
 
-  bool _isInit = false;
+  final bool _isInit = false;
 
   List<UserModel> _forumLikedByUser = [];
   List<UserModel> _forumCoinedByUser = [];
@@ -68,7 +67,6 @@ class _ForumLikeCommentScreenState extends State<ForumLikeCommentScreen> {
 
   @override
   Widget build(BuildContext context) {
-    debugPrint('_ForumLikeCommentScreenState.build');
     return GestureDetector(
       onTap: () {
         FocusScopeNode currentFocus = FocusScope.of(context);

@@ -25,8 +25,8 @@ class _GalleryPhotosScreenState extends State<GalleryPhotosScreen> {
   List<AssetEntity> _asImages = [];
   List<AssetEntity> _asVideos = [];
   List<MyAssetEntity> _selectedAssetEntities = [];
-  final _keyVideo = const ValueKey('video');
-  final _keyImage = const ValueKey('Image');
+  final ValueKey<String> _keyVideo = const ValueKey('video');
+  final ValueKey<String> _keyImage = const ValueKey('Image');
   late PermissionState _permissionState;
 
   List<File> files = [];
@@ -115,7 +115,7 @@ class _GalleryPhotosScreenState extends State<GalleryPhotosScreen> {
                         // mainAxisSpacing: 8,
                         childAspectRatio: (1 / 1),
                       ),
-                      itemBuilder: (context, i) {
+                      itemBuilder: (BuildContext context, int i) {
                         return Container(
                           margin: const EdgeInsets.all(1.0),
                           child: Stack(
@@ -156,7 +156,7 @@ class _GalleryPhotosScreenState extends State<GalleryPhotosScreen> {
                         // mainAxisSpacing: 8,
                         childAspectRatio: (1 / 1),
                       ),
-                      itemBuilder: (context, i) {
+                      itemBuilder: (BuildContext context, int i) {
                         return Container(
                           margin: const EdgeInsets.all(1.0),
                           child: Stack(
@@ -187,10 +187,10 @@ class _GalleryPhotosScreenState extends State<GalleryPhotosScreen> {
               right: 0.0,
               child: Center(
                 child: Container(
-                  child: const CircularProgressIndicator(),
                   height: 24.0,
                   width: 24.0,
                   alignment: Alignment.center,
+                  child: const CircularProgressIndicator(),
                 ),
               ),
             ),
@@ -358,9 +358,7 @@ class _GalleryPhotosScreenState extends State<GalleryPhotosScreen> {
           _fetchNextVideos();
         });
       }
-    } catch (e, stack) {
-      debugPrint('stack: $stack : $e');
-    }
+    } catch (e, stack) {}
   }
 
   final List<MyAssetEntity> _myAssetEntitiesImages = [];
@@ -390,7 +388,6 @@ class _GalleryPhotosScreenState extends State<GalleryPhotosScreen> {
       newImages.add(MyAssetEntity(
           assetEntity: assetEntity, thumbnail: thumbnail!, isImage: true));
     }
-    debugPrint('_myAssetEntitiesImages: ${_myAssetEntitiesImages.length}');
     if (mounted) {
       setState(() {
         _isLoadingNextImages = false;
@@ -405,9 +402,6 @@ class _GalleryPhotosScreenState extends State<GalleryPhotosScreen> {
   int _loadedVideos = 0;
 
   void _fetchNextVideos() async {
-    debugPrint(
-        '_asVideos.length: ${_asVideos.length}: myAssets: ${_myAssetEntitiesVideos.length}');
-
     _loadedVideos += 20;
     if (_asVideos.length < _myAssetEntitiesVideos.length ||
         _isLoadingNextVideos) {
@@ -423,7 +417,6 @@ class _GalleryPhotosScreenState extends State<GalleryPhotosScreen> {
     for (int i = _myAssetEntitiesVideos.length;
         i < min(_asVideos.length, _loadedVideos);
         i++) {
-      debugPrint('FOR LOOP');
       Uint8List? thumbnail = await _asVideos[i]
           .thumbnailDataWithSize(const ThumbnailSize.square(100), quality: 50);
       AssetEntity assetEntity = _asVideos[i];
@@ -558,9 +551,9 @@ class GallerySafety extends StatelessWidget {
         children: [
           isLoading
               ? const SizedBox(
-                  child: CircularProgressIndicator(),
                   height: 24.0,
                   width: 24.0,
+                  child: CircularProgressIndicator(),
                 )
               : Column(
                   children: [
@@ -568,7 +561,7 @@ class GallerySafety extends StatelessWidget {
                     const SizedBox(height: 16.0),
                     Text(
                       'There is not $title to select',
-                      style: Theme.of(context).textTheme.bodyText1,
+                      style: Theme.of(context).textTheme.bodyLarge,
                     ),
                     const SizedBox(height: 4.0),
                   ],

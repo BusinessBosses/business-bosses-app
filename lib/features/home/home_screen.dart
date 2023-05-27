@@ -1,4 +1,3 @@
-import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/features/chat/controllers/chat_controller.dart';
 import 'package:business_bosses_v2/features/chat/models/my_message.dart';
 import 'package:business_bosses_v2/features/forum/models/forum_model.dart';
@@ -13,11 +12,7 @@ import 'package:business_bosses_v2/features/profile/widgets/boss_of_the_week_til
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../common/widgets/text_widget.dart';
-import '../../services/api_service.dart';
-import '../../utils/constants/constants.dart';
 import '../../utils/theme/theme.dart';
 
 class HomeScreen extends StatefulWidget {

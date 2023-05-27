@@ -7,4 +7,16 @@ class HomeRepository {
     final ApiResponseModel response = await ApiService.get(path: 'init/');
     return response;
   }
+
+  static Future<ApiResponseModel> fetchIndustries() async {
+    final ApiResponseModel response =
+        await ApiService.get(path: 'industry/get');
+    return response;
+  }
+
+  static Future<ApiResponseModel> searchIndustries(String query) async {
+    final ApiResponseModel response =
+        await ApiService.get(path: 'forum/search/$query?page=0&size=50');
+    return response;
+  }
 }

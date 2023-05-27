@@ -54,11 +54,8 @@ class MyRefers {
   }) {
     List<String> refsUids = [];
     for (MyRefers ref in referralsList) {
-      debugPrint(
-          'MyRefers.uniqueUserUidList: ${ref.referTo != null} || ${ref.referTo.length}');
       if (ref.referTo != null || ref.referTo.isNotEmpty) {
         for (String t in ref.referTo) {
-          debugPrint('MyRefers.uniqueUserUidList: ${refsUids.contains(t)}');
           if (!refsUids.contains(t)) {
             refsUids.add(t);
           }
