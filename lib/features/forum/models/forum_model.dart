@@ -83,9 +83,7 @@ class ForumModel {
       description:
           map['description'] != null ? map['description'] as String : null,
       title: map['title'] != null ? map['title'] as String : null,
-      images: map['images'] != null
-          ? List<String>.from((map['images'] as List<String>))
-          : null,
+      images: map['images'] != null ? List<String>.from((map['images'])) : null,
       timestamp: map['timestamp'] != null
           ? int.parse(map['timestamp'].toString())
           : null,

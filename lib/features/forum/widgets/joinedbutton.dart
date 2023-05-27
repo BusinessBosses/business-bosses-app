@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
-Widget JoinedButton() {
+Widget JoinedButton(bool joined, VoidCallback onTap) {
   return GestureDetector(
-    onTap: () {},
+    onTap: () {
+      onTap();
+    },
     child: Container(
       padding: const EdgeInsets.symmetric(horizontal: 12.0),
       alignment: Alignment.center,
@@ -12,10 +14,7 @@ Widget JoinedButton() {
           color: Colors.white,
           borderRadius: BorderRadius.circular(10),
         ),
-        child: const Text(
-            '_industry?.joinedUsers?.contains(_firebase.uid)' == 'true'
-                ? 'Leave'
-                : 'Join',
+        child: Text(joined ? 'Leave' : 'Join',
             style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700)),
       ),
     ),

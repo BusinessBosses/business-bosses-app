@@ -1,4 +1,5 @@
 import 'package:business_bosses_v2/features/forum/models/forum_model.dart';
+import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
 import 'package:detectable_text_field/widgets/detectable_text.dart';
 import 'package:flutter/material.dart';
@@ -26,7 +27,7 @@ class ForumItem extends StatefulWidget {
   // final Function? onUpdateForum;
   // final Function? coinUncoinForum;
 
-  final PostsController? controller;
+  final dynamic controller;
 
   const ForumItem({
     Key? key,
@@ -99,7 +100,7 @@ class _ForumItemState extends State<ForumItem> {
                                       children: [
                                         ListTile(
                                           onTap: () {
-                                            navigateTo(context);
+                                            // Navigator.pop(context);
                                             showDialog(
                                               context: context,
                                               builder: (BuildContext context) =>
@@ -121,7 +122,7 @@ class _ForumItemState extends State<ForumItem> {
                                                 actions: [
                                                   TextButton(
                                                     onPressed: () =>
-                                                        navigateTo(context),
+                                                        Navigator.pop(context),
                                                     child: const TextWidget(
                                                       text: 'Cancel',
                                                       fontWeight:
@@ -132,7 +133,7 @@ class _ForumItemState extends State<ForumItem> {
                                                   ),
                                                   GestureDetector(
                                                     onTap: () {
-                                                      navigateTo(context);
+                                                      Navigator.pop(context);
                                                       // print(_post.user.uid);
                                                       setState(() {
                                                         blocked.add(widget
@@ -179,7 +180,7 @@ class _ForumItemState extends State<ForumItem> {
                                         ),
                                         ListTile(
                                           onTap: () {
-                                            navigateTo(context);
+                                            Navigator.of(context).pop(context);
                                             showDialog(
                                               context: context,
                                               builder: (BuildContext context) =>
@@ -201,7 +202,7 @@ class _ForumItemState extends State<ForumItem> {
                                                 actions: [
                                                   TextButton(
                                                     onPressed: () =>
-                                                        navigateTo(context),
+                                                        Navigator.pop(context),
                                                     child: const TextWidget(
                                                       text: 'Cancel',
                                                       fontWeight:
@@ -212,7 +213,7 @@ class _ForumItemState extends State<ForumItem> {
                                                   ),
                                                   GestureDetector(
                                                     onTap: () {
-                                                      navigateTo(context);
+                                                      Navigator.pop(context);
                                                       showSnackBar(context,
                                                           message:
                                                               'Post has been Reported');
@@ -327,7 +328,7 @@ class _ForumItemState extends State<ForumItem> {
                                 children: [
                                   Center(
                                     child: UserAvatarWithBadge(
-                                      user: widget.forum?.user,
+                                      user: widget.forum.user,
                                       height: 52.0,
                                       width: 52.0,
                                       radius: 50.0,
@@ -375,12 +376,10 @@ class _ForumItemState extends State<ForumItem> {
                               ),
                             )
                           : GestureDetector(
-                              onTap: () => navigateTo(
-                                context,
-                                routeName: PublicProfileScreen.routeName,
-                                arguments:
-                                    Params(arg1: widget.forum!.user!.uid),
-                              ),
+                              onTap: () {
+                                Get.toNamed(Routes.publicProfile,
+                                    arguments: widget.forum.user);
+                              },
                               child: UserAvatarWithBadge(
                                 user: widget.forum?.user,
                                 height: 52.0,
@@ -391,13 +390,14 @@ class _ForumItemState extends State<ForumItem> {
                               ),
                             ),
                       title: GestureDetector(
-                        onTap: () => navigateTo(
-                          context,
-                          routeName: PublicProfileScreen.routeName,
-                          arguments: Params(arg1: widget.forum!.user!.uid),
-                        ),
+                        onTap: () {
+                          Get.toNamed(Routes.publicProfile,
+                              arguments: widget.forum.user);
+                        },
                         child: Text(
-                          widget.forum?.user?.name ?? '',
+                          widget.forum?.user?.username ??
+                              widget.forum.user?.name ??
+                              '',
                           style: Theme.of(context).textTheme.bodyLarge,
                         ),
                       ),
