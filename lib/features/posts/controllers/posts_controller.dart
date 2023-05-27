@@ -11,8 +11,6 @@ import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
-import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:math' as math;
 
 class PostsController extends GetxController {
   late IO.Socket socket;
@@ -62,15 +60,15 @@ class PostsController extends GetxController {
   void joinPostsAndForums() {
     List<Map<String, dynamic>> frms = [];
     List<Map<String, dynamic>> psts = [];
-    for (var i = 0; i < forums.length; i++) {
+    for (int i = 0; i < forums.length; i++) {
       frms.add({'isForum': true, 'data': forums[i]});
     }
-    for (var i = 0; i < posts.length; i++) {
+    for (int i = 0; i < posts.length; i++) {
       psts.add({'isForum': false, 'data': posts[i]});
     }
 
     mixedPosts = [...frms, ...psts]
-      ..sort((a, b) => b['data'].timestamp - a['data'].timestamp);
+      ..sort((Map<String, dynamic> a, Map<String, dynamic> b) => b['data'].timestamp - a['data'].timestamp);
 
     // mixedPosts = Iterable.generate(math.max(posts.length, forums.length))
     //     .expand((i) sync* {

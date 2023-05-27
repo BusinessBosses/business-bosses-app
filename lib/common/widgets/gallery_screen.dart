@@ -25,8 +25,8 @@ class _GalleryPhotosScreenState extends State<GalleryPhotosScreen> {
   List<AssetEntity> _asImages = [];
   List<AssetEntity> _asVideos = [];
   List<MyAssetEntity> _selectedAssetEntities = [];
-  final _keyVideo = const ValueKey('video');
-  final _keyImage = const ValueKey('Image');
+  final ValueKey<String> _keyVideo = const ValueKey('video');
+  final ValueKey<String> _keyImage = const ValueKey('Image');
   late PermissionState _permissionState;
 
   List<File> files = [];
@@ -115,7 +115,7 @@ class _GalleryPhotosScreenState extends State<GalleryPhotosScreen> {
                         // mainAxisSpacing: 8,
                         childAspectRatio: (1 / 1),
                       ),
-                      itemBuilder: (context, i) {
+                      itemBuilder: (BuildContext context, int i) {
                         return Container(
                           margin: const EdgeInsets.all(1.0),
                           child: Stack(
@@ -156,7 +156,7 @@ class _GalleryPhotosScreenState extends State<GalleryPhotosScreen> {
                         // mainAxisSpacing: 8,
                         childAspectRatio: (1 / 1),
                       ),
-                      itemBuilder: (context, i) {
+                      itemBuilder: (BuildContext context, int i) {
                         return Container(
                           margin: const EdgeInsets.all(1.0),
                           child: Stack(
@@ -187,10 +187,10 @@ class _GalleryPhotosScreenState extends State<GalleryPhotosScreen> {
               right: 0.0,
               child: Center(
                 child: Container(
-                  child: const CircularProgressIndicator(),
                   height: 24.0,
                   width: 24.0,
                   alignment: Alignment.center,
+                  child: const CircularProgressIndicator(),
                 ),
               ),
             ),
@@ -558,9 +558,9 @@ class GallerySafety extends StatelessWidget {
         children: [
           isLoading
               ? const SizedBox(
-                  child: CircularProgressIndicator(),
                   height: 24.0,
                   width: 24.0,
+                  child: CircularProgressIndicator(),
                 )
               : Column(
                   children: [
@@ -568,7 +568,7 @@ class GallerySafety extends StatelessWidget {
                     const SizedBox(height: 16.0),
                     Text(
                       'There is not $title to select',
-                      style: Theme.of(context).textTheme.bodyText1,
+                      style: Theme.of(context).textTheme.bodyLarge,
                     ),
                     const SizedBox(height: 4.0),
                   ],

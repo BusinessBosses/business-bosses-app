@@ -3,11 +3,9 @@ import 'package:business_bosses_v2/features/posts/models/post_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
-import '../../../../common/models/api_response_model.dart';
 import '../../../../common/models/user_model.dart';
 import '../../../../common/widgets/safety_model.dart';
 import '../../../../common/widgets/user_avatar_with_badge.dart';
-import '../../../../services/api_service.dart';
 import '../../../../utils/theme/theme.dart';
 
 import 'comment_item.dart';
@@ -28,7 +26,7 @@ class PostLikeCommentItem extends StatefulWidget {
 }
 
 class _PostLikeCommentItemState extends State<PostLikeCommentItem> {
-  bool _isInit = false;
+  final bool _isInit = false;
   bool _isLoadingLikes = true, _isLoadingComments = true;
 
   @override

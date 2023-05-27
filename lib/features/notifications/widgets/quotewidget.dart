@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -52,7 +51,7 @@ Widget QuoteWidget(Quote quote) {
                     Container(
                       alignment: Alignment.bottomRight,
                       child: Text(
-                        quote.by ?? "Brian Tracy",
+                        quote.by ?? 'Brian Tracy',
                         style: bodyText1,
                       ),
                     ),

@@ -1,9 +1,9 @@
+import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/common/models/comment_model.dart';
 import 'package:business_bosses_v2/features/forum/models/forum_model.dart';
 import 'package:business_bosses_v2/features/forum/repository/forum_repository.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
-import 'package:business_bosses_v2/utils/constants/constants.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
@@ -22,12 +22,12 @@ class ForumController extends GetxController {
     error(false);
     update();
 
-    final response =
+    final ApiResponseModel response =
         await ForumRepository.getForums(page.value, Get.arguments.industryId);
     if (response.success) {
       totalForums(int.parse(response.data['count'].toString()));
       page(page.value + 1);
-      for (var i = 0; i < response.data['rows'].length; i++) {
+      for (int i = 0; i < response.data['rows'].length; i++) {
         forums.add(ForumModel.fromMap({
           ...response.data['rows'][i],
           'likes': response.data['rows'][i]['likes']

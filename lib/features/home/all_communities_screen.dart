@@ -1,4 +1,4 @@
-import 'package:business_bosses_v2/features/forum/models/forum_model.dart';
+import 'package:business_bosses_v2/features/forum/widgets/forum_item.dart';
 import 'package:business_bosses_v2/features/home/controller/commumities_controller.dart';
 import 'package:business_bosses_v2/features/home/widgets/industriessearch.dart';
 import 'package:business_bosses_v2/utils/constants/constants.dart';
@@ -9,14 +9,11 @@ import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
-import '../../action/action.dart';
 import '../../common/widgets/safety_model.dart';
 import '../../common/widgets/tiles/custom_tile.dart';
 import '../../navigation/routes.dart';
 import '../../utils/theme/theme.dart';
 import '../../common/widgets/popup/bossup_challenge_popup.dart';
-import '../forum/models/industry.dart';
-import '../forum/presentation/all_forum_screen.dart';
 import '../forum/widgets/joinedbutton.dart';
 import '../search/search_bar.dart';
 
@@ -33,12 +30,13 @@ class AllCommunitiesScreen extends StatefulWidget {
   _AllCommunitiesScreenState createState() => _AllCommunitiesScreenState();
 }
 
-class _AllCommunitiesScreenState extends State<AllCommunitiesScreen> {
+class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
+    with TickerProviderStateMixin {
   bool _isSearching = false;
-  List<ForumModel> _searchTopics = [];
-  List<Industry> _searchIndustries = [];
+
   final CommunitiesController _communitiesController =
       Get.put(CommunitiesController());
+  late final TabController _searchTabController;
 
   List<Widget> get mActions {
     return [
@@ -49,22 +47,29 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen> {
                 'assets/svgs/search.svg',
               ),
         onPressed: () {
-          if (_isSearching) {
-            _isSearching = !_isSearching;
-          }
+          // if (_isSearching) {
+          _isSearching = !_isSearching;
+          // }
           setState(() {});
+          _communitiesController.clearSearch();
         },
       ),
     ];
   }
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _searchTabController = TabController(length: 2, vsync: this);
+  }
+
+  @override
   Widget build(BuildContext context) {
-    bool isSearchingTopic = false;
     return GetBuilder<CommunitiesController>(
-      builder: (controller) {
+      builder: (CommunitiesController controller) {
         return DefaultTabController(
-          length: 3, // number of tabs
+          length: _isSearching ? 2 : 3, // number of tabs
           child: Scaffold(
               backgroundColor: backgroundcolorinterface,
               appBar: AppBar(
@@ -72,7 +77,18 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen> {
                   title: _isSearching
                       ? Searchbar(
                           hintText: 'Search',
-                          onChange: _onChanged,
+                          onChange: (String query) {
+                            if (_searchTabController.index == 0) {
+                              controller.onSearch(
+                                  _searchTabController.index, query);
+                            }
+                          },
+                          onSubmit: (String query) {
+                            if (_searchTabController.index == 1) {
+                              controller.onSearch(
+                                  _searchTabController.index, query);
+                            }
+                          },
                         )
                       : const Text('Boss Up'),
                   actions: mActions,
@@ -91,10 +107,12 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen> {
                                 text: 'Opportunities',
                               ),
                             ])
-                      : const TabBar(
-                          labelStyle: TextStyle(fontWeight: FontWeight.w500),
+                      : TabBar(
+                          controller: _searchTabController,
+                          labelStyle:
+                              const TextStyle(fontWeight: FontWeight.w500),
                           labelColor: Colors.black,
-                          tabs: [
+                          tabs: const [
                               Tab(
                                 text: 'Groups',
                               ),
@@ -614,13 +632,13 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen> {
                         child: controller.loading.value
                             ? SafetyModel(
                                 isLoading: controller.loading.value,
-                                title: "",
+                                title: '',
                               )
                             : controller.error.value
                                 ? SafetyModel(
                                     isLoading: false,
-                                    title: "Something went wrong",
-                                    clickableText: "Reload",
+                                    title: 'Something went wrong',
+                                    clickableText: 'Reload',
                                     onTap: () async {
                                       await controller.fetchIndustries();
                                     },
@@ -630,7 +648,7 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen> {
                                         .getCategoryIndustries(
                                             Constants.LEARNINGID)
                                         .length,
-                                    itemBuilder: (context, index) {
+                                    itemBuilder: (BuildContext context, int index) {
                                       return CustomTile(
                                         label: controller
                                             .getCategoryIndustries(
@@ -649,7 +667,7 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen> {
                                       );
                                     },
                                     gridDelegate:
-                                        SliverGridDelegateWithFixedCrossAxisCount(
+                                        const SliverGridDelegateWithFixedCrossAxisCount(
                                       mainAxisSpacing: 10.0,
                                       crossAxisSpacing: 15.0,
                                       crossAxisCount: 2,
@@ -662,13 +680,13 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen> {
                         child: controller.loading.value
                             ? SafetyModel(
                                 isLoading: controller.loading.value,
-                                title: "",
+                                title: '',
                               )
                             : controller.error.value
                                 ? SafetyModel(
                                     isLoading: false,
-                                    title: "Something went wrong",
-                                    clickableText: "Reload",
+                                    title: 'Something went wrong',
+                                    clickableText: 'Reload',
                                     onTap: () async {
                                       await controller.fetchIndustries();
                                     },
@@ -678,7 +696,7 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen> {
                                         .getCategoryIndustries(
                                             Constants.LEARNINGID)
                                         .length,
-                                    itemBuilder: (context, index) {
+                                    itemBuilder: (BuildContext context, int index) {
                                       return CustomTile(
                                         label: controller
                                             .getCategoryIndustries(Constants
@@ -697,7 +715,7 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen> {
                                       );
                                     },
                                     gridDelegate:
-                                        SliverGridDelegateWithFixedCrossAxisCount(
+                                        const SliverGridDelegateWithFixedCrossAxisCount(
                                       mainAxisSpacing: 10.0,
                                       crossAxisSpacing: 15.0,
                                       crossAxisCount: 2,
@@ -706,22 +724,23 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen> {
                       ),
                     ])
                   : TabBarView(
+                      controller: _searchTabController,
                       children: [
                         Container(
                           color: Theme.of(context).scaffoldBackgroundColor,
                           height: double.infinity,
                           width: double.infinity,
                           child: MySearchIndustries(
-                              searchIndustries: _searchIndustries),
+                              searchIndustries: controller.searchedIndustries),
                         ),
                         Container(
                           color: Theme.of(context).scaffoldBackgroundColor,
                           height: double.infinity,
                           width: double.infinity,
-                          child: _searchTopics.isEmpty
+                          child: controller.searchedForums.isEmpty
                               ? SafetyModel(
                                   mainAxisAlignment: MainAxisAlignment.start,
-                                  isLoading: isSearchingTopic,
+                                  isLoading: controller.loadingSearch.value,
                                   icon: SvgPicture.asset(
                                       'assets/svgs/search.svg',
                                       color: hintColor,
@@ -734,15 +753,19 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen> {
                                   //'Search for specific topic of ${cat.category.toLowerCase()}',
                                 )
                               : ListView.builder(
-                                  key: ValueKey('cat.categoryId'),
+                                  key: const ValueKey('cat.categoryId'),
                                   padding: const EdgeInsets.only(
                                     top: 8.0,
                                     right: 8.0,
                                     left: 8.0,
                                     bottom: 120.0,
                                   ),
-                                  itemCount: _searchTopics.length,
-                                  itemBuilder: (context, i) {
+                                  itemCount: controller.searchedForums.length,
+                                  itemBuilder: (BuildContext context, int i) {
+                                    return ForumItem(
+                                      forum: controller.searchedForums[i],
+                                      controller: controller,
+                                    );
                                     // return ForumItem(
                                     //   _searchTopics[i],
                                     //   key: ValueKey(_searchTopics[i].forumId),
@@ -763,6 +786,13 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen> {
         );
       },
     );
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    _searchTabController.dispose();
+    super.dispose();
   }
 
   void _onChanged(String value) {}

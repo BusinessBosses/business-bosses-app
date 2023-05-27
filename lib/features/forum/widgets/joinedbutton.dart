@@ -15,7 +15,7 @@ Widget JoinedButton(bool joined, VoidCallback onTap) {
           borderRadius: BorderRadius.circular(10),
         ),
         child: Text(joined ? 'Leave' : 'Join',
-            style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700)),
+            style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700)),
       ),
     ),
   );

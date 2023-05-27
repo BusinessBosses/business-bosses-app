@@ -41,6 +41,12 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
   bool _isJoined = false;
 
   Future<void> _loadNextConnections() async {
+/**
+ * @wadaskid there is no proper error handling on this function.... You did not specify if the response is successfull
+ * and also, this file is the presentation layer so you should try putting it this way ... Presentation Layer -> Controller -> Repository... You can check reference on the all_communities_screen.dart
+ * if you have any issues, you can relate with me
+ * 
+ */
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final String? userId = prefs.getString(Constants.USER_ID);
     ApiResponseModel response =
@@ -61,7 +67,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
 
   @override
   void initState() {
-    // _loadNextConnections();
+    _loadNextConnections();
     super.initState();
   }
 
@@ -305,7 +311,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                           ),
                                       onPressed: () {
                                         Get.to(
-                                          () => CreateSellingitemScreen(
+                                          () => const CreateSellingitemScreen(
                                             isUpd: false,
                                           ),
                                         );

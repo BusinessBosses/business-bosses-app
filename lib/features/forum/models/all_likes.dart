@@ -12,7 +12,7 @@ class AllLikes extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListView.builder(
       itemCount: postLikedByUser.length,
-      itemBuilder: (context, i) {
+      itemBuilder: (BuildContext context, int i) {
         return ListTile(
           leading: UserAvatarWithBadge(
             user: postLikedByUser[i],

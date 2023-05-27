@@ -61,7 +61,7 @@ class _MarketMembersScreenState extends State<MarketMembersScreen> {
                   padding: const EdgeInsets.only(bottom: 48.0),
                   controller: _controller,
                   itemCount: widget.users.length,
-                  itemBuilder: (BuildContext context, i) {
+                  itemBuilder: (BuildContext context, int i) {
                     return Column(
                       children: [
                         ListTile(

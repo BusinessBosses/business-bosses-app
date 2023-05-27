@@ -127,7 +127,7 @@ class Nav {
     ),
     GetPage(
       name: Routes.postDetails,
-      page: () => PostDetailsScreen(),
+      page: () => const PostDetailsScreen(),
     ),
   ];
 }

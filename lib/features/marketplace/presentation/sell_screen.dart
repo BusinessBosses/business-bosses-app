@@ -17,14 +17,13 @@ import '../../../common/widgets/network_image_with_placeholder.dart';
 import '../../../common/widgets/text_widget.dart';
 import '../../../services/api_service.dart';
 import '../../../utils/theme/theme.dart';
-import '../../home/bottom_nav.dart';
 import '../../profile/controller/profile_controller.dart';
 import '../controllers/market_controller.dart';
 import '../models/market_model.dart';
 import 'boost_market_screen.dart';
 
 class CreateSellingitemScreen extends StatefulWidget {
-  CreateSellingitemScreen({Key? key, this.market, required this.isUpd})
+  const CreateSellingitemScreen({Key? key, this.market, required this.isUpd})
       : super(key: key);
   // String topicType;
   final MarketModel? market;
@@ -36,7 +35,7 @@ class CreateSellingitemScreen extends StatefulWidget {
 }
 
 class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
-  final _scaffoldKey = GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   final ProfileController _profileController = Get.find();
   final MarketController _marketController = Get.find();
@@ -65,7 +64,7 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
     super.initState();
     _isUpdating = widget.isUpd;
     if (widget.isUpd) {
-      MarketModel _market = MarketModel(
+      MarketModel market = MarketModel(
           marketId: '',
           category: '',
           userId: '',
@@ -266,7 +265,7 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
                     // mainAxisSpacing: 8,
                     childAspectRatio: (1 / 1),
                   ),
-                  itemBuilder: (BuildContext context, i) {
+                  itemBuilder: (BuildContext context, int i) {
                     return Container(
                       margin: const EdgeInsets.all(8.0),
                       child: Stack(
@@ -307,7 +306,7 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
                         : 3,
                     childAspectRatio: (1 / 1),
                   ),
-                  itemBuilder: (BuildContext context, i) {
+                  itemBuilder: (BuildContext context, int i) {
                     return Container(
                       margin: const EdgeInsets.all(8.0),
                       child: Stack(
@@ -610,7 +609,7 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
     // }
   }
 
-  _onImagePicker() async {
+  Future<void> _onImagePicker() async {
     try {
       PermissionState permissionState =
           await PhotoManager.requestPermissionExtend();
@@ -629,12 +628,12 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
         setState(() {
           _myAssetsEntities = data;
           _fileProcessing =
-              List.generate(_myAssetsEntities.length, (index) => false);
+              List.generate(_myAssetsEntities.length, (int index) => false);
         });
       } else if (permissionState == PermissionState.denied) {
-        final PermissionState _ps =
+        final PermissionState ps =
             await PhotoManager.requestPermissionExtend();
-        if (!_ps.isAuth) {
+        if (!ps.isAuth) {
           PhotoManager.openSetting();
         }
       }

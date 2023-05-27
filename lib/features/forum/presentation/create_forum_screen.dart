@@ -9,13 +9,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import '../../../action/action.dart';
 import '../../../common/widgets/buttons/my_outlined_button.dart';
-import '../../../common/widgets/network_image_with_placeholder.dart';
 import '../../../utils/theme/theme.dart';
 import '../../home/bottom_nav.dart';
-import '../models/industry.dart';
 import '../widgets/field_container.dart';
-import '../widgets/optionsdialog.dart';
-import 'all_forum_screen.dart';
 
 // ignore: public_member_api_docs
 class CreateForumScreen extends StatefulWidget {
@@ -30,7 +26,7 @@ class CreateForumScreen extends StatefulWidget {
 }
 
 class _CreateForumScreenState extends State<CreateForumScreen> {
-  final scaffoldKey = GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   // Industry? industry;
   String title = '';
   String description = '';
@@ -60,14 +56,14 @@ class _CreateForumScreenState extends State<CreateForumScreen> {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<CreateForumController>(
-      builder: (controller) {
+      builder: (CreateForumController controller) {
         return GestureDetector(
           onTap: () => unFocusKeyboard(context),
           child: Scaffold(
             key: scaffoldKey,
             appBar: AppBar(
               title: //Text(Provider.of<AppCommunities>(context, listen: false).label(_industry.categoryId, isUpdating: _isUpdating)),
-                  Text('Start a Topic'),
+                  const Text('Start a Topic'),
               automaticallyImplyLeading:
                   false, // Used for removing back buttoon.
               actions: [
@@ -78,7 +74,7 @@ class _CreateForumScreenState extends State<CreateForumScreen> {
                         ? Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) =>
+                              builder: (BuildContext context) =>
                                   const BottomNavScreen(2, true),
                             ),
                           )
@@ -96,7 +92,7 @@ class _CreateForumScreenState extends State<CreateForumScreen> {
                   TextFormField(
                     // controller: _titleController,
                     initialValue: forum.title,
-                    onChanged: (val) {
+                    onChanged: (String val) {
                       title = val;
                     },
                     textInputAction: TextInputAction.next,
@@ -113,7 +109,7 @@ class _CreateForumScreenState extends State<CreateForumScreen> {
                     controller: TextEditingController(text: forum.description),
 
                     detectionRegExp: detectionRegExp(hashtag: false)!,
-                    onDetectionTyped: (text) {},
+                    onDetectionTyped: (String text) {},
                     onDetectionFinished: () {
                       debugPrint('finished');
                     },
@@ -122,7 +118,7 @@ class _CreateForumScreenState extends State<CreateForumScreen> {
                     maxLength: 1000,
                     maxLines: 5,
                     basicStyle: Theme.of(context).textTheme.bodyMedium,
-                    onChanged: (val) {
+                    onChanged: (String val) {
                       description = val;
                     },
 

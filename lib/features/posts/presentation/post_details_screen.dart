@@ -70,7 +70,7 @@ class PostDetailsScreen extends StatelessWidget {
                           height: 10,
                         ),
                         Padding(
-                          padding: EdgeInsets.only(left: 15),
+                          padding: const EdgeInsets.only(left: 15),
                           child: CreatePostUserTile(
                             user: post.user,
                           ),
@@ -111,7 +111,7 @@ class PostDetailsScreen extends StatelessWidget {
                         ),
                         Padding(
                           padding: const EdgeInsets.only(left: 15, right: 15),
-                          child: post.title != null && post.title.isNotEmpty
+                          child: post.title.isNotEmpty
                               ? Linkify(
                                   text: post.title,
                                   style: bodyText1.copyWith(
