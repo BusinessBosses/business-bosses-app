@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
 Widget deleteImage(int index) {
-  bool _isProcessing = false;
+  bool isProcessing = false;
   return Positioned(
     right: 5.0,
     top: 5.0,
     child: GestureDetector(
-      onTap: _isProcessing ? null : () => _removeImage(index),
+      onTap: isProcessing ? null : () => _removeImage(index),
       child: Container(
         height: 30.0,
         width: 30.0,

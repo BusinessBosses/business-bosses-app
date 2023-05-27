@@ -11,8 +11,6 @@ import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
-import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:math' as math;
 
 class PostsController extends GetxController {
   late IO.Socket socket;
@@ -60,13 +58,25 @@ class PostsController extends GetxController {
   }
 
   void joinPostsAndForums() {
-    mixedPosts = Iterable.generate(math.max(posts.length, forums.length))
-        .expand((i) sync* {
-      if (i < posts.length) {
-        yield {'isForum': false, 'data': posts[i]};
-      }
-      if (i < forums.length) yield {'isForum': true, 'data': forums[i]};
-    }).toList();
+    List<Map<String, dynamic>> frms = [];
+    List<Map<String, dynamic>> psts = [];
+    for (int i = 0; i < forums.length; i++) {
+      frms.add({'isForum': true, 'data': forums[i]});
+    }
+    for (int i = 0; i < posts.length; i++) {
+      psts.add({'isForum': false, 'data': posts[i]});
+    }
+
+    mixedPosts = [...frms, ...psts]
+      ..sort((Map<String, dynamic> a, Map<String, dynamic> b) => b['data'].timestamp - a['data'].timestamp);
+
+    // mixedPosts = Iterable.generate(math.max(posts.length, forums.length))
+    //     .expand((i) sync* {
+    //   if (i < posts.length) {
+    //     yield {'isForum': false, 'data': posts[i]};
+    //   }
+    //   if (i < forums.length) yield {'isForum': true, 'data': forums[i]};
+    // }).toList();
     // update();
   }
 
@@ -79,7 +89,6 @@ class PostsController extends GetxController {
 
   /// LIKE AND UNLIKE FUNCTION
   void postLike(String userId, String postId, String type) {
-    print(type);
     if (type == 'post') {
       final int postIndex =
           posts.indexWhere((PostModel element) => element.postId == postId);
@@ -163,17 +172,18 @@ class PostsController extends GetxController {
   }
 
   /// ADD NEW POST TO STATE
-  void addNewPost(Map<String, dynamic> newPost) async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
+  void addNewPost(
+      Map<String, dynamic> newPost, ProfileController profileController) async {
     PostModel modelizedNewPost = PostModel.fromMap({
       ...newPost,
       'coins': <String>[],
       'likes': <String>[],
       'comments': <CommentModel>[],
       'user': {
-        'username': 'testUser1',
-        'email': 'test1@gmail.com',
-        'uid': prefs.getString(Constants.USER_ID),
+        'username': profileController.myProfile.username,
+        'email': profileController.myProfile.email,
+        'uid': profileController.myProfile.uid,
+        'name': profileController.myProfile.name,
       }
     });
 

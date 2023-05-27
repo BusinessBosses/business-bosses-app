@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 
 import '../../../common/widgets/buttons/button.dart';
 
-optionsDialog(BuildContext context, Function() ontap) {
+Future optionsDialog(BuildContext context, Function() ontap) {
   return showDialog(
       context: context,
-      builder: (ctx) {
+      builder: (BuildContext ctx) {
         return AlertDialog(
           title: Text(
             'You can only post once in 12 weeks. Are you sure you want to proceed?',

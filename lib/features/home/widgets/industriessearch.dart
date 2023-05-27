@@ -1,14 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-
-import '../../../action/action.dart';
 import '../../../common/widgets/safety_model.dart';
 import '../../../common/widgets/tiles/custom_tile.dart';
 import '../../../utils/theme/theme.dart';
 import '../../forum/models/industry.dart';
-import '../../forum/presentation/all_forum_screen.dart';
-import '../bottom_nav.dart';
 
 class MySearchIndustries extends StatelessWidget {
   final List<Industry> searchIndustries;
@@ -39,7 +35,7 @@ class MySearchIndustries extends StatelessWidget {
               bottom: 120.0,
             ),
             itemCount: searchIndustries.length,
-            itemBuilder: (context, i) {
+            itemBuilder: (BuildContext context, int i) {
               return CustomTile(
                 label: searchIndustries[i].industry!,
                 photo: searchIndustries[i].photo!,
