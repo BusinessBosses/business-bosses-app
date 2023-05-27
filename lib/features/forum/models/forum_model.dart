@@ -1,33 +1,27 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
+
 import 'package:business_bosses_v2/common/models/comment_model.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 
 class ForumModel {
-  final String? forumId;
-  final String? categoryId;
-  final String? industryId;
-  late final String? description;
-  final bool? isArchived;
-  final String? marketCategory; // new field
-  final String? location;
-  late final String? title;
+  final String forumId;
+  final String industryId;
+  final String? description;
+  final String? title;
   final List<String>? images;
   final int? timestamp;
-  final List<String>? likes;
+  late final List<String>? likes;
   final List<String>? coins;
   final List<CommentModel>? comments;
   final UserModel? user;
   final bool? isRanked;
   ForumModel({
-    this.forumId,
-    this.categoryId,
-    this.industryId,
+    required this.forumId,
+    required this.industryId,
     this.description,
-    this.isArchived,
-    this.marketCategory,
-    this.location,
     this.title,
     this.images,
     this.timestamp,
@@ -40,12 +34,8 @@ class ForumModel {
 
   ForumModel copyWith({
     String? forumId,
-    String? categoryId,
     String? industryId,
     String? description,
-    bool? isArchived,
-    String? marketCategory,
-    String? location,
     String? title,
     List<String>? images,
     int? timestamp,
@@ -57,12 +47,8 @@ class ForumModel {
   }) {
     return ForumModel(
       forumId: forumId ?? this.forumId,
-      categoryId: categoryId ?? this.categoryId,
       industryId: industryId ?? this.industryId,
       description: description ?? this.description,
-      isArchived: isArchived ?? this.isArchived,
-      marketCategory: marketCategory ?? this.marketCategory,
-      location: location ?? this.location,
       title: title ?? this.title,
       images: images ?? this.images,
       timestamp: timestamp ?? this.timestamp,
@@ -77,12 +63,8 @@ class ForumModel {
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'forumId': forumId,
-      'categoryId': categoryId,
       'industryId': industryId,
       'description': description,
-      'isArchived': isArchived,
-      'marketCategory': marketCategory,
-      'location': location,
       'title': title,
       'images': images,
       'timestamp': timestamp,
@@ -97,26 +79,23 @@ class ForumModel {
   factory ForumModel.fromMap(Map<String, dynamic> map) {
     return ForumModel(
       forumId: map['forumId'] as String,
-      categoryId: map['categoryId'] as String,
       industryId: map['industryId'] as String,
-      description: map['description'] as String,
-      isArchived: map['isArchived'] != null ? map['isArchived'] as bool : null,
-      marketCategory: map['marketCategory'] as String,
-      location: map['location'] != null ? map['location'] as String : null,
-      title: map['title'] as String,
-      images: map['images'] != null
-          ? List<String>.from((map['images'] as List<String>))
+      description:
+          map['description'] != null ? map['description'] as String : null,
+      title: map['title'] != null ? map['title'] as String : null,
+      images: map['images'] != null ? List<String>.from((map['images'])) : null,
+      timestamp: map['timestamp'] != null
+          ? int.parse(map['timestamp'].toString())
           : null,
-      timestamp: map['timestamp'] as int,
-      likes: List<String>.from((map['likes'] as List<String>)),
-      coins: List<String>.from((map['coins'] as List<String>)),
-      comments: List<CommentModel>.from(
-        (map['comments'] as List<int>).map<CommentModel>(
-          (int x) => CommentModel.fromMap(x as Map<String, dynamic>),
-        ),
-      ),
-      user: UserModel.fromMap(map['user'] as Map<String, dynamic>),
-      isRanked: map['isRanked'] as bool,
+      likes: map['likes'] != null ? List<String>.from((map['likes'])) : null,
+      coins: map['coins'] != null ? List<String>.from((map['coins'])) : null,
+      comments: List.from(map['comments'])
+          .map((e) => CommentModel.fromMap(e as Map<String, dynamic>))
+          .toList(),
+      user: map['user'] != null
+          ? UserModel.fromMap(map['user'] as Map<String, dynamic>)
+          : null,
+      isRanked: map['isRanked'] == null ? false : true,
     );
   }
 
@@ -127,6 +106,38 @@ class ForumModel {
 
   @override
   String toString() {
-    return 'ForumModel(forumId: $forumId, categoryId: $categoryId, industryId: $industryId, description: $description, isArchived: $isArchived, marketCategory: $marketCategory, location: $location, title: $title, images: $images, timestamp: $timestamp, likes: $likes, coins: $coins, comments: $comments, user: $user, isRanked: $isRanked)';
+    return 'ForumModel(forumId: $forumId, industryId: $industryId, description: $description, title: $title, images: $images, timestamp: $timestamp, likes: $likes, coins: $coins, comments: $comments, user: $user, isRanked: $isRanked)';
+  }
+
+  @override
+  bool operator ==(covariant ForumModel other) {
+    if (identical(this, other)) return true;
+
+    return other.forumId == forumId &&
+        other.industryId == industryId &&
+        other.description == description &&
+        other.title == title &&
+        listEquals(other.images, images) &&
+        other.timestamp == timestamp &&
+        listEquals(other.likes, likes) &&
+        listEquals(other.coins, coins) &&
+        listEquals(other.comments, comments) &&
+        other.user == user &&
+        other.isRanked == isRanked;
+  }
+
+  @override
+  int get hashCode {
+    return forumId.hashCode ^
+        industryId.hashCode ^
+        description.hashCode ^
+        title.hashCode ^
+        images.hashCode ^
+        timestamp.hashCode ^
+        likes.hashCode ^
+        coins.hashCode ^
+        comments.hashCode ^
+        user.hashCode ^
+        isRanked.hashCode;
   }
 }

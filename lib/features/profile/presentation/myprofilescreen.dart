@@ -91,7 +91,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
               ];
             },
             body: DefaultTabController(
-              length: 2,
+              length: 3,
               child: Column(
                 children: [
                   // if (_publicUser.uid !=
@@ -117,6 +117,11 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                             'assets/svgs/posts.svg',
                           ),
                         ),
+                        Tab(
+                          icon: SvgPicture.asset(
+                            'assets/svgs/market.svg',
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -129,7 +134,6 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                   Expanded(
                     child: TabBarView(
                       children: [
-                        // Container(),
                         SingleChildScrollView(
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.start,
@@ -143,13 +147,13 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                             ],
                           ),
                         ),
-                        // Container()
                         profilepostsdisplay(
                           context,
                           profileController.myProfile,
                           _posts,
                           loading: isLoading,
-                        )
+                        ),
+                        Container()
                       ],
                     ),
                   ),

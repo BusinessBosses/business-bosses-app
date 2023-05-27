@@ -1,12 +1,22 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:country_list_pick/country_list_pick.dart';
 import 'package:flutter_svg/svg.dart';
-
+import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../../common/models/api_response_model.dart';
+import '../../common/models/user_model.dart';
+import '../../services/api_service.dart';
+import '../../utils/constants/constants.dart';
 import '../../utils/size_config.dart';
 import '../../utils/theme/theme.dart';
+import '../marketplace/controllers/market_controller.dart';
+import '../marketplace/models/market_model.dart';
+import '../marketplace/presentation/market_members.dart';
+import '../marketplace/presentation/sell_screen.dart';
+import '../marketplace/widgets/marketplace_item.dart';
+import '../profile/controller/profile_controller.dart';
 
 /// Buying and Selling screen
 class MarketplaceScreen extends StatefulWidget {
@@ -18,12 +28,43 @@ class MarketplaceScreen extends StatefulWidget {
 }
 
 class _MarketplaceScreenState extends State<MarketplaceScreen> {
+  final ProfileController _profileController = Get.find();
+  final MarketController _marketController = Get.find();
   String? _selectedCategory;
   String? _selectedLocation;
   final bool _isSearching = false;
   String? filterCode;
   String? filterLocation;
   String? filterCategory;
+  final List<UserModel> _users = [];
+  bool _isLoading = true;
+  bool _isJoined = false;
+
+  Future<void> _loadNextConnections() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String? userId = prefs.getString(Constants.USER_ID);
+    ApiResponseModel response =
+        await ApiService.get(path: 'members/marketplace');
+    dynamic uses = response.data['rows'];
+    for (dynamic uses in uses) {
+      dynamic user = UserModel.fromMap(uses['user']);
+      _users.add(user);
+    }
+    bool isJoined = _users.any((UserModel user) => user.uid == userId);
+    setState(() {
+      if (isJoined) {
+        _isJoined = true;
+      }
+      _isLoading = false;
+    });
+  }
+
+  @override
+  void initState() {
+    _loadNextConnections();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -111,13 +152,12 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                         return DropdownMenuItem<String>(
                                           value: value,
                                           child: value != null
-                                              ? Text(
-                                                  value,
-                                                )
+                                              ? Text(value)
                                               : Text(
-                                                  'Select Category',
+                                                  value ?? 'Select Category',
                                                   style: bodyText2.copyWith(
-                                                      color: hintColor),
+                                                    color: hintColor,
+                                                  ),
                                                 ),
                                         );
                                       }).toList(),
@@ -208,397 +248,353 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                   );
                 }),
           ]),
-      body: NestedScrollView(
-        headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-          return <Widget>[
-            SliverStickyHeader(
-              sticky: false,
-              header: Column(
-                children: [
-                  Container(
-                    width: double.infinity,
-                    color: Colors.transparent,
-                    child: Stack(
+      body: _isLoading
+          ? const CircularProgressIndicator()
+          : NestedScrollView(
+              headerSliverBuilder:
+                  (BuildContext context, bool innerBoxIsScrolled) {
+                return <Widget>[
+                  SliverStickyHeader(
+                    sticky: false,
+                    header: Column(
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.only(left: 20, top: 25),
-                          child: GestureDetector(
-                            onTap: (() {
-                              showDialog(
-                                context: context,
-                                builder: (BuildContext context) =>
-                                    sellingGuide(),
-                              );
-                            }),
-                            child: Row(
-                              children: [
-                                const Text(
-                                  'Guidelines ',
-                                  style: TextStyle(
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w700),
-                                ),
-                                SvgPicture.asset(
-                                  'assets/svgs/info.svg',
-                                  height: 20,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        Column(children: [
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Align(
-                            alignment: Alignment.centerRight,
-                            child: Padding(
-                              padding: const EdgeInsets.only(right: 20),
-                              child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                    minimumSize: const Size(150,
-                                        45) // put the width and height you want
-                                    ),
-                                onPressed: () {},
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: <Widget>[
-                                    const Text(
-                                      'Add Listing',
-                                      style: TextStyle(
-                                          fontSize: 15,
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.w500),
-                                    ),
-                                    const SizedBox(
-                                      width: 5,
-                                    ),
-                                    SvgPicture.asset(
-                                        'assets/svgs/startatopic.svg')
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                          Stack(
-                            children: <Widget>[
-                              Container(
-                                margin: const EdgeInsets.only(
-                                    top: 10, right: 20, left: 20),
-                                height: 150,
-                                width: double.infinity,
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(15.0),
-                                  child: FittedBox(
-                                    fit: BoxFit.fill,
-                                    child: Image.asset(
-                                        'assets/images/postbackground.png'),
-                                  ),
-                                ),
-                              ),
-                              Column(
-                                children: [
-                                  Row(
-                                    children: <Widget>[
-                                      Container(
-                                        margin: const EdgeInsets.only(
-                                            top: 25, right: 20, left: 35),
-                                        height: 86,
-                                        width: 142,
-                                        child: ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(10.0),
-                                          child: FittedBox(
-                                            child: CachedNetworkImage(
-                                              memCacheWidth: 256,
-                                              imageUrl:
-                                                  'http://44.210.87.234/learningImages/marketplace.jpg',
-                                              placeholder: (BuildContext
-                                                          context,
-                                                      String photo) =>
-                                                  const CircularProgressIndicator(),
-                                              errorWidget:
-                                                  (BuildContext context,
-                                                          String photo,
-                                                          dynamic error) =>
-                                                      const Icon(Icons.error),
-                                            ),
-                                          ),
-                                        ),
+                        Container(
+                          width: double.infinity,
+                          color: Colors.transparent,
+                          child: Stack(
+                            children: [
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(left: 20, top: 25),
+                                child: GestureDetector(
+                                  onTap: (() {
+                                    showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) =>
+                                          sellingGuide(),
+                                    );
+                                  }),
+                                  child: Row(
+                                    children: [
+                                      const Text(
+                                        'Guidelines ',
+                                        style: TextStyle(
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w700),
                                       ),
-                                      const Expanded(
-                                        child: Padding(
-                                          padding: EdgeInsets.only(right: 35),
-                                          child: Text(
-                                            'Description will be here',
-                                            style: TextStyle(
-                                              fontSize: 15,
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.w700,
-                                            ),
-                                            softWrap: true,
-                                            maxLines: 5,
-                                          ),
-                                        ),
+                                      SvgPicture.asset(
+                                        'assets/svgs/info.svg',
+                                        height: 20,
                                       ),
                                     ],
                                   ),
-                                  Row(
-                                    children: <Widget>[
-                                      Stack(
-                                        children: [
-                                          Padding(
-                                            padding: const EdgeInsets.only(
-                                              left: 35,
-                                              top: 5,
-                                            ),
-                                            child: Container(
-                                              padding: const EdgeInsets.only(
-                                                bottom: 8,
-                                                top: 8,
-                                                left: 10,
-                                                right: 10,
-                                              ),
-                                              decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(200),
-                                                color: primaryColorLT,
-                                              ),
-                                              child: Row(
-                                                children: [
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            right: 8),
-                                                    child: SvgPicture.asset(
-                                                        'assets/svgs/members.svg'),
-                                                  ),
-                                                  RichText(
-                                                    text: TextSpan(
-                                                      children: [
-                                                        TextSpan(
-                                                            text: 'Members: 0',
-                                                            style:
-                                                                const TextStyle(
-                                                                    fontSize:
-                                                                        11,
-                                                                    color: Colors
-                                                                        .white),
-                                                            recognizer:
-                                                                TapGestureRecognizer()
-                                                                  ..onTap =
-                                                                      () {}),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          )
+                                ),
+                              ),
+                              Column(children: [
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                Align(
+                                  alignment: Alignment.centerRight,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(right: 20),
+                                    child: ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                          minimumSize: const Size(150,
+                                              45) // put the width and height you want
+                                          ),
+                                      onPressed: () {
+                                        Get.to(
+                                          () => CreateSellingitemScreen(
+                                            isUpd: false,
+                                          ),
+                                        );
+                                      },
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: <Widget>[
+                                          const Text(
+                                            'Sell',
+                                            style: TextStyle(
+                                                fontSize: 15,
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.w500),
+                                          ),
+                                          const SizedBox(
+                                            width: 5,
+                                          ),
+                                          SvgPicture.asset(
+                                              'assets/svgs/startatopic.svg')
                                         ],
                                       ),
-                                      Stack(
-                                        children: [
-                                          Padding(
-                                            padding: const EdgeInsets.only(
-                                                left: 5, top: 5),
-                                            child: Container(
-                                              padding: const EdgeInsets.only(
-                                                  bottom: 8,
-                                                  top: 8,
-                                                  left: 10,
-                                                  right: 10),
-                                              decoration: BoxDecoration(
+                                    ),
+                                  ),
+                                ),
+                                Stack(
+                                  children: <Widget>[
+                                    Container(
+                                      margin: const EdgeInsets.only(
+                                          top: 10, right: 20, left: 20),
+                                      height: 150,
+                                      width: double.infinity,
+                                      child: ClipRRect(
+                                        borderRadius:
+                                            BorderRadius.circular(15.0),
+                                        child: FittedBox(
+                                          fit: BoxFit.fill,
+                                          child: Image.asset(
+                                              'assets/images/postbackground.png'),
+                                        ),
+                                      ),
+                                    ),
+                                    Column(
+                                      children: [
+                                        Row(
+                                          children: <Widget>[
+                                            Container(
+                                              margin: const EdgeInsets.only(
+                                                  top: 25, right: 20, left: 35),
+                                              height: 86,
+                                              width: 142,
+                                              child: ClipRRect(
                                                 borderRadius:
-                                                    BorderRadius.circular(200),
-                                                color: const Color.fromARGB(
-                                                    47, 255, 255, 255),
+                                                    BorderRadius.circular(10.0),
+                                                child: FittedBox(
+                                                  child: CachedNetworkImage(
+                                                    memCacheWidth: 256,
+                                                    imageUrl:
+                                                        'http://44.210.87.234/learningImages/marketplace.jpg',
+                                                    placeholder: (BuildContext
+                                                                context,
+                                                            String photo) =>
+                                                        const CircularProgressIndicator(),
+                                                    errorWidget: (BuildContext
+                                                                context,
+                                                            String photo,
+                                                            dynamic error) =>
+                                                        const Icon(Icons.error),
+                                                  ),
+                                                ),
                                               ),
-                                              child: Row(
-                                                children: [
-                                                  SvgPicture.asset(
-                                                      'assets/svgs/entries.svg'),
-                                                  RichText(
-                                                    text: const TextSpan(
-                                                      children: <InlineSpan>[
-                                                        TextSpan(
-                                                          text: 'Listings: (0)',
-                                                          style: TextStyle(
-                                                            fontSize: 11,
+                                            ),
+                                            const Expanded(
+                                              child: Padding(
+                                                padding:
+                                                    EdgeInsets.only(right: 35),
+                                                child: Text(
+                                                  '- Sell your products and services \n - Find Supplies',
+                                                  style: TextStyle(
+                                                    fontSize: 15,
+                                                    color: Colors.white,
+                                                    fontWeight: FontWeight.w700,
+                                                  ),
+                                                  softWrap: true,
+                                                  maxLines: 5,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        Row(
+                                          children: <Widget>[
+                                            Stack(
+                                              children: [
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                    left: 35,
+                                                    top: 5,
+                                                  ),
+                                                  child: Container(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                      bottom: 8,
+                                                      top: 8,
+                                                      left: 10,
+                                                      right: 10,
+                                                    ),
+                                                    decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              200),
+                                                      color: primaryColorLT,
+                                                    ),
+                                                    child: Row(
+                                                      children: [
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                      .only(
+                                                                  right: 8),
+                                                          child: SvgPicture.asset(
+                                                              'assets/svgs/members.svg'),
+                                                        ),
+                                                        GestureDetector(
+                                                          onTap: () {
+                                                            Get.to(() =>
+                                                                MarketMembersScreen(
+                                                                  users: _users,
+                                                                ));
+                                                          },
+                                                          child: RichText(
+                                                            text: TextSpan(
+                                                              children: [
+                                                                TextSpan(
+                                                                  text:
+                                                                      'Members: (${_users.length})',
+                                                                  style: const TextStyle(
+                                                                      fontSize:
+                                                                          11,
+                                                                      color: Colors
+                                                                          .white),
+                                                                ),
+                                                              ],
+                                                            ),
                                                           ),
                                                         ),
                                                       ],
                                                     ),
                                                   ),
-                                                ],
-                                              ),
+                                                )
+                                              ],
                                             ),
-                                          ),
-                                        ],
-                                      ),
-                                      Flexible(
-                                        child: Padding(
-                                            padding: const EdgeInsets.only(
-                                              right: 20,
+                                            Stack(
+                                              children: <Widget>[
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          left: 5, top: 5),
+                                                  child: Container(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            bottom: 8,
+                                                            top: 8,
+                                                            left: 10,
+                                                            right: 10),
+                                                    decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              200),
+                                                      color:
+                                                          const Color.fromARGB(
+                                                              47,
+                                                              255,
+                                                              255,
+                                                              255),
+                                                    ),
+                                                    child: Row(
+                                                      children: [
+                                                        const Padding(
+                                                          padding:
+                                                              EdgeInsets.only(
+                                                                  right: 8),
+                                                          child: Icon(
+                                                            Icons
+                                                                .shopping_cart_checkout_outlined,
+                                                            color: Colors.white,
+                                                            size: 15,
+                                                          ),
+                                                        ),
+                                                        RichText(
+                                                          text: TextSpan(
+                                                            children: <InlineSpan>[
+                                                              TextSpan(
+                                                                text:
+                                                                    'Listings: ${_marketController.markets.length}',
+                                                                style:
+                                                                    const TextStyle(
+                                                                  fontSize: 11,
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
                                             ),
-                                            child: SizedBox(
-                                              width: MediaQuery.of(context)
-                                                  .size
-                                                  .width,
-                                              child: Align(
-                                                  alignment:
-                                                      Alignment.centerRight,
-                                                  child: Row(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .center,
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment.end,
-                                                    children: [
-                                                      joinedButton(),
-                                                    ],
+                                            Flexible(
+                                              child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                    right: 20,
+                                                  ),
+                                                  child: SizedBox(
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                            .size
+                                                            .width,
+                                                    child: Align(
+                                                        alignment: Alignment
+                                                            .centerRight,
+                                                        child: Row(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .center,
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .end,
+                                                          children: [
+                                                            joinedButton(),
+                                                          ],
+                                                        )),
                                                   )),
-                                            )),
-                                      )
-                                    ],
-                                  ),
-                                  const SizedBox(
-                                    height: 5,
-                                  ),
-                                  // Padding(
-                                  //   padding: const EdgeInsets.only(
-                                  //     left: 20.0,
-                                  //     right: 5,
-                                  //   ),
-                                  //   child: StreamBuilder<Event>(
-                                  //     stream: FirebaseDatabase.instance
-                                  //         .reference()
-                                  //         .child(
-                                  //             "/settings/BossUp/companyName")
-                                  //         .onValue,
-                                  //     builder: (BuildContext context,
-                                  //         AsyncSnapshot snapshot) {
-                                  //       if (snapshot.hasData &&
-                                  //           snapshot.data.snapshot
-                                  //                   .value !=
-                                  //               null) {
-                                  //         var data = snapshot
-                                  //             .data.snapshot.value;
-                                  //         return GestureDetector(
-                                  //           onTap: () {
-                                  //             Navigator.push(
-                                  //               context,
-                                  //               MaterialPageRoute(
-                                  //                   builder: (BuildContext
-                                  //                           context) =>
-                                  //                       const Bossuppartner()),
-                                  //             );
-                                  //           },
-                                  //           child: Padding(
-                                  //             padding:
-                                  //                 const EdgeInsets.only(
-                                  //                     right: 15, top: 5),
-                                  //             child: Container(
-                                  //               height: 40,
-                                  //               decoration: BoxDecoration(
-                                  //                 color: const Color(
-                                  //                     0xFFF4F4F4),
-                                  //                 borderRadius:
-                                  //                     BorderRadius
-                                  //                         .circular(10),
-                                  //                 boxShadow: [
-                                  //                   BoxShadow(
-                                  //                     color: Colors.grey
-                                  //                         .withOpacity(
-                                  //                             0.3),
-                                  //                     spreadRadius: 20,
-                                  //                     blurRadius: 500,
-                                  //                     offset:
-                                  //                         const Offset(
-                                  //                             0, 3),
-                                  //                   ),
-                                  //                 ],
-                                  //               ),
-                                  //               child: Row(
-                                  //                 children: [
-                                  //                   Padding(
-                                  //                     padding:
-                                  //                         const EdgeInsets
-                                  //                             .only(
-                                  //                       left: 10,
-                                  //                     ),
-                                  //                     child: Container(
-                                  //                       height: 25,
-                                  //                       width: 100,
-                                  //                       decoration:
-                                  //                           BoxDecoration(
-                                  //                         color: const Color(
-                                  //                             0xFFEAEAEA),
-                                  //                         borderRadius:
-                                  //                             BorderRadius
-                                  //                                 .circular(
-                                  //                                     20),
-                                  //                       ),
-                                  //                       child:
-                                  //                           const Center(
-                                  //                         child: Padding(
-                                  //                           padding:
-                                  //                               EdgeInsets
-                                  //                                   .all(
-                                  //                                       2),
-                                  //                           child: Text(
-                                  //                               "Boss Up by"),
-                                  //                         ),
-                                  //                       ),
-                                  //                     ),
-                                  //                   ),
-                                  //                   const SizedBox(
-                                  //                       width: 10),
-                                  //                   Text(
-                                  //                     data.toString(),
-                                  //                     style:
-                                  //                         const TextStyle(
-                                  //                       fontSize: 15,
-                                  //                       fontWeight:
-                                  //                           FontWeight
-                                  //                               .bold,
-                                  //                       decoration:
-                                  //                           TextDecoration
-                                  //                               .underline,
-                                  //                     ),
-                                  //                   ),
-                                  //                 ],
-                                  //               ),
-                                  //             ),
-                                  //           ),
-                                  //         );
-                                  //       } else {
-                                  //         return Container();
-                                  //       }
-                                  //     },
-                                  //   ),
-                                  // ),
-                                ],
-                              )
+                                            )
+                                          ],
+                                        ),
+                                        const SizedBox(
+                                          height: 5,
+                                        ),
+                                      ],
+                                    )
+                                  ],
+                                ),
+                              ]),
                             ],
                           ),
-                        ]),
+                        )
                       ],
                     ),
                   )
-                ],
+                ];
+              },
+              body: Padding(
+                padding: const EdgeInsets.only(bottom: 100, top: 20),
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: _marketController.markets.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    final MarketModel market = _marketController.markets[index];
+
+                    return MarketTile(
+                      post: market,
+                    );
+                  },
+                ),
               ),
-            )
-          ];
-        },
-        body: Container(),
-      ),
+            ),
     );
   }
 
   Widget joinedButton() {
     return GestureDetector(
-      onTap: () {},
+      onTap: () async {
+        final SharedPreferences prefs = await SharedPreferences.getInstance();
+        final String? userId = prefs.getString(Constants.USER_ID);
+        await ApiService.post(path: 'members', body: <String, dynamic>{
+          'type': 'marketplace',
+        });
+        setState(() {
+          if (_isJoined) {
+            _users.removeWhere((UserModel user) => user.uid == userId);
+          } else {
+            _users.add(_profileController.myProfile);
+          }
+          _isJoined = !_isJoined;
+        });
+      },
       child: Container(
         padding: const EdgeInsets.symmetric(
           horizontal: 12.0,
@@ -613,9 +609,9 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
             color: Colors.white,
             borderRadius: BorderRadius.circular(10),
           ),
-          child: const Text(
-            'Join',
-            style: TextStyle(
+          child: Text(
+            _isJoined ? 'Leave' : 'Join',
+            style: const TextStyle(
               fontSize: 13,
               fontWeight: FontWeight.w700,
             ),
@@ -674,7 +670,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                 Text('🚫  ', style: bodyText2),
                 Expanded(
                   child: Text(
-                      'Human trafficking, prostitution, escort, sexual services or pornographer listings are not allowed',
+                      'Human trafficking, prostitution, escort, sexual services or pornographic listings are not allowed',
                       style: bodyText2),
                 ),
               ],

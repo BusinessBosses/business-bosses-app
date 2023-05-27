@@ -2,38 +2,20 @@ import 'dart:io';
 
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
-import 'package:business_bosses_v2/common/models/user_model.dart';
-import 'package:business_bosses_v2/features/posts/controllers/posts_controller.dart';
-import 'package:business_bosses_v2/features/posts/repository/post_repository.dart';
+import 'package:business_bosses_v2/features/forum/controller/forum_controller.dart';
+import 'package:business_bosses_v2/features/forum/repository/forum_repository.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../../profile/controller/profile_controller.dart';
-import '../presentation/boost_post_screen.dart';
-
-/// CREATEPOSTCONTROLLER
-class CreatePostController extends GetxController {
-  final PostsController _postsController = Get.find();
-
-  /// ALL USERS FOR MENTIONS
-  RxList<UserModel> users = RxList<UserModel>(<UserModel>[]);
-
-  /// SELECTED IMAGES
-  RxList<XFile> imageFileList = RxList<XFile>(<XFile>[]);
-
-  /// PROMOTE STATE
-  RxBool shouldPromote = false.obs;
-
-  final bool _promote = false;
-
-  /// LOADING STATE
+class CreateForumController extends GetxController {
   RxBool loading = false.obs;
   late ImagePicker _picker;
-
-  ///   VALIDATE CREATE POST DATA
+  RxList<XFile> imageFileList = RxList<XFile>(<XFile>[]);
+  final ForumController _forumController = Get.find();
   bool validateCreatePostData(Map<String, dynamic> data) {
-    if (data['title'].toString().isEmpty && imageFileList.isEmpty) {
+    if (data['title'].toString().isEmpty ||
+        data['description'].toString().isEmpty) {
       return false;
     } else {
       return true;
@@ -77,43 +59,31 @@ class CreatePostController extends GetxController {
   }
 
   /// CREATE POST CONTROLLER (REGISTER NEW POST TO REMOTE DATA SOURCE)
-  Future<void> createPost(
-      Map<String, dynamic> body, ProfileController profileController) async {
+  Future<void> createForum(Map<String, dynamic> body) async {
     if (validateCreatePostData(body)) {
       loading(true);
       update();
       if (imageFileList.isEmpty) {
-        final ApiResponseModel response = await PostRepository.createPost(body);
+        final ApiResponseModel response =
+            await ForumRepository.createForum(body);
 
         if (response.success) {
-          _postsController.addNewPost(response.data, profileController);
-          if (shouldPromote.value == true) {
-            Get.to(() => BoostPost(
-                  postId: response.data['postId'],
-                  postTitle: response.data['title'],
-                ));
-          } else {
-            Get.back();
-          }
+          _forumController.addNewForum(response.data);
+
+          Get.back();
         }
       } else {
         if (await uploadFile() == null) {
           showSnackbar(message: 'Error Uploading image');
         } else {
-          final ApiResponseModel response = await PostRepository.createPost(
+          final ApiResponseModel response = await ForumRepository.createForum(
               <String, dynamic>{...body, 'images': await uploadFile()});
 
           if (response.success) {
             imageFileList.clear();
-            _postsController.addNewPost(response.data, profileController);
-            if (shouldPromote.value == true) {
-              Get.to(() => BoostPost(
-                    postId: response.data['postId'],
-                    postTitle: response.data['title'],
-                  ));
-            } else {
-              Get.back();
-            }
+            _forumController.addNewForum(response.data);
+
+            Get.back();
           }
         }
       }
@@ -124,12 +94,6 @@ class CreatePostController extends GetxController {
           message: 'Post can\'t be empty', title: 'OOPS!', error: true);
       return;
     }
-  }
-
-  /// CHANGE PROMOTE STATE VALUE
-  void togglePromote() {
-    shouldPromote(!shouldPromote.value);
-    update();
   }
 
   /// REMOVE IMAGE FROM SELECTED
@@ -148,21 +112,9 @@ class CreatePostController extends GetxController {
           RxList<XFile>(<XFile>[...pickedFileList, ...imageFileList]);
       update();
     } catch (e) {
+      rethrow;
       // handle error
     }
-  }
-
-  /// FILTER USERS FOR MENTIONS
-  List<UserModel> filterUsers(String text) {
-    List<UserModel> filterUser = <UserModel>[];
-    for (UserModel u in users) {
-      String username = '@${u.username.toLowerCase()}';
-      if (username.trim().contains(text.trim().toLowerCase())) {
-        filterUser.add(u);
-      }
-    }
-
-    return filterUser;
   }
 
   /// INITIALIZE CONTROLLER
@@ -176,9 +128,7 @@ class CreatePostController extends GetxController {
   @override
   void onClose() {
     // TODO: implement onClose
-    users.clear();
     imageFileList.clear();
-    shouldPromote(false);
     super.onClose();
   }
 }

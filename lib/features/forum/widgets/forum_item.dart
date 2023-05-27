@@ -1,4 +1,5 @@
 import 'package:business_bosses_v2/features/forum/models/forum_model.dart';
+import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
 import 'package:detectable_text_field/widgets/detectable_text.dart';
 import 'package:flutter/material.dart';
@@ -20,21 +21,21 @@ import '../../profile/presentation/publicprofilescreen.dart';
 import '../presentation/forum_like_comment_screen.dart';
 
 class ForumItem extends StatefulWidget {
-  final ForumModel? forum;
-  final VoidCallback? commented;
-  final Function? likeUnlikeForum;
-  final Function? onUpdateForum;
-  final Function? coinUncoinForum;
+  final ForumModel forum;
+  // final VoidCallback? commented;
+  // final Function? likeUnlikeForum;
+  // final Function? onUpdateForum;
+  // final Function? coinUncoinForum;
 
-  final PostsController? controller;
+  final dynamic controller;
 
-  const ForumItem(
-    this.forum, {
+  const ForumItem({
     Key? key,
-    this.commented,
-    this.likeUnlikeForum,
-    this.coinUncoinForum,
-    this.onUpdateForum,
+    required this.forum,
+    // this.commented,
+    // this.likeUnlikeForum,
+    // this.coinUncoinForum,
+    // this.onUpdateForum,
     this.controller,
   }) : super(key: key);
 
@@ -99,7 +100,7 @@ class _ForumItemState extends State<ForumItem> {
                                       children: [
                                         ListTile(
                                           onTap: () {
-                                            navigateTo(context);
+                                            // Navigator.pop(context);
                                             showDialog(
                                               context: context,
                                               builder: (BuildContext context) =>
@@ -121,7 +122,7 @@ class _ForumItemState extends State<ForumItem> {
                                                 actions: [
                                                   TextButton(
                                                     onPressed: () =>
-                                                        navigateTo(context),
+                                                        Navigator.pop(context),
                                                     child: const TextWidget(
                                                       text: 'Cancel',
                                                       fontWeight:
@@ -132,7 +133,7 @@ class _ForumItemState extends State<ForumItem> {
                                                   ),
                                                   GestureDetector(
                                                     onTap: () {
-                                                      navigateTo(context);
+                                                      Navigator.pop(context);
                                                       // print(_post.user.uid);
                                                       setState(() {
                                                         blocked.add(widget
@@ -179,7 +180,7 @@ class _ForumItemState extends State<ForumItem> {
                                         ),
                                         ListTile(
                                           onTap: () {
-                                            navigateTo(context);
+                                            Navigator.of(context).pop(context);
                                             showDialog(
                                               context: context,
                                               builder: (BuildContext context) =>
@@ -201,7 +202,7 @@ class _ForumItemState extends State<ForumItem> {
                                                 actions: [
                                                   TextButton(
                                                     onPressed: () =>
-                                                        navigateTo(context),
+                                                        Navigator.pop(context),
                                                     child: const TextWidget(
                                                       text: 'Cancel',
                                                       fontWeight:
@@ -212,7 +213,7 @@ class _ForumItemState extends State<ForumItem> {
                                                   ),
                                                   GestureDetector(
                                                     onTap: () {
-                                                      navigateTo(context);
+                                                      Navigator.pop(context);
                                                       showSnackBar(context,
                                                           message:
                                                               'Post has been Reported');
@@ -271,7 +272,8 @@ class _ForumItemState extends State<ForumItem> {
                               // color: Colors.redAccent,
                             )
                           : SizedBox(
-                              width: leadingWidth(widget.forum),
+                              width: 60,
+                              // width: leadingWidth(widget.forum),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
@@ -284,7 +286,7 @@ class _ForumItemState extends State<ForumItem> {
                                               size: 20),
                                           onSelected: (String val) {
                                             if (val == 'Edit') {
-                                              widget.onUpdateForum!();
+                                              // widget.onUpdateForum!();
                                             } else if (val == 'Delete') {
                                               _showDialog();
                                             }
@@ -326,7 +328,7 @@ class _ForumItemState extends State<ForumItem> {
                                 children: [
                                   Center(
                                     child: UserAvatarWithBadge(
-                                      user: widget.forum?.user,
+                                      user: widget.forum.user,
                                       height: 52.0,
                                       width: 52.0,
                                       radius: 50.0,
@@ -374,12 +376,10 @@ class _ForumItemState extends State<ForumItem> {
                               ),
                             )
                           : GestureDetector(
-                              onTap: () => navigateTo(
-                                context,
-                                routeName: PublicProfileScreen.routeName,
-                                arguments:
-                                    Params(arg1: widget.forum!.user!.uid),
-                              ),
+                              onTap: () {
+                                Get.toNamed(Routes.publicProfile,
+                                    arguments: widget.forum.user);
+                              },
                               child: UserAvatarWithBadge(
                                 user: widget.forum?.user,
                                 height: 52.0,
@@ -390,13 +390,14 @@ class _ForumItemState extends State<ForumItem> {
                               ),
                             ),
                       title: GestureDetector(
-                        onTap: () => navigateTo(
-                          context,
-                          routeName: PublicProfileScreen.routeName,
-                          arguments: Params(arg1: widget.forum!.user!.uid),
-                        ),
+                        onTap: () {
+                          Get.toNamed(Routes.publicProfile,
+                              arguments: widget.forum.user);
+                        },
                         child: Text(
-                          widget.forum?.user?.name ?? '',
+                          widget.forum?.user?.username ??
+                              widget.forum.user?.name ??
+                              '',
                           style: Theme.of(context).textTheme.bodyLarge,
                         ),
                       ),
@@ -445,7 +446,7 @@ class _ForumItemState extends State<ForumItem> {
                                   onDetectableTextTap(context, val),
                             ),
                           ),
-                    widget.forum!.images!.isEmpty
+                    widget.forum.images == null
                         ? Container()
                         : Padding(
                             padding: const EdgeInsets.only(
@@ -460,7 +461,8 @@ class _ForumItemState extends State<ForumItem> {
                           onPressed: () async {
                             widget.controller!.postLike(
                                 profileController.myProfile.uid,
-                                widget.forum!.forumId!);
+                                widget.forum.forumId,
+                                'forum');
                           },
                           icon: widget.forum!.likes?.contains(
                                       profileController.myProfile.uid) ==
@@ -468,7 +470,7 @@ class _ForumItemState extends State<ForumItem> {
                               ? SvgPicture.asset('assets/svgs/likefilled.svg')
                               : SvgPicture.asset('assets/svgs/like.svg'),
                           label: Text(
-                            '${widget.forum!.likes?.length ?? 0}',
+                            '${widget.forum.likes?.length ?? 0}',
                             style: Theme.of(context)
                                 .textTheme
                                 .bodyMedium
@@ -485,7 +487,7 @@ class _ForumItemState extends State<ForumItem> {
                                   ForumLikeCommentScreen(
                                 forum: widget.forum!,
                                 commented: () {
-                                  widget.commented!();
+                                  // widget.commented!();
                                   setState(() {});
                                 },
                               ),
@@ -506,17 +508,19 @@ class _ForumItemState extends State<ForumItem> {
                         TextButton.icon(
                             onPressed: () async {
                               widget.controller!.postCoin(
-                                  profileController.myProfile.uid,
-                                  widget.forum!.forumId!,
-                                  profileController);
+                                profileController.myProfile.uid,
+                                widget.forum!.forumId!,
+                                profileController,
+                                'forum',
+                              );
                             },
-                            icon: widget.forum!.coins?.contains(
+                            icon: widget.forum.coins?.contains(
                                         profileController.myProfile.uid) ==
                                     true
                                 ? SvgPicture.asset('assets/svgs/coin.svg')
                                 : SvgPicture.asset('assets/svgs/coin.svg'),
                             label: Text(
-                              '${widget.forum?.coins?.length ?? 0}',
+                              '${widget.forum.coins?.length ?? 0}',
                               style: Theme.of(context)
                                   .textTheme
                                   .bodyMedium

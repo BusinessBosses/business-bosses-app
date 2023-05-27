@@ -7,4 +7,10 @@ class HomeRepository {
     final ApiResponseModel response = await ApiService.get(path: 'init/');
     return response;
   }
+
+  static Future<ApiResponseModel> fetchIndustries() async {
+    final ApiResponseModel response =
+        await ApiService.get(path: 'industry/get');
+    return response;
+  }
 }
