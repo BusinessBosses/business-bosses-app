@@ -25,10 +25,10 @@ class ConnectionController extends GetxController {
     loadingSearch = true;
     update();
 
-    final res = await ApiService.get(path: '/users/name/$query');
-    for (var i = 0; i < res.data.length; i++) {
+    final ApiResponseModel res = await ApiService.get(path: '/users/name/$query');
+    for (int i = 0; i < res.data.length; i++) {
       final mapData = res.data[i];
-      final modelizedData = UserModel.fromMap(mapData);
+      final UserModel modelizedData = UserModel.fromMap(mapData);
 
       searchedUsers.add(modelizedData);
     }
@@ -40,22 +40,22 @@ class ConnectionController extends GetxController {
     final ApiResponseModel res =
         await ApiService.get(path: '/connection/data/${Get.arguments['uid']}');
     if (res.success) {
-      for (var i = 0; i < res.data['connections']['data'].length; i++) {
+      for (int i = 0; i < res.data['connections']['data'].length; i++) {
         final mapData = res.data['connections']['data'][i];
-        final modelizedConnection = UserModel.fromMap(mapData);
+        final UserModel modelizedConnection = UserModel.fromMap(mapData);
 
         connections.add(modelizedConnection);
       }
-      for (var i = 0; i < res.data['connecteds']['data'].length; i++) {
+      for (int i = 0; i < res.data['connecteds']['data'].length; i++) {
         final mapData = res.data['connecteds']['data'][i];
-        final modelizedConnection = UserModel.fromMap(mapData);
+        final UserModel modelizedConnection = UserModel.fromMap(mapData);
 
         connecteds.add(modelizedConnection);
       }
 
-      for (var i = 0; i < res.data['suggestedUsers']['data'].length; i++) {
+      for (int i = 0; i < res.data['suggestedUsers']['data'].length; i++) {
         final mapData = res.data['suggestedUsers']['data'][i];
-        final modelizedConnection = UserModel.fromMap(mapData);
+        final UserModel modelizedConnection = UserModel.fromMap(mapData);
 
         suggestedUsers.add(modelizedConnection);
       }
@@ -65,22 +65,22 @@ class ConnectionController extends GetxController {
   }
 
   Future<void> connect(String userId) async {
-    final res = await ApiService.post(path: '/connection/connect', body: {
+    final ApiResponseModel res = await ApiService.post(path: '/connection/connect', body: {
       'userId': _profileController.myProfile.uid,
       'connectedId': userId
     });
   }
 
   Future<void> disconnect(String userId) async {
-    final res = await ApiService.post(path: '/connection/disconnect', body: {
+    final ApiResponseModel res = await ApiService.post(path: '/connection/disconnect', body: {
       'userId': _profileController.myProfile.uid,
       'connectedId': userId
     });
   }
 
   void connectToUser(UserModel user) async {
-    final checkConnected =
-        connecteds.indexWhere((element) => element.uid == user.uid);
+    final int checkConnected =
+        connecteds.indexWhere((UserModel element) => element.uid == user.uid);
     _profileController.updateConnections(user.uid);
     if (checkConnected == -1) {
       connecteds.add(user);

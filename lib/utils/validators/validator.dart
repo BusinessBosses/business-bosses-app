@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+import 'package:get/get.dart';
 
 /// Validate Form Fields
 class Validator {
@@ -24,12 +24,12 @@ class Validator {
   }
 
   /// VAlidate Field to be email
-  static String emailValidator(String? val) {
+  static String? emailValidator(String? val) {
     if (val == null) return 'Email cannot be empty';
-    if (!isValidEmail(val)) {
+    if (!val.isEmail) {
       return 'Invalid email';
     } else {
-      return '';
+      return null;
     }
   }
 
@@ -40,7 +40,7 @@ class Validator {
     if (!isValidEmail(val)) {
       return 'Invalid email';
     } else {
-      return '';
+      return null;
     }
   }
 
@@ -54,7 +54,7 @@ class Validator {
   }
 
   /// Validate password fields to be password
-  static String passwordValidator(String? val) {
+  static String? passwordValidator(String? val) {
     if (val == null) {
       return 'Enter a valid password';
     }
@@ -62,9 +62,9 @@ class Validator {
       return 'Password must be 8 character long';
     }
     if (!isValidPassword(val)) {
-      return 'Invalid p';
+      return 'Invalid password';
     } else {
-      return '';
+      return null;
     }
   }
 
@@ -83,14 +83,14 @@ class Validator {
 
   /// Validate if username
   static String? usernameValidator(String val, {required bool isUnique}) {
-    if (val == "") return 'Username cannot be empty';
+    if (val == '') return 'Username cannot be empty';
     if (val.length <= 3) return 'Username is too short';
     if (val.contains(' ')) return 'You can\'t enter space';
     if (isUnique == false) return 'Enter a unique username';
     if (!isUnique) if (val.length < 2) return 'username is too short';
     if (!isUnique) return 'User name already exist';
 
-    return '';
+    return null;
   }
 
   /// Validate Social media accounts
@@ -128,15 +128,15 @@ class Validator {
       return 'Name cannot be empty';
     }
     if (val!.length < 2) return 'Name is too short';
-    return '';
+    return null;
   }
 
   /// VAlidate bio is not empty
   static String? bioValidator(String? val) {
-    if ((val?.trim().isEmpty ?? true)) {
+    if (val!.trim().isEmpty) {
       return 'Bio cannot be empty';
     }
-    if (val!.length < 12) return 'Bio is too short';
+    if (val.length < 12) return 'Bio is too short';
     return null;
   }
 

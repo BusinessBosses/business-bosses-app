@@ -3,12 +3,8 @@ import 'package:business_bosses_v2/features/profile/widgets/productandservicesch
 import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 
-import '../../../functions/my_native_functions.dart';
 import '../../../utils/theme/theme.dart';
-import '../controller/profile_controller.dart';
 
 Widget profileinfodisplay(BuildContext context, UserModel publicUser) {
   // final ProfileController _profileController = Get.find();
@@ -147,78 +143,80 @@ Widget profileinfodisplay(BuildContext context, UserModel publicUser) {
         //             ''
         //     ? Container()
         //     :
-        Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(
-              height: 35,
-            ),
-            const Padding(
-              padding: EdgeInsets.only(left: 15),
-              child: Text(
-                'Achievements',
-                style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: subtextColor),
+        if (publicUser.achievements != null &&
+            publicUser.achievements!.isNotEmpty)
+          Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(
+                height: 35,
               ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            SizedBox(
-              width: double.infinity,
-              child: ListView.builder(
-                padding: const EdgeInsets.only(
-                    top: 10.0, bottom: 10, left: 20, right: 20),
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                scrollDirection: Axis.vertical,
-                itemCount: publicUser.achievements == null
-                    ? 0
-                    : publicUser.achievements!.length,
-                // : _profileController.myProfile.achievements
-                //     .toString()
-                //     .split('+')
-                //     .length,
-                itemBuilder: (BuildContext context, int index) {
-                  return Container(
-                      margin: const EdgeInsets.only(bottom: 15),
-                      decoration: BoxDecoration(
-                        color: backgroundcolorinterface,
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      child: Padding(
-                          padding: const EdgeInsets.only(
-                              top: 15, bottom: 15, left: 15, right: 20),
-                          child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                SvgPicture.asset(
-                                  'assets/svgs/trophy.svg',
-                                  color: Colors.black,
-                                ),
-                                const SizedBox(
-                                  width: 10,
-                                ),
-                                Text(
-                                  publicUser.achievements![index],
-                                  // _profileController.myProfile.achievements
-                                  //     .toString()
-                                  //     .split('+')[index],
-                                  style: const TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w700,
-                                      color: Colors.black),
-                                ),
-                              ])));
-                },
+              const Padding(
+                padding: EdgeInsets.only(left: 15),
+                child: Text(
+                  'Achievements',
+                  style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: subtextColor),
+                ),
               ),
-            ),
-          ],
-        ),
+              const SizedBox(
+                height: 10,
+              ),
+              SizedBox(
+                width: double.infinity,
+                child: ListView.builder(
+                  padding: const EdgeInsets.only(
+                      top: 10.0, bottom: 10, left: 20, right: 20),
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  scrollDirection: Axis.vertical,
+                  itemCount: publicUser.achievements == null
+                      ? 0
+                      : publicUser.achievements!.length,
+                  // : _profileController.myProfile.achievements
+                  //     .toString()
+                  //     .split('+')
+                  //     .length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return Container(
+                        margin: const EdgeInsets.only(bottom: 15),
+                        decoration: BoxDecoration(
+                          color: backgroundcolorinterface,
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        child: Padding(
+                            padding: const EdgeInsets.only(
+                                top: 15, bottom: 15, left: 15, right: 20),
+                            child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  SvgPicture.asset(
+                                    'assets/svgs/trophy.svg',
+                                    color: Colors.black,
+                                  ),
+                                  const SizedBox(
+                                    width: 10,
+                                  ),
+                                  Text(
+                                    publicUser.achievements![index],
+                                    // _profileController.myProfile.achievements
+                                    //     .toString()
+                                    //     .split('+')[index],
+                                    style: const TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w700,
+                                        color: Colors.black),
+                                  ),
+                                ])));
+                  },
+                ),
+              ),
+            ],
+          ),
         const SizedBox(
           height: 25,
         ),
@@ -231,43 +229,46 @@ Widget profileinfodisplay(BuildContext context, UserModel publicUser) {
         //             ''
         //     ? Container()
         //     :
-        Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Padding(
-              padding: EdgeInsets.only(left: 15),
-              child: Text(
-                'Products & Services',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: subtextColor,
+        if (publicUser.productsandservices != null &&
+            publicUser.productsandservices!.isNotEmpty)
+          Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Padding(
+                padding: EdgeInsets.only(left: 15),
+                child: Text(
+                  'Products & Services',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: subtextColor,
+                  ),
                 ),
               ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            buildChoiceChips(publicUser.productsandservices != null
-                ? publicUser.productsandservices!
-                : [])
-          ],
-        ),
+              const SizedBox(
+                height: 10,
+              ),
+              buildChoiceChips(publicUser.productsandservices != null
+                  ? publicUser.productsandservices!
+                  : [])
+            ],
+          ),
         const SizedBox(
           height: 10,
         ),
-        const Padding(
-          padding: EdgeInsets.only(left: 15),
-          child: Text(
-            'Interests',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: subtextColor,
+        if (publicUser.industry != null && publicUser.industry!.isNotEmpty)
+          const Padding(
+            padding: EdgeInsets.only(left: 15),
+            child: Text(
+              'Interests',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: subtextColor,
+              ),
             ),
           ),
-        ),
         const SizedBox(
           height: 20,
         ),

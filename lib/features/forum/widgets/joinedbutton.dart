@@ -12,11 +12,11 @@ Widget JoinedButton() {
           color: Colors.white,
           borderRadius: BorderRadius.circular(10),
         ),
-        child: Text(
+        child: const Text(
             '_industry?.joinedUsers?.contains(_firebase.uid)' == 'true'
                 ? 'Leave'
                 : 'Join',
-            style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700)),
+            style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700)),
       ),
     ),
   );

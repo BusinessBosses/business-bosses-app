@@ -1,12 +1,12 @@
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/common/widgets/buttons/custom_button.dart';
 import 'package:business_bosses_v2/features/posts/controllers/create_post_controller.dart';
-import 'package:business_bosses_v2/features/posts/presentation/widgets/add_image_widget.dart';
-import 'package:business_bosses_v2/features/posts/presentation/widgets/overlay_users_item.dart';
-import 'package:business_bosses_v2/features/posts/presentation/widgets/preview.dart';
-import 'package:business_bosses_v2/features/posts/presentation/widgets/promote_section.dart';
-import 'package:business_bosses_v2/features/posts/presentation/widgets/text_input.dart';
-import 'package:business_bosses_v2/features/posts/presentation/widgets/user_details_widget.dart';
+import 'package:business_bosses_v2/features/posts/widgets/add_image_widget.dart';
+import 'package:business_bosses_v2/features/posts/widgets/overlay_users_item.dart';
+import 'package:business_bosses_v2/features/posts/widgets/preview.dart';
+import 'package:business_bosses_v2/features/posts/widgets/promote_section.dart';
+import 'package:business_bosses_v2/features/posts/widgets/text_input.dart';
+import 'package:business_bosses_v2/features/posts/widgets/user_details_widget.dart';
 import 'package:business_bosses_v2/functions/unfocus_keyboard.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
@@ -15,7 +15,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 import '../../../common/dialogs/snackbar.dart';
-import '../../profile/controller/profile_controller.dart';
 
 /// CREATE POST SCREEN
 class CreatePostScreen extends StatefulWidget {

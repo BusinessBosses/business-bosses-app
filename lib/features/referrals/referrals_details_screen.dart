@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'package:business_bosses_v2/action/action.dart';
 import 'package:flutter/material.dart';
 
@@ -6,11 +5,10 @@ import '../../common/models/my_refers.dart';
 import '../../common/models/my_user.dart';
 import '../../common/params.dart';
 import '../../common/widgets/safety_model.dart';
-import '../../common/widgets/user_avatar_with_badge.dart';
 import '../profile/presentation/publicprofilescreen.dart';
 
 class ReferralsDetailsScreen extends StatefulWidget {
-  static const routeName = '/referrals-details-screen';
+  static const String routeName = '/referrals-details-screen';
 
   const ReferralsDetailsScreen({Key? key}) : super(key: key);
 
@@ -26,10 +24,10 @@ class _ReferralsDetailsScreenState extends State<ReferralsDetailsScreen> {
 
   final List<MyUser> _users = [];
 
-  int _loadedItemsCount = 0;
+  final int _loadedItemsCount = 0;
 
   bool _isInit = false;
-  bool _isLoadingNext = false;
+  final bool _isLoadingNext = false;
 
   @override
   void didChangeDependencies() {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../features/chat/models/my_message.dart';
-import '../../features/posts/presentation/widgets/images_viewer_screen.dart';
+import '../../features/posts/widgets/images_viewer_screen.dart';
 import '../../utils/theme/theme.dart';
 import '../../utils/time_format.dart';
 import 'network_image_with_placeholder.dart';
@@ -74,7 +74,7 @@ class ChatBox extends StatelessWidget {
                                           onTap: () {
                                             Navigator.of(context).push(
                                               MaterialPageRoute(
-                                                builder: (context) =>
+                                                builder: (BuildContext context) =>
                                                     ImagesViewerScreen(
                                                   urls: [message.image!],
                                                 ),
@@ -129,7 +129,7 @@ class ChatBox extends StatelessWidget {
               if (message.timestamp != null)
                 Padding(
                   padding: const EdgeInsets.all(16.0),
-                  child: Text(TimeFormat.formatString(message.timestamp!)),
+                  child: Text(TimeFormat.formatString(message.timestamp)),
                 ),
             ],
           )
@@ -139,7 +139,7 @@ class ChatBox extends StatelessWidget {
               if (message.timestamp != null)
                 Padding(
                   padding: const EdgeInsets.all(16.0),
-                  child: Text(TimeFormat.formatString(message.timestamp!)),
+                  child: Text(TimeFormat.formatString(message.timestamp)),
                 ),
               message.deleted!.contains('myId')
                   ? Text(
@@ -179,7 +179,7 @@ class ChatBox extends StatelessWidget {
                                       onTap: () {
                                         Navigator.of(context).push(
                                           MaterialPageRoute(
-                                            builder: (context) =>
+                                            builder: (BuildContext context) =>
                                                 ImagesViewerScreen(
                                               urls: [message.image!],
                                             ),

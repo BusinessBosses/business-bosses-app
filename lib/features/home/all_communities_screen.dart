@@ -5,18 +5,38 @@ import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
-import '../../action/action.dart';
 import '../../common/widgets/tiles/custom_tile.dart';
 import '../../navigation/routes.dart';
 import '../../utils/theme/theme.dart';
 import '../../common/widgets/popup/bossup_challenge_popup.dart';
-import '../forum/presentation/all_forum_screen.dart';
 import '../forum/widgets/joinedbutton.dart';
 
 // ignore: public_member_api_docs
-class AllCommunitiesScreen extends StatelessWidget {
+class AllCommunitiesScreen extends StatefulWidget {
   // ignore: public_member_api_docs
   const AllCommunitiesScreen({super.key});
+
+  @override
+  State<AllCommunitiesScreen> createState() => _AllCommunitiesScreenState();
+}
+
+class _AllCommunitiesScreenState extends State<AllCommunitiesScreen> {
+  bool _isSearching = false;
+
+  List<Widget> get mActions {
+    return [
+      IconButton(
+        icon: _isSearching
+            ? const Icon(Icons.close)
+            : SvgPicture.asset(
+                'assets/svgs/search.svg',
+              ),
+        onPressed: () {
+          setState(() {});
+        },
+      ),
+    ];
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +46,13 @@ class AllCommunitiesScreen extends StatelessWidget {
         backgroundColor: backgroundcolorinterface,
         appBar: AppBar(
           automaticallyImplyLeading: false,
-          title: const Text('Boss Up'),
+          title: _isSearching
+              ? SearchBar(
+                  hintText: 'Search',
+                  onChanged: _onChanged,
+                )
+              : const Text('Boss Up'),
+          actions: mActions,
           bottom: const TabBar(
               labelStyle: TextStyle(fontWeight: FontWeight.w500),
               labelColor: Colors.black,
@@ -297,8 +323,7 @@ class AllCommunitiesScreen extends StatelessWidget {
                                                             'assets/svgs/entries.svg'),
                                                         RichText(
                                                           text: const TextSpan(
-                                                            children: <
-                                                                InlineSpan>[
+                                                            children: <InlineSpan>[
                                                               TextSpan(
                                                                 text:
                                                                     'Entries: (0)',
@@ -580,4 +605,6 @@ class AllCommunitiesScreen extends StatelessWidget {
       ),
     );
   }
+
+  void _onChanged(String value) {}
 }

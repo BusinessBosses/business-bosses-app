@@ -41,7 +41,7 @@ class MyTitle {
     if (snapshot == null) return [];
     List<MyTitle> cats = [];
     // Map<dynamic, dynamic> values = snapshot.value;
-    for (var i = 0; i < snapshot.length; i++) {
+    for (int i = 0; i < snapshot.length; i++) {
       final MyTitle cat = MyTitle.toObject(snapshot[i]);
       cats.add(cat);
     }

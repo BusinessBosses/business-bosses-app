@@ -1,8 +1,5 @@
 import 'dart:io';
 // import 'package:apple_sign_in_safety/apple_sign_in.dart';
-import 'package:business_bosses_v2/common/models/user_model.dart';
-import 'package:business_bosses_v2/common/widgets/buttons/custom_button.dart'
-    as custombuttom;
 import 'package:business_bosses_v2/common/widgets/buttons/custom_button.dart';
 
 import 'package:business_bosses_v2/common/widgets/text_widget.dart'
@@ -15,7 +12,6 @@ import 'package:get/get.dart';
 
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
-import '../../../../action/action.dart';
 import '../../../../common/widgets/buttons/icon_text_button.dart';
 import '../../../../navigation/routes.dart';
 import '../../../../services/api_service.dart';

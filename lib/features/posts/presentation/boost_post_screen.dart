@@ -227,23 +227,23 @@ class _BoostPostState extends State<BoostPost> {
                   height: size.width / 2,
                   fit: BoxFit.cover,
                 ),
-                Positioned(
+                const Positioned(
                   bottom: 20,
                   left: 20,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const TextWidget(
+                      TextWidget(
                         text: 'Reach\na Wider Audience',
                         color: Color(0xFFFFFFFF),
                         fontWeight: FontWeight.w800,
                         size: 20,
                       ),
-                      const SizedBox(
+                      SizedBox(
                         height: 10,
                       ),
                       Row(
-                        children: const <Widget>[
+                        children: <Widget>[
                           Icon(
                             Icons.check_box,
                             color: Colors.white,
@@ -259,7 +259,7 @@ class _BoostPostState extends State<BoostPost> {
                         ],
                       ),
                       Row(
-                        children: const <Widget>[
+                        children: <Widget>[
                           Icon(
                             Icons.check_box,
                             color: Colors.white,
@@ -275,7 +275,7 @@ class _BoostPostState extends State<BoostPost> {
                         ],
                       ),
                       Row(
-                        children: const <Widget>[
+                        children: <Widget>[
                           Icon(
                             Icons.check_box,
                             color: Colors.white,

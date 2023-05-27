@@ -6,7 +6,6 @@ import 'package:get/get.dart';
 import '../../../common/widgets/buttons/my_button.dart';
 import '../../../common/widgets/text_widget.dart';
 import '../../../utils/theme/theme.dart';
-import '../../home/bottom_nav.dart';
 
 class Confirmation extends StatelessWidget {
   const Confirmation({Key? key}) : super(key: key);
@@ -100,11 +99,11 @@ class Confirmation extends StatelessWidget {
                     const SizedBox(
                       height: 91,
                     ),
-                    Row(
+                    const Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const CircleAvatar(
+                        CircleAvatar(
                           radius: 14,
                           backgroundColor: Color(0xFFF01C29),
                           child: CircleAvatar(
@@ -112,14 +111,14 @@ class Confirmation extends StatelessWidget {
                             backgroundColor: Colors.white,
                           ),
                         ),
-                        const SizedBox(
+                        SizedBox(
                           width: 25,
                         ),
                         Expanded(
                           child: Column(
                             children: [
                               Row(
-                                children: const [
+                                children: [
                                   TextWidget(
                                     text: 'Payment pending approval',
                                     size: 18,
@@ -127,10 +126,10 @@ class Confirmation extends StatelessWidget {
                                   )
                                 ],
                               ),
-                              const SizedBox(
+                              SizedBox(
                                 height: 15,
                               ),
-                              const TextWidget(
+                              TextWidget(
                                 text:
                                     'Your post has been sent for review. Most ads are reviewed in 24 hours, although in some cases it will take longer.',
                                 size: 13,

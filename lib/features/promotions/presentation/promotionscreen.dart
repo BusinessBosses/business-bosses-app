@@ -8,7 +8,7 @@ import 'package:get/get.dart';
 import '../../../action/action.dart';
 
 class PromotionScreen extends StatefulWidget {
-  static const routeName = '/promotion-screen';
+  static const String routeName = '/promotion-screen';
 
   const PromotionScreen({Key? key}) : super(key: key);
 
@@ -19,10 +19,6 @@ class PromotionScreen extends StatefulWidget {
 class _PromotionScreenState extends State<PromotionScreen> {
   late String _referralId;
   final ProfileController _profileController = Get.find();
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-  }
 
   @override
   void initState() {
@@ -72,9 +68,9 @@ class _PromotionScreenState extends State<PromotionScreen> {
                     const SizedBox(
                       width: 2,
                     ),
-                    const Text(
-                      '200',
-                      style: TextStyle(
+                    Text(
+                      '${_profileController.myProfile.coinscount ?? 0}',
+                      style: const TextStyle(
                         color: textColor,
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
@@ -181,13 +177,11 @@ class _PromotionScreenState extends State<PromotionScreen> {
             ),
             InkWell(
               onTap: () {
-                if (_referralId != null) {
-                  Clipboard.setData(ClipboardData(text: _referralId))
-                      .then((value) {
-                    showSnackBar(context,
-                        message: 'Your reference id is copied to clipboard.');
-                  });
-                }
+                Clipboard.setData(ClipboardData(text: _referralId))
+                    .then((value) {
+                  showSnackBar(context,
+                      message: 'Your reference id is copied to clipboard.');
+                });
               },
               child: Ink(
                 padding:
@@ -300,7 +294,7 @@ class _PromotionScreenState extends State<PromotionScreen> {
                           ),
                     ),
                     Text(
-                      '200',
+                      '${_profileController.myProfile.referalCount ?? 0}',
                       textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                             fontWeight: FontWeight.normal,

@@ -7,10 +7,12 @@ import 'package:business_bosses_v2/features/chat/chat_room_screen.dart';
 import 'package:business_bosses_v2/features/chat/chat_screen.dart';
 import 'package:business_bosses_v2/features/connects/presentation/all_connections_screen.dart';
 import 'package:business_bosses_v2/features/forum/presentation/all_forum_screen.dart';
+import 'package:business_bosses_v2/features/forum/presentation/create_forum_screen.dart';
 import 'package:business_bosses_v2/features/moreinfoscreens/bossuppartner.dart';
 import 'package:business_bosses_v2/features/notifications/notificationsscreen.dart';
 import 'package:business_bosses_v2/features/home/bottom_nav.dart';
 import 'package:business_bosses_v2/features/posts/presentation/create_post_screen.dart';
+import 'package:business_bosses_v2/features/posts/presentation/post_details_screen.dart';
 import 'package:business_bosses_v2/features/profile/analysescreen.dart';
 import 'package:business_bosses_v2/features/profile/change_password_screen.dart';
 import 'package:business_bosses_v2/features/profile/presentation/myprofilescreen.dart';
@@ -22,7 +24,6 @@ import 'package:business_bosses_v2/features/settings/settingsscreen.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:get/get.dart';
 
-import '../features/posts/presentation/boost_post_screen.dart';
 import '../features/settings/delete_account_screen.dart';
 
 ///NAV INITIALIZATIONS
@@ -63,7 +64,7 @@ class Nav {
     ),
     GetPage(
       name: Routes.notifications,
-      page: () => NotificationsScreen(),
+      page: () => const NotificationsScreen(),
     ),
     GetPage(
       name: Routes.promotionscreen,
@@ -95,11 +96,11 @@ class Nav {
     ),
     GetPage(
       name: Routes.publicProfile,
-      page: () => PublicProfileScreen(),
+      page: () => const PublicProfileScreen(),
     ),
     GetPage(
       name: Routes.referscreen,
-      page: () => ReferScreen(),
+      page: () => const ReferScreen(),
     ),
     GetPage(
       name: Routes.allconnectionsscreen,
@@ -116,6 +117,14 @@ class Nav {
     GetPage(
       name: Routes.deleteAccount,
       page: () => const DeleteAccountScreen(),
+    ),
+    GetPage(
+      name: Routes.createForum,
+      page: () => const CreateForumScreen(),
+    ),
+    GetPage(
+      name: Routes.postDetails,
+      page: () => PostDetailsScreen(),
     ),
   ];
 }

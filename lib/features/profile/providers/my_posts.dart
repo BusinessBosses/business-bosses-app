@@ -17,7 +17,7 @@ class MyPosts with ChangeNotifier {
   }
 
   void updatePost(PostModel post) {
-    int index = _items.indexWhere((p) => p.postId == post.postId);
+    int index = _items.indexWhere((PostModel p) => p.postId == post.postId);
     if (index != -1) {
       _items[index] = post;
       scheduleMicrotask(() => notifyListeners());
@@ -25,7 +25,7 @@ class MyPosts with ChangeNotifier {
   }
 
   void deletePost(String postId) {
-    int index = _items.indexWhere((p) => p.postId == postId);
+    int index = _items.indexWhere((PostModel p) => p.postId == postId);
     if (index != -1) {
       _items.removeAt(index);
       scheduleMicrotask(() => notifyListeners());

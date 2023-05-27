@@ -59,13 +59,13 @@ class _BossuppartnerState extends State<Bossuppartner> {
           const SizedBox(
             height: 35,
           ),
-          Padding(
-            padding: const EdgeInsets.only(left: 20, right: 20),
+          const Padding(
+            padding: EdgeInsets.only(left: 20, right: 20),
             child:
                 // ignore: always_specify_types
                 Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
+                    children: [
                   Text(
                     'Company name',
                     style: TextStyle(

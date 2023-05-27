@@ -16,13 +16,13 @@ class ForgotPasswordScreen extends StatefulWidget {
 }
 
 class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
-  final _formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   AutovalidateMode _autovalidateMode = AutovalidateMode.disabled;
 
   String? _email;
   bool? _isUniqueEmail;
-  ApiService _apiService = ApiService();
+  final ApiService _apiService = ApiService();
 
   @override
   Widget build(BuildContext context) {

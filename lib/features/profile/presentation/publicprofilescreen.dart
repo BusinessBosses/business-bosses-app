@@ -1,3 +1,4 @@
+import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/features/posts/models/post_model.dart';
 import 'package:business_bosses_v2/features/profile/widgets/profileinfodisplay.dart';
@@ -8,7 +9,6 @@ import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import '../../../action/action.dart';
-import '../../../common/widgets/safety_model.dart';
 import '../../../common/widgets/text_widget.dart';
 import '../../../utils/theme/theme.dart';
 import '../controller/profile_controller.dart';
@@ -20,7 +20,7 @@ class PublicProfileScreen extends StatefulWidget {
   static const String routeName = '/public-profile-screen';
 
   // ignore: public_member_api_docs
-  PublicProfileScreen({Key? key}) : super(key: key);
+  const PublicProfileScreen({Key? key}) : super(key: key);
 
   @override
   State<PublicProfileScreen> createState() => _PublicProfileScreenState();
@@ -39,8 +39,8 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
     setState(() {
       isLoading = true;
     });
-    final res = await ProfileController.loadData(publicUser.uid);
-    final modelizedUser = UserModel.fromMap(res['user']);
+    final Map<String, dynamic> res = await ProfileController.loadData(publicUser.uid);
+    final UserModel modelizedUser = UserModel.fromMap(res['user']);
     publicUser = modelizedUser;
     _posts = res['posts'];
 
@@ -53,14 +53,14 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
       BuildContext context, String type, String publicUserUid) async {}
 
   Future<void> connect(String userId) async {
-    final res = await ApiService.post(path: '/connection/connect', body: {
+    final ApiResponseModel res = await ApiService.post(path: '/connection/connect', body: {
       'userId': _profileController.myProfile.uid,
       'connectedId': userId
     });
   }
 
   Future<void> disconnect(String userId) async {
-    final res = await ApiService.post(path: '/connection/disconnect', body: {
+    final ApiResponseModel res = await ApiService.post(path: '/connection/disconnect', body: {
       'userId': _profileController.myProfile.uid,
       'connectedId': userId
     });
@@ -77,10 +77,10 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
   }
 
   void connectToUser() async {
-    final checkConnected = _profileController.myProfile.connecteds == null
+    final int checkConnected = _profileController.myProfile.connecteds == null
         ? -1
         : _profileController.myProfile.connecteds!
-            .indexWhere((element) => element == publicUser.uid);
+            .indexWhere((String element) => element == publicUser.uid);
     if (checkConnected == -1) {
       // connecteds.add(user);
       _profileController.updateConnections(publicUser.uid);

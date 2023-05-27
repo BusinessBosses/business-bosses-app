@@ -6,7 +6,6 @@ import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/features/posts/controllers/posts_controller.dart';
 import 'package:business_bosses_v2/features/posts/repository/post_repository.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -25,7 +24,7 @@ class CreatePostController extends GetxController {
   /// PROMOTE STATE
   RxBool shouldPromote = false.obs;
 
-  bool _promote = false;
+  final bool _promote = false;
 
   /// LOADING STATE
   RxBool loading = false.obs;

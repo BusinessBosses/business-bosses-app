@@ -33,11 +33,11 @@ class ProfileController extends GetxController {
   }
 
   void updateConnections(String uid) {
-    final checkIfConnected = myProfile.connecteds == null
+    final bool checkIfConnected = myProfile.connecteds == null
         ? false
         : myProfile.connecteds!.contains(uid);
-    final newConnecteds = checkIfConnected
-        ? myProfile.connecteds?.where((element) => element != uid).toList()
+    final List<String>? newConnecteds = checkIfConnected
+        ? myProfile.connecteds?.where((String element) => element != uid).toList()
         : myProfile.connecteds == null
             ? [uid]
             : [...myProfile.connecteds!, uid];

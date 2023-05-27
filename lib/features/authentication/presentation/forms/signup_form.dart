@@ -15,7 +15,6 @@ import 'package:url_launcher/url_launcher_string.dart';
 import '../../../../common/widgets/buttons/custom_button.dart';
 import '../../../../common/widgets/buttons/icon_text_button.dart';
 import '../../../../common/widgets/text_widget.dart';
-import '../../../../navigation/routes.dart';
 import '../../../../services/api_service.dart';
 import '../../../../utils/constants/constants.dart';
 import '../../../../utils/theme/theme.dart';
@@ -72,7 +71,7 @@ class _SignUpFormState extends State<SignUpForm> {
                   setState(() {
                     _isUniqueName = result;
                   });
-                  _autoValidateMode = AutovalidateMode.always;
+                  // _autoValidateMode = AutovalidateMode.always;
                 },
                 validator: (String? val) => Validator.usernameValidator(
                   val!,
@@ -181,12 +180,17 @@ class _SignUpFormState extends State<SignUpForm> {
           CustomButton(
             label: 'Sign Up',
             onPressed: () async {
-              if (Validator.emailValidatorSignUp(_authCred,
-                          isUnique: _isUniqueEmail!) ==
-                      '' &&
-                  Validator.usernameValidator(_username!,
-                          isUnique: _isUniqueName!) ==
-                      '') {
+              _formKey.currentState!.save();
+              setState(() {
+                _autoValidateMode = AutovalidateMode.always;
+              });
+              if (!_formKey.currentState!.validate()) return;
+              // if (Validator.emailValidatorSignUp(_authCred,
+              //             isUnique: _isUniqueEmail!) ==
+              //         '' &&
+              //     Validator.usernameValidator(_username!,
+              //             isUnique: _isUniqueName!) ==
+              //         '') {
               if (agreedToTerms) {
                 setState(() {
                   _autoValidateMode = AutovalidateMode.always;
@@ -208,12 +212,12 @@ class _SignUpFormState extends State<SignUpForm> {
                   _isProcessing = false;
                 });
               }
-              } else {
-                Get.snackbar('Error', 'Invalid Entries in Form');
-                setState(() {
-                  _isProcessing = false;
-                });
-              }
+              // } else {
+              //   Get.snackbar('Error', 'Invalid Entries in Form');
+              //   setState(() {
+              //     _isProcessing = false;
+              //   });
+              // }
               setState(() {
                 _isProcessing = false;
               });

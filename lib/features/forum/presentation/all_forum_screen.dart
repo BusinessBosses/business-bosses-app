@@ -1,13 +1,19 @@
-import 'package:business_bosses_v2/features/posts/models/forum_model.dart';
+import 'package:business_bosses_v2/features/forum/models/forum_model.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 
+import '../../../action/action.dart';
+import '../../../common/params.dart';
+import '../../../navigation/routes.dart';
 import '../models/industry.dart';
 import '../../../utils/theme/theme.dart';
+import '../widgets/forum_item.dart';
 import '../widgets/joinedbutton.dart';
+import 'create_forum_screen.dart';
 
 // ignore: public_member_api_docs
 class AllForumScreen extends StatelessWidget {
@@ -66,13 +72,15 @@ class AllForumScreen extends StatelessWidget {
                               child: ElevatedButton(
                                 style: ElevatedButton.styleFrom(
                                     minimumSize: const Size(150, 45)),
-                                onPressed: () {},
+                                onPressed: () {
+                                  Get.toNamed(Routes.createForum);
+                                },
                                 child: Row(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
-                                    Text(
+                                    const Text(
                                       'Start a Topic' ?? 'Create Opportunities',
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                           fontSize: 15,
                                           color: Colors.white,
                                           fontWeight: FontWeight.w500),
@@ -296,8 +304,27 @@ class AllForumScreen extends StatelessWidget {
                   ),
                 )
               : ListView.builder(
-                  itemBuilder: (BuildContext context, int index) {},
-                ),
+                  itemCount: forums.length,
+
+                  // <-- this will disable scroll
+
+                  //controller: differentController,
+
+                  itemBuilder: (BuildContext context, int i) => ForumItem(
+                        forum: forums[i],
+                        key: ValueKey(forums[i].forumId),
+                        // onUpdateForum: () {
+                        //   navigateWithReplaceTo(
+                        //     context,
+                        //     routeName: CreateForumScreen.routeName,
+                        //     arguments: Params(
+                        //       arg1: industry,
+                        //       arg2: forums[i],
+                        //     ),
+                        //   );
+                        // },
+                        controller: null,
+                      )),
         ));
   }
 }

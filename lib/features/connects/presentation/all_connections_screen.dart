@@ -5,10 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import '../../../action/action.dart';
-import '../../../common/models/my_connect.dart';
-import '../../../common/models/my_user.dart';
+// import '../../../common/models/my_connect.dart';
 import '../../../common/widgets/safety_model.dart';
-import '../../../utils/constants/constants.dart';
 import '../../../utils/theme/theme.dart';
 import '../../search/search_app_bar.dart';
 import '../widgets/connection_user_tile.dart';
@@ -20,15 +18,15 @@ class AllConnectionsScreen extends StatelessWidget {
   final ProfileController _profileController = Get.find();
   // bool _isSearching = true;
 
-  UserModel? _specificUser;
+  // UserModel? _specificUser;
 
-  final bool _isLoading = false;
+  // final bool _isLoading = false;
 
-  final List<UserModel> _allUsers = [];
-  final List<UserModel> _suggestedUsers = [];
-  final List<UserModel> _searchedUsers = [];
-  final List<MyConnect> _myConnections = [];
-  final List<MyConnect> _myConnected = [];
+  // final List<UserModel> _allUsers = [];
+  // final List<UserModel> _suggestedUsers = [];
+  // final List<UserModel> _searchedUsers = [];
+  // final List<MyConnect> _myConnections = [];
+  // final List<MyConnect> _myConnected = [];
 
   AllConnectionsScreen({Key? key}) : super(key: key);
 
@@ -36,7 +34,7 @@ class AllConnectionsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<ConnectionController>(
-      builder: (controller) {
+      builder: (ConnectionController controller) {
         return WillPopScope(
           onWillPop: () async {
             if (controller.isSearching) {}
@@ -54,7 +52,7 @@ class AllConnectionsScreen extends StatelessWidget {
                         controller.toggleSearchState();
                       },
                       onChange: _onChange,
-                      onSubmit: (username) {
+                      onSubmit: (String username) {
                         controller.search(username);
                       })
                   : AppBar(
@@ -133,10 +131,11 @@ class AllConnectionsScreen extends StatelessWidget {
                                             const Divider(height: 0.0),
                                         itemCount:
                                             controller.connections.length,
-                                        itemBuilder: (context, i) {
-                                          final checkConnected = controller
+                                        itemBuilder:
+                                            (BuildContext context, int i) {
+                                          final int checkConnected = controller
                                               .connecteds
-                                              .indexWhere((element) =>
+                                              .indexWhere((UserModel element) =>
                                                   element.uid ==
                                                   controller
                                                       .connections[i].uid);
@@ -166,10 +165,11 @@ class AllConnectionsScreen extends StatelessWidget {
                                         separatorBuilder: (_, __) =>
                                             const Divider(height: 0.0),
                                         itemCount: controller.connecteds.length,
-                                        itemBuilder: (context, i) {
-                                          final checkConnected = controller
+                                        itemBuilder:
+                                            (BuildContext context, int i) {
+                                          final int checkConnected = controller
                                               .connecteds
-                                              .indexWhere((element) =>
+                                              .indexWhere((UserModel element) =>
                                                   element.uid ==
                                                   controller.connecteds[i].uid);
                                           return ConnectionUserItem(
@@ -199,10 +199,11 @@ class AllConnectionsScreen extends StatelessWidget {
                                             const Divider(height: 0.0),
                                         itemCount:
                                             controller.suggestedUsers.length,
-                                        itemBuilder: (context, i) {
-                                          final checkConnected = controller
+                                        itemBuilder:
+                                            (BuildContext context, int i) {
+                                          final int checkConnected = controller
                                               .connecteds
-                                              .indexWhere((element) =>
+                                              .indexWhere((UserModel element) =>
                                                   element.uid ==
                                                   controller
                                                       .suggestedUsers[i].uid);
@@ -247,9 +248,9 @@ class AllConnectionsScreen extends StatelessWidget {
                             )
                           : ListView.builder(
                               itemCount: controller.searchedUsers.length,
-                              itemBuilder: (context, i) {
-                                final checkConnected = controller.connecteds
-                                    .indexWhere((element) =>
+                              itemBuilder: (BuildContext context, int i) {
+                                final int checkConnected = controller.connecteds
+                                    .indexWhere((UserModel element) =>
                                         element.uid ==
                                         controller.searchedUsers[i].uid);
                                 return ConnectionUserItem(

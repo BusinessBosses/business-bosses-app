@@ -30,7 +30,7 @@ class CodeVerificationScreen extends StatefulWidget {
 }
 
 class _CodeVerificationScreenState extends State<CodeVerificationScreen> {
-  String currentText = "";
+  String currentText = '';
   bool _isProcessing = false;
 
   final ApiService _apiService = ApiService();
@@ -101,16 +101,16 @@ class _CodeVerificationScreenState extends State<CodeVerificationScreen> {
                 ),
                 textStyle: const TextStyle(fontSize: 20, height: 1.6),
 
-                onCompleted: (v) {},
+                onCompleted: (String v) {},
                 // onTap: () {
                 //   print("Pressed");
                 // },
-                onChanged: (value) {
+                onChanged: (String value) {
                   setState(() {
                     currentText = value;
                   });
                 },
-                beforeTextPaste: (text) {
+                beforeTextPaste: (String? text) {
                   return true;
                 },
               ),

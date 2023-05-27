@@ -3,7 +3,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
-import '../../../navigation/routes.dart';
 import '../../../services/api_service.dart';
 import '../../../utils/theme/theme.dart';
 import 'reset_password_screen.dart';
@@ -27,7 +26,7 @@ class ForgotPasswordVerificationScreen extends StatefulWidget {
 
 class _ForgotPasswordVerificationScreenState
     extends State<ForgotPasswordVerificationScreen> {
-  String currentText = "";
+  String currentText = '';
   bool _isProcessing = false;
 
   final ApiService _apiService = ApiService();
@@ -96,7 +95,7 @@ class _ForgotPasswordVerificationScreenState
                   fieldOuterPadding: const EdgeInsets.all(6.0),
                 ),
                 textStyle: const TextStyle(fontSize: 20, height: 1.6),
-                onCompleted: (v) {},
+                onCompleted: (String v) {},
                 onChanged: (String value) {
                   setState(() {
                     currentText = value;

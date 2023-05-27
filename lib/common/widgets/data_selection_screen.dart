@@ -114,7 +114,7 @@ class _DataSelectionScreenState extends State<DataSelectionScreen> {
               ? Container()
               : Container(
                   margin: const EdgeInsets.all(16.0),
-                  child: searchBar.SearchBar(
+                  child: searchBar.SearchBarWidget(
                     hintText: _title,
                     onChange: onChange,
                     onSubmit: (String val) {},
@@ -129,8 +129,8 @@ class _DataSelectionScreenState extends State<DataSelectionScreen> {
                       size: 80.0,
                       color: Colors.grey,
                     ),
-                    subTitle: 'There is not $_title for to select',
-                    title: 'There is $_title found',
+                    subTitle: 'There is no $_title for you to select',
+                    title: 'There is no $_title found',
                     clickableText: 'Reload',
                     isLoading: _isLoading,
                     onTap: widget.analyser == Analyser.category

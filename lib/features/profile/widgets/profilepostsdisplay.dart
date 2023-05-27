@@ -1,13 +1,11 @@
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/features/posts/models/post_model.dart';
-import 'package:business_bosses_v2/features/posts/presentation/widgets/post_grid_item.dart';
+import 'package:business_bosses_v2/features/posts/widgets/post_grid_item.dart';
+import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../../action/action.dart';
 import '../../../common/widgets/safety_model.dart';
-import '../../posts/presentation/create_post_screen.dart';
-import '../controller/profile_controller.dart';
 
 Widget profilepostsdisplay(
     BuildContext context, UserModel publicUser, List<PostModel> posts,
@@ -53,6 +51,10 @@ Widget profilepostsdisplay(
                   return PostGridItem(
                     post: posts[i],
                     key: ValueKey(posts[i].postId),
+                    onTap: () {
+                      print('here');
+                      Get.toNamed(Routes.postDetails, arguments: posts[i]);
+                    },
                     // onDeletePost:
                     //     _onDeletePost,
                     // onTap: () => _onPostTap(

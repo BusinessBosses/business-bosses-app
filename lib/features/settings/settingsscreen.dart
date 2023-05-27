@@ -9,7 +9,7 @@ import '../../functions/my_native_functions.dart';
 import '../../navigation/routes.dart';
 import '../../services/api_service.dart';
 import '../../utils/constants/constants.dart';
-import '../posts/presentation/widgets/settings_item.dart';
+import '../posts/widgets/settings_item.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({Key? key}) : super(key: key);
@@ -22,7 +22,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final ApiService _apiService = ApiService();
 
-  String version = "";
+  String version = '';
 
   @override
   void initState() {
@@ -57,7 +57,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               primary: false,
               padding: const EdgeInsets.all(16.0),
               itemCount: item.length,
-              itemBuilder: (BuildContext context, i) => SettingsItem(
+              itemBuilder: (BuildContext context, int i) => SettingsItem(
                 isTitle: item[i].isTitle,
                 label: item[i].label,
                 hasSwitch: item[i].hasSwitch,

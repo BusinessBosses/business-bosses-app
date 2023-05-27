@@ -6,7 +6,7 @@ import 'package:flutter_svg/svg.dart';
 import '../../utils/theme/theme.dart';
 
 class AnalyserScreen extends StatefulWidget {
-  static const routeName = '/analyser-screen';
+  static const String routeName = '/analyser-screen';
 
   const AnalyserScreen({Key? key}) : super(key: key);
 
@@ -59,13 +59,13 @@ class _AnalyserScreenState extends State<AnalyserScreen> {
           const SizedBox(
             height: 35,
           ),
-          Padding(
-            padding: const EdgeInsets.only(
+          const Padding(
+            padding: EdgeInsets.only(
               left: 20,
             ),
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              const Text(
+              Text(
                 'Hi',
                 style: TextStyle(
                     fontSize: 25,
@@ -74,15 +74,15 @@ class _AnalyserScreenState extends State<AnalyserScreen> {
               ),
               Text(
                 '@username',
-                style: const TextStyle(
+                style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w700,
                     color: primaryColorLT),
               ),
-              const SizedBox(
+              SizedBox(
                 height: 5,
               ),
-              const Text(
+              Text(
                 'how may I help you?',
                 style: TextStyle(fontSize: 15, fontWeight: FontWeight.w100),
               ),

@@ -1,5 +1,3 @@
-import 'package:business_bosses_v2/action/action.dart';
-import 'package:business_bosses_v2/features/chat/chat_screen.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
@@ -127,7 +125,7 @@ class Homeappbar extends StatelessWidget {
                             ),
                             Text(
                               coinsCount,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 color: Color.fromRGBO(133, 133, 133, 1),
                                 fontSize: 15,
                                 fontWeight: FontWeight.w700,
