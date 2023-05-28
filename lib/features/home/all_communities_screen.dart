@@ -38,18 +38,27 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen> {
 
   List<Widget> get mActions {
     return [
-      IconButton(
-        icon: _isSearching
-            ? const Icon(Icons.close)
-            : SvgPicture.asset(
-                'assets/svgs/search.svg',
-              ),
-        onPressed: () {
+      GestureDetector(
+        onTap: () {
           if (_isSearching) {
             _isSearching = !_isSearching;
           }
-          setState(() {});
+          navigateTo(
+            context,
+            routeName: AllForumScreen.routeName,
+            arguments: 'industries[i].industryId',
+          );
         },
+        child: IconButton(
+          icon: _isSearching
+              ? const Icon(Icons.close)
+              : SvgPicture.asset(
+                  'assets/svgs/search.svg',
+                ),
+          onPressed: () {
+            setState(() {});
+          },
+        ),
       ),
     ];
   }
@@ -695,7 +704,7 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen> {
                                 bottom: 120.0,
                               ),
                               itemCount: _searchTopics.length,
-                              itemBuilder: (context, i) {
+                              itemBuilder: (BuildContext context, int i) {
                                 // return ForumItem(
                                 //   _searchTopics[i],
                                 //   key: ValueKey(_searchTopics[i].forumId),
