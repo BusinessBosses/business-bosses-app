@@ -40,18 +40,6 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
 
   List<Widget> get mActions {
     return [
-<<<<<<< HEAD
-      GestureDetector(
-        onTap: () {
-          if (_isSearching) {
-            _isSearching = !_isSearching;
-          }
-          navigateTo(
-            context,
-            routeName: AllForumScreen.routeName,
-            arguments: 'industries[i].industryId',
-          );
-=======
       IconButton(
         icon: _isSearching
             ? const Icon(Icons.close)
@@ -64,18 +52,7 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
           // }
           setState(() {});
           _communitiesController.clearSearch();
->>>>>>> test
         },
-        child: IconButton(
-          icon: _isSearching
-              ? const Icon(Icons.close)
-              : SvgPicture.asset(
-                  'assets/svgs/search.svg',
-                ),
-          onPressed: () {
-            setState(() {});
-          },
-        ),
       ),
     ];
   }
@@ -609,35 +586,6 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
                                 ],
                               ),
                             )
-<<<<<<< HEAD
-                          : ListView.builder(
-                              key: ValueKey('cat.categoryId'),
-                              padding: const EdgeInsets.only(
-                                top: 8.0,
-                                right: 8.0,
-                                left: 8.0,
-                                bottom: 120.0,
-                              ),
-                              itemCount: _searchTopics.length,
-                              itemBuilder: (BuildContext context, int i) {
-                                // return ForumItem(
-                                //   _searchTopics[i],
-                                //   key: ValueKey(_searchTopics[i].forumId),
-                                //   onLikeTap: (ForumModel latestForum) {
-                                //     _searchTopics[i].likes = latestForum.likes;
-                                //     setState(() {});
-                                //   },
-                                //   onCommentSent: (ForumModel latestForum) {
-                                //     _searchTopics[i].comments = latestForum.comments;
-                                //     setState(() {});
-                                //   },
-                                // );
-                              },
-                            ),
-                    ),
-                  ],
-                )),
-=======
                           ];
                         },
                         body: Container(),
@@ -700,7 +648,8 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
                                         .getCategoryIndustries(
                                             Constants.LEARNINGID)
                                         .length,
-                                    itemBuilder: (BuildContext context, int index) {
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
                                       return CustomTile(
                                         label: controller
                                             .getCategoryIndustries(
@@ -748,7 +697,8 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
                                         .getCategoryIndustries(
                                             Constants.LEARNINGID)
                                         .length,
-                                    itemBuilder: (BuildContext context, int index) {
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
                                       return CustomTile(
                                         label: controller
                                             .getCategoryIndustries(Constants
@@ -837,7 +787,6 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
                     )),
         );
       },
->>>>>>> test
     );
   }
 
