@@ -35,7 +35,7 @@ class MySearchIndustries extends StatelessWidget {
               bottom: 120.0,
             ),
             itemCount: searchIndustries.length,
-            itemBuilder: (context, i) {
+            itemBuilder: (BuildContext context, int i) {
               return CustomTile(
                 label: searchIndustries[i].industry!,
                 photo: searchIndustries[i].photo!,

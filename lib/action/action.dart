@@ -54,14 +54,14 @@ Future<void> onDetectableTextTap(
   BuildContext context,
   String val,
 ) async {
-  debugPrint(val);
+  // debugPrint(val);
   if (val.startsWith('#')) {
     showSnackBar(context, message: val);
-    debugPrint('DetectableText >>>>>>> #');
+    // debugPrint('DetectableText >>>>>>> #');
   } else if (val.startsWith('@')) {
-    debugPrint('DetectableText >>>>>>> @');
+    // debugPrint('DetectableText >>>>>>> @');
   } else if (val.startsWith('http')) {
-    debugPrint('DetectableText >>>>>>> http');
+    // debugPrint('DetectableText >>>>>>> http');
     MyResponse res = await MyNativeFunctions.onUrlLaunch(val);
     {
       if (!res.success) {
@@ -83,7 +83,7 @@ Future<void> socialShare(String message) async {
     //   return MyResponse(success: true);
     // }
   } catch (e) {
-    debugPrint('socialShare: $e');
+    // debugPrint('socialShare: $e');
     // return MyResponse(success: false, message: e.toString());
   }
 }

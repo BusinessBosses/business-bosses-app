@@ -27,7 +27,9 @@ class PostGridItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {},
+      onTap: () {
+        onTap!();
+      },
       child: Container(
         key: key,
         margin: const EdgeInsets.all(7.0),

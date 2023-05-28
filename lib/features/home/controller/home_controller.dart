@@ -104,7 +104,7 @@ class HomeController extends GetxController {
     update();
     final ApiResponseModel response = await HomeRepository.fetchData();
     if (response.success) {
-      _postsController.processPostsToState(response.data['posts']['rows']);
+      _postsController.processPostsAndForumsData(response.data['posts']);
       _profileController.processDataToState(response.data['user']);
       _chatController.processDataToState(
           response.data['chats'], _profileController.myProfile.uid);
@@ -139,7 +139,7 @@ class HomeController extends GetxController {
     });
 
     socket.on('new-message', (data) {
-      print(data);
+      // print(data);
       _chatController.newMessage(data);
     });
 

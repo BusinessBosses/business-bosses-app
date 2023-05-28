@@ -1,4 +1,6 @@
-import 'package:business_bosses_v2/features/forum/models/forum_model.dart';
+import 'package:business_bosses_v2/common/widgets/safety_model.dart';
+import 'package:business_bosses_v2/features/forum/controller/forum_controller.dart';
+import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -6,17 +8,14 @@ import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
-import '../../../action/action.dart';
-import '../../../common/params.dart';
 import '../../../navigation/routes.dart';
 import '../models/industry.dart';
 import '../../../utils/theme/theme.dart';
 import '../widgets/forum_item.dart';
 import '../widgets/joinedbutton.dart';
-import 'create_forum_screen.dart';
 
 // ignore: public_member_api_docs
-class AllForumScreen extends StatelessWidget {
+class AllForumScreen extends StatefulWidget {
   // ignore: public_member_api_docs
   static const String routeName = 'all-forum-screen';
 
@@ -24,307 +23,391 @@ class AllForumScreen extends StatelessWidget {
   const AllForumScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
-    final ScrollController scrollController = ScrollController();
-    Industry industry = Industry();
-    final List<ForumModel> forums = [];
+  State<AllForumScreen> createState() => _AllForumScreenState();
+}
 
-    return Scaffold(
-        backgroundColor: backgroundcolorinterface,
-        key: scaffoldKey,
-        appBar: AppBar(
-          leading: IconButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
-          ),
-          centerTitle: true,
-          title: Text(
-            industry.industry ?? 'Topic',
-            textAlign: TextAlign.center,
-            style: const TextStyle(fontSize: 20),
-          ),
-        ),
-        body: NestedScrollView(
-          controller: scrollController,
-          headerSliverBuilder: (
-            BuildContext context,
-            bool innerBoxIsScrolled,
-          ) {
-            return <Widget>[
-              SliverStickyHeader(
-                sticky: false,
-                header: Column(
-                  children: [
-                    Container(
-                      width: double.infinity,
-                      color: Colors.transparent,
-                      child: Column(children: [
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Align(
-                            alignment: Alignment.centerRight,
-                            child: Padding(
-                              padding: const EdgeInsets.only(right: 20),
-                              child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                    minimumSize: const Size(150, 45)),
-                                onPressed: () {
-                                  Get.toNamed(Routes.createForum);
-                                },
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    const Text(
-                                      'Start a Topic' ?? 'Create Opportunities',
-                                      style: TextStyle(
-                                          fontSize: 15,
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.w500),
-                                    ),
-                                    const SizedBox(
-                                      width: 5,
-                                    ),
-                                    SvgPicture.asset(
-                                        'assets/svgs/startatopic.svg')
-                                  ],
-                                ),
+class _AllForumScreenState extends State<AllForumScreen> {
+  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+  final ScrollController scrollController = ScrollController();
+  late Industry industry;
+  final ProfileController _myProfile = Get.find();
+  // final List<ForumModel> forums = [];
+
+  void toggleJoinAndLeaveIndustry(ForumController controller) {
+    final String myUid = _myProfile.myProfile.uid;
+    // print(myUid);
+    if (industry.joinedUsers?.contains(myUid) ?? false) {
+      industry.joinedUsers!.removeWhere((String element) => element == myUid);
+    } else {
+      if (industry.joinedUsers == null) {
+        industry.joinedUsers = [myUid];
+      } else {
+        industry.joinedUsers!.add(myUid);
+      }
+    }
+    setState(() {});
+
+    controller.joinAndLeaveIndustry(myUid, industry.industryId!);
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    if (Get.arguments == null) {
+      Get.back();
+    } else {
+      industry = Get.arguments;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GetBuilder<ForumController>(
+      builder: (ForumController controller) {
+        return Scaffold(
+            backgroundColor: backgroundcolorinterface,
+            key: scaffoldKey,
+            appBar: AppBar(
+              leading: IconButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
+              ),
+              centerTitle: true,
+              title: Text(
+                industry.industry ?? 'Topic',
+                textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: 20),
+              ),
+            ),
+            body: NestedScrollView(
+              controller: scrollController,
+              headerSliverBuilder: (
+                BuildContext context,
+                bool innerBoxIsScrolled,
+              ) {
+                return <Widget>[
+                  SliverStickyHeader(
+                    sticky: false,
+                    header: Column(
+                      children: [
+                        Container(
+                          width: double.infinity,
+                          color: Colors.transparent,
+                          child: Column(
+                            children: [
+                              const SizedBox(
+                                height: 10,
                               ),
-                            )),
-                        Stack(
-                          children: [
-                            Container(
-                              margin: const EdgeInsets.only(
-                                  top: 10, right: 20, left: 20),
-                              height: 150,
-                              width: double.infinity,
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(15.0),
-                                child: FittedBox(
-                                  fit: BoxFit.fill,
-                                  child: Image.asset(
-                                      'assets/images/postbackground.png'),
-                                ),
-                              ),
-                            ),
-                            Column(
-                              children: [
-                                Row(
-                                  children: [
-                                    Container(
-                                      margin: const EdgeInsets.only(
-                                          top: 25, right: 20, left: 35),
-                                      height: 86,
-                                      width: 142,
-                                      child: ClipRRect(
-                                        borderRadius:
-                                            BorderRadius.circular(10.0),
-                                        child: FittedBox(
-                                          fit: BoxFit.fill,
-                                          child: CachedNetworkImage(
-                                            imageUrl: 'industry.photo!',
-                                            memCacheHeight: 256,
-                                            memCacheWidth: 256,
-                                            placeholder: (BuildContext context,
-                                                    String photo) =>
-                                                const CircularProgressIndicator(),
-                                            errorWidget:
-                                                // ignore: always_specify_types
-                                                (BuildContext context,
-                                                        // ignore: always_specify_types
-                                                        String photo,
-                                                        error) =>
-                                                    const Icon(Icons.error),
+                              Align(
+                                  alignment: Alignment.centerRight,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(right: 20),
+                                    child: ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                          minimumSize: const Size(150, 45)),
+                                      onPressed: () {
+                                        Get.toNamed(Routes.createForum,
+                                            arguments: {
+                                              'isBossUp': false,
+                                              'industryId': industry.industryId
+                                            });
+                                      },
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          const Text(
+                                            'Start a Topic' ??
+                                                'Create Opportunities',
+                                            style: TextStyle(
+                                                fontSize: 15,
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.w500),
                                           ),
-                                        ),
+                                          const SizedBox(
+                                            width: 5,
+                                          ),
+                                          SvgPicture.asset(
+                                              'assets/svgs/startatopic.svg')
+                                        ],
                                       ),
                                     ),
-                                    Expanded(
-                                        child: Padding(
-                                      padding: const EdgeInsets.only(right: 35),
-                                      child: Text(
-                                        industry.description ??
-                                            'Industry Description',
-                                        style: const TextStyle(
-                                            fontSize: 15,
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.w700),
-                                        softWrap: true,
-                                        maxLines: 5,
+                                  )),
+                              Stack(
+                                children: [
+                                  Container(
+                                    margin: const EdgeInsets.only(
+                                        top: 10, right: 20, left: 20),
+                                    height: 150,
+                                    width: double.infinity,
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(15.0),
+                                      child: FittedBox(
+                                        fit: BoxFit.fill,
+                                        child: Image.asset(
+                                            'assets/images/postbackground.png'),
                                       ),
-                                    )),
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    Stack(
-                                      children: [
-                                        Padding(
-                                          padding: const EdgeInsets.only(
-                                              left: 35, top: 5),
-                                          child: Container(
-                                            padding: const EdgeInsets.only(
-                                                bottom: 8,
-                                                top: 8,
-                                                left: 10,
-                                                right: 10),
-                                            decoration: BoxDecoration(
+                                    ),
+                                  ),
+                                  Column(
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Container(
+                                            margin: const EdgeInsets.only(
+                                                top: 25, right: 20, left: 35),
+                                            height: 86,
+                                            width: 142,
+                                            child: ClipRRect(
                                               borderRadius:
-                                                  BorderRadius.circular(200),
-                                              color: primaryColorLT,
+                                                  BorderRadius.circular(10.0),
+                                              child: FittedBox(
+                                                fit: BoxFit.fill,
+                                                child: CachedNetworkImage(
+                                                  imageUrl:
+                                                      'http://44.210.87.234/learningImages/events.jpg',
+                                                  memCacheHeight: 256,
+                                                  memCacheWidth: 256,
+                                                  placeholder: (BuildContext
+                                                              context,
+                                                          String photo) =>
+                                                      const CircularProgressIndicator(),
+                                                  errorWidget:
+                                                      // ignore: always_specify_types
+                                                      (BuildContext context,
+                                                              // ignore: always_specify_types
+                                                              String photo,
+                                                              error) =>
+                                                          const Icon(
+                                                              Icons.error),
+                                                ),
+                                              ),
                                             ),
-                                            child: Row(
-                                              children: [
-                                                Padding(
+                                          ),
+                                          Expanded(
+                                              child: Padding(
+                                            padding: const EdgeInsets.only(
+                                                right: 35),
+                                            child: Text(
+                                              industry.description ??
+                                                  'Industry Description',
+                                              style: const TextStyle(
+                                                  fontSize: 15,
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.w700),
+                                              softWrap: true,
+                                              maxLines: 5,
+                                            ),
+                                          )),
+                                        ],
+                                      ),
+                                      Row(
+                                        children: [
+                                          Stack(
+                                            children: [
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    left: 35, top: 5),
+                                                child: Container(
                                                   padding:
                                                       const EdgeInsets.only(
-                                                          right: 8),
-                                                  child: SvgPicture.asset(
-                                                      'assets/svgs/members.svg'),
-                                                ),
-                                                RichText(
-                                                  text: TextSpan(
+                                                          bottom: 8,
+                                                          top: 8,
+                                                          left: 10,
+                                                          right: 10),
+                                                  decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            200),
+                                                    color: primaryColorLT,
+                                                  ),
+                                                  child: Row(
                                                     children: [
-                                                      TextSpan(
-                                                        text: industry
-                                                                    .joinedUsers ==
-                                                                null
-                                                            ? 'Members: 0'
-                                                            : 'Members: (${industry.joinedUsers!.length ?? 0})',
-                                                        style: const TextStyle(
-                                                            fontSize: 11,
-                                                            color:
-                                                                Colors.white),
-                                                        recognizer:
-                                                            TapGestureRecognizer()
-                                                              ..onTap = () {
-                                                                // navigateTo(
-                                                                //   context,
-                                                                //   routeName:
-                                                                //       SpecificUserListScreen
-                                                                //           .routeName,
-                                                                //   arguments: ParamData(
-                                                                //       'Members',
-                                                                //       industry
-                                                                //           .joinedUsers),
-                                                                // );
-                                                              },
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .only(right: 8),
+                                                        child: SvgPicture.asset(
+                                                            'assets/svgs/members.svg'),
+                                                      ),
+                                                      RichText(
+                                                        text: TextSpan(
+                                                          children: [
+                                                            TextSpan(
+                                                              text: industry
+                                                                          .joinedUsers ==
+                                                                      null
+                                                                  ? 'Members: 0'
+                                                                  : 'Members: (${industry.joinedUsers?.length ?? 0})',
+                                                              style: const TextStyle(
+                                                                  fontSize: 11,
+                                                                  color: Colors
+                                                                      .white),
+                                                              recognizer:
+                                                                  TapGestureRecognizer()
+                                                                    ..onTap =
+                                                                        () {
+                                                                      // navigateTo(
+                                                                      //   context,
+                                                                      //   routeName:
+                                                                      //       SpecificUserListScreen
+                                                                      //           .routeName,
+                                                                      //   arguments: ParamData(
+                                                                      //       'Members',
+                                                                      //       industry
+                                                                      //           .joinedUsers),
+                                                                      // );
+                                                                    },
+                                                            ),
+                                                          ],
+                                                        ),
                                                       ),
                                                     ],
                                                   ),
                                                 ),
-                                              ],
-                                            ),
+                                              )
+                                            ],
                                           ),
-                                        )
-                                      ],
-                                    ),
-                                    Stack(
-                                      children: [
-                                        Padding(
-                                          padding: const EdgeInsets.only(
-                                              left: 5, top: 5),
-                                          child: Container(
-                                            padding: const EdgeInsets.only(
-                                                bottom: 8,
-                                                top: 8,
-                                                left: 10,
-                                                right: 10),
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(200),
-                                              color: const Color.fromARGB(
-                                                  47, 255, 255, 255),
-                                            ),
-                                            child: Row(children: [
-                                              SvgPicture.asset(
-                                                  'assets/svgs/topics.svg'),
-                                              RichText(
-                                                text: TextSpan(
-                                                  children: [
-                                                    TextSpan(
-                                                      text: 'Topics: (${forums.length ?? 0}) ' ??
-                                                          ' Opport..: (${forums.length ?? 0})',
-                                                      style: const TextStyle(
-                                                          fontSize: 11),
-                                                    ),
-                                                  ],
+                                          Stack(
+                                            children: [
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    left: 5, top: 5),
+                                                child: Container(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          bottom: 8,
+                                                          top: 8,
+                                                          left: 10,
+                                                          right: 10),
+                                                  decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            200),
+                                                    color: const Color.fromARGB(
+                                                        47, 255, 255, 255),
+                                                  ),
+                                                  child: Row(
+                                                    children: [
+                                                      SvgPicture.asset(
+                                                        'assets/svgs/topics.svg',
+                                                      ),
+                                                      RichText(
+                                                        text: TextSpan(
+                                                          children: [
+                                                            TextSpan(
+                                                              text: 'Topics: (${controller.totalForums.value}) ' ??
+                                                                  ' Opport..: (${controller.totalForums.value})',
+                                                              style:
+                                                                  const TextStyle(
+                                                                fontSize: 11,
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
                                                 ),
                                               ),
-                                            ]),
+                                            ],
                                           ),
-                                        ),
-                                      ],
-                                    ),
-                                    Flexible(
-                                      child: Padding(
-                                          padding:
-                                              const EdgeInsets.only(right: 20),
-                                          child: SizedBox(
-                                            width: MediaQuery.of(context)
-                                                .size
-                                                .width,
-                                            child: Align(
-                                                alignment:
-                                                    Alignment.centerRight,
-                                                child: Row(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.center,
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.end,
-                                                  children: [
-                                                    JoinedButton(),
-                                                  ],
-                                                )),
-                                          )),
-                                    )
-                                  ],
-                                )
-                              ],
-                            )
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                      ]),
+                                          Flexible(
+                                            child: Padding(
+                                              padding: const EdgeInsets.only(
+                                                  right: 20),
+                                              child: SizedBox(
+                                                width: MediaQuery.of(context)
+                                                    .size
+                                                    .width,
+                                                child: Align(
+                                                  alignment:
+                                                      Alignment.centerRight,
+                                                  child: Row(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .center,
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.end,
+                                                    children: [
+                                                      JoinedButton(
+                                                        industry.joinedUsers
+                                                                ?.contains(
+                                                                    _myProfile
+                                                                        .myProfile
+                                                                        .uid) ??
+                                                            false,
+                                                        () {
+                                                          toggleJoinAndLeaveIndustry(
+                                                              controller);
+                                                        },
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          )
+                                        ],
+                                      )
+                                    ],
+                                  )
+                                ],
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                  )
+                ];
+              },
+              body: controller.loading.value
+                  ? SafetyModel(
+                      isLoading: controller.loading.value,
+                      title: '',
                     )
-                  ],
-                ),
-              )
-            ];
-          },
-          body: 'forums.isEmpty || industry.joinedUsers' == null
-              ? const SizedBox(
-                  child: Center(
-                    child: CircularProgressIndicator(),
-                  ),
-                )
-              : ListView.builder(
-                  itemCount: forums.length,
+                  : controller.error.value
+                      ? SafetyModel(
+                          isLoading: false,
+                          title: 'Something went wrong',
+                          clickableText: 'Reload',
+                          onTap: () async {
+                            await controller.fetchForums();
+                          },
+                        )
+                      : !controller.loading.value &&
+                              !controller.error.value &&
+                              controller.forums.isEmpty
+                          ? const SafetyModel(
+                              isLoading: false,
+                              title: 'No post',
+                              subTitle: 'This industry has no post',
+                              // clickableText: "Reload",
+                              // onTap: () async {
+                              //   await controller.fetchForums();
+                              // },
+                            )
+                          : ListView.builder(
+                              itemCount: controller.forums.length,
 
-                  // <-- this will disable scroll
+                              // <-- this will disable scroll
 
-                  //controller: differentController,
+                              //controller: differentController,
 
-                  itemBuilder: (BuildContext context, int i) => ForumItem(
-                        forums[i],
-                        key: ValueKey(forums[i].forumId),
-                        onUpdateForum: () {
-                          navigateWithReplaceTo(
-                            context,
-                            routeName: CreateForumScreen.routeName,
-                            arguments: Params(
-                              arg1: industry,
-                              arg2: forums[i],
-                            ),
-                          );
-                        },
-                        controller: null,
-                      )),
-        ));
+                              itemBuilder: (BuildContext context, int i) =>
+                                  ForumItem(
+                                    forum: controller.forums[i],
+                                    key: ValueKey(controller.forums[i].forumId),
+                                    controller: controller,
+                                  )),
+            ));
+      },
+    );
   }
 }

@@ -38,7 +38,7 @@ class _GenericSliderState extends State<GenericSlider> {
         child: Stack(
           children: [
             Swiper(
-                onIndexChanged: (i) {
+                onIndexChanged: (int i) {
                   setState(() {
                     _activeIndex = i;
                   });

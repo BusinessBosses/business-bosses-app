@@ -23,7 +23,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
   bool isLoad = false;
   int notificationTS = DateTime.now().millisecondsSinceEpoch;
   late ScrollController _scrollController;
-  List<MyNotification> _notifications = [];
+  final List<MyNotification> _notifications = [];
 
   @override
   void initState() {

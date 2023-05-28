@@ -19,18 +19,25 @@ import 'boost_post_screen.dart';
 
 // ignore: public_member_api_docs
 class PostDetailsScreen extends StatelessWidget {
+  // final PostModel post;
+  const PostDetailsScreen({Key? key}) : super(key: key);
+
   // ignore: public_member_api_docs
-  static const String routeName = '/post-details-screen';
+  // static const String routeName = '/post-details-screen';
 
   @override
   Widget build(BuildContext context) {
-    PostModel? post;
-    String? postId;
-    int? postIndex;
-    ProfileController profileController = Get.put(ProfileController());
+    // if (Get.arguments == null) {
+    //   Get.back();
+    // }
+    PostModel post = Get.arguments;
+    // PostModel? post;
+    // String? postId;
+    // int? postIndex;
+    ProfileController profileController = Get.find();
     return WillPopScope(
         onWillPop: () async {
-          navigateTo(context, arguments: post);
+          // navigateTo(context, arguments: post);
           return false;
         },
         child: Scaffold(
@@ -62,9 +69,11 @@ class PostDetailsScreen extends StatelessWidget {
                         const SizedBox(
                           height: 10,
                         ),
-                        const Padding(
-                          padding: EdgeInsets.only(left: 15),
-                          child: CreatePostUserTile(),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 15),
+                          child: CreatePostUserTile(
+                            user: post.user,
+                          ),
                         ),
                         const SizedBox(
                           height: 10,
@@ -102,7 +111,7 @@ class PostDetailsScreen extends StatelessWidget {
                         ),
                         Padding(
                           padding: const EdgeInsets.only(left: 15, right: 15),
-                          child: post.title != null && post.title.isNotEmpty
+                          child: post.title.isNotEmpty
                               ? Linkify(
                                   text: post.title,
                                   style: bodyText1.copyWith(
@@ -128,7 +137,7 @@ class PostDetailsScreen extends StatelessWidget {
                                       post: post,
                                       text: post.title,
                                       isVideo: true,
-                                      i: postIndex!,
+                                      // i: postIndex!,
                                     )
                                   : Padding(
                                       padding: const EdgeInsets.only(
@@ -331,7 +340,7 @@ class PostDetailsScreen extends StatelessWidget {
                                           // ignore: always_specify_types
                                           MaterialPageRoute(
                                             builder: (BuildContext context) =>
-                                                BoostPost(postId: postId!),
+                                                BoostPost(postId: post.postId),
                                           ),
                                         );
                                       },

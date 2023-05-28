@@ -1,4 +1,3 @@
-
 import 'package:business_bosses_v2/features/posts/controllers/posts_controller.dart';
 import 'package:business_bosses_v2/features/posts/models/post_model.dart';
 import 'package:business_bosses_v2/features/posts/widgets/post_images.dart';
@@ -148,7 +147,7 @@ class _PostTileState extends State<PostTile> {
                       }
                     },
                     child: Text(
-                      '${widget.post.user?.name}',
+                      widget.post.user!.name ?? widget.post.user!.username,
                       style: Theme.of(context).textTheme.bodyLarge,
                     ),
                   ),
@@ -346,7 +345,8 @@ class _PostTileState extends State<PostTile> {
                       onPressed: () async {
                         widget.controller.postLike(
                             profileController.myProfile.uid,
-                            widget.post.postId);
+                            widget.post.postId,
+                            'post');
                       },
                       icon: widget.post.likes
                                   ?.contains(profileController.myProfile.uid) ==
@@ -385,9 +385,11 @@ class _PostTileState extends State<PostTile> {
                         ? TextButton.icon(
                             onPressed: () async {
                               widget.controller.postCoin(
-                                  profileController.myProfile.uid,
-                                  widget.post.postId,
-                                  profileController);
+                                profileController.myProfile.uid,
+                                widget.post.postId,
+                                profileController,
+                                'post',
+                              );
                             },
                             icon: widget.post.coins?.contains(
                                         profileController.myProfile.uid) ==
