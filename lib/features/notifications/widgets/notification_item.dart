@@ -9,7 +9,7 @@ class NotificationItem extends StatelessWidget {
   // ignore: public_member_api_docs
   final MyNotification myNotification;
   // ignore: public_member_api_docs
-  final Function? onTap;
+  final VoidCallback? onTap;
 
   // ignore: public_member_api_docs
   const NotificationItem(
@@ -21,7 +21,7 @@ class NotificationItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {},
+      onTap: onTap,
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Row(
@@ -48,7 +48,7 @@ class NotificationItem extends StatelessWidget {
                     children: [
                       Expanded(
                         child: Text(
-                          myNotification.title!,
+                          myNotification.title,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: bodyText1,
@@ -57,7 +57,7 @@ class NotificationItem extends StatelessWidget {
                     ],
                   ),
                   Text(
-                    myNotification.message!,
+                    myNotification.message,
                     style: bodyText2,
                   )
                 ],
