@@ -41,6 +41,9 @@ class _FilterUsersState extends State<FilterUsers> {
 
   bool _isInit = false;
 
+  UserModel usersample = UserModel(
+      name: 'Ernest', username: 'ernestjr', email: 'awukeurnesu@djd.com');
+
   _scrollListener() {
     if (_controller.position.atEdge) {
       if (_controller.position.pixels == 0) {
@@ -87,7 +90,7 @@ class _FilterUsersState extends State<FilterUsers> {
               Container(
                 height: MediaQuery.of(context).size.height - 182,
                 color: Colors.white,
-                child: _users.isEmpty
+                child: _users.isNotEmpty
                     ? SafetyModel(
                         isLoading: _isLoading,
                         icon: const Icon(
@@ -103,7 +106,7 @@ class _FilterUsersState extends State<FilterUsers> {
                           ListView.builder(
                             padding: const EdgeInsets.only(bottom: 48.0),
                             controller: _controller,
-                            itemCount: _users.length,
+                            itemCount: 3,
                             itemBuilder: (BuildContext context, int i) {
                               if (i == 0) {
                                 return Column(
@@ -122,38 +125,43 @@ class _FilterUsersState extends State<FilterUsers> {
                                         }
                                       },
                                       leading: UserAvatarWithBadge(
-                                        user: myProfile,
+                                        user: usersample,
                                         height: 48.0,
                                         width: 48.0,
                                         radius: 30.0,
                                         placeHolder: Icons.person,
                                       ),
-                                      trailing: MCustomButton(
-                                          buttonType: connectedbutton == true
-                                              ? ButtonType.outline
-                                              : ButtonType.elevated,
-                                          margin: const EdgeInsets.symmetric(
-                                              horizontal: 4.0),
-                                          child: FittedBox(
-                                            child: myProfile.connecteds !=
-                                                        null &&
-                                                    myProfile.connecteds!
-                                                        .contains(
-                                                            publicUser.uid)
-                                                ? const Text(
-                                                    'Connected',
-                                                    style: TextStyle(
-                                                        color: primaryColorLT),
-                                                  )
-                                                : const Text(
-                                                    'Connect',
-                                                    style: TextStyle(
-                                                        color: primaryColorLT),
-                                                  ),
-                                          ),
-                                          onPressed: () async {
-                                            onConnect();
-                                          }),
+                                      trailing: SizedBox(
+                                        height: 40,
+                                        width: 120,
+                                        child: MCustomButton(
+                                            buttonType: connectedbutton == false
+                                                ? ButtonType.outline
+                                                : ButtonType.elevated,
+                                            margin: const EdgeInsets.symmetric(
+                                                horizontal: 4.0),
+                                            child: FittedBox(
+                                              child: myProfile.connecteds !=
+                                                          null &&
+                                                      myProfile.connecteds!
+                                                          .contains(
+                                                              publicUser.uid)
+                                                  ? const Text(
+                                                      'Connected',
+                                                      style: TextStyle(
+                                                          color:
+                                                              primaryColorLT),
+                                                    )
+                                                  : const Text(
+                                                      'Connect',
+                                                      style: TextStyle(
+                                                          color: Colors.white),
+                                                    ),
+                                            ),
+                                            onPressed: () async {
+                                              onConnect();
+                                            }),
+                                      ),
                                       title: Text('bossoftheweekname'),
                                       subtitle: Text(
                                         'bossoftheweekbio',
@@ -167,77 +175,69 @@ class _FilterUsersState extends State<FilterUsers> {
                                   ],
                                 );
                               }
-                              return _users[i].isRanked == true
-                                  ? Container()
-                                  : Column(
-                                      children: [
-                                        ListTile(
-                                          onTap: () async {
-                                            var result = await navigateTo(
-                                              context,
-                                              routeName:
-                                                  PublicProfileScreen.routeName,
-                                              arguments:
-                                                  Params(arg1: _users[i].uid),
-                                            );
-                                            if (result == null) {
-                                              Navigator.of(context).pop();
-                                            }
-                                          },
-                                          leading: UserAvatarWithBadge(
-                                            user: _users[i],
-                                            height: 48.0,
-                                            width: 48.0,
-                                            radius: 30.0,
-                                            placeHolder: Icons.person,
-                                          ),
-                                          trailing: SizedBox(
-                                              height: 40,
-                                              width: 120,
-                                              child: MCustomButton(
-                                                  buttonType:
-                                                      connectedbutton == true
-                                                          ? ButtonType.outline
-                                                          : ButtonType.elevated,
-                                                  margin: const EdgeInsets
-                                                          .symmetric(
-                                                      horizontal: 4.0),
-                                                  child: FittedBox(
-                                                    child: myProfile.connecteds !=
-                                                                null &&
-                                                            myProfile
-                                                                .connecteds!
-                                                                .contains(
-                                                                    publicUser
-                                                                        .uid)
-                                                        ? const Text(
-                                                            'Connected',
-                                                            style: TextStyle(
-                                                                color:
-                                                                    primaryColorLT),
-                                                          )
-                                                        : const Text(
-                                                            'Connect',
-                                                            style: TextStyle(
-                                                                color:
-                                                                    primaryColorLT),
-                                                          ),
-                                                  ),
-                                                  onPressed: () async {
-                                                    onConnect();
-                                                  })),
-                                          title: Text(_users[i].name!),
-                                          subtitle: Text(
-                                            _users[i].bio!,
-                                            maxLines: 1,
-                                          ),
-                                        ),
-                                        const Divider(
-                                            height: 0.0,
-                                            indent: 16.0,
-                                            endIndent: 16.0),
-                                      ],
-                                    );
+                              return Column(
+                                children: [
+                                  ListTile(
+                                    onTap: () async {
+                                      var result = await navigateTo(
+                                        context,
+                                        routeName:
+                                            PublicProfileScreen.routeName,
+                                        arguments: Params(arg1: _users[i].uid),
+                                      );
+                                      if (result == null) {
+                                        Navigator.of(context).pop();
+                                      }
+                                    },
+                                    leading: UserAvatarWithBadge(
+                                      user: usersample,
+                                      height: 48.0,
+                                      width: 48.0,
+                                      radius: 30.0,
+                                      placeHolder: Icons.person,
+                                    ),
+                                    trailing: SizedBox(
+                                        height: 40,
+                                        width: 120,
+                                        child: MCustomButton(
+                                            buttonType: connectedbutton == false
+                                                ? ButtonType.outline
+                                                : ButtonType.elevated,
+                                            margin: const EdgeInsets.symmetric(
+                                                horizontal: 4.0),
+                                            child: FittedBox(
+                                              child: myProfile.connecteds !=
+                                                          null &&
+                                                      myProfile.connecteds!
+                                                          .contains(
+                                                              publicUser.uid)
+                                                  ? const Text(
+                                                      'Connected',
+                                                      style: TextStyle(
+                                                          color:
+                                                              primaryColorLT),
+                                                    )
+                                                  : const Text(
+                                                      'Connect',
+                                                      style: TextStyle(
+                                                          color: Colors.white),
+                                                    ),
+                                            ),
+                                            onPressed: () async {
+                                              onConnect();
+                                            })),
+                                    title: Text('_users[i].name!'),
+                                    subtitle: Text(
+                                      '_users[i].bio!',
+                                      maxLines: 1,
+                                    ),
+                                  ),
+                                  const Divider(
+                                      height: 0.0,
+                                      indent: 16.0,
+                                      endIndent: 16.0),
+                                ],
+                              );
                             },
                           ),
                           if (_isLoadingNext)
@@ -266,7 +266,7 @@ class _FilterUsersState extends State<FilterUsers> {
                 contentPadding:
                     const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
                 leading: UserAvatarWithBadge(
-                  user: widget.filterItems[i],
+                  user: usersample,
                   height: 52.0,
                   width: 52.0,
                   radius: 50.0,
@@ -274,11 +274,11 @@ class _FilterUsersState extends State<FilterUsers> {
                   placeHolder: Icons.person,
                 ),
                 title: Text(
-                  widget.filterItems[i].name!,
+                  'widget.filterItems[i].name!',
                   style: Theme.of(context).textTheme.bodyLarge,
                 ),
                 subtitle: Text(
-                  widget.filterItems[i].username,
+                  'widget.filterItems[i].username',
                   maxLines: 1,
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         color: textColor.withOpacity(0.6),
