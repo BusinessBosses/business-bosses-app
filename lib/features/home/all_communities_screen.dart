@@ -648,7 +648,8 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
                                         .getCategoryIndustries(
                                             Constants.LEARNINGID)
                                         .length,
-                                    itemBuilder: (BuildContext context, int index) {
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
                                       return CustomTile(
                                         label: controller
                                             .getCategoryIndustries(
@@ -694,9 +695,10 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
                                 : GridView.builder(
                                     itemCount: controller
                                         .getCategoryIndustries(
-                                            Constants.LEARNINGID)
+                                            Constants.OPPORTUNITIESID)
                                         .length,
-                                    itemBuilder: (BuildContext context, int index) {
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
                                       return CustomTile(
                                         label: controller
                                             .getCategoryIndustries(Constants

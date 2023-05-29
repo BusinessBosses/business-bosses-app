@@ -21,11 +21,11 @@ class Constants {
   static const String HTTPS = 'https://';
   static const String HTTPS_WWW = 'https://www.';
 
-  // static const String socketUrl = 'https://orca-app-5dg8w.ondigitalocean.app';
-  // static const String baseUrl =
-  //     'https://orca-app-5dg8w.ondigitalocean.app/api/v1';
-  static const String socketUrl = 'http://192.168.1.176:3000';
-  static const String baseUrl = 'http://192.168.1.176:3000/api/v1';
+  static const String socketUrl = 'https://orca-app-5dg8w.ondigitalocean.app';
+  static const String baseUrl =
+      'https://orca-app-5dg8w.ondigitalocean.app/api/v1';
+  // static const String socketUrl = 'http://192.168.1.176:3000';
+  // static const String baseUrl = 'http://192.168.1.176:3000/api/v1';
 
   // nodes
   static const String POSTS = 'posts';
@@ -34,7 +34,7 @@ class Constants {
   static const String QUOTE_INDEX = 'quoteIndex';
 
   static const String LEARNINGID = '34094961-d525-47ae-8745-98481e975240';
-  static const String OPPORTUNITIESID = '08019cc4-c1d4-43fa-8d28-ba2ad78cf317';
+  static const String OPPORTUNITIESID = '344dbd5f-b591-4b90-87be-1e30b4ca250e';
   static const String USERS = 'users';
   static const String INDUSTRIES = 'industries';
   static const String INDUSTRY = 'industry';
