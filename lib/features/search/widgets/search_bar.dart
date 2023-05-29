@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import '../../utils/theme/theme.dart';
+import '../../../utils/theme/theme.dart';
 
 // ignore: public_member_api_docs
 class Searchbar extends StatelessWidget {

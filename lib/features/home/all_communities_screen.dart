@@ -18,7 +18,7 @@ import '../../common/widgets/popup/bossup_challenge_popup.dart';
 import '../forum/models/industry.dart';
 import '../forum/presentation/specific_user_list_screen.dart';
 import '../forum/widgets/joinedbutton.dart';
-import '../search/search_bar.dart';
+import '../search/widgets/search_bar.dart';
 
 // ignore: public_member_api_docs
 class AllCommunitiesScreen extends StatefulWidget {

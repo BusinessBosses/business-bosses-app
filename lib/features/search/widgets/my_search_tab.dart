@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 class MySearchTab {
-  String id;
-  String label;
-  Widget widget;
+  String? id;
+  String? label;
+  Widget? widget;
 
   MySearchTab({
     this.id,
