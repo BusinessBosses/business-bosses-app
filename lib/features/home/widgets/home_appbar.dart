@@ -21,6 +21,16 @@ class Homeappbar extends StatelessWidget {
       elevation: 0.5,
       bottomOpacity: 0,
       title: GestureDetector(
+        onTap: () => Get.toNamed(Routes.chat, arguments: [
+          MySearchTab(
+            label: 'Users',
+            widget: const FilterUsers(),
+          ),
+          // MySearchTab(
+          //   label: 'Posts',
+          //   widget: const FilterPosts(),
+          // ),
+        ]),
         child: SizedBox(
           height: 42,
           width: double.infinity,

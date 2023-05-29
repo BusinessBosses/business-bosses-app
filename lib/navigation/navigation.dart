@@ -10,6 +10,7 @@ import 'package:business_bosses_v2/features/forum/controller/create_forum_contro
 import 'package:business_bosses_v2/features/forum/controller/forum_controller.dart';
 import 'package:business_bosses_v2/features/forum/presentation/all_forum_screen.dart';
 import 'package:business_bosses_v2/features/forum/presentation/create_forum_screen.dart';
+import 'package:business_bosses_v2/features/forum/presentation/specific_user_list_screen.dart';
 import 'package:business_bosses_v2/features/moreinfoscreens/bossuppartner.dart';
 import 'package:business_bosses_v2/features/notifications/notificationsscreen.dart';
 import 'package:business_bosses_v2/features/home/bottom_nav.dart';
@@ -128,6 +129,10 @@ class Nav {
     GetPage(
       name: Routes.postDetails,
       page: () => const PostDetailsScreen(),
+    ),
+    GetPage(
+      name: Routes.specificuserlistscreen,
+      page: () => const SpecificUserListScreen(),
     ),
   ];
 }
