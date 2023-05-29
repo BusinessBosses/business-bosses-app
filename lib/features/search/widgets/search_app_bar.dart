@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
-import '../../utils/theme/theme.dart';
+import '../../../utils/theme/theme.dart';
 
 PreferredSizeWidget SearchAppBar({
   String hintText = 'Search',

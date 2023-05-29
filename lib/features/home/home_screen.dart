@@ -68,6 +68,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       coinsCount:
                           profileController.myProfile.coinscount?.toString() ??
                               '',
+                      hasUnreadNotification:
+                          profileController.myProfile.unReadCount != null &&
+                              profileController.myProfile.unReadCount! > 0,
                     ),
                   );
                 }),
