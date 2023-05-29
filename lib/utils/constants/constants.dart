@@ -34,7 +34,9 @@ class Constants {
   static const String QUOTE_INDEX = 'quoteIndex';
 
   static const String LEARNINGID = '34094961-d525-47ae-8745-98481e975240';
-  static const String OPPORTUNITIESID = 'a7830f32-1888-4219-86d7-0358387e7db2';
+
+  static const String OPPORTUNITIESID = '344dbd5f-b591-4b90-87be-1e30b4ca250e';
+
   static const String USERS = 'users';
   static const String INDUSTRIES = 'industries';
   static const String INDUSTRY = 'industry';

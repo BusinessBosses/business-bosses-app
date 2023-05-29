@@ -706,7 +706,7 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
                                 : GridView.builder(
                                     itemCount: controller
                                         .getCategoryIndustries(
-                                            Constants.LEARNINGID)
+                                            Constants.OPPORTUNITIESID)
                                         .length,
                                     itemBuilder:
                                         (BuildContext context, int index) {
