@@ -15,7 +15,7 @@ import '../../common/widgets/un_read_dot.dart';
 import '../../common/widgets/user_avatar_with_badge.dart';
 import '../../utils/theme/theme.dart';
 import '../../utils/time_format.dart';
-import '../search/search_app_bar.dart';
+import '../search/widgets/search_app_bar.dart';
 import 'models/last_message.dart';
 
 // ignore: public_member_api_docs
@@ -212,7 +212,8 @@ class _ChatItemState extends State<ChatItem> {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        widget.chatController.seen(widget.myChatUser.user.uid, _homeController.socket);
+        widget.chatController
+            .seen(widget.myChatUser.user.uid, _homeController.socket);
         Get.toNamed(Routes.chatRoom, arguments: widget.myChatUser.user);
       },
       child: Container(

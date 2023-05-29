@@ -1,15 +1,16 @@
-import 'package:business_bosses/action/action.dart';
-import 'package:business_bosses/models/search/my_search_tab.dart';
-import 'package:business_bosses/ui/button/my_outlined_button.dart';
 import 'package:flutter/material.dart';
 
+import '../../../action/action.dart';
+import '../../../common/widgets/buttons/my_outlined_button.dart';
+import 'my_search_tab.dart';
+
 class TabsPagesFilterItem extends StatefulWidget {
-  final List<MySearchTab> allTab;
-  final List<MySearchTab> selectedTabs;
-  final Function(List<MySearchTab> newTabs) onFilterChange;
+  final List<MySearchTab>? allTab;
+  final List<MySearchTab>? selectedTabs;
+  final Function(List<MySearchTab> newTabs)? onFilterChange;
 
   const TabsPagesFilterItem({
-    Key key,
+    Key? key,
     this.allTab = const [],
     this.selectedTabs = const [],
     this.onFilterChange,
@@ -28,7 +29,7 @@ class _TabsPagesFilterItemState extends State<TabsPagesFilterItem> {
     super.didChangeDependencies();
     if (!_isInit) {
       _isInit = true;
-      _selectedTabs = widget.selectedTabs;
+      _selectedTabs = widget.selectedTabs!;
     }
   }
 
@@ -46,20 +47,20 @@ class _TabsPagesFilterItemState extends State<TabsPagesFilterItem> {
         children: [
           Expanded(
             child: ListView.builder(
-              itemCount: widget.allTab.length,
+              itemCount: widget.allTab!.length,
               itemBuilder: (context, i) {
                 int index = _selectedTabs.indexWhere(
-                    (element) => element.label == widget.allTab[i].label);
+                    (element) => element.label == widget.allTab![i].label);
                 return CheckboxListTile(
                     controlAffinity: ListTileControlAffinity.leading,
-                    title: Text(widget.allTab[i].label),
+                    title: Text(widget.allTab![i].label!),
                     value: index != -1,
                     onChanged: (status) {
                       if (index != -1) {
                         _selectedTabs.removeWhere((element) =>
-                            element.label == widget.allTab[i].label);
+                            element.label == widget.allTab![i].label);
                       } else {
-                        _selectedTabs.add(widget.allTab[i]);
+                        _selectedTabs.add(widget.allTab![i]);
                       }
                       setState(() {});
                     });
@@ -85,23 +86,23 @@ class _TabsPagesFilterItemState extends State<TabsPagesFilterItem> {
               children: [
                 Expanded(
                   child: MCustomButton(
-                    child: const Text('Cancel'),
                     onPressed: () => navigateTo(context),
                     buttonType: ButtonType.outline,
+                    child: const Text('Cancel'),
                   ),
                 ),
                 const SizedBox(width: 8.0),
 
                 Expanded(
                   child: MCustomButton(
-                    child: const Text('Ok'),
                     onPressed: () {
                       if (_selectedTabs.isEmpty) return;
 
-                      widget.onFilterChange(_selectedTabs);
+                      widget.onFilterChange!(_selectedTabs);
                       navigateTo(context);
                     },
                     buttonType: ButtonType.elevated,
+                    child: const Text('Ok'),
                   ),
                 )
                 // Text('asd'),
