@@ -19,6 +19,7 @@ import '../../../common/widgets/buttons/my_outlined_button.dart';
 import '../../posts/widgets/post_images.dart';
 import '../controllers/market_controller.dart';
 import '../models/market_model.dart';
+import '../presentation/seller_reviews.dart';
 import 'post_like_comment.dart';
 
 /// import 'rep';
@@ -312,9 +313,9 @@ class _MarketTileState extends State<MarketTile> {
                                     color: Color.fromRGBO(255, 202, 40, 1),
                                     size: 16,
                                   ),
-                                  const Text(
-                                    '3.5',
-                                    style: TextStyle(
+                                  Text(
+                                    widget.post.user.averageRating.toString(),
+                                    style: const TextStyle(
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
@@ -322,7 +323,10 @@ class _MarketTileState extends State<MarketTile> {
                                     width: 2,
                                   ),
                                   TextButton(
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      Get.to(() => SellerReviewScreen(
+                                          user: widget.post.user));
+                                    },
                                     child: const Text(
                                       'See seller reviews',
                                       style: TextStyle(

@@ -1,10 +1,9 @@
 import 'package:business_bosses_v2/common/models/comment_model.dart';
-import 'package:business_bosses_v2/services/api_service.dart';
+import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:get/get.dart';
 
-import '../../../common/models/api_response_model.dart';
 import '../../../common/models/my_response.dart';
 import '../../../common/models/user_model.dart';
 import '../../../common/widgets/user_avatar_with_badge.dart';
@@ -96,11 +95,10 @@ class _CommentItemState extends State<CommentItem> {
   }
 
   void getUser() async {
-    final ApiResponseModel response =
-        await ApiService.get(path: 'users/${widget.comment.userId}');
+    final response = await ProfileController.loadData(widget.comment.userId!);
     if (mounted) {
       setState(() {
-        user = UserModel.fromMap(response.data as Map<String, dynamic>);
+        user = UserModel.fromMap(response['user']);
       });
     }
   }
