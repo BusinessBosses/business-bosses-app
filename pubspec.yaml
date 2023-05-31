@@ -39,6 +39,7 @@ dependencies:
   firebase_analytics: ^10.2.1
   firebase_core: ^2.10.0
   firebase_dynamic_links: ^5.1.1
+  firebase_messaging: ^14.6.1
   flutter:
     sdk: flutter
   flutter_dotenv: ^5.0.2
@@ -67,7 +68,6 @@ dependencies:
   socket_io_client: ^2.0.2
   url_launcher: ^6.0.6
   uuid: ^3.0.7
-
 
 flutter_native_splash:
   color: "#FFFFFF"

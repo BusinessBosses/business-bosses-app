@@ -10,7 +10,9 @@ import 'package:business_bosses_v2/features/forum/controller/create_forum_contro
 import 'package:business_bosses_v2/features/forum/controller/forum_controller.dart';
 import 'package:business_bosses_v2/features/forum/presentation/all_forum_screen.dart';
 import 'package:business_bosses_v2/features/forum/presentation/create_forum_screen.dart';
+import 'package:business_bosses_v2/features/forum/presentation/specific_user_list_screen.dart';
 import 'package:business_bosses_v2/features/moreinfoscreens/bossuppartner.dart';
+import 'package:business_bosses_v2/features/notifications/controller/notification_controller.dart';
 import 'package:business_bosses_v2/features/notifications/notificationsscreen.dart';
 import 'package:business_bosses_v2/features/home/bottom_nav.dart';
 import 'package:business_bosses_v2/features/posts/presentation/create_post_screen.dart';
@@ -22,6 +24,7 @@ import 'package:business_bosses_v2/features/promotions/presentation/promotionscr
 import 'package:business_bosses_v2/features/profile/presentation/publicprofilescreen.dart';
 import 'package:business_bosses_v2/features/profile/presentation/update_profile_screen.dart';
 import 'package:business_bosses_v2/features/referrals/refer_screen.dart';
+import 'package:business_bosses_v2/features/search/presentation/complete_searching_screen.dart';
 import 'package:business_bosses_v2/features/settings/settingsscreen.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:get/get.dart';
@@ -67,6 +70,7 @@ class Nav {
     GetPage(
       name: Routes.notifications,
       page: () => const NotificationsScreen(),
+      binding: BindingsBuilder.put(() => NotificationController()),
     ),
     GetPage(
       name: Routes.promotionscreen,
@@ -128,6 +132,14 @@ class Nav {
     GetPage(
       name: Routes.postDetails,
       page: () => const PostDetailsScreen(),
+    ),
+    GetPage(
+      name: Routes.specificuserlistscreen,
+      page: () => const SpecificUserListScreen(),
+    ),
+    GetPage(
+      name: Routes.completesearchingscreen,
+      page: () => const CompleteSearchingScreen(),
     ),
   ];
 }
