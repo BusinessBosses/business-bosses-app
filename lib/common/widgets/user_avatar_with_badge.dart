@@ -46,7 +46,6 @@ class UserAvatarWithBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(user!.photoUrl);
     return Stack(
       clipBehavior: Clip.none,
       children: <Widget>[

@@ -5,6 +5,7 @@ import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
 import 'package:detectable_text_field/widgets/detectable_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 import '../../../../action/action.dart';
@@ -13,8 +14,13 @@ import '../../../../common/widgets/text_widget.dart';
 import '../../../../common/widgets/user_avatar_with_badge.dart';
 import '../../../../navigation/routes.dart';
 import '../../../../utils/theme/theme.dart';
+import '../../../common/models/comment_model.dart';
+import '../../../common/widgets/buttons/my_outlined_button.dart';
 import '../../posts/widgets/post_images.dart';
+import '../controllers/market_controller.dart';
 import '../models/market_model.dart';
+import '../presentation/seller_reviews.dart';
+import 'post_like_comment.dart';
 
 /// import 'rep';
 class MarketTile extends StatefulWidget {
@@ -31,9 +37,10 @@ class MarketTile extends StatefulWidget {
 
 class _MarketTileState extends State<MarketTile> {
   bool hide = false;
+  final MarketController _marketController = Get.find();
+  final ProfileController profileController = Get.find();
   @override
   Widget build(BuildContext context) {
-    final ProfileController profileController = Get.find();
     if (hide == false) {
       final List<PopupMenuEntry<String>> myPopupMore = <PopupMenuEntry<String>>[
         const PopupMenuItem<String>(
@@ -306,9 +313,9 @@ class _MarketTileState extends State<MarketTile> {
                                     color: Color.fromRGBO(255, 202, 40, 1),
                                     size: 16,
                                   ),
-                                  const Text(
-                                    '3.5',
-                                    style: TextStyle(
+                                  Text(
+                                    widget.post.user.averageRating.toString(),
+                                    style: const TextStyle(
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
@@ -316,7 +323,10 @@ class _MarketTileState extends State<MarketTile> {
                                     width: 2,
                                   ),
                                   TextButton(
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      Get.to(() => SellerReviewScreen(
+                                          user: widget.post.user));
+                                    },
                                     child: const Text(
                                       'See seller reviews',
                                       style: TextStyle(
@@ -386,6 +396,120 @@ class _MarketTileState extends State<MarketTile> {
                             ],
                           ),
                           const SizedBox(height: 16),
+                          Row(
+                            children: [
+                              TextButton.icon(
+                                onPressed: () async {
+                                  _marketController.like(
+                                      profileController.myProfile.uid,
+                                      widget.post.marketId,
+                                      'market');
+                                },
+                                icon: widget.post.likes?.contains(
+                                            profileController.myProfile.uid) ==
+                                        true
+                                    ? SvgPicture.asset(
+                                        'assets/svgs/likefilled.svg')
+                                    : SvgPicture.asset('assets/svgs/like.svg'),
+                                label: Text(
+                                  '${widget.post.likes?.length ?? 0}',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium
+                                      ?.copyWith(
+                                        fontWeight: FontWeight.w700,
+                                        color: textColor.withOpacity(0.8),
+                                      ),
+                                ),
+                              ),
+                              TextButton.icon(
+                                onPressed: () {
+                                  showModalBottomSheet(
+                                    context: context,
+                                    builder: (BuildContext context) =>
+                                        PostLikeCommentItem(
+                                      post: widget.post,
+                                      onComment:
+                                          (CommentModel newComment) async {},
+                                    ),
+                                  );
+                                },
+                                icon:
+                                    SvgPicture.asset('assets/svgs/comment.svg'),
+                                label: Text(
+                                  '${widget.post.comments?.length ?? 0}',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium
+                                      ?.copyWith(
+                                        fontWeight: FontWeight.w700,
+                                        color: textColor.withOpacity(0.8),
+                                      ),
+                                ),
+                              ),
+                              widget.post.user.uid !=
+                                      profileController.myProfile.uid
+                                  ? TextButton.icon(
+                                      onPressed: () async {
+                                        _marketController.coin(
+                                          profileController.myProfile.uid,
+                                          widget.post.marketId,
+                                          profileController,
+                                          'market',
+                                        );
+                                      },
+                                      icon: widget.post.coins?.contains(
+                                                  profileController
+                                                      .myProfile.uid) ==
+                                              true
+                                          ? SvgPicture.asset(
+                                              'assets/svgs/coin.svg')
+                                          : SvgPicture.asset(
+                                              'assets/svgs/coin.svg'),
+                                      label: Text(
+                                        '${widget.post.coins?.length ?? 0}',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium
+                                            ?.copyWith(
+                                              fontWeight: FontWeight.w700,
+                                              color: textColor.withOpacity(0.8),
+                                            ),
+                                      ),
+                                    )
+                                  : const SizedBox(),
+                              const SizedBox(width: 8.0),
+                              GestureDetector(
+                                onTap: () => _sharePost(),
+                                child: SvgPicture.asset(
+                                  'assets/svgs/share.svg',
+                                  height: 18.0,
+                                  width: 18.0,
+                                ),
+                              ),
+                              const Spacer(),
+                              widget.post.userId !=
+                                      profileController.myProfile.uid
+                                  ? Container()
+                                  : Expanded(
+                                      child: MCustomButton(
+                                        height: 40,
+                                        margin: const EdgeInsets.only(
+                                            right: 0.0, bottom: 10, top: 10),
+                                        onPressed: () {
+                                          Get.toNamed(Routes.chatRoom,
+                                              arguments: widget.post.user);
+                                        },
+                                        child: const Text(
+                                          'Message Seller',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w700,
+                                              fontSize: 15),
+                                        ),
+                                      ),
+                                    ),
+                            ],
+                          )
                         ],
                       ),
                       widget.post.images?.isNotEmpty == true

@@ -110,9 +110,7 @@ class _CreateForumScreenState extends State<CreateForumScreen> {
 
                     detectionRegExp: detectionRegExp(hashtag: false)!,
                     onDetectionTyped: (String text) {},
-                    onDetectionFinished: () {
-                      debugPrint('finished');
-                    },
+                    onDetectionFinished: () {},
                     keyboardType: TextInputType.multiline,
                     // minLines: 5,
                     maxLength: 1000,

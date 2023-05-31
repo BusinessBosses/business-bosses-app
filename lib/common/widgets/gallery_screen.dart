@@ -358,9 +358,7 @@ class _GalleryPhotosScreenState extends State<GalleryPhotosScreen> {
           _fetchNextVideos();
         });
       }
-    } catch (e, stack) {
-      debugPrint('stack: $stack : $e');
-    }
+    } catch (e, stack) {}
   }
 
   final List<MyAssetEntity> _myAssetEntitiesImages = [];
@@ -390,7 +388,6 @@ class _GalleryPhotosScreenState extends State<GalleryPhotosScreen> {
       newImages.add(MyAssetEntity(
           assetEntity: assetEntity, thumbnail: thumbnail!, isImage: true));
     }
-    debugPrint('_myAssetEntitiesImages: ${_myAssetEntitiesImages.length}');
     if (mounted) {
       setState(() {
         _isLoadingNextImages = false;
@@ -405,9 +402,6 @@ class _GalleryPhotosScreenState extends State<GalleryPhotosScreen> {
   int _loadedVideos = 0;
 
   void _fetchNextVideos() async {
-    debugPrint(
-        '_asVideos.length: ${_asVideos.length}: myAssets: ${_myAssetEntitiesVideos.length}');
-
     _loadedVideos += 20;
     if (_asVideos.length < _myAssetEntitiesVideos.length ||
         _isLoadingNextVideos) {
@@ -423,7 +417,6 @@ class _GalleryPhotosScreenState extends State<GalleryPhotosScreen> {
     for (int i = _myAssetEntitiesVideos.length;
         i < min(_asVideos.length, _loadedVideos);
         i++) {
-      debugPrint('FOR LOOP');
       Uint8List? thumbnail = await _asVideos[i]
           .thumbnailDataWithSize(const ThumbnailSize.square(100), quality: 50);
       AssetEntity assetEntity = _asVideos[i];

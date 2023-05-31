@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
+import 'dart:ffi';
 
 import 'package:flutter/foundation.dart';
 
@@ -44,82 +45,87 @@ class UserModel {
   final int? unReadCount;
   final bool? isRanked;
   final String? inviteId;
+  final double? averageRating;
 
-  UserModel(
-      {this.uid = '',
-      this.username = '',
-      this.email = '',
-      this.timestamp,
-      this.bossOfTheWeekTimeStamp,
-      this.bossOfTheWeekUpTimeStamp,
-      this.photoUrl,
-      this.coinscount,
-      this.name,
-      this.companyName,
-      this.surname,
-      this.bio,
-      this.website,
-      this.instagram,
-      this.twitter,
-      this.industry,
-      this.category,
-      this.location,
-      this.achievements,
-      this.productsandservices,
-      this.referals,
-      this.deviceTokens,
-      this.disconnections,
-      this.active,
-      this.deactivated,
-      this.ageRange,
-      this.gender,
-      this.profileViews,
-      this.connectionCount,
-      this.connectedCount,
-      this.unReadCount,
-      this.isRanked,
-      this.connections,
-      this.connecteds,
-      this.referalCount,
-      this.inviteId});
+  UserModel({
+    this.uid = '',
+    this.username = '',
+    this.email = '',
+    this.timestamp,
+    this.bossOfTheWeekTimeStamp,
+    this.bossOfTheWeekUpTimeStamp,
+    this.photoUrl,
+    this.coinscount,
+    this.name,
+    this.companyName,
+    this.surname,
+    this.bio,
+    this.website,
+    this.instagram,
+    this.twitter,
+    this.industry,
+    this.category,
+    this.location,
+    this.achievements,
+    this.productsandservices,
+    this.referals,
+    this.deviceTokens,
+    this.disconnections,
+    this.active,
+    this.deactivated,
+    this.ageRange,
+    this.gender,
+    this.profileViews,
+    this.connectionCount,
+    this.connectedCount,
+    this.unReadCount,
+    this.isRanked,
+    this.connections,
+    this.connecteds,
+    this.referalCount,
+    this.inviteId,
+    this.averageRating,
+  });
 
-  UserModel copyWith(
-      {String? uid,
-      String? username,
-      String? email,
-      int? timestamp,
-      int? bossOfTheWeekTimeStamp,
-      int? bossOfTheWeekUpTimeStamp,
-      String? photoUrl,
-      int? coinscount,
-      String? name,
-      String? companyName,
-      String? surname,
-      String? bio,
-      String? website,
-      String? instagram,
-      String? twitter,
-      String? industry,
-      String? category,
-      String? location,
-      List<String>? achievements,
-      List<String>? productsandservices,
-      List<ReferralsModel>? referals,
-      List<String>? deviceTokens,
-      List<String>? connections,
-      List<String>? connecteds,
-      List<DisconnectionsModel>? disconnections,
-      bool? active,
-      bool? deactivated,
-      String? ageRange,
-      String? gender,
-      List<ProfileViewerModel>? profileViews,
-      int? connectionCount,
-      int? referalCount,
-      int? connectedCount,
-      int? unReadCount,
-      bool? isRanked,
-      String? inviteId}) {
+  UserModel copyWith({
+    String? uid,
+    String? username,
+    String? email,
+    int? timestamp,
+    int? bossOfTheWeekTimeStamp,
+    int? bossOfTheWeekUpTimeStamp,
+    String? photoUrl,
+    int? coinscount,
+    String? name,
+    String? companyName,
+    String? surname,
+    String? bio,
+    String? website,
+    String? instagram,
+    String? twitter,
+    String? industry,
+    String? category,
+    String? location,
+    List<String>? achievements,
+    List<String>? productsandservices,
+    List<ReferralsModel>? referals,
+    List<String>? deviceTokens,
+    List<String>? connections,
+    List<String>? connecteds,
+    List<DisconnectionsModel>? disconnections,
+    bool? active,
+    bool? deactivated,
+    String? ageRange,
+    String? gender,
+    List<ProfileViewerModel>? profileViews,
+    int? connectionCount,
+    int? referalCount,
+    int? connectedCount,
+    int? unReadCount,
+    bool? isRanked,
+    String? inviteId,
+    double? averageRating,
+  }) {
     return UserModel(
       uid: uid ?? this.uid,
       username: username ?? this.username,
@@ -159,6 +165,7 @@ class UserModel {
       inviteId: inviteId ?? this.inviteId,
       connections: connections ?? this.connections,
       connecteds: connecteds ?? this.connecteds,
+      averageRating: averageRating ?? this.averageRating,
     );
   }
 
@@ -202,6 +209,7 @@ class UserModel {
       'unReadCount': unReadCount,
       'isRanked': isRanked,
       'inviteId': inviteId,
+      'averageRating': averageRating,
     };
   }
 
@@ -281,6 +289,11 @@ class UserModel {
           map['unReadCount'] != null ? map['unReadCount'] as int : null,
       isRanked: map['isRanked'] != null ? map['isRanked'] as bool : null,
       inviteId: map['inviteId'] != null ? map['inviteId'] as String : null,
+      averageRating: map['averageRating'] != null
+          ? (map['averageRating'] is int
+              ? (map['averageRating'] as int).toDouble()
+              : map['averageRating'] as double)
+          : null,
     );
   }
 
@@ -291,7 +304,7 @@ class UserModel {
 
   @override
   String toString() {
-    return 'UserModel(uid: $uid, username: $username, email: $email, timestamp: $timestamp, bossOfTheWeekTimeStamp: $bossOfTheWeekTimeStamp, bossOfTheWeekUpTimeStamp: $bossOfTheWeekUpTimeStamp, photoUrl: $photoUrl, coinscount: $coinscount, name: $name, companyName: $companyName, surname: $surname, bio: $bio, website: $website, instagram: $instagram, twitter: $twitter, industry: $industry, category: $category, location: $location, achievements: $achievements, productsandservices: $productsandservices, referals: $referals, deviceTokens: $deviceTokens, disconnections: $disconnections, active: $active, deactivated: $deactivated, ageRange: $ageRange, gender: $gender, profileViews: $profileViews, connectionCount: $connectionCount, connectedCount: $connectedCount, unReadCount: $unReadCount, isRanked: $isRanked)';
+    return 'UserModel(uid: $uid, username: $username, email: $email, timestamp: $timestamp, bossOfTheWeekTimeStamp: $bossOfTheWeekTimeStamp, bossOfTheWeekUpTimeStamp: $bossOfTheWeekUpTimeStamp, photoUrl: $photoUrl, coinscount: $coinscount, name: $name, companyName: $companyName, surname: $surname, bio: $bio, website: $website, instagram: $instagram, twitter: $twitter, industry: $industry, category: $category, location: $location, achievements: $achievements, productsandservices: $productsandservices, referals: $referals, deviceTokens: $deviceTokens, disconnections: $disconnections, active: $active, deactivated: $deactivated, ageRange: $ageRange, gender: $gender, profileViews: $profileViews, connectionCount: $connectionCount, connectedCount: $connectedCount, unReadCount: $unReadCount, isRanked: $isRanked, averageRating: $averageRating)';
   }
 
   @override
@@ -333,7 +346,8 @@ class UserModel {
         other.connectedCount == connectedCount &&
         other.unReadCount == unReadCount &&
         other.isRanked == isRanked &&
-        other.inviteId == inviteId;
+        other.inviteId == inviteId &&
+        other.averageRating == averageRating;
   }
 
   @override
@@ -373,6 +387,7 @@ class UserModel {
         connectedCount.hashCode ^
         unReadCount.hashCode ^
         inviteId.hashCode ^
-        isRanked.hashCode;
+        isRanked.hashCode ^
+        averageRating.hashCode;
   }
 }

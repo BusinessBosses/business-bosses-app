@@ -172,7 +172,6 @@ class _DataSelectionScreenState extends State<DataSelectionScreen> {
     if (widget.analyser == Analyser.category) {
       for (int i = 0; i < _categories.length; i++) {
         if (_categories[i].category == title) return _categories[i];
-        debugPrint('i: $i: ${_categories[i].category}');
       }
     } else {
       for (int i = 0; i < _industries.length; i++) {

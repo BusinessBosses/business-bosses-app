@@ -5,8 +5,8 @@ import 'package:country_list_pick/country_list_pick.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../../common/models/api_response_model.dart';
 import '../../common/models/user_model.dart';
+import '../../common/widgets/safety_model.dart';
 import '../../services/api_service.dart';
 import '../../utils/constants/constants.dart';
 import '../../utils/size_config.dart';
@@ -36,40 +36,13 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
   String? filterCode;
   String? filterLocation;
   String? filterCategory;
-  final List<UserModel> _users = [];
-  bool _isLoading = true;
-  bool _isJoined = false;
-
-  Future<void> _loadNextConnections() async {
-/**
- * @wadaskid there is no proper error handling on this function.... You did not specify if the response is successfull
- * and also, this file is the presentation layer so you should try putting it this way ... Presentation Layer -> Controller -> Repository... You can check reference on the all_communities_screen.dart
- * if you have any issues, you can relate with me
- * 
- */
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final String? userId = prefs.getString(Constants.USER_ID);
-    ApiResponseModel response =
-        await ApiService.get(path: 'members/marketplace');
-    dynamic uses = response.data['rows'];
-    for (dynamic uses in uses) {
-      dynamic user = UserModel.fromMap(uses['user']);
-      _users.add(user);
-    }
-    bool isJoined = _users.any((UserModel user) => user.uid == userId);
-    setState(() {
-      if (isJoined) {
-        _isJoined = true;
-      }
-      _isLoading = false;
-    });
-  }
 
   @override
   void initState() {
-    _loadNextConnections();
     super.initState();
   }
+
+  filterResults() {}
 
   @override
   Widget build(BuildContext context) {
@@ -232,6 +205,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                     filterCategory = null;
                                     _selectedLocation = null;
                                     _selectedCategory = null;
+                                    _marketController.initMarket();
                                     Navigator.of(context).pop();
                                   });
                                 },
@@ -242,6 +216,8 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                   setState(() {
                                     filterLocation = _selectedLocation;
                                     filterCategory = _selectedCategory;
+                                    _marketController.filterMarket(
+                                        filterLocation, filterCategory);
                                   });
                                   Navigator.of(context).pop();
                                 },
@@ -254,7 +230,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                   );
                 }),
           ]),
-      body: _isLoading
+      body: _marketController.isLoading
           ? const CircularProgressIndicator()
           : NestedScrollView(
               headerSliverBuilder:
@@ -435,29 +411,32 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                                           child: SvgPicture.asset(
                                                               'assets/svgs/members.svg'),
                                                         ),
-                                                        GestureDetector(
-                                                          onTap: () {
-                                                            Get.to(() =>
-                                                                MarketMembersScreen(
-                                                                  users: _users,
-                                                                ));
-                                                          },
-                                                          child: RichText(
-                                                            text: TextSpan(
-                                                              children: [
-                                                                TextSpan(
-                                                                  text:
-                                                                      'Members: (${_users.length})',
-                                                                  style: const TextStyle(
-                                                                      fontSize:
-                                                                          11,
-                                                                      color: Colors
-                                                                          .white),
-                                                                ),
-                                                              ],
+                                                        Obx(() {
+                                                          return GestureDetector(
+                                                            onTap: () {
+                                                              Get.to(() =>
+                                                                  MarketMembersScreen(
+                                                                    users: _marketController
+                                                                        .users,
+                                                                  ));
+                                                            },
+                                                            child: RichText(
+                                                              text: TextSpan(
+                                                                children: [
+                                                                  TextSpan(
+                                                                    text:
+                                                                        'Members: (${_marketController.users.length})',
+                                                                    style: const TextStyle(
+                                                                        fontSize:
+                                                                            11,
+                                                                        color: Colors
+                                                                            .white),
+                                                                  ),
+                                                                ],
+                                                              ),
                                                             ),
-                                                          ),
-                                                        ),
+                                                          );
+                                                        }),
                                                       ],
                                                     ),
                                                   ),
@@ -501,19 +480,24 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                                             size: 15,
                                                           ),
                                                         ),
-                                                        RichText(
-                                                          text: TextSpan(
-                                                            children: <InlineSpan>[
-                                                              TextSpan(
-                                                                text:
-                                                                    'Listings: ${_marketController.markets.length}',
-                                                                style:
-                                                                    const TextStyle(
-                                                                  fontSize: 11,
-                                                                ),
+                                                        Obx(
+                                                          () {
+                                                            return RichText(
+                                                              text: TextSpan(
+                                                                children: <InlineSpan>[
+                                                                  TextSpan(
+                                                                    text:
+                                                                        'Listings: ${_marketController.markets.length}',
+                                                                    style:
+                                                                        const TextStyle(
+                                                                      fontSize:
+                                                                          11,
+                                                                    ),
+                                                                  ),
+                                                                ],
                                                               ),
-                                                            ],
-                                                          ),
+                                                            );
+                                                          },
                                                         ),
                                                       ],
                                                     ),
@@ -568,17 +552,75 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
               },
               body: Padding(
                 padding: const EdgeInsets.only(bottom: 100, top: 20),
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: _marketController.markets.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    final MarketModel market = _marketController.markets[index];
-
-                    return MarketTile(
-                      post: market,
+                child: Obx(() {
+                  if (_marketController.loading.value) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else if (_marketController.error.value) {
+                    return const SafetyModel(
+                      isLoading: false,
+                      title: 'Error While Loading Data',
+                      subTitle: 'Try Reloading Again',
+                      icon: Icon(
+                        Icons.warning,
+                        size: 60,
+                      ),
                     );
-                  },
-                ),
+                  } else {
+                    return _marketController.markets.isEmpty
+                        ? filterCategory != null || filterLocation != null
+                            ? SafetyModel(
+                                isLoading: false,
+                                icon: const Icon(
+                                  Icons.shopping_cart,
+                                  color: Colors.grey,
+                                  size: 80.0,
+                                ),
+                                title: 'No Items Available For This Search',
+                                // subTitle: '',
+                                clickableText: 'View All',
+                                onTap: () {
+                                  setState(() {
+                                    filterLocation = null;
+                                    filterCode = null;
+                                    filterCategory = null;
+                                    _selectedLocation = null;
+                                    _selectedCategory = null;
+                                    _marketController.initMarket();
+                                  });
+                                },
+                              )
+                            : SafetyModel(
+                                isLoading: false,
+                                icon: const Icon(
+                                  Icons.edit,
+                                  color: Colors.grey,
+                                  size: 80.0,
+                                ),
+                                title: 'Be the first one to Sell your Item',
+                                // subTitle: '',
+                                clickableText: 'Start a topic',
+                                onTap: () {
+                                  Get.to(
+                                    () => const CreateSellingitemScreen(
+                                      isUpd: false,
+                                    ),
+                                  );
+                                },
+                              )
+                        : ListView.builder(
+                            shrinkWrap: true,
+                            itemCount: _marketController.markets.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              final MarketModel market =
+                                  _marketController.markets[index];
+
+                              return MarketTile(
+                                post: market,
+                              );
+                            },
+                          );
+                  }
+                }),
               ),
             ),
     );
@@ -593,12 +635,13 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
           'type': 'marketplace',
         });
         setState(() {
-          if (_isJoined) {
-            _users.removeWhere((UserModel user) => user.uid == userId);
+          if (_marketController.isJoined.value) {
+            _marketController.users
+                .removeWhere((UserModel user) => user.uid == userId);
           } else {
-            _users.add(_profileController.myProfile);
+            _marketController.users.add(_profileController.myProfile);
           }
-          _isJoined = !_isJoined;
+          _marketController.isJoined.value = !_marketController.isJoined.value;
         });
       },
       child: Container(
@@ -615,11 +658,13 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
             color: Colors.white,
             borderRadius: BorderRadius.circular(10),
           ),
-          child: Text(
-            _isJoined ? 'Leave' : 'Join',
-            style: const TextStyle(
-              fontSize: 13,
-              fontWeight: FontWeight.w700,
+          child: Obx(
+            () => Text(
+              _marketController.isJoined.value ? 'Leave' : 'Join',
+              style: const TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.w700,
+              ),
             ),
           ),
         ),

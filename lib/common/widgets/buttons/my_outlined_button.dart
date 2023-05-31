@@ -96,4 +96,6 @@ class MCustomButton extends StatelessWidget {
   }
 }
 
+/// BUTTON TYPE
+// ignore: public_member_api_docs
 enum ButtonType { outline, elevated }

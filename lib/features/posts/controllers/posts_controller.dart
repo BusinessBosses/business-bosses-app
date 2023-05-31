@@ -67,8 +67,9 @@ class PostsController extends GetxController {
       psts.add({'isForum': false, 'data': posts[i]});
     }
 
-    mixedPosts = [...frms, ...psts]
-      ..sort((Map<String, dynamic> a, Map<String, dynamic> b) => b['data'].timestamp - a['data'].timestamp);
+    mixedPosts = [...frms, ...psts]..sort(
+        (Map<String, dynamic> a, Map<String, dynamic> b) =>
+            b['data'].timestamp - a['data'].timestamp);
 
     // mixedPosts = Iterable.generate(math.max(posts.length, forums.length))
     //     .expand((i) sync* {
@@ -81,9 +82,9 @@ class PostsController extends GetxController {
   }
 
   void processPostsAndForumsData(dynamic data) {
-    processPostsToState(data['posts']['rows']);
-    processForumsToState(data['forums']['rows']);
-    joinPostsAndForums();
+    // processPostsToState(data['posts']['rows']);
+    // processForumsToState(data['forums']['rows']);
+    // joinPostsAndForums();
     update();
   }
 

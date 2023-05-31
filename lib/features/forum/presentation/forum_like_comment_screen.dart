@@ -67,7 +67,6 @@ class _ForumLikeCommentScreenState extends State<ForumLikeCommentScreen> {
 
   @override
   Widget build(BuildContext context) {
-    debugPrint('_ForumLikeCommentScreenState.build');
     return GestureDetector(
       onTap: () {
         FocusScopeNode currentFocus = FocusScope.of(context);
