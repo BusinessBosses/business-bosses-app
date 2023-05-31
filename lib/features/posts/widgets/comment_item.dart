@@ -27,7 +27,6 @@ class _CommentItemState extends State<CommentItem> {
   @override
   void initState() {
     getUser();
-    loaded = true;
     super.initState();
   }
 
@@ -105,6 +104,7 @@ class _CommentItemState extends State<CommentItem> {
     if (mounted) {
       setState(() {
         user = UserModel.fromMap(response['user']);
+        loaded = true;
       });
     }
   }
