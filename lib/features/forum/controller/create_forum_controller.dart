@@ -12,7 +12,7 @@ class CreateForumController extends GetxController {
   RxBool loading = false.obs;
   late ImagePicker _picker;
   RxList<XFile> imageFileList = RxList<XFile>(<XFile>[]);
-  final ForumController _forumController = Get.find();
+  final ForumController _forumController = Get.put(ForumController());
   bool validateCreatePostData(Map<String, dynamic> data) {
     if (data['title'].toString().isEmpty ||
         data['description'].toString().isEmpty) {

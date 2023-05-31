@@ -14,6 +14,7 @@ import '../../common/widgets/tiles/custom_tile.dart';
 import '../../navigation/routes.dart';
 import '../../utils/theme/theme.dart';
 import '../../common/widgets/popup/bossup_challenge_popup.dart';
+import '../forum/presentation/create_forum_screen.dart';
 import '../forum/widgets/joinedbutton.dart';
 import '../search/search_bar.dart';
 
@@ -182,6 +183,13 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
                                                         45) // put the width and height you want
                                                     ),
                                                 onPressed: () {
+                                                  Get.toNamed(
+                                                      Routes.createForum,
+                                                      arguments: {
+                                                        'isBossUp': true,
+                                                        'industryId':
+                                                            'b668dc4e-16f1-4822-8802-f3b9c58c37cb'
+                                                      });
                                                   // int now = DateTime.now()
                                                   //     .millisecondsSinceEpoch;
                                                   // int previousStamp = user.user

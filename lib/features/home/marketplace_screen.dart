@@ -635,13 +635,13 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
           'type': 'marketplace',
         });
         setState(() {
-          if (_marketController.isJoined) {
+          if (_marketController.isJoined.value) {
             _marketController.users
                 .removeWhere((UserModel user) => user.uid == userId);
           } else {
             _marketController.users.add(_profileController.myProfile);
           }
-          _marketController.isJoined = !_marketController.isJoined;
+          _marketController.isJoined.value = !_marketController.isJoined.value;
         });
       },
       child: Container(
@@ -658,11 +658,13 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
             color: Colors.white,
             borderRadius: BorderRadius.circular(10),
           ),
-          child: Text(
-            _marketController.isJoined ? 'Leave' : 'Join',
-            style: const TextStyle(
-              fontSize: 13,
-              fontWeight: FontWeight.w700,
+          child: Obx(
+            () => Text(
+              _marketController.isJoined.value ? 'Leave' : 'Join',
+              style: const TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.w700,
+              ),
             ),
           ),
         ),

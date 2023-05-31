@@ -98,7 +98,6 @@ class MarketModel {
       price: map['price'] as String,
       userId: map['userId'] as String,
       promote: map['promote'] as bool,
-      timestamp: map['timestamp'] as int,
       likes: map['likes'] != null ? List<String>.from((map['likes'])) : null,
       coins: map['coins'] != null ? List<String>.from((map['coins'])) : null,
       comments: List.from(map['comments'])

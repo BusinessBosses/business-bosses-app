@@ -1,3 +1,4 @@
+import 'package:business_bosses_v2/features/marketplace/presentation/seller_reviews.dart';
 import 'package:business_bosses_v2/features/posts/models/post_model.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/features/profile/widgets/profileinfodisplay.dart';
@@ -153,7 +154,132 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                           _posts,
                           loading: isLoading,
                         ),
-                        Container()
+                        Stack(
+                          children: <Widget>[
+                            Container(
+                              padding: const EdgeInsets.all(0),
+                              height: 100,
+                              width: double.infinity,
+                              child: ClipRRect(
+                                child: FittedBox(
+                                  fit: BoxFit.fill,
+                                  child: Image.asset(
+                                      'assets/images/sellerbackground.jpg'),
+                                ),
+                              ),
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                  padding:
+                                      const EdgeInsets.only(left: 11, top: 11),
+                                  child: const Text(
+                                    'Store',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                                Container(
+                                  padding: const EdgeInsets.all(11.0),
+                                  child: Row(
+                                    children: [
+                                      Container(
+                                        padding: const EdgeInsets.only(
+                                            bottom: 8,
+                                            top: 8,
+                                            left: 10,
+                                            right: 10),
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(200),
+                                          color: const Color.fromRGBO(
+                                              128, 128, 128, 1),
+                                        ),
+                                        child: Row(
+                                          children: [
+                                            SvgPicture.asset(
+                                                'assets/svgs/star.svg'),
+                                            const SizedBox(
+                                              width: 3,
+                                            ),
+                                            RichText(
+                                              text: TextSpan(
+                                                children: <InlineSpan>[
+                                                  TextSpan(
+                                                    text: profileController
+                                                        .myProfile.averageRating
+                                                        .toString(),
+                                                    style: const TextStyle(
+                                                      fontSize: 11,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        width: 15,
+                                      ),
+                                      GestureDetector(
+                                        onTap: () {
+                                          Get.to(() => SellerReviewScreen(
+                                              user:
+                                                  profileController.myProfile));
+                                        },
+                                        child: Container(
+                                          padding: const EdgeInsets.only(
+                                              bottom: 8,
+                                              top: 8,
+                                              left: 20,
+                                              right: 20),
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(200),
+                                            color: const Color.fromRGBO(
+                                                128, 128, 128, 1),
+                                          ),
+                                          child: Row(
+                                            children: [
+                                              RichText(
+                                                text: TextSpan(
+                                                  children: <InlineSpan>[
+                                                    TextSpan(
+                                                      text:
+                                                          'See Seller Reviews',
+                                                      style: const TextStyle(
+                                                        fontSize: 11,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              const SizedBox(
+                                                width: 15,
+                                              ),
+                                              Text(
+                                                '>',
+                                                style: TextStyle(
+                                                    color: Colors.white),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 20,
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                       ],
                     ),
                   ),

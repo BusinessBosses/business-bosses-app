@@ -18,7 +18,7 @@ class MarketController extends GetxController {
   final int postsSize = 20;
   RxBool error = RxBool(false);
   RxBool loading = RxBool(false);
-  bool isJoined = false;
+  RxBool isJoined = RxBool(false);
   bool isLoading = true;
   // final ProfileController _profileController = Get.find();
 
@@ -173,7 +173,7 @@ class MarketController extends GetxController {
     final String? userId = prefs.getString(Constants.USER_ID);
     bool isJoin = users.any((UserModel user) => user.uid == userId);
     if (isJoin) {
-      isJoined = true;
+      isJoined(true);
     }
 
     update();
