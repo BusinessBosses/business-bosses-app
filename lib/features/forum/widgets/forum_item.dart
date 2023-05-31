@@ -291,26 +291,26 @@ class _ForumItemState extends State<ForumItem> {
                                         )
                                       : Container(),
 
-                                  if (widget.forum.isRanked ?? false)
-                                    Column(
-                                      children: [
-                                        const RankingBadge(size: 30.0),
-                                        const SizedBox(
-                                          height: 2,
-                                        ),
-                                        Text(
-                                          'Boss of the week',
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyMedium
-                                              ?.copyWith(
-                                                  fontWeight: FontWeight.w700,
-                                                  color:
-                                                      textColor.withOpacity(1),
-                                                  fontSize: 7.5),
-                                        ),
-                                      ],
-                                    )
+                                  // if (widget.forum.isRanked ?? false)
+                                  //   Column(
+                                  //     children: [
+                                  //       const RankingBadge(size: 30.0),
+                                  //       const SizedBox(
+                                  //         height: 2,
+                                  //       ),
+                                  //       Text(
+                                  //         'Boss of the week',
+                                  //         style: Theme.of(context)
+                                  //             .textTheme
+                                  //             .bodyMedium
+                                  //             ?.copyWith(
+                                  //                 fontWeight: FontWeight.w700,
+                                  //                 color:
+                                  //                     textColor.withOpacity(1),
+                                  //                 fontSize: 7.5),
+                                  //       ),
+                                  //     ],
+                                  //   )
 
                                   // if(widget.forum.uid != _firebase.uid)
                                 ],
@@ -334,41 +334,43 @@ class _ForumItemState extends State<ForumItem> {
                                       showText: true,
                                     ),
                                   ),
-                                  Positioned(
-                                    bottom: -10,
-                                    right: -10,
-                                    child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.end,
-                                      children: [
-                                        Container(
-                                          height: 90 / 3.4,
-                                          width: 90 / 3.4,
-                                          padding: const EdgeInsets.all(3),
-                                          decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            borderRadius:
-                                                BorderRadius.circular(30.0),
-                                            // ignore: prefer_const_literals_to_create_immutables
-                                            boxShadow: [
-                                              const BoxShadow(
-                                                color: Colors.black,
-                                                blurRadius:
-                                                    500.0, // soften the shadow
-                                                spreadRadius:
-                                                    0.02, //extend the shadow
-                                              )
-                                            ],
+                                  if (widget.forum.isRanked ?? false)
+                                    Positioned(
+                                      bottom: -10,
+                                      right: -10,
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.end,
+                                        children: [
+                                          Container(
+                                            height: 90 / 3.4,
+                                            width: 90 / 3.4,
+                                            padding: const EdgeInsets.all(3),
+                                            decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius:
+                                                  BorderRadius.circular(30.0),
+                                              // ignore: prefer_const_literals_to_create_immutables
+                                              boxShadow: [
+                                                const BoxShadow(
+                                                  color: Colors.black,
+                                                  blurRadius:
+                                                      500.0, // soften the shadow
+                                                  spreadRadius:
+                                                      0.02, //extend the shadow
+                                                )
+                                              ],
+                                            ),
+                                            child: SvgPicture.asset(
+                                              'assets/svgs/bosseek.svg',
+                                            ),
                                           ),
-                                          child: SvgPicture.asset(
-                                            'assets/svgs/bosseek.svg',
+                                          const SizedBox(
+                                            height: 5,
                                           ),
-                                        ),
-                                        const SizedBox(
-                                          height: 5,
-                                        ),
-                                      ],
-                                    ),
-                                  )
+                                        ],
+                                      ),
+                                    )
                                 ],
                               ),
                             )

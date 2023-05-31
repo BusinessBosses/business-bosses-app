@@ -19,4 +19,35 @@ class HomeRepository {
         await ApiService.get(path: 'forum/search/$query?page=0&size=50');
     return response;
   }
+
+  /// Fetch Marketplace Data
+  static Future<ApiResponseModel> fetchMarket() async {
+    final ApiResponseModel response = await ApiService.get(path: 'markets/all');
+    return response;
+  }
+
+  /// Fetch MArketplace Members
+  static Future<ApiResponseModel> fetchMarketMembers() async {
+    final ApiResponseModel response =
+        await ApiService.get(path: 'members/marketplace');
+    return response;
+  }
+
+  /// Filter Marketplace Data
+  static Future<ApiResponseModel> filterMarket(
+      String? location, String? category) async {
+    if (location == null) {
+      final ApiResponseModel response =
+          await ApiService.get(path: 'markets/search?category=$category');
+      return response;
+    } else if (category == null) {
+      final ApiResponseModel response =
+          await ApiService.get(path: 'markets/search?location=$location');
+      return response;
+    } else {
+      final ApiResponseModel response = await ApiService.get(
+          path: 'markets/search?category=$category&location=$location');
+      return response;
+    }
+  }
 }

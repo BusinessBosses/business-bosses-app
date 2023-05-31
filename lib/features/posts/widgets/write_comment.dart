@@ -77,11 +77,11 @@ class _WriteACommentState extends State<WriteAComment> {
                 postId: widget.postId,
                 comment: text,
                 timestamp: DateTime.now().millisecondsSinceEpoch,
-                user: UserModel.fromMap(_profileController.myProfile.toMap()),
+                user: _profileController.myProfile,
               );
-              debugPrint('COMMENT: ${comment.toMap()}');
               ApiService.post(path: 'comments', body: comment.toMap());
               widget.onCommentSend(comment);
+
               setState(() {
                 _commentController.text = '';
               });

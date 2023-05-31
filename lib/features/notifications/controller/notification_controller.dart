@@ -26,12 +26,13 @@ class NotificationController extends GetxController {
     final ApiResponseModel response =
         await NotificationRepository.fetchNotifications(_page.value);
     if (response.success) {
+      if (response.data['quote'] != null) {
+        quote = Quote.fromMap(response.data['quote']);
+      }
       for (var i = 0; i < response.data['notifications']['rows'].length; i++) {
         notifications.add(
             MyNotification.fromMap(response.data['notifications']['rows'][i]));
-        if (response.data['quote'] != null) {
-          quote = Quote.fromMap(response.data['quote']);
-        }
+
         _page(_page.value + 1);
 
         _profileController.updateProfile(

@@ -3,6 +3,7 @@ import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/common/widgets/text_widget.dart';
 import 'package:business_bosses_v2/features/chat/controllers/chat_controller.dart';
 import 'package:business_bosses_v2/features/home/repository/home_repository.dart';
+import 'package:business_bosses_v2/features/marketplace/controllers/market_controller.dart';
 import 'package:business_bosses_v2/features/posts/controllers/posts_controller.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
@@ -17,6 +18,7 @@ class HomeController extends GetxController {
   final PostsController _postsController = Get.find();
   final ProfileController _profileController = Get.find();
   final ChatController _chatController = Get.find();
+  final MarketController _marketController = Get.put(MarketController());
   RxBool error = RxBool(false);
   RxBool loading = RxBool(false);
 
@@ -109,6 +111,8 @@ class HomeController extends GetxController {
       _chatController.processDataToState(
           response.data['chats'], _profileController.myProfile.uid);
       socket.emit('handshake', _profileController.myProfile.uid);
+      _marketController.initMarket();
+      _marketController.initUsers();
       addCoinDaily();
     } else {
       error(true);
