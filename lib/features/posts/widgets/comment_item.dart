@@ -23,67 +23,73 @@ class CommentItem extends StatefulWidget {
 
 class _CommentItemState extends State<CommentItem> {
   UserModel user = UserModel();
+  bool loaded = false;
   @override
   void initState() {
     getUser();
+    loaded = true;
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          MyContainer(
-            width: MediaQuery.of(context).size.width * 0.7,
-            padding:
-                const EdgeInsets.only(bottom: 12.0, left: 12.0, right: 12.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                ListTile(
-                  leading: UserAvatarWithBadge(
-                    user: user,
-                    height: 36.0,
-                    width: 36.0,
-                    radius: 30.0,
-                    placeHolder: Icons.person,
+    if (loaded == true) {
+      return Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            MyContainer(
+              width: MediaQuery.of(context).size.width * 0.7,
+              padding:
+                  const EdgeInsets.only(bottom: 12.0, left: 12.0, right: 12.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  ListTile(
+                    leading: UserAvatarWithBadge(
+                      user: user,
+                      height: 36.0,
+                      width: 36.0,
+                      radius: 30.0,
+                      placeHolder: Icons.person,
+                    ),
+                    title: Text(
+                      '${user.name}',
+                      style: bodyText1,
+                    ),
+                    subtitle: Text(
+                      TimeFormat.formatString(widget.comment.timestamp!),
+                      style: bodyText2.copyWith(
+                        fontSize: 11.0,
+                        color: hintColor,
+                      ),
+                    ),
+                    contentPadding: const EdgeInsets.all(0.0),
                   ),
-                  title: Text(
-                    '${user.name}',
-                    style: bodyText1,
-                  ),
-                  subtitle: Text(
-                    TimeFormat.formatString(widget.comment.timestamp!),
+                  Linkify(
+                    text: '${widget.comment.comment}',
                     style: bodyText2.copyWith(
-                      fontSize: 11.0,
-                      color: hintColor,
+                      fontWeight: FontWeight.normal,
+                    ),
+                    onOpen: (LinkableElement linkableElement) =>
+                        _onUrlClick(context, linkableElement),
+                    options: const LinkifyOptions(humanize: false),
+                    linkStyle: bodyText2.copyWith(
+                      color: Colors.blue,
+                      fontWeight: FontWeight.normal,
                     ),
                   ),
-                  contentPadding: const EdgeInsets.all(0.0),
-                ),
-                Linkify(
-                  text: '${widget.comment.comment}',
-                  style: bodyText2.copyWith(
-                    fontWeight: FontWeight.normal,
-                  ),
-                  onOpen: (LinkableElement linkableElement) =>
-                      _onUrlClick(context, linkableElement),
-                  options: const LinkifyOptions(humanize: false),
-                  linkStyle: bodyText2.copyWith(
-                    color: Colors.blue,
-                    fontWeight: FontWeight.normal,
-                  ),
-                ),
-                const SizedBox(height: 4.0),
-              ],
+                  const SizedBox(height: 4.0),
+                ],
+              ),
             ),
-          ),
-        ],
-      ),
-    );
+          ],
+        ),
+      );
+    } else {
+      return const SizedBox();
+    }
   }
 
   Future<void> _onUrlClick(
