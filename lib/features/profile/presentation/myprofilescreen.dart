@@ -10,8 +10,13 @@ import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../../common/widgets/safety_model.dart';
 import '../../../common/widgets/tiles/outlinebuttonheader.dart';
 import '../../../navigation/routes.dart';
+import '../../marketplace/controllers/market_controller.dart';
+import '../../marketplace/models/market_model.dart';
+import '../../marketplace/presentation/sell_screen.dart';
+import '../../marketplace/widgets/marketplace_item.dart';
 import '../widgets/my_profile_header.dart';
 
 bool isExpanded = false;
@@ -33,6 +38,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
   List<PostModel> _posts = [];
 
   final ProfileController profileController = Get.find();
+  final MarketController _marketController = Get.find();
 
   Future<void> loadData(String uid) async {
     setState(() {
@@ -246,12 +252,12 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                           child: Row(
                                             children: [
                                               RichText(
-                                                text: TextSpan(
+                                                text: const TextSpan(
                                                   children: <InlineSpan>[
                                                     TextSpan(
                                                       text:
                                                           'See Seller Reviews',
-                                                      style: const TextStyle(
+                                                      style: TextStyle(
                                                         fontSize: 11,
                                                       ),
                                                     ),
@@ -261,7 +267,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                               const SizedBox(
                                                 width: 15,
                                               ),
-                                              Text(
+                                              const Text(
                                                 '>',
                                                 style: TextStyle(
                                                     color: Colors.white),
@@ -276,6 +282,75 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                 const SizedBox(
                                   height: 20,
                                 ),
+                                Obx(() {
+                                  if (_marketController.loading.value) {
+                                    return const Center(
+                                        child: CircularProgressIndicator());
+                                  } else if (_marketController.error.value) {
+                                    return const SafetyModel(
+                                      isLoading: false,
+                                      title: 'Error While Loading Data',
+                                      subTitle: 'Try Reloading Again',
+                                      icon: Icon(
+                                        Icons.warning,
+                                        size: 60,
+                                      ),
+                                    );
+                                  } else {
+                                    return _marketController.markets
+                                            .where((MarketModel market) =>
+                                                market.userId ==
+                                                profileController.myProfile.uid)
+                                            .isEmpty
+                                        ? SafetyModel(
+                                            isLoading: false,
+                                            icon: const Icon(
+                                              Icons.edit,
+                                              color: Colors.grey,
+                                              size: 80.0,
+                                            ),
+                                            title:
+                                                'Be the first one to Sell your Item',
+                                            // subTitle: '',
+                                            clickableText: 'Start a topic',
+                                            onTap: () {
+                                              Get.to(
+                                                () =>
+                                                    const CreateSellingitemScreen(
+                                                  isUpd: false,
+                                                ),
+                                              );
+                                            },
+                                          )
+                                        : ListView.builder(
+                                            shrinkWrap: true,
+                                            itemCount: _marketController.markets
+                                                .where((MarketModel market) =>
+                                                    market.userId ==
+                                                    profileController
+                                                        .myProfile.uid)
+                                                .length,
+                                            itemBuilder: (BuildContext context,
+                                                int index) {
+                                              final List<MarketModel>
+                                                  filteredMarkets =
+                                                  _marketController.markets
+                                                      .where((MarketModel
+                                                              market) =>
+                                                          market.userId ==
+                                                          profileController
+                                                              .myProfile.uid)
+                                                      .toList();
+                                              final MarketModel market =
+                                                  filteredMarkets[index];
+
+                                              return MarketTile(
+                                                post: market,
+                                              );
+                                            },
+                                          );
+                                  }
+                                }),
                               ],
                             ),
                           ],
