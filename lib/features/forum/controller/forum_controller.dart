@@ -1,9 +1,11 @@
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/common/models/comment_model.dart';
+import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/features/forum/models/forum_model.dart';
 import 'package:business_bosses_v2/features/forum/repository/forum_repository.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
@@ -13,10 +15,15 @@ class ForumController extends GetxController {
   final HomeController _homeController = Get.find();
   final ProfileController _profileController = Get.find();
   List<ForumModel> forums = [];
+  List<UserModel> members = [];
   RxInt totalForums = RxInt(0);
   RxInt page = RxInt(0);
+  RxInt membersPage = RxInt(0);
+  RxBool loadingNextMembers = RxBool(false);
   RxBool loading = RxBool(false);
   RxBool error = RxBool(false);
+  RxBool loadingMembers = RxBool(false);
+  RxBool errorMembers = RxBool(false);
   Future<void> fetchForums() async {
     loading(true);
     error(false);
@@ -42,6 +49,36 @@ class ForumController extends GetxController {
       error(true);
     }
     loading(false);
+
+    update();
+  }
+
+  Future<void> fetchIndustryUsers(String industryId,
+      {bool isNext = false}) async {
+    members.clear();
+    membersPage(0);
+    if (isNext && loadingNextMembers.value) return;
+    if (isNext) {
+      loadingNextMembers(true);
+    } else {
+      loadingMembers(true);
+      errorMembers(false);
+    }
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      update();
+    });
+    final ApiResponseModel response =
+        await ForumRepository.getForumMembers(membersPage.value, industryId);
+    if (response.success) {
+      membersPage(membersPage.value + 1);
+      for (var i = 0; i < response.data.length; i++) {
+        members.add(UserModel.fromMap(response.data[i]));
+      }
+    } else {
+      errorMembers(true);
+    }
+    loadingNextMembers(false);
+    loadingMembers(false);
 
     update();
   }

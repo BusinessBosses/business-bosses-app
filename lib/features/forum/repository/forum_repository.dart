@@ -8,6 +8,13 @@ class ForumRepository {
     return response;
   }
 
+  static Future<ApiResponseModel> getForumMembers(
+      int page, String industryId) async {
+    final ApiResponseModel response = await ApiService.get(
+        path: 'industry/get-joined-users/$industryId?size=50&page=$page');
+    return response;
+  }
+
   /// CREATE POST REPOSITORY
   static Future<ApiResponseModel> createForum(Map<String, dynamic> body) async {
     final ApiResponseModel response =
