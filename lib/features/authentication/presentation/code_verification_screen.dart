@@ -1,3 +1,4 @@
+import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -133,7 +134,13 @@ class _CodeVerificationScreenState extends State<CodeVerificationScreen> {
                     } else {
                       Get.snackbar(
                           'Success', 'You have registered succesfully!');
-                      Get.toNamed(Routes.updateProfile);
+                      Get.toNamed(
+                        Routes.updateProfile,
+                        arguments: UserModel(
+                          username: widget.userName,
+                          email: widget.emailAddress,
+                        ),
+                      );
                     }
                     // } else {
                     //   Get.snackbar('Error', 'Incorrect OTP');

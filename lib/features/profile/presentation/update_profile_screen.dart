@@ -517,7 +517,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                         maxLength: 150,
                                         maxLines: 5,
                                         keyboardType: TextInputType.text,
-                                        validator: Validator.bioValidator,
+                                        // validator: Validator.bioValidator,
                                         textInputAction: TextInputAction.next,
                                         decoration: inputDecoration.copyWith(
                                           hintStyle: const TextStyle(
