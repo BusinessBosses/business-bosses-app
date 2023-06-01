@@ -6,7 +6,7 @@ import '../models/post_model.dart';
 import 'images_viewer_screen.dart';
 
 class PostImages extends StatelessWidget {
-  final dynamic post;
+  final PostModel post;
   const PostImages({Key? key, required this.post}) : super(key: key);
 
   @override

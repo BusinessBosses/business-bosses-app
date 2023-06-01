@@ -6,7 +6,7 @@ import '../../../common/widgets/network_image_with_placeholder.dart';
 import '../../../utils/theme/theme.dart';
 
 class ImagesViewerScreen extends StatefulWidget {
-  final List<String>? urls;
+  final List<dynamic>? urls;
   final int index;
   final String? text;
 
@@ -41,7 +41,8 @@ class _ImagesViewerScreenState extends State<ImagesViewerScreen> {
                   index: widget.index,
                   loop: false,
                   itemCount: widget.urls!.length,
-                  itemBuilder: (BuildContext context, int i) => InteractiveViewer(
+                  itemBuilder: (BuildContext context, int i) =>
+                      InteractiveViewer(
                     child: NetworkImageWithPlaceHolder(
                       cacheHeight: 2200,
                       imageUrl: widget.urls![i],

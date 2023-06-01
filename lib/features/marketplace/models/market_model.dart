@@ -11,7 +11,7 @@ class MarketModel {
   String location;
   String description;
   String userId;
-  List<String>? images;
+  List<dynamic>? images;
   String price;
   UserModel user;
   bool promote;
@@ -89,7 +89,7 @@ class MarketModel {
     return MarketModel(
       description: map['description'] as String,
       images: map['images'] != null
-          ? List<String>.from((map['images'] as List<String>))
+          ? List<dynamic>.from((map['images'] as List<dynamic>))
           : null,
       user: UserModel.fromMap(map['user'] as Map<String, dynamic>),
       category: map['category'] as String,

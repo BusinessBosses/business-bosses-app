@@ -9,15 +9,17 @@ import 'package:get/get.dart';
 import 'package:photo_manager/photo_manager.dart';
 
 import '../../../action/action.dart';
+import '../../../common/dialogs/snackbar.dart';
 import '../../../common/models/api_response_model.dart';
 import '../../../common/widgets/buttons/my_outlined_button.dart';
-import '../../../common/widgets/field_container.dart';
 import '../../../common/widgets/gallery_screen.dart';
-import '../../../common/widgets/network_image_with_placeholder.dart';
 import '../../../common/widgets/text_widget.dart';
 import '../../../services/api_service.dart';
 import '../../../utils/theme/theme.dart';
+import '../../forum/widgets/field_container.dart';
+import '../../posts/widgets/preview.dart';
 import '../../profile/controller/profile_controller.dart';
+import '../controllers/create_market_controller.dart';
 import '../controllers/market_controller.dart';
 import '../models/market_model.dart';
 import 'boost_market_screen.dart';
@@ -39,6 +41,8 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
 
   final ProfileController _profileController = Get.find();
   final MarketController _marketController = Get.find();
+  final CreateMarketController createMarketController =
+      Get.put(CreateMarketController());
   List<File>? _resourceFile;
   List<bool>? _fileProcessing;
 
@@ -64,7 +68,7 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
     super.initState();
     _isUpdating = widget.isUpd;
     if (widget.isUpd) {
-      MarketModel market = MarketModel(
+      _market = MarketModel(
           marketId: '',
           category: '',
           userId: '',
@@ -80,395 +84,308 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return GestureDetector(
-      onTap: () => unFocusKeyboard(context),
-      child: Scaffold(
-        key: _scaffoldKey,
-        appBar: AppBar(
-          title: const Text('Create Listing'),
-          automaticallyImplyLeading: false, // Used for removing back buttoon.
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.close),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            )
-          ],
-        ),
-        body: SingleChildScrollView(
-          padding: const EdgeInsets.only(top: 16.0, left: 16.0, right: 16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              TextFormField(
-                initialValue: price,
-                onChanged: (String val) => price = val,
-                textInputAction: TextInputAction.next,
-                keyboardType: TextInputType.text,
-                maxLength: 15,
-                decoration: inputDecoration.copyWith(
-                  hintText: 'Enter Price in USD (Example \$10)',
-                ),
-              ),
-              const SizedBox(height: 24.0),
-              DetectableTextField(
-                controller: TextEditingController(text: description),
 
-                detectionRegExp: detectionRegExp(hashtag: false)!,
-                onDetectionTyped: (String text) {},
-                onDetectionFinished: () {},
-                keyboardType: TextInputType.multiline,
-                // minLines: 5,
-                maxLength: 300,
-                maxLines: 5,
-                basicStyle: Theme.of(context).textTheme.bodyMedium,
-                onChanged: (String val) => description = val,
+    return GetBuilder<CreateMarketController>(
+        builder: (CreateMarketController controller) {
+      return GestureDetector(
+        onTap: () => unFocusKeyboard(context),
+        child: Scaffold(
+          key: _scaffoldKey,
+          appBar: AppBar(
+            title: const Text('Create Listing'),
+            automaticallyImplyLeading: false, // Used for removing back buttoon.
+            actions: [
+              IconButton(
+                icon: const Icon(Icons.close),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              )
+            ],
+          ),
+          body: SingleChildScrollView(
+            padding: const EdgeInsets.only(top: 16.0, left: 16.0, right: 16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                TextFormField(
+                  initialValue: price,
+                  onChanged: (String val) => price = val,
+                  textInputAction: TextInputAction.next,
+                  keyboardType: TextInputType.text,
+                  maxLength: 15,
+                  decoration: inputDecoration.copyWith(
+                    hintText: 'Enter Price in USD (Example \$10)',
+                  ),
+                ),
+                const SizedBox(height: 24.0),
+                DetectableTextField(
+                  controller: TextEditingController(text: description),
 
-                decoration: inputDecoration.copyWith(
-                  hintText: 'Describe your Listing',
+                  detectionRegExp: detectionRegExp(hashtag: false)!,
+                  onDetectionTyped: (String text) {},
+                  onDetectionFinished: () {},
+                  keyboardType: TextInputType.multiline,
+                  // minLines: 5,
+                  maxLength: 300,
+                  maxLines: 5,
+                  basicStyle: Theme.of(context).textTheme.bodyMedium,
+                  onChanged: (String val) => description = val,
+
+                  decoration: inputDecoration.copyWith(
+                    hintText: 'Describe your Listing',
+                  ),
                 ),
-              ),
-              const SizedBox(height: 12.0),
-              Container(
-                decoration: BoxDecoration(
-                  color: backgroundcolorinterface,
-                  borderRadius: BorderRadius.circular(radiusValue),
+                const SizedBox(height: 12.0),
+                Container(
+                  decoration: BoxDecoration(
+                    color: backgroundcolorinterface,
+                    borderRadius: BorderRadius.circular(radiusValue),
+                  ),
+                  padding: const EdgeInsets.only(
+                    left: 16.0,
+                    right: 16,
+                    top: 4,
+                    bottom: 5,
+                  ),
+                  margin: const EdgeInsets.only(left: 10, right: 10),
+                  child: DropdownButton<String>(
+                    underline: Container(),
+                    value: _selectedCategory,
+                    isExpanded: true,
+                    icon: const Icon(Icons.keyboard_arrow_right),
+                    iconSize: 24,
+                    elevation: 16,
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        _selectedCategory = newValue!;
+                      });
+                    },
+                    items: <String?>[
+                      null,
+                      'Home, Garden & Outdoors',
+                      'Fashion & Beauty',
+                      'Sports & Entertainment',
+                      'Books & Education',
+                      'Jewellery & Timepieces',
+                      'Security, Safety & Equipment',
+                      'Video Games & Electronics',
+                      'Agriculture, Food, Beverage',
+                      'Construction & Real Estate',
+                      'Vehicle & Transportation',
+                      'Business Services & Events',
+                      'Other',
+                    ].map<DropdownMenuItem<String>>((String? value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: value != null
+                            ? Text(value)
+                            : Text(
+                                value ?? 'Select Category',
+                                style: bodyText2.copyWith(
+                                  color: hintColor,
+                                ),
+                              ),
+                      );
+                    }).toList(),
+                  ),
                 ),
-                padding: const EdgeInsets.only(
-                  left: 16.0,
-                  right: 16,
-                  top: 4,
-                  bottom: 5,
-                ),
-                margin: const EdgeInsets.only(left: 10, right: 10),
-                child: DropdownButton<String>(
-                  underline: Container(),
-                  value: _selectedCategory,
-                  isExpanded: true,
-                  icon: const Icon(Icons.keyboard_arrow_right),
-                  iconSize: 24,
-                  elevation: 16,
-                  onChanged: (String? newValue) {
+                const SizedBox(height: 12.0),
+                CountryListPick(
+                  appBar: AppBar(
+                    leading: IconButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
+                    ),
+                    centerTitle: true,
+                    // ignore: prefer_const_constructors
+                    title: Text(
+                      'Select Location',
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(fontSize: 20),
+                    ),
+                  ),
+                  initialSelection: _selectedLocation,
+                  pickerBuilder:
+                      (BuildContext context, CountryCode? countryCode) {
+                    return Container(
+                      decoration: BoxDecoration(
+                        color: backgroundcolorinterface,
+                        borderRadius: BorderRadius.circular(radiusValue),
+                      ),
+                      child: ListTile(
+                        leading: _selectedLocation != null
+                            ? Text(_selectedLocation!)
+                            : Text(
+                                'Location',
+                                style: bodyText2.copyWith(color: hintColor),
+                              ),
+                        trailing: const Icon(Icons.keyboard_arrow_right),
+                      ),
+                    );
+                  },
+                  onChanged: (CountryCode? code) {
                     setState(() {
-                      _selectedCategory = newValue!;
+                      _selectedLocation = code!.name!;
                     });
                   },
-                  items: <String?>[
-                    null,
-                    'Home, Garden & Outdoors',
-                    'Fashion & Beauty',
-                    'Sports & Entertainment',
-                    'Books & Education',
-                    'Jewellery & Timepieces',
-                    'Security, Safety & Equipment',
-                    'Video Games & Electronics',
-                    'Agriculture, Food, Beverage',
-                    'Construction & Real Estate',
-                    'Vehicle & Transportation',
-                    'Business Services & Events',
-                    'Other',
-                  ].map<DropdownMenuItem<String>>((String? value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: value != null
-                          ? Text(value)
-                          : Text(
-                              value ?? 'Select Category',
-                              style: bodyText2.copyWith(
-                                color: hintColor,
-                              ),
-                            ),
-                    );
-                  }).toList(),
+                  useSafeArea: false,
                 ),
-              ),
-              const SizedBox(height: 12.0),
-              CountryListPick(
-                appBar: AppBar(
-                  leading: IconButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
-                  ),
-                  centerTitle: true,
-                  // ignore: prefer_const_constructors
-                  title: Text(
-                    'Select Location',
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(fontSize: 20),
-                  ),
+                const SizedBox(
+                  height: 12,
                 ),
-                initialSelection: _selectedLocation,
-                pickerBuilder:
-                    (BuildContext context, CountryCode? countryCode) {
-                  return Container(
-                    decoration: BoxDecoration(
-                      color: backgroundcolorinterface,
-                      borderRadius: BorderRadius.circular(radiusValue),
-                    ),
-                    child: ListTile(
-                      leading: _selectedLocation != null
-                          ? Text(_selectedLocation!)
-                          : Text(
-                              'Location',
-                              style: bodyText2.copyWith(color: hintColor),
-                            ),
-                      trailing: const Icon(Icons.keyboard_arrow_right),
-                    ),
-                  );
-                },
-                onChanged: (CountryCode? code) {
-                  setState(() {
-                    _selectedLocation = code!.name!;
-                  });
-                },
-                useSafeArea: false,
-              ),
-              const SizedBox(
-                height: 12,
-              ),
-              GestureDetector(
-                onTap: _onImagePicker,
-                child: FieldContainer(
-                  message: '',
-                  child: Row(
-                    children: [
-                      SvgPicture.asset('assets/svgs/file.svg'),
-                      const SizedBox(width: 16.0),
-                      Expanded(
-                        child: Text('Add Attachment',
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium!
-                                .copyWith(color: hintColor)),
-                      ),
-                      const SizedBox(width: 16.0),
-                      SvgPicture.asset('assets/svgs/upload.svg'),
-                    ],
-                  ),
-                ),
-              ),
-              const SizedBox(height: 8.0),
-              if (_myAssetsEntities.isNotEmpty)
-                GridView.builder(
-                  physics: const NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  itemCount: _myAssetsEntities.length,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: MediaQuery.of(context).orientation ==
-                            Orientation.landscape
-                        ? 5
-                        : 3,
-                    // crossAxisSpacing: 8,
-                    // mainAxisSpacing: 8,
-                    childAspectRatio: (1 / 1),
-                  ),
-                  itemBuilder: (BuildContext context, int i) {
-                    return Container(
-                      margin: const EdgeInsets.all(8.0),
-                      child: Stack(
-                        children: [
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(10.0),
-                            child: AssetViewer(
-                              image: _myAssetsEntities[i].thumbnail,
-                              height: 150.0,
-                              width: 150.0,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                          (!_fileProcessing![i] && _isProcessing)
-                              ? const Center(
-                                  child: SizedBox(
-                                    height: 22.0,
-                                    width: 22.0,
-                                    child: CircularProgressIndicator(),
-                                  ),
-                                )
-                              : Container(),
-                          _deleteImage(i),
-                        ],
-                      ),
-                    );
+                GestureDetector(
+                  onTap: () {
+                    if (createMarketController.imageFileList.length < 5) {
+                      createMarketController.onPickImage();
+                    } else {
+                      showSnackbar(
+                          message: 'You can only upload up to 5 images.');
+                    }
                   },
-                ),
-              if ((_market?.images?.isNotEmpty ?? false))
-                GridView.builder(
-                  physics: const NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  itemCount: _market?.images?.length,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: MediaQuery.of(context).orientation ==
-                            Orientation.landscape
-                        ? 5
-                        : 3,
-                    childAspectRatio: (1 / 1),
+                  child: FieldContainer(
+                    child: Row(
+                      children: [
+                        SvgPicture.asset('assets/svgs/file.svg'),
+                        const SizedBox(width: 16.0),
+                        Expanded(
+                          child: Text('Add Attachment',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium
+                                  ?.copyWith(color: hintColor)),
+                        ),
+                        const SizedBox(width: 16.0),
+                        SvgPicture.asset('assets/svgs/upload.svg'),
+                      ],
+                    ),
                   ),
-                  itemBuilder: (BuildContext context, int i) {
-                    return Container(
-                      margin: const EdgeInsets.all(8.0),
-                      child: Stack(
-                        children: [
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(10.0),
-                            child: NetworkImageWithPlaceHolder(
-                              imageUrl: _market!.images?[i],
-                              height: 150.0,
-                              width: 150.0,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                          Positioned(
-                            right: 5.0,
-                            top: 5.0,
-                            child: GestureDetector(
-                              onTap: () {
-                                _market!.images!.removeAt(i);
-                                setState(() {});
-                              },
-                              child: Container(
-                                height: 30.0,
-                                width: 30.0,
-                                alignment: Alignment.center,
-                                decoration: BoxDecoration(
-                                  color: Colors.black54,
-                                  borderRadius: BorderRadius.circular(40.0),
-                                ),
-                                child: const Icon(
-                                  Icons.close,
-                                  size: 18.0,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                    );
-                  },
                 ),
-              Column(
-                children: [
-                  SizedBox(
-                    height: 55,
-                    child: Align(
-                      alignment: Alignment.center,
-                      child: SwitchListTile(
-                        value: _shouldPromote,
-                        onChanged: (bool value) {
-                          setState(() {
-                            _shouldPromote = value;
-                          });
-                        },
-                        title: Row(
-                          children: [
-                            SvgPicture.asset('assets/svgs/rocket.svg'),
-                            const SizedBox(
-                              width: 30,
-                            ),
-                            const Text(
-                              'Boost Post',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w600, fontSize: 18),
-                            ),
-                          ],
+                const SizedBox(height: 8.0),
+                Preview(controller: createMarketController),
+                Column(
+                  children: [
+                    SizedBox(
+                      height: 55,
+                      child: Align(
+                        alignment: Alignment.center,
+                        child: SwitchListTile(
+                          value: _shouldPromote,
+                          onChanged: (bool value) {
+                            setState(() {
+                              _shouldPromote = value;
+                            });
+                          },
+                          title: Row(
+                            children: [
+                              SvgPicture.asset('assets/svgs/rocket.svg'),
+                              const SizedBox(
+                                width: 30,
+                              ),
+                              const Text(
+                                'Boost Post',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w600, fontSize: 18),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  if (_shouldPromote)
-                    Padding(
-                      padding: const EdgeInsets.only(left: 20.0, right: 20),
-                      child: Stack(
-                        children: [
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
-                            child: Image.asset(
-                              'assets/images/boostbanner.png',
-                              width: size.width,
-                              height: size.width / 2,
-                              fit: BoxFit.cover,
+                    if (_shouldPromote)
+                      Padding(
+                        padding: const EdgeInsets.only(left: 20.0, right: 20),
+                        child: Stack(
+                          children: [
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: Image.asset(
+                                'assets/images/boostbanner.png',
+                                width: size.width,
+                                height: size.width / 2,
+                                fit: BoxFit.cover,
+                              ),
                             ),
-                          ),
-                          const Positioned(
-                            bottom: 20,
-                            left: 20,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                TextWidget(
-                                  text: 'Reach\na Wider Audience',
-                                  color: Color(0xFFFFFFFF),
-                                  fontWeight: FontWeight.w800,
-                                  size: 20,
-                                ),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                Row(
-                                  children: [
-                                    Icon(
-                                      Icons.check_box,
-                                      color: Colors.white,
-                                      size: 20,
-                                    ),
-                                    SizedBox(
-                                      width: 10,
-                                    ),
-                                    TextWidget(
-                                      text: 'More Goods/Service Sale',
-                                      color: Colors.white,
-                                    ),
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    Icon(
-                                      Icons.check_box,
-                                      color: Colors.white,
-                                      size: 20,
-                                    ),
-                                    SizedBox(
-                                      width: 10,
-                                    ),
-                                    TextWidget(
-                                      text: 'More connections',
-                                      color: Colors.white,
-                                    )
-                                  ],
-                                ),
-                              ],
-                            ),
-                          )
-                        ],
+                            const Positioned(
+                              bottom: 20,
+                              left: 20,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  TextWidget(
+                                    text: 'Reach\na Wider Audience',
+                                    color: Color(0xFFFFFFFF),
+                                    fontWeight: FontWeight.w800,
+                                    size: 20,
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Row(
+                                    children: [
+                                      Icon(
+                                        Icons.check_box,
+                                        color: Colors.white,
+                                        size: 20,
+                                      ),
+                                      SizedBox(
+                                        width: 10,
+                                      ),
+                                      TextWidget(
+                                        text: 'More Goods/Service Sale',
+                                        color: Colors.white,
+                                      ),
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      Icon(
+                                        Icons.check_box,
+                                        color: Colors.white,
+                                        size: 20,
+                                      ),
+                                      SizedBox(
+                                        width: 10,
+                                      ),
+                                      TextWidget(
+                                        text: 'More connections',
+                                        color: Colors.white,
+                                      )
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
                       ),
-                    ),
-                  const SizedBox(height: 24.0),
-                ],
-              ),
-              MCustomButton(
-                onPressed: () async {
-                  if ((description?.isEmpty == true) ||
-                      (price?.isEmpty == true)) {
-                    showSnackBar(context,
-                        message:
-                            'Please select price and description to create a listing');
-                    return;
-                  } else {
-                    await _onChangeForum();
-                  }
-                },
-                label: _isUpdating! ? 'Update' : 'Sell',
-                isProcessing: _isProcessing,
-                buttonType: ButtonType.elevated,
-              ),
-            ],
+                    const SizedBox(height: 24.0),
+                  ],
+                ),
+                MCustomButton(
+                  onPressed: () async {
+                    if ((description?.isEmpty == true) ||
+                        (price?.isEmpty == true)) {
+                      showSnackBar(context,
+                          message:
+                              'Please select price and description to create a listing');
+                      return;
+                    } else {
+                      await _onChangeForum();
+                    }
+                  },
+                  label: _isUpdating! ? 'Update' : 'Sell',
+                  isProcessing: _isProcessing,
+                  buttonType: ButtonType.elevated,
+                ),
+              ],
+            ),
           ),
         ),
-      ),
-    );
+      );
+    });
   }
 
   Future<void> _onChangeForum() async {
@@ -483,7 +400,7 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
       'description': description,
       'price': price,
       'timestamp': DateTime.now().millisecondsSinceEpoch,
-      'images': <dynamic>[]
+      'images': createMarketController.imageFileList
     };
     ApiResponseModel response =
         await ApiService.post(path: 'markets', body: data);
@@ -631,8 +548,7 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
               List.generate(_myAssetsEntities.length, (int index) => false);
         });
       } else if (permissionState == PermissionState.denied) {
-        final PermissionState ps =
-            await PhotoManager.requestPermissionExtend();
+        final PermissionState ps = await PhotoManager.requestPermissionExtend();
         if (!ps.isAuth) {
           PhotoManager.openSetting();
         }

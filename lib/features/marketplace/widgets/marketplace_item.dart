@@ -1,4 +1,5 @@
 import 'package:business_bosses_v2/features/marketplace/presentation/boost_market_screen.dart';
+import 'package:business_bosses_v2/features/marketplace/widgets/post_images_market.dart';
 import 'package:business_bosses_v2/features/posts/models/post_model.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
@@ -16,7 +17,6 @@ import '../../../../navigation/routes.dart';
 import '../../../../utils/theme/theme.dart';
 import '../../../common/models/comment_model.dart';
 import '../../../common/widgets/buttons/my_outlined_button.dart';
-import '../../posts/widgets/post_images.dart';
 import '../controllers/market_controller.dart';
 import '../models/market_model.dart';
 import '../presentation/seller_reviews.dart';
@@ -512,14 +512,12 @@ class _MarketTileState extends State<MarketTile> {
                           )
                         ],
                       ),
-                      widget.post.images?.isNotEmpty == true
-                          ? const SizedBox()
-                          : PostImages(post: widget.post),
+                      PostImagesMarket(post: widget.post),
                     ],
                   ),
                 ),
                 const Row(
-                  children: [
+                  children: <Widget>[
                     // const SizedBox(width: 8.0),
                     // GestureDetector(
                     //   onTap: () => _sharePost(),

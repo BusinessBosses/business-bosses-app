@@ -15,7 +15,6 @@ import '../../common/widgets/tiles/custom_tile.dart';
 import '../../navigation/routes.dart';
 import '../../utils/theme/theme.dart';
 import '../../common/widgets/popup/bossup_challenge_popup.dart';
-import '../forum/presentation/create_forum_screen.dart';
 import '../forum/models/industry.dart';
 import '../forum/presentation/specific_user_list_screen.dart';
 import '../forum/widgets/joinedbutton.dart';

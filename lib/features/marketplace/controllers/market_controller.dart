@@ -64,12 +64,7 @@ class MarketController extends GetxController {
       'coins': <String>[],
       'likes': <String>[],
       'comments': <CommentModel>[],
-      'user': {
-        'username': profileController.myProfile.username,
-        'email': profileController.myProfile.email,
-        'uid': profileController.myProfile.uid,
-        'name': profileController.myProfile.name,
-      }
+      'user': profileController.myProfile.toMap(),
     });
 
     markets.insert(0, modelizedNewPost);
