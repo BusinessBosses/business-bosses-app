@@ -1,13 +1,13 @@
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
+import 'package:business_bosses_v2/features/marketplace/models/market_model.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 
-import '../models/post_model.dart';
-import 'images_viewer_screen.dart';
+import '../../posts/widgets/images_viewer_screen.dart';
 
-class PostImages extends StatelessWidget {
-  final dynamic post;
-  const PostImages({Key? key, required this.post}) : super(key: key);
+class PostImagesMarket extends StatelessWidget {
+  final MarketModel post;
+  const PostImagesMarket({Key? key, required this.post}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +21,7 @@ class PostImages extends StatelessWidget {
                   MaterialPageRoute(
                     builder: (BuildContext context) => ImagesViewerScreen(
                       urls: post.images,
-                      text: post.title,
+                      text: post.description,
                     ),
                   ),
                 );
@@ -61,7 +61,7 @@ class PostImages extends StatelessWidget {
                                               ImagesViewerScreen(
                                             urls: post.images,
                                             index: i - 1,
-                                            text: post.title,
+                                            text: post.description,
                                           ),
                                         ),
                                       );

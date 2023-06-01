@@ -488,9 +488,9 @@ class _MarketTileState extends State<MarketTile> {
                                 ),
                               ),
                               const Spacer(),
-                              widget.post.userId !=
+                              widget.post.userId ==
                                       profileController.myProfile.uid
-                                  ? Container()
+                                  ? const SizedBox()
                                   : Expanded(
                                       child: MCustomButton(
                                         height: 40,
