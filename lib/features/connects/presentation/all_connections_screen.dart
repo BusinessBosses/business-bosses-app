@@ -8,7 +8,7 @@ import '../../../action/action.dart';
 // import '../../../common/models/my_connect.dart';
 import '../../../common/widgets/safety_model.dart';
 import '../../../utils/theme/theme.dart';
-import '../../search/search_app_bar.dart';
+import '../../search/widgets/search_app_bar.dart';
 import '../widgets/connection_user_tile.dart';
 
 class AllConnectionsScreen extends StatelessWidget {

@@ -9,14 +9,17 @@ import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
+import '../../action/action.dart';
 import '../../common/widgets/safety_model.dart';
 import '../../common/widgets/tiles/custom_tile.dart';
 import '../../navigation/routes.dart';
 import '../../utils/theme/theme.dart';
 import '../../common/widgets/popup/bossup_challenge_popup.dart';
 import '../forum/presentation/create_forum_screen.dart';
+import '../forum/models/industry.dart';
+import '../forum/presentation/specific_user_list_screen.dart';
 import '../forum/widgets/joinedbutton.dart';
-import '../search/search_bar.dart';
+import '../search/widgets/search_bar.dart';
 
 // ignore: public_member_api_docs
 class AllCommunitiesScreen extends StatefulWidget {
@@ -34,6 +37,7 @@ class AllCommunitiesScreen extends StatefulWidget {
 class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
     with TickerProviderStateMixin {
   bool _isSearching = false;
+  Industry industry = Industry();
 
   final CommunitiesController _communitiesController =
       Get.put(CommunitiesController());
@@ -369,7 +373,14 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
                                                                                 'Members: 0',
                                                                             style:
                                                                                 const TextStyle(fontSize: 11, color: Colors.white),
-                                                                            recognizer: TapGestureRecognizer()..onTap = () {}),
+                                                                            recognizer: TapGestureRecognizer()
+                                                                              ..onTap = () {
+                                                                                navigateTo(
+                                                                                  context,
+                                                                                  routeName: SpecificUserListScreen.routeName,
+                                                                                  arguments: ParamData('Members', industry.joinedUsers),
+                                                                                );
+                                                                              }),
                                                                       ],
                                                                     ),
                                                                   ),
@@ -705,7 +716,7 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
                                 : GridView.builder(
                                     itemCount: controller
                                         .getCategoryIndustries(
-                                            Constants.LEARNINGID)
+                                            Constants.OPPORTUNITIESID)
                                         .length,
                                     itemBuilder:
                                         (BuildContext context, int index) {

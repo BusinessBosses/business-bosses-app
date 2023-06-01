@@ -35,4 +35,6 @@ class Routes {
   static const String deleteAccount = '/deleteAccountScreen';
   static const String allconnectionsscreen = '/allconnectionsScreen';
   static const String allforumscreen = '/allforumScreen';
+  static const String specificuserlistscreen = '/specificuserlistScreen';
+  static const String completesearchingscreen = '/completesearchingScreen';
 }
