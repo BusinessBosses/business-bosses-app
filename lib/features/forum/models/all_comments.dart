@@ -10,7 +10,6 @@ class AllComments extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    debugPrint('AllComments.build asdf');
     return ListView.builder(
       padding: const EdgeInsets.all(16.0),
       itemCount: comments.length,

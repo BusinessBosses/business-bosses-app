@@ -15,6 +15,7 @@ import '../../common/widgets/tiles/custom_tile.dart';
 import '../../navigation/routes.dart';
 import '../../utils/theme/theme.dart';
 import '../../common/widgets/popup/bossup_challenge_popup.dart';
+import '../forum/presentation/create_forum_screen.dart';
 import '../forum/models/industry.dart';
 import '../forum/presentation/specific_user_list_screen.dart';
 import '../forum/widgets/joinedbutton.dart';
@@ -77,53 +78,55 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
           child: Scaffold(
               backgroundColor: backgroundcolorinterface,
               appBar: AppBar(
-                  automaticallyImplyLeading: false,
-                  title: _isSearching
-                      ? Searchbar(
-                          hintText: 'Search',
-                          onChange: (String query) {
-                            if (_searchTabController.index == 0) {
-                              controller.onSearch(
-                                  _searchTabController.index, query);
-                            }
-                          },
-                          onSubmit: (String query) {
-                            if (_searchTabController.index == 1) {
-                              controller.onSearch(
-                                  _searchTabController.index, query);
-                            }
-                          },
-                        )
-                      : const Text('Boss Up'),
-                  actions: mActions,
-                  bottom: !_isSearching
-                      ? const TabBar(
-                          labelStyle: TextStyle(fontWeight: FontWeight.w500),
-                          labelColor: Colors.black,
-                          tabs: [
-                              Tab(
-                                text: 'Challenge',
-                              ),
-                              Tab(
-                                text: 'Learning',
-                              ),
-                              Tab(
-                                text: 'Opportunities',
-                              ),
-                            ])
-                      : TabBar(
-                          controller: _searchTabController,
-                          labelStyle:
-                              const TextStyle(fontWeight: FontWeight.w500),
-                          labelColor: Colors.black,
-                          tabs: const [
-                              Tab(
-                                text: 'Groups',
-                              ),
-                              Tab(
-                                text: 'Topics',
-                              ),
-                            ])),
+                automaticallyImplyLeading: false,
+                title: _isSearching
+                    ? Searchbar(
+                        hintText: 'Search',
+                        onChange: (String query) {
+                          if (_searchTabController.index == 0) {
+                            controller.onSearch(
+                                _searchTabController.index, query);
+                          }
+                        },
+                        onSubmit: (String query) {
+                          if (_searchTabController.index == 1) {
+                            controller.onSearch(
+                                _searchTabController.index, query);
+                          }
+                        },
+                      )
+                    : const Text('Boss Up'),
+                actions: mActions,
+                bottom: !_isSearching
+                    ? const TabBar(
+                        labelStyle: TextStyle(fontWeight: FontWeight.w500),
+                        labelColor: Colors.black,
+                        tabs: [
+                            Tab(
+                              text: 'Challenge',
+                            ),
+                            Tab(
+                              text: 'Learning',
+                            ),
+                            Tab(
+                              text: 'Opportunities',
+                            ),
+                          ])
+                    : TabBar(
+                        controller: _searchTabController,
+                        labelStyle:
+                            const TextStyle(fontWeight: FontWeight.w500),
+                        labelColor: Colors.black,
+                        tabs: const [
+                          Tab(
+                            text: 'Groups',
+                          ),
+                          Tab(
+                            text: 'Topics',
+                          ),
+                        ],
+                      ),
+              ),
               body: !_isSearching
                   ? TabBarView(children: [
                       // content of Tab 1
@@ -184,6 +187,13 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
                                                         45) // put the width and height you want
                                                     ),
                                                 onPressed: () {
+                                                  Get.toNamed(
+                                                      Routes.createForum,
+                                                      arguments: {
+                                                        'isBossUp': true,
+                                                        'industryId':
+                                                            'b668dc4e-16f1-4822-8802-f3b9c58c37cb'
+                                                      });
                                                   // int now = DateTime.now()
                                                   //     .millisecondsSinceEpoch;
                                                   // int previousStamp = user.user
@@ -706,7 +716,7 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
                                 : GridView.builder(
                                     itemCount: controller
                                         .getCategoryIndustries(
-                                            Constants.LEARNINGID)
+                                            Constants.OPPORTUNITIESID)
                                         .length,
                                     itemBuilder:
                                         (BuildContext context, int index) {

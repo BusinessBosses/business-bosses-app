@@ -33,8 +33,10 @@ class Constants {
   static const String CONNECTS = 'connects';
   static const String QUOTE_INDEX = 'quoteIndex';
 
-  static const String LEARNINGID = '34094961-d525-47ae-8745-98481e975240';
-  static const String OPPORTUNITIESID = '08019cc4-c1d4-43fa-8d28-ba2ad78cf317';
+  static const String LEARNINGID = 'd479f179-3f41-4d84-915d-33110cf5b4fb';
+
+  static const String OPPORTUNITIESID = '2d520b18-f549-42ca-8116-85a523091713';
+
   static const String USERS = 'users';
   static const String INDUSTRIES = 'industries';
   static const String INDUSTRY = 'industry';

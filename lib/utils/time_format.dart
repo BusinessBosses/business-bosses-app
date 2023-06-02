@@ -17,8 +17,8 @@ class TimeFormat {
   static const String ONE_YEAR_AGO = 'years ago';
 
   //Time conversion
-  static String formatString(int timestamp) {
-    num delta = DateTime.now().millisecondsSinceEpoch - timestamp;
+  static String formatString(int? timestamp) {
+    num delta = DateTime.now().millisecondsSinceEpoch - timestamp!;
     if (delta < 1 * ONE_MINUTE) {
       num seconds = toSeconds(delta);
       return '${(seconds <= 0 ? 1 : seconds).toInt()} $ONE_SECOND_AGO';

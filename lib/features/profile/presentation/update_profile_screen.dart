@@ -517,7 +517,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                         maxLength: 150,
                                         maxLines: 5,
                                         keyboardType: TextInputType.text,
-                                        validator: Validator.bioValidator,
+                                        // validator: Validator.bioValidator,
                                         textInputAction: TextInputAction.next,
                                         decoration: inputDecoration.copyWith(
                                           hintStyle: const TextStyle(
@@ -610,8 +610,6 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                               TextFormField(
                                                 initialValue: _companyName,
                                                 onChanged: (String val) {
-                                                  debugPrint(
-                                                      '_companyName $_companyName');
                                                   _companyName = val;
                                                 },
                                                 keyboardType:
@@ -1009,10 +1007,8 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                                   );
                                                 },
                                                 onChanged: (CountryCode? code) {
-                                                  debugPrint(
-                                                      'code: ${code!.code}');
                                                   setState(() {
-                                                    _location = code.name;
+                                                    _location = code!.name;
                                                   });
                                                 },
                                                 useSafeArea: false,
@@ -1066,8 +1062,8 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   const Padding(
-                                    padding: EdgeInsets.only(
-                                        left: 20, right: 20),
+                                    padding:
+                                        EdgeInsets.only(left: 20, right: 20),
                                     child: Column(
                                       mainAxisAlignment:
                                           MainAxisAlignment.start,

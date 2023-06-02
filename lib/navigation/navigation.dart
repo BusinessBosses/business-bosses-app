@@ -12,6 +12,7 @@ import 'package:business_bosses_v2/features/forum/presentation/all_forum_screen.
 import 'package:business_bosses_v2/features/forum/presentation/create_forum_screen.dart';
 import 'package:business_bosses_v2/features/forum/presentation/specific_user_list_screen.dart';
 import 'package:business_bosses_v2/features/moreinfoscreens/bossuppartner.dart';
+import 'package:business_bosses_v2/features/notifications/controller/notification_controller.dart';
 import 'package:business_bosses_v2/features/notifications/notificationsscreen.dart';
 import 'package:business_bosses_v2/features/home/bottom_nav.dart';
 import 'package:business_bosses_v2/features/posts/presentation/create_post_screen.dart';
@@ -69,6 +70,7 @@ class Nav {
     GetPage(
       name: Routes.notifications,
       page: () => const NotificationsScreen(),
+      binding: BindingsBuilder.put(() => NotificationController()),
     ),
     GetPage(
       name: Routes.promotionscreen,
