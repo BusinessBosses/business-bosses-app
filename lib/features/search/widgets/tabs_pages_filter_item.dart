@@ -33,7 +33,7 @@ class _TabsPagesFilterItemState extends State<TabsPagesFilterItem> {
     }
   }
 
-  final _scaffoldKey = GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
@@ -48,16 +48,16 @@ class _TabsPagesFilterItemState extends State<TabsPagesFilterItem> {
           Expanded(
             child: ListView.builder(
               itemCount: widget.allTab!.length,
-              itemBuilder: (context, i) {
+              itemBuilder: (BuildContext context, int i) {
                 int index = _selectedTabs.indexWhere(
-                    (element) => element.label == widget.allTab![i].label);
+                    (MySearchTab element) => element.label == widget.allTab![i].label);
                 return CheckboxListTile(
                     controlAffinity: ListTileControlAffinity.leading,
                     title: Text(widget.allTab![i].label!),
                     value: index != -1,
-                    onChanged: (status) {
+                    onChanged: (bool? status) {
                       if (index != -1) {
-                        _selectedTabs.removeWhere((element) =>
+                        _selectedTabs.removeWhere((MySearchTab element) =>
                             element.label == widget.allTab![i].label);
                       } else {
                         _selectedTabs.add(widget.allTab![i]);
@@ -74,7 +74,7 @@ class _TabsPagesFilterItemState extends State<TabsPagesFilterItem> {
               child: Text(
                 'Minimum one filter is required',
                 style: TextStyle(
-                  color: Theme.of(context).errorColor,
+                  color: Theme.of(context).colorScheme.error,
                 ),
               ),
             ),

@@ -1,4 +1,3 @@
-import 'package:business_bosses_v2/common/models/quote.dart';
 import 'package:business_bosses_v2/common/widgets/safety_model.dart';
 import 'package:business_bosses_v2/features/notifications/controller/notification_controller.dart';
 import 'package:business_bosses_v2/features/notifications/widgets/nonotificationfoundwidget.dart';
@@ -10,7 +9,6 @@ import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import '../../utils/time_format.dart';
-import 'models/my_notification.dart';
 
 class NotificationsScreen extends StatefulWidget {
   static const String routeName = '/notifications-screen';
@@ -38,7 +36,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<NotificationController>(
-      builder: (controller) {
+      builder: (NotificationController controller) {
         return Scaffold(
             backgroundColor: Colors.white,
             appBar: AppBar(
@@ -72,7 +70,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                         ),
                         title: 'OOPS!! Something went Wrong',
                         subTitle: 'Could not get notifications',
-                        clickableText: "Reload",
+                        clickableText: 'Reload',
                         onTap: controller.loadNotifications,
                       )
                     : NestedScrollView(

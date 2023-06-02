@@ -1,5 +1,7 @@
-import 'package:flutter/cupertino.dart';
+import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
+import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../../../action/action.dart';
 import '../../../common/models/user_model.dart';
@@ -8,7 +10,6 @@ import '../../../common/widgets/buttons/my_outlined_button.dart';
 import '../../../common/widgets/safety_model.dart';
 import '../../../common/widgets/user_avatar_with_badge.dart';
 import '../../../utils/theme/theme.dart';
-import '../../forum/presentation/specific_user_list_screen.dart';
 import '../../profile/presentation/publicprofilescreen.dart';
 
 class FilterUsers extends StatefulWidget {
@@ -28,229 +29,200 @@ class FilterUsers extends StatefulWidget {
 
 class _FilterUsersState extends State<FilterUsers> {
   final ScrollController _controller = ScrollController();
-
-  final List<UserModel> _users = [];
-
-  final List<String> _userUids = [];
-
-  int _loadedItems = 0;
-
-  bool _isLoading = true;
-
-  bool _isLoadingNext = false;
-
-  bool _isInit = false;
-
-  _scrollListener() {
-    if (_controller.position.atEdge) {
-      if (_controller.position.pixels == 0) {
-      } else {
-        _loadNextConnections();
-      }
-    }
-  }
-
-  @override
-  void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((Duration timeStamp) {
-      getConnectedsConnections();
-    });
-    super.initState();
-  }
-
-  getConnectedsConnections() async {}
-
-  Future<void> _loadNextConnections() async {}
-
-  Future<void> connectUserPressed() async {}
-
+  final ProfileController _profileController = Get.find();
+  final bool loadingNext = false;
   @override
   Widget build(
     BuildContext context,
   ) {
-    VoidCallback onConnect = () {};
-    UserModel myProfile = UserModel();
-    UserModel publicUser = UserModel();
-    bool connectedbutton = true;
     return widget.filterItems.isEmpty
-        ? Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Padding(
-                padding: EdgeInsets.all(20),
-                child: Text(
-                  'Recommended Connections',
-                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 20),
+        ? SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Padding(
+                  padding: EdgeInsets.all(20),
+                  child: Text(
+                    'Recommended Connections',
+                    style: TextStyle(fontWeight: FontWeight.w700, fontSize: 20),
+                  ),
                 ),
-              ),
-              Container(
-                height: MediaQuery.of(context).size.height - 182,
-                color: Colors.white,
-                child: _users.isEmpty
-                    ? SafetyModel(
-                        isLoading: _isLoading,
-                        icon: const Icon(
-                          Icons.person,
-                          size: 80.0,
-                          color: hintColor,
-                        ),
-                        title: 'There is no user',
-                        // subTitle: 'Be the first one to like!',
-                      )
-                    : Stack(
-                        children: [
-                          ListView.builder(
-                            padding: const EdgeInsets.only(bottom: 48.0),
-                            controller: _controller,
-                            itemCount: _users.length,
-                            itemBuilder: (BuildContext context, int i) {
-                              if (i == 0) {
-                                return Column(
-                                  children: [
-                                    ListTile(
-                                      onTap: () async {
-                                        var result = await navigateTo(
-                                          context,
-                                          routeName:
-                                              PublicProfileScreen.routeName,
-                                          arguments:
-                                              Params(arg1: 'bossoftheweekuid'),
-                                        );
-                                        if (result == null) {
-                                          Navigator.of(context).pop();
-                                        }
-                                      },
-                                      leading: UserAvatarWithBadge(
-                                        user: myProfile,
-                                        height: 48.0,
-                                        width: 48.0,
-                                        radius: 30.0,
-                                        placeHolder: Icons.person,
-                                      ),
-                                      trailing: MCustomButton(
-                                          buttonType: connectedbutton == true
-                                              ? ButtonType.outline
-                                              : ButtonType.elevated,
-                                          margin: const EdgeInsets.symmetric(
-                                              horizontal: 4.0),
-                                          child: FittedBox(
-                                            child: myProfile.connecteds !=
-                                                        null &&
-                                                    myProfile.connecteds!
-                                                        .contains(
-                                                            publicUser.uid)
-                                                ? const Text(
-                                                    'Connected',
-                                                    style: TextStyle(
-                                                        color: primaryColorLT),
-                                                  )
-                                                : const Text(
-                                                    'Connect',
-                                                    style: TextStyle(
-                                                        color: primaryColorLT),
-                                                  ),
-                                          ),
-                                          onPressed: () async {
-                                            onConnect();
-                                          }),
-                                      title: Text('bossoftheweekname'),
-                                      subtitle: Text(
-                                        'bossoftheweekbio',
-                                        maxLines: 1,
-                                      ),
-                                    ),
-                                    const Divider(
-                                        height: 0.0,
-                                        indent: 16.0,
-                                        endIndent: 16.0),
-                                  ],
-                                );
-                              }
-                              return _users[i].isRanked == true
-                                  ? Container()
-                                  : Column(
-                                      children: [
-                                        ListTile(
-                                          onTap: () async {
-                                            var result = await navigateTo(
-                                              context,
-                                              routeName:
-                                                  PublicProfileScreen.routeName,
-                                              arguments:
-                                                  Params(arg1: _users[i].uid),
-                                            );
-                                            if (result == null) {
-                                              Navigator.of(context).pop();
-                                            }
-                                          },
-                                          leading: UserAvatarWithBadge(
-                                            user: _users[i],
-                                            height: 48.0,
-                                            width: 48.0,
-                                            radius: 30.0,
-                                            placeHolder: Icons.person,
-                                          ),
-                                          trailing: SizedBox(
-                                              height: 40,
-                                              width: 120,
-                                              child: MCustomButton(
-                                                  buttonType:
-                                                      connectedbutton == true
-                                                          ? ButtonType.outline
-                                                          : ButtonType.elevated,
-                                                  margin: const EdgeInsets
-                                                          .symmetric(
-                                                      horizontal: 4.0),
-                                                  child: FittedBox(
-                                                    child: myProfile.connecteds !=
-                                                                null &&
-                                                            myProfile
-                                                                .connecteds!
-                                                                .contains(
-                                                                    publicUser
-                                                                        .uid)
-                                                        ? const Text(
-                                                            'Connected',
-                                                            style: TextStyle(
-                                                                color:
-                                                                    primaryColorLT),
-                                                          )
-                                                        : const Text(
-                                                            'Connect',
-                                                            style: TextStyle(
-                                                                color:
-                                                                    primaryColorLT),
-                                                          ),
-                                                  ),
-                                                  onPressed: () async {
-                                                    onConnect();
-                                                  })),
-                                          title: Text(_users[i].name!),
-                                          subtitle: Text(
-                                            _users[i].bio!,
-                                            maxLines: 1,
-                                          ),
-                                        ),
-                                        const Divider(
-                                            height: 0.0,
-                                            indent: 16.0,
-                                            endIndent: 16.0),
-                                      ],
-                                    );
-                            },
+                Container(
+                  height: MediaQuery.of(context).size.height - 182,
+                  color: Colors.white,
+                  child: widget.filterItems.isEmpty
+                      ? SafetyModel(
+                          isLoading: widget.isLoading,
+                          icon: const Icon(
+                            Icons.person,
+                            size: 80.0,
+                            color: hintColor,
                           ),
-                          if (_isLoadingNext)
-                            const Positioned(
-                              child: SafetyModel(isLoading: true),
-                              bottom: 10.0,
-                              right: 0.0,
-                              left: 0.0,
+                          title: 'There is no user',
+                          // subTitle: 'Be the first one to like!',
+                        )
+                      : Stack(
+                          children: [
+                            ListView.builder(
+                              padding: const EdgeInsets.only(bottom: 48.0),
+                              controller: _controller,
+                              itemCount: widget.filterItems.length,
+                              itemBuilder: (BuildContext context, int i) {
+                                final int checkConnected = _profileController
+                                            .myProfile.connecteds !=
+                                        null
+                                    ? _profileController.myProfile.connecteds!
+                                        .indexWhere((String element) =>
+                                            element ==
+                                            widget.filterItems[i].uid)
+                                    : -1;
+                                if (i == 0) {
+                                  return Column(
+                                    children: [
+                                      ListTile(
+                                        onTap: () async {
+                                          Get.toNamed(Routes.publicProfile,
+                                              arguments: widget.filterItems[i]);
+                                        },
+                                        leading: UserAvatarWithBadge(
+                                          user: _profileController.myProfile,
+                                          height: 48.0,
+                                          width: 48.0,
+                                          radius: 30.0,
+                                          placeHolder: Icons.person,
+                                        ),
+                                        trailing: MCustomButton(
+                                            buttonType: checkConnected != -1
+                                                ? ButtonType.outline
+                                                : ButtonType.elevated,
+                                            margin: const EdgeInsets.symmetric(
+                                                horizontal: 4.0),
+                                            child: FittedBox(
+                                              child: _profileController
+                                                              .myProfile
+                                                              .connecteds !=
+                                                          null &&
+                                                      _profileController
+                                                          .myProfile.connecteds!
+                                                          .contains(
+                                                        widget
+                                                            .filterItems[i].uid,
+                                                      )
+                                                  ? const Text(
+                                                      'Connected',
+                                                      style: TextStyle(
+                                                          color:
+                                                              primaryColorLT),
+                                                    )
+                                                  : const Text(
+                                                      'Connect',
+                                                      style: TextStyle(
+                                                          color:
+                                                              primaryColorLT),
+                                                    ),
+                                            ),
+                                            onPressed: () async {}),
+                                        title: const Text('bossoftheweekname'),
+                                        subtitle: const Text(
+                                          'bossoftheweekbio',
+                                          maxLines: 1,
+                                        ),
+                                      ),
+                                      const Divider(
+                                          height: 0.0,
+                                          indent: 16.0,
+                                          endIndent: 16.0),
+                                    ],
+                                  );
+                                }
+                                return widget.filterItems[i].isRanked == true
+                                    ? Container()
+                                    : Column(
+                                        children: [
+                                          ListTile(
+                                            onTap: () async {
+                                              Get.toNamed(Routes.publicProfile,
+                                                  arguments:
+                                                      widget.filterItems[i]);
+                                            },
+                                            leading: UserAvatarWithBadge(
+                                              user: widget.filterItems[i],
+                                              height: 48.0,
+                                              width: 48.0,
+                                              radius: 30.0,
+                                              placeHolder: Icons.person,
+                                            ),
+                                            trailing: SizedBox(
+                                                height: 40,
+                                                width: 120,
+                                                child: MCustomButton(
+                                                    buttonType:
+                                                        checkConnected != -1
+                                                            ? ButtonType.outline
+                                                            : ButtonType
+                                                                .elevated,
+                                                    margin: const EdgeInsets
+                                                            .symmetric(
+                                                        horizontal: 4.0),
+                                                    child: FittedBox(
+                                                      child: _profileController
+                                                                      .myProfile
+                                                                      .connecteds !=
+                                                                  null &&
+                                                              _profileController
+                                                                  .myProfile
+                                                                  .connecteds!
+                                                                  .contains(
+                                                                widget
+                                                                    .filterItems[
+                                                                        i]
+                                                                    .uid,
+                                                              )
+                                                          ? const Text(
+                                                              'Connected',
+                                                              style: TextStyle(
+                                                                  color:
+                                                                      primaryColorLT),
+                                                            )
+                                                          : const Text(
+                                                              'Connect',
+                                                              style: TextStyle(
+                                                                  color:
+                                                                      primaryColorLT),
+                                                            ),
+                                                    ),
+                                                    onPressed: () async {
+                                                      // onConnect();
+                                                    })),
+                                            title: Text(widget
+                                                    .filterItems[i].name ??
+                                                widget.filterItems[i].username),
+                                            subtitle: Text(
+                                              widget.filterItems[i].bio ?? '',
+                                              maxLines: 1,
+                                            ),
+                                          ),
+                                          const Divider(
+                                              height: 0.0,
+                                              indent: 16.0,
+                                              endIndent: 16.0),
+                                        ],
+                                      );
+                              },
                             ),
-                        ],
-                      ),
-              )
-            ],
+                            if (loadingNext)
+                              const Positioned(
+                                bottom: 10.0,
+                                right: 0.0,
+                                left: 0.0,
+                                child: SafetyModel(isLoading: true),
+                              ),
+                          ],
+                        ),
+                )
+              ],
+            ),
           )
         : ListView.separated(
             key: ValueKey(widget.filterItems),
@@ -274,7 +246,7 @@ class _FilterUsersState extends State<FilterUsers> {
                   placeHolder: Icons.person,
                 ),
                 title: Text(
-                  widget.filterItems[i].name!,
+                  widget.filterItems[i].name ?? widget.filterItems[i].username,
                   style: Theme.of(context).textTheme.bodyLarge,
                 ),
                 subtitle: Text(
@@ -285,11 +257,8 @@ class _FilterUsersState extends State<FilterUsers> {
                       ),
                 ),
                 onTap: () {
-                  navigateTo(
-                    context,
-                    routeName: PublicProfileScreen.routeName,
-                    arguments: Params(arg1: widget.filterItems[i].uid),
-                  );
+                  Get.toNamed(Routes.publicProfile,
+                      arguments: widget.filterItems[i]);
                 },
               );
             },

@@ -29,16 +29,7 @@ class Homeappbar extends StatelessWidget {
       elevation: 0.5,
       bottomOpacity: 0,
       title: GestureDetector(
-        onTap: () => Get.toNamed(Routes.completesearchingscreen, arguments: [
-          MySearchTab(
-            label: 'Users',
-            widget: const FilterUsers(),
-          ),
-          // MySearchTab(
-          //   label: 'Posts',
-          //   widget: const FilterPosts(),
-          // ),
-        ]),
+        onTap: () => Get.toNamed(Routes.completesearchingscreen),
         child: SizedBox(
           height: 42,
           width: double.infinity,

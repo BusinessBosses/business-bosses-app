@@ -242,7 +242,7 @@ class _AllForumScreenState extends State<AllForumScreen> {
                                                                           .joinedUsers ==
                                                                       null
                                                                   ? 'Members: 0'
-                                                                  : 'Members: (${industry.joinedUsers?.where((element) => element.isNotEmpty).toList().length ?? 0})',
+                                                                  : 'Members: (${industry.joinedUsers?.where((String element) => element.isNotEmpty).toList().length ?? 0})',
                                                               style: const TextStyle(
                                                                   fontSize: 11,
                                                                   color: Colors

@@ -24,9 +24,11 @@ import 'package:business_bosses_v2/features/promotions/presentation/promotionscr
 import 'package:business_bosses_v2/features/profile/presentation/publicprofilescreen.dart';
 import 'package:business_bosses_v2/features/profile/presentation/update_profile_screen.dart';
 import 'package:business_bosses_v2/features/referrals/refer_screen.dart';
+import 'package:business_bosses_v2/features/search/controller/search_controller.dart';
 import 'package:business_bosses_v2/features/search/presentation/complete_searching_screen.dart';
 import 'package:business_bosses_v2/features/settings/settingsscreen.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../features/settings/delete_account_screen.dart';
@@ -140,6 +142,7 @@ class Nav {
     GetPage(
       name: Routes.completesearchingscreen,
       page: () => const CompleteSearchingScreen(),
+      binding: BindingsBuilder.put(() => CompleteSearchController()),
     ),
   ];
 }

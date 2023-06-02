@@ -246,12 +246,12 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                           child: Row(
                                             children: [
                                               RichText(
-                                                text: TextSpan(
+                                                text: const TextSpan(
                                                   children: <InlineSpan>[
                                                     TextSpan(
                                                       text:
                                                           'See Seller Reviews',
-                                                      style: const TextStyle(
+                                                      style: TextStyle(
                                                         fontSize: 11,
                                                       ),
                                                     ),
@@ -261,7 +261,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                               const SizedBox(
                                                 width: 15,
                                               ),
-                                              Text(
+                                              const Text(
                                                 '>',
                                                 style: TextStyle(
                                                     color: Colors.white),

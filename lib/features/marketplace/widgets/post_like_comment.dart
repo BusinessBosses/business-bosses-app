@@ -25,7 +25,7 @@ class PostLikeCommentItem extends StatefulWidget {
 }
 
 class _PostLikeCommentItemState extends State<PostLikeCommentItem> {
-  bool _isInit = false;
+  final bool _isInit = false;
   bool _isLoadingLikes = true, _isLoadingComments = true;
 
   @override

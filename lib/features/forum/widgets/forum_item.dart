@@ -8,7 +8,6 @@ import 'package:get/get.dart';
 
 import '../../../action/action.dart';
 import '../../../common/widgets/popup/my_popup_menu_button.dart';
-import '../../../common/widgets/ranking_badge.dart';
 import '../../../common/widgets/text_widget.dart';
 import '../../../common/widgets/user_avatar_with_badge.dart';
 import '../../../utils/theme/theme.dart';
