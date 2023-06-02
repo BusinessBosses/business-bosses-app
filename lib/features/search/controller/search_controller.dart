@@ -1,7 +1,6 @@
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/features/search/repository/search_repository.dart';
-import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:get/get.dart';
 
 class CompleteSearchController extends GetxController {
@@ -39,7 +38,7 @@ class CompleteSearchController extends GetxController {
     if (response.success) {
       page(page.value + 1);
 
-      for (var i = 0; i < response.data['rows'].length; i++) {
+      for (int i = 0; i < response.data['rows'].length; i++) {
         recommendedConnections.add(UserModel.fromMap(response.data['rows'][i]));
       }
     } else {

@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
-import '../../search/widgets/my_search_tab.dart';
-import '../../search/widgets/filterusers.dart';
 
 // ignore: public_member_api_docs
 class Homeappbar extends StatelessWidget {

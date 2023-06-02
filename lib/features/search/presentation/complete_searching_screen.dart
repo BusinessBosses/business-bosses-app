@@ -1,17 +1,11 @@
-import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/features/search/controller/search_controller.dart';
 import 'package:business_bosses_v2/features/search/widgets/search_bar.dart';
-import 'package:business_bosses_v2/features/search/widgets/tabs_pages_filter_item.dart';
 import 'package:business_bosses_v2/features/search/widgets/filterusers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 import '../../../action/action.dart';
-import '../../../utils/theme/theme.dart';
-import '../../forum/models/forum_model.dart';
-import '../../posts/models/post_model.dart';
-import '../widgets/my_search_tab.dart';
 
 class CompleteSearchingScreen extends StatefulWidget {
   static const String routeName = '/completesearchingScreen';
@@ -39,7 +33,7 @@ class _CompleteSearchingScreenState extends State<CompleteSearchingScreen>
   @override
   Widget build(BuildContext context) {
     return GetBuilder<CompleteSearchController>(
-      builder: (controller) {
+      builder: (CompleteSearchController controller) {
         return DefaultTabController(
           length: 1,
           child: Scaffold(
