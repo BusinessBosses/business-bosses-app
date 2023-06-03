@@ -389,37 +389,13 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
   }
 
   Future<void> _onChangeForum() async {
-    _resourceFile?.clear();
-    unFocusKeyboard(context);
-    setState(() {
-      _isProcessing = true;
-    });
-    Map<String, dynamic> data = <String, dynamic>{
+    createMarketController.createForum({
       'category': _selectedCategory,
       'location': _selectedLocation,
       'description': description,
       'price': price,
       'timestamp': DateTime.now().millisecondsSinceEpoch,
-      'images': createMarketController.imageFileList
-    };
-    ApiResponseModel response =
-        await ApiService.post(path: 'markets', body: data);
-    setState(() {
-      _isProcessing = false;
-    });
-    dynamic mId = response.data['marketId'];
-    _marketController.addNewPost({
-      ...data,
-      'marketId': mId,
-    }, _profileController);
-    setState(() {});
-    if (_shouldPromote) {
-      Get.to(() => BoostMarket(
-            postId: mId,
-          ));
-    } else {
-      Get.back();
-    }
+    }, _shouldPromote);
 
     // setState(() {
     //   _isProcessing = true;

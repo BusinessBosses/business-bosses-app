@@ -477,7 +477,28 @@ class _MarketTileState extends State<MarketTile> {
                                             ),
                                       ),
                                     )
-                                  : const SizedBox(),
+                                  : Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 8.0, right: 10.0),
+                                      child: Row(
+                                        children: [
+                                          SvgPicture.asset(
+                                              'assets/svgs/coin.svg'),
+                                          const SizedBox(width: 5),
+                                          Text(
+                                            '${widget.post.coins?.length ?? 0}',
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyText1
+                                                ?.copyWith(
+                                                  fontWeight: FontWeight.w700,
+                                                  color: textColor
+                                                      .withOpacity(0.8),
+                                                ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
                               const SizedBox(width: 8.0),
                               GestureDetector(
                                 onTap: () => _sharePost(),

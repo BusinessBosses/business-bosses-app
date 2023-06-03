@@ -1,5 +1,4 @@
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
-import 'package:business_bosses_v2/features/forum/controller/create_forum_controller.dart';
 import 'package:business_bosses_v2/features/forum/models/forum_model.dart';
 import 'package:business_bosses_v2/features/posts/widgets/preview.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
@@ -13,21 +12,22 @@ import '../../../common/widgets/buttons/my_outlined_button.dart';
 import '../../../services/api_service.dart';
 import '../../../utils/theme/theme.dart';
 import '../../home/bottom_nav.dart';
+import '../controller/create_bossup_controller.dart';
 import '../widgets/field_container.dart';
 
 // ignore: public_member_api_docs
-class CreateForumScreen extends StatefulWidget {
+class CreateBossUpScreen extends StatefulWidget {
   // ignore: public_member_api_docs
-  static const String routeName = '/create-forum-screen';
+  static const String routeName = '/create-bossup-screen';
 
   // ignore: public_member_api_docs
-  const CreateForumScreen({Key? key}) : super(key: key);
+  const CreateBossUpScreen({Key? key}) : super(key: key);
 
   @override
-  State<CreateForumScreen> createState() => _CreateForumScreenState();
+  State<CreateBossUpScreen> createState() => _CreateBossUpScreenState();
 }
 
-class _CreateForumScreenState extends State<CreateForumScreen> {
+class _CreateBossUpScreenState extends State<CreateBossUpScreen> {
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   final ProfileController _profileController = Get.find();
   // Industry? industry;
@@ -58,15 +58,15 @@ class _CreateForumScreenState extends State<CreateForumScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<CreateForumController>(
-      builder: (CreateForumController controller) {
+    return GetBuilder<CreateBossUpController>(
+      builder: (CreateBossUpController controller) {
         return GestureDetector(
           onTap: () => unFocusKeyboard(context),
           child: Scaffold(
             key: scaffoldKey,
             appBar: AppBar(
               title: //Text(Provider.of<AppCommunities>(context, listen: false).label(_industry.categoryId, isUpdating: _isUpdating)),
-                  const Text('Start a Topic'),
+                  const Text('Introduce Your Business'),
               automaticallyImplyLeading:
                   false, // Used for removing back buttoon.
               actions: [
@@ -78,7 +78,7 @@ class _CreateForumScreenState extends State<CreateForumScreen> {
                             context,
                             MaterialPageRoute(
                               builder: (BuildContext context) =>
-                                  const BottomNavScreen(2, true),
+                                  const BottomNavScreen(1, true),
                             ),
                           )
                         : Get.back();
@@ -102,7 +102,7 @@ class _CreateForumScreenState extends State<CreateForumScreen> {
                     keyboardType: TextInputType.text,
                     maxLength: 50,
                     decoration: inputDecoration.copyWith(
-                      hintText: isbossup == false
+                      hintText: isbossup == true
                           ? 'Enter Business name'
                           : 'Enter Topic Title',
                     ),
@@ -124,7 +124,7 @@ class _CreateForumScreenState extends State<CreateForumScreen> {
                     },
 
                     decoration: inputDecoration.copyWith(
-                      hintText: isbossup == false
+                      hintText: isbossup == true
                           ? 'Describe your Business'
                           : 'Enter your Description',
                     ),
@@ -159,125 +159,32 @@ class _CreateForumScreenState extends State<CreateForumScreen> {
                   ),
                   const SizedBox(height: 8.0),
                   Preview(controller: controller),
-                  // if (_myAssetsEntities?.isNotEmpty ?? false)
-                  //   GridView.builder(
-                  //     physics: const NeverScrollableScrollPhysics(),
-                  //     shrinkWrap: true,
-                  //     itemCount: _myAssetsEntities.length,
-                  //     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  //       crossAxisCount: MediaQuery.of(context).orientation ==
-                  //               Orientation.landscape
-                  //           ? 5
-                  //           : 3,
-                  //       childAspectRatio: (1 / 1),
-                  //     ),
-                  //     itemBuilder: (context, i) {
-                  //       return Container(
-                  //         margin: const EdgeInsets.all(8.0),
-                  //         child: Stack(
-                  //           children: [
-                  //             ClipRRect(
-                  //               borderRadius: BorderRadius.circular(10.0),
-                  //               child: AssetViewer(
-                  //                 image: _myAssetsEntities[i].thumbnail,
-                  //                 height: 150.0,
-                  //                 width: 150.0,
-                  //                 fit: BoxFit.cover,
-                  //               ),
-                  //             ),
-                  //             (!_fileProcessing[i] && isProcessing)
-                  //                 ? const Center(
-                  //                     child: SizedBox(
-                  //                       height: 22.0,
-                  //                       width: 22.0,
-                  //                       child: CircularProgressIndicator(),
-                  //                     ),
-                  //                   )
-                  //                 : Container(),
-                  //             deleteImage(i),
-                  //           ],
-                  //         ),
-                  //       );
-                  //     },
-                  //   ),
-                  // if ((forum.images?.isNotEmpty ?? false))
-                  //   GridView.builder(
-                  //     physics: const NeverScrollableScrollPhysics(),
-                  //     shrinkWrap: true,
-                  //     itemCount: forum.images!.length,
-                  //     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  //       crossAxisCount: MediaQuery.of(context).orientation ==
-                  //               Orientation.landscape
-                  //           ? 5
-                  //           : 3,
-                  //       childAspectRatio: (1 / 1),
-                  //     ),
-                  //     itemBuilder: (BuildContext context, int i) {
-                  //       return Container(
-                  //         margin: const EdgeInsets.all(8.0),
-                  //         child: Stack(
-                  //           children: [
-                  //             ClipRRect(
-                  //               borderRadius: BorderRadius.circular(10.0),
-                  //               child: NetworkImageWithPlaceHolder(
-                  //                 imageUrl: forum.images![i],
-                  //                 height: 150.0,
-                  //                 width: 150.0,
-                  //                 fit: BoxFit.cover,
-                  //               ),
-                  //             ),
-                  //             Positioned(
-                  //               right: 5.0,
-                  //               top: 5.0,
-                  //               child: GestureDetector(
-                  //                 onTap: () {
-                  //                   forum.images!.removeAt(i);
-                  //                 },
-                  //                 child: Container(
-                  //                   height: 30.0,
-                  //                   width: 30.0,
-                  //                   alignment: Alignment.center,
-                  //                   decoration: BoxDecoration(
-                  //                     color: Colors.black54,
-                  //                     borderRadius: BorderRadius.circular(40.0),
-                  //                   ),
-                  //                   child: const Icon(
-                  //                     Icons.close,
-                  //                     size: 18.0,
-                  //                     color: Colors.white,
-                  //                   ),
-                  //                 ),
-                  //               ),
-                  //             )
-                  //             // _deleteImage(i),
-                  //           ],
-                  //         ),
-                  //       );
-                  //     },
-                  //   ),
-
                   const SizedBox(height: 24.0),
                   MCustomButton(
-                    onPressed: () {
+                    onPressed: () async {
                       controller.createForum({
                         'title': title.trim(),
                         'description': description.trim(),
                         'timestamp': DateTime.now().millisecondsSinceEpoch,
                         'industryId': industryId
                       });
-                      // if (isbossup == true) {
-                      //   Map<String, dynamic> updateData = <String, dynamic>{
-                      //     'name': DateTime.now().millisecondsSinceEpoch,
-                      //   };
-                      //   ApiService.put(body: {
-                      //     'bossOfTheWeekTimeStamp':
-                      //         DateTime.now().millisecondsSinceEpoch,
-                      //   }, path: 'user/${_profileController.myProfile.uid}');
-                      //   _profileController.updateProfile({
-                      //     ..._profileController.myProfile.toMap(),
-                      //     ...updateData
-                      //   });
-                      // }
+                      if (isbossup == true) {
+                        Map<String, dynamic> updateData = <String, dynamic>{
+                          'bossOfTheWeekTimeStamp':
+                              DateTime.now().millisecondsSinceEpoch,
+                        };
+                        await ApiService.put(
+                          path: 'users/${_profileController.myProfile.uid}',
+                          body: {
+                            'bossOfTheWeekTimeStamp':
+                                DateTime.now().millisecondsSinceEpoch,
+                          },
+                        );
+                        _profileController.updateProfile({
+                          ..._profileController.myProfile.toMap(),
+                          ...updateData
+                        });
+                      }
                     },
                     label: isUpdating ? 'Update Post' : 'Post',
                     isProcessing: controller.loading.value,

@@ -136,6 +136,16 @@ class MarketController extends GetxController {
     update();
   }
 
+  /// COMMENT FUNCTION
+  void comment(String postId, CommentModel comment) {
+    final int postIndex =
+        markets.indexWhere((MarketModel element) => element.marketId == postId);
+    if (postIndex != -1) {
+      markets[postIndex].comments!.add(comment);
+    }
+    update();
+  }
+
   Future<void> initMarket() async {
     loading(true);
     error(false);

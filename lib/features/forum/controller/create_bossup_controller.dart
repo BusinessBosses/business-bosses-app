@@ -1,22 +1,27 @@
 import 'dart:io';
 
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
-import 'package:business_bosses_v2/features/marketplace/controllers/market_controller.dart';
-import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
+import 'package:business_bosses_v2/common/models/api_response_model.dart';
+import 'package:business_bosses_v2/features/forum/repository/forum_repository.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../../../common/models/api_response_model.dart';
-import '../../forum/repository/forum_repository.dart';
-import '../presentation/boost_market_screen.dart';
+import 'bossup_controller.dart';
 
-class CreateMarketController extends GetxController {
+class CreateBossUpController extends GetxController {
   RxBool loading = false.obs;
   late ImagePicker _picker;
-  final MarketController _marketController = Get.put(MarketController());
-  final ProfileController _profileController = Get.put(ProfileController());
   RxList<XFile> imageFileList = RxList<XFile>(<XFile>[]);
+  final BossUpController _forumController = Get.put(BossUpController());
+  bool validateCreatePostData(Map<String, dynamic> data) {
+    if (data['title'].toString().isEmpty ||
+        data['description'].toString().isEmpty) {
+      return false;
+    } else {
+      return true;
+    }
+  }
 
   /// UPLOAD FILE TO REMOTE SERVER
   Future<dynamic> uploadFile() async {
@@ -54,53 +59,32 @@ class CreateMarketController extends GetxController {
     return fileUrls;
   }
 
-  bool validateCreatePostData(Map<String, dynamic> data) {
-    if (data['price'].toString().isEmpty ||
-        data['description'].toString().isEmpty) {
-      return false;
-    } else {
-      return true;
-    }
-  }
-
   /// CREATE POST CONTROLLER (REGISTER NEW POST TO REMOTE DATA SOURCE)
-  Future<void> createForum(Map<String, dynamic> body, bool isPromote) async {
+  Future<void> createForum(Map<String, dynamic> body) async {
     if (validateCreatePostData(body)) {
       loading(true);
       update();
       if (imageFileList.isEmpty) {
         final ApiResponseModel response =
-            await ForumRepository.createMarket(body);
+            await ForumRepository.createForum(body);
 
         if (response.success) {
-          _marketController.addNewPost(response.data, _profileController);
+          _forumController.addNewForum(response.data);
 
-          if (isPromote) {
-            Get.to(() => BoostMarket(
-                  postId: response.data['marketId'],
-                ));
-          } else {
-            Get.back();
-          }
+          Get.back();
         }
       } else {
         if (await uploadFile() == null) {
           showSnackbar(message: 'Error Uploading image');
         } else {
-          final ApiResponseModel response = await ForumRepository.createMarket(
+          final ApiResponseModel response = await ForumRepository.createForum(
               <String, dynamic>{...body, 'images': await uploadFile()});
 
           if (response.success) {
             imageFileList.clear();
-            _marketController.addNewPost(response.data, _profileController);
+            _forumController.addNewForum(response.data);
 
-            if (isPromote) {
-              Get.to(() => BoostMarket(
-                    postId: response.data['marketId'],
-                  ));
-            } else {
-              Get.back();
-            }
+            Get.back();
           }
         }
       }
@@ -108,9 +92,7 @@ class CreateMarketController extends GetxController {
       update();
     } else {
       showSnackbar(
-          message: 'Price or Description can\'t be empty',
-          title: 'OOPS!',
-          error: true);
+          message: 'Post can\'t be empty', title: 'OOPS!', error: true);
       return;
     }
   }

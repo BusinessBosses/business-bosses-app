@@ -36,6 +36,7 @@ class Constants {
   static const String LEARNINGID = 'd479f179-3f41-4d84-915d-33110cf5b4fb';
 
   static const String OPPORTUNITIESID = '2d520b18-f549-42ca-8116-85a523091713';
+  static const String BOSSUPID = 'b3ee7915-66c3-4e41-9237-967827bcb990';
 
   static const String USERS = 'users';
   static const String INDUSTRIES = 'industries';
@@ -92,7 +93,8 @@ class Constants {
 
   static const String LAUNCH_PRO_ID = '-MsUOGcOT9oRXGakCcJv';
   // static const BOSS_UP_CHALLENGE_ID = '-MsUOGcOT9oRXGakCcJv';
-  static const String BOSS_UP_CHALLENGE_ID = '-MsUOGcOT9oRXGakCcJv';
+  static const String BOSS_UP_CHALLENGE_ID =
+      '840396d6-8563-4cb4-811c-e4ddc81e170c';
 
   /// STORAGE CONSTANTS
   static const String ACCESS_TOKEN = 'accessToken';
