@@ -85,6 +85,7 @@ class _FilterUsersState extends State<FilterUsers> {
                     style: TextStyle(fontWeight: FontWeight.w700, fontSize: 20),
                   ),
                 ),
+
                 Container(
                   height: MediaQuery.of(context).size.height - 182,
                   color: Colors.white,

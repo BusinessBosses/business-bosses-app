@@ -266,7 +266,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                                       text:
                                                           'See Seller Reviews',
                                                       style: TextStyle(
-                                                        fontSize: 11,
+                                                        fontSize: 11,))],),),
                                             const SizedBox(
                                               width: 15,
                                             ),
@@ -315,7 +315,8 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                                   ],
                                                 ),
                                               ),
-                                              const SizedBox(
+                                              
+                                              ),const SizedBox(
                                                 width: 15,
                                               ),
                                               const Text(
@@ -326,15 +327,15 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                             ],
                                           ),
                                             ),
-                                          ],
+                                  )],
                                         ),
-                                      ),
+                            ]),
                                       const SizedBox(
                                         height: 20,
                                       ),
                                     ],
                                   ),
-                                ],
+                     ) ],
                               ),
                               GetBuilder<MarketController>(
                                 builder: (MarketController marketController) {
