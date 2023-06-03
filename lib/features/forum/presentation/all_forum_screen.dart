@@ -48,7 +48,6 @@ class _AllForumScreenState extends State<AllForumScreen> {
       }
     }
     setState(() {});
-
     controller.joinAndLeaveIndustry(myUid, industry.industryId!);
   }
 

@@ -394,9 +394,7 @@ class _ForumItemState extends State<ForumItem> {
                               arguments: widget.forum.user);
                         },
                         child: Text(
-                          widget.forum.user?.username ??
-                              widget.forum.user?.name ??
-                              '',
+                          widget.forum.user?.name ?? '',
                           style: Theme.of(context).textTheme.bodyLarge,
                         ),
                       ),
@@ -504,30 +502,52 @@ class _ForumItemState extends State<ForumItem> {
                                 ),
                           ),
                         ),
-                        TextButton.icon(
-                            onPressed: () async {
-                              widget.controller!.postCoin(
-                                profileController.myProfile.uid,
-                                widget.forum.forumId,
-                                profileController,
-                                'forum',
-                              );
-                            },
-                            icon: widget.forum.coins?.contains(
-                                        profileController.myProfile.uid) ==
-                                    true
-                                ? SvgPicture.asset('assets/svgs/coin.svg')
-                                : SvgPicture.asset('assets/svgs/coin.svg'),
-                            label: Text(
-                              '${widget.forum.coins?.length ?? 0}',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium
-                                  ?.copyWith(
-                                    fontWeight: FontWeight.w700,
-                                    color: textColor.withOpacity(0.8),
-                                  ),
-                            )),
+                        widget.forum.user!.uid !=
+                                profileController.myProfile.uid
+                            ? TextButton.icon(
+                                onPressed: () async {
+                                  widget.controller!.postCoin(
+                                    profileController.myProfile.uid,
+                                    widget.forum.forumId,
+                                    profileController,
+                                    'forum',
+                                  );
+                                },
+                                icon: widget.forum.coins?.contains(
+                                            profileController.myProfile.uid) !=
+                                        true
+                                    ? SvgPicture.asset('assets/svgs/coin.svg')
+                                    : SvgPicture.asset('assets/svgs/coin.svg'),
+                                label: Text(
+                                  '${widget.forum.coins?.length ?? 0}',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium
+                                      ?.copyWith(
+                                        fontWeight: FontWeight.w700,
+                                        color: textColor.withOpacity(0.8),
+                                      ),
+                                ))
+                            : Padding(
+                                padding: const EdgeInsets.only(
+                                    left: 8.0, right: 10.0),
+                                child: Row(
+                                  children: [
+                                    SvgPicture.asset('assets/svgs/coin.svg'),
+                                    const SizedBox(width: 5),
+                                    Text(
+                                      '${widget.forum.coins?.length ?? 0}',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyLarge
+                                          ?.copyWith(
+                                            fontWeight: FontWeight.w700,
+                                            color: textColor.withOpacity(0.8),
+                                          ),
+                                    ),
+                                  ],
+                                ),
+                              ),
                         const SizedBox(width: 8.0),
                         GestureDetector(
                           onTap: () => _sharePost(widget.forum),

@@ -8,6 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import '../../utils/theme/theme.dart';
+import '../forum/controller/bossup_controller.dart';
 import '../marketplace/controllers/market_controller.dart';
 import '../posts/presentation/create_post_screen.dart';
 import '../profile/presentation/myprofilescreen.dart';
@@ -17,8 +18,10 @@ import 'marketplace_screen.dart';
 
 /// Bottom Nav Screen is basically where all home screens are navigated through
 class BottomNavScreen extends StatefulWidget {
+  final int selectedIndex;
+
   /// Constructor
-  const BottomNavScreen(int i, bool bool, {super.key});
+  const BottomNavScreen(this.selectedIndex, bool bool, {super.key});
 
   @override
   State<BottomNavScreen> createState() => _BottomNavScreenState();
@@ -30,6 +33,7 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
   final ChatController _chatController = Get.put(ChatController());
   final HomeController _homeController = Get.put(HomeController());
   final MarketController _marketController = Get.put(MarketController());
+  final BossUpController _bossUpController = Get.put(BossUpController());
   int _activeIndex = 0;
   int currentTimestamp = DateTime.now().millisecondsSinceEpoch;
   // final GetStorage sandBox = GetStorage();
@@ -65,9 +69,7 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
   @override
   void initState() {
     super.initState();
-    // WidgetsBinding.instance.addPostFrameCallback((_) {
-    //   addCoinDaily();
-    // });
+    _activeIndex = widget.selectedIndex;
   }
 
   @override

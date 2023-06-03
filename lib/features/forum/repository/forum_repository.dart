@@ -22,4 +22,13 @@ class ForumRepository {
 
     return response;
   }
+
+  /// CREATE POST REPOSITORY
+  static Future<ApiResponseModel> createMarket(
+      Map<String, dynamic> body) async {
+    final ApiResponseModel response =
+        await ApiService.post(path: 'markets', body: body);
+
+    return response;
+  }
 }
