@@ -35,6 +35,7 @@ class _CreateForumScreenState extends State<CreateForumScreen> {
   bool isUpdating = false;
   bool isbossup = true;
   late String industryId;
+  late String categoryId;
   @override
   void initState() {
     // TODO: implement initState
@@ -49,6 +50,7 @@ class _CreateForumScreenState extends State<CreateForumScreen> {
         forum = Get.arguments['forum'];
       } else {
         industryId = Get.arguments['industryId'];
+        categoryId = Get.arguments['categoryId'];
       }
     }
   }
@@ -62,8 +64,11 @@ class _CreateForumScreenState extends State<CreateForumScreen> {
           child: Scaffold(
             key: scaffoldKey,
             appBar: AppBar(
-              title: //Text(Provider.of<AppCommunities>(context, listen: false).label(_industry.categoryId, isUpdating: _isUpdating)),
-                  const Text('Start a Topic'),
+              title: Text(isbossup == true
+                  ? 'Enter Challenge'
+                  : categoryId == 'd479f179-3f41-4d84-915d-33110cf5b4fb'
+                      ? 'Start a Topic'
+                      : 'Create Opportunities'),
               automaticallyImplyLeading:
                   false, // Used for removing back buttoon.
               actions: [
@@ -99,7 +104,7 @@ class _CreateForumScreenState extends State<CreateForumScreen> {
                     keyboardType: TextInputType.text,
                     maxLength: 50,
                     decoration: inputDecoration.copyWith(
-                      hintText: isbossup == false
+                      hintText: isbossup == true
                           ? 'Enter Business name'
                           : 'Enter Topic Title',
                     ),
@@ -121,7 +126,7 @@ class _CreateForumScreenState extends State<CreateForumScreen> {
                     },
 
                     decoration: inputDecoration.copyWith(
-                      hintText: isbossup == false
+                      hintText: isbossup == true
                           ? 'Describe your Business'
                           : 'Enter your Description',
                     ),

@@ -8,7 +8,6 @@ import '../../../common/widgets/buttons/my_outlined_button.dart';
 import '../../../common/widgets/safety_model.dart';
 import '../../../common/widgets/user_avatar_with_badge.dart';
 import '../../../utils/theme/theme.dart';
-import '../../forum/presentation/specific_user_list_screen.dart';
 import '../../profile/presentation/publicprofilescreen.dart';
 
 class FilterUsers extends StatefulWidget {

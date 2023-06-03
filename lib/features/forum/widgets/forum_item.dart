@@ -7,15 +7,15 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 import '../../../action/action.dart';
+import '../../../common/models/comment_model.dart';
 import '../../../common/widgets/popup/my_popup_menu_button.dart';
-import '../../../common/widgets/ranking_badge.dart';
 import '../../../common/widgets/text_widget.dart';
 import '../../../common/widgets/user_avatar_with_badge.dart';
 import '../../../utils/theme/theme.dart';
 import '../../../utils/time_format.dart';
 import '../../posts/widgets/all_images_item.dart';
 import '../../profile/controller/profile_controller.dart';
-import '../presentation/forum_like_comment_screen.dart';
+import 'forum_like_comment.dart';
 
 class ForumItem extends StatefulWidget {
   final ForumModel forum;
@@ -26,6 +26,7 @@ class ForumItem extends StatefulWidget {
 
   final dynamic controller;
 
+  // ignore: public_member_api_docs
   const ForumItem({
     Key? key,
     required this.forum,
@@ -37,6 +38,7 @@ class ForumItem extends StatefulWidget {
   }) : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _ForumItemState createState() => _ForumItemState();
 }
 
@@ -481,16 +483,14 @@ class _ForumItemState extends State<ForumItem> {
                         ),
                         TextButton.icon(
                           onPressed: () {
-                            Navigator.of(context).push(MaterialPageRoute(
+                            showModalBottomSheet(
+                              context: context,
                               builder: (BuildContext context) =>
-                                  ForumLikeCommentScreen(
+                                  ForumLikeCommentItem(
                                 forum: widget.forum,
-                                commented: () {
-                                  // widget.commented!();
-                                  setState(() {});
-                                },
+                                onComment: (CommentModel newComment) async {},
                               ),
-                            ));
+                            );
                           },
                           icon: SvgPicture.asset('assets/svgs/comment.svg'),
                           label: Text(

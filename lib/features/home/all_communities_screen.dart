@@ -192,7 +192,8 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
                                                       arguments: {
                                                         'isBossUp': true,
                                                         'industryId':
-                                                            'b668dc4e-16f1-4822-8802-f3b9c58c37cb'
+                                                            'b668dc4e-16f1-4822-8802-f3b9c58c37cb',
+                                                        'categoryId': 'Bossup'
                                                       });
                                                   // int now = DateTime.now()
                                                   //     .millisecondsSinceEpoch;
@@ -375,9 +376,8 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
                                                                                 const TextStyle(fontSize: 11, color: Colors.white),
                                                                             recognizer: TapGestureRecognizer()
                                                                               ..onTap = () {
-                                                                                navigateTo(
-                                                                                  context,
-                                                                                  routeName: SpecificUserListScreen.routeName,
+                                                                                Get.toNamed(
+                                                                                  SpecificUserListScreen.routeName,
                                                                                   arguments: ParamData('Members', industry.joinedUsers),
                                                                                 );
                                                                               }),
