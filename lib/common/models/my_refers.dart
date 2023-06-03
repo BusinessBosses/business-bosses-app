@@ -1,6 +1,5 @@
 // ignore_for_file: public_member_api_docs, always_specify_types, unnecessary_null_comparison
 
-import 'package:flutter/material.dart';
 
 /// REFERAL CLASS
 class MyRefers {

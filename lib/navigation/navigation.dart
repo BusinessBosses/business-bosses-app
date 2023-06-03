@@ -6,6 +6,7 @@ import 'package:business_bosses_v2/features/authentication/presentation/register
 import 'package:business_bosses_v2/features/chat/chat_room_screen.dart';
 import 'package:business_bosses_v2/features/chat/chat_screen.dart';
 import 'package:business_bosses_v2/features/connects/presentation/all_connections_screen.dart';
+import 'package:business_bosses_v2/features/forum/controller/create_bossup_controller.dart';
 import 'package:business_bosses_v2/features/forum/controller/create_forum_controller.dart';
 import 'package:business_bosses_v2/features/forum/controller/forum_controller.dart';
 import 'package:business_bosses_v2/features/forum/presentation/all_forum_screen.dart';
@@ -24,11 +25,13 @@ import 'package:business_bosses_v2/features/promotions/presentation/promotionscr
 import 'package:business_bosses_v2/features/profile/presentation/publicprofilescreen.dart';
 import 'package:business_bosses_v2/features/profile/presentation/update_profile_screen.dart';
 import 'package:business_bosses_v2/features/referrals/refer_screen.dart';
+import 'package:business_bosses_v2/features/search/controller/search_controller.dart';
 import 'package:business_bosses_v2/features/search/presentation/complete_searching_screen.dart';
 import 'package:business_bosses_v2/features/settings/settingsscreen.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:get/get.dart';
 
+import '../features/forum/presentation/create_bossup_screen.dart';
 import '../features/settings/delete_account_screen.dart';
 
 ///NAV INITIALIZATIONS
@@ -130,6 +133,11 @@ class Nav {
       binding: BindingsBuilder.put(() => CreateForumController()),
     ),
     GetPage(
+      name: Routes.createBossUp,
+      page: () => const CreateBossUpScreen(),
+      binding: BindingsBuilder.put(() => CreateBossUpController()),
+    ),
+    GetPage(
       name: Routes.postDetails,
       page: () => const PostDetailsScreen(),
     ),
@@ -140,6 +148,7 @@ class Nav {
     GetPage(
       name: Routes.completesearchingscreen,
       page: () => const CompleteSearchingScreen(),
+      binding: BindingsBuilder.put(() => CompleteSearchController()),
     ),
   ];
 }

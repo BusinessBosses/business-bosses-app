@@ -1,5 +1,4 @@
 import 'package:business_bosses_v2/common/models/comment_model.dart';
-import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:flutter/material.dart';
@@ -69,13 +68,10 @@ class _WriteACommentState extends State<WriteAComment> {
                 return;
               }
               String text = _commentController.text;
-              final SharedPreferences snapshot =
-                  await SharedPreferences.getInstance();
-              final SharedPreferences data = snapshot;
-              final String? userId = data.getString(Constants.USER_ID);
               CommentModel comment = CommentModel(
                 postId: widget.postId,
                 comment: text,
+                userId: _profileController.myProfile.uid,
                 timestamp: DateTime.now().millisecondsSinceEpoch,
                 user: _profileController.myProfile,
               );

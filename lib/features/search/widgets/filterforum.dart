@@ -4,7 +4,6 @@ import 'package:flutter_svg/svg.dart';
 import '../../../common/widgets/safety_model.dart';
 import '../../../utils/theme/theme.dart';
 import '../../forum/models/forum_model.dart';
-import '../../forum/widgets/forum_item.dart';
 
 class FilterForum extends StatefulWidget {
   final List<ForumModel> filterItems;

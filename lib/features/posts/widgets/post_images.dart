@@ -2,10 +2,11 @@ import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 
+import '../models/post_model.dart';
 import 'images_viewer_screen.dart';
 
 class PostImages extends StatelessWidget {
-  final dynamic post;
+  final PostModel post;
   const PostImages({Key? key, required this.post}) : super(key: key);
 
   @override

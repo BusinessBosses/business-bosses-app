@@ -29,6 +29,7 @@ class _SellerReviewScreenState extends State<SellerReviewScreen> {
   int threeStar = 0;
   int fourStar = 0;
   int fiveStar = 0;
+  bool loading = true;
 
   @override
   void initState() {
@@ -49,7 +50,7 @@ class _SellerReviewScreenState extends State<SellerReviewScreen> {
 
   Future<void> processData() async {
     final ApiResponseModel response =
-        await ApiService.get(path: 'reviews/user');
+        await ApiService.get(path: 'reviews/user/${widget.user.uid}');
     final List<dynamic> psts = response.data['rows'];
     if (mounted) {
       setState(() {
@@ -84,6 +85,11 @@ class _SellerReviewScreenState extends State<SellerReviewScreen> {
           oneStar = oneCount;
         });
       }
+    }
+    if (mounted) {
+      setState(() {
+        loading = false;
+      });
     }
   }
 
@@ -233,7 +239,7 @@ class _SellerReviewScreenState extends State<SellerReviewScreen> {
                               const SizedBox(
                                 width: 10,
                               ),
-                              Container(
+                              SizedBox(
                                 width: 80,
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(10),
@@ -262,7 +268,7 @@ class _SellerReviewScreenState extends State<SellerReviewScreen> {
                               const SizedBox(
                                 width: 10,
                               ),
-                              Container(
+                              SizedBox(
                                 width: 80,
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(10),
@@ -291,7 +297,7 @@ class _SellerReviewScreenState extends State<SellerReviewScreen> {
                               const SizedBox(
                                 width: 10,
                               ),
-                              Container(
+                              SizedBox(
                                 width: 80,
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(10),
@@ -320,7 +326,7 @@ class _SellerReviewScreenState extends State<SellerReviewScreen> {
                               const SizedBox(
                                 width: 10,
                               ),
-                              Container(
+                              SizedBox(
                                 width: 80,
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(10),
@@ -350,7 +356,7 @@ class _SellerReviewScreenState extends State<SellerReviewScreen> {
                               const SizedBox(
                                 width: 10,
                               ),
-                              Container(
+                              SizedBox(
                                 width: 80,
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(10),
@@ -580,7 +586,7 @@ class _SellerReviewScreenState extends State<SellerReviewScreen> {
                           ),
                         ),
                         const SizedBox(height: 24),
-                        Container(
+                        SizedBox(
                           width: MediaQuery.of(context).size.width * 0.6,
                           child: MCustomButton(
                             isProcessing: isSending,
