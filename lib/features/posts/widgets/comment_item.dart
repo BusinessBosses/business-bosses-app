@@ -1,4 +1,5 @@
 import 'package:business_bosses_v2/common/models/comment_model.dart';
+import 'package:business_bosses_v2/features/home/bottom_nav.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
@@ -8,20 +9,25 @@ import '../../../common/models/my_response.dart';
 import '../../../common/models/user_model.dart';
 import '../../../common/widgets/user_avatar_with_badge.dart';
 import '../../../functions/my_native_functions.dart';
+import '../../../navigation/routes.dart';
 import '../../../utils/theme/theme.dart';
 import '../../../utils/time_format.dart';
 import 'my_container.dart';
 
 class CommentItem extends StatefulWidget {
   final CommentModel comment;
+  final Function(int)? onPageChange;
 
-  const CommentItem(this.comment, {Key? key}) : super(key: key);
+  ///
+  const CommentItem(this.comment, {Key? key, this.onPageChange})
+      : super(key: key);
 
   @override
   State<CommentItem> createState() => _CommentItemState();
 }
 
 class _CommentItemState extends State<CommentItem> {
+  final ProfileController profileController = Get.find();
   UserModel user = UserModel();
   bool loaded = false;
   @override
@@ -46,6 +52,17 @@ class _CommentItemState extends State<CommentItem> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   ListTile(
+                    onTap: () {
+                      if (profileController.myProfile.uid ==
+                          widget.comment.userId!) {
+                        if (widget.onPageChange != null) {
+                          widget.onPageChange!(3);
+                        }
+                      } else {
+                        Get.toNamed(Routes.publicProfile,
+                            arguments: widget.comment.user);
+                      }
+                    },
                     leading: UserAvatarWithBadge(
                       user: user,
                       height: 36.0,
@@ -101,6 +118,8 @@ class _CommentItemState extends State<CommentItem> {
 
   void getUser() async {
     final Map<String, dynamic> response = await ProfileController.loadData(widget.comment.userId!);
+    final Map<String, dynamic> response =
+        await ProfileController.loadData(widget.comment.userId!);
     if (mounted) {
       setState(() {
         user = UserModel.fromMap(response['user']);

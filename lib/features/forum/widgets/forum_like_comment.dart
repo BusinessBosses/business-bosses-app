@@ -2,35 +2,31 @@ import 'package:business_bosses_v2/common/models/comment_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
-import 'package:get/get.dart';
 import '../../../../common/models/user_model.dart';
 import '../../../../common/widgets/safety_model.dart';
 import '../../../../common/widgets/user_avatar_with_badge.dart';
 import '../../../../utils/theme/theme.dart';
 import '../../posts/widgets/comment_item.dart';
 import '../../posts/widgets/write_comment.dart';
-import '../controllers/market_controller.dart';
-import '../models/market_model.dart';
+import '../models/forum_model.dart';
 
-class PostLikeCommentItem extends StatefulWidget {
+class ForumLikeCommentItem extends StatefulWidget {
   final Function(CommentModel comment) onComment;
-  final MarketModel post;
+  final ForumModel forum;
 
-  const PostLikeCommentItem({
+  const ForumLikeCommentItem({
     Key? key,
     required this.onComment,
-    required this.post,
+    required this.forum,
   }) : super(key: key);
 
   @override
-  _PostLikeCommentItemState createState() => _PostLikeCommentItemState();
+  _ForumLikeCommentItemState createState() => _ForumLikeCommentItemState();
 }
 
-class _PostLikeCommentItemState extends State<PostLikeCommentItem> {
-  final bool _isInit = false;
+class _ForumLikeCommentItemState extends State<ForumLikeCommentItem> {
+  bool _isInit = false;
   bool _isLoadingLikes = true, _isLoadingComments = true;
-  final MarketController _marketController = Get.find();
-  final ProfileController profileController = Get.find();
 
   @override
   void initState() {
@@ -99,12 +95,8 @@ class _PostLikeCommentItemState extends State<PostLikeCommentItem> {
                           setState(() {
                             _comments.add(comment);
                           });
-                          _marketController.comment(
-                            widget.post.marketId,
-                            comment,
-                          );
                         },
-                        postId: widget.post.marketId,
+                        postId: widget.forum.forumId,
                       )
                     ],
                   ),
@@ -150,7 +142,7 @@ class _PostLikeCommentItemState extends State<PostLikeCommentItem> {
   final List<CommentModel> _comments = <CommentModel>[];
 
   Future<void> _loadCommentWithDetails() async {
-    for (CommentModel c in widget.post.comments ?? []) {
+    for (CommentModel c in widget.forum.comments ?? []) {
       _comments.add(
         CommentModel(
           commentId: c.commentId,
@@ -168,7 +160,7 @@ class _PostLikeCommentItemState extends State<PostLikeCommentItem> {
   final List<UserModel> _users = [];
 
   Future<void> _loadLikesWithDetails() async {
-    for (dynamic l in widget.post.likes ?? []) {
+    for (dynamic l in widget.forum.likes ?? []) {
       final Map<String, dynamic> response = await ProfileController.loadData(l);
       _users.add(UserModel(
           uid: l,

@@ -48,7 +48,6 @@ class _AllForumScreenState extends State<AllForumScreen> {
       }
     }
     setState(() {});
-
     controller.joinAndLeaveIndustry(myUid, industry.industryId!);
   }
 
@@ -114,16 +113,19 @@ class _AllForumScreenState extends State<AllForumScreen> {
                                         Get.toNamed(Routes.createForum,
                                             arguments: {
                                               'isBossUp': false,
-                                              'industryId': industry.industryId
+                                              'industryId': industry.industryId,
+                                              'categoryId': industry.categoryId
                                             });
                                       },
                                       child: Row(
                                         mainAxisSize: MainAxisSize.min,
                                         children: [
-                                          const Text(
-                                            'Start a Topic' ??
-                                                'Create Opportunities',
-                                            style: TextStyle(
+                                          Text(
+                                            industry.categoryId!.toString() ==
+                                                    'd479f179-3f41-4d84-915d-33110cf5b4fb'
+                                                ? 'Start a Topic'
+                                                : 'Create Opportunities',
+                                            style: const TextStyle(
                                                 fontSize: 15,
                                                 color: Colors.white,
                                                 fontWeight: FontWeight.w500),
@@ -251,10 +253,9 @@ class _AllForumScreenState extends State<AllForumScreen> {
                                                                   TapGestureRecognizer()
                                                                     ..onTap =
                                                                         () {
-                                                                      navigateTo(
-                                                                        context,
-                                                                        routeName:
-                                                                            SpecificUserListScreen.routeName,
+                                                                      Get.toNamed(
+                                                                        Routes
+                                                                            .specificuserlistscreen,
                                                                         arguments:
                                                                             industry.industryId,
                                                                       );

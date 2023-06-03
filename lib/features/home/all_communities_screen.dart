@@ -1,23 +1,19 @@
+import 'package:business_bosses_v2/features/forum/presentation/bossup_screen.dart';
 import 'package:business_bosses_v2/features/forum/widgets/forum_item.dart';
 import 'package:business_bosses_v2/features/home/controller/commumities_controller.dart';
 import 'package:business_bosses_v2/features/home/widgets/industriessearch.dart';
 import 'package:business_bosses_v2/utils/constants/constants.dart';
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
-import '../../action/action.dart';
 import '../../common/widgets/safety_model.dart';
 import '../../common/widgets/tiles/custom_tile.dart';
 import '../../navigation/routes.dart';
 import '../../utils/theme/theme.dart';
 import '../../common/widgets/popup/bossup_challenge_popup.dart';
+
 import '../forum/models/industry.dart';
-import '../forum/presentation/specific_user_list_screen.dart';
-import '../forum/widgets/joinedbutton.dart';
 import '../search/widgets/search_bar.dart';
 
 // ignore: public_member_api_docs
@@ -191,7 +187,8 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
                                                       arguments: {
                                                         'isBossUp': true,
                                                         'industryId':
-                                                            'b668dc4e-16f1-4822-8802-f3b9c58c37cb'
+                                                            'b668dc4e-16f1-4822-8802-f3b9c58c37cb',
+                                                        'categoryId': 'Bossup'
                                                       });
                                                   // int now = DateTime.now()
                                                   //     .millisecondsSinceEpoch;
@@ -374,9 +371,8 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
                                                                                 const TextStyle(fontSize: 11, color: Colors.white),
                                                                             recognizer: TapGestureRecognizer()
                                                                               ..onTap = () {
-                                                                                navigateTo(
-                                                                                  context,
-                                                                                  routeName: SpecificUserListScreen.routeName,
+                                                                                Get.toNamed(
+                                                                                  SpecificUserListScreen.routeName,
                                                                                   arguments: ParamData('Members', industry.joinedUsers),
                                                                                 );
                                                                               }),
@@ -605,47 +601,14 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
                                   )
                                 ],
                               ),
+                      controller.loading.value
+                          ? const Center(
+                              child: CircularProgressIndicator(),
                             )
-                          ];
-                        },
-                        body: Container(),
-                        // body: Container(
-                        //         color: backgroundcolorinterface,
-                        //         child: ListView.builder(
-                        //             key: ValueKey(cat.categoryId),
-                        //             padding: const EdgeInsets.only(
-                        //               top: 8.0,
-                        //               right: 0.0,
-                        //               left: 0.0,
-                        //               bottom: 120.0,
-                        //             ),
-                        //             itemCount: _forums.length,
-
-                        //             // <-- this will disable scroll
-
-                        //             //controller: differentController,
-
-                        //             itemBuilder: (BuildContext context, int i) {
-                        //               _forums.sort(
-                        //                 (a, b) => b.isRanked
-                        //                     .toString()
-                        //                     .compareTo(a.isRanked.toString()),
-                        //               );
-                        //               return UpdatedForumItem(
-                        //                 _forums[i],
-                        //                 key: ValueKey(_forums[i].forumId),
-                        //                 onLikeTap: (MyForum latestForum) {
-                        //                   _forums[i].likes = latestForum.likes;
-                        //                   setState(() {});
-                        //                 },
-                        //                 onCommentSent: (MyForum latestForum) {
-                        //                   _forums[i].comments = latestForum.comments;
-                        //                   setState(() {});
-                        //                 },
-                        //               );
-                        //             }),
-                        //       ),
-                      ),
+                          : BossUpSection(
+                              industry: controller
+                                  .getCategoryIndustries(Constants.BOSSUPID)[0],
+                            ),
                       // content of Tab 2
                       Padding(
                         padding: const EdgeInsets.all(15.0),

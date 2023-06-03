@@ -68,13 +68,10 @@ class _WriteACommentState extends State<WriteAComment> {
                 return;
               }
               String text = _commentController.text;
-              final SharedPreferences snapshot =
-                  await SharedPreferences.getInstance();
-              final SharedPreferences data = snapshot;
-              final String? userId = data.getString(Constants.USER_ID);
               CommentModel comment = CommentModel(
                 postId: widget.postId,
                 comment: text,
+                userId: _profileController.myProfile.uid,
                 timestamp: DateTime.now().millisecondsSinceEpoch,
                 user: _profileController.myProfile,
               );
