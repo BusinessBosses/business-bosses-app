@@ -11,6 +11,8 @@ import '../../common/widgets/safety_model.dart';
 import '../../common/widgets/tiles/custom_tile.dart';
 import '../../navigation/routes.dart';
 import '../../utils/theme/theme.dart';
+import '../../common/widgets/popup/bossup_challenge_popup.dart';
+
 import '../forum/models/industry.dart';
 import '../search/widgets/search_bar.dart';
 

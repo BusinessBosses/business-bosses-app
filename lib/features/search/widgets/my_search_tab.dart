@@ -31,7 +31,7 @@ class MySearchTab {
 
   static List<MySearchTab> cloneList(List<MySearchTab> list) {
     List<MySearchTab> l = [];
-    for (var element in list) {
+    for (MySearchTab element in list) {
       l.add(MySearchTab.fromMap(element.toMap()));
     }
     return l;

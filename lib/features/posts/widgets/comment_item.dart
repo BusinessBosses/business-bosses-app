@@ -117,6 +117,7 @@ class _CommentItemState extends State<CommentItem> {
   }
 
   void getUser() async {
+    final Map<String, dynamic> response = await ProfileController.loadData(widget.comment.userId!);
     final Map<String, dynamic> response =
         await ProfileController.loadData(widget.comment.userId!);
     if (mounted) {

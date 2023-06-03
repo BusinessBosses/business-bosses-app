@@ -73,7 +73,7 @@ class ForumController extends GetxController {
         await ForumRepository.getForumMembers(membersPage.value, industryId);
     if (response.success) {
       membersPage(membersPage.value + 1);
-      for (var i = 0; i < response.data.length; i++) {
+      for (int i = 0; i < response.data.length; i++) {
         members.add(UserModel.fromMap(response.data[i]));
       }
     } else {

@@ -3,7 +3,6 @@ import 'dart:convert';
 
 import 'package:business_bosses_v2/common/models/user_model.dart';
 
-import '../../../common/models/my_user.dart';
 
 class MyNotification {
   String notificationId;

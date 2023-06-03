@@ -82,9 +82,9 @@ class PostsController extends GetxController {
   }
 
   void processPostsAndForumsData(dynamic data) {
-    // processPostsToState(data['posts']['rows']);
-    // processForumsToState(data['forums']['rows']);
-    // joinPostsAndForums();
+    processPostsToState(data['posts']['rows']);
+    processForumsToState(data['forums']['rows']);
+    joinPostsAndForums();
     update();
   }
 

@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../../common/widgets/safety_model.dart';
@@ -34,7 +33,7 @@ class FilterPosts extends StatelessWidget {
             key: key,
             separatorBuilder: (_, __) => const SizedBox(height: 8.0),
             padding: const EdgeInsets.all(16.0),
-            itemCount: filterItems?.length ?? 0,
+            itemCount: filterItems.length ?? 0,
             itemBuilder: (BuildContext context, int i) {
               return Container();
               // UpdatedPostItem(

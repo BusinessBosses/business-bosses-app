@@ -239,7 +239,7 @@ class _SellerReviewScreenState extends State<SellerReviewScreen> {
                               const SizedBox(
                                 width: 10,
                               ),
-                              Container(
+                              SizedBox(
                                 width: 80,
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(10),
@@ -268,7 +268,7 @@ class _SellerReviewScreenState extends State<SellerReviewScreen> {
                               const SizedBox(
                                 width: 10,
                               ),
-                              Container(
+                              SizedBox(
                                 width: 80,
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(10),
@@ -297,7 +297,7 @@ class _SellerReviewScreenState extends State<SellerReviewScreen> {
                               const SizedBox(
                                 width: 10,
                               ),
-                              Container(
+                              SizedBox(
                                 width: 80,
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(10),
@@ -326,7 +326,7 @@ class _SellerReviewScreenState extends State<SellerReviewScreen> {
                               const SizedBox(
                                 width: 10,
                               ),
-                              Container(
+                              SizedBox(
                                 width: 80,
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(10),
@@ -356,7 +356,7 @@ class _SellerReviewScreenState extends State<SellerReviewScreen> {
                               const SizedBox(
                                 width: 10,
                               ),
-                              Container(
+                              SizedBox(
                                 width: 80,
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(10),
@@ -586,7 +586,7 @@ class _SellerReviewScreenState extends State<SellerReviewScreen> {
                           ),
                         ),
                         const SizedBox(height: 24),
-                        Container(
+                        SizedBox(
                           width: MediaQuery.of(context).size.width * 0.6,
                           child: MCustomButton(
                             isProcessing: isSending,

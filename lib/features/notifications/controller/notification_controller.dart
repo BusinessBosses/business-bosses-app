@@ -10,7 +10,7 @@ class NotificationController extends GetxController {
   final ProfileController _profileController = Get.find();
   RxBool loading = RxBool(false);
   final List<MyNotification> notifications = [];
-  RxInt _page = RxInt(0);
+  final RxInt _page = RxInt(0);
   Quote quote = Quote(
     id: 1,
     by: 'Brain Tracy',
@@ -29,7 +29,7 @@ class NotificationController extends GetxController {
       if (response.data['quote'] != null) {
         quote = Quote.fromMap(response.data['quote']);
       }
-      for (var i = 0; i < response.data['notifications']['rows'].length; i++) {
+      for (int i = 0; i < response.data['notifications']['rows'].length; i++) {
         notifications.add(
             MyNotification.fromMap(response.data['notifications']['rows'][i]));
 
