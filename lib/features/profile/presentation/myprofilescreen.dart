@@ -233,40 +233,6 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                                 ],
                                               ),
                                             ),
-                                          ],
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        width: 15,
-                                      ),
-                                      GestureDetector(
-                                        onTap: () {
-                                          Get.to(() => SellerReviewScreen(
-                                              user:
-                                                  profileController.myProfile));
-                                        },
-                                        child: Container(
-                                          padding: const EdgeInsets.only(
-                                              bottom: 8,
-                                              top: 8,
-                                              left: 20,
-                                              right: 20),
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(200),
-                                            color: const Color.fromRGBO(
-                                                128, 128, 128, 1),
-                                          ),
-                                          child: Row(
-                                            children: [
-                                              RichText(
-                                                text: const TextSpan(
-                                                  children: <InlineSpan>[
-                                                    TextSpan(
-                                                      text:
-                                                          'See Seller Reviews',
-                                                      style: TextStyle(
-                                                        fontSize: 11,))],),),
                                             const SizedBox(
                                               width: 15,
                                             ),
@@ -315,27 +281,16 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                                   ],
                                                 ),
                                               ),
-                                              
-                                              ),const SizedBox(
-                                                width: 15,
-                                              ),
-                                              const Text(
-                                                '>',
-                                                style: TextStyle(
-                                                    color: Colors.white),
-                                              ),
-                                            ],
-                                          ),
                                             ),
-                                  )],
+                                          ],
                                         ),
-                            ]),
+                                      ),
                                       const SizedBox(
                                         height: 20,
                                       ),
                                     ],
                                   ),
-                     ) ],
+                                ],
                               ),
                               GetBuilder<MarketController>(
                                 builder: (MarketController marketController) {

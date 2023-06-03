@@ -130,466 +130,464 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
                     ? TabBarView(
                         children: [
                           // content of Tab 1
-                          NestedScrollView(
-                            body: Container(),
-                            headerSliverBuilder: (BuildContext context,
-                                bool innerBoxIsScrolled) {
-                              return <Widget>[
-                                SliverStickyHeader(
-                                  sticky: false,
-                                  header: Column(
-                                    children: [
-                                      Container(
-                                        width: double.infinity,
-                                        color: Colors.transparent,
-                                        child: Stack(
-                                          children: [
-                                            Padding(
-                                              padding: const EdgeInsets.only(
-                                                  left: 20, top: 25),
-                                              child: GestureDetector(
-                                                onTap: (() {
-                                                  showDialog(
-                                                    context: context,
-                                                    builder: (BuildContext
-                                                            context) =>
-                                                        const BossUpChallangePopUpcopy(),
-                                                  );
-                                                }),
-                                                child: Row(
-                                                  children: [
-                                                    const Text(
-                                                      'About ',
-                                                      style: TextStyle(
-                                                          fontSize: 12,
-                                                          fontWeight:
-                                                              FontWeight.w700),
-                                                    ),
-                                                    SvgPicture.asset(
-                                                      'assets/svgs/info.svg',
-                                                      height: 20,
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
-                                            Column(
-                                              children: [
-                                                const SizedBox(
-                                                  height: 10,
-                                                ),
-                                                Align(
-                                                  alignment:
-                                                      Alignment.centerRight,
-                                                  child: Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            right: 20),
-                                                    child: ElevatedButton(
-                                                      style: ElevatedButton.styleFrom(
-                                                          minimumSize: const Size(
-                                                              150,
-                                                              45) // put the width and height you want
-                                                          ),
-                                                      onPressed: () {
-                                                        Get.toNamed(
-                                                            Routes.createForum,
-                                                            arguments: {
-                                                              'isBossUp': true,
-                                                              'industryId':
-                                                                  'b668dc4e-16f1-4822-8802-f3b9c58c37cb',
-                                                              'categoryId':
-                                                                  'Bossup'
-                                                            });
-                                                      },
-                                                      child: Row(
-                                                        mainAxisSize:
-                                                            MainAxisSize.min,
-                                                        children: <Widget>[
-                                                          const Text(
-                                                            'Enter Challenge',
-                                                            style: TextStyle(
-                                                                fontSize: 15,
-                                                                color: Colors
-                                                                    .white,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w500),
-                                                          ),
-                                                          const SizedBox(
-                                                            width: 5,
-                                                          ),
-                                                          SvgPicture.asset(
-                                                              'assets/svgs/startatopic.svg')
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                                Stack(
-                                                  children: <Widget>[
-                                                    Container(
-                                                      margin:
-                                                          const EdgeInsets.only(
-                                                              top: 10,
-                                                              right: 20,
-                                                              left: 20),
-                                                      height: 150,
-                                                      width: double.infinity,
-                                                      child: ClipRRect(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(15.0),
-                                                        child: FittedBox(
-                                                          fit: BoxFit.fill,
-                                                          child: Image.asset(
-                                                              'assets/images/postbackground.png'),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    Column(
-                                                      children: [
-                                                        Row(
-                                                          children: <Widget>[
-                                                            Container(
-                                                              margin:
-                                                                  const EdgeInsets
-                                                                          .only(
-                                                                      top: 25,
-                                                                      right: 20,
-                                                                      left: 35),
-                                                              height: 86,
-                                                              width: 142,
-                                                              child: ClipRRect(
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            10.0),
-                                                                child:
-                                                                    FittedBox(
-                                                                  child:
-                                                                      CachedNetworkImage(
-                                                                    memCacheWidth:
-                                                                        256,
-                                                                    imageUrl:
-                                                                        'https://files.ng/bossup.jpg',
-                                                                    placeholder: (BuildContext
-                                                                                context,
-                                                                            String
-                                                                                photo) =>
-                                                                        const CircularProgressIndicator(),
-                                                                    errorWidget: (BuildContext context,
-                                                                            String
-                                                                                photo,
-                                                                            dynamic
-                                                                                error) =>
-                                                                        const Icon(
-                                                                            Icons.error),
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                            ),
-                                                            const Expanded(
-                                                              child: Padding(
-                                                                padding: EdgeInsets
-                                                                    .only(
-                                                                        right:
-                                                                            35),
-                                                                child: Text(
-                                                                  'Description will be here',
-                                                                  style:
-                                                                      TextStyle(
-                                                                    fontSize:
-                                                                        15,
-                                                                    color: Colors
-                                                                        .white,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w700,
-                                                                  ),
-                                                                  softWrap:
-                                                                      true,
-                                                                  maxLines: 5,
-                                                                ),
-                                                              ),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                        Row(
-                                                          children: <Widget>[
-                                                            Stack(
-                                                              children: [
-                                                                Padding(
-                                                                  padding:
-                                                                      const EdgeInsets
-                                                                          .only(
-                                                                    left: 35,
-                                                                    top: 5,
-                                                                  ),
-                                                                  child:
-                                                                      Container(
-                                                                    padding:
-                                                                        const EdgeInsets
-                                                                            .only(
-                                                                      bottom: 8,
-                                                                      top: 8,
-                                                                      left: 10,
-                                                                      right: 10,
-                                                                    ),
-                                                                    decoration:
-                                                                        BoxDecoration(
-                                                                      borderRadius:
-                                                                          BorderRadius.circular(
-                                                                              200),
-                                                                      color:
-                                                                          primaryColorLT,
-                                                                    ),
-                                                                    child: Row(
-                                                                      children: [
-                                                                        Padding(
-                                                                          padding:
-                                                                              const EdgeInsets.only(right: 8),
-                                                                          child:
-                                                                              SvgPicture.asset('assets/svgs/members.svg'),
-                                                                        ),
-                                                                        RichText(
-                                                                          text:
-                                                                              TextSpan(
-                                                                            children: [
-                                                                              TextSpan(
-                                                                                  text: 'Members: 0',
-                                                                                  style: const TextStyle(fontSize: 11, color: Colors.white),
-                                                                                  recognizer: TapGestureRecognizer()
-                                                                                    ..onTap = () {
-                                                                                      // Get.toNamed(
-                                                                                      //   SpecificUserListScreen.routeName,
-                                                                                      //   arguments: ParamData('Members', industry.joinedUsers),
-                                                                                      // );
-                                                                                    }),
-                                                                            ],
-                                                                          ),
-                                                                        ),
-                                                                      ],
-                                                                    ),
-                                                                  ),
-                                                                )
-                                                              ],
-                                                            ),
-                                                            Stack(
-                                                              children: [
-                                                                Padding(
-                                                                  padding: const EdgeInsets
-                                                                          .only(
-                                                                      left: 5,
-                                                                      top: 5),
-                                                                  child:
-                                                                      Container(
-                                                                    padding: const EdgeInsets
-                                                                            .only(
-                                                                        bottom:
-                                                                            8,
-                                                                        top: 8,
-                                                                        left:
-                                                                            10,
-                                                                        right:
-                                                                            10),
-                                                                    decoration:
-                                                                        BoxDecoration(
-                                                                      borderRadius:
-                                                                          BorderRadius.circular(
-                                                                              200),
-                                                                      color: const Color
-                                                                              .fromARGB(
-                                                                          47,
-                                                                          255,
-                                                                          255,
-                                                                          255),
-                                                                    ),
-                                                                    child: Row(
-                                                                      children: [
-                                                                        SvgPicture.asset(
-                                                                            'assets/svgs/entries.svg'),
-                                                                        RichText(
-                                                                          text:
-                                                                              const TextSpan(
-                                                                            children: <InlineSpan>[
-                                                                              TextSpan(
-                                                                                text: 'Entries: (0)',
-                                                                                style: TextStyle(
-                                                                                  fontSize: 11,
-                                                                                ),
-                                                                              ),
-                                                                            ],
-                                                                          ),
-                                                                        ),
-                                                                      ],
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                            Flexible(
-                                                              child: Padding(
-                                                                  padding:
-                                                                      const EdgeInsets
-                                                                          .only(
-                                                                    right: 20,
-                                                                  ),
-                                                                  child:
-                                                                      SizedBox(
-                                                                    width: MediaQuery.of(
-                                                                            context)
-                                                                        .size
-                                                                        .width,
-                                                                    child: Align(
-                                                                        alignment: Alignment.centerRight,
-                                                                        child: Row(
-                                                                          crossAxisAlignment:
-                                                                              CrossAxisAlignment.center,
-                                                                          mainAxisAlignment:
-                                                                              MainAxisAlignment.end,
-                                                                          children: [
-                                                                            JoinedButton(true,
-                                                                                () {}),
-                                                                          ],
-                                                                        )),
-                                                                  )),
-                                                            )
-                                                          ],
-                                                        ),
-                                                        const SizedBox(
-                                                          height: 5,
-                                                        ),
-                                                      ],
-                                                    )
-                                                  ],
-                                                ),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                      )
-                                    ],
-                                  ),
+                          // NestedScrollView(
+                          //   headerSliverBuilder: (BuildContext context,
+                          //       bool innerBoxIsScrolled) {
+                          //     return <Widget>[
+                          //       SliverStickyHeader(
+                          //         sticky: false,
+                          //         header: Column(
+                          //           children: [
+                          //             Container(
+                          //               width: double.infinity,
+                          //               color: Colors.transparent,
+                          //               child: Stack(
+                          //                 children: [
+                          //                   Padding(
+                          //                     padding: const EdgeInsets.only(
+                          //                         left: 20, top: 25),
+                          //                     child: GestureDetector(
+                          //                       onTap: (() {
+                          //                         showDialog(
+                          //                           context: context,
+                          //                           builder: (BuildContext
+                          //                                   context) =>
+                          //                               const BossUpChallangePopUpcopy(),
+                          //                         );
+                          //                       }),
+                          //                       child: Row(
+                          //                         children: [
+                          //                           const Text(
+                          //                             'About ',
+                          //                             style: TextStyle(
+                          //                                 fontSize: 12,
+                          //                                 fontWeight:
+                          //                                     FontWeight.w700),
+                          //                           ),
+                          //                           SvgPicture.asset(
+                          //                             'assets/svgs/info.svg',
+                          //                             height: 20,
+                          //                           ),
+                          //                         ],
+                          //                       ),
+                          //                     ),
+                          //                   ),
+                          //                   Column(
+                          //                     children: [
+                          //                       const SizedBox(
+                          //                         height: 10,
+                          //                       ),
+                          //                       Align(
+                          //                         alignment:
+                          //                             Alignment.centerRight,
+                          //                         child: Padding(
+                          //                           padding:
+                          //                               const EdgeInsets.only(
+                          //                                   right: 20),
+                          //                           child: ElevatedButton(
+                          //                             style: ElevatedButton.styleFrom(
+                          //                                 minimumSize: const Size(
+                          //                                     150,
+                          //                                     45) // put the width and height you want
+                          //                                 ),
+                          //                             onPressed: () {
+                          //                               Get.toNamed(
+                          //                                   Routes.createForum,
+                          //                                   arguments: {
+                          //                                     'isBossUp': true,
+                          //                                     'industryId':
+                          //                                         'b668dc4e-16f1-4822-8802-f3b9c58c37cb',
+                          //                                     'categoryId':
+                          //                                         'Bossup'
+                          //                                   });
+                          //                             },
+                          //                             child: Row(
+                          //                               mainAxisSize:
+                          //                                   MainAxisSize.min,
+                          //                               children: <Widget>[
+                          //                                 const Text(
+                          //                                   'Enter Challenge',
+                          //                                   style: TextStyle(
+                          //                                       fontSize: 15,
+                          //                                       color: Colors
+                          //                                           .white,
+                          //                                       fontWeight:
+                          //                                           FontWeight
+                          //                                               .w500),
+                          //                                 ),
+                          //                                 const SizedBox(
+                          //                                   width: 5,
+                          //                                 ),
+                          //                                 SvgPicture.asset(
+                          //                                     'assets/svgs/startatopic.svg')
+                          //                               ],
+                          //                             ),
+                          //                           ),
+                          //                         ),
+                          //                       ),
+                          //                       Stack(
+                          //                         children: <Widget>[
+                          //                           Container(
+                          //                             margin:
+                          //                                 const EdgeInsets.only(
+                          //                                     top: 10,
+                          //                                     right: 20,
+                          //                                     left: 20),
+                          //                             height: 150,
+                          //                             width: double.infinity,
+                          //                             child: ClipRRect(
+                          //                               borderRadius:
+                          //                                   BorderRadius
+                          //                                       .circular(15.0),
+                          //                               child: FittedBox(
+                          //                                 fit: BoxFit.fill,
+                          //                                 child: Image.asset(
+                          //                                     'assets/images/postbackground.png'),
+                          //                               ),
+                          //                             ),
+                          //                           ),
+                          //                           Column(
+                          //                             children: [
+                          //                               Row(
+                          //                                 children: <Widget>[
+                          //                                   Container(
+                          //                                     margin:
+                          //                                         const EdgeInsets
+                          //                                                 .only(
+                          //                                             top: 25,
+                          //                                             right: 20,
+                          //                                             left: 35),
+                          //                                     height: 86,
+                          //                                     width: 142,
+                          //                                     child: ClipRRect(
+                          //                                       borderRadius:
+                          //                                           BorderRadius
+                          //                                               .circular(
+                          //                                                   10.0),
+                          //                                       child:
+                          //                                           FittedBox(
+                          //                                         child:
+                          //                                             CachedNetworkImage(
+                          //                                           memCacheWidth:
+                          //                                               256,
+                          //                                           imageUrl:
+                          //                                               'https://files.ng/bossup.jpg',
+                          //                                           placeholder: (BuildContext
+                          //                                                       context,
+                          //                                                   String
+                          //                                                       photo) =>
+                          //                                               const CircularProgressIndicator(),
+                          //                                           errorWidget: (BuildContext context,
+                          //                                                   String
+                          //                                                       photo,
+                          //                                                   dynamic
+                          //                                                       error) =>
+                          //                                               const Icon(
+                          //                                                   Icons.error),
+                          //                                         ),
+                          //                                       ),
+                          //                                     ),
+                          //                                   ),
+                          //                                   const Expanded(
+                          //                                     child: Padding(
+                          //                                       padding: EdgeInsets
+                          //                                           .only(
+                          //                                               right:
+                          //                                                   35),
+                          //                                       child: Text(
+                          //                                         'Description will be here',
+                          //                                         style:
+                          //                                             TextStyle(
+                          //                                           fontSize:
+                          //                                               15,
+                          //                                           color: Colors
+                          //                                               .white,
+                          //                                           fontWeight:
+                          //                                               FontWeight
+                          //                                                   .w700,
+                          //                                         ),
+                          //                                         softWrap:
+                          //                                             true,
+                          //                                         maxLines: 5,
+                          //                                       ),
+                          //                                     ),
+                          //                                   ),
+                          //                                 ],
+                          //                               ),
+                          //                               Row(
+                          //                                 children: <Widget>[
+                          //                                   Stack(
+                          //                                     children: [
+                          //                                       Padding(
+                          //                                         padding:
+                          //                                             const EdgeInsets
+                          //                                                 .only(
+                          //                                           left: 35,
+                          //                                           top: 5,
+                          //                                         ),
+                          //                                         child:
+                          //                                             Container(
+                          //                                           padding:
+                          //                                               const EdgeInsets
+                          //                                                   .only(
+                          //                                             bottom: 8,
+                          //                                             top: 8,
+                          //                                             left: 10,
+                          //                                             right: 10,
+                          //                                           ),
+                          //                                           decoration:
+                          //                                               BoxDecoration(
+                          //                                             borderRadius:
+                          //                                                 BorderRadius.circular(
+                          //                                                     200),
+                          //                                             color:
+                          //                                                 primaryColorLT,
+                          //                                           ),
+                          //                                           child: Row(
+                          //                                             children: [
+                          //                                               Padding(
+                          //                                                 padding:
+                          //                                                     const EdgeInsets.only(right: 8),
+                          //                                                 child:
+                          //                                                     SvgPicture.asset('assets/svgs/members.svg'),
+                          //                                               ),
+                          //                                               RichText(
+                          //                                                 text:
+                          //                                                     TextSpan(
+                          //                                                   children: [
+                          //                                                     TextSpan(
+                          //                                                         text: 'Members: 0',
+                          //                                                         style: const TextStyle(fontSize: 11, color: Colors.white),
+                          //                                                         recognizer: TapGestureRecognizer()
+                          //                                                           ..onTap = () {
+                          //                                                             // Get.toNamed(
+                          //                                                             //   SpecificUserListScreen.routeName,
+                          //                                                             //   arguments: ParamData('Members', industry.joinedUsers),
+                          //                                                             // );
+                          //                                                           }),
+                          //                                                   ],
+                          //                                                 ),
+                          //                                               ),
+                          //                                             ],
+                          //                                           ),
+                          //                                         ),
+                          //                                       )
+                          //                                     ],
+                          //                                   ),
+                          //                                   Stack(
+                          //                                     children: [
+                          //                                       Padding(
+                          //                                         padding: const EdgeInsets
+                          //                                                 .only(
+                          //                                             left: 5,
+                          //                                             top: 5),
+                          //                                         child:
+                          //                                             Container(
+                          //                                           padding: const EdgeInsets
+                          //                                                   .only(
+                          //                                               bottom:
+                          //                                                   8,
+                          //                                               top: 8,
+                          //                                               left:
+                          //                                                   10,
+                          //                                               right:
+                          //                                                   10),
+                          //                                           decoration:
+                          //                                               BoxDecoration(
+                          //                                             borderRadius:
+                          //                                                 BorderRadius.circular(
+                          //                                                     200),
+                          //                                             color: const Color
+                          //                                                     .fromARGB(
+                          //                                                 47,
+                          //                                                 255,
+                          //                                                 255,
+                          //                                                 255),
+                          //                                           ),
+                          //                                           child: Row(
+                          //                                             children: [
+                          //                                               SvgPicture.asset(
+                          //                                                   'assets/svgs/entries.svg'),
+                          //                                               RichText(
+                          //                                                 text:
+                          //                                                     const TextSpan(
+                          //                                                   children: <InlineSpan>[
+                          //                                                     TextSpan(
+                          //                                                       text: 'Entries: (0)',
+                          //                                                       style: TextStyle(
+                          //                                                         fontSize: 11,
+                          //                                                       ),
+                          //                                                     ),
+                          //                                                   ],
+                          //                                                 ),
+                          //                                               ),
+                          //                                             ],
+                          //                                           ),
+                          //                                         ),
+                          //                                       ),
+                          //                                     ],
+                          //                                   ),
+                          //                                   Flexible(
+                          //                                     child: Padding(
+                          //                                         padding:
+                          //                                             const EdgeInsets
+                          //                                                 .only(
+                          //                                           right: 20,
+                          //                                         ),
+                          //                                         child:
+                          //                                             SizedBox(
+                          //                                           width: MediaQuery.of(
+                          //                                                   context)
+                          //                                               .size
+                          //                                               .width,
+                          //                                           child: Align(
+                          //                                               alignment: Alignment.centerRight,
+                          //                                               child: Row(
+                          //                                                 crossAxisAlignment:
+                          //                                                     CrossAxisAlignment.center,
+                          //                                                 mainAxisAlignment:
+                          //                                                     MainAxisAlignment.end,
+                          //                                                 children: [
+                          //                                                   JoinedButton(true,
+                          //                                                       () {}),
+                          //                                                 ],
+                          //                                               )),
+                          //                                         )),
+                          //                                   )
+                          //                                 ],
+                          //                               ),
+                          //                               const SizedBox(
+                          //                                 height: 5,
+                          //                               ),
+                          //                             ],
+                          //                           )
+                          //                         ],
+                          //                       ),
+                          //                     ],
+                          //                   ),
+                          //                 ],
+                          //               ),
+                          //             )
+                          //           ],
+                          //         ),
+                          //       ),
+                          //     ];
+                          //   },
+                          //   body: controller.loading.value
+                          //       ? const Center(
+                          //           child: CircularProgressIndicator(),
+                          //         )
+                          //       : BossUpSection(
+                          //           industry: controller.getCategoryIndustries(
+                          //               Constants.BOSSUPID)[0],
+                          //         ),
+                          // ),
+                          controller.loading.value
+                              ? const Center(
+                                  child: CircularProgressIndicator(),
+                                )
+                              : BossUpSection(
+                                  industry: controller.getCategoryIndustries(
+                                      Constants.BOSSUPID)[0],
                                 ),
-                                controller.loading.value
-                                    ? const Center(
-                                        child: CircularProgressIndicator(),
+                          // content of Tab 2
+                          Padding(
+                            padding: const EdgeInsets.all(15.0),
+                            child: controller.loading.value
+                                ? SafetyModel(
+                                    isLoading: controller.loading.value,
+                                    title: '',
+                                  )
+                                : controller.error.value
+                                    ? SafetyModel(
+                                        isLoading: false,
+                                        title: 'Something went wrong',
+                                        clickableText: 'Reload',
+                                        onTap: () async {
+                                          await controller.fetchIndustries();
+                                        },
                                       )
-                                    : BossUpSection(
-                                        industry:
-                                            controller.getCategoryIndustries(
-                                                Constants.BOSSUPID)[0],
+                                    : GridView.builder(
+                                        itemCount: controller
+                                            .getCategoryIndustries(
+                                                Constants.LEARNINGID)
+                                            .length,
+                                        itemBuilder:
+                                            (BuildContext context, int index) {
+                                          return CustomTile(
+                                            label: controller
+                                                .getCategoryIndustries(
+                                                    Constants.LEARNINGID)[index]
+                                                .industry!,
+                                            photo:
+                                                'http://44.210.87.234/learningImages/events.jpg',
+                                            onTap: () {
+                                              Get.toNamed(
+                                                Routes.allforumscreen,
+                                                arguments: controller
+                                                    .getCategoryIndustries(
+                                                        Constants
+                                                            .LEARNINGID)[index],
+                                              );
+                                            },
+                                          );
+                                        },
+                                        gridDelegate:
+                                            const SliverGridDelegateWithFixedCrossAxisCount(
+                                          mainAxisSpacing: 10.0,
+                                          crossAxisSpacing: 15.0,
+                                          crossAxisCount: 2,
+                                        ),
                                       ),
-                                // content of Tab 2
-                                Padding(
-                                  padding: const EdgeInsets.all(15.0),
-                                  child: controller.loading.value
-                                      ? SafetyModel(
-                                          isLoading: controller.loading.value,
-                                          title: '',
-                                        )
-                                      : controller.error.value
-                                          ? SafetyModel(
-                                              isLoading: false,
-                                              title: 'Something went wrong',
-                                              clickableText: 'Reload',
-                                              onTap: () async {
-                                                await controller
-                                                    .fetchIndustries();
-                                              },
-                                            )
-                                          : GridView.builder(
-                                              itemCount: controller
-                                                  .getCategoryIndustries(
-                                                      Constants.LEARNINGID)
-                                                  .length,
-                                              itemBuilder:
-                                                  (BuildContext context,
-                                                      int index) {
-                                                return CustomTile(
-                                                  label: controller
-                                                      .getCategoryIndustries(
-                                                          Constants
-                                                              .LEARNINGID)[
-                                                          index]
-                                                      .industry!,
-                                                  photo:
-                                                      'http://44.210.87.234/learningImages/events.jpg',
-                                                  onTap: () {
-                                                    Get.toNamed(
-                                                      Routes.allforumscreen,
-                                                      arguments: controller
+                          ),
+                          // content of Tab 3
+                          Padding(
+                            padding: const EdgeInsets.all(15.0),
+                            child: controller.loading.value
+                                ? SafetyModel(
+                                    isLoading: controller.loading.value,
+                                    title: '',
+                                  )
+                                : controller.error.value
+                                    ? SafetyModel(
+                                        isLoading: false,
+                                        title: 'Something went wrong',
+                                        clickableText: 'Reload',
+                                        onTap: () async {
+                                          await controller.fetchIndustries();
+                                        },
+                                      )
+                                    : GridView.builder(
+                                        itemCount: controller
+                                            .getCategoryIndustries(
+                                                Constants.OPPORTUNITIESID)
+                                            .length,
+                                        itemBuilder:
+                                            (BuildContext context, int index) {
+                                          return CustomTile(
+                                            label: controller
+                                                .getCategoryIndustries(Constants
+                                                    .OPPORTUNITIESID)[index]
+                                                .industry!,
+                                            photo:
+                                                'http://44.210.87.234/learningImages/events.jpg',
+                                            onTap: () {
+                                              Get.toNamed(Routes.allforumscreen,
+                                                  arguments: controller
                                                           .getCategoryIndustries(
                                                               Constants
-                                                                  .LEARNINGID)[index],
-                                                    );
-                                                  },
-                                                );
-                                              },
-                                              gridDelegate:
-                                                  const SliverGridDelegateWithFixedCrossAxisCount(
-                                                mainAxisSpacing: 10.0,
-                                                crossAxisSpacing: 15.0,
-                                                crossAxisCount: 2,
-                                              ),
-                                            ),
-                                ),
-                                // content of Tab 3
-                                Padding(
-                                  padding: const EdgeInsets.all(15.0),
-                                  child: controller.loading.value
-                                      ? SafetyModel(
-                                          isLoading: controller.loading.value,
-                                          title: '',
-                                        )
-                                      : controller.error.value
-                                          ? SafetyModel(
-                                              isLoading: false,
-                                              title: 'Something went wrong',
-                                              clickableText: 'Reload',
-                                              onTap: () async {
-                                                await controller
-                                                    .fetchIndustries();
-                                              },
-                                            )
-                                          : GridView.builder(
-                                              itemCount: controller
-                                                  .getCategoryIndustries(
-                                                      Constants.OPPORTUNITIESID)
-                                                  .length,
-                                              itemBuilder:
-                                                  (BuildContext context,
-                                                      int index) {
-                                                return CustomTile(
-                                                  label: controller
-                                                      .getCategoryIndustries(
-                                                          Constants
-                                                              .OPPORTUNITIESID)[
-                                                          index]
-                                                      .industry!,
-                                                  photo:
-                                                      'http://44.210.87.234/learningImages/events.jpg',
-                                                  onTap: () {
-                                                    Get.toNamed(
-                                                        Routes.allforumscreen,
-                                                        arguments: controller
-                                                            .getCategoryIndustries(
-                                                                Constants
-                                                                    .OPPORTUNITIESID)[index]);
-                                                  },
-                                                );
-                                              },
-                                              gridDelegate:
-                                                  const SliverGridDelegateWithFixedCrossAxisCount(
-                                                mainAxisSpacing: 10.0,
-                                                crossAxisSpacing: 15.0,
-                                                crossAxisCount: 2,
-                                              ),
-                                            ),
-                                ),
-                              ];
-                            },
+                                                                  .OPPORTUNITIESID)[
+                                                      index]);
+                                            },
+                                          );
+                                        },
+                                        gridDelegate:
+                                            const SliverGridDelegateWithFixedCrossAxisCount(
+                                          mainAxisSpacing: 10.0,
+                                          crossAxisSpacing: 15.0,
+                                          crossAxisCount: 2,
+                                        ),
+                                      ),
                           ),
                         ],
                       )

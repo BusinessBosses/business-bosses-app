@@ -237,11 +237,9 @@ class _BossUpSectionState extends State<BossUpSection> {
                                                           recognizer:
                                                               TapGestureRecognizer()
                                                                 ..onTap = () {
-                                                                  navigateTo(
-                                                                    context,
-                                                                    routeName:
-                                                                        SpecificUserListScreen
-                                                                            .routeName,
+                                                                  Get.toNamed(
+                                                                    Routes
+                                                                        .specificuserlistscreen,
                                                                     arguments: widget
                                                                         .industry
                                                                         .industryId,

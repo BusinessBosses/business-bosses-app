@@ -20,12 +20,17 @@ class SpecificUserListScreen extends StatefulWidget {
 class _SpecificUserListScreenState extends State<SpecificUserListScreen> {
   final ScrollController _controller = ScrollController();
 
-  final ForumController _forumController = Get.find();
+  late final ForumController _forumController;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    if (!Get.isRegistered<ForumController>()) {
+      _forumController = Get.put(ForumController());
+    } else {
+      _forumController = Get.find();
+    }
     if (Get.arguments == null) {
       Get.back();
     } else {

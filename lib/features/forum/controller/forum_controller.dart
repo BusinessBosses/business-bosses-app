@@ -2,6 +2,7 @@ import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/common/models/comment_model.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/features/forum/models/forum_model.dart';
+import 'package:business_bosses_v2/features/forum/models/industry.dart';
 import 'package:business_bosses_v2/features/forum/repository/forum_repository.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
@@ -30,9 +31,12 @@ class ForumController extends GetxController {
     loading(true);
     error(false);
     update();
-    ApiResponseModel response;
-    response =
-        await ForumRepository.getForums(page.value, Get.arguments.industryId);
+
+    final ApiResponseModel response = await ForumRepository.getForums(
+        page.value,
+        Get.arguments.runtimeType == String
+            ? Get.arguments
+            : Get.arguments.industryId);
     if (response.success) {
       totalForums(int.parse(response.data['count'].toString()));
       page(page.value + 1);
@@ -159,7 +163,10 @@ class ForumController extends GetxController {
   void onInit() {
     // TODO: implement onInit
     socket = _homeController.socket;
-    fetchForums();
+    if (Get.arguments.runtimeType == Industry) {
+      fetchForums();
+    }
+
     super.onInit();
   }
 }
