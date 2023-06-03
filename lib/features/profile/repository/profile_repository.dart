@@ -9,4 +9,11 @@ class ProfileRepository {
         path: 'post/get-user-posts/$userId?page=$page&size=$size');
     return response;
   }
+
+  /// GET BOSS OF THE WEEK
+  static Future<ApiResponseModel> fetchBoss() async {
+    final ApiResponseModel response =
+        await ApiService.get(path: 'users/bossup');
+    return response;
+  }
 }

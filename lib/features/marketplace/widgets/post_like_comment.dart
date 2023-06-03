@@ -2,12 +2,14 @@ import 'package:business_bosses_v2/common/models/comment_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
+import 'package:get/get.dart';
 import '../../../../common/models/user_model.dart';
 import '../../../../common/widgets/safety_model.dart';
 import '../../../../common/widgets/user_avatar_with_badge.dart';
 import '../../../../utils/theme/theme.dart';
 import '../../posts/widgets/comment_item.dart';
 import '../../posts/widgets/write_comment.dart';
+import '../controllers/market_controller.dart';
 import '../models/market_model.dart';
 
 class PostLikeCommentItem extends StatefulWidget {
@@ -27,6 +29,8 @@ class PostLikeCommentItem extends StatefulWidget {
 class _PostLikeCommentItemState extends State<PostLikeCommentItem> {
   bool _isInit = false;
   bool _isLoadingLikes = true, _isLoadingComments = true;
+  final MarketController _marketController = Get.find();
+  final ProfileController profileController = Get.find();
 
   @override
   void initState() {
@@ -95,6 +99,10 @@ class _PostLikeCommentItemState extends State<PostLikeCommentItem> {
                           setState(() {
                             _comments.add(comment);
                           });
+                          _marketController.comment(
+                            widget.post.marketId,
+                            comment,
+                          );
                         },
                         postId: widget.post.marketId,
                       )

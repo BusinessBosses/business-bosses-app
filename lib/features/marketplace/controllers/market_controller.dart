@@ -64,12 +64,7 @@ class MarketController extends GetxController {
       'coins': <String>[],
       'likes': <String>[],
       'comments': <CommentModel>[],
-      'user': {
-        'username': profileController.myProfile.username,
-        'email': profileController.myProfile.email,
-        'uid': profileController.myProfile.uid,
-        'name': profileController.myProfile.name,
-      }
+      'user': profileController.myProfile.toMap(),
     });
 
     markets.insert(0, modelizedNewPost);
@@ -137,6 +132,16 @@ class MarketController extends GetxController {
         'userId': userId,
         'type': type,
       });
+    }
+    update();
+  }
+
+  /// COMMENT FUNCTION
+  void comment(String postId, CommentModel comment) {
+    final int postIndex =
+        markets.indexWhere((MarketModel element) => element.marketId == postId);
+    if (postIndex != -1) {
+      markets[postIndex].comments!.add(comment);
     }
     update();
   }
