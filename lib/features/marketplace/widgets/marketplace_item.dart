@@ -403,7 +403,8 @@ class _MarketTileState extends State<MarketTile> {
                                   _marketController.like(
                                       profileController.myProfile.uid,
                                       widget.post.marketId,
-                                      'market');
+                                      'market',
+                                      widget.post.userId);
                                 },
                                 icon: widget.post.likes?.contains(
                                             profileController.myProfile.uid) ==
