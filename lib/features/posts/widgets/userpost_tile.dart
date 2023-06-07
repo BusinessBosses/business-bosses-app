@@ -346,7 +346,8 @@ class _PostTileState extends State<PostTile> {
                         widget.controller.postLike(
                             profileController.myProfile.uid,
                             widget.post.postId,
-                            'post');
+                            'post',
+                            widget.post.user!.uid);
                       },
                       icon: widget.post.likes
                                   ?.contains(profileController.myProfile.uid) ==

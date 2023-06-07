@@ -89,7 +89,7 @@ class PostsController extends GetxController {
   }
 
   /// LIKE AND UNLIKE FUNCTION
-  void postLike(String userId, String postId, String type) {
+  void postLike(String userId, String postId, String type, String receiverUid) {
     if (type == 'post') {
       final int postIndex =
           posts.indexWhere((PostModel element) => element.postId == postId);
@@ -122,7 +122,18 @@ class PostsController extends GetxController {
       'postId': postId,
       'userId': userId,
       'type': type,
+      'receiverUid': receiverUid,
     });
+  }
+
+  /// COMMENT FUNCTION
+  void comment(String postId, CommentModel comment) {
+    final int postIndex =
+        posts.indexWhere((PostModel element) => element.postId == postId);
+    if (postIndex != -1) {
+      posts[postIndex].comments!.add(comment);
+    }
+    update();
   }
 
   /// COIN AND UNCOIN FUNCTION
