@@ -21,7 +21,7 @@ class AnalyserScreen extends StatefulWidget {
 
 class _AnalyserScreenState extends State<AnalyserScreen> {
   bool _isInit = false;
-  final ProfileController _profileController = Get.find();
+  final ProfileController profileController = Get.find();
 
   @override
   void didChangeDependencies() {
@@ -66,13 +66,13 @@ class _AnalyserScreenState extends State<AnalyserScreen> {
           const SizedBox(
             height: 35,
           ),
-          const Padding(
-            padding: EdgeInsets.only(
+          Padding(
+            padding: const EdgeInsets.only(
               left: 20,
             ),
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Text(
+              const Text(
                 'Hi',
                 style: TextStyle(
                     fontSize: 25,
@@ -80,16 +80,16 @@ class _AnalyserScreenState extends State<AnalyserScreen> {
                     fontWeight: FontWeight.w700),
               ),
               Text(
-                '@username',
-                style: TextStyle(
+                '@${profileController.myProfile.username}',
+                style: const TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w700,
                     color: primaryColorLT),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 5,
               ),
-              Text(
+              const Text(
                 'how may I help you?',
                 style: TextStyle(fontSize: 15, fontWeight: FontWeight.w100),
               ),
