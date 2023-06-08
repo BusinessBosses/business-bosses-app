@@ -1,3 +1,4 @@
+import 'package:business_bosses_v2/features/posts/widgets/likecommentandcointile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:flutter_svg/svg.dart';
@@ -6,11 +7,14 @@ import 'package:get/get.dart';
 import '../../../action/action.dart';
 import '../../../common/generic_slider.dart';
 import '../../../common/models/comment_model.dart';
+import '../../../common/models/my_response.dart';
 import '../../../common/widgets/text_widget.dart';
+import '../../../functions/my_native_functions.dart';
 import '../../../utils/theme/theme.dart';
 import '../../../utils/time_format.dart';
-import '../../profile/analysescreen.dart';
+import '../../../analytics/presentation/analysescreen.dart';
 import '../../profile/controller/profile_controller.dart';
+import '../controllers/posts_controller.dart';
 import '../models/post_model.dart';
 import '../widgets/all_images_item.dart';
 import '../widgets/create_post_user_tile.dart';
@@ -20,7 +24,9 @@ import 'boost_post_screen.dart';
 // ignore: public_member_api_docs
 class PostDetailsScreen extends StatelessWidget {
   // final PostModel post;
-  const PostDetailsScreen({Key? key}) : super(key: key);
+  PostDetailsScreen({Key? key}) : super(key: key);
+
+  PostModel post = Get.arguments;
 
   // ignore: public_member_api_docs
   // static const String routeName = '/post-details-screen';
@@ -30,11 +36,12 @@ class PostDetailsScreen extends StatelessWidget {
     // if (Get.arguments == null) {
     //   Get.back();
     // }
-    PostModel post = Get.arguments;
+
     // PostModel? post;
     // String? postId;
     // int? postIndex;
     ProfileController profileController = Get.find();
+    PostsController controller = Get.find();
     return WillPopScope(
         onWillPop: () async {
           // navigateTo(context, arguments: post);
@@ -116,7 +123,8 @@ class PostDetailsScreen extends StatelessWidget {
                                   text: post.title,
                                   style: bodyText1.copyWith(
                                       fontWeight: FontWeight.normal),
-                                  onOpen: onUrlClick,
+                                  onOpen: (LinkableElement linkableElement) =>
+                                      _onUrlClick(context, linkableElement),
                                   options:
                                       const LinkifyOptions(humanize: false),
                                   linkStyle: bodyText1.copyWith(
@@ -162,113 +170,10 @@ class PostDetailsScreen extends StatelessWidget {
                                           : null,
                                     ),
                         ),
-                        Container(
-                          padding: const EdgeInsets.only(left: 15, right: 15),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                children: [
-                                  TextButton.icon(
-                                    onPressed: () async {},
-                                    icon: post.likes?.contains(profileController
-                                                .myProfile.uid) ==
-                                            true
-                                        ? SvgPicture.asset(
-                                            'assets/svgs/likefilled.svg')
-                                        : SvgPicture.asset(
-                                            'assets/svgs/like.svg'),
-                                    label: Text(
-                                      '${post.likes?.length ?? 0}',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium
-                                          ?.copyWith(
-                                            fontWeight: FontWeight.w700,
-                                            color: textColor.withOpacity(0.8),
-                                          ),
-                                    ),
-                                  ),
-                                  TextButton.icon(
-                                    onPressed: () {
-                                      showModalBottomSheet(
-                                        context: context,
-                                        builder: (BuildContext context) =>
-                                            PostLikeCommentItem(
-                                          post: post,
-                                          onComment: (CommentModel
-                                              newComment) async {},
-                                        ),
-                                      );
-                                    },
-                                    icon: SvgPicture.asset(
-                                        'assets/svgs/comment.svg'),
-                                    label: Text(
-                                      '${post.comments?.length ?? 0}',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium
-                                          ?.copyWith(
-                                            fontWeight: FontWeight.w700,
-                                            color: textColor.withOpacity(0.8),
-                                          ),
-                                    ),
-                                  ),
-                                  post.user!.uid !=
-                                          profileController.myProfile.uid
-                                      ? TextButton.icon(
-                                          onPressed: () async {},
-                                          icon: post.coins?.contains(
-                                                      profileController
-                                                          .myProfile.uid) ==
-                                                  true
-                                              ? SvgPicture.asset(
-                                                  'assets/svgs/coin.svg')
-                                              : SvgPicture.asset(
-                                                  'assets/svgs/coin.svg'),
-                                          label: Text(
-                                            '${post.coins?.length ?? 0}',
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .bodyMedium
-                                                ?.copyWith(
-                                                  fontWeight: FontWeight.w700,
-                                                  color: textColor
-                                                      .withOpacity(0.8),
-                                                ),
-                                          ),
-                                        )
-                                      : const SizedBox(),
-                                  const SizedBox(width: 8.0),
-                                  GestureDetector(
-                                    onTap: () => _sharePost(),
-                                    child: SvgPicture.asset(
-                                      'assets/svgs/share.svg',
-                                      height: 18.0,
-                                      width: 18.0,
-                                    ),
-                                  ),
-                                  const Spacer(),
-                                  Padding(
-                                    padding: const EdgeInsets.only(right: 15),
-                                    child: Text(
-                                      TimeFormat.formatString(post.timestamp),
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium
-                                          ?.copyWith(
-                                            color: textColor.withOpacity(0.4),
-                                          ),
-                                    ),
-                                  )
-                                ],
-                              ),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                            ],
-                          ),
-                        ),
+                        PostInteractionsWidget(
+                            post: post,
+                            profileController: profileController,
+                            sharePost: _sharePost),
                         const SizedBox(
                           width: double.infinity,
                           height: 1,
@@ -282,98 +187,118 @@ class PostDetailsScreen extends StatelessWidget {
                           child: Align(
                             alignment: Alignment.centerRight,
                             child: Padding(
-                              padding: const EdgeInsets.only(right: 0),
-                              child: post.promote != null &&
-                                      post.promote == true
-                                  ? Align(
-                                      alignment: Alignment.centerRight,
-                                      child: GestureDetector(
-                                        onTap: () {
-                                          navigateTo(context,
-                                              routeName:
-                                                  AnalyserScreen.routeName);
-                                        },
-                                        child: Container(
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width /
-                                              2,
-                                          padding: const EdgeInsets.symmetric(
-                                            vertical: 5.0,
-                                          ),
-                                          decoration: BoxDecoration(
-                                            color: primaryColorLT,
-                                            borderRadius:
-                                                BorderRadius.circular(15.0),
-                                          ),
-                                          child: const Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              TextWidget(
-                                                text: 'View Analytics',
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.w700,
-                                                size: 18,
+                                padding: const EdgeInsets.only(right: 0),
+                                child: post.user!.uid ==
+                                        profileController.myProfile.uid
+                                    ? post.promote != null &&
+                                            post.promote == true
+                                        ? Align(
+                                            alignment: Alignment.centerRight,
+                                            child: GestureDetector(
+                                              onTap: () {
+                                                navigateTo(context,
+                                                    routeName: AnalyserScreen
+                                                        .routeName);
+                                              },
+                                              child: Container(
+                                                width: MediaQuery.of(context)
+                                                        .size
+                                                        .width /
+                                                    2,
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                  vertical: 5.0,
+                                                ),
+                                                decoration: BoxDecoration(
+                                                  color: primaryColorLT,
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          15.0),
+                                                ),
+                                                child: const Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    TextWidget(
+                                                      text: 'View Analytics',
+                                                      color: Colors.white,
+                                                      fontWeight:
+                                                          FontWeight.w700,
+                                                      size: 18,
+                                                    ),
+                                                    SizedBox(
+                                                      width: 10.0,
+                                                    ),
+                                                    Icon(
+                                                      Icons
+                                                          .stacked_line_chart_rounded,
+                                                      color: Colors.white,
+                                                      size: 23,
+                                                    )
+                                                  ],
+                                                ),
                                               ),
-                                              SizedBox(
-                                                width: 10.0,
-                                              ),
-                                              Icon(
-                                                Icons
-                                                    .stacked_line_chart_rounded,
-                                                color: Colors.white,
-                                                size: 23,
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    )
-                                  : ElevatedButton(
-                                      style: ElevatedButton.styleFrom(
-                                          minimumSize: const Size(150,
-                                              50) // put the width and height you want
-                                          ),
-                                      onPressed: () {
-                                        Navigator.of(context).push(
-                                          // ignore: always_specify_types
-                                          MaterialPageRoute(
-                                            builder: (BuildContext context) =>
-                                                BoostPost(postId: post.postId),
-                                          ),
-                                        );
-                                      },
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        // ignore: always_specify_types
-                                        children: [
-                                          const Text(
-                                            '  Boost Post   ',
-                                            style: TextStyle(
-                                                fontSize: 18,
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.w500),
-                                          ),
-                                          const SizedBox(
-                                            width: 5,
-                                          ),
-                                          SvgPicture.asset(
-                                            'assets/svgs/rocket.svg',
-                                            color: Colors.white,
-                                          ),
-                                          const SizedBox(
-                                            width: 10,
-                                          ),
-                                        ],
-                                      )),
-                            ),
+                                            ),
+                                          )
+                                        : ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
+                                                minimumSize: const Size(150,
+                                                    50) // put the width and height you want
+                                                ),
+                                            onPressed: () {
+                                              Navigator.of(context).push(
+                                                // ignore: always_specify_types
+                                                MaterialPageRoute(
+                                                  builder:
+                                                      (BuildContext context) =>
+                                                          BoostPost(
+                                                              postId:
+                                                                  post.postId),
+                                                ),
+                                              );
+                                            },
+                                            child: Row(
+                                              mainAxisSize: MainAxisSize.min,
+                                              // ignore: always_specify_types
+                                              children: [
+                                                const Text(
+                                                  '  Boost Post   ',
+                                                  style: TextStyle(
+                                                      fontSize: 18,
+                                                      color: Colors.white,
+                                                      fontWeight:
+                                                          FontWeight.w500),
+                                                ),
+                                                const SizedBox(
+                                                  width: 5,
+                                                ),
+                                                SvgPicture.asset(
+                                                  'assets/svgs/rocket.svg',
+                                                  color: Colors.white,
+                                                ),
+                                                const SizedBox(
+                                                  width: 10,
+                                                ),
+                                              ],
+                                            ))
+                                    : Container()),
                           ),
                         )
                       ]))));
   }
 
-  void onUrlClick(LinkableElement link) {}
+  Future<void> _onUrlClick(
+      BuildContext context, LinkableElement linkableElement) async {
+    MyResponse res = await MyNativeFunctions.onUrlLaunch(linkableElement.url);
+    if (!res.success) {
+      showSnackBar(context, message: res.message);
+    }
+  }
 
-  void _sharePost() {}
+  void _sharePost() {
+    String message =
+        'Have a look at ${post.user!.username}\'s post on Business Bosses\n'
+        'https://businessbosses.onelink.me/xLWk/36a2ff16';
+    socialShare(message);
+  }
 }

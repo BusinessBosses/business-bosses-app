@@ -3,7 +3,7 @@ import 'package:business_bosses_v2/common/models/my_response.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:flutter/material.dart';
 
-import '../../features/profile/analysescreen.dart';
+import '../../analytics/presentation/analysescreen.dart';
 import '../../features/forum/models/industry.dart';
 import '../models/my_title.dart';
 import 'safety_model.dart';

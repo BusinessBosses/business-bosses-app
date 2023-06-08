@@ -1,8 +1,13 @@
 import 'dart:core';
 
+import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 
+import '../../common/params.dart';
+import '../../features/profile/controller/profile_controller.dart';
+import '../../navigation/routes.dart';
 import '../../utils/theme/theme.dart';
 
 class AnalyserScreen extends StatefulWidget {
@@ -16,6 +21,7 @@ class AnalyserScreen extends StatefulWidget {
 
 class _AnalyserScreenState extends State<AnalyserScreen> {
   bool _isInit = false;
+  final ProfileController _profileController = Get.find();
 
   @override
   void didChangeDependencies() {
@@ -32,6 +38,7 @@ class _AnalyserScreenState extends State<AnalyserScreen> {
 
   @override
   Widget build(BuildContext context) {
+    UserModel user = UserModel();
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -105,7 +112,10 @@ class _AnalyserScreenState extends State<AnalyserScreen> {
                     fontWeight: FontWeight.w700,
                     color: textColor),
               ),
-              onTap: () {},
+              onTap: () {
+                Get.toNamed(Routes.profileanalysescreen,
+                    arguments: Params(arg1: user));
+              },
               trailing: SvgPicture.asset('assets/svgs/nexticon.svg')),
           const SizedBox(
             width: double.infinity,
@@ -121,35 +131,16 @@ class _AnalyserScreenState extends State<AnalyserScreen> {
                     fontWeight: FontWeight.w700,
                     color: textColor),
               ),
-              onTap: () {},
+              onTap: () {
+                Get.toNamed(Routes.relevantusersscreen,
+                    arguments: Params(arg1: user));
+              },
               trailing: SvgPicture.asset('assets/svgs/nexticon.svg')),
           const SizedBox(
             width: double.infinity,
             height: 1.5,
             child: ColoredBox(color: backgroundcolorinterface),
           ),
-          // ListTile(
-          //     leading: SvgPicture.asset('assets/svgs/looking.svg'),
-          //     title: const Text(
-          //       'Looking for Opportunity',
-          //       style: TextStyle(
-          //           fontSize: 15,
-          //           fontWeight: FontWeight.w700,
-          //           color: textColor),
-          //     ),
-          //     onTap: () => navigateTo(
-          //           context,
-          //           routeName: OpportunitiesScreen.routeName,
-          //           arguments:
-          //               Provider.of<AppCommunities>(context, listen: false)
-          //                   .categoryById('-Mos1VMnV53H7AZa0W8q'),
-          //         ),
-          //     trailing: SvgPicture.asset('assets/svgs/nexticon.svg')),
-          // const SizedBox(
-          //   width: double.infinity,
-          //   height: 1.5,
-          //   child: ColoredBox(color: backgroundcolorinterface),
-          // ),
           ListTile(
               leading: SvgPicture.asset('assets/svgs/ranking.svg'),
               title: const Text(
@@ -159,7 +150,9 @@ class _AnalyserScreenState extends State<AnalyserScreen> {
                     fontWeight: FontWeight.w700,
                     color: textColor),
               ),
-              onTap: () {},
+              onTap: () {
+                Get.toNamed(Routes.rankingscreen);
+              },
               trailing: SvgPicture.asset('assets/svgs/nexticon.svg')),
           const SizedBox(
             width: double.infinity,
@@ -175,7 +168,10 @@ class _AnalyserScreenState extends State<AnalyserScreen> {
                     fontWeight: FontWeight.w700,
                     color: textColor),
               ),
-              onTap: () {},
+              onTap: () {
+                Get.toNamed(Routes.communityrulesscreen,
+                    arguments: 'Description');
+              },
               trailing: SvgPicture.asset('assets/svgs/nexticon.svg')),
           const SizedBox(
             width: double.infinity,

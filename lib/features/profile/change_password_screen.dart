@@ -77,6 +77,9 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                         .bodyLarge!
                         .copyWith(fontWeight: FontWeight.w600),
                   ),
+                  const SizedBox(
+                    height: 10,
+                  ),
                   TextFormField(
                     onChanged: (String val) => _newPassword = val,
                     validator: Validator.passwordValidator,

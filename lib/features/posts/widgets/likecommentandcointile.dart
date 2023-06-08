@@ -1,0 +1,131 @@
+import 'package:business_bosses_v2/features/posts/controllers/posts_controller.dart';
+import 'package:business_bosses_v2/features/posts/widgets/post_like_comment.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
+
+import '../../../common/models/comment_model.dart';
+import '../../../utils/theme/theme.dart';
+import '../../../utils/time_format.dart';
+import '../../profile/controller/profile_controller.dart';
+import '../models/post_model.dart';
+
+class PostInteractionsWidget extends StatelessWidget {
+  final PostModel post;
+  final ProfileController profileController;
+
+  final Function() sharePost;
+
+  const PostInteractionsWidget({
+    required this.post,
+    required this.profileController,
+    required this.sharePost,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GetBuilder<PostsController>(
+      init: PostsController(),
+      builder: (controller) {
+        return Container(
+          padding: const EdgeInsets.only(left: 15, right: 15),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  TextButton.icon(
+                    onPressed: () async {
+                      controller.postLike(
+                        profileController.myProfile.uid,
+                        post.postId,
+                        'post',
+                      );
+                    },
+                    icon:
+                        post.likes?.contains(profileController.myProfile.uid) ==
+                                true
+                            ? SvgPicture.asset('assets/svgs/likefilled.svg')
+                            : SvgPicture.asset('assets/svgs/like.svg'),
+                    label: Text(
+                      '${post.likes?.length ?? 0}',
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            fontWeight: FontWeight.w700,
+                            color: textColor.withOpacity(0.8),
+                          ),
+                    ),
+                  ),
+                  TextButton.icon(
+                    onPressed: () {
+                      showModalBottomSheet(
+                        context: context,
+                        builder: (BuildContext context) => PostLikeCommentItem(
+                          post: post,
+                          onComment: (CommentModel newComment) async {},
+                        ),
+                      );
+                    },
+                    icon: SvgPicture.asset('assets/svgs/comment.svg'),
+                    label: Text(
+                      '${post.comments?.length ?? 0}',
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            fontWeight: FontWeight.w700,
+                            color: textColor.withOpacity(0.8),
+                          ),
+                    ),
+                  ),
+                  TextButton.icon(
+                    onPressed: post.user!.uid == profileController.myProfile.uid
+                        ? () async {
+                            controller.postCoin(
+                              profileController.myProfile.uid,
+                              post.postId,
+                              profileController,
+                              'post',
+                            );
+                          }
+                        : null,
+                    icon:
+                        post.coins?.contains(profileController.myProfile.uid) ==
+                                true
+                            ? SvgPicture.asset('assets/svgs/coin.svg')
+                            : SvgPicture.asset('assets/svgs/coin.svg'),
+                    label: Text(
+                      '${post.coins?.length ?? 0}',
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            fontWeight: FontWeight.w700,
+                            color: textColor.withOpacity(0.8),
+                          ),
+                    ),
+                  ),
+                  const SizedBox(width: 8.0),
+                  GestureDetector(
+                    onTap: sharePost,
+                    child: SvgPicture.asset(
+                      'assets/svgs/share.svg',
+                      height: 18.0,
+                      width: 18.0,
+                    ),
+                  ),
+                  const Spacer(),
+                  Padding(
+                    padding: const EdgeInsets.only(right: 15),
+                    child: Text(
+                      TimeFormat.formatString(post.timestamp),
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color: textColor.withOpacity(0.4),
+                          ),
+                    ),
+                  )
+                ],
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+}

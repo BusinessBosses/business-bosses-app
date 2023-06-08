@@ -107,7 +107,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
     } else if ('Change password' == label) {
       Get.toNamed(Routes.changePassword);
     } else if (label == 'Community Rules') {
+      Get.toNamed(Routes.communityrulesscreen, arguments: 'community rules');
     } else if (label == 'Invite a friend terms & conditions') {
+      Get.toNamed(Routes.inviteafriendscreen,
+          arguments: 'Invite a friend text');
     } else if ('Contact us' == label) {
       _contactUs();
     } else if ('Delete Account' == label) {
