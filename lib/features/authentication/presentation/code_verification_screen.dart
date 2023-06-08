@@ -11,17 +11,19 @@ import '../../../utils/theme/theme.dart';
 /// VERIFY CODE AFTER SIGNUP
 class CodeVerificationScreen extends StatefulWidget {
   /// KEY CONSTRUCTOR
-  const CodeVerificationScreen({
-    Key? key,
-    required this.otp,
-    required this.userName,
-    required this.emailAddress,
-    required this.password,
-  }) : super(key: key);
+  const CodeVerificationScreen(
+      {Key? key,
+      required this.otp,
+      required this.userName,
+      required this.emailAddress,
+      required this.password,
+      this.inviteId})
+      : super(key: key);
   // ignore: public_member_api_docs
   final String otp;
   // ignore: public_member_api_docs
   final String userName;
+  final String? inviteId;
   // ignore: public_member_api_docs
   final String password;
   // ignore: public_member_api_docs
@@ -169,10 +171,7 @@ class _CodeVerificationScreenState extends State<CodeVerificationScreen> {
 
   Future<dynamic> _handleRegister() async {
     dynamic user = await _apiService.register(
-      widget.emailAddress,
-      widget.password,
-      widget.userName,
-    );
+        widget.emailAddress, widget.password, widget.userName, widget.inviteId);
     return user;
   }
 }

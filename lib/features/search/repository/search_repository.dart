@@ -9,9 +9,16 @@ class SearchRepository {
     return response;
   }
 
-  static Future<ApiResponseModel> search(String query) async {
+  static Future<ApiResponseModel> searchUsers(String query) async {
     final ApiResponseModel response =
         await ApiService.get(path: '/users/name/$query');
+
+    return response;
+  }
+
+  static Future<ApiResponseModel> searchPosts(String query) async {
+    final ApiResponseModel response =
+        await ApiService.get(path: '/post/search/$query');
 
     return response;
   }
