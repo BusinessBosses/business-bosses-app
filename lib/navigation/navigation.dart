@@ -165,7 +165,7 @@ class Nav {
     ),
     GetPage(
       name: Routes.relevantusersscreen,
-      page: () => RelevantUsersScreen(),
+      page: () => const RelevantUsersScreen(),
     ),
     GetPage(
       name: Routes.profileanalysescreen,

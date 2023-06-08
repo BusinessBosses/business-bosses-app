@@ -2,17 +2,13 @@ import 'package:business_bosses_v2/features/posts/models/post_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
-import '../../common/models/comment.dart';
 import '../../common/models/user_model.dart';
-import '../../features/promotions/invite.dart';
 import '../../features/promotions/referrals.dart';
-import '../../utils/constants/constants.dart';
 import '../../utils/theme/theme.dart';
-import '../../utils/time_format.dart';
 import '../models/ranking.dart';
 
 class MyRankingScreen extends StatefulWidget {
-  static const routeName = '/my-ranking-screen';
+  static const String routeName = '/my-ranking-screen';
 
   const MyRankingScreen({Key? key}) : super(key: key);
 
@@ -22,15 +18,15 @@ class MyRankingScreen extends StatefulWidget {
 
 class _MyRankingScreenState extends State<MyRankingScreen> {
   bool _isInit = false;
-  List<Ranking> _weeklyRanking = [];
-  List<Ranking> _monthlyRanking = [];
-  List<Ranking> _top10WeeklyRanking = [];
+  final List<Ranking> _weeklyRanking = [];
+  final List<Ranking> _monthlyRanking = [];
+  final List<Ranking> _top10WeeklyRanking = [];
 
   // List<Ranking> _top10MonthlyRanking = [];
   // List<Ranking> _top25WeeklyRanking = [];
-  List<Ranking> _top25MonthlyRanking = [];
-  static const TOP_10 = 10;
-  static const TOP_25 = 25;
+  final List<Ranking> _top25MonthlyRanking = [];
+  static const int TOP_10 = 10;
+  static const int TOP_25 = 25;
 
   @override
   void didChangeDependencies() {
@@ -41,8 +37,8 @@ class _MyRankingScreenState extends State<MyRankingScreen> {
     }
   }
 
-  Ranking _myWeeklyRanking = Ranking();
-  Ranking _myMonthlyRanking = Ranking();
+  final Ranking _myWeeklyRanking = Ranking();
+  final Ranking _myMonthlyRanking = Ranking();
 
   Future<void> _loadRankingProfile() async {
     // String weeklyRankingPath =
@@ -474,9 +470,9 @@ class _MyRankingScreenState extends State<MyRankingScreen> {
 
   final String _text = 'Your ranking is based on:\n';
 
-  List<UserModel> _allUsers = [];
-  List<PostModel> _allPosts = [];
-  List<Referrals> _allReferrals = [];
+  final List<UserModel> _allUsers = [];
+  final List<PostModel> _allPosts = [];
+  final List<Referrals> _allReferrals = [];
 
   Future<void> _fetchAllUsers() async {
     // MyResponse res = await _firebase.fetchAllNodes(path: Constants.USERS);

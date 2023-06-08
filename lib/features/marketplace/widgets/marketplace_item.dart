@@ -490,7 +490,7 @@ class _MarketTileState extends State<MarketTile> {
                                             '${widget.post.coins?.length ?? 0}',
                                             style: Theme.of(context)
                                                 .textTheme
-                                                .bodyText1
+                                                .bodyLarge
                                                 ?.copyWith(
                                                   fontWeight: FontWeight.w700,
                                                   color: textColor

@@ -13,7 +13,7 @@ import '../../features/connects/widgets/connection_grid_tile.dart';
 import '../../utils/theme/theme.dart';
 
 class RelevantUsersScreen extends StatefulWidget {
-  static const routeName = '/relevant-users-screen';
+  static const String routeName = '/relevant-users-screen';
 
   const RelevantUsersScreen({Key? key}) : super(key: key);
 
@@ -32,8 +32,8 @@ class _RelevantUsersScreenState extends State<RelevantUsersScreen> {
     super.didChangeDependencies();
     if (!_isInit) {
       _isInit = true;
-      final data = ModalRoute.of(context)!.settings.arguments as Params;
-      if (data?.arg1 != null) {
+      final Params data = ModalRoute.of(context)!.settings.arguments as Params;
+      if (data.arg1 != null) {
         _user = data.arg1;
       } else {
         navigateTo(context);

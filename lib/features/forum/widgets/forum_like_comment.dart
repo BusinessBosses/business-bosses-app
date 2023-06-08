@@ -25,7 +25,7 @@ class ForumLikeCommentItem extends StatefulWidget {
 }
 
 class _ForumLikeCommentItemState extends State<ForumLikeCommentItem> {
-  bool _isInit = false;
+  final bool _isInit = false;
   bool _isLoadingLikes = true, _isLoadingComments = true;
 
   @override

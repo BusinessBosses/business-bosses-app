@@ -112,6 +112,7 @@ class _CompleteSearchingScreenState extends State<CompleteSearchingScreen>
                             : controller.recommendedConnections,
                         isLoading: controller.loading.value ||
                             controller.loadingSearch.value,
+                        onConnectionChange: controller.connectToUser,
                       ),
                       FilterPosts(
                         filterItems: controller.searchedPosts,
@@ -165,7 +166,7 @@ class FilterPosts extends StatelessWidget {
             key: key,
             separatorBuilder: (_, __) => const SizedBox(height: 8.0),
             padding: const EdgeInsets.all(16.0),
-            itemCount: filterItems?.length ?? 0,
+            itemCount: filterItems.length ?? 0,
             itemBuilder: (BuildContext context, int i) {
               return PostTile(
                 post: filterItems[i],

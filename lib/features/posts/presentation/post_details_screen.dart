@@ -6,19 +6,16 @@ import 'package:get/get.dart';
 
 import '../../../action/action.dart';
 import '../../../common/generic_slider.dart';
-import '../../../common/models/comment_model.dart';
 import '../../../common/models/my_response.dart';
 import '../../../common/widgets/text_widget.dart';
 import '../../../functions/my_native_functions.dart';
 import '../../../utils/theme/theme.dart';
-import '../../../utils/time_format.dart';
 import '../../../analytics/presentation/analysescreen.dart';
 import '../../profile/controller/profile_controller.dart';
 import '../controllers/posts_controller.dart';
 import '../models/post_model.dart';
 import '../widgets/all_images_item.dart';
 import '../widgets/create_post_user_tile.dart';
-import '../widgets/post_like_comment.dart';
 import 'boost_post_screen.dart';
 
 // ignore: public_member_api_docs

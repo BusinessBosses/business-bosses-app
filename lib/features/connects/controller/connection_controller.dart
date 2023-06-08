@@ -25,7 +25,8 @@ class ConnectionController extends GetxController {
     loadingSearch = true;
     update();
 
-    final ApiResponseModel res = await ApiService.get(path: '/users/name/$query');
+    final ApiResponseModel res =
+        await ApiService.get(path: '/users/name/$query');
     for (int i = 0; i < res.data.length; i++) {
       final mapData = res.data[i];
       final UserModel modelizedData = UserModel.fromMap(mapData);
@@ -37,8 +38,7 @@ class ConnectionController extends GetxController {
   }
 
   Future<void> getConnections() async {
-    final ApiResponseModel res =
-        await ApiService.get(path: '/connection/data/${Get.arguments['uid']}');
+    final ApiResponseModel res = await ApiService.get(path: '/connection/data');
     if (res.success) {
       for (int i = 0; i < res.data['connections']['data'].length; i++) {
         final mapData = res.data['connections']['data'][i];
@@ -65,23 +65,21 @@ class ConnectionController extends GetxController {
   }
 
   Future<void> connect(String userId) async {
-    final ApiResponseModel res = await ApiService.post(path: '/connection/connect', body: {
-      'userId': _profileController.myProfile.uid,
-      'connectedId': userId
-    });
+    final ApiResponseModel res = await ApiService.post(
+        path: '/connection/connect', body: {'connectedId': userId});
   }
 
   Future<void> disconnect(String userId) async {
-    final ApiResponseModel res = await ApiService.post(path: '/connection/disconnect', body: {
-      'userId': _profileController.myProfile.uid,
-      'connectedId': userId
-    });
+    final ApiResponseModel res = await ApiService.post(
+        path: '/connection/disconnect', body: {'connectedId': userId});
   }
 
   void connectToUser(UserModel user) async {
     final int checkConnected =
         connecteds.indexWhere((UserModel element) => element.uid == user.uid);
     _profileController.updateConnections(user.uid);
+    update();
+
     if (checkConnected == -1) {
       connecteds.add(user);
       await connect(user.uid);

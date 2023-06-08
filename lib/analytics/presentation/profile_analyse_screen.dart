@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:get/get.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 import '../../action/action.dart';
@@ -8,12 +7,11 @@ import '../../common/models/my_connect.dart';
 import '../../common/models/my_user.dart';
 import '../../common/params.dart';
 import '../../common/widgets/buttons/custom_child_button.dart';
-import '../../features/profile/controller/profile_controller.dart';
 import '../../utils/theme/theme.dart';
 import '../../utils/time_format.dart';
 
 class ProfileAnalyseScreen extends StatefulWidget {
-  static const routeName = '/profile-analyse-screen';
+  static const String routeName = '/profile-analyse-screen';
 
   const ProfileAnalyseScreen({Key? key}) : super(key: key);
 
@@ -30,7 +28,7 @@ class _ProfileAnalyseScreenState extends State<ProfileAnalyseScreen> {
     if (!_isInit) {
       _tooltipBehavior = TooltipBehavior(enable: true);
       final Params data = ModalRoute.of(context)!.settings.arguments as Params;
-      if (data?.arg1 == null) navigateTo(context);
+      if (data.arg1 == null) navigateTo(context);
       _isInit = true;
     }
     super.didChangeDependencies();
@@ -299,7 +297,7 @@ class _ProfileAnalyseScreenState extends State<ProfileAnalyseScreen> {
     // String statue,
     num? timestamp,
   }) {
-    return connects.where((element) {
+    return connects.where((MyConnect element) {
       bool isWithInTime = timestamp == null
           ? true
           : DateTime.now().millisecondsSinceEpoch - element.timestamp! <=
@@ -313,7 +311,7 @@ class _ProfileAnalyseScreenState extends State<ProfileAnalyseScreen> {
     // String statue,
     num? timestamp,
   }) {
-    return disconnections.where((element) {
+    return disconnections.where((Disconnection element) {
       bool isWithInTime = timestamp == null
           ? true
           : DateTime.now().millisecondsSinceEpoch - element.timeStamp <=
