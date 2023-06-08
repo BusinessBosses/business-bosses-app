@@ -11,7 +11,6 @@ import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
-import '../../../utils/constants/constants.dart';
 
 class ForumController extends GetxController {
   late IO.Socket socket;

@@ -1,5 +1,9 @@
 // ignore_for_file: always_specify_types
 
+import 'package:business_bosses_v2/features/settings/community_rules_screen.dart';
+import 'package:business_bosses_v2/analytics/presentation/my_ranking_screen.dart';
+import 'package:business_bosses_v2/analytics/presentation/profile_analyse_screen.dart';
+import 'package:business_bosses_v2/analytics/presentation/relevant_users_screen.dart';
 import 'package:business_bosses_v2/features/authentication/presentation/forgot_password_screen.dart';
 import 'package:business_bosses_v2/features/authentication/presentation/login_screen.dart';
 import 'package:business_bosses_v2/features/authentication/presentation/register_screen.dart';
@@ -18,7 +22,7 @@ import 'package:business_bosses_v2/features/notifications/notificationsscreen.da
 import 'package:business_bosses_v2/features/home/bottom_nav.dart';
 import 'package:business_bosses_v2/features/posts/presentation/create_post_screen.dart';
 import 'package:business_bosses_v2/features/posts/presentation/post_details_screen.dart';
-import 'package:business_bosses_v2/features/profile/analysescreen.dart';
+import 'package:business_bosses_v2/analytics/presentation/analysescreen.dart';
 import 'package:business_bosses_v2/features/profile/change_password_screen.dart';
 import 'package:business_bosses_v2/features/profile/presentation/myprofilescreen.dart';
 import 'package:business_bosses_v2/features/promotions/presentation/promotionscreen.dart';
@@ -27,6 +31,7 @@ import 'package:business_bosses_v2/features/profile/presentation/update_profile_
 import 'package:business_bosses_v2/features/referrals/refer_screen.dart';
 import 'package:business_bosses_v2/features/search/controller/search_controller.dart';
 import 'package:business_bosses_v2/features/search/presentation/complete_searching_screen.dart';
+import 'package:business_bosses_v2/features/settings/invite_a_friendscreen.dart';
 import 'package:business_bosses_v2/features/settings/settingsscreen.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:get/get.dart';
@@ -139,7 +144,7 @@ class Nav {
     ),
     GetPage(
       name: Routes.postDetails,
-      page: () => const PostDetailsScreen(),
+      page: () => PostDetailsScreen(),
     ),
     GetPage(
       name: Routes.specificuserlistscreen,
@@ -149,6 +154,26 @@ class Nav {
       name: Routes.completesearchingscreen,
       page: () => const CompleteSearchingScreen(),
       binding: BindingsBuilder.put(() => CompleteSearchController()),
+    ),
+    GetPage(
+      name: Routes.communityrulesscreen,
+      page: () => const CommunityRulesScreen(),
+    ),
+    GetPage(
+      name: Routes.rankingscreen,
+      page: () => const MyRankingScreen(),
+    ),
+    GetPage(
+      name: Routes.relevantusersscreen,
+      page: () => const RelevantUsersScreen(),
+    ),
+    GetPage(
+      name: Routes.profileanalysescreen,
+      page: () => const ProfileAnalyseScreen(),
+    ),
+    GetPage(
+      name: Routes.inviteafriendscreen,
+      page: () => const InviteAFriendTermsAndConditions(),
     ),
   ];
 }

@@ -24,7 +24,7 @@ import '../../../services/api_service.dart';
 import '../../../utils/constants/constants.dart';
 import '../../../utils/validators/validator.dart';
 import '../../../utils/theme/theme.dart';
-import '../analysescreen.dart';
+import '../../../analytics/presentation/analysescreen.dart';
 import '../widgets/user_profile_image_item.dart';
 
 bool isExpanded = false;

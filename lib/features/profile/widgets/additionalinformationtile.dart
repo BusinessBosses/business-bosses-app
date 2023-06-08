@@ -8,7 +8,7 @@ import '../../../common/models/my_response.dart';
 import '../../../common/models/my_title.dart';
 import '../../../common/widgets/data_selection_screen.dart';
 import '../../../utils/theme/theme.dart';
-import '../analysescreen.dart';
+import '../../../analytics/presentation/analysescreen.dart';
 import '../presentation/myprofilescreen.dart';
 
 class AdditionalInfoTile extends StatefulWidget {

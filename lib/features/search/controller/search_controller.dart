@@ -3,7 +3,9 @@ import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/features/forum/models/forum_model.dart';
 import 'package:business_bosses_v2/features/home/repository/home_repository.dart';
 import 'package:business_bosses_v2/features/posts/models/post_model.dart';
+import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/features/search/repository/search_repository.dart';
+import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:get/get.dart';
 
 class CompleteSearchController extends GetxController {
@@ -16,6 +18,8 @@ class CompleteSearchController extends GetxController {
   RxBool isUserSearch = RxBool(false);
   RxBool loading = RxBool(true);
   RxBool error = RxBool(false);
+  final ProfileController _profileController = Get.find();
+  late List<String> connecteds = _profileController.myProfile.connecteds ?? [];
 
   void clearUserSearch() {
     isUserSearch(false);
@@ -98,6 +102,45 @@ class CompleteSearchController extends GetxController {
     }
 
     loading(false);
+    update();
+  }
+
+  Future<void> connect(String userId) async {
+    await ApiService.post(path: '/connection/connect', body: {
+      'userId': _profileController.myProfile.uid,
+      'connectedId': userId
+    });
+  }
+
+  Future<void> disconnect(String userId) async {
+    await ApiService.post(path: '/connection/disconnect', body: {
+      'userId': _profileController.myProfile.uid,
+      'connectedId': userId
+    });
+  }
+
+  void connectToUser(UserModel user) async {
+    final int checkConnected =
+        connecteds.indexWhere((String element) => element == user.uid);
+    _profileController.updateConnections(user.uid);
+    update();
+    if (isUserSearch.value) {
+      final int checkConnectedSearch =
+          connecteds.indexWhere((String element) => element == user.uid);
+      if (checkConnectedSearch == -1) {
+        connecteds.add(user.uid);
+      } else {
+        connecteds.removeAt(checkConnectedSearch);
+      }
+    }
+    if (checkConnected == -1) {
+      connecteds.add(user.uid);
+      await connect(user.uid);
+    } else {
+      connecteds.removeAt(checkConnected);
+      await disconnect(user.uid);
+    }
+
     update();
   }
 

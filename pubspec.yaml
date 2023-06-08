@@ -68,6 +68,7 @@ dependencies:
   socket_io_client: ^2.0.2
   url_launcher: ^6.0.6
   uuid: ^3.0.7
+  syncfusion_flutter_charts: ^20.1.48
 
 flutter_native_splash:
   color: "#FFFFFF"
