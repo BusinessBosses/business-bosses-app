@@ -14,10 +14,8 @@ import '../controller/profile_controller.dart';
 
 /// BOSS OF THE WEEK HOMEPAGE TILE
 class BossOfWeekProfileTile extends StatefulWidget {
-  final UserModel user;
-
   /// BOSS OF THE WEEK PROFILE
-  const BossOfWeekProfileTile(this.user, {Key? key}) : super(key: key);
+  const BossOfWeekProfileTile({Key? key}) : super(key: key);
 
   @override
   State<BossOfWeekProfileTile> createState() => _BossOfWeekProfileTileState();
@@ -28,12 +26,12 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
   String? companyurl;
   bool connectedbutton = true;
   final ProfileController _profileController = Get.find();
-  late UserModel user;
+  late UserModel? user;
 
   @override
   void initState() {
     super.initState();
-    user = widget.user;
+    user = _profileController.bossOfTheWeek;
   }
 
   @override
@@ -44,68 +42,70 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
         'message': 'A goal is a dream with a deadline.',
       }
     ];
-    return GestureDetector(
-      onTap: () {},
-      child: Container(
-        width: double.infinity,
-        color: backgroundcolorinterface,
-        padding:
-            const EdgeInsets.only(top: 0.0, bottom: 15.0, left: 15, right: 15),
-        child: user.isRanked == true
-            ? Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Align(
-                    alignment: Alignment.topLeft,
-                    child: Row(
-                      children: [
-                        CircleAvatar(
-                          radius: 48 / 3,
-                          backgroundColor: primaryColorLT.withOpacity(0.1),
-                          child: SvgPicture.asset(
-                            'assets/app/app_icon_only.svg',
-                          ),
+    return Container(
+      width: double.infinity,
+      color: backgroundcolorinterface,
+      padding:
+          const EdgeInsets.only(top: 0.0, bottom: 15.0, left: 15, right: 15),
+      child: user != null
+          ? Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Align(
+                  alignment: Alignment.topLeft,
+                  child: Row(
+                    children: [
+                      CircleAvatar(
+                        radius: 48 / 3,
+                        backgroundColor: primaryColorLT.withOpacity(0.1),
+                        child: SvgPicture.asset(
+                          'assets/app/app_icon_only.svg',
                         ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        const Text(
-                          'Boss of the week',
-                          style: TextStyle(
-                              fontWeight: FontWeight.w900,
-                              fontSize: 25,
-                              color: Color(0xff333333)),
-                        ),
-                        Expanded(
-                            child: Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            GestureDetector(
-                                child: Container(
-                                    color: Colors.transparent,
-                                    width: 50,
-                                    height: 50,
-                                    child: Align(
-                                      alignment: Alignment.centerRight,
-                                      child: SvgPicture.asset(
-                                        'assets/svgs/more.svg',
-                                        height: 20,
-                                        fit: BoxFit.none,
-                                      ),
-                                    )),
-                                onTap: () {
-                                  showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) =>
-                                        const BossUpChallangePopUpcopy(),
-                                  );
-                                })
-                          ],
-                        ))
-                      ],
-                    ),
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      const Text(
+                        'Boss of the week',
+                        style: TextStyle(
+                            fontWeight: FontWeight.w900,
+                            fontSize: 25,
+                            color: Color(0xff333333)),
+                      ),
+                      Expanded(
+                          child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          GestureDetector(
+                              child: Container(
+                                  color: Colors.transparent,
+                                  width: 50,
+                                  height: 50,
+                                  child: Align(
+                                    alignment: Alignment.centerRight,
+                                    child: SvgPicture.asset(
+                                      'assets/svgs/more.svg',
+                                      height: 20,
+                                      fit: BoxFit.none,
+                                    ),
+                                  )),
+                              onTap: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) =>
+                                      const BossUpChallangePopUpcopy(),
+                                );
+                              })
+                        ],
+                      ))
+                    ],
                   ),
-                  Align(
+                ),
+                Align(
+                  child: GestureDetector(
+                    onTap: () {
+                      Get.toNamed(Routes.publicProfile, arguments: user);
+                    },
                     child: Container(
                       padding: const EdgeInsets.only(
                           top: 3.0, bottom: 0, left: 0, right: 0),
@@ -120,7 +120,10 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                             clipBehavior: Clip.none,
                             children: [
                               GestureDetector(
-                                onTap: (() {}),
+                                onTap: (() {
+                                  Get.toNamed(Routes.publicProfile,
+                                      arguments: user);
+                                }),
                                 child: SizedBox(
                                   height: 90.0,
                                   width: 90.0,
@@ -128,9 +131,9 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                                     alignment: Alignment.topLeft,
                                     child: ClipRRect(
                                       borderRadius: BorderRadius.circular(1000),
-                                      child: user.photoUrl != null
+                                      child: user?.photoUrl != null
                                           ? NetworkImageWithPlaceHolder(
-                                              imageUrl: user.photoUrl,
+                                              imageUrl: user?.photoUrl,
                                               height: 90.0,
                                               width: 90.0,
                                               radius: radius,
@@ -146,7 +149,7 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                                   ),
                                 ),
                               ),
-                              if (user.isRanked ?? false)
+                              if (user?.isRanked ?? false)
                                 Positioned(
                                   right: 7.0,
                                   bottom: -3.0,
@@ -168,25 +171,25 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                if (user.category == null &&
-                                    user.companyName == null &&
-                                    user.location == null)
+                                if (user?.category == null &&
+                                    user?.companyName == null &&
+                                    user?.location == null)
                                   const SizedBox(height: 12.0),
-                                Text(user.name ?? '',
+                                Text(user?.name ?? '',
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
                                     style: const TextStyle(
                                       fontSize: 15,
                                       fontWeight: FontWeight.bold,
                                     )),
-                                if (user.category != null)
-                                  Text(user.category.toString(),
+                                if (user?.category != null)
+                                  Text(user!.category.toString(),
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
                                       style: const TextStyle(
                                         fontSize: 14,
                                       )),
-                                user.bio == null
+                                user?.bio == null
                                     ? Container()
                                     : Column(
                                         mainAxisAlignment:
@@ -195,7 +198,7 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                                             CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            user.bio.toString(),
+                                            user!.bio.toString(),
                                             maxLines: 2,
                                             overflow: TextOverflow.ellipsis,
                                             style: const TextStyle(
@@ -219,70 +222,70 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                       ),
                     ),
                   ),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (BuildContext context) =>
-                                const Bossuppartner()),
-                      );
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.only(right: 15, top: 5),
-                      child: Container(
-                        height: 40,
-                        decoration: BoxDecoration(
-                          color: const Color(0xFFF4F4F4),
-                          borderRadius: BorderRadius.circular(10),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.withOpacity(0.3),
-                              spreadRadius: 20,
-                              blurRadius: 500,
-                              offset: const Offset(0, 3),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (BuildContext context) =>
+                              const Bossuppartner()),
+                    );
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 15, top: 5),
+                    child: Container(
+                      height: 40,
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFF4F4F4),
+                        borderRadius: BorderRadius.circular(10),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.3),
+                            spreadRadius: 20,
+                            blurRadius: 500,
+                            offset: const Offset(0, 3),
+                          ),
+                        ],
+                      ),
+                      child: Row(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(
+                              left: 10,
                             ),
-                          ],
-                        ),
-                        child: Row(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(
-                                left: 10,
+                            child: Container(
+                              height: 25,
+                              width: 100,
+                              decoration: BoxDecoration(
+                                color: const Color(0xFFEAEAEA),
+                                borderRadius: BorderRadius.circular(20),
                               ),
-                              child: Container(
-                                height: 25,
-                                width: 100,
-                                decoration: BoxDecoration(
-                                  color: const Color(0xFFEAEAEA),
-                                  borderRadius: BorderRadius.circular(20),
+                              child: const Center(
+                                child: Padding(
+                                  padding: EdgeInsets.all(2),
+                                  child: Text('Boss Up by'),
                                 ),
-                                child: const Center(
-                                  child: Padding(
-                                    padding: EdgeInsets.all(2),
-                                    child: Text('Boss Up by'),
-                                  ),
-                                ),
                               ),
                             ),
-                            const SizedBox(width: 10),
-                            const Text(
-                              'Partner',
-                              style: TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.bold,
-                                decoration: TextDecoration.underline,
-                              ),
+                          ),
+                          const SizedBox(width: 10),
+                          const Text(
+                            'Partner',
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                              decoration: TextDecoration.underline,
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
-                ],
-              )
-            : qouteWidget(quotes),
-      ),
+                ),
+              ],
+            )
+          : qouteWidget(quotes),
     );
   }
 
@@ -357,7 +360,7 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
             child: Text(
               _profileController.myProfile.connecteds != null &&
                       _profileController.myProfile.connecteds!
-                          .contains(user.uid)
+                          .contains(user?.uid)
                   ? 'Connected'
                   : 'Connect',
               style: const TextStyle(color: Colors.white),
@@ -400,37 +403,37 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
     final int checkConnected = _profileController.myProfile.connecteds == null
         ? -1
         : _profileController.myProfile.connecteds!
-            .indexWhere((String element) => element == user.uid);
+            .indexWhere((String element) => element == user?.uid);
     if (checkConnected == -1) {
-      _profileController.updateConnections(user.uid);
+      _profileController.updateConnections(user!.uid);
       setState(() {
         user = UserModel.fromMap({
-          ...user.toMap(),
+          ...user!.toMap(),
           'connectionCount':
-              user.connectionCount == null ? 1 : user.connectionCount! + 1
+              user?.connectionCount == null ? 1 : user!.connectionCount! + 1
         });
       });
-      await connect(user.uid);
+      await connect(user!.uid);
     } else {
-      _profileController.updateConnections(user.uid);
+      _profileController.updateConnections(user!.uid);
 
       setState(() {
         user = UserModel.fromMap({
-          ...user.toMap(),
+          ...user!.toMap(),
           'connectionCount':
-              user.connectionCount == null ? null : user.connectionCount! - 1
+              user?.connectionCount == null ? null : user!.connectionCount! - 1
         });
       });
       // connecteds.removeAt(checkConnected);
-      await disconnect(user.uid);
+      await disconnect(user!.uid);
     }
   }
 
   void updateReferals(int refs) {
     user = UserModel.fromMap({
-      ...user.toMap(),
+      ...user!.toMap(),
       'referalCount':
-          user.referals == null ? refs : user.referals!.length + refs
+          user?.referals == null ? refs : user!.referals!.length + refs
     });
     setState(() {});
   }

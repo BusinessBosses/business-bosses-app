@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 class ProfileController extends GetxController {
   /// MODELIZED PROFILE DATA
   UserModel myProfile = UserModel();
+  UserModel? bossOfTheWeek = UserModel();
 
   ///MODELIZE RAW DATA AND PUSH TO STATE
   void processDataToState(dynamic userData) {
@@ -17,6 +18,13 @@ class ProfileController extends GetxController {
       'connecteds': userData['connecteds']
     });
     myProfile = modelizedData;
+    update();
+  }
+
+  ///MODELIZE RAW DATA AND PUSH TO STATE
+  void processBossToState(dynamic userData) {
+    final UserModel modelizedData = UserModel.fromMap(userData);
+    bossOfTheWeek = modelizedData;
     update();
   }
 
@@ -37,7 +45,9 @@ class ProfileController extends GetxController {
         ? false
         : myProfile.connecteds!.contains(uid);
     final List<String>? newConnecteds = checkIfConnected
-        ? myProfile.connecteds?.where((String element) => element != uid).toList()
+        ? myProfile.connecteds
+            ?.where((String element) => element != uid)
+            .toList()
         : myProfile.connecteds == null
             ? [uid]
             : [...myProfile.connecteds!, uid];
@@ -50,6 +60,16 @@ class ProfileController extends GetxController {
     });
 
     update();
+  }
+
+  /// LOAD BOSS TO STATE
+  Future<void> loadBoss() async {
+    final ApiResponseModel response = await ProfileRepository.fetchBoss();
+    if (response.data != 'no record found') {
+      processBossToState(response.data);
+    } else {
+      bossOfTheWeek = null;
+    }
   }
 
   static Future<Map<String, dynamic>> loadData(String userId) async {
@@ -92,5 +112,12 @@ class ProfileController extends GetxController {
         }
       };
     }
+  }
+
+  @override
+  void onInit() {
+    // TODO: implement onInit
+    loadBoss();
+    super.onInit();
   }
 }

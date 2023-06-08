@@ -2,6 +2,7 @@ import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/features/forum/controller/create_forum_controller.dart';
 import 'package:business_bosses_v2/features/forum/models/forum_model.dart';
 import 'package:business_bosses_v2/features/posts/widgets/preview.dart';
+import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
 import 'package:detectable_text_field/widgets/detectable_text_field.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +10,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import '../../../action/action.dart';
 import '../../../common/widgets/buttons/my_outlined_button.dart';
+import '../../../services/api_service.dart';
 import '../../../utils/theme/theme.dart';
 import '../../home/bottom_nav.dart';
 import '../widgets/field_container.dart';
@@ -27,6 +29,7 @@ class CreateForumScreen extends StatefulWidget {
 
 class _CreateForumScreenState extends State<CreateForumScreen> {
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+  final ProfileController _profileController = Get.find();
   // Industry? industry;
   String title = '';
   String description = '';
@@ -267,6 +270,19 @@ class _CreateForumScreenState extends State<CreateForumScreen> {
                         'timestamp': DateTime.now().millisecondsSinceEpoch,
                         'industryId': industryId
                       });
+                      // if (isbossup == true) {
+                      //   Map<String, dynamic> updateData = <String, dynamic>{
+                      //     'name': DateTime.now().millisecondsSinceEpoch,
+                      //   };
+                      //   ApiService.put(body: {
+                      //     'bossOfTheWeekTimeStamp':
+                      //         DateTime.now().millisecondsSinceEpoch,
+                      //   }, path: 'user/${_profileController.myProfile.uid}');
+                      //   _profileController.updateProfile({
+                      //     ..._profileController.myProfile.toMap(),
+                      //     ...updateData
+                      //   });
+                      // }
                     },
                     label: isUpdating ? 'Update Post' : 'Post',
                     isProcessing: controller.loading.value,

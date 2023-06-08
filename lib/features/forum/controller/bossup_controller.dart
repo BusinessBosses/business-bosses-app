@@ -12,7 +12,7 @@ import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 import '../../../utils/constants/constants.dart';
 
-class ForumController extends GetxController {
+class BossUpController extends GetxController {
   late IO.Socket socket;
   final HomeController _homeController = Get.find();
   final ProfileController _profileController = Get.find();
@@ -31,8 +31,8 @@ class ForumController extends GetxController {
     error(false);
     update();
     ApiResponseModel response;
-    response =
-        await ForumRepository.getForums(page.value, Get.arguments.industryId);
+    response = await ForumRepository.getForums(
+        page.value, Constants.BOSS_UP_CHALLENGE_ID);
     if (response.success) {
       totalForums(int.parse(response.data['count'].toString()));
       page(page.value + 1);
