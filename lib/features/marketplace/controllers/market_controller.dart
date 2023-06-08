@@ -90,7 +90,7 @@ class MarketController extends GetxController {
   }
 
   /// LIKE AND UNLIKE FUNCTION
-  void like(String userId, String postId, String type) {
+  void like(String userId, String postId, String type, String receiverUid) {
     final int postIndex =
         markets.indexWhere((MarketModel element) => element.marketId == postId);
     if (postIndex != -1) {
@@ -108,6 +108,7 @@ class MarketController extends GetxController {
       'postId': postId,
       'userId': userId,
       'type': type,
+      'receiverUid': receiverUid,
     });
   }
 

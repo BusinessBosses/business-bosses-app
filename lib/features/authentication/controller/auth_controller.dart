@@ -22,6 +22,7 @@ class AuthController extends GetxController {
     required String emailAddress,
     required String userName,
     required String password,
+    String? inviteId,
     required VoidCallback onError,
   }) {
     Random rng = Random();
@@ -57,6 +58,7 @@ class AuthController extends GetxController {
               userName: userName,
               emailAddress: emailAddress,
               password: password,
+              inviteId: inviteId,
             ));
       }
     }).catchError((dynamic e) {

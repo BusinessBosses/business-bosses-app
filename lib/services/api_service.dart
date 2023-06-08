@@ -74,13 +74,14 @@ class ApiService {
 
   /// LOGIN POINT
   Future<dynamic> register(
-      String email, String password, String username) async {
+      String email, String password, String username, String? inviteId) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
 
     Map<String, dynamic> data = {
       'username': username,
       'email': email,
       'password': password,
+      'inviteId': inviteId
     };
     final http.Response response = await http.post(
       Uri.parse('${Constants.baseUrl}/auth/sign-up'),
