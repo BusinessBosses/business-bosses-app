@@ -12,6 +12,7 @@ import '../../../utils/theme/theme.dart';
 class FilterUsers extends StatefulWidget {
   final List<UserModel> filterItems;
   final bool isLoading;
+  final bool isSearch;
   final Function(UserModel)? onConnectionChange;
 
   // ignore: public_member_api_docs
@@ -19,6 +20,7 @@ class FilterUsers extends StatefulWidget {
       {Key? key,
       this.filterItems = const [],
       this.isLoading = false,
+      this.isSearch = false,
       this.onConnectionChange})
       : super(key: key);
 
@@ -80,7 +82,7 @@ class _FilterUsersState extends State<FilterUsers> {
                                               : widget.filterItems[i].uid),
                                     )
                                   : -1;
-                          if (i == 0) {
+                          if (!widget.isSearch) if (i == 0) {
                             return Column(
                               children: [
                                 ListTile(

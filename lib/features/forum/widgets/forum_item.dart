@@ -48,9 +48,9 @@ class _ForumItemState extends State<ForumItem> {
 
   final List<PopupMenuEntry<String>> myPopup = <PopupMenuEntry<String>>[
     const PopupMenuItem<String>(
-      value: 'Hide',
+      value: 'Edit',
       child: Text(
-        'Hide',
+        'Edit',
         style: bodyText2,
       ),
     ),
@@ -58,9 +58,9 @@ class _ForumItemState extends State<ForumItem> {
       height: 0.0,
     ),
     const PopupMenuItem<String>(
-      value: 'Report',
+      value: 'Delete',
       child: Text(
-        'Report',
+        'Delete',
         style: bodyText2,
       ),
     )
@@ -285,7 +285,12 @@ class _ForumItemState extends State<ForumItem> {
                                               size: 20),
                                           onSelected: (String val) {
                                             if (val == 'Edit') {
-                                              // widget.onUpdateForum!();
+                                              Get.toNamed(Routes.createForum,
+                                                  arguments: {
+                                                    'isUpdating': true,
+                                                    'forum': widget.forum,
+                                                    'isBossUp': false,
+                                                  });
                                             } else if (val == 'Delete') {
                                               _showDialog();
                                             }
