@@ -198,8 +198,8 @@ class PostsController extends GetxController {
         'name': profileController.myProfile.name,
       }
     });
-
-    posts.insert(0, modelizedNewPost);
+    mixedPosts.insert(0, {'isForum': false, 'data': modelizedNewPost});
+    // posts.insert(0, modelizedNewPost);
 
     update();
   }

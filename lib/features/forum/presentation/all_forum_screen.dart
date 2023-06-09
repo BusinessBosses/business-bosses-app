@@ -1,6 +1,7 @@
 import 'package:business_bosses_v2/common/widgets/safety_model.dart';
 import 'package:business_bosses_v2/features/forum/controller/forum_controller.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
+import 'package:business_bosses_v2/utils/constants/constants.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -120,7 +121,7 @@ class _AllForumScreenState extends State<AllForumScreen> {
                                         children: [
                                           Text(
                                             industry.categoryId!.toString() ==
-                                                    'd479f179-3f41-4d84-915d-33110cf5b4fb'
+                                                    Constants.LEARNINGID
                                                 ? 'Start a Topic'
                                                 : 'Create Opportunities',
                                             style: const TextStyle(
