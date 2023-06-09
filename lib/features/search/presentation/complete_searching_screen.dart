@@ -113,6 +113,7 @@ class _CompleteSearchingScreenState extends State<CompleteSearchingScreen>
                         isLoading: controller.loading.value ||
                             controller.loadingSearch.value,
                         onConnectionChange: controller.connectToUser,
+                        isSearch: controller.isUserSearch.value,
                       ),
                       FilterPosts(
                         filterItems: controller.searchedPosts,
