@@ -11,7 +11,6 @@ import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
-
 class ForumController extends GetxController {
   late IO.Socket socket;
   final HomeController _homeController = Get.find();
@@ -26,6 +25,14 @@ class ForumController extends GetxController {
   RxBool error = RxBool(false);
   RxBool loadingMembers = RxBool(false);
   RxBool errorMembers = RxBool(false);
+
+  void updateForum(int index, Map<String, dynamic> data) {
+    if (index != -1) {
+      forums[index] = ForumModel.fromMap(data);
+    }
+    update();
+  }
+
   Future<void> fetchForums() async {
     loading(true);
     error(false);
