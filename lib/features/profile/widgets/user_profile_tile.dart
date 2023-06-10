@@ -2,8 +2,10 @@ import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 
 import '../../../common/widgets/network_image_with_placeholder.dart';
+import '../../../navigation/routes.dart';
 
 // ignore: public_member_api_docs
 class UserProfileTile extends StatefulWidget {
@@ -21,7 +23,6 @@ class _UserProfileTileState extends State<UserProfileTile> {
     // setState(() {});
     return Container(
       width: double.infinity,
-      height: 140.0,
       padding: const EdgeInsets.only(
         top: 0.0,
         bottom: 0.0,
@@ -98,8 +99,7 @@ class _UserProfileTileState extends State<UserProfileTile> {
             ],
           ),
           Expanded(
-            child: SizedBox(
-              height: 106.0,
+            child: Container(
               child: Column(
                 // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -136,6 +136,53 @@ class _UserProfileTileState extends State<UserProfileTile> {
                           color: textColor.withOpacity(0.6),
                         ),
                   ),
+                  GestureDetector(
+                    onTap: () {
+                      Get.toNamed(Routes.premiumscreen);
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.09),
+                            blurRadius: 500.0,
+                            spreadRadius: 0.0,
+                          ),
+                        ],
+                      ),
+                      child: Align(
+                        alignment: Alignment.center,
+                        child: Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            SvgPicture.asset(
+                              'assets/svgs/subscribebuttonback.svg',
+                              width: 200,
+                              fit: BoxFit.contain,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Text(
+                                  'Subscribe to Premium',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 15,
+                                  ),
+                                ),
+                                const SizedBox(
+                                  width: 20,
+                                ),
+                                SvgPicture.asset(
+                                  'assets/svgs/nextbutton.svg',
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  )
                 ],
               ),
             ),

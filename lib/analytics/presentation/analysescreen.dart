@@ -113,8 +113,10 @@ class _AnalyserScreenState extends State<AnalyserScreen> {
                     color: textColor),
               ),
               onTap: () {
+                String uid = profileController.myProfile.uid;
+                Params params = Params(arg1: uid);
                 Get.toNamed(Routes.profileanalysescreen,
-                    arguments: Params(arg1: user));
+                    arguments: Params(arg1: params));
               },
               trailing: SvgPicture.asset('assets/svgs/nexticon.svg')),
           const SizedBox(

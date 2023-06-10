@@ -105,27 +105,21 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                   // const SizedBox(height: 8.0),
                   // },
 
-                  Material(
+                  const Material(
                     color: Colors.white,
                     child: TabBar(
                       indicatorColor: primaryColorLT,
-                      labelStyle: const TextStyle(fontWeight: FontWeight.w500),
+                      labelStyle: TextStyle(fontWeight: FontWeight.w500),
                       labelColor: Colors.black,
                       tabs: [
                         Tab(
-                          icon: SvgPicture.asset(
-                            'assets/svgs/portfolio.svg',
-                          ),
+                          text: 'About',
                         ),
                         Tab(
-                          icon: SvgPicture.asset(
-                            'assets/svgs/posts.svg',
-                          ),
+                          text: 'Posts',
                         ),
                         Tab(
-                          icon: SvgPicture.asset(
-                            'assets/svgs/market.svg',
-                          ),
+                          text: 'Store',
                         ),
                       ],
                     ),

@@ -12,14 +12,6 @@ Widget profileinfodisplay(BuildContext context, UserModel publicUser) {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Padding(
-          padding: EdgeInsets.only(left: 15),
-          child: Text(
-            'Bio',
-            style: TextStyle(
-                fontSize: 18, fontWeight: FontWeight.bold, color: subtextColor),
-          ),
-        ),
         const SizedBox(
           height: 10,
         ),

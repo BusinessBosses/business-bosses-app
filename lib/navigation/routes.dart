@@ -43,4 +43,5 @@ class Routes {
   static const String relevantusersscreen = '/relevantusersScreen';
   static const String profileanalysescreen = '/profileanalyseScreen';
   static const String inviteafriendscreen = '/inviteafriendScreen';
+  static const String premiumscreen = '/premiumScreen';
 }

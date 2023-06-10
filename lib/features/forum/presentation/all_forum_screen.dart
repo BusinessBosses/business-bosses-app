@@ -199,7 +199,6 @@ class _AllForumScreenState extends State<AllForumScreen> {
                                                   'Industry Description',
                                               style: const TextStyle(
                                                   fontSize: 15,
-                                                  color: Colors.white,
                                                   fontWeight: FontWeight.w700),
                                               softWrap: true,
                                               maxLines: 5,
@@ -221,12 +220,6 @@ class _AllForumScreenState extends State<AllForumScreen> {
                                                           top: 8,
                                                           left: 10,
                                                           right: 10),
-                                                  decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            200),
-                                                    color: primaryColorLT,
-                                                  ),
                                                   child: Row(
                                                     children: [
                                                       Padding(
@@ -234,7 +227,9 @@ class _AllForumScreenState extends State<AllForumScreen> {
                                                             const EdgeInsets
                                                                 .only(right: 8),
                                                         child: SvgPicture.asset(
-                                                            'assets/svgs/members.svg'),
+                                                          'assets/svgs/members.svg',
+                                                          color: primaryColorLT,
+                                                        ),
                                                       ),
                                                       RichText(
                                                         text: TextSpan(
@@ -247,8 +242,8 @@ class _AllForumScreenState extends State<AllForumScreen> {
                                                                   : 'Members: (${industry.joinedUsers?.where((String element) => element.isNotEmpty).toList().length ?? 0})',
                                                               style: const TextStyle(
                                                                   fontSize: 11,
-                                                                  color: Colors
-                                                                      .white),
+                                                                  color:
+                                                                      primaryColorLT),
                                                               recognizer:
                                                                   TapGestureRecognizer()
                                                                     ..onTap =
