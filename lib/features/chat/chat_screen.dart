@@ -32,23 +32,9 @@ class ChatScreen extends StatefulWidget {
 
 class _ChatScreenState extends State<ChatScreen> {
   final ChatController _chatController = Get.find();
-  final bool _isInit = false;
-  final bool _isLoading = true;
+
   bool _isSearching = false;
   final List<LastMessage> _myChats = [];
-
-  Future<void> _listenMyChatUsers() async {}
-
-  @override
-  void initState() {
-    super.initState();
-    _listenMyChatUsers();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
