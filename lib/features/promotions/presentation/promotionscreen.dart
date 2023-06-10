@@ -294,7 +294,7 @@ class _PromotionScreenState extends State<PromotionScreen> {
                           ),
                     ),
                     Text(
-                      '${_profileController.myProfile.referalCount ?? 0}',
+                      '${_profileController.myProfile.invitations ?? 0}',
                       textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                             fontWeight: FontWeight.normal,
