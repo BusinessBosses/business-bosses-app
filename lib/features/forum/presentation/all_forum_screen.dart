@@ -228,6 +228,7 @@ class _AllForumScreenState extends State<AllForumScreen> {
                                                                 .only(right: 8),
                                                         child: SvgPicture.asset(
                                                           'assets/svgs/members.svg',
+                                                          height: 15,
                                                           color: primaryColorLT,
                                                         ),
                                                       ),
@@ -240,10 +241,18 @@ class _AllForumScreenState extends State<AllForumScreen> {
                                                                       null
                                                                   ? 'Members: 0'
                                                                   : 'Members: (${industry.joinedUsers?.where((String element) => element.isNotEmpty).toList().length ?? 0})',
-                                                              style: const TextStyle(
-                                                                  fontSize: 11,
-                                                                  color:
-                                                                      primaryColorLT),
+                                                              style:
+                                                                  const TextStyle(
+                                                                fontSize: 12,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w600,
+                                                                color:
+                                                                    primaryColorLT,
+                                                                decoration:
+                                                                    TextDecoration
+                                                                        .underline,
+                                                              ),
                                                               recognizer:
                                                                   TapGestureRecognizer()
                                                                     ..onTap =
@@ -288,16 +297,27 @@ class _AllForumScreenState extends State<AllForumScreen> {
                                                     children: [
                                                       SvgPicture.asset(
                                                         'assets/svgs/topics.svg',
+                                                        color: textColor,
+                                                        height: 11.5,
                                                       ),
                                                       RichText(
                                                         text: TextSpan(
                                                           children: [
                                                             TextSpan(
-                                                              text: 'Topics: (${controller.totalForums.value}) ' ??
-                                                                  ' Opport..: (${controller.totalForums.value})',
+                                                              text: industry
+                                                                          .categoryId!
+                                                                          .toString() ==
+                                                                      'd479f179-3f41-4d84-915d-33110cf5b4fb'
+                                                                  ? ' Topics: (${controller.totalForums.value}) '
+                                                                  : ' Opport..: (${controller.totalForums.value})',
                                                               style:
                                                                   const TextStyle(
-                                                                fontSize: 11,
+                                                                fontSize: 12,
+                                                                color:
+                                                                    textColor,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w600,
                                                               ),
                                                             ),
                                                           ],

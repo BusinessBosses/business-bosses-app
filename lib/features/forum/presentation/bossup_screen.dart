@@ -185,7 +185,6 @@ class _BossUpSectionState extends State<BossUpSection> {
                                               'Industry Description',
                                           style: const TextStyle(
                                               fontSize: 15,
-                                              color: Colors.white,
                                               fontWeight: FontWeight.w700),
                                           softWrap: true,
                                           maxLines: 5,
@@ -200,59 +199,54 @@ class _BossUpSectionState extends State<BossUpSection> {
                                           Padding(
                                             padding: const EdgeInsets.only(
                                                 left: 35, top: 5),
-                                            child: Container(
-                                              padding: const EdgeInsets.only(
-                                                  bottom: 8,
-                                                  top: 8,
-                                                  left: 10,
-                                                  right: 10),
-                                              decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(200),
-                                                color: primaryColorLT,
-                                              ),
-                                              child: Row(
-                                                children: [
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            right: 8),
-                                                    child: SvgPicture.asset(
-                                                        'assets/svgs/members.svg'),
+                                            child: Row(
+                                              children: [
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          right: 8),
+                                                  child: SvgPicture.asset(
+                                                    'assets/svgs/members.svg',
+                                                    height: 15,
+                                                    color: primaryColorLT,
                                                   ),
-                                                  RichText(
-                                                    text: TextSpan(
-                                                      children: [
-                                                        TextSpan(
-                                                          text: widget.industry
-                                                                      .joinedUsers ==
-                                                                  null
-                                                              ? 'Members: 0'
-                                                              : 'Members: (${widget.industry.joinedUsers?.where((element) => element.isNotEmpty).toList().length ?? 0})',
-                                                          style:
-                                                              const TextStyle(
-                                                                  fontSize: 11,
-                                                                  color: Colors
-                                                                      .white),
-                                                          recognizer:
-                                                              TapGestureRecognizer()
-                                                                ..onTap = () {
-                                                                  navigateTo(
-                                                                    context,
-                                                                    routeName:
-                                                                        SpecificUserListScreen
-                                                                            .routeName,
-                                                                    arguments: widget
-                                                                        .industry
-                                                                        .industryId,
-                                                                  );
-                                                                },
+                                                ),
+                                                RichText(
+                                                  text: TextSpan(
+                                                    children: [
+                                                      TextSpan(
+                                                        text: widget.industry
+                                                                    .joinedUsers ==
+                                                                null
+                                                            ? 'Members: 0'
+                                                            : 'Members: (${widget.industry.joinedUsers?.where((element) => element.isNotEmpty).toList().length ?? 0})',
+                                                        style: const TextStyle(
+                                                          fontSize: 12,
+                                                          fontWeight:
+                                                              FontWeight.w600,
+                                                          color: primaryColorLT,
+                                                          decoration:
+                                                              TextDecoration
+                                                                  .underline,
                                                         ),
-                                                      ],
-                                                    ),
+                                                        recognizer:
+                                                            TapGestureRecognizer()
+                                                              ..onTap = () {
+                                                                navigateTo(
+                                                                  context,
+                                                                  routeName:
+                                                                      SpecificUserListScreen
+                                                                          .routeName,
+                                                                  arguments: widget
+                                                                      .industry
+                                                                      .industryId,
+                                                                );
+                                                              },
+                                                      ),
+                                                    ],
                                                   ),
-                                                ],
-                                              ),
+                                                ),
+                                              ],
                                             ),
                                           )
                                         ],
@@ -278,16 +272,21 @@ class _BossUpSectionState extends State<BossUpSection> {
                                                 children: [
                                                   SvgPicture.asset(
                                                     'assets/svgs/topics.svg',
+                                                    height: 11.5,
+                                                    color: textColor,
                                                   ),
                                                   RichText(
                                                     text: TextSpan(
                                                       children: [
                                                         TextSpan(
                                                           text:
-                                                              'Topics: (${controller.totalForums.value}) ',
+                                                              ' Topics: (${controller.totalForums.value}) ',
                                                           style:
                                                               const TextStyle(
-                                                            fontSize: 11,
+                                                            fontSize: 12,
+                                                            color: textColor,
+                                                            fontWeight:
+                                                                FontWeight.w600,
                                                           ),
                                                         ),
                                                       ],

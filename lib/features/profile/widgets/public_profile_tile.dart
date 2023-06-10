@@ -9,15 +9,16 @@ import '../../../navigation/routes.dart';
 import '../controller/profile_controller.dart';
 
 // ignore: public_member_api_docs
-class UserProfileTile extends StatefulWidget {
+class PublicProfileTile extends StatefulWidget {
   final UserModel myProfile;
 
-  const UserProfileTile({Key? key, required this.myProfile}) : super(key: key);
+  const PublicProfileTile({Key? key, required this.myProfile})
+      : super(key: key);
   @override
-  State<UserProfileTile> createState() => _UserProfileTileState();
+  State<PublicProfileTile> createState() => _PublicProfileTileState();
 }
 
-class _UserProfileTileState extends State<UserProfileTile> {
+class _PublicProfileTileState extends State<PublicProfileTile> {
   @override
   Widget build(BuildContext context) {
     final ProfileController profileController = Get.find();
@@ -138,53 +139,6 @@ class _UserProfileTileState extends State<UserProfileTile> {
                           color: textColor.withOpacity(0.6),
                         ),
                   ),
-                  GestureDetector(
-                    onTap: () {
-                      Get.toNamed(Routes.premiumscreen);
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.09),
-                            blurRadius: 500.0,
-                            spreadRadius: 0.0,
-                          ),
-                        ],
-                      ),
-                      child: Align(
-                        alignment: Alignment.center,
-                        child: Stack(
-                          alignment: Alignment.center,
-                          children: [
-                            SvgPicture.asset(
-                              'assets/svgs/subscribebuttonback.svg',
-                              width: 200,
-                              fit: BoxFit.contain,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                const Text(
-                                  'Subscribe to Premium',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w700,
-                                    fontSize: 15,
-                                  ),
-                                ),
-                                const SizedBox(
-                                  width: 20,
-                                ),
-                                SvgPicture.asset(
-                                  'assets/svgs/nextbutton.svg',
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  )
                 ],
               ),
             ),

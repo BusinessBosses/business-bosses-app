@@ -374,7 +374,6 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                                     '- Sell your products and services \n - Find Supplies',
                                                     style: TextStyle(
                                                       fontSize: 15,
-                                                      color: Colors.white,
                                                       fontWeight:
                                                           FontWeight.w700,
                                                     ),
@@ -395,56 +394,54 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                                       left: 35,
                                                       top: 5,
                                                     ),
-                                                    child: Container(
-                                                      padding:
-                                                          const EdgeInsets.only(
-                                                        bottom: 8,
-                                                        top: 8,
-                                                        left: 10,
-                                                        right: 10,
-                                                      ),
-                                                      decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(200),
-                                                        color: primaryColorLT,
-                                                      ),
-                                                      child: Row(
-                                                        children: [
-                                                          Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                        .only(
-                                                                    right: 8),
-                                                            child: SvgPicture.asset(
-                                                                'assets/svgs/members.svg'),
+                                                    child: Row(
+                                                      children: [
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                      .only(
+                                                                  right: 8),
+                                                          child:
+                                                              SvgPicture.asset(
+                                                            'assets/svgs/members.svg',
+                                                            height: 15,
+                                                            color:
+                                                                primaryColorLT,
                                                           ),
-                                                          GestureDetector(
-                                                            onTap: () {
-                                                              Get.to(() =>
-                                                                  MarketMembersScreen(
-                                                                    users: _marketController
-                                                                        .users,
-                                                                  ));
-                                                            },
-                                                            child: RichText(
-                                                              text: TextSpan(
-                                                                children: [
-                                                                  TextSpan(
+                                                        ),
+                                                        GestureDetector(
+                                                          onTap: () {
+                                                            Get.to(() =>
+                                                                MarketMembersScreen(
+                                                                  users:
+                                                                      _marketController
+                                                                          .users,
+                                                                ));
+                                                          },
+                                                          child: RichText(
+                                                            text: TextSpan(
+                                                              children: [
+                                                                TextSpan(
                                                                     text:
                                                                         'Members: (${_marketController.users.length})',
-                                                                    style: const TextStyle(
-                                                                        fontSize:
-                                                                            11,
-                                                                        color: Colors
-                                                                            .white),
-                                                                  ),
-                                                                ],
-                                                              ),
+                                                                    style:
+                                                                        const TextStyle(
+                                                                      fontSize:
+                                                                          12,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .w600,
+                                                                      color:
+                                                                          primaryColorLT,
+                                                                      decoration:
+                                                                          TextDecoration
+                                                                              .underline,
+                                                                    )),
+                                                              ],
                                                             ),
                                                           ),
-                                                        ],
-                                                      ),
+                                                        ),
+                                                      ],
                                                     ),
                                                   )
                                                 ],
@@ -472,16 +469,16 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                                       ),
                                                       child: Row(
                                                         children: [
-                                                          const Padding(
+                                                          Padding(
                                                             padding:
-                                                                EdgeInsets.only(
+                                                                const EdgeInsets
+                                                                        .only(
                                                                     right: 8),
-                                                            child: Icon(
-                                                              Icons
-                                                                  .shopping_cart_checkout_outlined,
-                                                              color:
-                                                                  Colors.white,
-                                                              size: 15,
+                                                            child: SvgPicture
+                                                                .asset(
+                                                              'assets/svgs/marketplace.svg',
+                                                              color: textColor,
+                                                              height: 15,
                                                             ),
                                                           ),
                                                           Obx(
@@ -495,7 +492,11 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                                                       style:
                                                                           const TextStyle(
                                                                         fontSize:
-                                                                            11,
+                                                                            12,
+                                                                        color:
+                                                                            textColor,
+                                                                        fontWeight:
+                                                                            FontWeight.w600,
                                                                       ),
                                                                     ),
                                                                   ],
@@ -555,7 +556,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                   ];
                 },
                 body: Padding(
-                  padding: const EdgeInsets.only(bottom: 100, top: 20),
+                  padding: const EdgeInsets.only(bottom: 100, top: 13),
                   child: Obx(() {
                     if (_marketController.loading.value) {
                       return const Center(child: CircularProgressIndicator());
@@ -633,48 +634,60 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
 
   Widget joinedButton() {
     return GestureDetector(
-      onTap: () async {
-        final SharedPreferences prefs = await SharedPreferences.getInstance();
-        final String? userId = prefs.getString(Constants.USER_ID);
-        await ApiService.post(path: 'members', body: <String, dynamic>{
-          'type': 'marketplace',
-        });
-        setState(() {
-          if (_marketController.isJoined.value) {
-            _marketController.users
-                .removeWhere((UserModel user) => user.uid == userId);
-          } else {
-            _marketController.users.add(_profileController.myProfile);
-          }
-          _marketController.isJoined.value = !_marketController.isJoined.value;
-        });
-      },
-      child: Container(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 12.0,
-        ),
-        alignment: Alignment.center,
+        onTap: () async {
+          final SharedPreferences prefs = await SharedPreferences.getInstance();
+          final String? userId = prefs.getString(Constants.USER_ID);
+          await ApiService.post(path: 'members', body: <String, dynamic>{
+            'type': 'marketplace',
+          });
+          setState(() {
+            if (_marketController.isJoined.value) {
+              _marketController.users
+                  .removeWhere((UserModel user) => user.uid == userId);
+            } else {
+              _marketController.users.add(_profileController.myProfile);
+            }
+            _marketController.isJoined.value =
+                !_marketController.isJoined.value;
+          });
+        },
         child: Container(
           padding: const EdgeInsets.symmetric(
-            horizontal: 20.0,
-            vertical: 10.0,
+            horizontal: 12.0,
           ),
-          decoration: BoxDecoration(
-            color: Colors.white,
+          alignment: Alignment.center,
+          child: Material(
+            elevation: 4.0,
+            shadowColor: Colors.black.withOpacity(0.2),
             borderRadius: BorderRadius.circular(10),
-          ),
-          child: Obx(
-            () => Text(
-              _marketController.isJoined.value ? 'Leave' : 'Join',
-              style: const TextStyle(
-                fontSize: 13,
-                fontWeight: FontWeight.w700,
+            child: Container(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 20.0,
+                vertical: 10.0,
+              ),
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10),
+                  boxShadow: const [
+                    BoxShadow(
+                      color: Colors.black,
+                      blurRadius: 500.0, // soften the shadow
+                      spreadRadius: 15, //extend the shadow
+                    )
+                  ]),
+              child: Obx(
+                () => Text(
+                  _marketController.isJoined.value ? 'Leave' : 'Join',
+                  style: const TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w700,
+                    color: primaryColorLT,
+                  ),
+                ),
               ),
             ),
           ),
-        ),
-      ),
-    );
+        ));
   }
 
   Widget sellingGuide() {
