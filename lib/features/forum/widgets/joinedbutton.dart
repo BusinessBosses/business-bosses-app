@@ -23,7 +23,7 @@ Widget JoinedButton(bool joined, VoidCallback onTap) {
                 BoxShadow(
                   color: Colors.black,
                   blurRadius: 500.0, // soften the shadow
-                  spreadRadius: 15, //extend the shadow
+                  spreadRadius: 0.02, //extend the shadow
                 )
               ],
             ),

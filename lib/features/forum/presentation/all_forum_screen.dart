@@ -139,237 +139,259 @@ class _AllForumScreenState extends State<AllForumScreen> {
                                       ),
                                     ),
                                   )),
-                              Stack(
-                                children: [
-                                  Container(
-                                    margin: const EdgeInsets.only(
-                                        top: 10, right: 20, left: 20),
-                                    height: 150,
-                                    width: double.infinity,
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(15.0),
-                                      child: FittedBox(
-                                        fit: BoxFit.fill,
-                                        child: Image.asset(
-                                            'assets/images/postbackground.png'),
+                              Container(
+                                decoration: BoxDecoration(
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black.withOpacity(0.09),
+                                      blurRadius: 100.0, // soften the shadow
+                                      spreadRadius: 5, //extend the shadow
+                                    )
+                                  ],
+                                ),
+                                child: Stack(
+                                  children: [
+                                    Container(
+                                      margin: const EdgeInsets.only(
+                                          top: 10, right: 20, left: 20),
+                                      height: 150,
+                                      width: double.infinity,
+                                      child: ClipRRect(
+                                        borderRadius:
+                                            BorderRadius.circular(15.0),
+                                        child: FittedBox(
+                                          fit: BoxFit.fill,
+                                          child: Image.asset(
+                                              'assets/images/postbackground.png'),
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  Column(
-                                    children: [
-                                      Row(
-                                        children: [
-                                          Container(
-                                            margin: const EdgeInsets.only(
-                                                top: 25, right: 20, left: 35),
-                                            height: 86,
-                                            width: 142,
-                                            child: ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(10.0),
-                                              child: FittedBox(
-                                                fit: BoxFit.fill,
-                                                child: CachedNetworkImage(
-                                                  imageUrl:
-                                                      'http://44.210.87.234/learningImages/events.jpg',
-                                                  memCacheHeight: 256,
-                                                  memCacheWidth: 256,
-                                                  placeholder: (BuildContext
-                                                              context,
-                                                          String photo) =>
-                                                      const CircularProgressIndicator(),
-                                                  errorWidget:
-                                                      // ignore: always_specify_types
-                                                      (BuildContext context,
-                                                              // ignore: always_specify_types
-                                                              String photo,
-                                                              error) =>
-                                                          const Icon(
-                                                              Icons.error),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                          Expanded(
-                                              child: Padding(
-                                            padding: const EdgeInsets.only(
-                                                right: 35),
-                                            child: Text(
-                                              industry.description ??
-                                                  'Industry Description',
-                                              style: const TextStyle(
-                                                  fontSize: 15,
-                                                  fontWeight: FontWeight.w700),
-                                              softWrap: true,
-                                              maxLines: 5,
-                                            ),
-                                          )),
-                                        ],
-                                      ),
-                                      Row(
-                                        children: [
-                                          Stack(
-                                            children: [
-                                              Padding(
-                                                padding: const EdgeInsets.only(
-                                                    left: 35, top: 5),
-                                                child: Container(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          bottom: 8,
-                                                          top: 8,
-                                                          left: 10,
-                                                          right: 10),
-                                                  child: Row(
-                                                    children: [
-                                                      Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .only(right: 8),
-                                                        child: SvgPicture.asset(
-                                                          'assets/svgs/members.svg',
-                                                          height: 15,
-                                                          color: primaryColorLT,
-                                                        ),
-                                                      ),
-                                                      RichText(
-                                                        text: TextSpan(
-                                                          children: [
-                                                            TextSpan(
-                                                              text: industry
-                                                                          .joinedUsers ==
-                                                                      null
-                                                                  ? 'Members: 0'
-                                                                  : 'Members: (${industry.joinedUsers?.where((String element) => element.isNotEmpty).toList().length ?? 0})',
-                                                              style:
-                                                                  const TextStyle(
-                                                                fontSize: 12,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w600,
-                                                                color:
-                                                                    primaryColorLT,
-                                                                decoration:
-                                                                    TextDecoration
-                                                                        .underline,
-                                                              ),
-                                                              recognizer:
-                                                                  TapGestureRecognizer()
-                                                                    ..onTap =
-                                                                        () {
-                                                                      Get.toNamed(
-                                                                        Routes
-                                                                            .specificuserlistscreen,
-                                                                        arguments:
-                                                                            industry.industryId,
-                                                                      );
-                                                                    },
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              )
-                                            ],
-                                          ),
-                                          Stack(
-                                            children: [
-                                              Padding(
-                                                padding: const EdgeInsets.only(
-                                                    left: 5, top: 5),
-                                                child: Container(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          bottom: 8,
-                                                          top: 8,
-                                                          left: 10,
-                                                          right: 10),
-                                                  decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            200),
-                                                    color: const Color.fromARGB(
-                                                        47, 255, 255, 255),
-                                                  ),
-                                                  child: Row(
-                                                    children: [
-                                                      SvgPicture.asset(
-                                                        'assets/svgs/topics.svg',
-                                                        color: textColor,
-                                                        height: 11.5,
-                                                      ),
-                                                      RichText(
-                                                        text: TextSpan(
-                                                          children: [
-                                                            TextSpan(
-                                                              text: industry
-                                                                          .categoryId!
-                                                                          .toString() ==
-                                                                      'd479f179-3f41-4d84-915d-33110cf5b4fb'
-                                                                  ? ' Topics: (${controller.totalForums.value}) '
-                                                                  : ' Opport..: (${controller.totalForums.value})',
-                                                              style:
-                                                                  const TextStyle(
-                                                                fontSize: 12,
-                                                                color:
-                                                                    textColor,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w600,
-                                                              ),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                    ],
+                                    Column(
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Container(
+                                              margin: const EdgeInsets.only(
+                                                  top: 25, right: 20, left: 35),
+                                              height: 86,
+                                              width: 142,
+                                              child: ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(10.0),
+                                                child: FittedBox(
+                                                  fit: BoxFit.fill,
+                                                  child: CachedNetworkImage(
+                                                    imageUrl:
+                                                        'http://44.210.87.234/learningImages/events.jpg',
+                                                    memCacheHeight: 256,
+                                                    memCacheWidth: 256,
+                                                    placeholder: (BuildContext
+                                                                context,
+                                                            String photo) =>
+                                                        const CircularProgressIndicator(),
+                                                    errorWidget:
+                                                        // ignore: always_specify_types
+                                                        (BuildContext context,
+                                                                // ignore: always_specify_types
+                                                                String photo,
+                                                                error) =>
+                                                            const Icon(
+                                                                Icons.error),
                                                   ),
                                                 ),
                                               ),
-                                            ],
-                                          ),
-                                          Flexible(
-                                            child: Padding(
+                                            ),
+                                            Expanded(
+                                                child: Padding(
                                               padding: const EdgeInsets.only(
-                                                  right: 20),
-                                              child: SizedBox(
-                                                width: MediaQuery.of(context)
-                                                    .size
-                                                    .width,
-                                                child: Align(
-                                                  alignment:
-                                                      Alignment.centerRight,
-                                                  child: Row(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .center,
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment.end,
-                                                    children: [
-                                                      JoinedButton(
-                                                        industry.joinedUsers
-                                                                ?.contains(
-                                                                    _myProfile
-                                                                        .myProfile
-                                                                        .uid) ??
-                                                            false,
-                                                        () {
-                                                          toggleJoinAndLeaveIndustry(
-                                                              controller);
-                                                        },
-                                                      ),
-                                                    ],
+                                                  right: 35),
+                                              child: Text(
+                                                industry.description ??
+                                                    'Industry Description',
+                                                style: const TextStyle(
+                                                    fontSize: 15,
+                                                    fontWeight:
+                                                        FontWeight.w700),
+                                                softWrap: true,
+                                                maxLines: 5,
+                                              ),
+                                            )),
+                                          ],
+                                        ),
+                                        Row(
+                                          children: [
+                                            Stack(
+                                              children: [
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          left: 35, top: 5),
+                                                  child: Container(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            bottom: 8,
+                                                            top: 8,
+                                                            left: 10,
+                                                            right: 10),
+                                                    child: Row(
+                                                      children: [
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                      .only(
+                                                                  right: 8),
+                                                          child:
+                                                              SvgPicture.asset(
+                                                            'assets/svgs/members.svg',
+                                                            height: 15,
+                                                            color:
+                                                                primaryColorLT,
+                                                          ),
+                                                        ),
+                                                        RichText(
+                                                          text: TextSpan(
+                                                            children: [
+                                                              TextSpan(
+                                                                text: industry
+                                                                            .joinedUsers ==
+                                                                        null
+                                                                    ? 'Members: 0'
+                                                                    : 'Members: (${industry.joinedUsers?.where((String element) => element.isNotEmpty).toList().length ?? 0})',
+                                                                style:
+                                                                    const TextStyle(
+                                                                  fontSize: 12,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w600,
+                                                                  color:
+                                                                      primaryColorLT,
+                                                                  decoration:
+                                                                      TextDecoration
+                                                                          .underline,
+                                                                ),
+                                                                recognizer:
+                                                                    TapGestureRecognizer()
+                                                                      ..onTap =
+                                                                          () {
+                                                                        Get.toNamed(
+                                                                          Routes
+                                                                              .specificuserlistscreen,
+                                                                          arguments:
+                                                                              industry.industryId,
+                                                                        );
+                                                                      },
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                )
+                                              ],
+                                            ),
+                                            Stack(
+                                              children: [
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          left: 5, top: 5),
+                                                  child: Container(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            bottom: 8,
+                                                            top: 8,
+                                                            left: 10,
+                                                            right: 10),
+                                                    decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              200),
+                                                      color:
+                                                          const Color.fromARGB(
+                                                              47,
+                                                              255,
+                                                              255,
+                                                              255),
+                                                    ),
+                                                    child: Row(
+                                                      children: [
+                                                        SvgPicture.asset(
+                                                          'assets/svgs/topics.svg',
+                                                          color: textColor,
+                                                          height: 11.5,
+                                                        ),
+                                                        RichText(
+                                                          text: TextSpan(
+                                                            children: [
+                                                              TextSpan(
+                                                                text: industry
+                                                                            .categoryId!
+                                                                            .toString() ==
+                                                                        'd479f179-3f41-4d84-915d-33110cf5b4fb'
+                                                                    ? ' Topics: (${controller.totalForums.value}) '
+                                                                    : ' Opport..: (${controller.totalForums.value})',
+                                                                style:
+                                                                    const TextStyle(
+                                                                  fontSize: 12,
+                                                                  color:
+                                                                      textColor,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w600,
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            Flexible(
+                                              child: Padding(
+                                                padding: const EdgeInsets.only(
+                                                    right: 20),
+                                                child: SizedBox(
+                                                  width: MediaQuery.of(context)
+                                                      .size
+                                                      .width,
+                                                  child: Align(
+                                                    alignment:
+                                                        Alignment.centerRight,
+                                                    child: Row(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .center,
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment.end,
+                                                      children: [
+                                                        JoinedButton(
+                                                          industry.joinedUsers
+                                                                  ?.contains(
+                                                                      _myProfile
+                                                                          .myProfile
+                                                                          .uid) ??
+                                                              false,
+                                                          () {
+                                                            toggleJoinAndLeaveIndustry(
+                                                                controller);
+                                                          },
+                                                        ),
+                                                      ],
+                                                    ),
                                                   ),
                                                 ),
                                               ),
-                                            ),
-                                          )
-                                        ],
-                                      )
-                                    ],
-                                  )
-                                ],
+                                            )
+                                          ],
+                                        )
+                                      ],
+                                    )
+                                  ],
+                                ),
                               ),
                               const SizedBox(
                                 height: 10,
