@@ -77,15 +77,15 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
         });
   }
 
-  void updateReferals(int refs) {
-    publicUser = UserModel.fromMap({
-      ...publicUser.toMap(),
-      'referalCount': publicUser.referals == null
-          ? refs
-          : publicUser.referals!.length + refs
-    });
-    setState(() {});
-  }
+  // void updateReferals(int refs) {
+  //   publicUser = UserModel.fromMap({
+  //     ...publicUser.toMap(),
+  //     'referalCount': publicUser.referals == null
+  //         ? refs
+  //         : publicUser.referals!.length + refs
+  //   });
+  //   setState(() {});
+  // }
 
   void connectToUser() async {
     final int checkConnected = _profileController.myProfile.connecteds == null
@@ -334,10 +334,10 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
                     // if (_publicUser.uid !=
                     //     'FirebaseAuth.instance.currentUser.uid') ...{
                     OutlineButtonHeader(
-                        publicUser, _profileController.myProfile, connectToUser,
-                        (refs) {
-                      updateReferals(refs);
-                    }),
+                      publicUser,
+                      _profileController.myProfile,
+                      connectToUser,
+                    ),
                     // const SizedBox(height: 8.0),
                     // },
 

@@ -41,6 +41,7 @@ class UserModel {
   late final int? connectionCount;
   final int? connectedCount;
   final int? referalCount;
+  final int? invitations;
   final int? unReadCount;
   final bool? isRanked;
   final String? inviteId;
@@ -69,6 +70,7 @@ class UserModel {
     this.productsandservices,
     this.referals,
     this.deviceTokens,
+    this.invitations,
     this.disconnections,
     this.active,
     this.deactivated,
@@ -119,6 +121,7 @@ class UserModel {
     List<ProfileViewerModel>? profileViews,
     int? connectionCount,
     int? referalCount,
+    int? invitations,
     int? connectedCount,
     int? unReadCount,
     bool? isRanked,
@@ -158,6 +161,7 @@ class UserModel {
       profileViews: profileViews ?? this.profileViews,
       connectionCount: connectionCount ?? this.connectionCount,
       referalCount: referalCount ?? this.referalCount,
+      invitations: invitations ?? this.invitations,
       connectedCount: connectedCount ?? this.connectedCount,
       unReadCount: unReadCount ?? this.unReadCount,
       isRanked: isRanked ?? this.isRanked,
@@ -204,6 +208,7 @@ class UserModel {
           profileViews?.map((ProfileViewerModel x) => x.toMap()).toList(),
       'connectionCount': connectionCount,
       'referalCount': referalCount,
+      'invitations': invitations,
       'connectedCount': connectedCount,
       'unReadCount': unReadCount,
       'isRanked': isRanked,
@@ -282,6 +287,8 @@ class UserModel {
           map['connectionCount'] != null ? map['connectionCount'] as int : null,
       referalCount:
           map['referalCount'] != null ? map['referalCount'] as int : null,
+      invitations:
+          map['invitations'] != null ? map['invitations'] as int : null,
       connectedCount:
           map['connectedCount'] != null ? map['connectedCount'] as int : null,
       unReadCount:
@@ -342,6 +349,7 @@ class UserModel {
         listEquals(other.profileViews, profileViews) &&
         other.connectionCount == connectionCount &&
         other.referalCount == referalCount &&
+        other.invitations == invitations &&
         other.connectedCount == connectedCount &&
         other.unReadCount == unReadCount &&
         other.isRanked == isRanked &&
@@ -383,6 +391,7 @@ class UserModel {
         profileViews.hashCode ^
         connectionCount.hashCode ^
         referalCount.hashCode ^
+        invitations.hashCode ^
         connectedCount.hashCode ^
         unReadCount.hashCode ^
         inviteId.hashCode ^
