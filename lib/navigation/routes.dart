@@ -38,6 +38,7 @@ class Routes {
   static const String allforumscreen = '/allforumScreen';
   static const String specificuserlistscreen = '/specificuserlistScreen';
   static const String completesearchingscreen = '/completesearchingScreen';
+  static const String referalsscreen = '/referalsScreen';
   static const String communityrulesscreen = '/communityrulesScreen';
   static const String rankingscreen = '/rankingScreen';
   static const String relevantusersscreen = '/relevantusersScreen';

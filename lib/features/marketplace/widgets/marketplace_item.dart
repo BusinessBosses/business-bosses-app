@@ -403,7 +403,8 @@ class _MarketTileState extends State<MarketTile> {
                                   _marketController.like(
                                       profileController.myProfile.uid,
                                       widget.post.marketId,
-                                      'market');
+                                      'market',
+                                      widget.post.userId);
                                 },
                                 icon: widget.post.likes?.contains(
                                             profileController.myProfile.uid) ==
@@ -489,7 +490,7 @@ class _MarketTileState extends State<MarketTile> {
                                             '${widget.post.coins?.length ?? 0}',
                                             style: Theme.of(context)
                                                 .textTheme
-                                                .bodyText1
+                                                .bodyLarge
                                                 ?.copyWith(
                                                   fontWeight: FontWeight.w700,
                                                   color: textColor

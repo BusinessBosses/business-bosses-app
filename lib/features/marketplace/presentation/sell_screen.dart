@@ -10,11 +10,9 @@ import 'package:photo_manager/photo_manager.dart';
 
 import '../../../action/action.dart';
 import '../../../common/dialogs/snackbar.dart';
-import '../../../common/models/api_response_model.dart';
 import '../../../common/widgets/buttons/my_outlined_button.dart';
 import '../../../common/widgets/gallery_screen.dart';
 import '../../../common/widgets/text_widget.dart';
-import '../../../services/api_service.dart';
 import '../../../utils/theme/theme.dart';
 import '../../forum/widgets/field_container.dart';
 import '../../posts/widgets/preview.dart';
@@ -22,7 +20,6 @@ import '../../profile/controller/profile_controller.dart';
 import '../controllers/create_market_controller.dart';
 import '../controllers/market_controller.dart';
 import '../models/market_model.dart';
-import 'boost_market_screen.dart';
 
 class CreateSellingitemScreen extends StatefulWidget {
   const CreateSellingitemScreen({Key? key, this.market, required this.isUpd})
@@ -58,7 +55,7 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
   String? filterLocation;
   String? filterCategory;
 
-  bool _isProcessing = false;
+  final bool _isProcessing = false;
   bool? _isUpdating;
   bool _shouldPromote = false;
 

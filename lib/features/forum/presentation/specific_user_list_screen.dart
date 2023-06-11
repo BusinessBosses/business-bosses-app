@@ -4,16 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
-import '../../../action/action.dart';
-import '../../../common/models/user_model.dart';
-import '../../../common/params.dart';
 import '../../../common/widgets/safety_model.dart';
 import '../../../common/widgets/user_avatar_with_badge.dart';
 import '../../../utils/theme/theme.dart';
-import '../../profile/presentation/publicprofilescreen.dart';
 
 class SpecificUserListScreen extends StatefulWidget {
-  static const routeName = '/specificuserlistScreen';
+  static const String routeName = '/specificuserlistScreen';
 
   const SpecificUserListScreen({Key? key}) : super(key: key);
 
@@ -24,12 +20,17 @@ class SpecificUserListScreen extends StatefulWidget {
 class _SpecificUserListScreenState extends State<SpecificUserListScreen> {
   final ScrollController _controller = ScrollController();
 
-  final ForumController _forumController = Get.find();
+  late final ForumController _forumController;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    if (!Get.isRegistered<ForumController>()) {
+      _forumController = Get.put(ForumController());
+    } else {
+      _forumController = Get.find();
+    }
     if (Get.arguments == null) {
       Get.back();
     } else {
@@ -40,7 +41,7 @@ class _SpecificUserListScreenState extends State<SpecificUserListScreen> {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<ForumController>(
-      builder: (controller) {
+      builder: (ForumController controller) {
         return Scaffold(
           backgroundColor: Colors.white,
           appBar: AppBar(
@@ -51,11 +52,11 @@ class _SpecificUserListScreenState extends State<SpecificUserListScreen> {
               icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
             ),
             centerTitle: true,
-            title: Text(
+            title: const Text(
               // _prarams.title ??
               'Members',
               textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: 20),
+              style: TextStyle(fontSize: 20),
             ),
           ),
           body: controller.members.isEmpty
@@ -75,7 +76,7 @@ class _SpecificUserListScreenState extends State<SpecificUserListScreen> {
                       padding: const EdgeInsets.only(bottom: 48.0),
                       controller: _controller,
                       itemCount: controller.members.length,
-                      itemBuilder: (context, i) {
+                      itemBuilder: (BuildContext context, int i) {
                         return Column(
                           children: [
                             ListTile(
@@ -122,11 +123,11 @@ class _SpecificUserListScreenState extends State<SpecificUserListScreen> {
                       },
                     ),
                     if (controller.loadingNextMembers.value)
-                      Positioned(
-                        child: SafetyModel(isLoading: true),
+                      const Positioned(
                         bottom: 10.0,
                         right: 0.0,
                         left: 0.0,
+                        child: SafetyModel(isLoading: true),
                       ),
                   ],
                 ),

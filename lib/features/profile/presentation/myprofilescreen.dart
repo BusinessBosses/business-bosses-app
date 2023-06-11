@@ -192,7 +192,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                           : ListView.builder(
                                               shrinkWrap: true,
                                               physics:
-                                                  NeverScrollableScrollPhysics(),
+                                                  const NeverScrollableScrollPhysics(),
                                               itemCount: marketController
                                                   .markets
                                                   .where((MarketModel market) =>

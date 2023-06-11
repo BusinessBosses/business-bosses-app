@@ -5,7 +5,7 @@ import '../posts/widgets/my_container.dart';
 import '../../utils/theme/theme.dart';
 
 class CommunityRulesScreen extends StatelessWidget {
-  static const routeName = '/communityrulesscreen';
+  static const String routeName = '/communityrulesscreen';
 
   const CommunityRulesScreen({Key? key}) : super(key: key);
 

@@ -1,22 +1,19 @@
-import 'package:business_bosses_v2/common/models/user_model.dart';
+import 'package:business_bosses_v2/common/widgets/safety_model.dart';
+import 'package:business_bosses_v2/common/widgets/text_widget.dart';
+import 'package:business_bosses_v2/features/forum/models/forum_model.dart';
+import 'package:business_bosses_v2/features/forum/widgets/forum_item.dart';
+import 'package:business_bosses_v2/features/posts/controllers/posts_controller.dart';
+import 'package:business_bosses_v2/features/posts/models/post_model.dart';
+import 'package:business_bosses_v2/features/posts/widgets/userpost_tile.dart';
+import 'package:business_bosses_v2/features/search/controller/search_controller.dart';
 import 'package:business_bosses_v2/features/search/widgets/search_bar.dart';
-import 'package:business_bosses_v2/features/search/widgets/tabs_pages_filter_item.dart';
-import 'package:business_bosses_v2/features/search/widgets/filterforum.dart';
-import 'package:business_bosses_v2/features/search/widgets/filterposts.dart';
 import 'package:business_bosses_v2/features/search/widgets/filterusers.dart';
+import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 
 import '../../../action/action.dart';
-import '../../../common/params.dart';
-import '../../../common/widgets/safety_model.dart';
-import '../../../common/widgets/user_avatar_with_badge.dart';
-import '../../../utils/theme/theme.dart';
-import '../../forum/models/forum_model.dart';
-import '../../forum/presentation/specific_user_list_screen.dart';
-import '../../posts/models/post_model.dart';
-import '../../profile/presentation/publicprofilescreen.dart';
-import '../widgets/my_search_tab.dart';
 
 class CompleteSearchingScreen extends StatefulWidget {
   static const String routeName = '/completesearchingScreen';
@@ -32,155 +29,187 @@ class _CompleteSearchingScreenState extends State<CompleteSearchingScreen>
     with TickerProviderStateMixin {
   late TabController _tabController;
 
-  bool _isInit = false;
-
-  List<MySearchTab> _tabs = [];
-  List<MySearchTab>? _selectedTabs = [];
-
-  List<UserModel> _allUsers = [];
-  List<UserModel> _searchUsers = [];
-
-  List<PostModel> _searchPosts = [];
-  List<ForumModel> _searchForum = [];
-
-  bool _hasFilter = false;
+  final bool _hasFilter = false;
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    if (!_isInit) {
-      _isInit = true;
-      _fetchAllUsers();
-      _initList();
-
-      final data =
-          ModalRoute.of(context)!.settings.arguments as List<MySearchTab>;
-      if (data != null) {
-        _hasFilter = false;
-        _selectedTabs = data;
-      } else {
-        _hasFilter = true;
-
-        _selectedTabs!.addAll([..._tabs]);
-      }
-
-      _tabController =
-          TabController(vsync: this, length: _selectedTabs!.length);
-    }
-  }
-
-  void _initList() {
-    _tabs = [
-      MySearchTab(
-        label: 'Users',
-        widget: const FilterUsers(),
-      ),
-      // MySearchTab(
-      //   label: 'Posts',
-      //   widget: FilterPosts(),
-      // ),
-      // MySearchTab(
-      //   label: 'Communities',
-      //   widget: FilterForum(),
-      // ),
-    ];
-    setState(() {});
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _tabController = TabController(vsync: this, length: 2);
   }
 
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: _selectedTabs!.length,
-      child: Scaffold(
-        backgroundColor: Colors.white,
-        appBar: AppBar(
-          titleSpacing: 0.0,
-          automaticallyImplyLeading: false,
-          leadingWidth: 48.0,
-          leading: IconButton(
-            alignment: Alignment.centerRight,
-            onPressed: () => navigateTo(context),
-            icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
-          ),
-          title: Searchbar(
-            hintText: 'Search',
-            onSubmit: _onSubmit,
-          ),
-          actions: [
-            if (_hasFilter)
-              IconButton(
-                icon: SvgPicture.asset('assets/svgs/filter.svg'),
-                onPressed: _filterPage,
+    return GetBuilder<CompleteSearchController>(
+      builder: (CompleteSearchController controller) {
+        return DefaultTabController(
+          length: 2,
+          child: Scaffold(
+            backgroundColor: Colors.white,
+            appBar: AppBar(
+              titleSpacing: 0.0,
+              automaticallyImplyLeading: false,
+              leadingWidth: 48.0,
+              leading: IconButton(
+                alignment: Alignment.centerRight,
+                onPressed: () => navigateTo(context),
+                icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
               ),
-          ],
-          bottom: _selectedTabs!.length <= 1
-              ? null
-              : TabBar(
-                  controller: _tabController,
-                  isScrollable: true,
-                  physics: const AlwaysScrollableScrollPhysics(),
-                  tabs: _selectedTabs!
-                      .map(
-                        (MySearchTab e) => Tab(text: e.label),
-                      )
-                      .toList(),
-                ),
-        ),
-        body: Column(
-          children: [
-            Expanded(
-              child: TabBarView(
-                children: _selectedTabs!
-                    .map(
-                      (MySearchTab e) => e.widget!,
-                    )
-                    .toList(),
+              title: Searchbar(
+                hintText: 'Search',
+                onChange: (String query) {
+                  if (query.isEmpty) {
+                    controller.clearUserSearch();
+                  }
+                },
+                onSubmit: (String query) {
+                  controller.search(query, currentIndex: _tabController.index);
+                },
               ),
-            )
-          ],
-        ),
-      ),
-    );
-  }
-
-  int _pageIndex(String label) {
-    return _selectedTabs!
-        .indexWhere((MySearchTab element) => element.label == label);
-  }
-
-  void _filterPage() {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          contentPadding: const EdgeInsets.all(0.0),
-          content: ClipRRect(
-            borderRadius: BorderRadius.circular(radius),
-            child: SizedBox(
-              height: MediaQuery.of(context).size.height * 0.5,
-              width: MediaQuery.of(context).size.width * 0.9,
-              child: TabsPagesFilterItem(
-                allTab: MySearchTab.cloneList(_tabs),
-                selectedTabs: MySearchTab.cloneList(_selectedTabs!),
-                onFilterChange: _onFilterChange,
+              bottom: TabBar(
+                controller: _tabController,
+                tabs: const <Widget>[
+                  Tab(
+                    child: TextWidget(
+                      text: 'Users',
+                      size: 20,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  Tab(
+                    child: TextWidget(
+                      text: 'Posts',
+                      size: 20,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  // Tab(
+                  //   child: TextWidget(
+                  //     text: 'Forums',
+                  //     size: 20,
+                  //     fontWeight: FontWeight.w700,
+                  //   ),
+                  // ),
+                ],
               ),
+              actions: [
+                if (_hasFilter)
+                  IconButton(
+                    icon: SvgPicture.asset('assets/svgs/filter.svg'),
+                    onPressed: () {},
+                  ),
+              ],
+            ),
+            body: Column(
+              children: [
+                Expanded(
+                  child: TabBarView(
+                    controller: _tabController,
+                    children: [
+                      FilterUsers(
+                        filterItems: controller.isUserSearch.value
+                            ? controller.searchedUsers
+                            : controller.recommendedConnections,
+                        isLoading: controller.loading.value ||
+                            controller.loadingSearch.value,
+                        onConnectionChange: controller.connectToUser,
+                        isSearch: controller.isUserSearch.value,
+                      ),
+                      FilterPosts(
+                        filterItems: controller.searchedPosts,
+                        isLoading: controller.loading.value ||
+                            controller.loadingSearch.value,
+                      ),
+                      // FilterForum(
+                      //   filterItems: controller.searchedForums,
+                      //   isLoading: controller.loading.value ||
+                      //       controller.loadingSearch.value,
+                      // ),
+                    ],
+                  ),
+                )
+              ],
             ),
           ),
         );
       },
     );
   }
+}
 
-  void _onFilterChange(List<MySearchTab> newTabs) {
-    _selectedTabs = newTabs;
-    _tabController = TabController(vsync: this, length: _selectedTabs!.length);
-    setState(() {});
+/// FILTER POSTS
+class FilterPosts extends StatelessWidget {
+  final List<PostModel> filterItems;
+  final bool isLoading;
+
+  /// CONSTRUCTOR
+  const FilterPosts({
+    Key? key,
+    this.filterItems = const <PostModel>[],
+    this.isLoading = false,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final PostsController postsController = Get.find();
+    return filterItems.isEmpty
+        ? SafetyModel(
+            icon: const Icon(
+              Icons.edit,
+              size: 80.0,
+              color: hintColor,
+            ),
+            title: 'No post found',
+            subTitle: 'Your search posts will be displayed here!',
+            isLoading: isLoading,
+          )
+        : ListView.separated(
+            key: key,
+            separatorBuilder: (_, __) => const SizedBox(height: 8.0),
+            padding: const EdgeInsets.all(16.0),
+            itemCount: filterItems.length ?? 0,
+            itemBuilder: (BuildContext context, int i) {
+              return PostTile(
+                post: filterItems[i],
+                controller: postsController,
+              );
+            },
+          );
   }
+}
 
-  Future<void> _fetchAllUsers() async {}
+/// FILTER FORUMS
+class FilterForum extends StatelessWidget {
+  final List<ForumModel> filterItems;
+  final bool isLoading;
 
-  bool _isLoadingUser = false, _isLoadingPost = false, _isLoadingForum = false;
+  /// CONSTRUCTOR
+  const FilterForum({
+    Key? key,
+    this.filterItems = const <ForumModel>[],
+    this.isLoading = false,
+  }) : super(key: key);
 
-  Future<void> _onSubmit(String val) async {}
+  @override
+  Widget build(BuildContext context) {
+    return filterItems.isEmpty
+        ? SafetyModel(
+            icon: SvgPicture.asset(
+              'assets/svgs/group.svg',
+              height: 80.0,
+              color: hintColor,
+            ),
+            title: 'No forum to show you',
+            subTitle: 'Your search forums will be displayed here!',
+            isLoading: isLoading,
+          )
+        : ListView.separated(
+            key: ValueKey(filterItems),
+            separatorBuilder: (_, __) => const SizedBox(height: 8.0),
+            itemCount: filterItems.length,
+            itemBuilder: (BuildContext context, int i) {
+              return ForumItem(forum: filterItems[i]);
+            },
+          );
+  }
 }

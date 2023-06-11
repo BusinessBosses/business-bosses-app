@@ -5,14 +5,13 @@ import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class ConnectionController extends GetxController {
+class ReferralsController extends GetxController {
   bool loading = true;
-  final List<UserModel> suggestedUsers = [];
   final List<UserModel> searchedUsers = [];
-  final List<UserModel> connections = [];
-  final List<UserModel> connecteds = [];
+  final List<UserModel> referrals = [];
   final TextEditingController searchController = TextEditingController();
   final ProfileController _profileController = Get.find();
+  late List<String> connecteds = _profileController.myProfile.connecteds ?? [];
 
   bool isSearching = false;
   bool loadingSearch = false;
@@ -37,29 +36,15 @@ class ConnectionController extends GetxController {
     update();
   }
 
-  Future<void> getConnections() async {
-    final ApiResponseModel res = await ApiService.get(path: '/connection/data');
+  Future<void> getReferrals() async {
+    final ApiResponseModel res =
+        await ApiService.get(path: '/referal/${Get.arguments}');
     if (res.success) {
-      for (int i = 0; i < res.data['connections']['data'].length; i++) {
-        final mapData = res.data['connections']['data'][i];
+      for (int i = 0; i < res.data.length; i++) {
+        final mapData = res.data[i];
         final UserModel modelizedConnection = UserModel.fromMap(mapData);
 
-        connections.add(modelizedConnection);
-      }
-      for (int i = 0; i < res.data['connecteds']['data'].length; i++) {
-        final mapData = res.data['connecteds']['data'][i];
-        final UserModel modelizedConnection = UserModel.fromMap(mapData);
-
-        connecteds.add(modelizedConnection);
-      }
-
-      for (int i = 0;
-          i < res.data['suggestedUsers']['data']['rows'].length;
-          i++) {
-        final mapData = res.data['suggestedUsers']['data']['rows'][i];
-        final UserModel modelizedConnection = UserModel.fromMap(mapData);
-
-        suggestedUsers.add(modelizedConnection);
+        referrals.add(modelizedConnection);
       }
     }
     loading = false;
@@ -78,12 +63,12 @@ class ConnectionController extends GetxController {
 
   void connectToUser(UserModel user) async {
     final int checkConnected =
-        connecteds.indexWhere((UserModel element) => element.uid == user.uid);
+        connecteds.indexWhere((String element) => element == user.uid);
     _profileController.updateConnections(user.uid);
     update();
 
     if (checkConnected == -1) {
-      connecteds.add(user);
+      connecteds.add(user.uid);
       await connect(user.uid);
     } else {
       connecteds.removeAt(checkConnected);
@@ -96,7 +81,7 @@ class ConnectionController extends GetxController {
   void onInit() {
     // TODO: implement onInit
 
-    getConnections();
+    getReferrals();
     super.onInit();
   }
 
@@ -111,9 +96,7 @@ class ConnectionController extends GetxController {
   void onClose() {
     // TODO: implement onClose
     isSearching = false;
-    suggestedUsers.clear();
     searchedUsers.clear();
-    connections.clear();
     super.onClose();
   }
 }

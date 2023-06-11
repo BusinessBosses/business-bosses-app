@@ -2,6 +2,7 @@ import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/common/models/comment_model.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/features/forum/models/forum_model.dart';
+import 'package:business_bosses_v2/features/forum/models/industry.dart';
 import 'package:business_bosses_v2/features/forum/repository/forum_repository.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
@@ -9,8 +10,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
-
-import '../../../utils/constants/constants.dart';
 
 class ForumController extends GetxController {
   late IO.Socket socket;
@@ -26,13 +25,24 @@ class ForumController extends GetxController {
   RxBool error = RxBool(false);
   RxBool loadingMembers = RxBool(false);
   RxBool errorMembers = RxBool(false);
+
+  void updateForum(int index, Map<String, dynamic> data) {
+    if (index != -1) {
+      forums[index] = ForumModel.fromMap(data);
+    }
+    update();
+  }
+
   Future<void> fetchForums() async {
     loading(true);
     error(false);
     update();
-    ApiResponseModel response;
-    response =
-        await ForumRepository.getForums(page.value, Get.arguments.industryId);
+
+    final ApiResponseModel response = await ForumRepository.getForums(
+        page.value,
+        Get.arguments.runtimeType == String
+            ? Get.arguments
+            : Get.arguments.industryId);
     if (response.success) {
       totalForums(int.parse(response.data['count'].toString()));
       page(page.value + 1);
@@ -73,7 +83,7 @@ class ForumController extends GetxController {
         await ForumRepository.getForumMembers(membersPage.value, industryId);
     if (response.success) {
       membersPage(membersPage.value + 1);
-      for (var i = 0; i < response.data.length; i++) {
+      for (int i = 0; i < response.data.length; i++) {
         members.add(UserModel.fromMap(response.data[i]));
       }
     } else {
@@ -159,7 +169,10 @@ class ForumController extends GetxController {
   void onInit() {
     // TODO: implement onInit
     socket = _homeController.socket;
-    fetchForums();
+    if (Get.arguments.runtimeType == Industry) {
+      fetchForums();
+    }
+
     super.onInit();
   }
 }

@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -6,7 +5,7 @@ import '../posts/widgets/my_container.dart';
 import '../../utils/theme/theme.dart';
 
 class InviteAFriendTermsAndConditions extends StatelessWidget {
-  static const routeName = '/tiles-rules-scree';
+  static const String routeName = '/tiles-rules-scree';
 
   const InviteAFriendTermsAndConditions({Key? key}) : super(key: key);
 

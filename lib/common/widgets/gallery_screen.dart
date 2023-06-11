@@ -358,7 +358,7 @@ class _GalleryPhotosScreenState extends State<GalleryPhotosScreen> {
           _fetchNextVideos();
         });
       }
-    } catch (e, stack) {}
+    } catch (e) {}
   }
 
   final List<MyAssetEntity> _myAssetEntitiesImages = [];

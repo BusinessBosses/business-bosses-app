@@ -62,12 +62,10 @@ class MyProfileHeader extends StatelessWidget {
                         value: myProfile.referalCount ?? 0,
                         caption: 'Referrals',
                         onPressed: () {
-                          // Get.toNamed(Routes.referscreen);
-                          // navigateTo(
-                          //   context,
-                          //   routeName: ReferralsDetailsScreen.routeName,
-                          //   arguments: myProfile.refers,
-                          // );
+                          Get.toNamed(
+                            Routes.referalsscreen,
+                            arguments: myProfile.uid,
+                          );
                         },
                       ),
                     ),

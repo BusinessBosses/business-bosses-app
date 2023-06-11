@@ -1,14 +1,10 @@
 import 'package:business_bosses_v2/common/models/comment_model.dart';
-import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
-import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../common/widgets/user_avatar_with_badge.dart';
-import '../../../utils/constants/constants.dart';
 import '../../../utils/theme/theme.dart';
 import 'my_container.dart';
 
@@ -76,7 +72,6 @@ class _WriteACommentState extends State<WriteAComment> {
                 timestamp: DateTime.now().millisecondsSinceEpoch,
                 user: _profileController.myProfile,
               );
-              ApiService.post(path: 'comments', body: comment.toMap());
               widget.onCommentSend(comment);
 
               setState(() {

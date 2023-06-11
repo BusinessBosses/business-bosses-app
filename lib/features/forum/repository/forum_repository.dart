@@ -23,6 +23,14 @@ class ForumRepository {
     return response;
   }
 
+  /// EDIT POST REPOSITORY
+  static Future<ApiResponseModel> editForum(Map<String, dynamic> body) async {
+    final ApiResponseModel response = await ApiService.put(
+        path: 'forum/update/${body['forumId']}', body: body);
+
+    return response;
+  }
+
   /// CREATE POST REPOSITORY
   static Future<ApiResponseModel> createMarket(
       Map<String, dynamic> body) async {

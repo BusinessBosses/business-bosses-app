@@ -1,22 +1,18 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 
-import '../../../action/action.dart';
 import '../../../common/widgets/safety_model.dart';
 import '../../../navigation/routes.dart';
 import '../../../utils/theme/theme.dart';
 import '../../profile/controller/profile_controller.dart';
 import '../controller/bossup_controller.dart';
-import '../controller/forum_controller.dart';
 import '../models/industry.dart';
 import '../widgets/forum_item.dart';
 import '../widgets/joinedbutton.dart';
-import 'specific_user_list_screen.dart';
 
 class BossUpSection extends StatefulWidget {
   final Industry industry;
@@ -229,7 +225,7 @@ class _BossUpSectionState extends State<BossUpSection> {
                                                                       .joinedUsers ==
                                                                   null
                                                               ? 'Members: 0'
-                                                              : 'Members: (${widget.industry.joinedUsers?.where((element) => element.isNotEmpty).toList().length ?? 0})',
+                                                              : 'Members: (${widget.industry.joinedUsers?.where((String element) => element.isNotEmpty).toList().length ?? 0})',
                                                           style:
                                                               const TextStyle(
                                                             fontSize: 12,
@@ -244,11 +240,9 @@ class _BossUpSectionState extends State<BossUpSection> {
                                                           recognizer:
                                                               TapGestureRecognizer()
                                                                 ..onTap = () {
-                                                                  navigateTo(
-                                                                    context,
-                                                                    routeName:
-                                                                        SpecificUserListScreen
-                                                                            .routeName,
+                                                                  Get.toNamed(
+                                                                    Routes
+                                                                        .specificuserlistscreen,
                                                                     arguments: widget
                                                                         .industry
                                                                         .industryId,

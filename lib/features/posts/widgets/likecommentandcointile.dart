@@ -16,7 +16,7 @@ class PostInteractionsWidget extends StatelessWidget {
 
   final Function() sharePost;
 
-  const PostInteractionsWidget({
+  const PostInteractionsWidget({super.key, 
     required this.post,
     required this.profileController,
     required this.sharePost,
@@ -26,7 +26,7 @@ class PostInteractionsWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetBuilder<PostsController>(
       init: PostsController(),
-      builder: (controller) {
+      builder: (PostsController controller) {
         return Container(
           padding: const EdgeInsets.only(left: 15, right: 15),
           child: Column(
@@ -36,11 +36,8 @@ class PostInteractionsWidget extends StatelessWidget {
                 children: [
                   TextButton.icon(
                     onPressed: () async {
-                      controller.postLike(
-                        profileController.myProfile.uid,
-                        post.postId,
-                        'post',
-                      );
+                      controller.postLike(profileController.myProfile.uid,
+                          post.postId, 'post', post.user!.uid);
                     },
                     icon:
                         post.likes?.contains(profileController.myProfile.uid) ==

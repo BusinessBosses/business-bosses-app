@@ -34,7 +34,7 @@ class _SignUpFormState extends State<SignUpForm> {
   bool _isProcessing = false;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   AutovalidateMode _autoValidateMode = AutovalidateMode.disabled;
-  String? _username, _authCred, _password;
+  String? _username, _authCred, _password, _inviteId;
   bool? _isUniqueName = false;
   bool? _isUniqueEmail = false;
   bool isEmailAuth = true;
@@ -173,6 +173,32 @@ class _SignUpFormState extends State<SignUpForm> {
               ),
             ],
           ),
+
+          const SizedBox(height: 25.0),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              TextFormField(
+                onChanged: (String val) {
+                  _inviteId = val;
+                  setState(() {});
+                },
+                textInputAction: TextInputAction.done,
+                keyboardType: TextInputType.visiblePassword,
+                decoration: inputDecoration.copyWith(
+                  hintText: 'Invite Id (Optional)',
+                  hintStyle: const TextStyle(
+                    color: iconColor,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                  ),
+                  filled: true,
+                  fillColor: const Color(0xffF4F4F4),
+                ),
+              ),
+            ],
+          ),
+
           const SizedBox(height: 24.0),
 
           agreementText(context),
@@ -200,6 +226,7 @@ class _SignUpFormState extends State<SignUpForm> {
                     emailAddress: _authCred!,
                     userName: _username!,
                     password: _password!,
+                    inviteId: _inviteId,
                     onError: () {
                       setState(() {
                         _isProcessing = false;

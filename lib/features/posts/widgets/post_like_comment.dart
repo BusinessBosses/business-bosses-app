@@ -3,11 +3,15 @@ import 'package:business_bosses_v2/features/posts/models/post_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
+import 'package:get/get.dart';
 import '../../../../common/models/user_model.dart';
 import '../../../../common/widgets/safety_model.dart';
 import '../../../../common/widgets/user_avatar_with_badge.dart';
 import '../../../../utils/theme/theme.dart';
 
+import '../../../common/controllers/comment_controller.dart';
+import '../../../services/api_service.dart';
+import '../controllers/posts_controller.dart';
 import 'comment_item.dart';
 import 'write_comment.dart';
 
@@ -26,8 +30,9 @@ class PostLikeCommentItem extends StatefulWidget {
 }
 
 class _PostLikeCommentItemState extends State<PostLikeCommentItem> {
-  final bool _isInit = false;
   bool _isLoadingLikes = true, _isLoadingComments = true;
+  final CommentController _commentController = Get.put(CommentController());
+  final PostsController _postsController = Get.find();
 
   @override
   void initState() {
@@ -69,7 +74,7 @@ class _PostLikeCommentItemState extends State<PostLikeCommentItem> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Expanded(
-                        child: _comments.isEmpty
+                        child: _commentController.comments.isEmpty
                             ? SafetyModel(
                                 isLoading: _isLoadingComments,
                                 icon: SvgPicture.asset(
@@ -84,18 +89,29 @@ class _PostLikeCommentItemState extends State<PostLikeCommentItem> {
                                 reverse: true,
                                 itemBuilder: (BuildContext context, int i) {
                                   final int j =
-                                      _comments.length - 1 - i; // reverse index
-                                  return CommentItem(_comments[j]);
+                                      _commentController.comments.length -
+                                          1 -
+                                          i; // reverse index
+                                  return CommentItem(
+                                      _commentController.comments[j]);
                                 },
-                                itemCount: _comments.length,
+                                itemCount: _commentController.comments.length,
                               ),
                       ),
                       WriteAComment(
                         onCommentSend: (CommentModel comment) {
                           widget.onComment(comment);
-                          setState(() {
-                            _comments.add(comment);
+                          ApiService.post(path: 'comments', body: {
+                            ...comment.toMap(),
+                            'receiverUid': widget.post.user?.uid
                           });
+                          setState(() {
+                            _commentController.comments.add(comment);
+                          });
+                          _postsController.comment(
+                            widget.post.postId,
+                            comment,
+                          );
                         },
                         postId: widget.post.postId,
                       )
@@ -123,7 +139,7 @@ class _PostLikeCommentItemState extends State<PostLikeCommentItem> {
                                 radius: 30.0,
                                 placeHolder: Icons.person,
                               ),
-                              title: Text('${_users[i].name}'),
+                              title: Text(_users[i].name!),
                               subtitle: Text(
                                 '${_users[i].bio}',
                                 maxLines: 1,
@@ -143,18 +159,9 @@ class _PostLikeCommentItemState extends State<PostLikeCommentItem> {
   final List<CommentModel> _comments = <CommentModel>[];
 
   Future<void> _loadCommentWithDetails() async {
-    for (CommentModel c in widget.post.comments ?? []) {
-      _comments.add(
-        CommentModel(
-          commentId: c.commentId,
-          userId: c.userId,
-          comment: c.comment,
-          timestamp: c.timestamp,
-        ),
-      );
-    }
+    await _commentController.fetchComments(widget.post.postId);
     setState(() {
-      _isLoadingComments = false;
+      _isLoadingComments = _commentController.loading.value;
     });
   }
 
@@ -163,10 +170,12 @@ class _PostLikeCommentItemState extends State<PostLikeCommentItem> {
   Future<void> _loadLikesWithDetails() async {
     for (dynamic l in widget.post.likes ?? []) {
       final Map<String, dynamic> response = await ProfileController.loadData(l);
-      _users.add(UserModel(
-          uid: l,
-          name: response['user']['name'],
-          bio: response['user']['bio']));
+      _users.add(
+        UserModel(
+            uid: l,
+            name: response['user']['name'] ?? response['user']['username'],
+            bio: response['user']['bio']),
+      );
     }
     if (mounted) {
       setState(() {

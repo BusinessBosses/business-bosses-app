@@ -7,6 +7,8 @@ import '../../../../common/models/user_model.dart';
 import '../../../../common/widgets/safety_model.dart';
 import '../../../../common/widgets/user_avatar_with_badge.dart';
 import '../../../../utils/theme/theme.dart';
+import '../../../common/controllers/comment_controller.dart';
+import '../../../services/api_service.dart';
 import '../../posts/widgets/comment_item.dart';
 import '../../posts/widgets/write_comment.dart';
 import '../controllers/market_controller.dart';
@@ -27,10 +29,10 @@ class PostLikeCommentItem extends StatefulWidget {
 }
 
 class _PostLikeCommentItemState extends State<PostLikeCommentItem> {
-  bool _isInit = false;
   bool _isLoadingLikes = true, _isLoadingComments = true;
   final MarketController _marketController = Get.find();
   final ProfileController profileController = Get.find();
+  final CommentController _commentController = Get.put(CommentController());
 
   @override
   void initState() {
@@ -72,7 +74,7 @@ class _PostLikeCommentItemState extends State<PostLikeCommentItem> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Expanded(
-                        child: _comments.isEmpty
+                        child: _commentController.comments.isEmpty
                             ? SafetyModel(
                                 isLoading: _isLoadingComments,
                                 icon: SvgPicture.asset(
@@ -87,17 +89,25 @@ class _PostLikeCommentItemState extends State<PostLikeCommentItem> {
                                 reverse: true,
                                 itemBuilder: (BuildContext context, int i) {
                                   final int j =
-                                      _comments.length - 1 - i; // reverse index
-                                  return CommentItem(_comments[j]);
+                                      _commentController.comments.length -
+                                          1 -
+                                          i; // reverse index
+                                  return CommentItem(
+                                      _commentController.comments[j]);
                                 },
-                                itemCount: _comments.length,
+                                itemCount: _commentController.comments.length,
                               ),
                       ),
                       WriteAComment(
                         onCommentSend: (CommentModel comment) {
                           widget.onComment(comment);
+
+                          ApiService.post(path: 'comments', body: {
+                            ...comment.toMap(),
+                            'receiverUid': widget.post.userId
+                          });
                           setState(() {
-                            _comments.add(comment);
+                            _commentController.comments.add(comment);
                           });
                           _marketController.comment(
                             widget.post.marketId,
@@ -147,21 +157,10 @@ class _PostLikeCommentItemState extends State<PostLikeCommentItem> {
     );
   }
 
-  final List<CommentModel> _comments = <CommentModel>[];
-
   Future<void> _loadCommentWithDetails() async {
-    for (CommentModel c in widget.post.comments ?? []) {
-      _comments.add(
-        CommentModel(
-          commentId: c.commentId,
-          userId: c.userId,
-          comment: c.comment,
-          timestamp: c.timestamp,
-        ),
-      );
-    }
+    await _commentController.fetchComments(widget.post.marketId);
     setState(() {
-      _isLoadingComments = false;
+      _isLoadingComments = _commentController.loading.value;
     });
   }
 
@@ -180,5 +179,10 @@ class _PostLikeCommentItemState extends State<PostLikeCommentItem> {
         _isLoadingLikes = false;
       });
     }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 }

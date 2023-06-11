@@ -82,14 +82,14 @@ class PostsController extends GetxController {
   }
 
   void processPostsAndForumsData(dynamic data) {
-    // processPostsToState(data['posts']['rows']);
-    // processForumsToState(data['forums']['rows']);
-    // joinPostsAndForums();
+    processPostsToState(data['posts']['rows']);
+    processForumsToState(data['forums']['rows']);
+    joinPostsAndForums();
     update();
   }
 
   /// LIKE AND UNLIKE FUNCTION
-  void postLike(String userId, String postId, String type) {
+  void postLike(String userId, String postId, String type, String receiverUid) {
     if (type == 'post') {
       final int postIndex =
           posts.indexWhere((PostModel element) => element.postId == postId);
@@ -122,7 +122,18 @@ class PostsController extends GetxController {
       'postId': postId,
       'userId': userId,
       'type': type,
+      'receiverUid': receiverUid,
     });
+  }
+
+  /// COMMENT FUNCTION
+  void comment(String postId, CommentModel comment) {
+    final int postIndex =
+        posts.indexWhere((PostModel element) => element.postId == postId);
+    if (postIndex != -1) {
+      posts[postIndex].comments!.add(comment);
+    }
+    update();
   }
 
   /// COIN AND UNCOIN FUNCTION
@@ -187,8 +198,8 @@ class PostsController extends GetxController {
         'name': profileController.myProfile.name,
       }
     });
-
-    posts.insert(0, modelizedNewPost);
+    mixedPosts.insert(0, {'isForum': false, 'data': modelizedNewPost});
+    // posts.insert(0, modelizedNewPost);
 
     update();
   }

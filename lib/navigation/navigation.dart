@@ -1,5 +1,7 @@
 // ignore_for_file: always_specify_types
 
+import 'package:business_bosses_v2/features/connects/controller/referrals_controller.dart';
+import 'package:business_bosses_v2/features/connects/presentation/referals_screen.dart';
 import 'package:business_bosses_v2/features/settings/community_rules_screen.dart';
 import 'package:business_bosses_v2/analytics/presentation/my_ranking_screen.dart';
 import 'package:business_bosses_v2/analytics/presentation/profile_analyse_screen.dart';
@@ -29,6 +31,7 @@ import 'package:business_bosses_v2/features/promotions/presentation/promotionscr
 import 'package:business_bosses_v2/features/profile/presentation/publicprofilescreen.dart';
 import 'package:business_bosses_v2/features/profile/presentation/update_profile_screen.dart';
 import 'package:business_bosses_v2/features/referrals/refer_screen.dart';
+import 'package:business_bosses_v2/features/search/controller/search_controller.dart';
 import 'package:business_bosses_v2/features/search/presentation/complete_searching_screen.dart';
 import 'package:business_bosses_v2/features/settings/invite_a_friendscreen.dart';
 import 'package:business_bosses_v2/features/settings/settingsscreen.dart';
@@ -121,9 +124,15 @@ class Nav {
       page: () => AllConnectionsScreen(),
     ),
     GetPage(
-        name: Routes.allforumscreen,
-        page: () => const AllForumScreen(),
-        binding: BindingsBuilder.put(() => ForumController())),
+      name: Routes.allforumscreen,
+      page: () => const AllForumScreen(),
+      binding: BindingsBuilder.put(() => ForumController()),
+    ),
+    GetPage(
+      name: Routes.referalsscreen,
+      page: () => const ReferalsScreen(),
+      binding: BindingsBuilder.put(() => ReferralsController()),
+    ),
     GetPage(
       name: Routes.changePassword,
       page: () => const ChangePasswordScreen(),
@@ -153,6 +162,7 @@ class Nav {
     GetPage(
       name: Routes.completesearchingscreen,
       page: () => const CompleteSearchingScreen(),
+      binding: BindingsBuilder.put(() => CompleteSearchController()),
     ),
     GetPage(
       name: Routes.communityrulesscreen,
