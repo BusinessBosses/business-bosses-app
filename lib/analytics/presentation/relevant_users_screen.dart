@@ -1,4 +1,5 @@
 import 'package:business_bosses_v2/common/models/user_model.dart';
+import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -10,6 +11,7 @@ import '../../common/params.dart';
 import '../../common/widgets/safety_model.dart';
 import '../../features/connects/controller/connection_controller.dart';
 import '../../features/connects/widgets/connection_grid_tile.dart';
+import '../../features/search/controller/search_controller.dart';
 import '../../utils/theme/theme.dart';
 
 class RelevantUsersScreen extends StatefulWidget {
@@ -22,102 +24,91 @@ class RelevantUsersScreen extends StatefulWidget {
 }
 
 class _RelevantUsersScreenState extends State<RelevantUsersScreen> {
-  bool _isInit = false;
   late UserModel _user;
-  final List<UserModel> _relevantUsers = [];
-  final ConnectionController controller = Get.put(ConnectionController());
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    if (!_isInit) {
-      _isInit = true;
-      final Params? data =
-          ModalRoute.of(context)?.settings.arguments as Params?;
-      if (data != null && data.arg1 != null) {
-        _user = data.arg1;
-      } else {
-        navigateTo(context);
-        return;
-      }
-      _loadRelevantUsers();
-    }
-  }
+  ProfileController profileController = Get.find();
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        backgroundColor: backgroundcolorinterface,
-        appBar: AppBar(
-          leading: IconButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
+    return GetBuilder<CompleteSearchController>(
+        builder: (CompleteSearchController controller) {
+      return Scaffold(
+          backgroundColor: backgroundcolorinterface,
+          appBar: AppBar(
+            leading: IconButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
+            ),
+            centerTitle: true,
+            title: const Text(
+              'Connect',
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 20),
+            ),
           ),
-          centerTitle: true,
-          title: const Text(
-            'Connect',
-            textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 20),
-          ),
-        ),
-        body: controller.suggestedUsers.isEmpty && !controller.loading
-            ? _safetyModal(_user)
-            : StaggeredGridView.countBuilder(
-                padding: const EdgeInsets.all(8.0),
-                crossAxisCount: 2,
-                crossAxisSpacing: 8.0,
-                mainAxisSpacing: 8.0,
-                itemCount: controller.suggestedUsers.length,
-                itemBuilder: (BuildContext context, int index) {
-                  UserModel specificUser = _relevantUsers[index];
-                  final int checkConnected = controller.connecteds.indexWhere(
-                      (UserModel element) =>
-                          element.uid == controller.suggestedUsers[index].uid);
-
-                  return ConnectionGridTile(
-                      user: controller.suggestedUsers[index],
-                      status: checkConnected == -1 ? false : true,
-                      onChangeConnectionStatus: null);
-                },
-                staggeredTileBuilder: (_) => const StaggeredTile.fit(1),
-              ));
+          body: controller.recommendedConnections.isEmpty &&
+                  !controller.loading.value
+              ? _safetyModal(_user)
+              : StaggeredGridView.countBuilder(
+                  padding: const EdgeInsets.all(8.0),
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 8.0,
+                  mainAxisSpacing: 8.0,
+                  itemCount: controller.recommendedConnections.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    bool checkConnected =
+                        profileController.myProfile.connecteds != null &&
+                                profileController.myProfile.connecteds!
+                                    .contains(
+                                  controller.recommendedConnections[index].uid,
+                                )
+                            ? true
+                            : false;
+                    return ConnectionGridTile(
+                      user: controller.recommendedConnections[index],
+                      status: checkConnected,
+                      onChangeConnectionStatus: null,
+                    );
+                  },
+                  staggeredTileBuilder: (_) => const StaggeredTile.fit(1),
+                ));
+    });
   }
-}
 
-bool _isLoading = true;
+  bool _isLoading = true;
 
-Future<void> _loadRelevantUsers() async {}
+  Future<void> _loadRelevantUsers() async {}
 
-void _sendNotification(UserModel user) {}
+  void _sendNotification(UserModel user) {}
 
-Widget _safetyModal(UserModel user) {
-  if ((user.category?.isEmpty ?? true) && (user.industry?.isEmpty ?? true)) {
+  Widget _safetyModal(UserModel user) {
+    if ((user.category?.isEmpty ?? true) && (user.industry?.isEmpty ?? true)) {
+      return SafetyModel(
+        icon: const Icon(
+          Icons.info_outline,
+          size: 80.0,
+          color: hintColor,
+        ),
+        isLoading: _isLoading,
+        title: 'You may have incomplete profile!',
+        subTitle: 'You don\'t have category or industry yet',
+        clickableText: 'Complete profile',
+        onTap: () async {
+          await Get.toNamed(Routes.updateProfile, arguments: true);
+          _loadRelevantUsers();
+        },
+      );
+    }
     return SafetyModel(
-      icon: const Icon(
-        Icons.info_outline,
-        size: 80.0,
+      icon: SvgPicture.asset(
+        'assets/svgs/group.svg',
         color: hintColor,
+        height: 80.0,
       ),
       isLoading: _isLoading,
-      title: 'You may have incomplete profile!',
-      subTitle: 'You don\'t have category or industry yet',
-      clickableText: 'Complete profile',
-      onTap: () async {
-        await Get.toNamed(Routes.updateProfile, arguments: true);
-        _loadRelevantUsers();
-      },
+      title: 'You\'ve no matched users for now',
+      subTitle: 'All relevant users will be displayed here!',
     );
   }
-  return SafetyModel(
-    icon: SvgPicture.asset(
-      'assets/svgs/group.svg',
-      color: hintColor,
-      height: 80.0,
-    ),
-    isLoading: _isLoading,
-    title: 'You\'ve no matched users for now',
-    subTitle: 'All relevant users will be displayed here!',
-  );
 }

@@ -173,9 +173,9 @@ class Nav {
       page: () => const MyRankingScreen(),
     ),
     GetPage(
-      name: Routes.relevantusersscreen,
-      page: () => const RelevantUsersScreen(),
-    ),
+        name: Routes.relevantusersscreen,
+        page: () => const RelevantUsersScreen(),
+        binding: BindingsBuilder.put(() => CompleteSearchController())),
     GetPage(
       name: Routes.profileanalysescreen,
       page: () => const ProfileAnalyseScreen(),
