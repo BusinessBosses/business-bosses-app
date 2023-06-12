@@ -21,6 +21,7 @@ class HomeController extends GetxController {
   final MarketController _marketController = Get.put(MarketController());
   RxBool error = RxBool(false);
   RxBool loading = RxBool(false);
+  RxBool refreshing = RxBool(false);
 
   /// SHOW WHEN ACCESS TOKEN EXPIRES
   void showAccessTokenDialog() {
@@ -125,6 +126,24 @@ class HomeController extends GetxController {
     }
 
     loading(false);
+    update();
+  }
+
+  /// LOAD POSTS FROM REMOTE SOURCE
+  Future<void> refreshData() async {
+    refreshing(true);
+    // error(false);
+    update();
+    final ApiResponseModel response = await HomeRepository.fetchRefreshData();
+    if (response.success) {
+      _postsController.processPostsAndForumsData(response.data['posts']);
+      _profileController.processDataToState(response.data['user']);
+    } else {
+      error(true);
+      showSnackbar(title: 'OOPS!', message: response.message, error: true);
+    }
+
+    refreshing(false);
     update();
   }
 

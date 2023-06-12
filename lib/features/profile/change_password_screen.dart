@@ -1,11 +1,18 @@
 import 'package:business_bosses_v2/common/widgets/buttons/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../action/action.dart';
+import '../../common/models/api_response_model.dart';
 import '../../functions/validators/validator.dart';
+import '../../navigation/routes.dart';
 import '../../services/api_service.dart';
+import '../../utils/constants/constants.dart';
 import '../../utils/theme/theme.dart';
+import 'controller/profile_controller.dart';
 
 class ChangePasswordScreen extends StatefulWidget {
   const ChangePasswordScreen({Key? key}) : super(key: key);
@@ -51,25 +58,25 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Text(
-                  //   'Old password',
-                  //   style: Theme.of(context)
-                  //       .textTheme
-                  //       .bodyLarge!
-                  //       .copyWith(fontWeight: FontWeight.w600),
-                  // ),
-                  // const SizedBox(height: 12.0),
-                  // TextFormField(
-                  //   onChanged: (val) => _currentPassword = val,
-                  //   validator: Validator.passwordValidator,
-                  //   textInputAction: TextInputAction.next,
-                  //   obscureText: true,
-                  //   keyboardType: TextInputType.visiblePassword,
-                  //   decoration: inputDecoration.copyWith(
-                  //     hintText: 'Enter your current password',
-                  //   ),
-                  // ),
-                  // const SizedBox(height: 24.0),
+                  Text(
+                    'Old password',
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyLarge!
+                        .copyWith(fontWeight: FontWeight.w600),
+                  ),
+                  const SizedBox(height: 12.0),
+                  TextFormField(
+                    onChanged: (val) => _currentPassword = val,
+                    validator: Validator.passwordValidator,
+                    textInputAction: TextInputAction.next,
+                    obscureText: true,
+                    keyboardType: TextInputType.visiblePassword,
+                    decoration: inputDecoration.copyWith(
+                      hintText: 'Enter your current password',
+                    ),
+                  ),
+                  const SizedBox(height: 24.0),
                   Text(
                     'New password',
                     style: Theme.of(context)
@@ -125,28 +132,39 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
     );
   }
 
+  ///change the user password
   Future<void> _onChangePassword() async {
     setState(() {
       _isProcessing = true;
     });
-    // MyResponse res = await _firebase.signInWithEmailAndPassword(
-    //     email: FirebaseAuth.instance.currentUser.email,
-    //     password: _currentPassword);
-    // if (res.success) {
-    //   MyResponse res2 =
-    //       await _firebase.changePassword(newPassword: _newPassword);
-    //   if (res2.success) {
-    //     showSnackBar(context, message: 'Password changed');
-    //     navigateTo(context);
-    //   } else {
-    //     showSnackBar(context, message: res.message);
-    //   }
-    // } else {
-    //   Get.snackbar('Error', 'Error while changing password!');
-    // }
-    // setState(() {
-    //   _isProcessing = false;
-    // });
+
+    Map<String, dynamic> updateData = <String, dynamic>{
+      'oldPassword': _currentPassword,
+      'newPassword': _newPassword,
+    };
+    ApiResponseModel response =
+        await ApiService.post(path: 'users/update-password', body: updateData);
+    if (response.success) {
+      Get.snackbar('Success', 'Password Updated Succesfully');
+      if (Get.isRegistered<ProfileController>()) {
+        final ProfileController profileController = Get.find();
+        profileController.updateProfile(
+            {...profileController.myProfile.toMap(), ...updateData});
+        // Get.back();
+        // return;
+      }
+      Get.toNamed(Routes.bottomNavigation);
+    } else {
+      Get.snackbar('Error', response.message);
+    }
+
+    setState(() {
+      _isProcessing = true;
+    });
+
+    setState(() {
+      _isProcessing = false;
+    });
   }
 
   Future<dynamic> _handleChange() async {
