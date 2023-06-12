@@ -252,3 +252,25 @@ class ApiService {
     }
   }
 }
+
+/// Add Subscription
+Future<dynamic> addSubscription(
+    String plan, String price, bool isSubscribed) async {
+  Map<String, dynamic> data = {
+    'plan': plan,
+    'price': price,
+    'isSubscribed': isSubscribed
+  };
+  final http.Response response = await http.post(
+    Uri.parse('${Constants.baseUrl}/subscription'),
+    headers: {'Content-Type': 'application/json'},
+    body: jsonEncode(data),
+  );
+  if (response.statusCode == 200) {
+    final dynamic jsonResponse = json.decode(response.body);
+    return jsonResponse;
+  } else {
+    final dynamic jsonResponse = json.decode(response.body);
+    return jsonResponse;
+  }
+}

@@ -35,18 +35,14 @@ class Validator {
   }
 
   /// Validate password fields to be password
-  static String passwordValidator(String? val) {
+  static String? passwordValidator(String? val) {
     if (val == null) {
       return 'Enter a valid password';
     }
     if (val.length < 8) {
       return 'Password must be 8 character long';
     }
-    if (!isValidPassword(val)) {
-      return 'Invalid p';
-    } else {
-      return '';
-    }
+    return null;
   }
 
   /// Validate phone number

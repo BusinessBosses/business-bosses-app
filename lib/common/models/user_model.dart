@@ -35,6 +35,7 @@ class UserModel {
   final List<DisconnectionsModel>? disconnections;
   final bool? active;
   final bool? deactivated;
+  final bool isSubscribed;
   final String? ageRange;
   final String? gender;
   final List<ProfileViewerModel>? profileViews;
@@ -86,6 +87,7 @@ class UserModel {
     this.referalCount,
     this.inviteId,
     this.averageRating,
+    this.isSubscribed = false,
   });
 
   UserModel copyWith({
@@ -127,6 +129,7 @@ class UserModel {
     bool? isRanked,
     String? inviteId,
     double? averageRating,
+    bool? isSubscribed = false,
   }) {
     return UserModel(
       uid: uid ?? this.uid,
@@ -169,6 +172,7 @@ class UserModel {
       connections: connections ?? this.connections,
       connecteds: connecteds ?? this.connecteds,
       averageRating: averageRating ?? this.averageRating,
+      isSubscribed: isSubscribed ?? this.isSubscribed,
     );
   }
 
@@ -214,6 +218,7 @@ class UserModel {
       'isRanked': isRanked,
       'inviteId': inviteId,
       'averageRating': averageRating,
+      'isSubscribed': isSubscribed,
     };
   }
 
@@ -294,6 +299,8 @@ class UserModel {
       unReadCount:
           map['unReadCount'] != null ? map['unReadCount'] as int : null,
       isRanked: map['isRanked'] != null ? map['isRanked'] as bool : null,
+      isSubscribed:
+          map['isSubscribed'] != null ? map['isSubscribed'] as bool : false,
       inviteId: map['inviteId'] != null ? map['inviteId'] as String : null,
       averageRating: map['averageRating'] != null
           ? (map['averageRating'] is int
@@ -354,6 +361,7 @@ class UserModel {
         other.unReadCount == unReadCount &&
         other.isRanked == isRanked &&
         other.inviteId == inviteId &&
+        other.isSubscribed == isSubscribed &&
         other.averageRating == averageRating;
   }
 
@@ -396,6 +404,7 @@ class UserModel {
         unReadCount.hashCode ^
         inviteId.hashCode ^
         isRanked.hashCode ^
+        isSubscribed.hashCode ^
         averageRating.hashCode;
   }
 }

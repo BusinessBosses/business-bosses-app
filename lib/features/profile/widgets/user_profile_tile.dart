@@ -138,53 +138,54 @@ class _UserProfileTileState extends State<UserProfileTile> {
                           color: textColor.withOpacity(0.6),
                         ),
                   ),
-                  GestureDetector(
-                    onTap: () {
-                      Get.toNamed(Routes.premiumscreen);
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.09),
-                            blurRadius: 500.0,
-                            spreadRadius: 0.0,
-                          ),
-                        ],
-                      ),
-                      child: Align(
-                        alignment: Alignment.center,
-                        child: Stack(
-                          alignment: Alignment.center,
-                          children: [
-                            SvgPicture.asset(
-                              'assets/svgs/subscribebuttonback.svg',
-                              width: 200,
-                              fit: BoxFit.contain,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                const Text(
-                                  'Subscribe to Premium',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w700,
-                                    fontSize: 15,
-                                  ),
-                                ),
-                                const SizedBox(
-                                  width: 20,
-                                ),
-                                SvgPicture.asset(
-                                  'assets/svgs/nextbutton.svg',
-                                ),
-                              ],
+                  if (!widget.myProfile.isSubscribed)
+                    GestureDetector(
+                      onTap: () {
+                        Get.toNamed(Routes.premiumscreen);
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.09),
+                              blurRadius: 500.0,
+                              spreadRadius: 0.0,
                             ),
                           ],
                         ),
+                        child: Align(
+                          alignment: Alignment.center,
+                          child: Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              SvgPicture.asset(
+                                'assets/svgs/subscribebuttonback.svg',
+                                width: 200,
+                                fit: BoxFit.contain,
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    'Subscribe to Premium',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w700,
+                                      fontSize: 15,
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    width: 20,
+                                  ),
+                                  SvgPicture.asset(
+                                    'assets/svgs/nextbutton.svg',
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
-                    ),
-                  )
+                    )
                 ],
               ),
             ),

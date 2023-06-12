@@ -382,22 +382,40 @@ class _BossUpSectionState extends State<BossUpSection> {
                           title: 'No post',
                           subTitle: 'This industry has no post',
                         )
-                      : ListView.builder(
-                          itemCount: controller.forums.length,
+                      : RefreshIndicator(
+                          onRefresh: refreshData,
+                          child: ListView.builder(
+                            itemCount: controller.forums.length,
 
-                          // <-- this will disable scroll
+                            // <-- this will disable scroll
 
-                          //controller: differentController,
+                            //controller: differentController,
 
-                          itemBuilder: (BuildContext context, int i) =>
-                              ForumItem(
-                            forum: controller.forums[i],
-                            key: ValueKey(controller.forums[i].forumId),
-                            controller: controller,
+                            itemBuilder: (BuildContext context, int i) =>
+                                ForumItem(
+                              forum: controller.forums[i],
+                              key: ValueKey(controller.forums[i].forumId),
+                              controller: controller,
+                            ),
                           ),
                         ),
         );
       }
     });
+  }
+
+  Future<void> loadData() async {
+    setState(() {});
+
+    // Call the loadPosts() function from the PostsController
+    // await Get.find<PostsController>().loadPosts();
+    await Get.find<BossUpController>().fetchForums();
+    print('working');
+
+    setState(() {});
+  }
+
+  Future<void> refreshData() async {
+    await loadData(); // Trigger data reload
   }
 }

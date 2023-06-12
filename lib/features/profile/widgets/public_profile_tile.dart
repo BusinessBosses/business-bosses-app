@@ -5,7 +5,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 import '../../../common/widgets/network_image_with_placeholder.dart';
-import '../../../navigation/routes.dart';
 import '../controller/profile_controller.dart';
 
 // ignore: public_member_api_docs

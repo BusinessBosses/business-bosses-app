@@ -629,17 +629,20 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                     );
                                   },
                                 )
-                          : ListView.builder(
-                              shrinkWrap: true,
-                              itemCount: _marketController.markets.length,
-                              itemBuilder: (BuildContext context, int index) {
-                                final MarketModel market =
-                                    _marketController.markets[index];
+                          : RefreshIndicator(
+                              onRefresh: refreshData,
+                              child: ListView.builder(
+                                shrinkWrap: true,
+                                itemCount: _marketController.markets.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  final MarketModel market =
+                                      _marketController.markets[index];
 
-                                return MarketTile(
-                                  post: market,
-                                );
-                              },
+                                  return MarketTile(
+                                    post: market,
+                                  );
+                                },
+                              ),
                             );
                     }
                   }),
@@ -647,6 +650,21 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
               ),
       );
     });
+  }
+
+  Future<void> loadData() async {
+    setState(() {});
+
+    // Call the loadPosts() function from the PostsController
+    // await Get.find<PostsController>().loadPosts();
+    await Get.find<MarketController>().initMarket();
+    print('working');
+
+    setState(() {});
+  }
+
+  Future<void> refreshData() async {
+    await loadData(); // Trigger data reload
   }
 
   Widget joinedButton() {

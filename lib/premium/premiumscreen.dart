@@ -1,15 +1,25 @@
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
 
 import '../../utils/theme/theme.dart';
+import '../action/action.dart';
 import '../common/widgets/buttons/custom_button.dart';
-import '../features/posts/widgets/my_container.dart';
+import '../features/marketplace/presentation/subscription_confirmation.dart';
+import '../features/profile/controller/profile_controller.dart';
+import '../services/api_service.dart';
 
 class PremiumScreen extends StatefulWidget {
-  static const routeName = '/premiumScreen';
+  static const String routeName = '/premiumScreen';
 
-  PremiumScreen({Key? key}) : super(key: key);
+  const PremiumScreen({Key? key}) : super(key: key);
 
   @override
   State<PremiumScreen> createState() => _PremiumScreenState();
@@ -31,6 +41,122 @@ class _PremiumScreenState extends State<PremiumScreen> {
       child: Text('Annually', style: TextStyle(fontWeight: FontWeight.bold)),
     )
   };
+
+  bool _isProcessing = false;
+  bool isCoin = false;
+  bool isSubscribed = false;
+  late Map<String, dynamic>? paymantIntent;
+  final ProfileController profileController = Get.find();
+
+  late String duration;
+  List<Map<String, dynamic>> plans = <Map<String, dynamic>>[
+    <String, dynamic>{'price': '4.99', 'plan': 'monthly', 'isSubscribed': true},
+    <String, dynamic>{
+      'price': '49.99',
+      'plan': 'annually',
+      'isSubscribed': true
+    },
+  ];
+
+  Future<void> addSubscription() async {
+    ApiService.post(path: 'subscription', body: plans[_currentIndex]);
+  }
+
+  void displaySheet() async {
+    try {
+      await Stripe.instance.presentPaymentSheet().then((value) async {
+        await addSubscription();
+
+        Navigator.of(context).push(MaterialPageRoute(
+          builder: (BuildContext context) => const SubscriptionConfirmation(),
+        ));
+
+        paymantIntent = null;
+      }).onError((Object? error, StackTrace stackTrace) {
+        setState(() {
+          _isProcessing = false;
+        });
+        print(' =>> $error');
+        showSnackBar(context,
+            message: 'Opps!! Something went wrong. Try again');
+      });
+    } on StripeException {
+      setState(() {
+        _isProcessing = false;
+      });
+      showSnackBar(context, message: 'Opps!! Something went wrong. Try again');
+      // print('Here ->>>>>> $e');
+    } catch (e) {
+      setState(() {
+        _isProcessing = false;
+      });
+      log('Here ->>>>>> $e');
+
+      showSnackBar(context, message: 'Opps!! Something went wrong. Try again');
+    }
+  }
+
+  String calculateAmount(String amount) {
+    final int calculatedAmount = ((double.parse(amount)) * 100).toInt();
+    return calculatedAmount.toString();
+  }
+
+  Future<dynamic> createPaymentIntent(String amount, String currency) async {
+    try {
+      Map<String, dynamic> body = {
+        'amount': calculateAmount(plans[_currentIndex]['price']),
+        'currency': currency,
+        'payment_method_types[]': 'card'
+      };
+
+      http.Response res = await http.post(
+          Uri.parse('https://api.stripe.com/v1/payment_intents'),
+          body: body,
+          headers: {
+            'Authorization': 'Bearer ${dotenv.env['STRIPE_SEC_KEY']}',
+            'Content-Type': 'application/x-www-form-urlencoded'
+          });
+
+      // log(res.body);
+
+      return jsonDecode(res.body);
+    } catch (e) {
+      setState(() {
+        _isProcessing = false;
+      });
+      log('Here ->>>>>> $e');
+
+      showSnackBar(context, message: 'Opps!! Something went wrong. Try again');
+    }
+  }
+
+  Future<void> makePayment() async {
+    try {
+      setState(() {
+        _isProcessing = true;
+      });
+      paymantIntent = await createPaymentIntent(
+          plans[_currentIndex]['price'].toString(), 'USD');
+      await Stripe.instance
+          .initPaymentSheet(
+        paymentSheetParameters: SetupPaymentSheetParameters(
+          paymentIntentClientSecret: paymantIntent!['client_secret'],
+          merchantDisplayName: 'Business Bosses',
+        ),
+      )
+          .then((void value) {
+        // log(value.toString());
+        print('everythings here is working!');
+      });
+
+      displaySheet();
+    } catch (e) {
+      log(e.toString());
+    }
+    setState(() {
+      _isProcessing = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -70,9 +196,9 @@ class _PremiumScreenState extends State<PremiumScreen> {
                   ),
                   Column(
                     children: [
-                      const SizedBox(
-                        height: 30,
-                      ),
+                      // const SizedBox(
+                      //   height: 25,
+                      // ),
                       Padding(
                         padding: const EdgeInsets.only(left: 50.0, right: 50),
                         child: RichText(
@@ -107,7 +233,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
                           child: CupertinoSlidingSegmentedControl<int>(
                             padding: const EdgeInsets.all(5),
                             children: _segments,
-                            onValueChanged: (value) {
+                            onValueChanged: (int? value) {
                               setState(() {
                                 _currentIndex = value!;
                               });
@@ -271,20 +397,23 @@ class _PremiumScreenState extends State<PremiumScreen> {
                               ]),
                             ),
                             const SizedBox(
-                              height: 20,
+                              height: 7,
                             ),
                             CustomButton(
+                              isProcessing: _isProcessing,
                               margin: const EdgeInsets.all(2.0),
                               label: _currentIndex == 0
                                   ? 'Subscribe at \$4.99'
                                   : 'Subscribe at \$49.99',
                               onPressed: () async {
-                                setState(() {
-                                  // _autoValidateMode = AutovalidateMode.always;
-                                });
-                                setState(() {
-                                  // _isProcessing = true;
-                                });
+                                // setState(() async{
+                                //   _isProcessing = true;
+                                //   // _autoValidateMode = AutovalidateMode.always;
+                                //   plans[_currentIndex];
+                                //   await makePayment();
+                                // });
+                                plans[_currentIndex];
+                                await makePayment();
                               },
                               buttonType: ButtonType.elevated,
                               child: Container(),
@@ -296,7 +425,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
                               'By Subscribing you accept the Terms of Service',
                               style:
                                   TextStyle(color: Colors.grey, fontSize: 12),
-                            )
+                            ),
                           ],
                         ),
                       )

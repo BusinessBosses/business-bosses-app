@@ -32,7 +32,7 @@ class PostsController extends GetxController {
         'likes': psts[i]['likes']
             .map((dynamic like) => like['userId'].toString())
             .toList(),
-        'coins': psts[i]['likes']
+        'coins': psts[i]['coins']
             .map((dynamic coin) => coin['userId'].toString())
             .toList()
       }));
@@ -157,8 +157,10 @@ class PostsController extends GetxController {
           'postId': postId,
           'userId': userId,
           'type': type,
+          'timestamp': DateTime.now().millisecondsSinceEpoch
         });
       }
+      print(postId);
     } else {
       final int postIndex =
           forums.indexWhere((ForumModel element) => element.forumId == postId);
@@ -177,6 +179,7 @@ class PostsController extends GetxController {
           'postId': postId,
           'userId': userId,
           'type': type,
+          'timestamp': DateTime.now().millisecondsSinceEpoch
         });
       }
     }

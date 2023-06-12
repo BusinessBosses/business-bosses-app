@@ -14,7 +14,6 @@ import '../../../common/widgets/text_widget.dart';
 import '../../../utils/theme/theme.dart';
 import '../../marketplace/controllers/market_controller.dart';
 import '../../marketplace/models/market_model.dart';
-import '../../marketplace/presentation/seller_reviews.dart';
 import '../../marketplace/widgets/marketplace_item.dart';
 import '../controller/profile_controller.dart';
 import '../widgets/friendoutlinebuttonheader.dart';
