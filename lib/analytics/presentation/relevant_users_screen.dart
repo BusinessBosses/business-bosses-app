@@ -6,13 +6,10 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 import '../../action/action.dart';
-import '../../common/models/my_connect.dart';
-import '../../common/models/my_user.dart';
 import '../../common/params.dart';
 import '../../common/widgets/safety_model.dart';
 import '../../features/connects/controller/connection_controller.dart';
 import '../../features/connects/widgets/connection_grid_tile.dart';
-import '../../utils/constants/constants.dart';
 import '../../utils/theme/theme.dart';
 
 class RelevantUsersScreen extends StatefulWidget {
@@ -27,7 +24,7 @@ class RelevantUsersScreen extends StatefulWidget {
 class _RelevantUsersScreenState extends State<RelevantUsersScreen> {
   bool _isInit = false;
   late UserModel _user;
-  List<UserModel> _relevantUsers = [];
+  final List<UserModel> _relevantUsers = [];
   final ConnectionController controller = Get.put(ConnectionController());
 
   @override

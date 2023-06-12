@@ -186,7 +186,7 @@ class Nav {
     ),
     GetPage(
       name: Routes.premiumscreen,
-      page: () => PremiumScreen(),
+      page: () => const PremiumScreen(),
     ),
   ];
 }

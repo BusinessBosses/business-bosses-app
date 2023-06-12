@@ -2,15 +2,12 @@ import 'package:business_bosses_v2/common/widgets/buttons/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../action/action.dart';
 import '../../common/models/api_response_model.dart';
 import '../../functions/validators/validator.dart';
 import '../../navigation/routes.dart';
 import '../../services/api_service.dart';
-import '../../utils/constants/constants.dart';
 import '../../utils/theme/theme.dart';
 import 'controller/profile_controller.dart';
 
@@ -67,7 +64,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                   ),
                   const SizedBox(height: 12.0),
                   TextFormField(
-                    onChanged: (val) => _currentPassword = val,
+                    onChanged: (String val) => _currentPassword = val,
                     validator: Validator.passwordValidator,
                     textInputAction: TextInputAction.next,
                     obscureText: true,

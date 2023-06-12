@@ -410,7 +410,7 @@ class _BossUpSectionState extends State<BossUpSection> {
     // Call the loadPosts() function from the PostsController
     // await Get.find<PostsController>().loadPosts();
     await Get.find<BossUpController>().fetchForums();
-    print("working");
+    print('working');
 
     setState(() {});
   }

@@ -105,7 +105,7 @@ class _ReferScreenState extends State<ReferScreen> {
               onPressed: _onReferringToYourConnections,
               icon: const Icon(Icons.check),
               label: _isProcessing
-                  ? SizedBox(
+                  ? const SizedBox(
                       height: 20,
                       width: 20,
                       child: CircularProgressIndicator(
@@ -192,8 +192,8 @@ class _ReferScreenState extends State<ReferScreen> {
       Get.back();
     } else {
       showSnackbar(
-        message: "OOPS!! Something went wrong",
-        title: "Error Occured",
+        message: 'OOPS!! Something went wrong',
+        title: 'Error Occured',
         error: true,
       );
     }
