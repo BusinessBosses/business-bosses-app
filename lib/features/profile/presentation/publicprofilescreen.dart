@@ -354,7 +354,7 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
                             text: 'Posts',
                           ),
                           Tab(
-                            text: 'Store',
+                            text: 'Shop',
                           ),
                         ],
                       ),
