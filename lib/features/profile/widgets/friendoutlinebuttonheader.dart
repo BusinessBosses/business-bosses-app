@@ -7,8 +7,11 @@ import '../../../common/models/user_model.dart';
 import '../../../common/widgets/buttons/my_outlined_button.dart';
 import '../../../utils/theme/theme.dart';
 
-Widget OutlineButtonHeader(UserModel publicUser, UserModel myProfile,
-    VoidCallback onConnect, onRefer) {
+Widget OutlineButtonHeader(
+  UserModel publicUser,
+  UserModel myProfile,
+  VoidCallback onConnect,
+) {
   bool connectedbutton = true;
   return Container(
     height: 50.0,
@@ -49,8 +52,7 @@ Widget OutlineButtonHeader(UserModel publicUser, UserModel myProfile,
         child: MCustomButton(
             margin: const EdgeInsets.symmetric(horizontal: 4.0),
             onPressed: () async {
-              Get.toNamed(Routes.referscreen,
-                  arguments: {'user': publicUser, 'onRefer': onRefer});
+              Get.toNamed(Routes.referscreen, arguments: {'user': publicUser});
             },
             child: const Text('Refer')),
       ),

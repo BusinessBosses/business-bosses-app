@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import '../../../common/models/api_response_model.dart';
 import '../../../common/widgets/safety_model.dart';
 import '../../../services/api_service.dart';
+import '../../profile/widgets/public_profile_tile.dart';
 import '../../profile/widgets/user_profile_tile.dart';
 import '../models/reviews_model.dart';
 import '../widgets/review_item.dart';
@@ -123,7 +124,7 @@ class _SellerReviewScreenState extends State<SellerReviewScreen> {
             ),
             child: Column(
               children: <Widget>[
-                UserProfileTile(
+                PublicProfileTile(
                   myProfile: cUser!,
                 ),
                 const SizedBox(

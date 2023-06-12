@@ -105,27 +105,21 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                   // const SizedBox(height: 8.0),
                   // },
 
-                  Material(
+                  const Material(
                     color: Colors.white,
                     child: TabBar(
                       indicatorColor: primaryColorLT,
-                      labelStyle: const TextStyle(fontWeight: FontWeight.w500),
+                      labelStyle: TextStyle(fontWeight: FontWeight.w500),
                       labelColor: Colors.black,
                       tabs: [
                         Tab(
-                          icon: SvgPicture.asset(
-                            'assets/svgs/portfolio.svg',
-                          ),
+                          text: 'About',
                         ),
                         Tab(
-                          icon: SvgPicture.asset(
-                            'assets/svgs/posts.svg',
-                          ),
+                          text: 'Posts',
                         ),
                         Tab(
-                          icon: SvgPicture.asset(
-                            'assets/svgs/market.svg',
-                          ),
+                          text: 'Store',
                         ),
                       ],
                     ),
@@ -161,137 +155,6 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                         SingleChildScrollView(
                           child: Column(
                             children: [
-                              Stack(
-                                children: <Widget>[
-                                  Container(
-                                    padding: const EdgeInsets.all(0),
-                                    height: 100,
-                                    width: double.infinity,
-                                    child: ClipRRect(
-                                      child: FittedBox(
-                                        fit: BoxFit.fill,
-                                        child: Image.asset(
-                                            'assets/images/sellerbackground.jpg'),
-                                      ),
-                                    ),
-                                  ),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Container(
-                                        padding: const EdgeInsets.only(
-                                            left: 11, top: 11),
-                                        child: const Text(
-                                          'Store',
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                      ),
-                                      Container(
-                                        padding: const EdgeInsets.all(11.0),
-                                        child: Row(
-                                          children: [
-                                            Container(
-                                              padding: const EdgeInsets.only(
-                                                  bottom: 8,
-                                                  top: 8,
-                                                  left: 10,
-                                                  right: 10),
-                                              decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(200),
-                                                color: const Color.fromRGBO(
-                                                    128, 128, 128, 1),
-                                              ),
-                                              child: Row(
-                                                children: [
-                                                  SvgPicture.asset(
-                                                      'assets/svgs/star.svg'),
-                                                  const SizedBox(
-                                                    width: 3,
-                                                  ),
-                                                  RichText(
-                                                    text: TextSpan(
-                                                      children: <InlineSpan>[
-                                                        TextSpan(
-                                                          text:
-                                                              profileController
-                                                                  .myProfile
-                                                                  .averageRating
-                                                                  .toString(),
-                                                          style:
-                                                              const TextStyle(
-                                                            fontSize: 11,
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                            const SizedBox(
-                                              width: 15,
-                                            ),
-                                            GestureDetector(
-                                              onTap: () {
-                                                Get.to(() => SellerReviewScreen(
-                                                    user: profileController
-                                                        .myProfile));
-                                              },
-                                              child: Container(
-                                                padding: const EdgeInsets.only(
-                                                    bottom: 8,
-                                                    top: 8,
-                                                    left: 20,
-                                                    right: 20),
-                                                decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          200),
-                                                  color: const Color.fromRGBO(
-                                                      128, 128, 128, 1),
-                                                ),
-                                                child: Row(
-                                                  children: [
-                                                    RichText(
-                                                      text: const TextSpan(
-                                                        children: <InlineSpan>[
-                                                          TextSpan(
-                                                            text:
-                                                                'See Seller Reviews',
-                                                            style: TextStyle(
-                                                              fontSize: 11,
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                    const SizedBox(
-                                                      width: 15,
-                                                    ),
-                                                    const Text(
-                                                      '>',
-                                                      style: TextStyle(
-                                                          color: Colors.white),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        height: 20,
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
                               GetBuilder<MarketController>(
                                 builder: (MarketController marketController) {
                                   return Obx(() {

@@ -1,15 +1,18 @@
 import 'package:business_bosses_v2/common/models/user_model.dart';
-import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+
 import '../../action/action.dart';
+import '../../common/models/my_connect.dart';
+import '../../common/models/my_user.dart';
 import '../../common/params.dart';
 import '../../common/widgets/safety_model.dart';
 import '../../features/connects/controller/connection_controller.dart';
 import '../../features/connects/widgets/connection_grid_tile.dart';
+import '../../utils/constants/constants.dart';
 import '../../utils/theme/theme.dart';
 
 class RelevantUsersScreen extends StatefulWidget {
@@ -24,16 +27,17 @@ class RelevantUsersScreen extends StatefulWidget {
 class _RelevantUsersScreenState extends State<RelevantUsersScreen> {
   bool _isInit = false;
   late UserModel _user;
-  final List<UserModel> _relevantUsers = [];
-  ProfileController profileController = Get.find();
+  List<UserModel> _relevantUsers = [];
+  final ConnectionController controller = Get.put(ConnectionController());
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     if (!_isInit) {
       _isInit = true;
-      final Params data = ModalRoute.of(context)!.settings.arguments as Params;
-      if (data.arg1 != null) {
+      final Params? data =
+          ModalRoute.of(context)?.settings.arguments as Params?;
+      if (data != null && data.arg1 != null) {
         _user = data.arg1;
       } else {
         navigateTo(context);
@@ -61,25 +65,24 @@ class _RelevantUsersScreenState extends State<RelevantUsersScreen> {
             style: TextStyle(fontSize: 20),
           ),
         ),
-        body: _relevantUsers.isEmpty
+        body: controller.suggestedUsers.isEmpty && !controller.loading
             ? _safetyModal(_user)
             : StaggeredGridView.countBuilder(
                 padding: const EdgeInsets.all(8.0),
                 crossAxisCount: 2,
                 crossAxisSpacing: 8.0,
                 mainAxisSpacing: 8.0,
-                itemCount: _relevantUsers.length,
+                itemCount: controller.suggestedUsers.length,
                 itemBuilder: (BuildContext context, int index) {
                   UserModel specificUser = _relevantUsers[index];
-                  bool isconnected = profileController.myProfile.connecteds!
-                      .contains(specificUser.uid);
-                  ConnectionController controller = Get.find();
+                  final int checkConnected = controller.connecteds.indexWhere(
+                      (UserModel element) =>
+                          element.uid == controller.suggestedUsers[index].uid);
+
                   return ConnectionGridTile(
-                      user: specificUser,
-                      status: isconnected,
-                      onChangeConnectionStatus: () {
-                        controller.connectToUser(specificUser);
-                      });
+                      user: controller.suggestedUsers[index],
+                      status: checkConnected == -1 ? false : true,
+                      onChangeConnectionStatus: null);
                 },
                 staggeredTileBuilder: (_) => const StaggeredTile.fit(1),
               ));
@@ -102,7 +105,7 @@ Widget _safetyModal(UserModel user) {
       ),
       isLoading: _isLoading,
       title: 'You may have incomplete profile!',
-      subTitle: 'You don\'t have a category or industry yet',
+      subTitle: 'You don\'t have category or industry yet',
       clickableText: 'Complete profile',
       onTap: () async {
         await Get.toNamed(Routes.updateProfile, arguments: true);

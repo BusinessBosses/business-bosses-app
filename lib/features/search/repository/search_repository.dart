@@ -17,8 +17,14 @@ class SearchRepository {
   }
 
   static Future<ApiResponseModel> searchPosts(String query) async {
+    String searchQuery = '';
+    if (query.contains('#')) {
+      searchQuery = '%23${query.split('#')[1]}';
+    } else {
+      searchQuery = query;
+    }
     final ApiResponseModel response =
-        await ApiService.get(path: '/post/search/$query');
+        await ApiService.get(path: 'post/search/$searchQuery');
 
     return response;
   }
