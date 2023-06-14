@@ -177,9 +177,9 @@ class Nav {
         page: () => const RelevantUsersScreen(),
         binding: BindingsBuilder.put(() => CompleteSearchController())),
     GetPage(
-      name: Routes.profileanalysescreen,
-      page: () => const ProfileAnalyseScreen(),
-    ),
+        name: Routes.profileanalysescreen,
+        page: () => const ProfileAnalyseScreen(),
+        binding: BindingsBuilder.put(() => CompleteSearchController())),
     GetPage(
       name: Routes.inviteafriendscreen,
       page: () => const InviteAFriendTermsAndConditions(),

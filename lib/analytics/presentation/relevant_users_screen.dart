@@ -68,7 +68,10 @@ class _RelevantUsersScreenState extends State<RelevantUsersScreen> {
                     return ConnectionGridTile(
                       user: controller.recommendedConnections[index],
                       status: checkConnected,
-                      onChangeConnectionStatus: null,
+                      onChangeConnectionStatus: () {
+                        controller.connectToUser(
+                            controller.recommendedConnections[index]);
+                      },
                     );
                   },
                   staggeredTileBuilder: (_) => const StaggeredTile.fit(1),

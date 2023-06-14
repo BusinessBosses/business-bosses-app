@@ -330,7 +330,10 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                       children: <Widget>[
                                         Container(
                                           margin: const EdgeInsets.only(
-                                              top: 10, right: 20, left: 20),
+                                              top: 10,
+                                              right: 20,
+                                              left: 20,
+                                              bottom: 10),
                                           height: 150,
                                           width: double.infinity,
                                           child: ClipRRect(
@@ -573,7 +576,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                   ];
                 },
                 body: Padding(
-                  padding: const EdgeInsets.only(bottom: 100, top: 13),
+                  padding: const EdgeInsets.only(bottom: 50, top: 0),
                   child: Obx(() {
                     if (_marketController.loading.value) {
                       return const Center(child: CircularProgressIndicator());

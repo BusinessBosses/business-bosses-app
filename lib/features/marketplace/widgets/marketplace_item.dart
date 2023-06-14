@@ -99,8 +99,6 @@ class _MarketTileState extends State<MarketTile> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Container(
-            padding: const EdgeInsets.all(0.0),
-            margin: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 0.0),
             width: double.infinity,
             decoration: BoxDecoration(
                 color: Colors.white, borderRadius: BorderRadius.circular(0)),
@@ -277,7 +275,7 @@ class _MarketTileState extends State<MarketTile> {
                         Container(
                           padding: const EdgeInsets.symmetric(
                             vertical: 5,
-                            horizontal: 15,
+                            horizontal: 5,
                           ),
                           decoration: const BoxDecoration(
                             color: backgroundcolorinterface,
@@ -292,13 +290,13 @@ class _MarketTileState extends State<MarketTile> {
                           ),
                         ),
                       const SizedBox(
-                        height: 10,
+                        height: 5,
                       ),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            mainAxisAlignment: MainAxisAlignment.start,
                             children: <Widget>[
                               Text(
                                 widget.post.price.toString(),
@@ -306,42 +304,7 @@ class _MarketTileState extends State<MarketTile> {
                                   fontWeight: FontWeight.w800,
                                 ),
                               ),
-                              Row(
-                                children: [
-                                  const Icon(
-                                    Icons.star,
-                                    color: Color.fromRGBO(255, 202, 40, 1),
-                                    size: 16,
-                                  ),
-                                  Text(
-                                    widget.post.user.averageRating.toString(),
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    width: 2,
-                                  ),
-                                  TextButton(
-                                    onPressed: () {
-                                      Get.to(() => SellerReviewScreen(
-                                          user: widget.post.user));
-                                    },
-                                    child: const Text(
-                                      'See seller reviews',
-                                      style: TextStyle(
-                                        fontSize: 11,
-                                        fontWeight: FontWeight.bold,
-                                        decoration: TextDecoration.underline,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
                             ],
-                          ),
-                          const SizedBox(
-                            height: 5,
                           ),
                           DetectableText(
                             text: widget.post.description,
@@ -359,43 +322,76 @@ class _MarketTileState extends State<MarketTile> {
                             basicStyle: bodyText2.copyWith(color: textColor),
                             onTap: (_) {},
                           ),
-                          const SizedBox(height: 16),
+                          const SizedBox(
+                            height: 2,
+                          ),
                           Row(
                             children: [
-                              const Icon(
-                                Icons.location_pin,
-                                size: 13,
+                              SvgPicture.asset('assets/svgs/location.svg'),
+                              const SizedBox(
+                                width: 1,
                               ),
+                              Text(
+                                widget.post.location.length > 11
+                                    ? '${widget.post.location.substring(0, 11)}...'
+                                    : widget.post.location,
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.normal,
+                                    fontSize: 12,
+                                    color: subtextColor),
+                                overflow: TextOverflow.ellipsis,
+                                softWrap: false,
+                              ),
+                              const SizedBox(
+                                width: 5,
+                              ),
+                              SvgPicture.asset('assets/svgs/category.svg'),
                               const SizedBox(
                                 width: 3,
                               ),
                               Text(
-                                widget.post.location,
+                                widget.post.category.length > 15
+                                    ? '${widget.post.category.substring(0, 15)}...'
+                                    : widget.post.category,
                                 style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 10,
-                                ),
+                                    fontWeight: FontWeight.normal,
+                                    fontSize: 12,
+                                    color: subtextColor),
                               ),
                               const SizedBox(
-                                width: 15,
+                                width: 5,
                               ),
                               const Icon(
-                                Icons.category,
-                                size: 13,
-                              ),
-                              const SizedBox(
-                                width: 3,
+                                Icons.star,
+                                color: Color.fromRGBO(255, 202, 40, 1),
+                                size: 16,
                               ),
                               Text(
-                                widget.post.category,
+                                widget.post.user.averageRating.toString(),
                                 style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 10,
+                                    fontWeight: FontWeight.bold, fontSize: 13),
+                              ),
+                              const SizedBox(
+                                width: 5,
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  Get.to(() => SellerReviewScreen(
+                                      user: widget.post.user));
+                                },
+                                child: const Text(
+                                  'Seller reviews',
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.bold,
+                                    decoration: TextDecoration.underline,
+                                  ),
                                 ),
                               ),
                             ],
                           ),
-                          const SizedBox(height: 16),
+                          const SizedBox(height: 10),
+                          PostImagesMarket(post: widget.post),
                           Row(
                             children: [
                               TextButton.icon(
@@ -509,7 +505,9 @@ class _MarketTileState extends State<MarketTile> {
                                   width: 18.0,
                                 ),
                               ),
-                              const Spacer(),
+                              const SizedBox(
+                                width: 30,
+                              ),
                               widget.post.userId ==
                                       profileController.myProfile.uid
                                   ? const SizedBox()
@@ -534,7 +532,6 @@ class _MarketTileState extends State<MarketTile> {
                           )
                         ],
                       ),
-                      PostImagesMarket(post: widget.post),
                     ],
                   ),
                 ),
