@@ -19,6 +19,7 @@ import '../../common/widgets/text_widget.dart';
 import '../../common/widgets/user_avatar_with_badge.dart';
 import '../../utils/constants/constants.dart';
 import '../../utils/theme/theme.dart';
+import '../marketplace/presentation/seller_reviews.dart';
 import 'models/my_message.dart';
 
 class ChatRoomScreen extends StatefulWidget {
@@ -62,6 +63,8 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
 
   @override
   Widget build(BuildContext context) {
+    String? previousScreen = Get.previousRoute;
+
     return WillPopScope(
       onWillPop: () async {
         navigateTo(context);
@@ -71,54 +74,130 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
         builder: (ChatController controller) {
           return Scaffold(
             appBar: AppBar(
-              leading: IconButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
-              ),
-              title: Container(
-                alignment: Alignment.centerRight,
-                child: ListTile(
-                  onTap: () {
-                    Get.toNamed(Routes.publicProfile, arguments: args);
-                  },
-                  trailing: SizedBox(
-                    height: 22,
-                    width: 22,
-                    child: MyPopupMenuButton(
-                      popupItems: _popupItemForumMore,
-                      icon: const Icon(Icons.more_vert),
-                      onSelected: (String val) {
-                        deleteChat();
+              leading: previousScreen == '/bottomNavScreen'
+                  ? Padding(
+                      padding: const EdgeInsets.only(top: 20.0),
+                      child: Container(
+                        alignment: Alignment.topCenter,
+                        child: IconButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
+                        ),
+                      ),
+                    )
+                  : IconButton(
+                      onPressed: () {
+                        Navigator.pop(context);
                       },
+                      icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
+                    ),
+              title: Column(
+                children: [
+                  ListTile(
+                    onTap: () {
+                      Get.toNamed(Routes.publicProfile, arguments: args);
+                    },
+                    trailing: SizedBox(
+                      height: 22,
+                      width: 22,
+                      child: MyPopupMenuButton(
+                        popupItems: _popupItemForumMore,
+                        icon: const Icon(Icons.more_vert),
+                        onSelected: (String val) {
+                          deleteChat();
+                        },
+                      ),
+                    ),
+                    contentPadding: const EdgeInsets.only(left: 0),
+                    title: Text(
+                      args.username,
+                      style: Theme.of(context).textTheme.bodyLarge,
+                    ),
+                    leading: UserAvatarWithBadge(
+                      user: args,
+                      height: 52.0,
+                      width: 52.0,
+                      radius: 50.0,
+                      placeHolder: Icons.person,
+                      iconSize: 36.0,
+                    ),
+                    subtitle: Text(
+                      args.bio ?? '',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyMedium
+                          ?.copyWith(color: textColor.withOpacity(0.6)),
                     ),
                   ),
-                  contentPadding: const EdgeInsets.only(left: 0),
-                  title: Text(
-                    args.username,
-                    style: Theme.of(context).textTheme.bodyLarge,
-                  ),
-                  leading: UserAvatarWithBadge(
-                    user: args,
-                    height: 52.0,
-                    width: 52.0,
-                    radius: 50.0,
-                    placeHolder: Icons.person,
-                    iconSize: 36.0,
-                  ),
-                  subtitle: Text(
-                    args.bio ?? '',
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyMedium
-                        ?.copyWith(color: textColor.withOpacity(0.6)),
-                  ),
-                ),
+                  previousScreen == '/bottomNavScreen'
+                      ? Padding(
+                          padding: const EdgeInsets.only(left: 5.0),
+                          child: Row(
+                            children: [
+                              const Icon(
+                                Icons.star,
+                                color: Color.fromRGBO(255, 202, 40, 1),
+                                size: 16,
+                              ),
+                              Text(
+                                args.averageRating.toString(),
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 13),
+                              ),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              Stack(
+                                children: [
+                                  Container(
+                                    decoration: BoxDecoration(
+                                        color: backgroundcolorinterface,
+                                        borderRadius:
+                                            BorderRadius.circular(20)),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Row(
+                                        children: [
+                                          GestureDetector(
+                                            onTap: () {
+                                              Get.to(() => SellerReviewScreen(
+                                                  user: args));
+                                            },
+                                            child: Text(
+                                              args.averageRating!.toDouble() > 0
+                                                  ? 'Seller reviews'
+                                                  : 'Rate Seller',
+                                              style: const TextStyle(
+                                                color: primaryColorLT,
+                                                fontSize: 13,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                          ),
+                                          const SizedBox(
+                                            width: 10,
+                                          ),
+                                          SvgPicture.asset(
+                                              'assets/svgs/nexticon.svg')
+                                        ],
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ],
+                          ),
+                        )
+                      : Container()
+                ],
               ),
-              toolbarHeight: 48.0 + 28.0,
+              toolbarHeight: previousScreen == '/bottomNavScreen'
+                  ? 48.0 + 78.0
+                  : 48.0 + 28.0,
             ),
             body: Container(
               width: double.infinity,

@@ -96,7 +96,8 @@ class _ProfileAnalyseScreenState extends State<ProfileAnalyseScreen> {
                     Expanded(
                       child: CustomChildButton(
                         value: _connections([], timestamp: TimeFormat.ONE_WEEK)
-                            .length,
+                                .length ??
+                            0,
                         onPressed: () {},
                         caption: 'Connection',
                       ),
@@ -104,7 +105,8 @@ class _ProfileAnalyseScreenState extends State<ProfileAnalyseScreen> {
                     Expanded(
                       child: CustomChildButton(
                         value: _connections([], timestamp: TimeFormat.ONE_WEEK)
-                            .length,
+                                .length ??
+                            0,
                         onPressed: () {},
                         caption: 'Connected',
                       ),
@@ -112,7 +114,8 @@ class _ProfileAnalyseScreenState extends State<ProfileAnalyseScreen> {
                     Expanded(
                       child: CustomChildButton(
                         value: Disconnected([], timestamp: TimeFormat.ONE_WEEK)
-                            .length,
+                                .length ??
+                            0,
                         onPressed: () {},
                         caption: 'Disconnected',
                       ),
@@ -132,7 +135,8 @@ class _ProfileAnalyseScreenState extends State<ProfileAnalyseScreen> {
                     Expanded(
                       child: CustomChildButton(
                         value: _connections([], timestamp: TimeFormat.ONE_MONTH)
-                            .length,
+                                .length ??
+                            0,
 
                         // value:
                         // _connections(_specificUser,
@@ -146,7 +150,8 @@ class _ProfileAnalyseScreenState extends State<ProfileAnalyseScreen> {
                     Expanded(
                       child: CustomChildButton(
                         value: _connections([], timestamp: TimeFormat.ONE_MONTH)
-                            .length,
+                                .length ??
+                            0,
                         onPressed: () {},
                         caption: 'Connected',
                       ),
@@ -154,7 +159,8 @@ class _ProfileAnalyseScreenState extends State<ProfileAnalyseScreen> {
                     Expanded(
                       child: CustomChildButton(
                         value: Disconnected([], timestamp: TimeFormat.ONE_MONTH)
-                            .length,
+                                .length ??
+                            0,
                         onPressed: () {},
                         caption: 'Disconnected',
                       ),
@@ -317,18 +323,19 @@ class _ProfileAnalyseScreenState extends State<ProfileAnalyseScreen> {
 
   int getConnectionValue(double val, num time) {
     final ProfileController profileController = Get.find();
-    return ((_connections([], timestamp: time).length) / val).round();
+    return ((_connections([], timestamp: time).length) / val).round() ?? 0;
   }
 
   int getConnectedValue(int val, num time) {
     final ProfileController profileController = Get.find();
     return ((_connections([], timestamp: TimeFormat.ONE_MONTH).length) / val)
-        .round();
+            .round() ??
+        0;
   }
 
   int getDisconnectedValue(int val, num time) {
     final ProfileController profileController = Get.find();
-    return ((Disconnected([], timestamp: time).length) / val).round();
+    return ((Disconnected([], timestamp: time).length) / val).round() ?? 0;
   }
 }
 

@@ -517,8 +517,10 @@ class _MarketTileState extends State<MarketTile> {
                                         margin: const EdgeInsets.only(
                                             right: 0.0, bottom: 10, top: 10),
                                         onPressed: () {
-                                          Get.toNamed(Routes.chatRoom,
-                                              arguments: widget.post.user);
+                                          Get.toNamed(
+                                            Routes.chatRoom,
+                                            arguments: widget.post.user,
+                                          );
                                         },
                                         child: const Text(
                                           'Message Seller',
