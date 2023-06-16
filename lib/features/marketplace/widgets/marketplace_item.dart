@@ -266,27 +266,30 @@ class _MarketTileState extends State<MarketTile> {
                 ),
                 Padding(
                   padding: const EdgeInsets.only(
-                      left: 15, right: 15, bottom: 0, top: 0),
+                      left: 0, right: 0, bottom: 0, top: 0),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       if (widget.post.promote)
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 5,
-                            horizontal: 5,
-                          ),
-                          decoration: const BoxDecoration(
-                            color: backgroundcolorinterface,
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(5),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 15.0, right: 15),
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 5,
+                              horizontal: 5,
                             ),
-                          ),
-                          child: const TextWidget(
-                            text: 'Sponsored',
-                            fontWeight: FontWeight.w700,
-                            size: 10,
+                            decoration: const BoxDecoration(
+                              color: backgroundcolorinterface,
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(5),
+                              ),
+                            ),
+                            child: const TextWidget(
+                              text: 'Sponsored',
+                              fontWeight: FontWeight.w700,
+                              size: 10,
+                            ),
                           ),
                         ),
                       const SizedBox(
@@ -295,103 +298,120 @@ class _MarketTileState extends State<MarketTile> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: <Widget>[
-                              Text(
-                                widget.post.price.toString(),
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.w800,
+                          Padding(
+                            padding:
+                                const EdgeInsets.only(left: 15.0, right: 15),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: <Widget>[
+                                Text(
+                                  widget.post.price.toString(),
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.w800,
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
-                          DetectableText(
-                            text: widget.post.description,
-                            detectionRegExp: detectionRegExp(hashtag: false)!,
-                            detectedStyle: bodyText2.copyWith(
-                              color: Colors.blue,
+                          Padding(
+                            padding:
+                                const EdgeInsets.only(left: 15.0, right: 15),
+                            child: DetectableText(
+                              text: widget.post.description,
+                              detectionRegExp: detectionRegExp(hashtag: false)!,
+                              detectedStyle: bodyText2.copyWith(
+                                color: Colors.blue,
+                              ),
+                              moreStyle: bodyText2.copyWith(
+                                color: Colors.redAccent,
+                              ),
+                              lessStyle: bodyText2.copyWith(
+                                color: Colors.redAccent,
+                              ),
+                              trimExpandedText: '  show less',
+                              basicStyle: bodyText2.copyWith(color: textColor),
+                              onTap: (_) {},
                             ),
-                            moreStyle: bodyText2.copyWith(
-                              color: Colors.redAccent,
-                            ),
-                            lessStyle: bodyText2.copyWith(
-                              color: Colors.redAccent,
-                            ),
-                            trimExpandedText: '  show less',
-                            basicStyle: bodyText2.copyWith(color: textColor),
-                            onTap: (_) {},
                           ),
                           const SizedBox(
                             height: 2,
                           ),
-                          Row(
-                            children: [
-                              SvgPicture.asset('assets/svgs/location.svg'),
-                              const SizedBox(
-                                width: 1,
-                              ),
-                              Text(
-                                widget.post.location.length > 11
-                                    ? '${widget.post.location.substring(0, 11)}...'
-                                    : widget.post.location,
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.normal,
-                                    fontSize: 12,
-                                    color: subtextColor),
-                                overflow: TextOverflow.ellipsis,
-                                softWrap: false,
-                              ),
-                              const SizedBox(
-                                width: 5,
-                              ),
-                              SvgPicture.asset('assets/svgs/category.svg'),
-                              const SizedBox(
-                                width: 3,
-                              ),
-                              Text(
-                                widget.post.category.length > 15
-                                    ? '${widget.post.category.substring(0, 15)}...'
-                                    : widget.post.category,
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.normal,
-                                    fontSize: 12,
-                                    color: subtextColor),
-                              ),
-                              const SizedBox(
-                                width: 5,
-                              ),
-                              const Icon(
-                                Icons.star,
-                                color: Color.fromRGBO(255, 202, 40, 1),
-                                size: 16,
-                              ),
-                              Text(
-                                widget.post.user.averageRating.toString(),
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 13),
-                              ),
-                              const SizedBox(
-                                width: 5,
-                              ),
-                              GestureDetector(
-                                onTap: () {
-                                  Get.to(() => SellerReviewScreen(
-                                      user: widget.post.user));
-                                },
-                                child: const Text(
-                                  'Seller reviews',
-                                  style: TextStyle(
-                                    fontSize: 13,
-                                    fontWeight: FontWeight.bold,
-                                    decoration: TextDecoration.underline,
+                          Padding(
+                            padding:
+                                const EdgeInsets.only(left: 15.0, right: 15),
+                            child: Row(
+                              children: [
+                                SvgPicture.asset('assets/svgs/location.svg'),
+                                const SizedBox(
+                                  width: 1,
+                                ),
+                                Text(
+                                  widget.post.location.length > 11
+                                      ? '${widget.post.location.substring(0, 11)}...'
+                                      : widget.post.location,
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.normal,
+                                      fontSize: 12,
+                                      color: subtextColor),
+                                  overflow: TextOverflow.ellipsis,
+                                  softWrap: false,
+                                ),
+                                const SizedBox(
+                                  width: 5,
+                                ),
+                                SvgPicture.asset('assets/svgs/category.svg'),
+                                const SizedBox(
+                                  width: 3,
+                                ),
+                                Text(
+                                  widget.post.category.length > 15
+                                      ? '${widget.post.category.substring(0, 15)}...'
+                                      : widget.post.category,
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.normal,
+                                      fontSize: 12,
+                                      color: subtextColor),
+                                ),
+                                const SizedBox(
+                                  width: 5,
+                                ),
+                                const Icon(
+                                  Icons.star,
+                                  color: Color.fromRGBO(255, 202, 40, 1),
+                                  size: 16,
+                                ),
+                                Text(
+                                  widget.post.user.averageRating.toString(),
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 13),
+                                ),
+                                const SizedBox(
+                                  width: 5,
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    Get.to(() => SellerReviewScreen(
+                                        user: widget.post.user));
+                                  },
+                                  child: const Text(
+                                    'Seller reviews',
+                                    style: TextStyle(
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.bold,
+                                      decoration: TextDecoration.underline,
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                           const SizedBox(height: 10),
-                          PostImagesMarket(post: widget.post),
+                          Padding(
+                            padding:
+                                const EdgeInsets.only(left: 15.0, right: 15),
+                            child: PostImagesMarket(post: widget.post),
+                          ),
                           Row(
                             children: [
                               TextButton.icon(
@@ -512,21 +532,25 @@ class _MarketTileState extends State<MarketTile> {
                                       profileController.myProfile.uid
                                   ? const SizedBox()
                                   : Expanded(
-                                      child: MCustomButton(
-                                        height: 40,
-                                        margin: const EdgeInsets.only(
-                                            right: 0.0, bottom: 10, top: 10),
-                                        onPressed: () {
-                                          Get.toNamed(
-                                            Routes.chatRoom,
-                                            arguments: widget.post.user,
-                                          );
-                                        },
-                                        child: const Text(
-                                          'Message Seller',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.w700,
-                                              fontSize: 15),
+                                      child: Padding(
+                                        padding:
+                                            const EdgeInsets.only(right: 15.0),
+                                        child: MCustomButton(
+                                          height: 40,
+                                          margin: const EdgeInsets.only(
+                                              right: 0.0, bottom: 10, top: 10),
+                                          onPressed: () {
+                                            Get.toNamed(
+                                              Routes.chatRoom,
+                                              arguments: widget.post.user,
+                                            );
+                                          },
+                                          child: const Text(
+                                            'Message Seller',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.w700,
+                                                fontSize: 15),
+                                          ),
                                         ),
                                       ),
                                     ),
