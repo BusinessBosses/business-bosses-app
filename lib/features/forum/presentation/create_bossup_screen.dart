@@ -38,11 +38,12 @@ class _CreateBossUpScreenState extends State<CreateBossUpScreen> {
   bool isUpdating = false;
   bool isbossup = true;
   late String industryId;
+  final TextEditingController descriptionController = TextEditingController();
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-
+    descriptionController.text = forum.description ?? '';
     if (Get.arguments == null) {
       Get.back();
     } else {
@@ -109,7 +110,7 @@ class _CreateBossUpScreenState extends State<CreateBossUpScreen> {
                   ),
                   const SizedBox(height: 24.0),
                   DetectableTextField(
-                    controller: TextEditingController(text: forum.description),
+                    controller: descriptionController,
 
                     detectionRegExp: detectionRegExp(hashtag: false)!,
                     onDetectionTyped: (String text) {},
