@@ -166,7 +166,7 @@ class _UserProfileTileState extends State<UserProfileTile> {
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Text(
+                                  const Text(
                                     'Subscribe to Premium',
                                     style: TextStyle(
                                       fontWeight: FontWeight.w700,

@@ -154,7 +154,7 @@ class SubscriptionConfirmation extends StatelessWidget {
                         Get.to(() => const BottomNavScreen(3, true));
                       },
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 40,
                     ),
                   ],

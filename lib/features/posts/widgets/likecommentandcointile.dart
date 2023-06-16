@@ -79,6 +79,7 @@ class PostInteractionsWidget extends StatelessWidget {
                               post.postId,
                               profileController,
                               'post',
+                              post.user!.uid
                             );
                           }
                         : null,
