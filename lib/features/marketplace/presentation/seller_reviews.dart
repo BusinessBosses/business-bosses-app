@@ -2,6 +2,7 @@ import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/common/widgets/buttons/my_outlined_button.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../../../common/models/api_response_model.dart';
 import '../../../common/widgets/safety_model.dart';
@@ -30,6 +31,7 @@ class _SellerReviewScreenState extends State<SellerReviewScreen> {
   int fourStar = 0;
   int fiveStar = 0;
   bool loading = true;
+  final ProfileController _profileController = Get.find();
 
   @override
   void initState() {
@@ -601,6 +603,20 @@ class _SellerReviewScreenState extends State<SellerReviewScreen> {
                                   'sellerId': widget.user.uid,
                                   'rating': rater,
                                   'reviewText': reviewText,
+                                },
+                              );
+                              await ApiService.post(
+                                path: 'notification',
+                                body: {
+                                  'senderUid': widget.user.uid,
+                                  'receiverUid':
+                                      _profileController.myProfile.uid,
+                                  'title': 'Seller Review',
+                                  'message':
+                                      '${_profileController.myProfile.username} has reviewed your store',
+                                  'timestamp':
+                                      DateTime.now().millisecondsSinceEpoch,
+                                  'notificationType': 'Review'
                                 },
                               );
                               await processData();
