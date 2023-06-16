@@ -5,6 +5,7 @@ import 'package:async/async.dart';
 import 'package:business_bosses_v2/features/authentication/presentation/code_verification_screen.dart';
 import 'package:business_bosses_v2/features/authentication/presentation/forgot_password_verification.dart';
 import 'package:business_bosses_v2/features/authentication/repository/auth_repository.dart';
+import 'package:business_bosses_v2/utils/validators/validator.dart';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -20,9 +21,26 @@ class AuthController extends GetxController {
   /// AUTH LOADING STATE
   RxBool isLoading = RxBool(false);
 
+  GlobalKey<State> _key = GlobalKey<State>();
+
   final ApiService _apiService = ApiService();
 
   String? _authCred, _password;
+
+  static bool isValidEmail(String email) {
+    if (email.isEmpty) return false;
+    return RegExp(
+            r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+        .hasMatch(email);
+  }
+
+  bool emailValidatorExists(String? val, {required bool isUnique}) {
+    if (!isValidEmail(val!)) {
+      return false;
+    } else {
+      return true;
+    }
+  }
 
   /// SEND OTP TO USER EMAIL FOR VERIFICATION
   void sendOtp({
@@ -148,19 +166,18 @@ class AuthController extends GetxController {
       );
 
       _authCred = appleCredential.email;
-      _password = appleCredential.familyName;
+      _password = 'password';
 
-      if (appleCredential.email != null || appleCredential.familyName != null) {
+      if (appleCredential.email != null) {
         dynamic user = await _handleLogin();
         if (user['success'] == false) {
           Get.snackbar('Error', user['error']);
         } else {
           Get.offAndToNamed(Routes.bottomNavigation);
         }
+      } else {
+        Get.snackbar('Error', 'Couldn\'t authenticate with Apple');
       }
-
-      dartdeveloper.log(
-          'email: ${appleCredential.email}, name: ${appleCredential.familyName}');
 
       // print(appleCredential.email);
     } catch (e) {
@@ -197,10 +214,13 @@ class AuthController extends GetxController {
   }
 
   Future<dynamic> _handleLogin() async {
-    dynamic user = await _apiService.login(
-      _authCred!,
-      _password!,
-    );
-    return user;
+    if (emailValidatorExists(_authCred, isUnique: false)) {
+      dartdeveloper.log('exists');
+      Get.snackbar('Account Exists',
+          'An account already exists for your Apple ID try logging in instead');
+    } else {
+      dynamic user = await _apiService.login(_authCred!, _password!);
+      return user;
+    }
   }
 }
