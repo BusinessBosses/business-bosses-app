@@ -118,7 +118,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                           text: 'Posts',
                         ),
                         Tab(
-                          text: 'Store',
+                          text: 'Shop',
                         ),
                       ],
                     ),

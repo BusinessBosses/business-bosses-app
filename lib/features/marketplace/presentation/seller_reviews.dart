@@ -2,11 +2,14 @@ import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/common/widgets/buttons/my_outlined_button.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+
 import 'package:get/get.dart';
 
 import '../../../common/models/api_response_model.dart';
 import '../../../common/widgets/safety_model.dart';
 import '../../../services/api_service.dart';
+import '../../../utils/theme/theme.dart';
 import '../../profile/widgets/public_profile_tile.dart';
 import '../models/reviews_model.dart';
 import '../widgets/review_item.dart';
@@ -101,6 +104,12 @@ class _SellerReviewScreenState extends State<SellerReviewScreen> {
       return Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
+          leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
+          ),
           title: const Text('Seller Reviews'),
           centerTitle: true,
         ),
@@ -110,314 +119,342 @@ class _SellerReviewScreenState extends State<SellerReviewScreen> {
       );
     } else {
       return Scaffold(
+        backgroundColor: Colors.white,
         appBar: AppBar(
           title: const Text('Seller Reviews'),
           centerTitle: true,
+          leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
+          ),
         ),
         body: SingleChildScrollView(
-          child: Container(
-            color: Colors.white,
-            padding: const EdgeInsets.symmetric(
-              horizontal: 16.0,
-            ),
-            margin: const EdgeInsets.only(
-              top: 16.0,
-            ),
-            child: Column(
-              children: <Widget>[
-                PublicProfileTile(
-                  myProfile: cUser!,
+          child: Column(
+            children: [
+              Container(
+                height: 20,
+                color: backgroundcolorinterface,
+              ),
+              Container(
+                color: Colors.white,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16.0,
                 ),
-                const SizedBox(
-                  height: 10,
+                margin: const EdgeInsets.only(
+                  top: 16.0,
                 ),
-                MCustomButton(
-                  buttonType: ButtonType.elevated,
-                  onPressed: () async {
-                    await rateSeller();
-                  },
-                  width: 250,
-                  child: const Text(
-                    'Rate Seller',
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                Container(
-                  width: MediaQuery.of(context).size.width * 0.9,
-                  padding: const EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: const Color.fromRGBO(244, 244, 244, 1),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                child: Column(
+                  children: <Widget>[
+                    PublicProfileTile(
+                      myProfile: cUser!,
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    MCustomButton(
+                      height: 50,
+                      buttonType: ButtonType.elevated,
+                      onPressed: () async {
+                        await rateSeller();
+                      },
+                      width: 200,
+                      child: const Text(
+                        'Rate Seller',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Container(
+                      width: MediaQuery.of(context).size.width * 0.9,
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: const Color.fromRGBO(244, 244, 244, 1),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          const Text(
-                            'Rating',
-                            style: TextStyle(
-                              color: Colors.red,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 10,
-                            ),
-                          ),
-                          Row(
+                          Column(
                             mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(widget.user.averageRating.toString(),
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 20,
-                                  )),
-                              const SizedBox(
-                                width: 3,
+                              const Text(
+                                'Rating',
+                                style: TextStyle(
+                                  color: Colors.red,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 10,
+                                ),
                               ),
-                              const Text('out of 5',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                  )),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Text(widget.user.averageRating.toString(),
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 20,
+                                      )),
+                                  const SizedBox(
+                                    width: 3,
+                                  ),
+                                  const Text('out of 5',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                      )),
+                                ],
+                              ),
+                              Text('Based on ${reviews?.length} reviews'),
+                              Row(
+                                children: [
+                                  Icon(
+                                    Icons.star,
+                                    color: widget.user.averageRating! >= 1
+                                        ? const Color.fromRGBO(255, 202, 40, 1)
+                                        : const Color.fromRGBO(
+                                            229, 229, 229, 1),
+                                    size: 30,
+                                  ),
+                                  Icon(
+                                    Icons.star,
+                                    color: widget.user.averageRating! >= 2
+                                        ? const Color.fromRGBO(255, 202, 40, 1)
+                                        : const Color.fromRGBO(
+                                            229, 229, 229, 1),
+                                    size: 30,
+                                  ),
+                                  Icon(
+                                    Icons.star,
+                                    color: widget.user.averageRating! >= 3
+                                        ? const Color.fromRGBO(255, 202, 40, 1)
+                                        : const Color.fromRGBO(
+                                            229, 229, 229, 1),
+                                    size: 30,
+                                  ),
+                                  Icon(
+                                    Icons.star,
+                                    color: widget.user.averageRating! >= 4
+                                        ? const Color.fromRGBO(255, 202, 40, 1)
+                                        : const Color.fromRGBO(
+                                            229, 229, 229, 1),
+                                    size: 30,
+                                  ),
+                                  Icon(
+                                    Icons.star,
+                                    color: widget.user.averageRating! == 5
+                                        ? const Color.fromRGBO(255, 202, 40, 1)
+                                        : const Color.fromRGBO(
+                                            229, 229, 229, 1),
+                                    size: 30,
+                                  )
+                                ],
+                              ),
                             ],
                           ),
-                          Text('Based on ${reviews?.length} reviews'),
-                          Row(
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
-                              Icon(
-                                Icons.star,
-                                color: widget.user.averageRating! >= 1
-                                    ? const Color.fromRGBO(255, 202, 40, 1)
-                                    : const Color.fromRGBO(229, 229, 229, 1),
-                                size: 30,
+                              Row(
+                                children: [
+                                  const Text(
+                                    '5 Stars',
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    width: 10,
+                                  ),
+                                  SizedBox(
+                                    width: 80,
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(10),
+                                      child: LinearProgressIndicator(
+                                        value: reviews == null
+                                            ? 0
+                                            : fiveStar / reviews!.length,
+                                        minHeight: 10,
+                                        backgroundColor: Colors.grey,
+                                        valueColor:
+                                            const AlwaysStoppedAnimation<Color>(
+                                                Color.fromRGBO(
+                                                    255, 202, 40, 1)),
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
-                              Icon(
-                                Icons.star,
-                                color: widget.user.averageRating! >= 2
-                                    ? const Color.fromRGBO(255, 202, 40, 1)
-                                    : const Color.fromRGBO(229, 229, 229, 1),
-                                size: 30,
+                              Row(
+                                children: [
+                                  const Text(
+                                    '4 Stars',
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    width: 10,
+                                  ),
+                                  SizedBox(
+                                    width: 80,
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(10),
+                                      child: LinearProgressIndicator(
+                                        value: reviews == null
+                                            ? 0
+                                            : fourStar / reviews!.length,
+                                        minHeight: 10,
+                                        backgroundColor: Colors.grey,
+                                        valueColor:
+                                            const AlwaysStoppedAnimation<Color>(
+                                                Color.fromRGBO(
+                                                    255, 202, 40, 1)),
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
-                              Icon(
-                                Icons.star,
-                                color: widget.user.averageRating! >= 3
-                                    ? const Color.fromRGBO(255, 202, 40, 1)
-                                    : const Color.fromRGBO(229, 229, 229, 1),
-                                size: 30,
+                              Row(
+                                children: [
+                                  const Text(
+                                    '3 Stars',
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    width: 10,
+                                  ),
+                                  SizedBox(
+                                    width: 80,
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(10),
+                                      child: LinearProgressIndicator(
+                                        value: reviews == null
+                                            ? 0
+                                            : threeStar / reviews!.length,
+                                        minHeight: 10,
+                                        backgroundColor: Colors.grey,
+                                        valueColor:
+                                            const AlwaysStoppedAnimation<Color>(
+                                                Color.fromRGBO(
+                                                    255, 202, 40, 1)),
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
-                              Icon(
-                                Icons.star,
-                                color: widget.user.averageRating! >= 4
-                                    ? const Color.fromRGBO(255, 202, 40, 1)
-                                    : const Color.fromRGBO(229, 229, 229, 1),
-                                size: 30,
+                              Row(
+                                children: [
+                                  const Text(
+                                    '2 Stars',
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    width: 10,
+                                  ),
+                                  SizedBox(
+                                    width: 80,
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(10),
+                                      child: LinearProgressIndicator(
+                                        value: reviews == null
+                                            ? 0
+                                            : twoStar / reviews!.length,
+                                        minHeight: 10,
+                                        backgroundColor: Colors.grey,
+                                        valueColor:
+                                            const AlwaysStoppedAnimation<Color>(
+                                                Color.fromRGBO(
+                                                    255, 202, 40, 1)),
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
-                              Icon(
-                                Icons.star,
-                                color: widget.user.averageRating! == 5
-                                    ? const Color.fromRGBO(255, 202, 40, 1)
-                                    : const Color.fromRGBO(229, 229, 229, 1),
-                                size: 30,
-                              )
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  const Text(
+                                    '1 Star',
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    width: 10,
+                                  ),
+                                  SizedBox(
+                                    width: 80,
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(10),
+                                      child: LinearProgressIndicator(
+                                        value: reviews == null
+                                            ? 0
+                                            : oneStar / reviews!.length,
+                                        minHeight: 10,
+                                        backgroundColor: Colors.grey,
+                                        valueColor:
+                                            const AlwaysStoppedAnimation<Color>(
+                                                Color.fromRGBO(
+                                                    255, 202, 40, 1)),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ],
                           ),
                         ],
                       ),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Row(
+                    ),
+                    reviews == null
+                        ? const Column(
                             children: [
-                              const Text(
-                                '5 Stars',
-                                style: TextStyle(
-                                  fontSize: 12,
-                                ),
-                              ),
-                              const SizedBox(
-                                width: 10,
-                              ),
                               SizedBox(
-                                width: 80,
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(10),
-                                  child: LinearProgressIndicator(
-                                    value: reviews == null
-                                        ? 0
-                                        : fiveStar / reviews!.length,
-                                    minHeight: 10,
-                                    backgroundColor: Colors.grey,
-                                    valueColor:
-                                        const AlwaysStoppedAnimation<Color>(
-                                            Color.fromRGBO(255, 202, 40, 1)),
+                                height: 60,
+                              ),
+                              Center(
+                                child: SafetyModel(
+                                  isLoading: false,
+                                  icon: Icon(
+                                    Icons.warning,
+                                    size: 100,
                                   ),
+                                  title: 'No Review For This Seller',
+                                  subTitle: 'Be the first to review',
                                 ),
                               ),
                             ],
-                          ),
-                          Row(
-                            children: [
-                              const Text(
-                                '4 Stars',
-                                style: TextStyle(
-                                  fontSize: 12,
-                                ),
-                              ),
-                              const SizedBox(
-                                width: 10,
-                              ),
-                              SizedBox(
-                                width: 80,
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(10),
-                                  child: LinearProgressIndicator(
-                                    value: reviews == null
-                                        ? 0
-                                        : fourStar / reviews!.length,
-                                    minHeight: 10,
-                                    backgroundColor: Colors.grey,
-                                    valueColor:
-                                        const AlwaysStoppedAnimation<Color>(
-                                            Color.fromRGBO(255, 202, 40, 1)),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              const Text(
-                                '3 Stars',
-                                style: TextStyle(
-                                  fontSize: 12,
-                                ),
-                              ),
-                              const SizedBox(
-                                width: 10,
-                              ),
-                              SizedBox(
-                                width: 80,
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(10),
-                                  child: LinearProgressIndicator(
-                                    value: reviews == null
-                                        ? 0
-                                        : threeStar / reviews!.length,
-                                    minHeight: 10,
-                                    backgroundColor: Colors.grey,
-                                    valueColor:
-                                        const AlwaysStoppedAnimation<Color>(
-                                            Color.fromRGBO(255, 202, 40, 1)),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              const Text(
-                                '2 Stars',
-                                style: TextStyle(
-                                  fontSize: 12,
-                                ),
-                              ),
-                              const SizedBox(
-                                width: 10,
-                              ),
-                              SizedBox(
-                                width: 80,
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(10),
-                                  child: LinearProgressIndicator(
-                                    value: reviews == null
-                                        ? 0
-                                        : twoStar / reviews!.length,
-                                    minHeight: 10,
-                                    backgroundColor: Colors.grey,
-                                    valueColor:
-                                        const AlwaysStoppedAnimation<Color>(
-                                            Color.fromRGBO(255, 202, 40, 1)),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              const Text(
-                                '1 Star',
-                                style: TextStyle(
-                                  fontSize: 12,
-                                ),
-                              ),
-                              const SizedBox(
-                                width: 10,
-                              ),
-                              SizedBox(
-                                width: 80,
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(10),
-                                  child: LinearProgressIndicator(
-                                    value: reviews == null
-                                        ? 0
-                                        : oneStar / reviews!.length,
-                                    minHeight: 10,
-                                    backgroundColor: Colors.grey,
-                                    valueColor:
-                                        const AlwaysStoppedAnimation<Color>(
-                                            Color.fromRGBO(255, 202, 40, 1)),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                reviews == null
-                    ? const Column(
-                        children: [
-                          SizedBox(
-                            height: 60,
-                          ),
-                          Center(
-                            child: SafetyModel(
-                              isLoading: false,
-                              icon: Icon(
-                                Icons.warning,
-                                size: 100,
-                              ),
-                              title: 'No Review For This Seller',
-                              subTitle: 'Be the first to review',
+                          )
+                        : Padding(
+                            padding:
+                                const EdgeInsets.only(bottom: 100, top: 20),
+                            child: ListView.builder(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: reviews?.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                final ReviewModel review = reviews![index];
+
+                                return ReviewTile(
+                                  post: review,
+                                  process: processData,
+                                );
+                              },
                             ),
                           ),
-                        ],
-                      )
-                    : Padding(
-                        padding: const EdgeInsets.only(bottom: 100, top: 20),
-                        child: ListView.builder(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemCount: reviews?.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            final ReviewModel review = reviews![index];
-
-                            return ReviewTile(
-                              post: review,
-                              process: processData,
-                            );
-                          },
-                        ),
-                      ),
-              ],
-            ),
+                  ],
+                ),
+              ),
+            ],
           ),
         ),
       );

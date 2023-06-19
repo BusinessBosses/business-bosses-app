@@ -82,6 +82,7 @@ class _FilterUsersState extends State<FilterUsers> {
                                               : widget.filterItems[i].uid),
                                     )
                                   : -1;
+                          // ignore: curly_braces_in_flow_control_structures
                           if (!widget.isSearch) if (i == 0) {
                             return Column(
                               children: [

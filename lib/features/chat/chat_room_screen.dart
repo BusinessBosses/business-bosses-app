@@ -3,6 +3,8 @@ import 'package:business_bosses_v2/features/chat/controllers/chat_controller.dar
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
+import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
+import 'package:detectable_text_field/widgets/detectable_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -17,6 +19,7 @@ import '../../common/widgets/text_widget.dart';
 import '../../common/widgets/user_avatar_with_badge.dart';
 import '../../utils/constants/constants.dart';
 import '../../utils/theme/theme.dart';
+import '../marketplace/presentation/seller_reviews.dart';
 import 'models/my_message.dart';
 
 class ChatRoomScreen extends StatefulWidget {
@@ -43,6 +46,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
       ),
     ),
   ];
+  bool frommarketplace = true;
 
   @override
   void initState() {
@@ -59,6 +63,8 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
 
   @override
   Widget build(BuildContext context) {
+    String? previousScreen = Get.previousRoute;
+
     return WillPopScope(
       onWillPop: () async {
         navigateTo(context);
@@ -68,58 +74,133 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
         builder: (ChatController controller) {
           return Scaffold(
             appBar: AppBar(
-              leading: IconButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
-              ),
-              title: Container(
-                alignment: Alignment.centerRight,
-                child: ListTile(
-                  onTap: () {
-                    Get.toNamed(Routes.publicProfile, arguments: args);
-                  },
-                  trailing: SizedBox(
-                    height: 22,
-                    width: 22,
-                    child: MyPopupMenuButton(
-                      popupItems: _popupItemForumMore,
-                      icon: const Icon(Icons.more_vert),
-                      onSelected: (String val) {
-                        deleteChat();
+              leading: previousScreen == '/bottomNavScreen'
+                  ? Padding(
+                      padding: const EdgeInsets.only(top: 20.0),
+                      child: Container(
+                        alignment: Alignment.topCenter,
+                        child: IconButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
+                        ),
+                      ),
+                    )
+                  : IconButton(
+                      onPressed: () {
+                        Navigator.pop(context);
                       },
+                      icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
+                    ),
+              title: Column(
+                children: [
+                  ListTile(
+                    onTap: () {
+                      Get.toNamed(Routes.publicProfile, arguments: args);
+                    },
+                    trailing: SizedBox(
+                      height: 22,
+                      width: 22,
+                      child: MyPopupMenuButton(
+                        popupItems: _popupItemForumMore,
+                        icon: const Icon(Icons.more_vert),
+                        onSelected: (String val) {
+                          deleteChat();
+                        },
+                      ),
+                    ),
+                    contentPadding: const EdgeInsets.only(left: 0),
+                    title: Text(
+                      args.username,
+                      style: Theme.of(context).textTheme.bodyLarge,
+                    ),
+                    leading: UserAvatarWithBadge(
+                      user: args,
+                      height: 52.0,
+                      width: 52.0,
+                      radius: 50.0,
+                      placeHolder: Icons.person,
+                      iconSize: 36.0,
+                    ),
+                    subtitle: Text(
+                      args.bio ?? '',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyMedium
+                          ?.copyWith(color: textColor.withOpacity(0.6)),
                     ),
                   ),
-                  contentPadding: const EdgeInsets.only(left: 0),
-                  title: Text(
-                    args.username,
-                    style: Theme.of(context).textTheme.bodyLarge,
-                  ),
-                  leading: UserAvatarWithBadge(
-                    user: args,
-                    height: 52.0,
-                    width: 52.0,
-                    radius: 50.0,
-                    placeHolder: Icons.person,
-                    iconSize: 36.0,
-                  ),
-                  subtitle: Text(
-                    args.bio ?? '',
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyMedium
-                        ?.copyWith(color: textColor.withOpacity(0.6)),
-                  ),
-                ),
+                  previousScreen == '/bottomNavScreen'
+                      ? Padding(
+                          padding: const EdgeInsets.only(left: 5.0),
+                          child: Row(
+                            children: [
+                              const Icon(
+                                Icons.star,
+                                color: Color.fromRGBO(255, 202, 40, 1),
+                                size: 16,
+                              ),
+                              Text(
+                                args.averageRating.toString(),
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 13),
+                              ),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              Stack(
+                                children: [
+                                  Container(
+                                    decoration: BoxDecoration(
+                                        color: backgroundcolorinterface,
+                                        borderRadius:
+                                            BorderRadius.circular(20)),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Row(
+                                        children: [
+                                          GestureDetector(
+                                            onTap: () {
+                                              Get.to(() => SellerReviewScreen(
+                                                  user: args));
+                                            },
+                                            child: Text(
+                                              args.averageRating!.toDouble() > 0
+                                                  ? 'Seller reviews'
+                                                  : 'Rate Seller',
+                                              style: const TextStyle(
+                                                color: primaryColorLT,
+                                                fontSize: 13,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                          ),
+                                          const SizedBox(
+                                            width: 10,
+                                          ),
+                                          SvgPicture.asset(
+                                              'assets/svgs/nexticon.svg')
+                                        ],
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ],
+                          ),
+                        )
+                      : Container()
+                ],
               ),
-              toolbarHeight: 48.0 + 28.0,
+              toolbarHeight: previousScreen == '/bottomNavScreen'
+                  ? 48.0 + 78.0
+                  : 48.0 + 28.0,
             ),
-            body: SizedBox(
+            body: Container(
               width: double.infinity,
-              height: double.infinity,
               child: Stack(
                 children: [
                   Container(
@@ -155,69 +236,251 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                                   controller.extractConversations(args.uid,
                                       _profileController.myProfile.uid)[i];
                               // final reversedIndex = _messages.length - 1 - i;
-                              return InkWell(
-                                  onLongPress: () {
-                                    FocusScopeNode currentFocus =
-                                        FocusScope.of(context);
-                                    if (!currentFocus.hasPrimaryFocus) {
-                                      currentFocus.unfocus();
-                                    }
+                              return Column(
+                                children: [
+                                  InkWell(
+                                      onLongPress: () {
+                                        FocusScopeNode currentFocus =
+                                            FocusScope.of(context);
+                                        if (!currentFocus.hasPrimaryFocus) {
+                                          currentFocus.unfocus();
+                                        }
 
-                                    showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) => AlertDialog(
-                                        content: Column(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            ListTile(
-                                              onTap: () async {
-                                                navigateTo(context);
-                                                await Clipboard.setData(
-                                                  ClipboardData(
-                                                    text: message.messageText!,
+                                        showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) =>
+                                              AlertDialog(
+                                            content: Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                ListTile(
+                                                  onTap: () async {
+                                                    navigateTo(context);
+                                                    await Clipboard.setData(
+                                                      ClipboardData(
+                                                        text: message
+                                                            .messageText!,
+                                                      ),
+                                                    );
+                                                    // ignore: use_build_context_synchronously
+                                                    showSnackBar(context,
+                                                        message:
+                                                            'Text Copied!');
+                                                  },
+                                                  contentPadding:
+                                                      EdgeInsets.zero,
+                                                  title: const TextWidget(
+                                                    text: 'Copy Text',
                                                   ),
-                                                );
-                                                showSnackBar(context,
-                                                    message: 'Text Copied!');
-                                              },
-                                              contentPadding: EdgeInsets.zero,
-                                              title: const TextWidget(
-                                                text: 'Copy Text',
-                                              ),
+                                                ),
+                                                ListTile(
+                                                  onTap: () {
+                                                    navigateTo(context);
+                                                    optionsDialog(context, () {
+                                                      // _isLoading = true;
+                                                      Navigator.pop(context);
+                                                      // deleteMessage(
+                                                      //     _messages[reversedIndex],
+                                                      //     reversedIndex);
+                                                      // if (reversedIndex ==
+                                                      //     _messages.length - 1) {
+                                                      //   DeleteLastMessage(_messages[
+                                                      //       reversedIndex]);
+                                                      // }
+                                                    });
+                                                  },
+                                                  contentPadding:
+                                                      EdgeInsets.zero,
+                                                  title: const TextWidget(
+                                                    text: 'Delete Message',
+                                                    color: Colors.red,
+                                                  ),
+                                                )
+                                              ],
                                             ),
-                                            ListTile(
-                                              onTap: () {
-                                                navigateTo(context);
-                                                optionsDialog(context, () {
-                                                  // _isLoading = true;
-                                                  Navigator.pop(context);
-                                                  // deleteMessage(
-                                                  //     _messages[reversedIndex],
-                                                  //     reversedIndex);
-                                                  // if (reversedIndex ==
-                                                  //     _messages.length - 1) {
-                                                  //   DeleteLastMessage(_messages[
-                                                  //       reversedIndex]);
-                                                  // }
-                                                });
-                                              },
-                                              contentPadding: EdgeInsets.zero,
-                                              title: const TextWidget(
-                                                text: 'Delete Message',
-                                                color: Colors.red,
-                                              ),
-                                            )
-                                          ],
-                                        ),
-                                      ),
-                                    );
+                                          ),
+                                        );
 
-                                    // deleteMessage(_messages[reversedIndex]);
-                                  },
-                                  child: ChatBox(
-                                    message,
-                                    myUid: _profileController.myProfile.uid,
-                                  ));
+                                        // deleteMessage(_messages[reversedIndex]);
+                                      },
+                                      child: ChatBox(
+                                        message,
+                                        myUid: _profileController.myProfile.uid,
+                                      )),
+                                  i == 0 && frommarketplace
+                                      ? Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.end,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.end,
+                                          children: [
+                                              Container(
+                                                decoration: BoxDecoration(
+                                                  color: Colors.white,
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                ),
+                                                child: Stack(
+                                                  children: [
+                                                    ClipRRect(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10),
+                                                      child: Image.asset(
+                                                        'assets/images/img1.png',
+                                                        fit: BoxFit.cover,
+                                                        height: 300,
+                                                      ),
+                                                    ),
+                                                    Positioned.fill(
+                                                      child: Align(
+                                                        alignment: Alignment
+                                                            .bottomCenter,
+                                                        child: Container(
+                                                            color: Colors.white,
+                                                            width:
+                                                                double.infinity,
+                                                            height: 100,
+                                                            child: Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                          .only(
+                                                                      left:
+                                                                          20.0,
+                                                                      right: 20,
+                                                                      top: 20),
+                                                              child: Column(
+                                                                children: [
+                                                                  const Row(
+                                                                    mainAxisAlignment:
+                                                                        MainAxisAlignment
+                                                                            .start,
+                                                                    children: <Widget>[
+                                                                      Text(
+                                                                        'price',
+                                                                        style:
+                                                                            TextStyle(
+                                                                          fontWeight:
+                                                                              FontWeight.w800,
+                                                                        ),
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                  DetectableText(
+                                                                    text:
+                                                                        'post description',
+                                                                    detectionRegExp:
+                                                                        detectionRegExp(
+                                                                            hashtag:
+                                                                                false)!,
+                                                                    detectedStyle:
+                                                                        bodyText2
+                                                                            .copyWith(
+                                                                      color: Colors
+                                                                          .blue,
+                                                                    ),
+                                                                    moreStyle:
+                                                                        bodyText2
+                                                                            .copyWith(
+                                                                      color: Colors
+                                                                          .redAccent,
+                                                                    ),
+                                                                    lessStyle:
+                                                                        bodyText2
+                                                                            .copyWith(
+                                                                      color: Colors
+                                                                          .redAccent,
+                                                                    ),
+                                                                    trimExpandedText:
+                                                                        '  show less',
+                                                                    basicStyle:
+                                                                        bodyText2.copyWith(
+                                                                            color:
+                                                                                textColor),
+                                                                    onTap:
+                                                                        (_) {},
+                                                                  ),
+                                                                  const SizedBox(
+                                                                    height: 2,
+                                                                  ),
+                                                                  Row(
+                                                                    children: [
+                                                                      SvgPicture
+                                                                          .asset(
+                                                                              'assets/svgs/location.svg'),
+                                                                      const SizedBox(
+                                                                        width:
+                                                                            1,
+                                                                      ),
+                                                                      const Text(
+                                                                        'location',
+                                                                        style: TextStyle(
+                                                                            fontWeight: FontWeight
+                                                                                .normal,
+                                                                            fontSize:
+                                                                                12,
+                                                                            color:
+                                                                                subtextColor),
+                                                                        overflow:
+                                                                            TextOverflow.ellipsis,
+                                                                        softWrap:
+                                                                            false,
+                                                                      ),
+                                                                      const SizedBox(
+                                                                        width:
+                                                                            5,
+                                                                      ),
+                                                                      SvgPicture
+                                                                          .asset(
+                                                                              'assets/svgs/category.svg'),
+                                                                      const SizedBox(
+                                                                        width:
+                                                                            3,
+                                                                      ),
+                                                                      const Text(
+                                                                        'category',
+                                                                        style: TextStyle(
+                                                                            fontWeight: FontWeight
+                                                                                .normal,
+                                                                            fontSize:
+                                                                                12,
+                                                                            color:
+                                                                                subtextColor),
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            )),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              const SizedBox(
+                                                height: 10,
+                                              ),
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    left: 50.0, bottom: 20),
+                                                child: ClipRRect(
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                  child: Container(
+                                                    color: backgroundColor,
+                                                    child: const Padding(
+                                                      padding:
+                                                          EdgeInsets.all(15.0),
+                                                      child: Text(
+                                                          'Safety tips \n\n\• Check seller offers buyer protection before making payment \n\• On delivery, check that the item delivered is what you ordered \n\• Report any seller you’ve any concerns about'),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ])
+                                      : Container()
+                                ],
+                              );
                             },
                           ),
                   ),

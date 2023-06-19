@@ -143,8 +143,6 @@ class _CreateBossUpScreenState extends State<CreateBossUpScreen> {
                     child: FieldContainer(
                       child: Row(
                         children: [
-                          SvgPicture.asset('assets/svgs/file.svg'),
-                          const SizedBox(width: 16.0),
                           Expanded(
                             child: Text('Add Attachment',
                                 style: Theme.of(context)
@@ -153,7 +151,14 @@ class _CreateBossUpScreenState extends State<CreateBossUpScreen> {
                                     ?.copyWith(color: hintColor)),
                           ),
                           const SizedBox(width: 16.0),
-                          SvgPicture.asset('assets/svgs/upload.svg'),
+                          CircleAvatar(
+                            radius: 26 / 1.38,
+                            backgroundColor: backgroundColor,
+                            child: SvgPicture.asset(
+                              'assets/svgs/addimagepost.svg',
+                              height: 18,
+                            ),
+                          ),
                         ],
                       ),
                     ),

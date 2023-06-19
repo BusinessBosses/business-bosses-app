@@ -130,6 +130,29 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
               return SizedBox(
                 height: MediaQuery.of(context).size.height,
                 width: MediaQuery.of(context).size.width,
+                color: Colors.white,
+                child: IndexedStack(
+                  index: _activeIndex,
+                  children: const <Widget>[
+                    HomeScreen(),
+                    AllCommunitiesScreen(),
+                    MarketplaceScreen(),
+                    MyProfileScreen(),
+                  ],
+                ),
+              ),
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: Container(
+                  height: 103.0,
+                  decoration: BoxDecoration(
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.08),
+                        spreadRadius: 10,
+                        blurRadius: 50,
+                        offset:
+                            const Offset(0, 7), // changes position of shadow
                 child: Stack(
                   children: <Widget>[
                     Container(

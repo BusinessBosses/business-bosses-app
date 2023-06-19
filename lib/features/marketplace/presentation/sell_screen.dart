@@ -101,10 +101,28 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
             ],
           ),
           body: SingleChildScrollView(
-            padding: const EdgeInsets.only(top: 16.0, left: 16.0, right: 16.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
+                Padding(
+                  padding:
+                      const EdgeInsets.only(left: 20.0, right: 20, top: 16),
+                  child: TextFormField(
+                    initialValue: price,
+                    onChanged: (String val) => price = val,
+                    textInputAction: TextInputAction.next,
+                    keyboardType: TextInputType.text,
+                    maxLength: 15,
+                    decoration: inputDecoration.copyWith(
+                      hintText: 'Enter Price in USD (Example \$10)',
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 24.0),
+                Padding(
+                  padding: const EdgeInsets.only(left: 20.0, right: 20),
+                  child: DetectableTextField(
+                    controller: TextEditingController(text: description),
                 TextFormField(
                   controller: _priceController,
                   onChanged: (String val) => price = val,
@@ -119,18 +137,19 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
                 DetectableTextField(
                   controller: descriptionController,
 
-                  detectionRegExp: detectionRegExp(hashtag: false)!,
-                  onDetectionTyped: (String text) {},
-                  onDetectionFinished: () {},
-                  keyboardType: TextInputType.multiline,
-                  // minLines: 5,
-                  maxLength: 300,
-                  maxLines: 5,
-                  basicStyle: Theme.of(context).textTheme.bodyMedium,
-                  onChanged: (String val) => description = val,
+                    detectionRegExp: detectionRegExp(hashtag: false)!,
+                    onDetectionTyped: (String text) {},
+                    onDetectionFinished: () {},
+                    keyboardType: TextInputType.multiline,
+                    // minLines: 5,
+                    maxLength: 300,
+                    maxLines: 5,
+                    basicStyle: Theme.of(context).textTheme.bodyMedium,
+                    onChanged: (String val) => description = val,
 
-                  decoration: inputDecoration.copyWith(
-                    hintText: 'Describe your Listing',
+                    decoration: inputDecoration.copyWith(
+                      hintText: 'Describe your Listing',
+                    ),
                   ),
                 ),
                 const SizedBox(height: 12.0),
@@ -140,12 +159,12 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
                     borderRadius: BorderRadius.circular(radiusValue),
                   ),
                   padding: const EdgeInsets.only(
-                    left: 16.0,
-                    right: 16,
+                    left: 20.0,
+                    right: 20,
                     top: 4,
                     bottom: 5,
                   ),
-                  margin: const EdgeInsets.only(left: 10, right: 10),
+                  margin: const EdgeInsets.only(left: 20, right: 20),
                   child: DropdownButton<String>(
                     underline: Container(),
                     value: _selectedCategory,
@@ -208,6 +227,8 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
                   pickerBuilder:
                       (BuildContext context, CountryCode? countryCode) {
                     return Container(
+                      margin: const EdgeInsets.only(left: 10, right: 10),
+                      padding: const EdgeInsets.only(left: 5, right: 5),
                       decoration: BoxDecoration(
                         color: backgroundcolorinterface,
                         borderRadius: BorderRadius.circular(radiusValue),
@@ -233,6 +254,56 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
                 const SizedBox(
                   height: 12,
                 ),
+                GestureDetector(
+                  onTap: () {
+                    if (createMarketController.imageFileList.length < 5) {
+                      createMarketController.onPickImage();
+                    } else {
+                      showSnackbar(
+                          message: 'You can only upload up to 5 images.');
+                    }
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 20.0, right: 20),
+                    child: FieldContainer(
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Text('Add Attachment',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium
+                                    ?.copyWith(color: hintColor)),
+                          ),
+                          const SizedBox(width: 16.0),
+                          CircleAvatar(
+                            radius: 26 / 1.38,
+                            backgroundColor: backgroundColor,
+                            child: SvgPicture.asset(
+                              'assets/svgs/addimagepost.svg',
+                              height: 18,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 8.0),
+                Preview(controller: createMarketController),
+                Column(
+                  children: [
+                    const SizedBox(
+                      width: double.infinity,
+                      height: 1,
+                      child: ColoredBox(color: backgroundcolorinterface),
+                    ),
+                    SizedBox(
+                      height: 55,
+                      child: Align(
+                        alignment: Alignment.center,
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 20.0, right: 20),
                 widget.isUpd
                     ? const SizedBox()
                     : GestureDetector(
@@ -256,12 +327,47 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
                                         .bodyMedium
                                         ?.copyWith(color: hintColor)),
                               ),
+                              const Spacer(),
+                              const Text(
+                                'No',
+                                style: TextStyle(fontWeight: FontWeight.w600),
+                              ),
+                              Switch(
+                                value: _shouldPromote,
+                                onChanged: (bool value) {
+                                  setState(() {
+                                    _shouldPromote = value;
+                                  });
+                                },
+                              ),
+                              const Text(
+                                'Yes',
+                                style: TextStyle(fontWeight: FontWeight.w600),
+                              ),
                               const SizedBox(width: 16.0),
                               SvgPicture.asset('assets/svgs/upload.svg'),
                             ],
                           ),
                         ),
                       ),
+                    ),
+                    const SizedBox(
+                      width: double.infinity,
+                      height: 1,
+                      child: ColoredBox(color: backgroundcolorinterface),
+                    ),
+                    if (_shouldPromote)
+                      Padding(
+                        padding: const EdgeInsets.only(left: 20.0, right: 20),
+                        child: Stack(
+                          children: [
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: Image.asset(
+                                'assets/images/boostbanner.png',
+                                width: size.width,
+                                height: size.width / 2,
+                                fit: BoxFit.cover,
                 const SizedBox(height: 8.0),
                 widget.isUpd
                     ? const SizedBox()
@@ -370,6 +476,28 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
                           const SizedBox(height: 24.0),
                         ],
                       ),
+                    const SizedBox(height: 24.0),
+                  ],
+                ),
+                Padding(
+                  padding:
+                      const EdgeInsets.only(left: 20.0, right: 20, bottom: 50),
+                  child: MCustomButton(
+                    onPressed: () async {
+                      if ((description?.isEmpty == true) ||
+                          (price?.isEmpty == true)) {
+                        showSnackBar(context,
+                            message:
+                                'Please select price and description to create a listing');
+                        return;
+                      } else {
+                        await _onChangeForum();
+                      }
+                    },
+                    label: _isUpdating! ? 'Update' : 'Sell',
+                    isProcessing: _isProcessing,
+                    buttonType: ButtonType.elevated,
+                  ),
                 MCustomButton(
                   onPressed: () async {
                     setState(() {

@@ -25,10 +25,6 @@ class _UserProfileTileState extends State<UserProfileTile> {
     // setState(() {});
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.only(
-        top: 0.0,
-        bottom: 0.0,
-      ),
       child: Row(
         children: [
           Stack(
@@ -123,21 +119,54 @@ class _UserProfileTileState extends State<UserProfileTile> {
                           fontWeight: FontWeight.bold,
                         ),
                   ),
-                  Text(widget.myProfile.companyName ?? '',
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyLarge
-                          ?.copyWith(fontWeight: FontWeight.normal)),
-                  Text(
-                    widget.myProfile.location ?? '',
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: textColor.withOpacity(0.6),
-                        ),
-                  ),
+                  widget.myProfile?.companyName != null &&
+                          widget.myProfile.companyName == ''
+                      ? Text(
+                          widget.myProfile.companyName!,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyLarge
+                              ?.copyWith(fontWeight: FontWeight.normal),
+                        )
+                      : Container(),
+                  widget.myProfile?.location != null &&
+                          widget.myProfile.location == ''
+                      ? Text(
+                          widget.myProfile.location ?? '',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style:
+                              Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                    color: textColor.withOpacity(0.6),
+                                  ),
+                        )
+                      : Container(),
+                  widget.myProfile?.companyName != null &&
+                          widget.myProfile.companyName == ''
+                      ? Text(
+                          widget.myProfile.companyName!,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyLarge
+                              ?.copyWith(fontWeight: FontWeight.normal),
+                        )
+                      : Container(),
+                  widget.myProfile?.location != null &&
+                          widget.myProfile.location == ''
+                      ? Text(
+                          widget.myProfile.location ?? '',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style:
+                              Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                    color: textColor.withOpacity(0.6),
+                                  ),
+                        )
+                      : Container(),
                   if (!widget.myProfile.isSubscribed)
                     GestureDetector(
                       onTap: () {
@@ -154,15 +183,26 @@ class _UserProfileTileState extends State<UserProfileTile> {
                           ],
                         ),
                         child: Align(
-                          alignment: Alignment.center,
+                          alignment: Alignment.centerLeft,
                           child: Stack(
-                            alignment: Alignment.center,
+                            alignment: Alignment.centerLeft,
                             children: [
                               SvgPicture.asset(
                                 'assets/svgs/subscribebuttonback.svg',
                                 width: 200,
                                 fit: BoxFit.contain,
                               ),
+                              Padding(
+                                padding: const EdgeInsets.only(left: 15.0),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    const Text(
+                                      'Subscribe to Premium',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 15,
+                                      ),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
@@ -172,14 +212,14 @@ class _UserProfileTileState extends State<UserProfileTile> {
                                       fontWeight: FontWeight.w700,
                                       fontSize: 15,
                                     ),
-                                  ),
-                                  const SizedBox(
-                                    width: 20,
-                                  ),
-                                  SvgPicture.asset(
-                                    'assets/svgs/nextbutton.svg',
-                                  ),
-                                ],
+                                    const SizedBox(
+                                      width: 10,
+                                    ),
+                                    SvgPicture.asset(
+                                      'assets/svgs/nextbutton.svg',
+                                    ),
+                                  ],
+                                ),
                               ),
                             ],
                           ),
