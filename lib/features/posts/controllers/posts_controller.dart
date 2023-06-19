@@ -2,6 +2,7 @@ import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/common/models/comment_model.dart';
 import 'package:business_bosses_v2/common/widgets/text_widget.dart';
 import 'package:business_bosses_v2/features/forum/models/forum_model.dart';
+import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/posts/models/post_model.dart';
 import 'package:business_bosses_v2/features/posts/repository/post_repository.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
@@ -32,7 +33,7 @@ class PostsController extends GetxController {
         'likes': psts[i]['likes']
             .map((dynamic like) => like['userId'].toString())
             .toList(),
-        'coins': psts[i]['likes']
+        'coins': psts[i]['coins']
             .map((dynamic coin) => coin['userId'].toString())
             .toList()
       }));
@@ -138,7 +139,7 @@ class PostsController extends GetxController {
 
   /// COIN AND UNCOIN FUNCTION
   void postCoin(String userId, String postId,
-      ProfileController profileController, String type) {
+      ProfileController profileController, String type, String receiverUid) {
     if (type == 'post') {
       final int postIndex =
           posts.indexWhere((PostModel element) => element.postId == postId);
@@ -157,8 +158,11 @@ class PostsController extends GetxController {
           'postId': postId,
           'userId': userId,
           'type': type,
+          'timestamp': DateTime.now().millisecondsSinceEpoch,
+          'receiverUid': receiverUid,
         });
       }
+      print(postId);
     } else {
       final int postIndex =
           forums.indexWhere((ForumModel element) => element.forumId == postId);
@@ -177,6 +181,7 @@ class PostsController extends GetxController {
           'postId': postId,
           'userId': userId,
           'type': type,
+          'timestamp': DateTime.now().millisecondsSinceEpoch
         });
       }
     }

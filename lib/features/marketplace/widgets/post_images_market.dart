@@ -11,7 +11,7 @@ class PostImagesMarket extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return post.images!.isEmpty == true ||
+    return post.images?.isEmpty == true ||
             post.images == null ||
             post.images?[0] == ''
         ? const SizedBox()

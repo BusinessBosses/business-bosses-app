@@ -72,6 +72,20 @@ class MarketController extends GetxController {
     update();
   }
 
+  Future<void> updatePost(Map<String, dynamic> updatedPost) async {
+    final int postIndex = markets.indexWhere(
+        (MarketModel element) => element.marketId == updatedPost['marketId']);
+    if (postIndex != -1) {
+      MarketModel modelizedUpdatedPost = MarketModel.fromMap({
+        ...updatedPost,
+      });
+
+      markets[postIndex] = modelizedUpdatedPost;
+
+      update();
+    }
+  }
+
   void filterMarket(String? location, String? category) async {
     loading(true);
     error(false);

@@ -5,7 +5,7 @@ import 'package:flutter_svg/svg.dart';
 
 /// Icon Text Button
 class IconTextButton extends StatelessWidget {
-  final Function onPressed;
+  final VoidCallback onPressed;
   final double width, height;
   final Color backgroundColor;
   final BorderRadius borderRadius;
@@ -32,7 +32,7 @@ class IconTextButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       borderRadius: borderRadius,
-      onTap: () {},
+      onTap: onPressed,
       child: Ink(
         width: width,
         height: height,

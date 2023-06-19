@@ -2,6 +2,7 @@
 
 import 'package:business_bosses_v2/features/connects/controller/referrals_controller.dart';
 import 'package:business_bosses_v2/features/connects/presentation/referals_screen.dart';
+import 'package:business_bosses_v2/features/posts/presentation/confirmation.dart';
 import 'package:business_bosses_v2/features/settings/community_rules_screen.dart';
 import 'package:business_bosses_v2/analytics/presentation/my_ranking_screen.dart';
 import 'package:business_bosses_v2/analytics/presentation/profile_analyse_screen.dart';
@@ -36,6 +37,7 @@ import 'package:business_bosses_v2/features/search/presentation/complete_searchi
 import 'package:business_bosses_v2/features/settings/invite_a_friendscreen.dart';
 import 'package:business_bosses_v2/features/settings/settingsscreen.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
+import 'package:business_bosses_v2/premium/premiumscreen.dart';
 import 'package:get/get.dart';
 
 import '../features/forum/presentation/create_bossup_screen.dart';
@@ -119,6 +121,10 @@ class Nav {
       page: () => const ReferScreen(),
     ),
     GetPage(
+      name: Routes.transactionConfirmation,
+      page: () => const Confirmation(),
+    ),
+    GetPage(
       name: Routes.allconnectionsscreen,
       page: () => AllConnectionsScreen(),
     ),
@@ -172,16 +178,20 @@ class Nav {
       page: () => const MyRankingScreen(),
     ),
     GetPage(
-      name: Routes.relevantusersscreen,
-      page: () => const RelevantUsersScreen(),
-    ),
+        name: Routes.relevantusersscreen,
+        page: () => const RelevantUsersScreen(),
+        binding: BindingsBuilder.put(() => CompleteSearchController())),
     GetPage(
-      name: Routes.profileanalysescreen,
-      page: () => const ProfileAnalyseScreen(),
-    ),
+        name: Routes.profileanalysescreen,
+        page: () => const ProfileAnalyseScreen(),
+        binding: BindingsBuilder.put(() => CompleteSearchController())),
     GetPage(
       name: Routes.inviteafriendscreen,
       page: () => const InviteAFriendTermsAndConditions(),
+    ),
+    GetPage(
+      name: Routes.premiumscreen,
+      page: () => const PremiumScreen(),
     ),
   ];
 }
