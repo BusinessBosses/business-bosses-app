@@ -21,6 +21,7 @@ class HomeController extends GetxController {
   final MarketController _marketController = Get.put(MarketController());
   RxBool error = RxBool(false);
   RxBool loading = RxBool(false);
+  List<Map<String, dynamic>>? bossUp = [];
   RxBool refreshing = RxBool(false);
 
   /// SHOW WHEN ACCESS TOKEN EXPIRES
@@ -106,6 +107,7 @@ class HomeController extends GetxController {
     error(false);
     update();
     final ApiResponseModel response = await HomeRepository.fetchData();
+    final ApiResponseModel partner = await HomeRepository.fetchPartner();
     if (response.success) {
       _postsController.processPostsAndForumsData(response.data['posts']);
       _profileController.processDataToState(response.data['user']);
@@ -115,6 +117,10 @@ class HomeController extends GetxController {
       _marketController.initMarket();
       _marketController.initUsers();
       addCoinDaily();
+      if (partner.data['count'] > 0) {
+        bossUp?.addAll(partner.data['rows'].cast<Map<String, dynamic>>());
+        print(bossUp);
+      }
     } else {
       error(true);
       socket.disconnect();
