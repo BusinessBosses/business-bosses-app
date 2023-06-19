@@ -514,8 +514,10 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
                                                 .getCategoryIndustries(
                                                     Constants.LEARNINGID)[index]
                                                 .industry!,
-                                            photo:
-                                                'http://44.210.87.234/learningImages/events.jpg',
+                                            photo: controller
+                                                .getCategoryIndustries(
+                                                    Constants.LEARNINGID)[index]
+                                                .photo!,
                                             onTap: () {
                                               Get.toNamed(
                                                 Routes.allforumscreen,
@@ -565,7 +567,10 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
                                                     .OPPORTUNITIESID)[index]
                                                 .industry!,
                                             photo:
-                                                'http://44.210.87.234/learningImages/events.jpg',
+                                                controller
+                                                .getCategoryIndustries(Constants
+                                                    .OPPORTUNITIESID)[index]
+                                                .photo!,
                                             onTap: () {
                                               Get.toNamed(Routes.allforumscreen,
                                                   arguments: controller

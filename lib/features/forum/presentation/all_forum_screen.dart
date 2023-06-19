@@ -180,8 +180,7 @@ class _AllForumScreenState extends State<AllForumScreen> {
                                                 child: FittedBox(
                                                   fit: BoxFit.fill,
                                                   child: CachedNetworkImage(
-                                                    imageUrl:
-                                                        'http://44.210.87.234/learningImages/events.jpg',
+                                                    imageUrl: industry.photo!,
                                                     memCacheHeight: 256,
                                                     memCacheWidth: 256,
                                                     placeholder: (BuildContext
