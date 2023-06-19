@@ -63,4 +63,10 @@ class HomeRepository {
       return response;
     }
   }
+
+  /// Fetch BossUp Partner
+  static Future<ApiResponseModel> fetchPartner() async {
+    final ApiResponseModel response = await ApiService.get(path: 'partner/all');
+    return response;
+  }
 }

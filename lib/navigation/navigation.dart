@@ -2,6 +2,7 @@
 
 import 'package:business_bosses_v2/features/connects/controller/referrals_controller.dart';
 import 'package:business_bosses_v2/features/connects/presentation/referals_screen.dart';
+import 'package:business_bosses_v2/features/posts/presentation/confirmation.dart';
 import 'package:business_bosses_v2/features/settings/community_rules_screen.dart';
 import 'package:business_bosses_v2/analytics/presentation/my_ranking_screen.dart';
 import 'package:business_bosses_v2/analytics/presentation/profile_analyse_screen.dart';
@@ -118,6 +119,10 @@ class Nav {
     GetPage(
       name: Routes.referscreen,
       page: () => const ReferScreen(),
+    ),
+    GetPage(
+      name: Routes.transactionConfirmation,
+      page: () => const Confirmation(),
     ),
     GetPage(
       name: Routes.allconnectionsscreen,

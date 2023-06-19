@@ -19,6 +19,7 @@ import '../../../common/models/comment_model.dart';
 import '../../../common/widgets/buttons/my_outlined_button.dart';
 import '../controllers/market_controller.dart';
 import '../models/market_model.dart';
+import '../presentation/sell_screen.dart';
 import '../presentation/seller_reviews.dart';
 import 'post_like_comment.dart';
 
@@ -171,6 +172,12 @@ class _MarketTileState extends State<MarketTile> {
                                     ),
                                     onSelected: (String val) {
                                       if (val == 'Edit') {
+                                        Get.to(
+                                          () => CreateSellingitemScreen(
+                                            isUpd: true,
+                                            market: widget.post,
+                                          ),
+                                        );
                                       } else if (val == 'Delete') {
                                         showDialog(
                                           context: context,

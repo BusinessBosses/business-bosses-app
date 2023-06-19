@@ -203,6 +203,14 @@ class _UserProfileTileState extends State<UserProfileTile> {
                                         fontWeight: FontWeight.w700,
                                         fontSize: 15,
                                       ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const Text(
+                                    'Subscribe to Premium',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w700,
+                                      fontSize: 15,
                                     ),
                                     const SizedBox(
                                       width: 10,

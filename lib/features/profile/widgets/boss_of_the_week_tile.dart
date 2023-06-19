@@ -9,6 +9,7 @@ import '../../../common/widgets/popup/bossup_challenge_popup.dart';
 import '../../../navigation/routes.dart';
 import '../../../services/api_service.dart';
 import '../../../utils/theme/theme.dart';
+import '../../home/controller/home_controller.dart';
 import '../../moreinfoscreens/bossuppartner.dart';
 import '../controller/profile_controller.dart';
 
@@ -27,6 +28,7 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
   bool connectedbutton = true;
   final ProfileController _profileController = Get.find();
   late UserModel? user;
+  final HomeController homeController = Get.find();
 
   @override
   void initState() {
@@ -273,8 +275,32 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                                 child: Padding(
                                   padding: EdgeInsets.all(2),
                                   child: Text('Boss Up by'),
+                homeController.bossUp != null &&
+                        homeController.bossUp!.isNotEmpty
+                    ? GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (BuildContext context) =>
+                                    const Bossuppartner()),
+                          );
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.only(right: 15, top: 5),
+                          child: Container(
+                            height: 40,
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFF4F4F4),
+                              borderRadius: BorderRadius.circular(10),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey.withOpacity(0.3),
+                                  spreadRadius: 20,
+                                  blurRadius: 500,
+                                  offset: const Offset(0, 3),
                                 ),
-                              ),
+                              ],
                             ),
                             const SizedBox(width: 10),
                             Text(
@@ -300,6 +326,47 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                     ),
                   ),
                 ),
+                            child: Row(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                    left: 10,
+                                  ),
+                                  child: Container(
+                                    height: 25,
+                                    width: 100,
+                                    decoration: BoxDecoration(
+                                      color: const Color(0xFFEAEAEA),
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                    child: const Center(
+                                      child: Padding(
+                                        padding: EdgeInsets.all(2),
+                                        child: Text('Boss Up by'),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(width: 10),
+                                Text(
+                                  homeController.bossUp != null &&
+                                          homeController.bossUp!.isNotEmpty
+                                      ? homeController
+                                              .bossUp!.last['companyName'] ??
+                                          ''
+                                      : '',
+                                  style: const TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold,
+                                    decoration: TextDecoration.underline,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      )
+                    : const SizedBox(),
               ],
             )
           : qouteWidget(quotes),

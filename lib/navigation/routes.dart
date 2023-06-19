@@ -7,6 +7,7 @@ class Routes {
   }
 
   static const String home = '/homeScreen';
+  static const String allCommunitiesScreen = '/bossupScreen';
   static const String login = '/loginScreen';
   static const String registration = '/registerScreen';
   static const String codeVerification = '/codeVerificationScreen';
@@ -24,6 +25,7 @@ class Routes {
   static const String marketPlace = '/marketPlaceScreen';
   static const String marketMembersScreen = '/marketMembersScreen';
   static const String createForum = '/createForumScreen';
+  static const String transactionConfirmation = '/transactionConfirmation';
   static const String createBossUp = '/createBossUpScreen';
   static const String settings = '/settingsScreen';
   static const String notifications = '/notificationsScreen';
