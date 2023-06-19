@@ -77,7 +77,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
           appBar: AppBar(
             leading: IconButton(
               onPressed: () {
-                Get.back();
+                Navigator.pop(context);
               },
               icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
             ),

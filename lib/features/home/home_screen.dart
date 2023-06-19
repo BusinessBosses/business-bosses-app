@@ -143,7 +143,6 @@ class _HomeScreenState extends State<HomeScreen> {
     // Call the loadPosts() function from the PostsController
     // await Get.find<PostsController>().loadPosts();
     await Get.find<HomeController>().refreshData();
-    print('working');
 
     setState(() {});
   }

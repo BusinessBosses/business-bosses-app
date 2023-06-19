@@ -205,7 +205,13 @@ class _UserProfileTileState extends State<UserProfileTile> {
                                               fontWeight: FontWeight.w700,
                                               fontSize: 15,
                                             ),
-                                          )
+                                          ),
+                                          const SizedBox(
+                                            width: 15,
+                                          ),
+                                          SvgPicture.asset(
+                                            'assets/svgs/nextbutton.svg',
+                                          ),
                                         ],
                                       ),
                                     ),
