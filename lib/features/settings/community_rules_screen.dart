@@ -93,7 +93,7 @@ class _CommunityRulesScreenState extends State<CommunityRulesScreen> {
                   child: Container(
                     width: 40,
                     height: 40,
-                    child: CircularProgressIndicator(),
+                    child: const CircularProgressIndicator(),
                   ),
                 )
               : Text(

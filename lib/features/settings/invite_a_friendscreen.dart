@@ -104,7 +104,7 @@ class _InviteAFriendTermsAndConditionsState
                   child: Container(
                     width: 40,
                     height: 40,
-                    child: CircularProgressIndicator(),
+                    child: const CircularProgressIndicator(),
                   ),
                 )
               : Text(
