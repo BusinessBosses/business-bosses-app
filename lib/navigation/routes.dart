@@ -10,7 +10,6 @@ class Routes {
   static const String allCommunitiesScreen = '/bossupScreen';
   static const String login = '/loginScreen';
   static const String registration = '/registerScreen';
-  static const String allCommunitiesScreen = '/bossupScreen';
   static const String codeVerification = '/codeVerificationScreen';
   static const String otpScreen = '/otpScreen';
   static const String resetPassword = '/resetPasswordScreen';
