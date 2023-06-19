@@ -30,6 +30,7 @@ class _PromotionScreenState extends State<PromotionScreen> {
 
   @override
   Widget build(BuildContext context) {
+    ProfileController profileController = Get.find();
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -176,51 +177,53 @@ class _PromotionScreenState extends State<PromotionScreen> {
                             height: 10,
                           ),
                           Container(
-                            decoration: BoxDecoration(
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withOpacity(0.09),
-                                  blurRadius: 500.0,
-                                  spreadRadius: 0.0,
-                                ),
-                              ],
-                            ),
-                            child: Align(
-                              alignment: Alignment.center,
-                              child: Stack(
-                                alignment: Alignment.center,
-                                children: [
-                                  SvgPicture.asset(
-                                    'assets/svgs/subscribebuttonback.svg',
-                                    width: 200,
-                                    fit: BoxFit.contain,
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 0.0),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        const Text(
-                                          'Subscribe to Premium',
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.w700,
-                                            fontSize: 15,
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                          width: 15,
-                                        ),
-                                        SvgPicture.asset(
-                                          'assets/svgs/nextbutton.svg',
-                                        ),
-                                      ],
-                                    ),
+                              decoration: BoxDecoration(
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withOpacity(0.09),
+                                    blurRadius: 500.0,
+                                    spreadRadius: 0.0,
                                   ),
                                 ],
                               ),
-                            ),
-                          ),
+                              child: !profileController.myProfile.isSubscribed
+                                  ? Align(
+                                      alignment: Alignment.center,
+                                      child: Stack(
+                                        alignment: Alignment.center,
+                                        children: [
+                                          SvgPicture.asset(
+                                            'assets/svgs/subscribebuttonback.svg',
+                                            width: 200,
+                                            fit: BoxFit.contain,
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 0.0),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                const Text(
+                                                  'Subscribe to Premium',
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.w700,
+                                                    fontSize: 15,
+                                                  ),
+                                                ),
+                                                const SizedBox(
+                                                  width: 15,
+                                                ),
+                                                SvgPicture.asset(
+                                                  'assets/svgs/nextbutton.svg',
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    )
+                                  : Container()),
                         ],
                       ),
                     ),
