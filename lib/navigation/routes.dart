@@ -24,6 +24,7 @@ class Routes {
   static const String marketPlace = '/marketPlaceScreen';
   static const String marketMembersScreen = '/marketMembersScreen';
   static const String createForum = '/createForumScreen';
+  static const String transactionConfirmation = '/transactionConfirmation';
   static const String createBossUp = '/createBossUpScreen';
   static const String settings = '/settingsScreen';
   static const String notifications = '/notificationsScreen';

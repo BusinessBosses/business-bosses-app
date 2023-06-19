@@ -1,6 +1,6 @@
 // This is a generated file; do not edit or check into version control.
-FLUTTER_ROOT=/home/smartdev/fvm/versions/3.10.1
-FLUTTER_APPLICATION_PATH=/home/smartdev/Documents/business-bosses--v2
+FLUTTER_ROOT=/home/zarah/dev/flutter
+FLUTTER_APPLICATION_PATH=/home/zarah/dev/projects/mobile/flutter/business_bosses_v2
 COCOAPODS_PARALLEL_CODE_SIGN=true
 FLUTTER_BUILD_DIR=build
 FLUTTER_BUILD_NAME=1.0.0

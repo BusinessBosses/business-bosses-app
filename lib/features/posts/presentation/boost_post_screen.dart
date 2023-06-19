@@ -190,7 +190,7 @@ class _BoostPostState extends State<BoostPost> {
     super.initState();
     initPlan = plans[0]['amount'];
 
-    log(widget.postId);
+    // log(widget.postId);
   }
 
   @override

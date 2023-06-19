@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -8,6 +9,7 @@ import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../utils/theme/theme.dart';
 import '../action/action.dart';
@@ -28,7 +30,7 @@ class PremiumScreen extends StatefulWidget {
 class _PremiumScreenState extends State<PremiumScreen> {
   int _currentIndex = 0;
   String paymentMethodId = '';
-
+  final ProfileController _profileController = Get.find();
   final Map<int, Widget> _segments = {
     0: const Padding(
       padding: EdgeInsets.all(8),
@@ -91,17 +93,19 @@ class _PremiumScreenState extends State<PremiumScreen> {
 
   ///intialize the payment
   Future<void> makePayment() async {
-    try {
-      setState(() {
-        _isProcessing = true;
-      });
-      displaySheet();
-    } catch (e) {
-      log(e.toString());
-    }
-    setState(() {
-      _isProcessing = false;
+    final ApiResponseModel res =
+        await ApiService.post(path: 'subscription', body: {
+      'price': plans[_currentIndex]['price'],
+      'plan': plans[_currentIndex]['plan'],
     });
+
+    if (res.success) {
+      if (await canLaunchUrlString(res.data)) {
+        await launchUrlString(res.data, mode: LaunchMode.externalApplication);
+      }
+    } else {
+      showSnackBar(context, message: res.message);
+    }
   }
 
   @override
