@@ -58,111 +58,6 @@ class _SignUpFormState extends State<SignUpForm> {
     });
   }
 
-  void _handleGoogleSignUp() async {
-    setState(() {
-      _isProcessing = true;
-    });
-
-    try {
-      // Attempt to sign in with Google
-      final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
-
-      if (googleUser != null) {
-        // Sign in was successful
-        showSnackBar(context, message: 'Sign Up successful');
-        _authCred = googleUser.email;
-        _username = googleUser.displayName;
-        showDialog(
-            context: context,
-            builder: (context) => AlertDialog(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(26)),
-                  content: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      TextFormField(
-                        onChanged: (String val) {
-                          _password = val;
-                          setState(() {});
-                        },
-                        validator: Validator.passwordValidator,
-                        textInputAction: TextInputAction.done,
-                        obscureText: _invisiblePassword,
-                        keyboardType: TextInputType.visiblePassword,
-                        decoration: inputDecoration.copyWith(
-                          hintText: 'Enter your password',
-                          suffixIcon: _showHideIcon(PasswordField.password),
-                          hintStyle: const TextStyle(
-                            color: iconColor,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                          ),
-                          filled: true,
-                          fillColor: const Color(0xffF4F4F4),
-                        ),
-                      ),
-                      const SizedBox(height: 24.0),
-                      const SizedBox(height: 24.0),
-                      CustomButton(
-                        label: 'Sign Up',
-                        onPressed: () async {
-                          _formKey.currentState!.save();
-                          setState(() {
-                            _autoValidateMode = AutovalidateMode.always;
-                          });
-                          if (!_formKey.currentState!.validate()) return;
-                          // if (Validator.emailValidatorSignUp(_authCred,
-                          //             isUnique: _isUniqueEmail!) ==
-                          //         '' &&
-                          //     Validator.usernameValidator(_username!,
-                          //             isUnique: _isUniqueName!) ==
-                          //         '') {
-                          if (agreedToTerms) {
-                            setState(() {
-                              _autoValidateMode = AutovalidateMode.always;
-                              _isProcessing = true;
-                            });
-                          } else {
-                            Get.snackbar('Error',
-                                'Before signing up, you must agree to our Terms and Conditions');
-                            setState(() {
-                              _isProcessing = false;
-                            });
-                          }
-                          // } else {
-                          //   Get.snackbar('Error', 'Invalid Entries in Form');
-                          //   setState(() {
-                          //     _isProcessing = false;
-                          //   });
-                          // }
-                          setState(() {
-                            _isProcessing = false;
-                          });
-                        },
-                        isProcessing: _isProcessing,
-                        buttonType: ButtonType.elevated,
-                      ),
-                    ],
-                  ),
-                ));
-        dynamic user = await _handleRegister();
-        await _googleSignIn.disconnect();
-
-        setState(() {
-          _isProcessing = false;
-        });
-      } else {
-        // Sign in was canceled by the user
-        showSnackBar(context,
-            message: 'Opps!! Something went wrong. Try again');
-        setState(() {
-          _isProcessing = false;
-        });
-      }
-    } catch (error) {
-      // Error occurred during sign in
-      log('Here ->>>>>> $error');
-
   Future<GoogleSignInAccount?> _handleGoogleAuth() async {
     try {
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
@@ -534,7 +429,7 @@ class _SignUpFormState extends State<SignUpForm> {
             Stack(children: [
               SignInWithAppleButton(
                 height: 55,
-                text: 'Sign up with Apple',
+                text: 'SIgn up with Apple',
                 onPressed: () async {
                   AuthController().appleAuthentication();
                 },
