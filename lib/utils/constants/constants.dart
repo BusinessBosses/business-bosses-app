@@ -24,8 +24,14 @@ class Constants {
   static const String socketUrl = 'https://orca-app-5dg8w.ondigitalocean.app';
   static const String baseUrl =
       'https://orca-app-5dg8w.ondigitalocean.app/api/v1';
+
+  //victor url
   // static const String socketUrl = 'http://192.168.1.176:3000';
   // static const String baseUrl = 'http://192.168.1.176:3000/api/v1';
+
+  //stephen url
+  // static const String baseUrl = 'http://192.168.0.193:3000/api/v1';
+  // static const String socketUrl = 'http://192.168.0.193:3000';
 
   // nodes
   static const String POSTS = 'posts';

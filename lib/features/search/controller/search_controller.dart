@@ -33,6 +33,7 @@ class CompleteSearchController extends GetxController {
     if (currentIndex == 0) {
       isUserSearch(true);
       update();
+      searchedUsers.clear();
       final ApiResponseModel response =
           await SearchRepository.searchUsers(query.trim());
       if (response.success) {
@@ -44,6 +45,7 @@ class CompleteSearchController extends GetxController {
         }
       }
     } else if (currentIndex == 1) {
+      searchedPosts.clear();
       final ApiResponseModel response =
           await SearchRepository.searchPosts(query.trim());
       if (response.success) {
@@ -63,6 +65,7 @@ class CompleteSearchController extends GetxController {
         }
       }
     } else {
+      searchedForums.clear();
       final ApiResponseModel response =
           await HomeRepository.searchIndustries(query.trim());
       if (response.success) {

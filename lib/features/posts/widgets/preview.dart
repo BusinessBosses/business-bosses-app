@@ -6,8 +6,10 @@ import 'package:business_bosses_v2/features/posts/widgets/image_item.dart';
 import 'package:flutter/material.dart';
 
 class Preview extends StatelessWidget {
-  const Preview({Key? key, required this.controller}) : super(key: key);
+  const Preview({Key? key, required this.controller, this.isUrl = false})
+      : super(key: key);
   final dynamic controller;
+  final bool isUrl;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -15,7 +17,9 @@ class Preview extends StatelessWidget {
       child: GridView.builder(
         physics: const NeverScrollableScrollPhysics(),
         shrinkWrap: true,
-        itemCount: controller.imageFileList.length,
+        itemCount: isUrl
+            ? controller.imageUrlList.length
+            : controller.imageFileList.length,
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount:
               MediaQuery.of(context).orientation == Orientation.landscape
@@ -25,8 +29,9 @@ class Preview extends StatelessWidget {
         ),
         itemBuilder: (BuildContext context, int i) {
           return ImageItem(
-            file: File(controller.imageFileList[i].path),
+            file: isUrl ? null : File(controller.imageFileList[i].path),
             onRemove: () => controller.removeImage(i),
+            imageUrl: isUrl ? controller.imageUrlList[i] : null,
           );
         },
       ),

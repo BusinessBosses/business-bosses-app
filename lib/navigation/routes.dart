@@ -7,6 +7,7 @@ class Routes {
   }
 
   static const String home = '/homeScreen';
+  static const String allCommunitiesScreen = '/bossupScreen';
   static const String login = '/loginScreen';
   static const String registration = '/registerScreen';
   static const String codeVerification = '/codeVerificationScreen';
@@ -24,6 +25,7 @@ class Routes {
   static const String marketPlace = '/marketPlaceScreen';
   static const String marketMembersScreen = '/marketMembersScreen';
   static const String createForum = '/createForumScreen';
+  static const String transactionConfirmation = '/transactionConfirmation';
   static const String createBossUp = '/createBossUpScreen';
   static const String settings = '/settingsScreen';
   static const String notifications = '/notificationsScreen';
@@ -38,9 +40,11 @@ class Routes {
   static const String allforumscreen = '/allforumScreen';
   static const String specificuserlistscreen = '/specificuserlistScreen';
   static const String completesearchingscreen = '/completesearchingScreen';
+  static const String referalsscreen = '/referalsScreen';
   static const String communityrulesscreen = '/communityrulesScreen';
   static const String rankingscreen = '/rankingScreen';
   static const String relevantusersscreen = '/relevantusersScreen';
   static const String profileanalysescreen = '/profileanalyseScreen';
   static const String inviteafriendscreen = '/inviteafriendScreen';
+  static const String premiumscreen = '/premiumScreen';
 }

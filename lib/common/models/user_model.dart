@@ -35,12 +35,14 @@ class UserModel {
   final List<DisconnectionsModel>? disconnections;
   final bool? active;
   final bool? deactivated;
+  final bool isSubscribed;
   final String? ageRange;
   final String? gender;
   final List<ProfileViewerModel>? profileViews;
   late final int? connectionCount;
   final int? connectedCount;
   final int? referalCount;
+  final int? invitations;
   final int? unReadCount;
   final bool? isRanked;
   final String? inviteId;
@@ -69,6 +71,7 @@ class UserModel {
     this.productsandservices,
     this.referals,
     this.deviceTokens,
+    this.invitations,
     this.disconnections,
     this.active,
     this.deactivated,
@@ -84,6 +87,7 @@ class UserModel {
     this.referalCount,
     this.inviteId,
     this.averageRating,
+    this.isSubscribed = false,
   });
 
   UserModel copyWith({
@@ -119,11 +123,13 @@ class UserModel {
     List<ProfileViewerModel>? profileViews,
     int? connectionCount,
     int? referalCount,
+    int? invitations,
     int? connectedCount,
     int? unReadCount,
     bool? isRanked,
     String? inviteId,
     double? averageRating,
+    bool? isSubscribed = false,
   }) {
     return UserModel(
       uid: uid ?? this.uid,
@@ -158,6 +164,7 @@ class UserModel {
       profileViews: profileViews ?? this.profileViews,
       connectionCount: connectionCount ?? this.connectionCount,
       referalCount: referalCount ?? this.referalCount,
+      invitations: invitations ?? this.invitations,
       connectedCount: connectedCount ?? this.connectedCount,
       unReadCount: unReadCount ?? this.unReadCount,
       isRanked: isRanked ?? this.isRanked,
@@ -165,6 +172,7 @@ class UserModel {
       connections: connections ?? this.connections,
       connecteds: connecteds ?? this.connecteds,
       averageRating: averageRating ?? this.averageRating,
+      isSubscribed: isSubscribed ?? this.isSubscribed,
     );
   }
 
@@ -204,11 +212,13 @@ class UserModel {
           profileViews?.map((ProfileViewerModel x) => x.toMap()).toList(),
       'connectionCount': connectionCount,
       'referalCount': referalCount,
+      'invitations': invitations,
       'connectedCount': connectedCount,
       'unReadCount': unReadCount,
       'isRanked': isRanked,
       'inviteId': inviteId,
       'averageRating': averageRating,
+      'isSubscribed': isSubscribed,
     };
   }
 
@@ -282,11 +292,15 @@ class UserModel {
           map['connectionCount'] != null ? map['connectionCount'] as int : null,
       referalCount:
           map['referalCount'] != null ? map['referalCount'] as int : null,
+      invitations:
+          map['invitations'] != null ? map['invitations'] as int : null,
       connectedCount:
           map['connectedCount'] != null ? map['connectedCount'] as int : null,
       unReadCount:
           map['unReadCount'] != null ? map['unReadCount'] as int : null,
       isRanked: map['isRanked'] != null ? map['isRanked'] as bool : null,
+      isSubscribed:
+          map['isSubscribed'] != null ? map['isSubscribed'] as bool : false,
       inviteId: map['inviteId'] != null ? map['inviteId'] as String : null,
       averageRating: map['averageRating'] != null
           ? (map['averageRating'] is int
@@ -342,10 +356,12 @@ class UserModel {
         listEquals(other.profileViews, profileViews) &&
         other.connectionCount == connectionCount &&
         other.referalCount == referalCount &&
+        other.invitations == invitations &&
         other.connectedCount == connectedCount &&
         other.unReadCount == unReadCount &&
         other.isRanked == isRanked &&
         other.inviteId == inviteId &&
+        other.isSubscribed == isSubscribed &&
         other.averageRating == averageRating;
   }
 
@@ -383,10 +399,12 @@ class UserModel {
         profileViews.hashCode ^
         connectionCount.hashCode ^
         referalCount.hashCode ^
+        invitations.hashCode ^
         connectedCount.hashCode ^
         unReadCount.hashCode ^
         inviteId.hashCode ^
         isRanked.hashCode ^
+        isSubscribed.hashCode ^
         averageRating.hashCode;
   }
 }

@@ -315,99 +315,98 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                       ),
                                     ),
                                   ),
-                                  Stack(
-                                    children: <Widget>[
-                                      Container(
-                                        margin: const EdgeInsets.only(
-                                            top: 10, right: 20, left: 20),
-                                        height: 150,
-                                        width: double.infinity,
-                                        child: ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(15.0),
-                                          child: FittedBox(
-                                            fit: BoxFit.fill,
-                                            child: Image.asset(
-                                                'assets/images/postbackground.png'),
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.black.withOpacity(0.09),
+                                          blurRadius:
+                                              100.0, // soften the shadow
+                                          spreadRadius: 5, //extend the shadow
+                                        )
+                                      ],
+                                    ),
+                                    child: Stack(
+                                      children: <Widget>[
+                                        Container(
+                                          margin: const EdgeInsets.only(
+                                              top: 10, right: 20, left: 20),
+                                          height: 150,
+                                          width: double.infinity,
+                                          child: ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(15.0),
+                                            child: FittedBox(
+                                              fit: BoxFit.fill,
+                                              child: Image.asset(
+                                                  'assets/images/postbackground.png'),
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                      Column(
-                                        children: [
-                                          Row(
-                                            children: <Widget>[
-                                              Container(
-                                                margin: const EdgeInsets.only(
-                                                    top: 25,
-                                                    right: 20,
-                                                    left: 35),
-                                                height: 86,
-                                                width: 142,
-                                                child: ClipRRect(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          10.0),
-                                                  child: FittedBox(
-                                                    child: CachedNetworkImage(
-                                                      memCacheWidth: 256,
-                                                      imageUrl:
-                                                          'http://44.210.87.234/learningImages/marketplace.jpg',
-                                                      placeholder: (BuildContext
-                                                                  context,
-                                                              String photo) =>
-                                                          const CircularProgressIndicator(),
-                                                      errorWidget: (BuildContext
-                                                                  context,
-                                                              String photo,
-                                                              dynamic error) =>
-                                                          const Icon(
-                                                              Icons.error),
+                                        Column(
+                                          children: [
+                                            Row(
+                                              children: <Widget>[
+                                                Container(
+                                                  margin: const EdgeInsets.only(
+                                                      top: 25,
+                                                      right: 20,
+                                                      left: 35),
+                                                  height: 86,
+                                                  width: 142,
+                                                  child: ClipRRect(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10.0),
+                                                    child: FittedBox(
+                                                      child: CachedNetworkImage(
+                                                        memCacheWidth: 256,
+                                                        imageUrl:
+                                                            'http://44.210.87.234/learningImages/marketplace.jpg',
+                                                        placeholder: (BuildContext
+                                                                    context,
+                                                                String photo) =>
+                                                            const CircularProgressIndicator(),
+                                                        errorWidget:
+                                                            (BuildContext
+                                                                        context,
+                                                                    String
+                                                                        photo,
+                                                                    dynamic
+                                                                        error) =>
+                                                                const Icon(Icons
+                                                                    .error),
+                                                      ),
                                                     ),
                                                   ),
                                                 ),
-                                              ),
-                                              const Expanded(
-                                                child: Padding(
-                                                  padding: EdgeInsets.only(
-                                                      right: 35),
-                                                  child: Text(
-                                                    '- Sell your products and services \n - Find Supplies',
-                                                    style: TextStyle(
-                                                      fontSize: 15,
-                                                      color: Colors.white,
-                                                      fontWeight:
-                                                          FontWeight.w700,
+                                                const Expanded(
+                                                  child: Padding(
+                                                    padding: EdgeInsets.only(
+                                                        right: 35),
+                                                    child: Text(
+                                                      '- Sell your products and services \n - Find Supplies',
+                                                      style: TextStyle(
+                                                        fontSize: 15,
+                                                        fontWeight:
+                                                            FontWeight.w700,
+                                                      ),
+                                                      softWrap: true,
+                                                      maxLines: 5,
                                                     ),
-                                                    softWrap: true,
-                                                    maxLines: 5,
                                                   ),
                                                 ),
-                                              ),
-                                            ],
-                                          ),
-                                          Row(
-                                            children: <Widget>[
-                                              Stack(
-                                                children: [
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                      left: 35,
-                                                      top: 5,
-                                                    ),
-                                                    child: Container(
+                                              ],
+                                            ),
+                                            Row(
+                                              children: <Widget>[
+                                                Stack(
+                                                  children: [
+                                                    Padding(
                                                       padding:
                                                           const EdgeInsets.only(
-                                                        bottom: 8,
-                                                        top: 8,
-                                                        left: 10,
-                                                        right: 10,
-                                                      ),
-                                                      decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(200),
-                                                        color: primaryColorLT,
+                                                        left: 35,
+                                                        top: 5,
                                                       ),
                                                       child: Row(
                                                         children: [
@@ -416,8 +415,13 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                                                 const EdgeInsets
                                                                         .only(
                                                                     right: 8),
-                                                            child: SvgPicture.asset(
-                                                                'assets/svgs/members.svg'),
+                                                            child: SvgPicture
+                                                                .asset(
+                                                              'assets/svgs/members.svg',
+                                                              height: 15,
+                                                              color:
+                                                                  primaryColorLT,
+                                                            ),
                                                           ),
                                                           GestureDetector(
                                                             onTap: () {
@@ -431,119 +435,133 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                                               text: TextSpan(
                                                                 children: [
                                                                   TextSpan(
-                                                                    text:
-                                                                        'Members: (${_marketController.users.length})',
-                                                                    style: const TextStyle(
+                                                                      text:
+                                                                          'Members: (${_marketController.users.length})',
+                                                                      style:
+                                                                          const TextStyle(
                                                                         fontSize:
-                                                                            11,
-                                                                        color: Colors
-                                                                            .white),
-                                                                  ),
+                                                                            12,
+                                                                        fontWeight:
+                                                                            FontWeight.w600,
+                                                                        color:
+                                                                            primaryColorLT,
+                                                                        decoration:
+                                                                            TextDecoration.underline,
+                                                                      )),
                                                                 ],
                                                               ),
                                                             ),
                                                           ),
                                                         ],
                                                       ),
-                                                    ),
-                                                  )
-                                                ],
-                                              ),
-                                              Stack(
-                                                children: <Widget>[
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            left: 5, top: 5),
-                                                    child: Container(
+                                                    )
+                                                  ],
+                                                ),
+                                                Stack(
+                                                  children: <Widget>[
+                                                    Padding(
                                                       padding:
                                                           const EdgeInsets.only(
-                                                              bottom: 8,
-                                                              top: 8,
-                                                              left: 10,
-                                                              right: 10),
-                                                      decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(200),
-                                                        color: const Color
-                                                                .fromARGB(
-                                                            47, 255, 255, 255),
-                                                      ),
-                                                      child: Row(
-                                                        children: [
-                                                          const Padding(
-                                                            padding:
-                                                                EdgeInsets.only(
-                                                                    right: 8),
-                                                            child: Icon(
-                                                              Icons
-                                                                  .shopping_cart_checkout_outlined,
-                                                              color:
-                                                                  Colors.white,
-                                                              size: 15,
+                                                              left: 5, top: 5),
+                                                      child: Container(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                    .only(
+                                                                bottom: 8,
+                                                                top: 8,
+                                                                left: 10,
+                                                                right: 10),
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      200),
+                                                          color: const Color
+                                                                  .fromARGB(47,
+                                                              255, 255, 255),
+                                                        ),
+                                                        child: Row(
+                                                          children: [
+                                                            Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                          .only(
+                                                                      right: 8),
+                                                              child: SvgPicture
+                                                                  .asset(
+                                                                'assets/svgs/marketplace.svg',
+                                                                color:
+                                                                    textColor,
+                                                                height: 15,
+                                                              ),
                                                             ),
-                                                          ),
-                                                          Obx(
-                                                            () {
-                                                              return RichText(
-                                                                text: TextSpan(
-                                                                  children: <InlineSpan>[
-                                                                    TextSpan(
-                                                                      text:
-                                                                          'Listings: ${_marketController.markets.length}',
-                                                                      style:
-                                                                          const TextStyle(
-                                                                        fontSize:
-                                                                            11,
+                                                            Obx(
+                                                              () {
+                                                                return RichText(
+                                                                  text:
+                                                                      TextSpan(
+                                                                    children: <InlineSpan>[
+                                                                      TextSpan(
+                                                                        text:
+                                                                            'Listings: ${_marketController.markets.length}',
+                                                                        style:
+                                                                            const TextStyle(
+                                                                          fontSize:
+                                                                              12,
+                                                                          color:
+                                                                              textColor,
+                                                                          fontWeight:
+                                                                              FontWeight.w600,
+                                                                        ),
                                                                       ),
-                                                                    ),
-                                                                  ],
-                                                                ),
-                                                              );
-                                                            },
-                                                          ),
-                                                        ],
+                                                                    ],
+                                                                  ),
+                                                                );
+                                                              },
+                                                            ),
+                                                          ],
+                                                        ),
                                                       ),
                                                     ),
-                                                  ),
-                                                ],
-                                              ),
-                                              Flexible(
-                                                child: Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                      right: 20,
-                                                    ),
-                                                    child: SizedBox(
-                                                      width:
-                                                          MediaQuery.of(context)
-                                                              .size
-                                                              .width,
-                                                      child: Align(
-                                                          alignment: Alignment
-                                                              .centerRight,
-                                                          child: Row(
-                                                            crossAxisAlignment:
-                                                                CrossAxisAlignment
-                                                                    .center,
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .end,
-                                                            children: [
-                                                              joinedButton(),
-                                                            ],
-                                                          )),
-                                                    )),
-                                              )
-                                            ],
-                                          ),
-                                          const SizedBox(
-                                            height: 5,
-                                          ),
-                                        ],
-                                      )
-                                    ],
+                                                  ],
+                                                ),
+                                                Flexible(
+                                                  child: Padding(
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                        right: 20,
+                                                      ),
+                                                      child: SizedBox(
+                                                        width: MediaQuery.of(
+                                                                context)
+                                                            .size
+                                                            .width,
+                                                        child: Align(
+                                                            alignment: Alignment
+                                                                .centerRight,
+                                                            child: Row(
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .center,
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .end,
+                                                              children: [
+                                                                joinedButton(),
+                                                              ],
+                                                            )),
+                                                      )),
+                                                )
+                                              ],
+                                            ),
+                                            const SizedBox(
+                                              height: 5,
+                                            ),
+                                          ],
+                                        )
+                                      ],
+                                    ),
                                   ),
                                 ]),
                               ],
@@ -555,7 +573,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                   ];
                 },
                 body: Padding(
-                  padding: const EdgeInsets.only(bottom: 100, top: 20),
+                  padding: const EdgeInsets.only(bottom: 100, top: 13),
                   child: Obx(() {
                     if (_marketController.loading.value) {
                       return const Center(child: CircularProgressIndicator());
@@ -611,17 +629,20 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                     );
                                   },
                                 )
-                          : ListView.builder(
-                              shrinkWrap: true,
-                              itemCount: _marketController.markets.length,
-                              itemBuilder: (BuildContext context, int index) {
-                                final MarketModel market =
-                                    _marketController.markets[index];
+                          : RefreshIndicator(
+                              onRefresh: refreshData,
+                              child: ListView.builder(
+                                shrinkWrap: true,
+                                itemCount: _marketController.markets.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  final MarketModel market =
+                                      _marketController.markets[index];
 
-                                return MarketTile(
-                                  post: market,
-                                );
-                              },
+                                  return MarketTile(
+                                    post: market,
+                                  );
+                                },
+                              ),
                             );
                     }
                   }),
@@ -631,50 +652,77 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
     });
   }
 
+  Future<void> loadData() async {
+    setState(() {});
+
+    // Call the loadPosts() function from the PostsController
+    // await Get.find<PostsController>().loadPosts();
+    await Get.find<MarketController>().initMarket();
+    print('working');
+
+    setState(() {});
+  }
+
+  Future<void> refreshData() async {
+    await loadData(); // Trigger data reload
+  }
+
   Widget joinedButton() {
     return GestureDetector(
-      onTap: () async {
-        final SharedPreferences prefs = await SharedPreferences.getInstance();
-        final String? userId = prefs.getString(Constants.USER_ID);
-        await ApiService.post(path: 'members', body: <String, dynamic>{
-          'type': 'marketplace',
-        });
-        setState(() {
-          if (_marketController.isJoined.value) {
-            _marketController.users
-                .removeWhere((UserModel user) => user.uid == userId);
-          } else {
-            _marketController.users.add(_profileController.myProfile);
-          }
-          _marketController.isJoined.value = !_marketController.isJoined.value;
-        });
-      },
-      child: Container(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 12.0,
-        ),
-        alignment: Alignment.center,
+        onTap: () async {
+          final SharedPreferences prefs = await SharedPreferences.getInstance();
+          final String? userId = prefs.getString(Constants.USER_ID);
+          await ApiService.post(path: 'members', body: <String, dynamic>{
+            'type': 'marketplace',
+          });
+          setState(() {
+            if (_marketController.isJoined.value) {
+              _marketController.users
+                  .removeWhere((UserModel user) => user.uid == userId);
+            } else {
+              _marketController.users.add(_profileController.myProfile);
+            }
+            _marketController.isJoined.value =
+                !_marketController.isJoined.value;
+          });
+        },
         child: Container(
           padding: const EdgeInsets.symmetric(
-            horizontal: 20.0,
-            vertical: 10.0,
+            horizontal: 12.0,
           ),
-          decoration: BoxDecoration(
-            color: Colors.white,
+          alignment: Alignment.center,
+          child: Material(
+            elevation: 4.0,
+            shadowColor: Colors.black.withOpacity(0.2),
             borderRadius: BorderRadius.circular(10),
-          ),
-          child: Obx(
-            () => Text(
-              _marketController.isJoined.value ? 'Leave' : 'Join',
-              style: const TextStyle(
-                fontSize: 13,
-                fontWeight: FontWeight.w700,
+            child: Container(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 20.0,
+                vertical: 10.0,
+              ),
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10),
+                  boxShadow: const [
+                    BoxShadow(
+                      color: Colors.black,
+                      blurRadius: 500.0, // soften the shadow
+                      spreadRadius: 15, //extend the shadow
+                    )
+                  ]),
+              child: Obx(
+                () => Text(
+                  _marketController.isJoined.value ? 'Leave' : 'Join',
+                  style: const TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w700,
+                    color: primaryColorLT,
+                  ),
+                ),
               ),
             ),
           ),
-        ),
-      ),
-    );
+        ));
   }
 
   Widget sellingGuide() {

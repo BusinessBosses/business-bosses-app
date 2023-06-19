@@ -22,6 +22,7 @@ class HomeController extends GetxController {
   RxBool error = RxBool(false);
   RxBool loading = RxBool(false);
   List<Map<String, dynamic>>? bossUp = [];
+  RxBool refreshing = RxBool(false);
 
   /// SHOW WHEN ACCESS TOKEN EXPIRES
   void showAccessTokenDialog() {
@@ -134,6 +135,24 @@ class HomeController extends GetxController {
     update();
   }
 
+  /// LOAD POSTS FROM REMOTE SOURCE
+  Future<void> refreshData() async {
+    refreshing(true);
+    // error(false);
+    update();
+    final ApiResponseModel response = await HomeRepository.fetchRefreshData();
+    if (response.success) {
+      _postsController.processPostsAndForumsData(response.data['posts']);
+      _profileController.processDataToState(response.data['user']);
+    } else {
+      error(true);
+      showSnackbar(title: 'OOPS!', message: response.message, error: true);
+    }
+
+    refreshing(false);
+    update();
+  }
+
   initSocket() {
     socket = IO.io(Constants.socketUrl, <String, dynamic>{
       'autoConnect': false,
@@ -151,6 +170,12 @@ class HomeController extends GetxController {
     socket.on('new-message', (data) {
       // print(data);
       _chatController.newMessage(data);
+    });
+
+    socket.on('new-notification', (data) {
+      print(data);
+      _profileController.updateProfile(
+          {..._profileController.myProfile.toMap(), 'unReadCount': 1});
     });
 
     socket.onReconnect((_) {

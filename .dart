@@ -162,7 +162,7 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen> {
                                             mainAxisSize: MainAxisSize.min,
                                             children: <Widget>[
                                               const Text(
-                                                'Enter Challenge',
+                                                'Enter Challengekk',
                                                 style: TextStyle(
                                                     fontSize: 15,
                                                     color: Colors.white,
@@ -179,6 +179,7 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen> {
                                         ),
                                       ),
                                     ),
+                                    
                                     Stack(
                                       children: <Widget>[
                                         Container(

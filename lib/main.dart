@@ -1,3 +1,6 @@
+import 'dart:async';
+import 'dart:developer';
+
 import 'package:business_bosses_v2/navigation/navigation.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/services/firebase_analytics.dart';
@@ -13,6 +16,7 @@ import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:uni_links/uni_links.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
@@ -22,6 +26,7 @@ void main() async {
   await GetStorage.init();
   await dotenv.load();
   await Firebase.initializeApp();
+  await initUniLinks();
   AnalyticsServices();
   Stripe.publishableKey =
       'pk_test_51MAcspEGsMsi6baUQ14KJlYZVcpaKiRtC5wnN42Jq3vOl68JwSahkzoiUOrOh9zGyG9nDj1bML8jOlfwMDai51Rm00vWZoIAgE';
@@ -54,6 +59,49 @@ void main() async {
 
   runApp(const MyApp());
   FlutterNativeSplash.remove();
+}
+
+/// INITIALIZE DEEP LINKING
+Future<void> initUniLinks() async {
+  try {
+    final String? initialLink = await getInitialLink();
+    if (initialLink != null) {
+      processDeepLink(Uri.parse(initialLink));
+    }
+  } on PlatformException {}
+
+  uriLinkStream.listen((Uri? uri) {
+    if (uri != null) {
+      processDeepLink(uri);
+    } else {
+      print('sdfsadfa');
+    }
+  }, onError: (err) {
+    // Handle any errors that occur during deep link handling
+    print('Error initializing UniLinks: $err');
+  });
+}
+
+/// PROCESS DEEPLINK
+void processDeepLink(Uri uri) {
+  log(uri.toString());
+  if (uri.scheme == 'myapp' && uri.host == 'app.subscription') {
+    String? successParam = uri.queryParameters['success'];
+    if (successParam != null) {
+      bool success = successParam.toLowerCase() == 'true';
+      if (success) {
+        showAboutDialog(
+            context: navigatorKey.currentState!.context,
+            applicationName: "here at $uri");
+        Navigator.pushNamed(
+          navigatorKey.currentState!.context,
+          Routes.transactionConfirmation,
+        );
+      } else {
+        Get.snackbar('Canceled', 'Transaction Canceled');
+      }
+    }
+  }
 }
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {

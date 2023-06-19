@@ -122,91 +122,89 @@ class _BossUpSectionState extends State<BossUpSection> {
                                   ),
                                 ),
                               )),
-                          Stack(
-                            children: [
-                              Container(
-                                margin: const EdgeInsets.only(
-                                    top: 10, right: 20, left: 20),
-                                height: 150,
-                                width: double.infinity,
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(15.0),
-                                  child: FittedBox(
-                                    fit: BoxFit.fill,
-                                    child: Image.asset(
-                                        'assets/images/postbackground.png'),
+                          Container(
+                            decoration: BoxDecoration(
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.09),
+                                  blurRadius: 100.0, // soften the shadow
+                                  spreadRadius: 5, //extend the shadow
+                                )
+                              ],
+                            ),
+                            child: Stack(
+                              children: [
+                                Container(
+                                  margin: const EdgeInsets.only(
+                                      top: 10, right: 20, left: 20),
+                                  height: 150,
+                                  width: double.infinity,
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(15.0),
+                                    child: FittedBox(
+                                      fit: BoxFit.fill,
+                                      child: Image.asset(
+                                          'assets/images/postbackground.png'),
+                                    ),
                                   ),
                                 ),
-                              ),
-                              Column(
-                                children: [
-                                  Row(
-                                    children: [
-                                      Container(
-                                        margin: const EdgeInsets.only(
-                                            top: 25, right: 20, left: 35),
-                                        height: 86,
-                                        width: 142,
-                                        child: ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(10.0),
-                                          child: FittedBox(
-                                            fit: BoxFit.fill,
-                                            child: CachedNetworkImage(
-                                              imageUrl:
-                                                  'https://files.ng/bossup.jpg',
-                                              memCacheHeight: 256,
-                                              memCacheWidth: 256,
-                                              placeholder: (BuildContext
-                                                          context,
-                                                      String photo) =>
-                                                  const CircularProgressIndicator(),
-                                              errorWidget:
-                                                  // ignore: always_specify_types
-                                                  (BuildContext context,
-                                                          // ignore: always_specify_types
-                                                          String photo,
-                                                          dynamic error) =>
-                                                      const Icon(Icons.error),
+                                Column(
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Container(
+                                          margin: const EdgeInsets.only(
+                                              top: 25, right: 20, left: 35),
+                                          height: 86,
+                                          width: 142,
+                                          child: ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(10.0),
+                                            child: FittedBox(
+                                              fit: BoxFit.fill,
+                                              child: CachedNetworkImage(
+                                                imageUrl:
+                                                    'https://files.ng/bossup.jpg',
+                                                memCacheHeight: 256,
+                                                memCacheWidth: 256,
+                                                placeholder: (BuildContext
+                                                            context,
+                                                        String photo) =>
+                                                    const CircularProgressIndicator(),
+                                                errorWidget:
+                                                    // ignore: always_specify_types
+                                                    (BuildContext context,
+                                                            // ignore: always_specify_types
+                                                            String photo,
+                                                            dynamic error) =>
+                                                        const Icon(Icons.error),
+                                              ),
                                             ),
                                           ),
                                         ),
-                                      ),
-                                      Expanded(
-                                          child: Padding(
-                                        padding:
-                                            const EdgeInsets.only(right: 35),
-                                        child: Text(
-                                          widget.industry.description ??
-                                              'Industry Description',
-                                          style: const TextStyle(
-                                              fontSize: 15,
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.w700),
-                                          softWrap: true,
-                                          maxLines: 5,
-                                        ),
-                                      )),
-                                    ],
-                                  ),
-                                  Row(
-                                    children: [
-                                      Stack(
-                                        children: [
-                                          Padding(
-                                            padding: const EdgeInsets.only(
-                                                left: 35, top: 5),
-                                            child: Container(
+                                        Expanded(
+                                            child: Padding(
+                                          padding:
+                                              const EdgeInsets.only(right: 35),
+                                          child: Text(
+                                            widget.industry.description ??
+                                                'Industry Description',
+                                            style: const TextStyle(
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.w700),
+                                            softWrap: true,
+                                            maxLines: 5,
+                                          ),
+                                        )),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        Stack(
+                                          children: [
+                                            Padding(
                                               padding: const EdgeInsets.only(
-                                                  bottom: 8,
-                                                  top: 8,
-                                                  left: 10,
-                                                  right: 10),
-                                              decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(200),
-                                                color: primaryColorLT,
-                                              ),
+                                                  left: 35, top: 5),
                                               child: Row(
                                                 children: [
                                                   Padding(
@@ -214,7 +212,10 @@ class _BossUpSectionState extends State<BossUpSection> {
                                                         const EdgeInsets.only(
                                                             right: 8),
                                                     child: SvgPicture.asset(
-                                                        'assets/svgs/members.svg'),
+                                                      'assets/svgs/members.svg',
+                                                      height: 15,
+                                                      color: primaryColorLT,
+                                                    ),
                                                   ),
                                                   RichText(
                                                     text: TextSpan(
@@ -227,9 +228,15 @@ class _BossUpSectionState extends State<BossUpSection> {
                                                               : 'Members: (${widget.industry.joinedUsers?.where((String element) => element.isNotEmpty).toList().length ?? 0})',
                                                           style:
                                                               const TextStyle(
-                                                                  fontSize: 11,
-                                                                  color: Colors
-                                                                      .white),
+                                                            fontSize: 12,
+                                                            fontWeight:
+                                                                FontWeight.w600,
+                                                            color:
+                                                                primaryColorLT,
+                                                            decoration:
+                                                                TextDecoration
+                                                                    .underline,
+                                                          ),
                                                           recognizer:
                                                               TapGestureRecognizer()
                                                                 ..onTap = () {
@@ -247,91 +254,100 @@ class _BossUpSectionState extends State<BossUpSection> {
                                                   ),
                                                 ],
                                               ),
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                      Stack(
-                                        children: [
-                                          Padding(
-                                            padding: const EdgeInsets.only(
-                                                left: 5, top: 5),
-                                            child: Container(
-                                              padding: const EdgeInsets.only(
-                                                  bottom: 8,
-                                                  top: 8,
-                                                  left: 10,
-                                                  right: 10),
-                                              decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(200),
-                                                color: const Color.fromARGB(
-                                                    47, 255, 255, 255),
-                                              ),
-                                              child: Row(
-                                                children: [
-                                                  SvgPicture.asset(
-                                                    'assets/svgs/topics.svg',
-                                                  ),
-                                                  RichText(
-                                                    text: TextSpan(
-                                                      children: [
-                                                        TextSpan(
-                                                          text:
-                                                              'Topics: (${controller.totalForums.value}) ',
-                                                          style:
-                                                              const TextStyle(
-                                                            fontSize: 11,
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      Flexible(
-                                        child: Padding(
-                                          padding:
-                                              const EdgeInsets.only(right: 20),
-                                          child: SizedBox(
-                                            width: MediaQuery.of(context)
-                                                .size
-                                                .width,
-                                            child: Align(
-                                              alignment: Alignment.centerRight,
-                                              child: Row(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.end,
-                                                children: [
-                                                  JoinedButton(
-                                                    widget.industry.joinedUsers
-                                                            ?.contains(
-                                                                _myProfile
-                                                                    .myProfile
-                                                                    .uid) ??
-                                                        false,
-                                                    () {
-                                                      toggleJoinAndLeaveIndustry(
-                                                          controller);
-                                                    },
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
+                                            )
+                                          ],
                                         ),
-                                      )
-                                    ],
-                                  )
-                                ],
-                              )
-                            ],
+                                        Stack(
+                                          children: [
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                  left: 5, top: 5),
+                                              child: Container(
+                                                padding: const EdgeInsets.only(
+                                                    bottom: 8,
+                                                    top: 8,
+                                                    left: 10,
+                                                    right: 10),
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          200),
+                                                  color: const Color.fromARGB(
+                                                      47, 255, 255, 255),
+                                                ),
+                                                child: Row(
+                                                  children: [
+                                                    SvgPicture.asset(
+                                                      'assets/svgs/topics.svg',
+                                                      height: 11.5,
+                                                      color: textColor,
+                                                    ),
+                                                    RichText(
+                                                      text: TextSpan(
+                                                        children: [
+                                                          TextSpan(
+                                                            text:
+                                                                ' Topics: (${controller.totalForums.value}) ',
+                                                            style:
+                                                                const TextStyle(
+                                                              fontSize: 12,
+                                                              color: textColor,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w600,
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        Flexible(
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(
+                                                right: 20),
+                                            child: SizedBox(
+                                              width: MediaQuery.of(context)
+                                                  .size
+                                                  .width,
+                                              child: Align(
+                                                alignment:
+                                                    Alignment.centerRight,
+                                                child: Row(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.end,
+                                                  children: [
+                                                    JoinedButton(
+                                                      widget.industry
+                                                              .joinedUsers
+                                                              ?.contains(
+                                                                  _myProfile
+                                                                      .myProfile
+                                                                      .uid) ??
+                                                          false,
+                                                      () {
+                                                        toggleJoinAndLeaveIndustry(
+                                                            controller);
+                                                      },
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        )
+                                      ],
+                                    )
+                                  ],
+                                )
+                              ],
+                            ),
                           ),
                           const SizedBox(
                             height: 10,
@@ -366,22 +382,40 @@ class _BossUpSectionState extends State<BossUpSection> {
                           title: 'No post',
                           subTitle: 'This industry has no post',
                         )
-                      : ListView.builder(
-                          itemCount: controller.forums.length,
+                      : RefreshIndicator(
+                          onRefresh: refreshData,
+                          child: ListView.builder(
+                            itemCount: controller.forums.length,
 
-                          // <-- this will disable scroll
+                            // <-- this will disable scroll
 
-                          //controller: differentController,
+                            //controller: differentController,
 
-                          itemBuilder: (BuildContext context, int i) =>
-                              ForumItem(
-                            forum: controller.forums[i],
-                            key: ValueKey(controller.forums[i].forumId),
-                            controller: controller,
+                            itemBuilder: (BuildContext context, int i) =>
+                                ForumItem(
+                              forum: controller.forums[i],
+                              key: ValueKey(controller.forums[i].forumId),
+                              controller: controller,
+                            ),
                           ),
                         ),
         );
       }
     });
+  }
+
+  Future<void> loadData() async {
+    setState(() {});
+
+    // Call the loadPosts() function from the PostsController
+    // await Get.find<PostsController>().loadPosts();
+    await Get.find<BossUpController>().fetchForums();
+    print('working');
+
+    setState(() {});
+  }
+
+  Future<void> refreshData() async {
+    await loadData(); // Trigger data reload
   }
 }
