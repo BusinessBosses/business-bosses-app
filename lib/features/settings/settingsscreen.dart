@@ -3,9 +3,9 @@ import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../action/action.dart';
-import '../../functions/my_native_functions.dart';
 import '../../navigation/routes.dart';
 import '../../services/api_service.dart';
 import '../../utils/constants/constants.dart';
@@ -119,11 +119,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   Future<void> _contactUs() async {
+    print('pressed');
     String mailUrl = 'mailto:support@businessbosses.co.uk';
     try {
-      MyNativeFunctions.onUrlLaunch(mailUrl);
+      if (await canLaunch(mailUrl)) {
+        await launch(mailUrl);
+      } else {
+        throw 'Could not launch $mailUrl';
+      }
     } catch (e) {
-      debugPrint('Something gone wrong try again later');
       showSnackBar(context, message: '${Constants.STGW}, try again later');
     }
   }
