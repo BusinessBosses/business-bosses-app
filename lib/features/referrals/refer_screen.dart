@@ -1,3 +1,4 @@
+import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
@@ -30,23 +31,8 @@ class _ReferScreenState extends State<ReferScreen> {
 
   final List<String> _selectedUsers = [];
 
-  final bool _isProcessing = false;
+  bool _isProcessing = false;
   bool _isLoading = false;
-
-  final bool _isInit = false;
-  final List<String> _alreadyReferredUsers = [];
-
-  // @override
-  // void didChangeDependencies() {
-  //   super.didChangeDependencies();
-  //   if (!_isInit) {
-  //     _specificUser = ModalRoute.of(context)?.settings.arguments as UserModel;
-
-  //     _fetchMyConnections();
-
-  //     _isInit = true;
-  //   }
-  // }
 
   Future<void> getData() async {
     setState(() {
@@ -113,15 +99,24 @@ class _ReferScreenState extends State<ReferScreen> {
           autofocus: false,
         ),
       ),
-      floatingActionButton: (_selectedUsers.isEmpty ?? true) && !_isProcessing
+      floatingActionButton: (_selectedUsers.isEmpty)
           ? null
           : FloatingActionButton.extended(
               onPressed: _onReferringToYourConnections,
               icon: const Icon(Icons.check),
-              label: Text(
-                'Refer (${_selectedUsers.length})',
-                style: const TextStyle(fontWeight: FontWeight.bold),
-              ),
+              label: _isProcessing
+                  ? const SizedBox(
+                      height: 20,
+                      width: 20,
+                      child: CircularProgressIndicator(
+                        color: Colors.white,
+                        strokeWidth: 2,
+                      ),
+                    )
+                  : Text(
+                      'Refer (${_selectedUsers.length})',
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
             ),
       body: _referrableConnections.isEmpty
           ? SafetyModel(
@@ -184,17 +179,27 @@ class _ReferScreenState extends State<ReferScreen> {
 
   void _onReferringToYourConnections() async {
     unFocusKeyboard(context);
-
-    final ApiResponseModel res = await ApiService.post(path: '/referal/refer', body: {
+    setState(() {
+      _isProcessing = true;
+    });
+    final ApiResponseModel res =
+        await ApiService.post(path: '/referal/refer', body: {
       'referredUserUid': _specificUser.uid,
       'referBy': _profileController.myProfile.uid,
       'referTo': _selectedUsers
     });
-    Get.arguments['onRefer'](_selectedUsers.length);
-    Get.back();
-    // setState(() {
-    //   _isProcessing = true;
-    // });
+    if (res.success) {
+      Get.back();
+    } else {
+      showSnackbar(
+        message: 'OOPS!! Something went wrong',
+        title: 'Error Occured',
+        error: true,
+      );
+    }
+    setState(() {
+      _isProcessing = false;
+    });
   }
 
   Future<void> _sendNotificationToReferTo(
@@ -204,8 +209,7 @@ class _ReferScreenState extends State<ReferScreen> {
       List<String> tokens, List<String> receivers) async {}
 
   Future<void> _createMyReferrals(List<String> referToUsers) async {
-    String path =
-        '${Constants.USERS}/${_specificUser.uid}/${Constants.REFERS}';
+    String path = '${Constants.USERS}/${_specificUser.uid}/${Constants.REFERS}';
   }
 
   void _addRemoveUser(String uid) {

@@ -2,8 +2,11 @@ import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 
 import '../../../common/widgets/network_image_with_placeholder.dart';
+import '../../../navigation/routes.dart';
+import '../controller/profile_controller.dart';
 
 // ignore: public_member_api_docs
 class UserProfileTile extends StatefulWidget {
@@ -17,15 +20,11 @@ class UserProfileTile extends StatefulWidget {
 class _UserProfileTileState extends State<UserProfileTile> {
   @override
   Widget build(BuildContext context) {
+    final ProfileController profileController = Get.find();
     // fetchData();
     // setState(() {});
     return Container(
       width: double.infinity,
-      height: 140.0,
-      padding: const EdgeInsets.only(
-        top: 0.0,
-        bottom: 0.0,
-      ),
       child: Row(
         children: [
           Stack(
@@ -98,8 +97,7 @@ class _UserProfileTileState extends State<UserProfileTile> {
             ],
           ),
           Expanded(
-            child: SizedBox(
-              height: 106.0,
+            child: Container(
               child: Column(
                 // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -121,21 +119,113 @@ class _UserProfileTileState extends State<UserProfileTile> {
                           fontWeight: FontWeight.bold,
                         ),
                   ),
-                  Text(widget.myProfile.companyName ?? '',
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyLarge
-                          ?.copyWith(fontWeight: FontWeight.normal)),
-                  Text(
-                    widget.myProfile.location ?? '',
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: textColor.withOpacity(0.6),
+                  widget.myProfile?.companyName != null &&
+                          widget.myProfile.companyName == ''
+                      ? Text(
+                          widget.myProfile.companyName!,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyLarge
+                              ?.copyWith(fontWeight: FontWeight.normal),
+                        )
+                      : Container(),
+                  widget.myProfile?.location != null &&
+                          widget.myProfile.location == ''
+                      ? Text(
+                          widget.myProfile.location ?? '',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style:
+                              Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                    color: textColor.withOpacity(0.6),
+                                  ),
+                        )
+                      : Container(),
+                  widget.myProfile?.companyName != null &&
+                          widget.myProfile.companyName == ''
+                      ? Text(
+                          widget.myProfile.companyName!,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyLarge
+                              ?.copyWith(fontWeight: FontWeight.normal),
+                        )
+                      : Container(),
+                  widget.myProfile?.location != null &&
+                          widget.myProfile.location == ''
+                      ? Text(
+                          widget.myProfile.location ?? '',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style:
+                              Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                    color: textColor.withOpacity(0.6),
+                                  ),
+                        )
+                      : Container(),
+                  if (!widget.myProfile.isSubscribed)
+                    GestureDetector(
+                      onTap: () {
+                        Get.toNamed(Routes.premiumscreen);
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.09),
+                              blurRadius: 500.0,
+                              spreadRadius: 0.0,
+                            ),
+                          ],
                         ),
-                  ),
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Stack(
+                            alignment: Alignment.centerLeft,
+                            children: [
+                              SvgPicture.asset(
+                                'assets/svgs/subscribebuttonback.svg',
+                                width: 200,
+                                fit: BoxFit.contain,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(left: 15.0),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    const Text(
+                                      'Subscribe to Premium',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 15,
+                                      ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const Text(
+                                    'Subscribe to Premium',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w700,
+                                      fontSize: 15,
+                                    ),
+                                    const SizedBox(
+                                      width: 10,
+                                    ),
+                                    SvgPicture.asset(
+                                      'assets/svgs/nextbutton.svg',
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    )
                 ],
               ),
             ),

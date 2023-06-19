@@ -3,8 +3,10 @@ import 'dart:io';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/features/forum/controller/forum_controller.dart';
+import 'package:business_bosses_v2/features/forum/models/forum_model.dart';
 import 'package:business_bosses_v2/features/forum/repository/forum_repository.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -12,7 +14,19 @@ class CreateForumController extends GetxController {
   RxBool loading = false.obs;
   late ImagePicker _picker;
   RxList<XFile> imageFileList = RxList<XFile>(<XFile>[]);
+  RxList<String> imageUrlList = RxList<String>(<String>[]);
   final ForumController _forumController = Get.put(ForumController());
+
+  ///ADD IMAGES FOR PREVIEW
+  void initializeForumEditImage(List<String>? images) {
+    if (images != null) {
+      imageUrlList.addAll(images);
+    }
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      update();
+    });
+  }
+
   bool validateCreatePostData(Map<String, dynamic> data) {
     if (data['title'].toString().isEmpty ||
         data['description'].toString().isEmpty) {
@@ -96,6 +110,38 @@ class CreateForumController extends GetxController {
     }
   }
 
+  /// EDIT POST CONTROLLER (EDIT POST TO REMOTE DATA SOURCE)
+  Future<void> editForum(Map<String, dynamic> body) async {
+    if (validateCreatePostData(body)) {
+      loading(true);
+      update();
+
+      final ApiResponseModel response = await ForumRepository.editForum(body);
+
+      if (response.success) {
+        imageUrlList.clear();
+        final int forumIndex = _forumController.forums.indexWhere(
+            (ForumModel element) => element.forumId == body['forumId']);
+        _forumController.updateForum(forumIndex, <String, dynamic>{
+          ...response.data,
+          'likes': body['likes'],
+          'coins': body['coins'],
+          'user': body['user'],
+          'comments': body['comments']
+        });
+
+        Get.back();
+      }
+
+      loading(false);
+      update();
+    } else {
+      showSnackbar(
+          message: 'Post can\'t be empty', title: 'OOPS!', error: true);
+      return;
+    }
+  }
+
   /// REMOVE IMAGE FROM SELECTED
   void removeImage(int index) {
     RxList<XFile> myAE = imageFileList;
@@ -129,6 +175,7 @@ class CreateForumController extends GetxController {
   void onClose() {
     // TODO: implement onClose
     imageFileList.clear();
+    imageUrlList.clear();
     super.onClose();
   }
 }

@@ -1,11 +1,15 @@
+import 'dart:convert';
+
 import 'package:business_bosses_v2/features/settings/settingsItemModal.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter/services.dart' show rootBundle;
+import 'package:yaml/yaml.dart';
 
 import '../../action/action.dart';
-import '../../functions/my_native_functions.dart';
 import '../../navigation/routes.dart';
 import '../../services/api_service.dart';
 import '../../utils/constants/constants.dart';
@@ -26,6 +30,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   @override
   void initState() {
+    getVersionNumber();
     super.initState();
   }
 
@@ -90,12 +95,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
             const SizedBox(height: 24.0),
             Image.asset('assets/app/app_logo.png', height: 120.0, width: 120.0),
             Text(
-              version,
+              'Version ($version)',
               style: Theme.of(context)
                   .textTheme
                   .bodyLarge
                   ?.copyWith(fontSize: 16, fontWeight: FontWeight.w400),
             ),
+            const SizedBox(
+              height: 40,
+            )
           ],
         ),
       ),
@@ -119,11 +127,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   Future<void> _contactUs() async {
+    print('pressed');
     String mailUrl = 'mailto:support@businessbosses.co.uk';
     try {
-      MyNativeFunctions.onUrlLaunch(mailUrl);
+      if (await canLaunch(mailUrl)) {
+        await launch(mailUrl);
+      } else {
+        throw 'Could not launch $mailUrl';
+      }
     } catch (e) {
-      debugPrint('Something gone wrong try again later');
       showSnackBar(context, message: '${Constants.STGW}, try again later');
     }
   }
@@ -155,5 +167,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   void logout() async {
     await _apiService.logout();
+  }
+
+  Future<void> getVersionNumber() async {
+    final String pubspecString = await rootBundle.loadString('pubspec.yaml');
+    final Map yamlData = jsonDecode(jsonEncode(loadYaml(pubspecString)));
+    version = yamlData['version'].toString().split('+')[0];
+    setState(() {});
   }
 }

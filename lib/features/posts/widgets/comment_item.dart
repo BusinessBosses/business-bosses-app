@@ -64,7 +64,7 @@ class _CommentItemState extends State<CommentItem> {
                     placeHolder: Icons.person,
                   ),
                   title: Text(
-                    '${widget.comment.user?.name}',
+                    widget.comment.user?.name ?? widget.comment.user!.username,
                     style: bodyText1,
                   ),
                   subtitle: Text(

@@ -53,8 +53,10 @@ class ConnectionController extends GetxController {
         connecteds.add(modelizedConnection);
       }
 
-      for (int i = 0; i < res.data['suggestedUsers']['data'].length; i++) {
-        final mapData = res.data['suggestedUsers']['data'][i];
+      for (int i = 0;
+          i < res.data['suggestedUsers']['data']['rows'].length;
+          i++) {
+        final mapData = res.data['suggestedUsers']['data']['rows'][i];
         final UserModel modelizedConnection = UserModel.fromMap(mapData);
 
         suggestedUsers.add(modelizedConnection);

@@ -2,7 +2,7 @@ import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/features/forum/controller/create_forum_controller.dart';
 import 'package:business_bosses_v2/features/forum/models/forum_model.dart';
 import 'package:business_bosses_v2/features/posts/widgets/preview.dart';
-import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
+import 'package:business_bosses_v2/utils/constants/constants.dart';
 import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
 import 'package:detectable_text_field/widgets/detectable_text_field.dart';
 import 'package:flutter/material.dart';
@@ -28,7 +28,7 @@ class CreateForumScreen extends StatefulWidget {
 
 class _CreateForumScreenState extends State<CreateForumScreen> {
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
-  final ProfileController _profileController = Get.find();
+  final CreateForumController _createForumController = Get.find();
   // Industry? industry;
   String title = '';
   String description = '';
@@ -37,7 +37,7 @@ class _CreateForumScreenState extends State<CreateForumScreen> {
   bool isUpdating = false;
   bool isbossup = true;
   late String industryId;
-  late String categoryId;
+  String? categoryId;
   @override
   void initState() {
     // TODO: implement initState
@@ -50,6 +50,10 @@ class _CreateForumScreenState extends State<CreateForumScreen> {
       if (Get.arguments['isUpdating'] != null) {
         isUpdating = true;
         forum = Get.arguments['forum'];
+        title = forum.title ?? '';
+        description = forum.description ?? '';
+        industryId = forum.industryId;
+        _createForumController.initializeForumEditImage(forum.images);
       } else {
         industryId = Get.arguments['industryId'];
         categoryId = Get.arguments['categoryId'];
@@ -66,11 +70,13 @@ class _CreateForumScreenState extends State<CreateForumScreen> {
           child: Scaffold(
             key: scaffoldKey,
             appBar: AppBar(
-              title: Text(isbossup == true
-                  ? 'Enter Challenge'
-                  : categoryId == 'd479f179-3f41-4d84-915d-33110cf5b4fb'
-                      ? 'Start a Topic'
-                      : 'Create Opportunities'),
+              title: Text(
+                isbossup == true
+                    ? 'Enter Challenge'
+                    : categoryId == Constants.LEARNINGID
+                        ? 'Start a Topic'
+                        : 'Create Opportunities',
+              ),
               automaticallyImplyLeading:
                   false, // Used for removing back buttoon.
               actions: [
@@ -134,154 +140,59 @@ class _CreateForumScreenState extends State<CreateForumScreen> {
                     ),
                   ),
                   const SizedBox(height: 12.0),
-                  GestureDetector(
-                    onTap: () {
-                      if (controller.imageFileList.length < 5) {
-                        controller.onPickImage();
-                      } else {
-                        showSnackbar(
-                            message: 'You can only upload up to 5 images.');
-                      }
-                    },
-                    child: FieldContainer(
-                      child: Row(
-                        children: [
-                          SvgPicture.asset('assets/svgs/file.svg'),
-                          const SizedBox(width: 16.0),
-                          Expanded(
-                            child: Text('Add Attachment',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyMedium
-                                    ?.copyWith(color: hintColor)),
-                          ),
-                          const SizedBox(width: 16.0),
-                          SvgPicture.asset('assets/svgs/upload.svg'),
-                        ],
+                  if (!isUpdating)
+                    GestureDetector(
+                      onTap: () {
+                        if (controller.imageFileList.length < 5) {
+                          controller.onPickImage();
+                        } else {
+                          showSnackbar(
+                              message: 'You can only upload up to 5 images.');
+                        }
+                      },
+                      child: FieldContainer(
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Text('Add Attachment',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium
+                                      ?.copyWith(color: hintColor)),
+                            ),
+                            const SizedBox(width: 16.0),
+                            CircleAvatar(
+                              radius: 26 / 1.38,
+                              backgroundColor: backgroundColor,
+                              child: SvgPicture.asset(
+                                'assets/svgs/addimagepost.svg',
+                                height: 18,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
                   const SizedBox(height: 8.0),
                   Preview(controller: controller),
-                  // if (_myAssetsEntities?.isNotEmpty ?? false)
-                  //   GridView.builder(
-                  //     physics: const NeverScrollableScrollPhysics(),
-                  //     shrinkWrap: true,
-                  //     itemCount: _myAssetsEntities.length,
-                  //     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  //       crossAxisCount: MediaQuery.of(context).orientation ==
-                  //               Orientation.landscape
-                  //           ? 5
-                  //           : 3,
-                  //       childAspectRatio: (1 / 1),
-                  //     ),
-                  //     itemBuilder: (context, i) {
-                  //       return Container(
-                  //         margin: const EdgeInsets.all(8.0),
-                  //         child: Stack(
-                  //           children: [
-                  //             ClipRRect(
-                  //               borderRadius: BorderRadius.circular(10.0),
-                  //               child: AssetViewer(
-                  //                 image: _myAssetsEntities[i].thumbnail,
-                  //                 height: 150.0,
-                  //                 width: 150.0,
-                  //                 fit: BoxFit.cover,
-                  //               ),
-                  //             ),
-                  //             (!_fileProcessing[i] && isProcessing)
-                  //                 ? const Center(
-                  //                     child: SizedBox(
-                  //                       height: 22.0,
-                  //                       width: 22.0,
-                  //                       child: CircularProgressIndicator(),
-                  //                     ),
-                  //                   )
-                  //                 : Container(),
-                  //             deleteImage(i),
-                  //           ],
-                  //         ),
-                  //       );
-                  //     },
-                  //   ),
-                  // if ((forum.images?.isNotEmpty ?? false))
-                  //   GridView.builder(
-                  //     physics: const NeverScrollableScrollPhysics(),
-                  //     shrinkWrap: true,
-                  //     itemCount: forum.images!.length,
-                  //     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  //       crossAxisCount: MediaQuery.of(context).orientation ==
-                  //               Orientation.landscape
-                  //           ? 5
-                  //           : 3,
-                  //       childAspectRatio: (1 / 1),
-                  //     ),
-                  //     itemBuilder: (BuildContext context, int i) {
-                  //       return Container(
-                  //         margin: const EdgeInsets.all(8.0),
-                  //         child: Stack(
-                  //           children: [
-                  //             ClipRRect(
-                  //               borderRadius: BorderRadius.circular(10.0),
-                  //               child: NetworkImageWithPlaceHolder(
-                  //                 imageUrl: forum.images![i],
-                  //                 height: 150.0,
-                  //                 width: 150.0,
-                  //                 fit: BoxFit.cover,
-                  //               ),
-                  //             ),
-                  //             Positioned(
-                  //               right: 5.0,
-                  //               top: 5.0,
-                  //               child: GestureDetector(
-                  //                 onTap: () {
-                  //                   forum.images!.removeAt(i);
-                  //                 },
-                  //                 child: Container(
-                  //                   height: 30.0,
-                  //                   width: 30.0,
-                  //                   alignment: Alignment.center,
-                  //                   decoration: BoxDecoration(
-                  //                     color: Colors.black54,
-                  //                     borderRadius: BorderRadius.circular(40.0),
-                  //                   ),
-                  //                   child: const Icon(
-                  //                     Icons.close,
-                  //                     size: 18.0,
-                  //                     color: Colors.white,
-                  //                   ),
-                  //                 ),
-                  //               ),
-                  //             )
-                  //             // _deleteImage(i),
-                  //           ],
-                  //         ),
-                  //       );
-                  //     },
-                  //   ),
-
                   const SizedBox(height: 24.0),
                   MCustomButton(
                     onPressed: () {
-                      controller.createForum({
-                        'title': title.trim(),
-                        'description': description.trim(),
-                        'timestamp': DateTime.now().millisecondsSinceEpoch,
-                        'industryId': industryId
-                      });
-                      // if (isbossup == true) {
-                      //   Map<String, dynamic> updateData = <String, dynamic>{
-                      //     'name': DateTime.now().millisecondsSinceEpoch,
-                      //   };
-                      //   ApiService.put(body: {
-                      //     'bossOfTheWeekTimeStamp':
-                      //         DateTime.now().millisecondsSinceEpoch,
-                      //   }, path: 'user/${_profileController.myProfile.uid}');
-                      //   _profileController.updateProfile({
-                      //     ..._profileController.myProfile.toMap(),
-                      //     ...updateData
-                      //   });
-                      // }
+                      if (isUpdating) {
+                        controller.editForum({
+                          ...forum.toMap(),
+                          'title': title.trim(),
+                          'description': description.trim(),
+                          'industryId': industryId,
+                        });
+                      } else {
+                        controller.createForum({
+                          'title': title.trim(),
+                          'description': description.trim(),
+                          'timestamp': DateTime.now().millisecondsSinceEpoch,
+                          'industryId': industryId
+                        });
+                      }
                     },
                     label: isUpdating ? 'Update Post' : 'Post',
                     isProcessing: controller.loading.value,
@@ -294,8 +205,4 @@ class _CreateForumScreenState extends State<CreateForumScreen> {
       },
     );
   }
-
-  void _onImagePicker() {}
-
-  void _onChangeForum() {}
 }

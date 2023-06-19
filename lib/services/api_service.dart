@@ -49,6 +49,33 @@ class ApiService {
     }
   }
 
+  // LOGIN POINT
+  Future<dynamic> googleLogin(String email, String token) async {
+    /// Obtain shared preferences.
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    Map<String, dynamic> data = {
+      'email': email,
+      'token': token,
+    };
+    final http.Response response = await http.post(
+      Uri.parse('${Constants.baseUrl}/auth/google-sign-in'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode(data),
+    );
+    if (response.statusCode == 200) {
+      final dynamic jsonResponse = json.decode(response.body);
+      await sandBox.write(
+          Constants.ACCESS_TOKEN, jsonResponse['data']['accessToken']);
+      await prefs.setString(
+          Constants.USER_ID, jsonResponse['data']['uid'].toString());
+      // sandBox.write(Constants.USER_ID, jsonResponse['data']['uid'].toString());
+      return jsonResponse;
+    } else {
+      final dynamic jsonResponse = json.decode(response.body);
+      return jsonResponse;
+    }
+  }
+
   /// UPLOAD FILE
   static Future<dynamic> uploadFile(File image) async {
     String uploadUrl = 'http://44.210.87.234/upload.php';
@@ -250,5 +277,27 @@ class ApiService {
     } catch (e) {
       throw e.toString();
     }
+  }
+}
+
+/// Add Subscription
+Future<dynamic> addSubscription(
+    String plan, String price, bool isSubscribed) async {
+  Map<String, dynamic> data = {
+    'plan': plan,
+    'price': price,
+    'isSubscribed': isSubscribed
+  };
+  final http.Response response = await http.post(
+    Uri.parse('${Constants.baseUrl}/subscription'),
+    headers: {'Content-Type': 'application/json'},
+    body: jsonEncode(data),
+  );
+  if (response.statusCode == 200) {
+    final dynamic jsonResponse = json.decode(response.body);
+    return jsonResponse;
+  } else {
+    final dynamic jsonResponse = json.decode(response.body);
+    return jsonResponse;
   }
 }

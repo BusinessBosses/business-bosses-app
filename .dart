@@ -179,6 +179,7 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen> {
                                         ),
                                       ),
                                     ),
+                                    
                                     Stack(
                                       children: <Widget>[
                                         Container(

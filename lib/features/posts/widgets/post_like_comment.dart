@@ -139,7 +139,7 @@ class _PostLikeCommentItemState extends State<PostLikeCommentItem> {
                                 radius: 30.0,
                                 placeHolder: Icons.person,
                               ),
-                              title: Text('${_users[i].name}'),
+                              title: Text(_users[i].name!),
                               subtitle: Text(
                                 '${_users[i].bio}',
                                 maxLines: 1,
@@ -156,8 +156,6 @@ class _PostLikeCommentItemState extends State<PostLikeCommentItem> {
     );
   }
 
-  final List<CommentModel> _comments = <CommentModel>[];
-
   Future<void> _loadCommentWithDetails() async {
     await _commentController.fetchComments(widget.post.postId);
     setState(() {
@@ -170,10 +168,12 @@ class _PostLikeCommentItemState extends State<PostLikeCommentItem> {
   Future<void> _loadLikesWithDetails() async {
     for (dynamic l in widget.post.likes ?? []) {
       final Map<String, dynamic> response = await ProfileController.loadData(l);
-      _users.add(UserModel(
-          uid: l,
-          name: response['user']['name'],
-          bio: response['user']['bio']));
+      _users.add(
+        UserModel(
+            uid: l,
+            name: response['user']['name'] ?? response['user']['username'],
+            bio: response['user']['bio']),
+      );
     }
     if (mounted) {
       setState(() {

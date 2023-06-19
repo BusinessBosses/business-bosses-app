@@ -38,11 +38,12 @@ class _CreateBossUpScreenState extends State<CreateBossUpScreen> {
   bool isUpdating = false;
   bool isbossup = true;
   late String industryId;
+  final TextEditingController descriptionController = TextEditingController();
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-
+    descriptionController.text = forum.description ?? '';
     if (Get.arguments == null) {
       Get.back();
     } else {
@@ -109,7 +110,7 @@ class _CreateBossUpScreenState extends State<CreateBossUpScreen> {
                   ),
                   const SizedBox(height: 24.0),
                   DetectableTextField(
-                    controller: TextEditingController(text: forum.description),
+                    controller: descriptionController,
 
                     detectionRegExp: detectionRegExp(hashtag: false)!,
                     onDetectionTyped: (String text) {},
@@ -142,8 +143,6 @@ class _CreateBossUpScreenState extends State<CreateBossUpScreen> {
                     child: FieldContainer(
                       child: Row(
                         children: [
-                          SvgPicture.asset('assets/svgs/file.svg'),
-                          const SizedBox(width: 16.0),
                           Expanded(
                             child: Text('Add Attachment',
                                 style: Theme.of(context)
@@ -152,7 +151,14 @@ class _CreateBossUpScreenState extends State<CreateBossUpScreen> {
                                     ?.copyWith(color: hintColor)),
                           ),
                           const SizedBox(width: 16.0),
-                          SvgPicture.asset('assets/svgs/upload.svg'),
+                          CircleAvatar(
+                            radius: 26 / 1.38,
+                            backgroundColor: backgroundColor,
+                            child: SvgPicture.asset(
+                              'assets/svgs/addimagepost.svg',
+                              height: 18,
+                            ),
+                          ),
                         ],
                       ),
                     ),

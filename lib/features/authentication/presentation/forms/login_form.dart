@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 // import 'package:apple_sign_in_safety/apple_sign_in.dart';
 import 'package:business_bosses_v2/common/widgets/buttons/custom_button.dart';
@@ -12,12 +13,14 @@ import 'package:get/get.dart';
 
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
+import '../../../../action/action.dart';
 import '../../../../common/widgets/buttons/icon_text_button.dart';
 import '../../../../navigation/routes.dart';
 import '../../../../services/api_service.dart';
 import '../../../../utils/theme/theme.dart';
 import '../../../../utils/validators/phone_input.dart';
 import '../../../../utils/validators/validator.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class LoginForm extends StatefulWidget {
   const LoginForm({super.key});
@@ -32,15 +35,61 @@ class _LoginFormState extends State<LoginForm> {
   late AutovalidateMode _autoValidateMode = AutovalidateMode.disabled;
   bool isEmailAuth = true;
   String? _authCred, _password;
+  String? _email, _token;
   bool _invisiblePassword = true;
   String countryCode = '+447';
   final ApiService _apiService = ApiService();
+  GoogleSignIn _googleSignIn = GoogleSignIn();
 
   ///  COUNTRY CHANGE HANDLER
   void onChangeCountry(Country value) {
     List<String> spl = value.displayName.toString().split(' ');
     setState(() {
       countryCode = spl[spl.length - 1].toString().split('[')[1].split(']')[0];
+    });
+  }
+
+  void _handleGoogleSignIn() async {
+    setState(() {
+      _isProcessing = true;
+    });
+
+    try {
+      // Attempt to sign in with Google
+      final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
+
+      if (googleUser != null) {
+        // Sign in was successful
+        _email = googleUser.email;
+        _token = googleUser.serverAuthCode;
+        dynamic user = await _handleGoogleLogin();
+        if (user['success'] == false) {
+          Get.snackbar('Error', user['error']);
+          await _googleSignIn.disconnect();
+        } else {
+          Get.offAndToNamed(Routes.bottomNavigation);
+        }
+
+        setState(() {
+          _isProcessing = false;
+        });
+      } else {
+        // Sign in was canceled by the user
+        showSnackBar(context,
+            message: 'Opps!! Something went wrong. Try again');
+        setState(() {
+          _isProcessing = false;
+        });
+      }
+    } catch (error) {
+      // Error occurred during sign in
+      log('Here ->>>>>> $error');
+
+      showSnackBar(context, message: 'Opps!! Something went wrong. Try again');
+    }
+
+    setState(() {
+      _isProcessing = false;
     });
   }
 
@@ -197,10 +246,11 @@ class _LoginFormState extends State<LoginForm> {
                 backgroundColor: Colors.transparent,
                 label: 'Sign in with Google',
                 labelColor: textColor,
-                onPressed: () async {},
+                onPressed: _handleGoogleSignIn,
                 borderRadius: BorderRadius.circular(20.0),
               ),
             ),
+
             const SizedBox(height: 10.0),
 
             if (Platform.isIOS)
@@ -243,6 +293,14 @@ class _LoginFormState extends State<LoginForm> {
     dynamic user = await _apiService.login(
       _authCred!,
       _password!,
+    );
+    return user;
+  }
+
+  Future<dynamic> _handleGoogleLogin() async {
+    dynamic user = await _apiService.googleLogin(
+      _email!,
+      _token!,
     );
     return user;
   }

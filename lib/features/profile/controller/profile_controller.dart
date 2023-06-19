@@ -23,7 +23,9 @@ class ProfileController extends GetxController {
 
   ///MODELIZE RAW DATA AND PUSH TO STATE
   void processBossToState(dynamic userData) {
-    final UserModel modelizedData = UserModel.fromMap(userData);
+    final UserModel modelizedData = UserModel.fromMap({
+      ...userData,
+    });
     bossOfTheWeek = modelizedData;
     update();
   }

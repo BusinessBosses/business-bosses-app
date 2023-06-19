@@ -351,9 +351,6 @@ class _MyRankingScreenState extends State<MyRankingScreen> {
                           fontSize: 14.0,
                         ),
                       ),
-                      const SizedBox(
-                        height: 8,
-                      ),
                       Image.asset('assets/images/one.png'),
                       Text(
                         'Networking and making new connections.',
@@ -362,9 +359,6 @@ class _MyRankingScreenState extends State<MyRankingScreen> {
                           fontSize: 14.0,
                         ),
                       ),
-                      const SizedBox(
-                        height: 8,
-                      ),
                       Image.asset('assets/images/two.png'),
                       Text(
                         'Commenting and liking users post/content.',
@@ -372,9 +366,6 @@ class _MyRankingScreenState extends State<MyRankingScreen> {
                           fontWeight: FontWeight.normal,
                           fontSize: 14.0,
                         ),
-                      ),
-                      const SizedBox(
-                        height: 8,
                       ),
                       Image.asset('assets/images/three.png'),
                       Text(
@@ -394,9 +385,6 @@ class _MyRankingScreenState extends State<MyRankingScreen> {
                           fontWeight: FontWeight.normal,
                           fontSize: 14.0,
                         ),
-                      ),
-                      const SizedBox(
-                        height: 8,
                       ),
                       Image.asset('assets/images/five.png'),
                     ],
