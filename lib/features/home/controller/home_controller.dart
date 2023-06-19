@@ -166,6 +166,12 @@ class HomeController extends GetxController {
       _chatController.newMessage(data);
     });
 
+    socket.on('new-notification', (data) {
+      print(data);
+      _profileController.updateProfile(
+          {..._profileController.myProfile.toMap(), 'unReadCount': 1});
+    });
+
     socket.onReconnect((_) {
       socket.emit('handshake', _profileController.myProfile.uid);
 

@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 // import 'package:apple_sign_in_safety/apple_sign_in.dart';
@@ -10,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../../../common/widgets/buttons/custom_button.dart';
@@ -41,6 +43,7 @@ class _SignUpFormState extends State<SignUpForm> {
   bool _invisibleCPassword = true, _invisiblePassword = true;
   bool agreedToTerms = true;
   final ApiService _apiService = ApiService();
+  GoogleSignIn _googleSignIn = GoogleSignIn();
 
   String countryCode = '+447';
 
@@ -48,6 +51,119 @@ class _SignUpFormState extends State<SignUpForm> {
     List spl = value.displayName.toString().split(' ');
     setState(() {
       countryCode = spl[spl.length - 1].toString().split('[')[1].split(']')[0];
+    });
+  }
+
+  void _handleGoogleSignUp() async {
+    setState(() {
+      _isProcessing = true;
+    });
+
+    try {
+      // Attempt to sign in with Google
+      final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
+
+      if (googleUser != null) {
+        // Sign in was successful
+        showSnackBar(context, message: 'Sign Up successful');
+        _authCred = googleUser.email;
+        _username = googleUser.displayName;
+        showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(26)),
+                  content: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      TextFormField(
+                        onChanged: (String val) {
+                          _password = val;
+                          setState(() {});
+                        },
+                        validator: Validator.passwordValidator,
+                        textInputAction: TextInputAction.done,
+                        obscureText: _invisiblePassword,
+                        keyboardType: TextInputType.visiblePassword,
+                        decoration: inputDecoration.copyWith(
+                          hintText: 'Enter your password',
+                          suffixIcon: _showHideIcon(PasswordField.password),
+                          hintStyle: const TextStyle(
+                            color: iconColor,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                          ),
+                          filled: true,
+                          fillColor: const Color(0xffF4F4F4),
+                        ),
+                      ),
+                      const SizedBox(height: 24.0),
+                      const SizedBox(height: 24.0),
+                      CustomButton(
+                        label: 'Sign Up',
+                        onPressed: () async {
+                          _formKey.currentState!.save();
+                          setState(() {
+                            _autoValidateMode = AutovalidateMode.always;
+                          });
+                          if (!_formKey.currentState!.validate()) return;
+                          // if (Validator.emailValidatorSignUp(_authCred,
+                          //             isUnique: _isUniqueEmail!) ==
+                          //         '' &&
+                          //     Validator.usernameValidator(_username!,
+                          //             isUnique: _isUniqueName!) ==
+                          //         '') {
+                          if (agreedToTerms) {
+                            setState(() {
+                              _autoValidateMode = AutovalidateMode.always;
+                              _isProcessing = true;
+                            });
+                          } else {
+                            Get.snackbar('Error',
+                                'Before signing up, you must agree to our Terms and Conditions');
+                            setState(() {
+                              _isProcessing = false;
+                            });
+                          }
+                          // } else {
+                          //   Get.snackbar('Error', 'Invalid Entries in Form');
+                          //   setState(() {
+                          //     _isProcessing = false;
+                          //   });
+                          // }
+                          setState(() {
+                            _isProcessing = false;
+                          });
+                        },
+                        isProcessing: _isProcessing,
+                        buttonType: ButtonType.elevated,
+                      ),
+                    ],
+                  ),
+                ));
+        dynamic user = await _handleRegister();
+        await _googleSignIn.disconnect();
+
+        setState(() {
+          _isProcessing = false;
+        });
+      } else {
+        // Sign in was canceled by the user
+        showSnackBar(context,
+            message: 'Opps!! Something went wrong. Try again');
+        setState(() {
+          _isProcessing = false;
+        });
+      }
+    } catch (error) {
+      // Error occurred during sign in
+      log('Here ->>>>>> $error');
+
+      showSnackBar(context, message: 'Opps!! Something went wrong. Try again');
+    }
+
+    setState(() {
+      _isProcessing = false;
     });
   }
 
@@ -292,11 +408,7 @@ class _SignUpFormState extends State<SignUpForm> {
             onPressed: () {},
             child: IconTextButton(
               label: 'Sign up with Google',
-              onPressed: () async {
-                setState(() {
-                  _isProcessing = true;
-                });
-              },
+              onPressed: _handleGoogleSignUp,
               borderRadius: BorderRadius.circular(20),
             ),
           ),
@@ -420,5 +532,11 @@ class _SignUpFormState extends State<SignUpForm> {
     } else {
       Get.snackbar('An Error Occured', 'Try again later.');
     }
+  }
+
+  Future<dynamic> _handleRegister() async {
+    dynamic user = await _apiService.register(
+        _authCred!, _password!, _username!, _inviteId);
+    return user;
   }
 }
