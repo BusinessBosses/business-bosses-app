@@ -9,7 +9,6 @@ import '../../../common/widgets/popup/bossup_challenge_popup.dart';
 import '../../../navigation/routes.dart';
 import '../../../services/api_service.dart';
 import '../../../utils/theme/theme.dart';
-import '../../home/controller/home_controller.dart';
 import '../../moreinfoscreens/bossuppartner.dart';
 import '../controller/profile_controller.dart';
 
@@ -28,7 +27,6 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
   bool connectedbutton = true;
   final ProfileController _profileController = Get.find();
   late UserModel? user;
-  final HomeController homeController = Get.find();
 
   @override
   void initState() {
@@ -48,7 +46,7 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
       width: double.infinity,
       color: backgroundcolorinterface,
       padding:
-          const EdgeInsets.only(top: 0.0, bottom: 10.0, left: 15, right: 0),
+          const EdgeInsets.only(top: 0.0, bottom: 15.0, left: 15, right: 15),
       child: user != null
           ? Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -235,10 +233,7 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                     );
                   },
                   child: Padding(
-                    padding: const EdgeInsets.only(
-                      right: 20,
-                      top: 10,
-                    ),
+                    padding: const EdgeInsets.only(right: 15, top: 5),
                     child: Container(
                       height: 40,
                       decoration: BoxDecoration(
@@ -253,120 +248,41 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                           ),
                         ],
                       ),
-                      child: Container(
-                        decoration: BoxDecoration(
-                            color: const Color(0xFFFFFFFF).withAlpha(250),
-                            borderRadius: BorderRadius.circular(10),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.white.withOpacity(1),
-                                spreadRadius: 20,
-                                blurRadius: 500,
-                                offset: const Offset(0, 3),
+                      child: Row(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(
+                              left: 10,
+                            ),
+                            child: Container(
+                              height: 25,
+                              width: 100,
+                              decoration: BoxDecoration(
+                                color: const Color(0xFFEAEAEA),
+                                borderRadius: BorderRadius.circular(20),
                               ),
-                            ]),
-                        child: Row(
-                          children: [
-                            const Padding(
-                              padding: EdgeInsets.only(
-                                left: 10,
-                              ),
-                              child: Center(
+                              child: const Center(
                                 child: Padding(
                                   padding: EdgeInsets.all(2),
                                   child: Text('Boss Up by'),
-                homeController.bossUp != null &&
-                        homeController.bossUp!.isNotEmpty
-                    ? GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (BuildContext context) =>
-                                    const Bossuppartner()),
-                          );
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.only(right: 15, top: 5),
-                          child: Container(
-                            height: 40,
-                            decoration: BoxDecoration(
-                              color: const Color(0xFFF4F4F4),
-                              borderRadius: BorderRadius.circular(10),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.grey.withOpacity(0.3),
-                                  spreadRadius: 20,
-                                  blurRadius: 500,
-                                  offset: const Offset(0, 3),
                                 ),
-                              ],
-                            ),
-                            const SizedBox(width: 10),
-                            Text(
-                              'Partners'.substring(0, 8),
-                              style: const TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.bold,
                               ),
-                              overflow: TextOverflow.ellipsis,
-                              softWrap: false,
                             ),
-                            const Spacer(),
-                            Padding(
-                              padding: const EdgeInsets.only(right: 10.0),
-                              child: SvgPicture.asset(
-                                'assets/svgs/nexticon.svg',
-                                color: textColor,
-                              ),
-                            )
-                          ],
-                        ),
+                          ),
+                          const SizedBox(width: 10),
+                          const Text(
+                            'Partner',
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                              decoration: TextDecoration.underline,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
                 ),
-                            child: Row(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                    left: 10,
-                                  ),
-                                  child: Container(
-                                    height: 25,
-                                    width: 100,
-                                    decoration: BoxDecoration(
-                                      color: const Color(0xFFEAEAEA),
-                                      borderRadius: BorderRadius.circular(20),
-                                    ),
-                                    child: const Center(
-                                      child: Padding(
-                                        padding: EdgeInsets.all(2),
-                                        child: Text('Boss Up by'),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(width: 10),
-                                Text(
-                                  homeController.bossUp != null &&
-                                          homeController.bossUp!.isNotEmpty
-                                      ? homeController
-                                              .bossUp!.last['companyName'] ??
-                                          ''
-                                      : '',
-                                  style: const TextStyle(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.bold,
-                                    decoration: TextDecoration.underline,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      )
-                    : const SizedBox(),
               ],
             )
           : qouteWidget(quotes),
