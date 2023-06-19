@@ -155,7 +155,7 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
                             BoxShadow(
                               color: Colors.black.withOpacity(0.08),
                               spreadRadius: 10,
-                              blurRadius: 500,
+                              blurRadius: 50,
                               offset: const Offset(
                                   0, 7), // changes position of shadow
                             ),
