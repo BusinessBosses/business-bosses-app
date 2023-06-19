@@ -390,6 +390,7 @@ class _PostTileState extends State<PostTile> {
                                 widget.post.postId,
                                 profileController,
                                 'post',
+                                widget.post.user!.uid
                               );
                             },
                             icon: widget.post.coins?.contains(
