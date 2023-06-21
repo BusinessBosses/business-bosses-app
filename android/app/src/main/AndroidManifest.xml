@@ -36,6 +36,14 @@
                 <data android:scheme="http" android:host="businessbosses.page.link" />
                 <data android:scheme="https" />
             </intent-filter>
+
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <!-- Replace 'your_scheme' with your app's custom scheme -->
+                <data android:scheme="myapp" android:host="app.subscription" />
+            </intent-filter>
         </activity>
 
 

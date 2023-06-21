@@ -25,6 +25,7 @@ class Routes {
   static const String marketPlace = '/marketPlaceScreen';
   static const String marketMembersScreen = '/marketMembersScreen';
   static const String createForum = '/createForumScreen';
+  static const String transactionConfirmation = '/transactionConfirmation';
   static const String createBossUp = '/createBossUpScreen';
   static const String settings = '/settingsScreen';
   static const String notifications = '/notificationsScreen';
@@ -45,4 +46,6 @@ class Routes {
   static const String relevantusersscreen = '/relevantusersScreen';
   static const String profileanalysescreen = '/profileanalyseScreen';
   static const String inviteafriendscreen = '/inviteafriendScreen';
+  static const String premiumscreen = '/premiumScreen';
+  static const String nullscreen = '/nullscreen';
 }

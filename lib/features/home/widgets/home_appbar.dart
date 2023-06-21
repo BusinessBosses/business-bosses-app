@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
-
 // ignore: public_member_api_docs
 class Homeappbar extends StatelessWidget {
   // ignore: public_member_api_docs
@@ -117,7 +116,7 @@ class Homeappbar extends StatelessWidget {
                           left: 8, top: 5, right: 8, bottom: 5),
                       child: GestureDetector(
                         onTap: () {
-                          Navigator.pushNamed(context, '/promotionScreen');
+                          Get.toNamed(Routes.promotionscreen);
                         },
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,

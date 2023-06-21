@@ -156,8 +156,6 @@ class _PostLikeCommentItemState extends State<PostLikeCommentItem> {
     );
   }
 
-  final List<CommentModel> _comments = <CommentModel>[];
-
   Future<void> _loadCommentWithDetails() async {
     await _commentController.fetchComments(widget.post.postId);
     setState(() {

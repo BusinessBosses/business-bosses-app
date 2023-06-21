@@ -21,6 +21,8 @@ class HomeController extends GetxController {
   final MarketController _marketController = Get.put(MarketController());
   RxBool error = RxBool(false);
   RxBool loading = RxBool(false);
+  List<Map<String, dynamic>>? bossUp = [];
+  RxBool refreshing = RxBool(false);
 
   /// SHOW WHEN ACCESS TOKEN EXPIRES
   void showAccessTokenDialog() {
@@ -105,6 +107,7 @@ class HomeController extends GetxController {
     error(false);
     update();
     final ApiResponseModel response = await HomeRepository.fetchData();
+    final ApiResponseModel partner = await HomeRepository.fetchPartner();
     if (response.success) {
       _postsController.processPostsAndForumsData(response.data['posts']);
       _profileController.processDataToState(response.data['user']);
@@ -114,6 +117,10 @@ class HomeController extends GetxController {
       _marketController.initMarket();
       _marketController.initUsers();
       addCoinDaily();
+      if (partner.data['count'] > 0) {
+        bossUp?.addAll(partner.data['rows'].cast<Map<String, dynamic>>());
+        print(bossUp);
+      }
     } else {
       error(true);
       socket.disconnect();
@@ -125,6 +132,24 @@ class HomeController extends GetxController {
     }
 
     loading(false);
+    update();
+  }
+
+  /// LOAD POSTS FROM REMOTE SOURCE
+  Future<void> refreshData() async {
+    refreshing(true);
+    // error(false);
+    update();
+    final ApiResponseModel response = await HomeRepository.fetchRefreshData();
+    if (response.success) {
+      _postsController.processPostsAndForumsData(response.data['posts']);
+      _profileController.processDataToState(response.data['user']);
+    } else {
+      error(true);
+      showSnackbar(title: 'OOPS!', message: response.message, error: true);
+    }
+
+    refreshing(false);
     update();
   }
 
@@ -145,6 +170,12 @@ class HomeController extends GetxController {
     socket.on('new-message', (data) {
       // print(data);
       _chatController.newMessage(data);
+    });
+
+    socket.on('new-notification', (data) {
+      print(data);
+      _profileController.updateProfile(
+          {..._profileController.myProfile.toMap(), 'unReadCount': 1});
     });
 
     socket.onReconnect((_) {
