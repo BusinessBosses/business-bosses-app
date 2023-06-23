@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
+import 'package:business_bosses_v2/features/forum/models/industry.dart';
 import 'package:flutter/foundation.dart';
 
 import 'package:business_bosses_v2/common/models/disconnections_models.dart';
@@ -27,6 +28,7 @@ class UserModel {
   final String? category;
   final String? location;
   final List<String>? achievements;
+  final List<Industry>? interests;
   final List<String>? productsandservices;
   final List<ReferralsModel>? referals;
   final List<String>? deviceTokens;
@@ -68,6 +70,7 @@ class UserModel {
     this.category,
     this.location,
     this.achievements,
+    this.interests,
     this.productsandservices,
     this.referals,
     this.deviceTokens,
@@ -110,6 +113,7 @@ class UserModel {
     String? category,
     String? location,
     List<String>? achievements,
+    List<Industry>? interests,
     List<String>? productsandservices,
     List<ReferralsModel>? referals,
     List<String>? deviceTokens,
@@ -153,6 +157,7 @@ class UserModel {
       category: category ?? this.category,
       location: location ?? this.location,
       achievements: achievements ?? this.achievements,
+      interests: interests ?? this.interests,
       productsandservices: productsandservices ?? this.productsandservices,
       referals: referals ?? this.referals,
       deviceTokens: deviceTokens ?? this.deviceTokens,
@@ -197,6 +202,7 @@ class UserModel {
       'category': category,
       'location': location,
       'achievements': achievements,
+      'interests': interests?.map((Industry x) => x.toMap()).toList(),
       'productsandservices': productsandservices,
       'referals': referals?.map((ReferralsModel x) => x.toMap()).toList(),
       'deviceTokens': deviceTokens,
@@ -249,6 +255,11 @@ class UserModel {
       location: map['location'] != null ? map['location'] as String : null,
       achievements: map['achievements'] != null
           ? List<String>.from((map['achievements']))
+          : null,
+      interests: map['interests'] != null
+          ? List.from(map['interests'])
+              .map((e) => Industry.toObject(e as Map<String, dynamic>))
+              .toList()
           : null,
       productsandservices: map['productsandservices'] != null
           ? List<String>.from((map['productsandservices']))

@@ -1,7 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 
-
-
 import 'package:business_bosses_v2/common/models/user_model.dart';
 
 class MessageModel {
@@ -9,6 +7,7 @@ class MessageModel {
   final String? messageText;
   final int timestamp;
   final String? image;
+  final bool? isRawImage;
   final List<String>? deleted;
   final String senderUid;
   final String receiverUid;
@@ -19,6 +18,7 @@ class MessageModel {
     this.messageText,
     required this.timestamp,
     this.image,
+    this.isRawImage,
     this.deleted,
     required this.senderUid,
     required this.receiverUid,
@@ -31,6 +31,7 @@ class MessageModel {
     String? messageText,
     int? timestamp,
     String? image,
+    bool? isRawImage,
     List<String>? deleted,
     String? senderUid,
     String? receiverUid,
@@ -42,6 +43,7 @@ class MessageModel {
       messageText: messageText ?? this.messageText,
       timestamp: timestamp ?? this.timestamp,
       image: image ?? this.image,
+      isRawImage: isRawImage ?? this.isRawImage,
       deleted: deleted ?? this.deleted,
       senderUid: senderUid ?? this.senderUid,
       receiverUid: receiverUid ?? this.receiverUid,
@@ -56,6 +58,7 @@ class MessageModel {
       'messageText': messageText,
       'timestamp': timestamp,
       'image': image,
+      'isRawImage': isRawImage,
       'deleted': deleted,
       'senderUid': senderUid,
       'receiverUid': receiverUid,
@@ -71,6 +74,7 @@ class MessageModel {
           map['messageText'] != null ? map['messageText'] as String : null,
       timestamp: map['timestamp'] as int,
       image: map['image'] != null ? map['image'] as String : null,
+      isRawImage: map['isRawImage'] != null ? map['isRawImage'] as bool : null,
       deleted: map['deleted'] != null
           ? List<String>.from((map['deleted'] as List<String>))
           : [],
