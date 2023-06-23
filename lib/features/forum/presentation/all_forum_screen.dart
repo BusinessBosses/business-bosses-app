@@ -10,7 +10,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 import '../../../navigation/routes.dart';
-import '../models/industry.dart';
 import '../../../utils/theme/theme.dart';
 import '../widgets/forum_item.dart';
 import '../widgets/joinedbutton.dart';
@@ -30,36 +29,8 @@ class AllForumScreen extends StatefulWidget {
 class _AllForumScreenState extends State<AllForumScreen> {
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   final ScrollController scrollController = ScrollController();
-  late Industry industry;
   final ProfileController _myProfile = Get.find();
   // final List<ForumModel> forums = [];
-
-  void toggleJoinAndLeaveIndustry(ForumController controller) {
-    final String myUid = _myProfile.myProfile.uid;
-    // print(myUid);
-    if (industry.joinedUsers?.contains(myUid) ?? false) {
-      industry.joinedUsers!.removeWhere((String element) => element == myUid);
-    } else {
-      if (industry.joinedUsers == null) {
-        industry.joinedUsers = [myUid];
-      } else {
-        industry.joinedUsers!.add(myUid);
-      }
-    }
-    setState(() {});
-    controller.joinAndLeaveIndustry(myUid, industry.industryId!);
-  }
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    if (Get.arguments == null) {
-      Get.back();
-    } else {
-      industry = Get.arguments;
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -77,7 +48,7 @@ class _AllForumScreenState extends State<AllForumScreen> {
               ),
               centerTitle: true,
               title: Text(
-                industry.industry ?? 'Topic',
+                controller.industry.industry ?? 'Topic',
                 textAlign: TextAlign.center,
                 style: const TextStyle(fontSize: 20),
               ),
@@ -112,15 +83,18 @@ class _AllForumScreenState extends State<AllForumScreen> {
                                         Get.toNamed(Routes.createForum,
                                             arguments: {
                                               'isBossUp': false,
-                                              'industryId': industry.industryId,
-                                              'categoryId': industry.categoryId
+                                              'industryId': controller
+                                                  .industry.industryId,
+                                              'categoryId':
+                                                  controller.industry.categoryId
                                             });
                                       },
                                       child: Row(
                                         mainAxisSize: MainAxisSize.min,
                                         children: [
                                           Text(
-                                            industry.categoryId!.toString() ==
+                                            controller.industry.categoryId!
+                                                        .toString() ==
                                                     Constants.LEARNINGID
                                                 ? 'Start a Topic'
                                                 : 'Create Opportunities',
@@ -180,8 +154,8 @@ class _AllForumScreenState extends State<AllForumScreen> {
                                                 child: FittedBox(
                                                   fit: BoxFit.fill,
                                                   child: CachedNetworkImage(
-                                                    imageUrl:
-                                                        'http://44.210.87.234/learningImages/events.jpg',
+                                                    imageUrl: controller
+                                                        .industry.photo!,
                                                     memCacheHeight: 256,
                                                     memCacheWidth: 256,
                                                     placeholder: (BuildContext
@@ -205,7 +179,8 @@ class _AllForumScreenState extends State<AllForumScreen> {
                                               padding: const EdgeInsets.only(
                                                   right: 35),
                                               child: Text(
-                                                industry.description ??
+                                                controller
+                                                        .industry.description ??
                                                     'Industry Description',
                                                 style: const TextStyle(
                                                     fontSize: 15,
@@ -251,11 +226,12 @@ class _AllForumScreenState extends State<AllForumScreen> {
                                                           text: TextSpan(
                                                             children: [
                                                               TextSpan(
-                                                                text: industry
+                                                                text: controller
+                                                                            .industry
                                                                             .joinedUsers ==
                                                                         null
                                                                     ? 'Members: 0'
-                                                                    : 'Members: (${industry.joinedUsers?.where((String element) => element.isNotEmpty).toList().length ?? 0})',
+                                                                    : 'Members: (${controller.industry.joinedUsers?.where((String element) => element.isNotEmpty).toList().length ?? 0})',
                                                                 style:
                                                                     const TextStyle(
                                                                   fontSize: 12,
@@ -275,8 +251,9 @@ class _AllForumScreenState extends State<AllForumScreen> {
                                                                         Get.toNamed(
                                                                           Routes
                                                                               .specificuserlistscreen,
-                                                                          arguments:
-                                                                              industry.industryId,
+                                                                          arguments: controller
+                                                                              .industry
+                                                                              .industryId,
                                                                         );
                                                                       },
                                                               ),
@@ -324,7 +301,8 @@ class _AllForumScreenState extends State<AllForumScreen> {
                                                           text: TextSpan(
                                                             children: [
                                                               TextSpan(
-                                                                text: industry
+                                                                text: controller
+                                                                            .industry
                                                                             .categoryId!
                                                                             .toString() ==
                                                                         'd479f179-3f41-4d84-915d-33110cf5b4fb'
@@ -368,15 +346,16 @@ class _AllForumScreenState extends State<AllForumScreen> {
                                                           MainAxisAlignment.end,
                                                       children: [
                                                         JoinedButton(
-                                                          industry.joinedUsers
+                                                          controller.industry
+                                                                  .joinedUsers
                                                                   ?.contains(
                                                                       _myProfile
                                                                           .myProfile
                                                                           .uid) ??
                                                               false,
                                                           () {
-                                                            toggleJoinAndLeaveIndustry(
-                                                                controller);
+                                                            controller
+                                                                .toggleJoinAndLeaveIndustry();
                                                           },
                                                         ),
                                                       ],

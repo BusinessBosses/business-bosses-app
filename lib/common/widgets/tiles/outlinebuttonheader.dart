@@ -52,7 +52,7 @@ Container OutlineButtonHeader(BuildContext context, UserModel myProfile) {
         Expanded(
           child: OutlinedButton(
             onPressed: () {
-              Navigator.pushNamed(context, '/promotionScreen');
+              Get.toNamed(Routes.promotionscreen);
             },
             child: Row(
               mainAxisSize: MainAxisSize.min,
@@ -80,7 +80,7 @@ Container OutlineButtonHeader(BuildContext context, UserModel myProfile) {
         Expanded(
           child: OutlinedButton(
             onPressed: () {
-              Navigator.pushNamed(context, '/analyseScreen');
+              Get.toNamed(Routes.analysescreen);
             },
             child: Row(
               mainAxisSize: MainAxisSize.min,

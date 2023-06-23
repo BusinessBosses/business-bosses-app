@@ -8,7 +8,6 @@ import 'package:business_bosses_v2/features/home/controller/home_controller.dart
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class ForumController extends GetxController {
@@ -16,6 +15,8 @@ class ForumController extends GetxController {
   final HomeController _homeController = Get.find();
   final ProfileController _profileController = Get.find();
   List<ForumModel> forums = [];
+  late Industry industry;
+
   List<UserModel> members = [];
   RxInt totalForums = RxInt(0);
   RxInt page = RxInt(0);
@@ -33,11 +34,27 @@ class ForumController extends GetxController {
     update();
   }
 
+  void toggleJoinAndLeaveIndustry() {
+    final String myUid = _profileController.myProfile.uid;
+    // print(myUid);
+    if (industry.joinedUsers?.contains(myUid) ?? false) {
+      industry.joinedUsers!.removeWhere((String element) => element == myUid);
+    } else {
+      if (industry.joinedUsers == null) {
+        industry.joinedUsers = [myUid];
+      } else {
+        industry.joinedUsers!.add(myUid);
+      }
+    }
+    _profileController.toggleInterests(industry);
+    update();
+    joinAndLeaveIndustry(myUid, industry.industryId!);
+  }
+
   Future<void> fetchForums() async {
     loading(true);
     error(false);
     update();
-
     final ApiResponseModel response = await ForumRepository.getForums(
         page.value,
         Get.arguments.runtimeType == String
@@ -46,6 +63,7 @@ class ForumController extends GetxController {
     if (response.success) {
       totalForums(int.parse(response.data['count'].toString()));
       page(page.value + 1);
+      // industry = Industry.toObject(response.data['industry']);
       for (int i = 0; i < response.data['rows'].length; i++) {
         forums.add(ForumModel.fromMap({
           ...response.data['rows'][i],
@@ -151,7 +169,6 @@ class ForumController extends GetxController {
 
   /// ADD NEW POST TO STATE
   void addNewForum(Map<String, dynamic> newPost) async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
     ForumModel modelizedNewPost = ForumModel.fromMap({
       ...newPost,
       'coins': <String>[],
@@ -169,8 +186,15 @@ class ForumController extends GetxController {
   void onInit() {
     // TODO: implement onInit
     socket = _homeController.socket;
-    if (Get.arguments.runtimeType == Industry) {
-      fetchForums();
+    print(Get.arguments);
+    if (Get.arguments == null) {
+      Get.back();
+      return;
+    } else {
+      if (Get.arguments.runtimeType == Industry) {
+        industry = Get.arguments;
+        fetchForums();
+      }
     }
 
     super.onInit();

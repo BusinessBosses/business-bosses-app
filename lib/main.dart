@@ -92,7 +92,7 @@ void processDeepLink(Uri uri) {
       if (success) {
         showAboutDialog(
             context: navigatorKey.currentState!.context,
-            applicationName: "here at $uri");
+            applicationName: 'here at $uri');
         Navigator.pushNamed(
           navigatorKey.currentState!.context,
           Routes.transactionConfirmation,

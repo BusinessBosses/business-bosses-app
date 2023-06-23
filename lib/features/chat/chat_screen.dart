@@ -272,9 +272,7 @@ class _ChatItemState extends State<ChatItem> {
                                     ),
                               )
                             : Text(
-                                widget.myChatUser.messageText ??
-                                    widget.myChatUser.image ??
-                                    '',
+                                widget.myChatUser.messageText ?? 'Image',
                                 maxLines: 1,
                                 style: Theme.of(context)
                                     .textTheme
