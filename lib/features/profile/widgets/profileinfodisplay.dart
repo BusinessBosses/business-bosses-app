@@ -1,8 +1,11 @@
 import 'package:business_bosses_v2/common/models/user_model.dart';
+import 'package:business_bosses_v2/common/widgets/tiles/custom_tileinterests.dart';
 import 'package:business_bosses_v2/features/profile/widgets/productandserviceschip.dart';
+import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 
 import '../../../utils/theme/theme.dart';
 
@@ -249,7 +252,7 @@ Widget profileinfodisplay(BuildContext context, UserModel publicUser) {
         const SizedBox(
           height: 10,
         ),
-        if (publicUser.industry != null && publicUser.industry!.isNotEmpty)
+        if (publicUser.interests != null && publicUser.interests!.isNotEmpty)
           const Padding(
             padding: EdgeInsets.only(left: 15),
             child: Text(
@@ -264,91 +267,41 @@ Widget profileinfodisplay(BuildContext context, UserModel publicUser) {
         const SizedBox(
           height: 20,
         ),
-        // Consumer<AppCommunities>(
-        //   builder:
-        //       (context, appCommunities, _) {
-        //     List<Industry> yourIndustries =
-        //         [];
-        //     yourIndustries = appCommunities
-        //         .industriesByUid(
-        //             _profileController.myProfile.industry);
-        //     return yourIndustries.isEmpty
-        //         ? SafetyModel(
-        //             isLoading: _isLoading,
-        //             icon: const Icon(
-        //               Icons.edit,
-        //               size: 80.0,
-        //               color: Colors.grey,
-        //             ),
-        //             title:
-        //                 'You\'ve not joined any tiles',
-        //             subTitle:
-        //                 'All joined communities will be shown here.',
-        //           )
-        //         : Column(children: [
-        //             ListView.builder(
-        //               shrinkWrap: true,
-        //               physics:
-        //                   const NeverScrollableScrollPhysics(),
-        //               padding:
-        //                   const EdgeInsets
-        //                           .only(
-        //                       left: 8.0,
-        //                       right: 8.0,
-        //                       top: 8.0),
-        //               itemBuilder:
-        //                   (context, i) {
-        //                 return Column(
-        //                   children: [
-        //                     CustomTileInterest(
-        //                         label: yourIndustries[
-        //                                 i]
-        //                             .industry,
-        //                         onTap: () {
-        //                           yourIndustries[i]
-        //                                   .industryId
-        //                                   .contains(
-        //                                       '-MsUPNEHnp8-An5VLI_v')
-        //                               ? Navigator
-        //                                   .push(
-        //                                   context,
-        //                                   MaterialPageRoute(
-        //                                     builder: (BuildContext context) => const BottomNavScreen(2, true),
-        //                                   ),
-        //                                 )
-        //                               : yourIndustries[i].industryId.contains('-MsUOGcOT9oRXGakCcJv')
-        //                                   ? Navigator.push(
-        //                                       context,
-        //                                       MaterialPageRoute(
-        //                                         builder: (context) => BottomNavScreen(1, true),
-        //                                       ),
-        //                                     )
-        //                                   : navigateTo(
-        //                                       context,
-        //                                       routeName: AllForumScreenOld.routeName,
-        //                                       arguments: yourIndustries[i].industryId,
-        //                                     );
-        //                         }),
-        //                   ],
-        //                 );
-        //               },
-        //               itemCount:
-        //                   yourIndustries
-        //                       .length,
-        //             ),
-        //             const SizedBox(
-        //               width: double.infinity,
-        //               height: 1,
-        //               child: ColoredBox(
-        //                   color:
-        //                       backgroundcolorinterface),
-        //             ),
-        //             const SizedBox(
-        //               height: 150,
-        //             )
-        //           ]);
-        //   },
-        // ),
+        Column(children: [
+          ListView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
+            itemBuilder: (BuildContext context, int i) {
+              return Column(
+                children: [
+                  CustomTileInterest(
+                    label: publicUser.interests != null
+                        ? publicUser.interests![i].industry!
+                        : '',
+                    onTap: () {
+                      Get.toNamed(
+                        Routes.allforumscreen,
+                        arguments: publicUser.interests![i],
+                      );
+                    },
+                  ),
+                ],
+              );
+            },
+            itemCount:
+                publicUser.interests != null ? publicUser.interests!.length : 0,
+          ),
+          const SizedBox(
+            width: double.infinity,
+            height: 1,
+            child: ColoredBox(color: backgroundcolorinterface),
+          ),
+          const SizedBox(
+            height: 150,
+          )
+        ]),
+
         const SizedBox(
           height: 100,
         ),

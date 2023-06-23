@@ -41,6 +41,19 @@ class Industry {
     );
   }
 
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'industryId': industryId,
+      'industry': industry,
+      'photo': photo,
+      'description': description,
+      'timestamp': timestamp,
+      'active': active,
+      'categoryId': categoryId,
+      'joinedUsers': joinedUsers
+    };
+  }
+
   static List<Industry> toIndustries({
     required List snapshot,
   }) {

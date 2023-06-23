@@ -39,7 +39,7 @@ class _LoginFormState extends State<LoginForm> {
   bool _invisiblePassword = true;
   String countryCode = '+447';
   final ApiService _apiService = ApiService();
-  GoogleSignIn _googleSignIn = GoogleSignIn();
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
 
   ///  COUNTRY CHANGE HANDLER
   void onChangeCountry(Country value) {

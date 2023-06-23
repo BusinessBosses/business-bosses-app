@@ -2,7 +2,6 @@ import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/common/models/comment_model.dart';
 import 'package:business_bosses_v2/common/widgets/text_widget.dart';
 import 'package:business_bosses_v2/features/forum/models/forum_model.dart';
-import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/posts/models/post_model.dart';
 import 'package:business_bosses_v2/features/posts/repository/post_repository.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';

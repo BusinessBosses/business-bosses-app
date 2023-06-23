@@ -406,7 +406,7 @@ class _ForumItemState extends State<ForumItem> {
                         ),
                       ),
                       subtitle: Text(
-                        widget.forum.user!.bio!,
+                        widget.forum.user!.bio ?? '',
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),

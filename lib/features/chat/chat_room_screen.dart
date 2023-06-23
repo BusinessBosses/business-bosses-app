@@ -1,16 +1,18 @@
 import 'dart:async';
+import 'package:business_bosses_v2/common/models/user_model.dart';
+import 'package:flutter/foundation.dart' as foundation;
 import 'package:business_bosses_v2/features/chat/controllers/chat_controller.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
 import 'package:detectable_text_field/widgets/detectable_text.dart';
+import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import '../../action/action.dart';
-import '../../common/models/user_model.dart';
 import '../../common/widgets/buttons/button.dart';
 import '../../common/widgets/chat_box.dart';
 import '../../common/widgets/popup/my_popup_menu_button.dart';
@@ -35,8 +37,9 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
   final ProfileController _profileController = Get.find();
   final HomeController _homeController = Get.find();
   final ChatController _chatController = Get.find();
-  late UserModel args;
   late TextEditingController _textEditingController;
+  late UserModel args;
+  bool showEmoji = false;
   final List<PopupMenuEntry<String>> _popupItemForumMore = [
     const PopupMenuItem<String>(
       value: 'Delete Chat',
@@ -199,7 +202,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                   ? 48.0 + 78.0
                   : 48.0 + 28.0,
             ),
-            body: Container(
+            body: SizedBox(
               width: double.infinity,
               child: Stack(
                 children: [
@@ -472,7 +475,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                                                       padding:
                                                           EdgeInsets.all(15.0),
                                                       child: Text(
-                                                          'Safety tips \n\n\• Check seller offers buyer protection before making payment \n\• On delivery, check that the item delivered is what you ordered \n\• Report any seller you’ve any concerns about'),
+                                                          'Safety tips \n\n• Check seller offers buyer protection before making payment \n• On delivery, check that the item delivered is what you ordered \n• Report any seller you’ve any concerns about'),
                                                     ),
                                                   ),
                                                 ),
@@ -484,14 +487,67 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                             },
                           ),
                   ),
+                  if (showEmoji)
+                    EmojiPicker(
+                      onEmojiSelected: (Category? category, Emoji emoji) {
+                        // Do something when emoji is tapped (optional)
+                      },
+                      onBackspacePressed: () {
+                        // Do something when the user taps the backspace button (optional)
+                        // Set it to null to hide the Backspace-Button
+                      },
+                      textEditingController:
+                          _textEditingController, // pass here the same [TextEditingController] that is connected to your input field, usually a [TextFormField]
+                      config: Config(
+                        columns: 7,
+                        emojiSizeMax: 32 *
+                            (foundation.defaultTargetPlatform ==
+                                    TargetPlatform.iOS
+                                ? 1.30
+                                : 1.0), // Issue: https://github.com/flutter/flutter/issues/28894
+                        verticalSpacing: 0,
+                        horizontalSpacing: 0,
+                        gridPadding: EdgeInsets.zero,
+                        initCategory: Category.RECENT,
+                        bgColor: const Color(0xFFF2F2F2),
+                        indicatorColor: primaryColorLT,
+                        iconColor: Colors.grey,
+                        iconColorSelected: primaryColorLT,
+                        backspaceColor: primaryColorLT,
+                        skinToneDialogBgColor: Colors.white,
+                        skinToneIndicatorColor: Colors.grey,
+                        enableSkinTones: true,
+                        recentTabBehavior: RecentTabBehavior.RECENT,
+                        recentsLimit: 28,
+                        noRecents: const Text(
+                          'No Recents',
+                          style: TextStyle(fontSize: 20, color: Colors.black26),
+                          textAlign: TextAlign.center,
+                        ), // Needs to be const Widget
+                        loadingIndicator:
+                            const SizedBox.shrink(), // Needs to be const Widget
+                        tabIndicatorAnimDuration: kTabScrollDuration,
+                        categoryIcons: const CategoryIcons(),
+                        buttonMode: ButtonMode.MATERIAL,
+                      ),
+                    ),
                   Positioned(
                     bottom: 20.0,
                     left: 10.0,
                     right: 10.0,
                     child: SendMessageBox(
+                      onPickImage: () {
+                        controller.onPickImage();
+                      },
+                      onToggleEmoji: () {
+                        setState(() {
+                          showEmoji = !showEmoji;
+                        });
+                      },
                       onSendMessage: (
                         String message,
                       ) {
+                        showEmoji = false;
                         controller.addNewChat(
                           <String, dynamic>{
                             'senderUid': _profileController.myProfile.uid,
@@ -499,7 +555,6 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                             'messageText': message
                           },
                           args,
-                          _homeController.socket,
                         );
 
                         _textEditingController.clear();
@@ -558,12 +613,16 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
 
 class SendMessageBox extends StatelessWidget {
   final Function(String) onSendMessage;
+  final VoidCallback onPickImage;
+  final VoidCallback onToggleEmoji;
   final TextEditingController textEditingController;
-  const SendMessageBox(
-      {Key? key,
-      required this.onSendMessage,
-      required this.textEditingController})
-      : super(key: key);
+  const SendMessageBox({
+    Key? key,
+    required this.onSendMessage,
+    required this.onPickImage,
+    required this.onToggleEmoji,
+    required this.textEditingController,
+  }) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -583,17 +642,22 @@ class SendMessageBox extends StatelessWidget {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                const Stack(
+                Stack(
                   children: [
-                    // IconButton(
-                    //   onPressed: _onImagePicker,
-                    //   icon: _myAssetsEntities.isNotEmpty && !_isSending
-                    //       ? AssetViewer(
-                    //           image: _myAssetsEntities[0].thumbnail,
-                    //         )
-                    //       : const Icon(Icons.insert_photo),
-                    //   iconSize: 24.0,
-                    // ),
+                    IconButton(
+                      onPressed: onPickImage,
+                      icon: const Icon(Icons.insert_photo),
+                      iconSize: 24.0,
+                    ),
+                  ],
+                ),
+                Stack(
+                  children: [
+                    IconButton(
+                      onPressed: onToggleEmoji,
+                      icon: SvgPicture.asset('assets/svgs/smile.svg'),
+                      iconSize: 24.0,
+                    ),
                   ],
                 ),
                 Expanded(

@@ -45,7 +45,7 @@ class _CompleteSearchingScreenState extends State<CompleteSearchingScreen>
         return DefaultTabController(
           length: 2,
           child: Scaffold(
-            backgroundColor: Colors.white,
+            backgroundColor: backgroundcolorinterface,
             appBar: AppBar(
               titleSpacing: 0.0,
               automaticallyImplyLeading: false,
