@@ -232,8 +232,12 @@ class _ChatItemState extends State<ChatItem> {
                     children: [
                       Expanded(
                         child: Text(
-                          widget.myChatUser.user.name ??
-                              widget.myChatUser.user.username,
+                          widget.myChatUser.user.name != null &&
+                                  widget.myChatUser.user.name!.length <= 20
+                              ? widget.myChatUser.user.name!
+                              : widget.myChatUser.user.name != null
+                                  ? '${widget.myChatUser.user.name!.substring(0, 20)}...'
+                                  : widget.myChatUser.user.username,
                           style: Theme.of(context).textTheme.bodyLarge,
                         ),
                       ),

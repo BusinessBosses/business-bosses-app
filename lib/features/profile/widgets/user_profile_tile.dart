@@ -30,11 +30,11 @@ class _UserProfileTileState extends State<UserProfileTile> {
           Stack(
             clipBehavior: Clip.none,
             children: [
-              SizedBox(
-                height: 120.0,
-                width: 120.0,
-                child: Align(
-                  alignment: Alignment.topLeft,
+              Align(
+                alignment: Alignment.topLeft,
+                child: SizedBox(
+                  height: 120.0,
+                  width: 120.0,
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(1000),
                     child: NetworkImageWithPlaceHolder(
@@ -51,49 +51,43 @@ class _UserProfileTileState extends State<UserProfileTile> {
                   ),
                 ),
               ),
-              widget.myProfile.isRanked ?? false
-                  ? Positioned(
-                      right: 0.0,
-                      bottom: 0.0,
-                      child: Column(
-                        children: [
-                          Container(
-                            height: 36,
-                            width: 36,
-                            padding: const EdgeInsets.all(36 * .2),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(30.0),
-                              // ignore: always_specify_types
-                              boxShadow: const [
-                                BoxShadow(
-                                  color: Colors.black,
-                                  blurRadius: 5000000.0, // soften the shadow
-                                  spreadRadius: 0.02, //extend the shadow
-                                )
-                              ],
-                            ),
-                            child: SvgPicture.asset(
-                              'assets/svgs/bosseek.svg',
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 2,
-                          ),
-                          Text(
-                            'Boss of the week',
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium
-                                ?.copyWith(
-                                    fontWeight: FontWeight.w700,
-                                    color: textColor.withOpacity(1),
-                                    fontSize: 9),
-                          ),
+              if (widget.myProfile.isRanked ?? false)
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Container(
+                      height: 36,
+                      width: 36,
+                      padding: const EdgeInsets.all(36 * .2),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(30.0),
+                        boxShadow: const [
+                          BoxShadow(
+                            color: Colors.black,
+                            blurRadius: 5.0, // soften the shadow
+                            spreadRadius: 0.02, // extend the shadow
+                          )
                         ],
                       ),
-                    )
-                  : const SizedBox(),
+                      child: SvgPicture.asset(
+                        'assets/svgs/bosseek.svg',
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 2,
+                    ),
+                    Text(
+                      'Boss of the week',
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            fontWeight: FontWeight.w700,
+                            color: textColor.withOpacity(1),
+                            fontSize: 9,
+                          ),
+                    ),
+                  ],
+                ),
             ],
           ),
           Expanded(
@@ -102,71 +96,68 @@ class _UserProfileTileState extends State<UserProfileTile> {
                 // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const SizedBox(height: 6.0),
-                  Text(
-                    widget.myProfile.name ?? '',
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          fontWeight: FontWeight.bold,
+                  const SizedBox(height: 0.0),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 15.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          widget.myProfile.name != null &&
+                                  widget.myProfile.name!.length <= 20
+                              ? widget.myProfile.name!
+                              : widget.myProfile.name != null
+                                  ? '${widget.myProfile.name!.substring(0, 20)}...'
+                                  : '',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style:
+                              Theme.of(context).textTheme.titleLarge?.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                  ),
                         ),
-                  ),
-                  Text(
-                    widget.myProfile.category ?? '',
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
-                  ),
-                  widget.myProfile?.companyName != null &&
-                          widget.myProfile.companyName == ''
-                      ? Text(
-                          widget.myProfile.companyName!,
+                        Text(
+                          widget.myProfile.category ?? '',
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: Theme.of(context)
                               .textTheme
                               .bodyLarge
-                              ?.copyWith(fontWeight: FontWeight.normal),
-                        )
-                      : Container(),
-                  widget.myProfile?.location != null &&
-                          widget.myProfile.location == ''
-                      ? Text(
-                          widget.myProfile.location ?? '',
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style:
-                              Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                    color: textColor.withOpacity(0.6),
-                                  ),
-                        )
-                      : Container(),
-                  widget.myProfile?.companyName != null &&
-                          widget.myProfile.companyName == ''
-                      ? Text(
-                          widget.myProfile.companyName!,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyLarge
-                              ?.copyWith(fontWeight: FontWeight.normal),
-                        )
-                      : Container(),
-                  widget.myProfile?.location != null &&
-                          widget.myProfile.location == ''
-                      ? Text(
-                          widget.myProfile.location ?? '',
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style:
-                              Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                    color: textColor.withOpacity(0.6),
-                                  ),
-                        )
-                      : Container(),
+                              ?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  color: textColor.withOpacity(0.8)),
+                        ),
+                        widget.myProfile?.companyName != null &&
+                                widget.myProfile.companyName != ''
+                            ? Text(
+                                widget.myProfile.companyName!,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.normal,
+                                    color: textColor.withOpacity(
+                                      0.8,
+                                    )),
+                              )
+                            : Container(),
+                        widget.myProfile?.location != null &&
+                                widget.myProfile.location != ''
+                            ? Text(
+                                widget.myProfile.location ?? '',
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium
+                                    ?.copyWith(
+                                      color: textColor.withOpacity(0.6),
+                                    ),
+                              )
+                            : Container(),
+                      ],
+                    ),
+                  ),
                   if (!widget.myProfile.isSubscribed)
                     GestureDetector(
                       onTap: () {
@@ -211,6 +202,7 @@ class _UserProfileTileState extends State<UserProfileTile> {
                                           ),
                                           SvgPicture.asset(
                                             'assets/svgs/nextbutton.svg',
+                                            color: primaryColorLT,
                                           ),
                                         ],
                                       ),

@@ -404,9 +404,19 @@ class _BossUpSectionState extends State<BossUpSection> {
                                         child: Center(
                                           child: Padding(
                                             padding: EdgeInsets.all(2),
-                                            child: Text('Boss Up by'),
+                                            child: Text(
+                                              'Boss Up by',
+                                              style: TextStyle(fontSize: 11),
+                                            ),
                                           ),
                                         ),
+                                      ),
+                                      const SizedBox(width: 10),
+                                      Text(
+                                        '|',
+                                        style: TextStyle(
+                                            fontSize: 20,
+                                            color: textColor.withOpacity(0.5)),
                                       ),
                                       const SizedBox(width: 10),
                                       Text(

@@ -622,9 +622,19 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                         child: Center(
                                           child: Padding(
                                             padding: EdgeInsets.all(2),
-                                            child: Text('Boss Up by'),
+                                            child: Text(
+                                              'Boss Up by',
+                                              style: TextStyle(fontSize: 11),
+                                            ),
                                           ),
                                         ),
+                                      ),
+                                      const SizedBox(width: 10),
+                                      Text(
+                                        '|',
+                                        style: TextStyle(
+                                            fontSize: 20,
+                                            color: textColor.withOpacity(0.5)),
                                       ),
                                       const SizedBox(width: 10),
                                       Text(
@@ -787,11 +797,12 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
               decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(10),
-                  boxShadow: const [
+                  boxShadow: [
                     BoxShadow(
-                      color: Colors.black,
-                      blurRadius: 500.0, // soften the shadow
-                      spreadRadius: 15, //extend the shadow
+                      offset: Offset(0, 0),
+                      color: Colors.black.withAlpha(80),
+                      blurRadius: 100.0, // soften the shadow
+                      spreadRadius: 5, //extend the shadow
                     )
                   ]),
               child: Obx(

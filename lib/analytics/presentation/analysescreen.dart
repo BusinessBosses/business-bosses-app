@@ -133,6 +133,7 @@ class _AnalyserScreenState extends State<AnalyserScreen> {
                                                 ),
                                                 SvgPicture.asset(
                                                   'assets/svgs/nextbutton.svg',
+                                                  color: primaryColorLT,
                                                 ),
                                               ],
                                             ),

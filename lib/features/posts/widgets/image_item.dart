@@ -30,7 +30,7 @@ class ImageItem extends StatelessWidget {
                   fit: BoxFit.cover,
                 ),
         ),
-        if (imageUrl != null)
+        if (file != null)
           Positioned(
             right: 5.0,
             top: 5.0,
