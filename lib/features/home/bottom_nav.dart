@@ -122,144 +122,133 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
         return false;
       },
       child: Scaffold(
-          body: Navigator(
-        observers: [_observer],
-        onGenerateRoute: (RouteSettings settings) {
-          return MaterialPageRoute(
-            builder: (BuildContext context) {
-              return SizedBox(
-                height: MediaQuery.of(context).size.height,
-                width: MediaQuery.of(context).size.width,
+          body: SizedBox(
+        height: MediaQuery.of(context).size.height,
+        width: MediaQuery.of(context).size.width,
+        child: Stack(
+          children: <Widget>[
+            Container(
+              height: MediaQuery.of(context).size.height,
+              width: MediaQuery.of(context).size.width,
+              color: Colors.white,
+              child: IndexedStack(
+                index: _activeIndex,
+                children: const <Widget>[
+                  HomeScreen(),
+                  AllCommunitiesScreen(),
+                  MarketplaceScreen(),
+                  MyProfileScreen(),
+                ],
+              ),
+            ),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Container(
+                height: 103.0,
+                decoration: BoxDecoration(
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.08),
+                      spreadRadius: 10,
+                      blurRadius: 50,
+                      offset: const Offset(0, 7), // changes position of shadow
+                    ),
+                  ],
+                ),
                 child: Stack(
                   children: <Widget>[
-                    Container(
-                      height: MediaQuery.of(context).size.height,
-                      width: MediaQuery.of(context).size.width,
-                      color: Colors.white,
-                      child: IndexedStack(
-                        index: _activeIndex,
-                        children: const <Widget>[
-                          HomeScreen(),
-                          AllCommunitiesScreen(),
-                          MarketplaceScreen(),
-                          MyProfileScreen(),
-                        ],
-                      ),
-                    ),
-                    Align(
-                      alignment: Alignment.bottomCenter,
-                      child: Container(
-                        height: 103.0,
-                        decoration: BoxDecoration(
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.08),
-                              spreadRadius: 10,
-                              blurRadius: 50,
-                              offset: const Offset(
-                                  0, 7), // changes position of shadow
-                            ),
-                          ],
+                    Column(
+                      children: [
+                        Container(
+                          height: 20.0,
+                          color: Colors.transparent,
                         ),
-                        child: Stack(
-                          children: <Widget>[
-                            Column(
-                              children: [
-                                Container(
-                                  height: 20.0,
-                                  color: Colors.transparent,
-                                ),
-                                Container(
-                                  height: 83.0,
-                                  padding: const EdgeInsets.only(bottom: 20),
-                                  color: Colors.white,
-                                  child: Row(
-                                    children: [
-                                      Expanded(
-                                        flex: 10,
-                                        child: BottomTabButton(
-                                          icon: 'assets/svgs/hom.svg',
-                                          label: 'Home',
-                                          onTap: () {
-                                            _onChangePage(0);
-                                          },
-                                          isActive: _activeIndex == 0,
-                                        ),
-                                      ),
-                                      Expanded(
-                                        flex: 10,
-                                        child: BottomTabButton(
-                                          icon: 'assets/svgs/bossup.svg',
-                                          onTap: () {
-                                            _onChangePage(1);
-                                          },
-                                          label: 'Boss Up',
-                                          isActive: _activeIndex == 1,
-                                        ),
-                                      ),
-                                      Container(
-                                        width: 72.0,
-                                        height: double.infinity,
-                                        color: Colors.white,
-                                      ),
-                                      Expanded(
-                                        flex: 10,
-                                        child: BottomTabButton(
-                                          label: 'Marketplace',
-                                          icon: 'assets/svgs/marketplace.svg',
-                                          onTap: () {
-                                            _onChangePage(2);
-                                          },
-                                          isActive: _activeIndex == 2,
-                                        ),
-                                      ),
-                                      Expanded(
-                                        flex: 10,
-                                        child: BottomTabButton(
-                                          icon: 'assets/svgs/profilebottom.svg',
-                                          onTap: () => _onChangePage(3),
-                                          isActive: _activeIndex == 3,
-                                          label: 'Profile',
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Positioned(
-                              left: 0,
-                              right: 0,
-                              child: Container(
-                                alignment: Alignment.center,
-                                child: FloatingActionButton(
-                                  child: const Icon(Icons.add),
-                                  onPressed: () async {
-                                    // log("Hello world");
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute<dynamic>(
-                                        builder: (BuildContext context) =>
-                                            const CreatePostScreen(),
-                                      ),
-                                    );
+                        Container(
+                          height: 83.0,
+                          padding: const EdgeInsets.only(bottom: 20),
+                          color: Colors.white,
+                          child: Row(
+                            children: [
+                              Expanded(
+                                flex: 10,
+                                child: BottomTabButton(
+                                  icon: 'assets/svgs/hom.svg',
+                                  label: 'Home',
+                                  onTap: () {
+                                    _onChangePage(0);
                                   },
+                                  isActive: _activeIndex == 0,
                                 ),
                               ),
-                            )
-                          ],
+                              Expanded(
+                                flex: 10,
+                                child: BottomTabButton(
+                                  icon: 'assets/svgs/bossup.svg',
+                                  onTap: () {
+                                    _onChangePage(1);
+                                  },
+                                  label: 'Boss Up',
+                                  isActive: _activeIndex == 1,
+                                ),
+                              ),
+                              Container(
+                                width: 72.0,
+                                height: double.infinity,
+                                color: Colors.white,
+                              ),
+                              Expanded(
+                                flex: 10,
+                                child: BottomTabButton(
+                                  label: 'Marketplace',
+                                  icon: 'assets/svgs/marketplace.svg',
+                                  onTap: () {
+                                    _onChangePage(2);
+                                  },
+                                  isActive: _activeIndex == 2,
+                                ),
+                              ),
+                              Expanded(
+                                flex: 10,
+                                child: BottomTabButton(
+                                  icon: 'assets/svgs/profilebottom.svg',
+                                  onTap: () => _onChangePage(3),
+                                  isActive: _activeIndex == 3,
+                                  label: 'Profile',
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    Positioned(
+                      left: 0,
+                      right: 0,
+                      child: Container(
+                        alignment: Alignment.center,
+                        child: FloatingActionButton(
+                          child: const Icon(Icons.add),
+                          onPressed: () async {
+                            // log("Hello world");
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute<dynamic>(
+                                builder: (BuildContext context) =>
+                                    const CreatePostScreen(),
+                              ),
+                            );
+                          },
                         ),
                       ),
                     )
-
-                    //navbar
                   ],
                 ),
-              );
-            },
-            settings: settings,
-          );
-        },
+              ),
+            )
+
+            //navbar
+          ],
+        ),
       )),
     );
   }

@@ -23,7 +23,7 @@ class _UserProfileTileState extends State<UserProfileTile> {
     final ProfileController profileController = Get.find();
     // fetchData();
     // setState(() {});
-    return Container(
+    return SizedBox(
       width: double.infinity,
       child: Row(
         children: [
@@ -119,7 +119,7 @@ class _UserProfileTileState extends State<UserProfileTile> {
                           fontWeight: FontWeight.bold,
                         ),
                   ),
-                  widget.myProfile?.companyName != null &&
+                  widget.myProfile.companyName != null &&
                           widget.myProfile.companyName == ''
                       ? Text(
                           widget.myProfile.companyName!,
@@ -131,7 +131,7 @@ class _UserProfileTileState extends State<UserProfileTile> {
                               ?.copyWith(fontWeight: FontWeight.normal),
                         )
                       : Container(),
-                  widget.myProfile?.location != null &&
+                  widget.myProfile.location != null &&
                           widget.myProfile.location == ''
                       ? Text(
                           widget.myProfile.location ?? '',
@@ -143,7 +143,7 @@ class _UserProfileTileState extends State<UserProfileTile> {
                                   ),
                         )
                       : Container(),
-                  widget.myProfile?.companyName != null &&
+                  widget.myProfile.companyName != null &&
                           widget.myProfile.companyName == ''
                       ? Text(
                           widget.myProfile.companyName!,
@@ -155,7 +155,7 @@ class _UserProfileTileState extends State<UserProfileTile> {
                               ?.copyWith(fontWeight: FontWeight.normal),
                         )
                       : Container(),
-                  widget.myProfile?.location != null &&
+                  widget.myProfile.location != null &&
                           widget.myProfile.location == ''
                       ? Text(
                           widget.myProfile.location ?? '',

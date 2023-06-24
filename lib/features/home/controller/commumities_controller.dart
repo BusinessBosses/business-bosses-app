@@ -10,6 +10,7 @@ import 'package:socket_io_client/socket_io_client.dart' as IO;
 class CommunitiesController extends GetxController {
   late IO.Socket socket;
   final HomeController _homeController = Get.find();
+  final ProfileController _profileController = Get.find();
 
   List<Industry> industries = [];
   List<Industry> searchedIndustries = [];
@@ -36,7 +37,8 @@ class CommunitiesController extends GetxController {
       loadingSearch(true);
       searchError(false);
       update();
-      final ApiResponseModel response = await HomeRepository.searchIndustries(query.trim());
+      final ApiResponseModel response =
+          await HomeRepository.searchIndustries(query.trim());
       if (response.success) {
         for (int i = 0; i < response.data['rows'].length; i++) {
           searchedForums.add(ForumModel.fromMap({
@@ -62,7 +64,7 @@ class CommunitiesController extends GetxController {
     searchedIndustries.clear();
   }
 
-  void postLike(String userId, String postId, String type) {
+  void postLike(String userId, String postId, String type, String receiverUid) {
     final int postIndex = searchedForums
         .indexWhere((ForumModel element) => element.forumId == postId);
     if (postIndex != -1) {
@@ -76,11 +78,20 @@ class CommunitiesController extends GetxController {
       }
     }
     update();
-    socket.emit('like', {
-      'postId': postId,
-      'userId': userId,
-      'type': type,
-    });
+    if (_profileController.myProfile.uid != receiverUid) {
+      socket.emit('like', {
+        'postId': postId,
+        'userId': userId,
+        'type': type,
+        'receiverUid': receiverUid,
+      });
+    } else {
+      socket.emit('like', {
+        'postId': postId,
+        'userId': userId,
+        'type': type,
+      });
+    }
   }
 
   /// COIN AND UNCOIN FUNCTION

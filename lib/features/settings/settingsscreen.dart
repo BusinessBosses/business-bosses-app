@@ -127,11 +127,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   Future<void> _contactUs() async {
-    print('pressed');
-    String mailUrl = 'mailto:support@businessbosses.co.uk';
+    Uri mailUrl = Uri.parse('mailto:support@businessbosses.co.uk');
     try {
-      if (await canLaunch(mailUrl)) {
-        await launch(mailUrl);
+      if (await canLaunchUrl(mailUrl)) {
+        await launchUrl(mailUrl);
       } else {
         throw 'Could not launch $mailUrl';
       }

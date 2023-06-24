@@ -1,16 +1,18 @@
 import 'dart:async';
+import 'package:business_bosses_v2/common/models/user_model.dart';
+import 'package:flutter/foundation.dart' as foundation;
 import 'package:business_bosses_v2/features/chat/controllers/chat_controller.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
 import 'package:detectable_text_field/widgets/detectable_text.dart';
+import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import '../../action/action.dart';
-import '../../common/models/user_model.dart';
 import '../../common/widgets/buttons/button.dart';
 import '../../common/widgets/chat_box.dart';
 import '../../common/widgets/popup/my_popup_menu_button.dart';
@@ -19,13 +21,19 @@ import '../../common/widgets/text_widget.dart';
 import '../../common/widgets/user_avatar_with_badge.dart';
 import '../../utils/constants/constants.dart';
 import '../../utils/theme/theme.dart';
+import '../marketplace/models/market_model.dart';
 import '../marketplace/presentation/seller_reviews.dart';
 import 'models/my_message.dart';
 
 class ChatRoomScreen extends StatefulWidget {
   static const String routeName = '/chat-room-screen';
-
-  const ChatRoomScreen({Key? key}) : super(key: key);
+  final bool frommarketplace;
+  final MarketModel? market;
+  ChatRoomScreen({
+    Key? key,
+    required this.frommarketplace,
+    this.market,
+  }) : super(key: key);
 
   @override
   _ChatRoomScreenState createState() => _ChatRoomScreenState();
@@ -35,8 +43,9 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
   final ProfileController _profileController = Get.find();
   final HomeController _homeController = Get.find();
   final ChatController _chatController = Get.find();
-  late UserModel args;
   late TextEditingController _textEditingController;
+  late UserModel args;
+  bool showEmoji = false;
   final List<PopupMenuEntry<String>> _popupItemForumMore = [
     const PopupMenuItem<String>(
       value: 'Delete Chat',
@@ -46,7 +55,6 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
       ),
     ),
   ];
-  bool frommarketplace = true;
 
   @override
   void initState() {
@@ -64,7 +72,6 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
   @override
   Widget build(BuildContext context) {
     String? previousScreen = Get.previousRoute;
-
     return WillPopScope(
       onWillPop: () async {
         navigateTo(context);
@@ -199,7 +206,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                   ? 48.0 + 78.0
                   : 48.0 + 28.0,
             ),
-            body: Container(
+            body: SizedBox(
               width: double.infinity,
               child: Stack(
                 children: [
@@ -239,75 +246,73 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                               return Column(
                                 children: [
                                   InkWell(
-                                      onLongPress: () {
-                                        FocusScopeNode currentFocus =
-                                            FocusScope.of(context);
-                                        if (!currentFocus.hasPrimaryFocus) {
-                                          currentFocus.unfocus();
-                                        }
+                                    onLongPress: () {
+                                      FocusScopeNode currentFocus =
+                                          FocusScope.of(context);
+                                      if (!currentFocus.hasPrimaryFocus) {
+                                        currentFocus.unfocus();
+                                      }
 
-                                        showDialog(
-                                          context: context,
-                                          builder: (BuildContext context) =>
-                                              AlertDialog(
-                                            content: Column(
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: [
-                                                ListTile(
-                                                  onTap: () async {
-                                                    navigateTo(context);
-                                                    await Clipboard.setData(
-                                                      ClipboardData(
-                                                        text: message
-                                                            .messageText!,
-                                                      ),
-                                                    );
-                                                    // ignore: use_build_context_synchronously
-                                                    showSnackBar(context,
-                                                        message:
-                                                            'Text Copied!');
-                                                  },
-                                                  contentPadding:
-                                                      EdgeInsets.zero,
-                                                  title: const TextWidget(
-                                                    text: 'Copy Text',
-                                                  ),
+                                      showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) =>
+                                            AlertDialog(
+                                          content: Column(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              ListTile(
+                                                onTap: () async {
+                                                  navigateTo(context);
+                                                  await Clipboard.setData(
+                                                    ClipboardData(
+                                                      text:
+                                                          message.messageText!,
+                                                    ),
+                                                  );
+                                                  // ignore: use_build_context_synchronously
+                                                  showSnackBar(context,
+                                                      message: 'Text Copied!');
+                                                },
+                                                contentPadding: EdgeInsets.zero,
+                                                title: const TextWidget(
+                                                  text: 'Copy Text',
                                                 ),
-                                                ListTile(
-                                                  onTap: () {
-                                                    navigateTo(context);
-                                                    optionsDialog(context, () {
-                                                      // _isLoading = true;
-                                                      Navigator.pop(context);
-                                                      // deleteMessage(
-                                                      //     _messages[reversedIndex],
-                                                      //     reversedIndex);
-                                                      // if (reversedIndex ==
-                                                      //     _messages.length - 1) {
-                                                      //   DeleteLastMessage(_messages[
-                                                      //       reversedIndex]);
-                                                      // }
-                                                    });
-                                                  },
-                                                  contentPadding:
-                                                      EdgeInsets.zero,
-                                                  title: const TextWidget(
-                                                    text: 'Delete Message',
-                                                    color: Colors.red,
-                                                  ),
-                                                )
-                                              ],
-                                            ),
+                                              ),
+                                              ListTile(
+                                                onTap: () {
+                                                  navigateTo(context);
+                                                  optionsDialog(context, () {
+                                                    // _isLoading = true;
+                                                    Navigator.pop(context);
+                                                    // deleteMessage(
+                                                    //     _messages[reversedIndex],
+                                                    //     reversedIndex);
+                                                    // if (reversedIndex ==
+                                                    //     _messages.length - 1) {
+                                                    //   DeleteLastMessage(_messages[
+                                                    //       reversedIndex]);
+                                                    // }
+                                                  });
+                                                },
+                                                contentPadding: EdgeInsets.zero,
+                                                title: const TextWidget(
+                                                  text: 'Delete Message',
+                                                  color: Colors.red,
+                                                ),
+                                              )
+                                            ],
                                           ),
-                                        );
+                                        ),
+                                      );
 
-                                        // deleteMessage(_messages[reversedIndex]);
-                                      },
-                                      child: ChatBox(
-                                        message,
-                                        myUid: _profileController.myProfile.uid,
-                                      )),
-                                  i == 0 && frommarketplace
+                                      // deleteMessage(_messages[reversedIndex]);
+                                    },
+                                    child: ChatBox(
+                                      message,
+                                      myUid: _profileController.myProfile.uid,
+                                    ),
+                                  ),
+                                  i == 0 && widget.frommarketplace
                                       ? Column(
                                           mainAxisAlignment:
                                               MainAxisAlignment.end,
@@ -326,8 +331,9 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                                                       borderRadius:
                                                           BorderRadius.circular(
                                                               10),
-                                                      child: Image.asset(
-                                                        'assets/images/img1.png',
+                                                      child: Image.network(
+                                                        widget
+                                                            .market?.images?[0],
                                                         fit: BoxFit.cover,
                                                         height: 300,
                                                       ),
@@ -337,121 +343,118 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                                                         alignment: Alignment
                                                             .bottomCenter,
                                                         child: Container(
-                                                            color: Colors.white,
-                                                            width:
-                                                                double.infinity,
-                                                            height: 100,
-                                                            child: Padding(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                          .only(
-                                                                      left:
-                                                                          20.0,
-                                                                      right: 20,
-                                                                      top: 20),
-                                                              child: Column(
-                                                                children: [
-                                                                  const Row(
-                                                                    mainAxisAlignment:
-                                                                        MainAxisAlignment
-                                                                            .start,
-                                                                    children: <Widget>[
-                                                                      Text(
-                                                                        'price',
-                                                                        style:
-                                                                            TextStyle(
-                                                                          fontWeight:
-                                                                              FontWeight.w800,
-                                                                        ),
+                                                          color: Colors.white,
+                                                          width:
+                                                              double.infinity,
+                                                          height: 100,
+                                                          child: Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                        .only(
+                                                                    left: 20.0,
+                                                                    right: 20,
+                                                                    top: 20),
+                                                            child: Column(
+                                                              children: [
+                                                                Row(
+                                                                  mainAxisAlignment:
+                                                                      MainAxisAlignment
+                                                                          .start,
+                                                                  children: <Widget>[
+                                                                    Text(
+                                                                      '${widget.market?.price}',
+                                                                      style:
+                                                                          const TextStyle(
+                                                                        fontWeight:
+                                                                            FontWeight.w800,
                                                                       ),
-                                                                    ],
-                                                                  ),
-                                                                  DetectableText(
-                                                                    text:
-                                                                        'post description',
-                                                                    detectionRegExp:
-                                                                        detectionRegExp(
-                                                                            hashtag:
-                                                                                false)!,
-                                                                    detectedStyle:
-                                                                        bodyText2
-                                                                            .copyWith(
-                                                                      color: Colors
-                                                                          .blue,
                                                                     ),
-                                                                    moreStyle:
-                                                                        bodyText2
-                                                                            .copyWith(
-                                                                      color: Colors
-                                                                          .redAccent,
+                                                                  ],
+                                                                ),
+                                                                DetectableText(
+                                                                  text:
+                                                                      '${widget.market?.description}',
+                                                                  detectionRegExp:
+                                                                      detectionRegExp(
+                                                                          hashtag:
+                                                                              false)!,
+                                                                  detectedStyle:
+                                                                      bodyText2
+                                                                          .copyWith(
+                                                                    color: Colors
+                                                                        .blue,
+                                                                  ),
+                                                                  moreStyle:
+                                                                      bodyText2
+                                                                          .copyWith(
+                                                                    color: Colors
+                                                                        .redAccent,
+                                                                  ),
+                                                                  lessStyle:
+                                                                      bodyText2
+                                                                          .copyWith(
+                                                                    color: Colors
+                                                                        .redAccent,
+                                                                  ),
+                                                                  trimExpandedText:
+                                                                      '  show less',
+                                                                  basicStyle: bodyText2
+                                                                      .copyWith(
+                                                                          color:
+                                                                              textColor),
+                                                                  onTap: (_) {},
+                                                                ),
+                                                                const SizedBox(
+                                                                  height: 2,
+                                                                ),
+                                                                Row(
+                                                                  children: [
+                                                                    SvgPicture
+                                                                        .asset(
+                                                                            'assets/svgs/location.svg'),
+                                                                    const SizedBox(
+                                                                      width: 1,
                                                                     ),
-                                                                    lessStyle:
-                                                                        bodyText2
-                                                                            .copyWith(
-                                                                      color: Colors
-                                                                          .redAccent,
+                                                                    Text(
+                                                                      '${widget.market?.location}',
+                                                                      style: const TextStyle(
+                                                                          fontWeight: FontWeight
+                                                                              .normal,
+                                                                          fontSize:
+                                                                              12,
+                                                                          color:
+                                                                              subtextColor),
+                                                                      overflow:
+                                                                          TextOverflow
+                                                                              .ellipsis,
+                                                                      softWrap:
+                                                                          false,
                                                                     ),
-                                                                    trimExpandedText:
-                                                                        '  show less',
-                                                                    basicStyle:
-                                                                        bodyText2.copyWith(
-                                                                            color:
-                                                                                textColor),
-                                                                    onTap:
-                                                                        (_) {},
-                                                                  ),
-                                                                  const SizedBox(
-                                                                    height: 2,
-                                                                  ),
-                                                                  Row(
-                                                                    children: [
-                                                                      SvgPicture
-                                                                          .asset(
-                                                                              'assets/svgs/location.svg'),
-                                                                      const SizedBox(
-                                                                        width:
-                                                                            1,
-                                                                      ),
-                                                                      const Text(
-                                                                        'location',
-                                                                        style: TextStyle(
-                                                                            fontWeight: FontWeight
-                                                                                .normal,
-                                                                            fontSize:
-                                                                                12,
-                                                                            color:
-                                                                                subtextColor),
-                                                                        overflow:
-                                                                            TextOverflow.ellipsis,
-                                                                        softWrap:
-                                                                            false,
-                                                                      ),
-                                                                      const SizedBox(
-                                                                        width:
-                                                                            5,
-                                                                      ),
-                                                                      SvgPicture
-                                                                          .asset(
-                                                                              'assets/svgs/category.svg'),
-                                                                      const SizedBox(
-                                                                        width:
-                                                                            3,
-                                                                      ),
-                                                                      const Text(
-                                                                        'category',
-                                                                        style: TextStyle(
-                                                                            fontWeight: FontWeight
-                                                                                .normal,
-                                                                            fontSize:
-                                                                                12,
-                                                                            color:
-                                                                                subtextColor),
-                                                                      ),
-                                                                    ],
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                            )),
+                                                                    const SizedBox(
+                                                                      width: 5,
+                                                                    ),
+                                                                    SvgPicture
+                                                                        .asset(
+                                                                            'assets/svgs/category.svg'),
+                                                                    const SizedBox(
+                                                                      width: 3,
+                                                                    ),
+                                                                    Text(
+                                                                      '${widget.market?.category}',
+                                                                      style: const TextStyle(
+                                                                          fontWeight: FontWeight
+                                                                              .normal,
+                                                                          fontSize:
+                                                                              12,
+                                                                          color:
+                                                                              subtextColor),
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        ),
                                                       ),
                                                     ),
                                                   ],
@@ -472,36 +475,99 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                                                       padding:
                                                           EdgeInsets.all(15.0),
                                                       child: Text(
-                                                          'Safety tips \n\n\• Check seller offers buyer protection before making payment \n\• On delivery, check that the item delivered is what you ordered \n\• Report any seller you’ve any concerns about'),
+                                                          'Safety tips \n\n• Check seller offers buyer protection before making payment \n• On delivery, check that the item delivered is what you ordered \n• Report any seller you’ve any concerns about'),
                                                     ),
                                                   ),
                                                 ),
                                               ),
                                             ])
-                                      : Container()
+                                      : const SizedBox(),
                                 ],
                               );
                             },
                           ),
                   ),
+                  if (showEmoji)
+                    EmojiPicker(
+                      onEmojiSelected: (Category? category, Emoji emoji) {
+                        // Do something when emoji is tapped (optional)
+                      },
+                      onBackspacePressed: () {
+                        // Do something when the user taps the backspace button (optional)
+                        // Set it to null to hide the Backspace-Button
+                      },
+                      textEditingController:
+                          _textEditingController, // pass here the same [TextEditingController] that is connected to your input field, usually a [TextFormField]
+                      config: Config(
+                        columns: 7,
+                        emojiSizeMax: 32 *
+                            (foundation.defaultTargetPlatform ==
+                                    TargetPlatform.iOS
+                                ? 1.30
+                                : 1.0), // Issue: https://github.com/flutter/flutter/issues/28894
+                        verticalSpacing: 0,
+                        horizontalSpacing: 0,
+                        gridPadding: EdgeInsets.zero,
+                        initCategory: Category.RECENT,
+                        bgColor: const Color(0xFFF2F2F2),
+                        indicatorColor: primaryColorLT,
+                        iconColor: Colors.grey,
+                        iconColorSelected: primaryColorLT,
+                        backspaceColor: primaryColorLT,
+                        skinToneDialogBgColor: Colors.white,
+                        skinToneIndicatorColor: Colors.grey,
+                        enableSkinTones: true,
+                        recentTabBehavior: RecentTabBehavior.RECENT,
+                        recentsLimit: 28,
+                        noRecents: const Text(
+                          'No Recents',
+                          style: TextStyle(fontSize: 20, color: Colors.black26),
+                          textAlign: TextAlign.center,
+                        ), // Needs to be const Widget
+                        loadingIndicator:
+                            const SizedBox.shrink(), // Needs to be const Widget
+                        tabIndicatorAnimDuration: kTabScrollDuration,
+                        categoryIcons: const CategoryIcons(),
+                        buttonMode: ButtonMode.MATERIAL,
+                      ),
+                    ),
                   Positioned(
                     bottom: 20.0,
                     left: 10.0,
                     right: 10.0,
                     child: SendMessageBox(
+                      onPickImage: () {
+                        controller.onPickImage();
+                      },
+                      onToggleEmoji: () {
+                        setState(() {
+                          showEmoji = !showEmoji;
+                        });
+                      },
                       onSendMessage: (
                         String message,
                       ) {
-                        controller.addNewChat(
-                          <String, dynamic>{
-                            'senderUid': _profileController.myProfile.uid,
-                            'receiverUid': args.uid,
-                            'messageText': message
-                          },
-                          args,
-                          _homeController.socket,
-                        );
-
+                        showEmoji = false;
+                        if (widget.frommarketplace) {
+                          controller.addNewChatMarket(
+                            <String, dynamic>{
+                              'senderUid': _profileController.myProfile.uid,
+                              'receiverUid': args.uid,
+                              'messageText': message
+                            },
+                            args,
+                            widget.market!.marketId,
+                          );
+                        } else {
+                          controller.addNewChat(
+                            <String, dynamic>{
+                              'senderUid': _profileController.myProfile.uid,
+                              'receiverUid': args.uid,
+                              'messageText': message
+                            },
+                            args,
+                          );
+                        }
                         _textEditingController.clear();
                       },
                       textEditingController: _textEditingController,
@@ -558,12 +624,16 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
 
 class SendMessageBox extends StatelessWidget {
   final Function(String) onSendMessage;
+  final VoidCallback onPickImage;
+  final VoidCallback onToggleEmoji;
   final TextEditingController textEditingController;
-  const SendMessageBox(
-      {Key? key,
-      required this.onSendMessage,
-      required this.textEditingController})
-      : super(key: key);
+  const SendMessageBox({
+    Key? key,
+    required this.onSendMessage,
+    required this.onPickImage,
+    required this.onToggleEmoji,
+    required this.textEditingController,
+  }) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -583,17 +653,22 @@ class SendMessageBox extends StatelessWidget {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                const Stack(
+                Stack(
                   children: [
-                    // IconButton(
-                    //   onPressed: _onImagePicker,
-                    //   icon: _myAssetsEntities.isNotEmpty && !_isSending
-                    //       ? AssetViewer(
-                    //           image: _myAssetsEntities[0].thumbnail,
-                    //         )
-                    //       : const Icon(Icons.insert_photo),
-                    //   iconSize: 24.0,
-                    // ),
+                    IconButton(
+                      onPressed: onPickImage,
+                      icon: const Icon(Icons.insert_photo),
+                      iconSize: 24.0,
+                    ),
+                  ],
+                ),
+                Stack(
+                  children: [
+                    IconButton(
+                      onPressed: onToggleEmoji,
+                      icon: SvgPicture.asset('assets/svgs/smile.svg'),
+                      iconSize: 24.0,
+                    ),
                   ],
                 ),
                 Expanded(

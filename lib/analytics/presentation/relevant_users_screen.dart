@@ -6,10 +6,7 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
-import '../../action/action.dart';
-import '../../common/params.dart';
 import '../../common/widgets/safety_model.dart';
-import '../../features/connects/controller/connection_controller.dart';
 import '../../features/connects/widgets/connection_grid_tile.dart';
 import '../../features/search/controller/search_controller.dart';
 import '../../utils/theme/theme.dart';
@@ -79,7 +76,7 @@ class _RelevantUsersScreenState extends State<RelevantUsersScreen> {
     });
   }
 
-  bool _isLoading = true;
+  final bool _isLoading = true;
 
   Future<void> _loadRelevantUsers() async {}
 
