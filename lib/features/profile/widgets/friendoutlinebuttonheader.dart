@@ -7,6 +7,7 @@ import '../../../action/action.dart';
 import '../../../common/models/user_model.dart';
 import '../../../common/widgets/buttons/my_outlined_button.dart';
 import '../../../utils/theme/theme.dart';
+import '../../chat/chat_room_screen.dart';
 import '../controller/profile_controller.dart';
 
 Widget OutlineButtonHeader(
@@ -46,7 +47,12 @@ Widget OutlineButtonHeader(
         child: MCustomButton(
           margin: const EdgeInsets.symmetric(horizontal: 4.0),
           onPressed: () {
-            Get.toNamed(Routes.chatRoom, arguments: publicUser);
+            Get.to(
+              () => ChatRoomScreen(
+                frommarketplace: false,
+              ),
+              arguments: publicUser,
+            );
           },
           child: const Text('Message'),
         ),

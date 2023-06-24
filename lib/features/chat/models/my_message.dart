@@ -12,12 +12,14 @@ class MessageModel {
   final String senderUid;
   final String receiverUid;
   final bool seen;
+  final String? marketId;
   final UserModel user;
   MessageModel({
     required this.messageId,
     this.messageText,
     required this.timestamp,
     this.image,
+    this.marketId,
     this.isRawImage,
     this.deleted,
     required this.senderUid,
@@ -29,6 +31,7 @@ class MessageModel {
   MessageModel copyWith({
     String? messageId,
     String? messageText,
+    String? marketId,
     int? timestamp,
     String? image,
     bool? isRawImage,
@@ -41,6 +44,7 @@ class MessageModel {
     return MessageModel(
       messageId: messageId ?? this.messageId,
       messageText: messageText ?? this.messageText,
+      marketId: marketId ?? this.marketId,
       timestamp: timestamp ?? this.timestamp,
       image: image ?? this.image,
       isRawImage: isRawImage ?? this.isRawImage,
@@ -56,6 +60,7 @@ class MessageModel {
     return <String, dynamic>{
       'messageId': messageId,
       'messageText': messageText,
+      'marketId': marketId,
       'timestamp': timestamp,
       'image': image,
       'isRawImage': isRawImage,
@@ -72,6 +77,7 @@ class MessageModel {
       messageId: map['messageId'] as String,
       messageText:
           map['messageText'] != null ? map['messageText'] as String : null,
+      marketId: map['marketId'] != null ? map['marketId'] as String : null,
       timestamp: map['timestamp'] as int,
       image: map['image'] != null ? map['image'] as String : null,
       isRawImage: map['isRawImage'] != null ? map['isRawImage'] as bool : null,

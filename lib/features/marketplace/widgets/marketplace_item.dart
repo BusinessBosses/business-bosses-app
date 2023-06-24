@@ -17,6 +17,7 @@ import '../../../../navigation/routes.dart';
 import '../../../../utils/theme/theme.dart';
 import '../../../common/models/comment_model.dart';
 import '../../../common/widgets/buttons/my_outlined_button.dart';
+import '../../chat/chat_room_screen.dart';
 import '../../profile/presentation/publicprofilescreen.dart';
 import '../controllers/market_controller.dart';
 import '../models/market_model.dart';
@@ -548,8 +549,11 @@ class _MarketTileState extends State<MarketTile> {
                                           margin: const EdgeInsets.only(
                                               right: 0.0, bottom: 10, top: 10),
                                           onPressed: () {
-                                            Get.toNamed(
-                                              Routes.chatRoom,
+                                            Get.to(
+                                              () => ChatRoomScreen(
+                                                frommarketplace: true,
+                                                market: widget.post,
+                                              ),
                                               arguments: widget.post.user,
                                             );
                                           },
