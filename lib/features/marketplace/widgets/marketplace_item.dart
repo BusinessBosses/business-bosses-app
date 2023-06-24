@@ -17,6 +17,7 @@ import '../../../../navigation/routes.dart';
 import '../../../../utils/theme/theme.dart';
 import '../../../common/models/comment_model.dart';
 import '../../../common/widgets/buttons/my_outlined_button.dart';
+import '../../profile/presentation/publicprofilescreen.dart';
 import '../controllers/market_controller.dart';
 import '../models/market_model.dart';
 import '../presentation/sell_screen.dart';
@@ -744,6 +745,21 @@ class _MarketTileState extends State<MarketTile> {
               title: const TextWidget(
                 text: 'Report this post',
                 color: Colors.red,
+              ),
+            ),
+            ListTile(
+              onTap: () {
+                Get.to(
+                  () => PublicProfileScreen(
+                    store: true,
+                  ),
+                  arguments: widget.post.user,
+                );
+              },
+              contentPadding: EdgeInsets.zero,
+              title: const TextWidget(
+                text: 'View Store',
+                color: Colors.blue,
               ),
             )
           ],

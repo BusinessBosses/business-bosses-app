@@ -20,7 +20,7 @@ class MarketController extends GetxController {
   RxBool loading = RxBool(false);
   RxBool isJoined = RxBool(false);
   bool isLoading = true;
-  // final ProfileController _profileController = Get.find();
+  final ProfileController _profileController = Get.find();
 
   /// PROCESS RAW API DATA, MODELIZE AND SAVE TO STATE
   void processPostsToState(dynamic post) {
@@ -86,6 +86,28 @@ class MarketController extends GetxController {
     }
   }
 
+  /// UPDATE MARKET RATING IF THERE IS AN UPDATE IN REVIEWS
+  void updateUser(String id, double newAverageRating) {
+    final List<int> postIndices = <int>[];
+
+    for (int i = 0; i < markets.length; i++) {
+      if (markets[i].userId == id) {
+        postIndices.add(i);
+      }
+    }
+
+    for (final int index in postIndices) {
+      final MarketModel market = markets[index];
+      final UserModel user = market.user;
+      final UserModel updatedUser =
+          user.copyWith(averageRating: newAverageRating);
+      final MarketModel updatedMarket = market.copyWith(user: updatedUser);
+      markets[index] = updatedMarket;
+    }
+
+    update();
+  }
+
   void filterMarket(String? location, String? category) async {
     loading(true);
     error(false);
@@ -118,12 +140,20 @@ class MarketController extends GetxController {
       }
     }
     update();
-    socket.emit('like', {
-      'postId': postId,
-      'userId': userId,
-      'type': type,
-      'receiverUid': receiverUid,
-    });
+    if (_profileController.myProfile.uid != receiverUid) {
+      socket.emit('like', {
+        'postId': postId,
+        'userId': userId,
+        'type': type,
+        'receiverUid': receiverUid,
+      });
+    } else {
+      socket.emit('like', {
+        'postId': postId,
+        'userId': userId,
+        'type': type,
+      });
+    }
   }
 
   /// COIN AND UNCOIN FUNCTION

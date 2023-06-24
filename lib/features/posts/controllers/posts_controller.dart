@@ -2,7 +2,6 @@ import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/common/models/comment_model.dart';
 import 'package:business_bosses_v2/common/widgets/text_widget.dart';
 import 'package:business_bosses_v2/features/forum/models/forum_model.dart';
-import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/posts/models/post_model.dart';
 import 'package:business_bosses_v2/features/posts/repository/post_repository.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
@@ -22,7 +21,7 @@ class PostsController extends GetxController {
   final int postsSize = 20;
   RxBool error = RxBool(false);
   RxBool loading = RxBool(false);
-  // final ProfileController _profileController = Get.find();
+  final ProfileController _profileController = Get.put(ProfileController());
 
   /// PROCESS RAW API DATA, MODELIZE AND SAVE TO STATE
   void processPostsToState(dynamic post) {
@@ -119,12 +118,20 @@ class PostsController extends GetxController {
       }
     }
     update();
-    socket.emit('like', {
-      'postId': postId,
-      'userId': userId,
-      'type': type,
-      'receiverUid': receiverUid,
-    });
+    if (_profileController.myProfile.uid != receiverUid) {
+      socket.emit('like', {
+        'postId': postId,
+        'userId': userId,
+        'type': type,
+        'receiverUid': receiverUid,
+      });
+    } else {
+      socket.emit('like', {
+        'postId': postId,
+        'userId': userId,
+        'type': type,
+      });
+    }
   }
 
   /// COMMENT FUNCTION
@@ -206,6 +213,11 @@ class PostsController extends GetxController {
     mixedPosts.insert(0, {'isForum': false, 'data': modelizedNewPost});
     // posts.insert(0, modelizedNewPost);
 
+    update();
+  }
+
+  void removePostsByUserId(String? userId) {
+    posts.removeWhere((post) => post.user?.uid == userId);
     update();
   }
 

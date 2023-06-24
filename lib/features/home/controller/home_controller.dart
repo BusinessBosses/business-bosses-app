@@ -85,15 +85,17 @@ class HomeController extends GetxController {
   /// DailyCoin
   void addCoinDaily() {
     int currentTimestamp = DateTime.now().millisecondsSinceEpoch;
-
+    int dataTime = _profileController.myProfile.bossOfTheWeekUpTimeStamp ?? 0;
     int lastExecutionTimestamp = sandBox.read('lastExecutionTimestamp') ?? 0;
-    if (currentTimestamp - lastExecutionTimestamp >= 24 * 60 * 60 * 1000) {
+    if ((currentTimestamp - lastExecutionTimestamp >= 24 * 60 * 60 * 1000) &&
+        (dataTime - lastExecutionTimestamp >= 24 * 60 * 60 * 1000)) {
       // The action hasn't been executed today, save the current timestamp
       sandBox.write('lastExecutionTimestamp', currentTimestamp);
       ApiService.put(
         path: 'users/${_profileController.myProfile.uid}',
         body: <String, dynamic>{
           'coinscount': _profileController.myProfile.coinscount! + 1,
+          'bossOfTheWeekUpTimeStamp': currentTimestamp,
         },
       );
       _profileController.updateCoinCount(1);
@@ -119,7 +121,6 @@ class HomeController extends GetxController {
       addCoinDaily();
       if (partner.data['count'] > 0) {
         bossUp?.addAll(partner.data['rows'].cast<Map<String, dynamic>>());
-        print(bossUp);
       }
     } else {
       error(true);

@@ -114,7 +114,7 @@ class Nav {
     ),
     GetPage(
       name: Routes.publicProfile,
-      page: () => const PublicProfileScreen(),
+      page: () => PublicProfileScreen(),
     ),
     GetPage(
       name: Routes.referscreen,
