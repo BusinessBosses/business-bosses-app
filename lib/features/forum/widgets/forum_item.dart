@@ -43,7 +43,6 @@ class ForumItem extends StatefulWidget {
 }
 
 class _ForumItemState extends State<ForumItem> {
-  final bool _isInit = false;
   List<String> blocked = [];
 
   final List<PopupMenuEntry<String>> myPopup = <PopupMenuEntry<String>>[
@@ -406,7 +405,7 @@ class _ForumItemState extends State<ForumItem> {
                         ),
                       ),
                       subtitle: Text(
-                        widget.forum.user!.bio ?? '',
+                        widget.forum.user?.bio ?? '',
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -466,7 +465,8 @@ class _ForumItemState extends State<ForumItem> {
                             widget.controller!.postLike(
                                 profileController.myProfile.uid,
                                 widget.forum.forumId,
-                                'forum');
+                                'forum',
+                                widget.forum.user?.uid);
                           },
                           icon: widget.forum.likes?.contains(
                                       profileController.myProfile.uid) ==

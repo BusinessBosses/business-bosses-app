@@ -19,12 +19,13 @@ import '../controller/profile_controller.dart';
 import '../widgets/friendoutlinebuttonheader.dart';
 import '../widgets/friendprofileheader.dart';
 
-// ignore: public_member_api_docs
+// ignore: public_member_api_docs, must_be_immutable
 class PublicProfileScreen extends StatefulWidget {
   static const String routeName = '/public-profile-screen';
+  bool? store;
 
   // ignore: public_member_api_docs
-  const PublicProfileScreen({Key? key}) : super(key: key);
+  PublicProfileScreen({Key? key, this.store}) : super(key: key);
 
   @override
   State<PublicProfileScreen> createState() => _PublicProfileScreenState();
@@ -60,6 +61,7 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
       BuildContext context, String type, String publicUserUid) async {}
 
   Future<void> connect(String userId) async {
+    // ignore: unused_local_variable
     final ApiResponseModel res = await ApiService.post(
         path: '/connection/connect',
         body: {
@@ -69,6 +71,7 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
   }
 
   Future<void> disconnect(String userId) async {
+    // ignore: unused_local_variable
     final ApiResponseModel res = await ApiService.post(
         path: '/connection/disconnect',
         body: {
@@ -329,6 +332,7 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
               },
               body: DefaultTabController(
                 length: 3,
+                initialIndex: widget.store != null ? 2 : 0,
                 child: Column(
                   children: [
                     // if (_publicUser.uid !=

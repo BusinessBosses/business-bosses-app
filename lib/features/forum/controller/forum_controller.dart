@@ -114,7 +114,7 @@ class ForumController extends GetxController {
   }
 
   /// LIKE AND UNLIKE FUNCTION
-  void postLike(String userId, String postId, String type) {
+  void postLike(String userId, String postId, String type, String receiverUid) {
     final int postIndex =
         forums.indexWhere((ForumModel element) => element.forumId == postId);
     if (postIndex != -1) {
@@ -128,11 +128,20 @@ class ForumController extends GetxController {
       }
     }
     update();
-    socket.emit('like', {
-      'postId': postId,
-      'userId': userId,
-      'type': type,
-    });
+    if (_profileController.myProfile.uid != receiverUid) {
+      socket.emit('like', {
+        'postId': postId,
+        'userId': userId,
+        'type': type,
+        'receiverUid': receiverUid,
+      });
+    } else {
+      socket.emit('like', {
+        'postId': postId,
+        'userId': userId,
+        'type': type,
+      });
+    }
   }
 
   void joinAndLeaveIndustry(String userId, String industryId) {

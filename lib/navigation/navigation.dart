@@ -109,12 +109,8 @@ class Nav {
       page: () => const ChatScreen(),
     ),
     GetPage(
-      name: Routes.chatRoom,
-      page: () => const ChatRoomScreen(),
-    ),
-    GetPage(
       name: Routes.publicProfile,
-      page: () => const PublicProfileScreen(),
+      page: () => PublicProfileScreen(),
     ),
     GetPage(
       name: Routes.referscreen,
