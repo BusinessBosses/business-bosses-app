@@ -15,6 +15,7 @@ import '../../../navigation/routes.dart';
 import '../../marketplace/controllers/market_controller.dart';
 import '../../marketplace/models/market_model.dart';
 import '../../marketplace/widgets/marketplace_item.dart';
+import '../../posts/controllers/posts_controller.dart';
 import '../widgets/my_profile_header.dart';
 
 bool isExpanded = false;
@@ -41,11 +42,6 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
     setState(() {
       isLoading = true;
     });
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final Map<String, dynamic> res =
-        await ProfileController.loadData(prefs.getString(Constants.USER_ID)!);
-
-    _posts = res['posts'];
 
     setState(() {
       isLoading = false;
@@ -145,12 +141,19 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                             ],
                           ),
                         ),
-                        profilepostsdisplay(
-                          context,
-                          profileController.myProfile,
-                          _posts,
-                          loading: isLoading,
-                        ),
+                        GetBuilder<PostsController>(
+                            builder: (PostsController postsController) {
+                          return profilepostsdisplay(
+                            context,
+                            profileController.myProfile,
+                            postsController.posts
+                                .where((post) =>
+                                    post.user?.uid ==
+                                    profileController.myProfile.uid)
+                                .toList(),
+                            loading: isLoading,
+                          );
+                        }),
                         SingleChildScrollView(
                           child: Column(
                             children: [

@@ -85,7 +85,7 @@ class ChatController extends GetxController {
           .where((MessageModel element) =>
               element.senderUid == e || element.receiverUid == e)
           .toList();
-      chats.add(chat[i]);
+      chats.addAll(chat); // Add all chat elements instead of accessing chat[i]
     }
   }
 
@@ -114,6 +114,26 @@ class ChatController extends GetxController {
       ...data,
       'timestamp': DateTime.now().millisecondsSinceEpoch,
       'messageId': const Uuid().v4(),
+      'seen': false
+    };
+
+    chatMessages.insert(
+        0, MessageModel.fromMap({...body, 'user': user.toMap()}));
+    extractChats(data['senderUid']);
+    _homeController.socket.emit('new-message',
+        {'data': body, 'sender': _profileController.myProfile.toMap()});
+    update();
+  }
+
+  void addNewChatMarket(
+      Map<String, dynamic> data, UserModel user, String marketId) {
+    final HomeController _homeController = Get.find();
+
+    final Map<String, dynamic> body = {
+      ...data,
+      'timestamp': DateTime.now().millisecondsSinceEpoch,
+      'messageId': const Uuid().v4(),
+      'marketId': marketId,
       'seen': false
     };
 

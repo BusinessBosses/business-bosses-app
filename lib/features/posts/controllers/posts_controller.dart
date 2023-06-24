@@ -21,7 +21,7 @@ class PostsController extends GetxController {
   final int postsSize = 20;
   RxBool error = RxBool(false);
   RxBool loading = RxBool(false);
-  // final ProfileController _profileController = Get.find();
+  final ProfileController _profileController = Get.put(ProfileController());
 
   /// PROCESS RAW API DATA, MODELIZE AND SAVE TO STATE
   void processPostsToState(dynamic post) {
@@ -118,12 +118,20 @@ class PostsController extends GetxController {
       }
     }
     update();
-    socket.emit('like', {
-      'postId': postId,
-      'userId': userId,
-      'type': type,
-      'receiverUid': receiverUid,
-    });
+    if (_profileController.myProfile.uid != receiverUid) {
+      socket.emit('like', {
+        'postId': postId,
+        'userId': userId,
+        'type': type,
+        'receiverUid': receiverUid,
+      });
+    } else {
+      socket.emit('like', {
+        'postId': postId,
+        'userId': userId,
+        'type': type,
+      });
+    }
   }
 
   /// COMMENT FUNCTION
@@ -205,6 +213,11 @@ class PostsController extends GetxController {
     mixedPosts.insert(0, {'isForum': false, 'data': modelizedNewPost});
     // posts.insert(0, modelizedNewPost);
 
+    update();
+  }
+
+  void removePostsByUserId(String? userId) {
+    posts.removeWhere((post) => post.user?.uid == userId);
     update();
   }
 
