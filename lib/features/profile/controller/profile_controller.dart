@@ -1,5 +1,6 @@
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
+import 'package:business_bosses_v2/features/forum/models/industry.dart';
 import 'package:business_bosses_v2/features/posts/models/post_model.dart';
 import 'package:business_bosses_v2/features/profile/repository/profile_repository.dart';
 import 'package:get/get.dart';
@@ -11,13 +12,25 @@ class ProfileController extends GetxController {
   UserModel? bossOfTheWeek = UserModel();
 
   ///MODELIZE RAW DATA AND PUSH TO STATE
-  void processDataToState(dynamic userData) {
+  void processDataToState(dynamic userData, List interests) {
     final UserModel modelizedData = UserModel.fromMap({
       ...userData,
       'connections': userData['connections']['connections'],
-      'connecteds': userData['connecteds']
+      'connecteds': userData['connecteds'],
+      'interests': interests
     });
     myProfile = modelizedData;
+    update();
+  }
+
+  void toggleInterests(Industry industry) {
+    final int index = myProfile.interests!
+        .indexWhere((Industry element) => element.industryId == industry.industryId);
+    if (index != -1) {
+      myProfile.interests!.removeAt(index);
+    } else {
+      myProfile.interests!.add(industry);
+    }
     update();
   }
 

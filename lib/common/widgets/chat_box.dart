@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:business_bosses_v2/features/marketplace/models/market_model.dart';
 import 'package:flutter/material.dart';
 
@@ -76,6 +78,8 @@ class ChatBox extends StatelessWidget {
                                       if (message.image != null)
                                         GestureDetector(
                                           onTap: () {
+                                            if (message.isRawImage ?? false)
+                                              return;
                                             Navigator.of(context).push(
                                               MaterialPageRoute(
                                                 builder:
@@ -88,15 +92,22 @@ class ChatBox extends StatelessWidget {
                                           },
                                           child: Stack(
                                             children: [
-                                              NetworkImageWithPlaceHolder(
-                                                imageUrl: message.image,
-                                                width: size.width * 0.6,
-                                                height: size.width * 0.6,
-                                                cacheHeight: 90,
-                                                cacheWidth: 90,
-                                                placeHolder: Icons.photo,
-                                                iconSize: 36.0,
-                                              ),
+                                              if (message.isRawImage ?? false)
+                                                Image.file(
+                                                  File(message.image!),
+                                                  width: size.width * 0.6,
+                                                  height: size.width * 0.6,
+                                                )
+                                              else
+                                                NetworkImageWithPlaceHolder(
+                                                  imageUrl: message.image,
+                                                  width: size.width * 0.6,
+                                                  height: size.width * 0.6,
+                                                  cacheHeight: 120,
+                                                  cacheWidth: 120,
+                                                  placeHolder: Icons.photo,
+                                                  iconSize: 36.0,
+                                                ),
                                               // multiImageIcon(message.images!)
                                             ],
                                           ),
@@ -187,6 +198,8 @@ class ChatBox extends StatelessWidget {
                                       if (message.image != null)
                                         GestureDetector(
                                           onTap: () {
+                                            if (message.isRawImage ?? false)
+                                              return;
                                             Navigator.of(context).push(
                                               MaterialPageRoute(
                                                 builder:
@@ -199,15 +212,22 @@ class ChatBox extends StatelessWidget {
                                           },
                                           child: Stack(
                                             children: [
-                                              NetworkImageWithPlaceHolder(
-                                                imageUrl: message.image,
-                                                width: size.width * 0.6,
-                                                cacheHeight: 90,
-                                                cacheWidth: 90,
-                                                height: size.width * 0.6,
-                                                placeHolder: Icons.photo,
-                                                iconSize: 36.0,
-                                              ),
+                                              if (message.isRawImage ?? false)
+                                                Image.file(
+                                                  File(message.image!),
+                                                  width: size.width * 0.6,
+                                                  height: size.width * 0.6,
+                                                )
+                                              else
+                                                NetworkImageWithPlaceHolder(
+                                                  imageUrl: message.image,
+                                                  width: size.width * 0.6,
+                                                  cacheHeight: 120,
+                                                  cacheWidth: 120,
+                                                  height: size.width * 0.6,
+                                                  placeHolder: Icons.photo,
+                                                  iconSize: 36.0,
+                                                ),
                                               // multiImageIcon(message.images!)
                                             ],
                                           ),

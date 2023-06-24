@@ -47,7 +47,8 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
     });
     final Map<String, dynamic> res =
         await ProfileController.loadData(publicUser.uid);
-    final UserModel modelizedUser = UserModel.fromMap(res['user']);
+    final UserModel modelizedUser =
+        UserModel.fromMap({...res['user'], 'interests': res['industries']});
     publicUser = modelizedUser;
     _posts = res['posts'];
 

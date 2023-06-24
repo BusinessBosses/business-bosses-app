@@ -33,7 +33,7 @@ class _InviteAFriendTermsAndConditionsState
     });
 
     try {
-      final response = await http.get(
+      final http.Response response = await http.get(
         Uri.parse('https://orca-app-5dg8w.ondigitalocean.app/api/v1/admin'),
       );
 
@@ -59,7 +59,7 @@ class _InviteAFriendTermsAndConditionsState
           }
         } else {
           // Handle the case when the response data is not in the expected format
-          print("Invalid response format");
+          print('Invalid response format');
         }
       } else {
         // Handle API error
@@ -100,11 +100,11 @@ class _InviteAFriendTermsAndConditionsState
         width: double.infinity,
         child: SingleChildScrollView(
           child: isLoading
-              ? Center(
-                  child: Container(
+              ? const Center(
+                  child: SizedBox(
                     width: 40,
                     height: 40,
-                    child: const CircularProgressIndicator(),
+                    child: CircularProgressIndicator(),
                   ),
                 )
               : Text(

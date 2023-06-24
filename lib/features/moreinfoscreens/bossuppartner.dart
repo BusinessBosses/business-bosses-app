@@ -82,7 +82,7 @@ class BossuppartnerItem extends StatelessWidget {
   final String companyUrl;
   final bool showPartnerMessage;
 
-  const BossuppartnerItem({
+  const BossuppartnerItem({super.key, 
     required this.companyName,
     required this.companyDescription,
     required this.companyUrl,

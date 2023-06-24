@@ -112,7 +112,8 @@ class HomeController extends GetxController {
     final ApiResponseModel partner = await HomeRepository.fetchPartner();
     if (response.success) {
       _postsController.processPostsAndForumsData(response.data['posts']);
-      _profileController.processDataToState(response.data['user']);
+      _profileController.processDataToState(
+          response.data['user'], response.data['interests']);
       _chatController.processDataToState(
           response.data['chats'], _profileController.myProfile.uid);
       socket.emit('handshake', _profileController.myProfile.uid);
@@ -144,7 +145,8 @@ class HomeController extends GetxController {
     final ApiResponseModel response = await HomeRepository.fetchRefreshData();
     if (response.success) {
       _postsController.processPostsAndForumsData(response.data['posts']);
-      _profileController.processDataToState(response.data['user']);
+      _profileController.processDataToState(
+          response.data['user'], response.data['interests']);
     } else {
       error(true);
       showSnackbar(title: 'OOPS!', message: response.message, error: true);

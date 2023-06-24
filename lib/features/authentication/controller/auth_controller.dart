@@ -5,7 +5,6 @@ import 'package:async/async.dart';
 import 'package:business_bosses_v2/features/authentication/presentation/code_verification_screen.dart';
 import 'package:business_bosses_v2/features/authentication/presentation/forgot_password_verification.dart';
 import 'package:business_bosses_v2/features/authentication/repository/auth_repository.dart';
-import 'package:business_bosses_v2/utils/validators/validator.dart';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -21,7 +20,7 @@ class AuthController extends GetxController {
   /// AUTH LOADING STATE
   RxBool isLoading = RxBool(false);
 
-  GlobalKey<State> _key = GlobalKey<State>();
+  final GlobalKey<State> _key = GlobalKey<State>();
 
   final ApiService _apiService = ApiService();
 
@@ -117,7 +116,7 @@ class AuthController extends GetxController {
       fromAddress,
       subject,
       content: <Content>[content],
-      templateId: dotenv.env['SENDGRID_TEMPLATE_ID'],
+      templateId: dotenv.env['SENDGRID_FORGOT_TEMPLATE_ID'],
       customArgs: {'username': emailAddress, 'otp': code.toString()},
     );
     mailer.send(email).then((Result<void> result) {
