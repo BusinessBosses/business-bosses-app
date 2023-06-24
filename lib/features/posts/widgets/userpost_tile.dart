@@ -492,6 +492,14 @@ class _PostTileState extends State<PostTile> {
                       ),
                       GestureDetector(
                         onTap: () {
+                          ApiService.post(
+                            path: 'blockedpost',
+                            body: <String, dynamic>{
+                              'userId': widget.post.user?.uid
+                            },
+                          );
+                          widget.controller
+                              .removePostsByUserId(widget.post.user?.uid);
                           navigateTo(context);
                           showSnackBar(context,
                               message: 'User has been blocked');

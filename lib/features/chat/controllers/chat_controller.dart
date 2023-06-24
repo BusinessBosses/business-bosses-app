@@ -1,7 +1,13 @@
+import 'dart:io';
+
+import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/features/chat/models/my_message.dart';
+import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
+import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 import 'package:uuid/uuid.dart';
 
@@ -11,6 +17,7 @@ class ChatController extends GetxController {
   List<MessageModel> chatMessages = [];
   List<MessageModel> chats = [];
   List<MessageModel> searchedChats = [];
+  late ImagePicker _picker;
 
   final ProfileController _profileController = Get.find();
 
@@ -36,8 +43,8 @@ class ChatController extends GetxController {
       'receiverUid': _profileController.myProfile.uid
     });
     for (int i = 0; i < userConversations.length; i++) {
-      final int chatIndex = chatMessages.indexWhere(
-          (MessageModel element) => element.messageId == userConversations[i].messageId);
+      final int chatIndex = chatMessages.indexWhere((MessageModel element) =>
+          element.messageId == userConversations[i].messageId);
       chatMessages[chatIndex] = MessageModel.fromMap(
           {...chatMessages[chatIndex].toMap(), 'seen': true});
     }
@@ -78,7 +85,7 @@ class ChatController extends GetxController {
           .where((MessageModel element) =>
               element.senderUid == e || element.receiverUid == e)
           .toList();
-      chats.add(chat[i]);
+      chats.addAll(chat); // Add all chat elements instead of accessing chat[i]
     }
   }
 
@@ -92,6 +99,7 @@ class ChatController extends GetxController {
     update();
   }
 
+  /// ADD ON SOCKET EVENT
   void newMessage(Map<String, dynamic> data) {
     chatMessages.insert(0, MessageModel.fromMap(data));
     extractChats(data['receiverUid']);
@@ -99,7 +107,9 @@ class ChatController extends GetxController {
     update();
   }
 
-  void addNewChat(Map<String, dynamic> data, UserModel user, Socket socket) {
+  void addNewChat(Map<String, dynamic> data, UserModel user) {
+    final HomeController _homeController = Get.find();
+
     final Map<String, dynamic> body = {
       ...data,
       'timestamp': DateTime.now().millisecondsSinceEpoch,
@@ -110,8 +120,103 @@ class ChatController extends GetxController {
     chatMessages.insert(
         0, MessageModel.fromMap({...body, 'user': user.toMap()}));
     extractChats(data['senderUid']);
-    socket.emit('new-message',
+    _homeController.socket.emit('new-message',
         {'data': body, 'sender': _profileController.myProfile.toMap()});
     update();
+  }
+
+  void addNewChatMarket(
+      Map<String, dynamic> data, UserModel user, String marketId) {
+    final HomeController _homeController = Get.find();
+
+    final Map<String, dynamic> body = {
+      ...data,
+      'timestamp': DateTime.now().millisecondsSinceEpoch,
+      'messageId': const Uuid().v4(),
+      'marketId': marketId,
+      'seen': false
+    };
+
+    chatMessages.insert(
+        0, MessageModel.fromMap({...body, 'user': user.toMap()}));
+    extractChats(data['senderUid']);
+    _homeController.socket.emit('new-message',
+        {'data': body, 'sender': _profileController.myProfile.toMap()});
+    update();
+  }
+
+  void uploadNewChat(Map<String, dynamic> data, UserModel user) {
+    final HomeController _homeController = Get.find();
+
+    final Map<String, dynamic> body = {
+      ...data,
+      'timestamp': DateTime.now().millisecondsSinceEpoch,
+      'messageId': const Uuid().v4(),
+      'seen': false
+    };
+
+    chatMessages.insert(
+        0, MessageModel.fromMap({...body, 'user': user.toMap()}));
+    extractChats(data['senderUid']);
+    _homeController.socket.emit('new-message',
+        {'data': body, 'sender': _profileController.myProfile.toMap()});
+    update();
+  }
+
+  /// PICK IMAGE FROM DEVICE GALLERY
+  Future<void> onPickImage() async {
+    try {
+      final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+      if (image != null) {
+        final HomeController _homeController = Get.find();
+
+        final File imageFile = File(image.path);
+        final String messageId = const Uuid().v4();
+        final Map<String, dynamic> body = {
+          'senderUid': _profileController.myProfile.uid,
+          'receiverUid': Get.arguments.uid,
+          'image': imageFile.path,
+          'timestamp': DateTime.now().millisecondsSinceEpoch,
+          'messageId': const Uuid().v4(),
+          'seen': false,
+          'isRawImage': true
+        };
+        chatMessages.insert(
+            0, MessageModel.fromMap({...body, 'user': Get.arguments.toMap()}));
+        extractChats(_profileController.myProfile.uid);
+        update();
+        final uploadResponse = await ApiService.uploadFile(imageFile);
+        if (uploadResponse == null) {
+          final int messageIndex = chatMessages.indexWhere(
+            (MessageModel element) => element.messageId == messageId,
+          );
+          if (messageIndex != -1) {
+            chatMessages.removeAt(messageIndex);
+          }
+          showSnackbar(message: 'Error Uploading image');
+        } else {
+          final String imageUrl = uploadResponse['fileUrl'];
+          _homeController.socket.emit('new-message', {
+            'data': {
+              ...body,
+              'image': imageUrl,
+            },
+            'sender': _profileController.myProfile.toMap()
+          });
+        }
+        update();
+      }
+    } catch (e) {
+      rethrow;
+      // handle error
+    }
+  }
+
+  @override
+  void onInit() {
+    // TODO: implement onInit
+    _picker = ImagePicker();
+
+    super.onInit();
   }
 }

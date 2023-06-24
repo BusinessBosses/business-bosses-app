@@ -1,5 +1,3 @@
-import 'dart:io';
-import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:country_list_pick/country_list_pick.dart';
 import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
 import 'package:detectable_text_field/widgets/detectable_text_field.dart';
@@ -21,10 +19,13 @@ import '../controllers/create_market_controller.dart';
 import '../controllers/market_controller.dart';
 import '../models/market_model.dart';
 
+/// SELLING SCREEN MARKETPLACE
 class CreateSellingitemScreen extends StatefulWidget {
+  /// SELLING SCREEN MARKETPLACE
   const CreateSellingitemScreen({Key? key, this.market, required this.isUpd})
       : super(key: key);
-  // String topicType;
+
+  /// String if to update;
   final MarketModel? market;
   final bool isUpd;
   // CreateSellingitemScreen();
@@ -36,11 +37,12 @@ class CreateSellingitemScreen extends StatefulWidget {
 class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
+  // ignore: unused_field
   final ProfileController _profileController = Get.find();
+  // ignore: unused_field
   final MarketController _marketController = Get.find();
   final CreateMarketController createMarketController =
       Get.put(CreateMarketController());
-  List<File>? _resourceFile;
   List<bool>? _fileProcessing;
 
   List<MyAssetEntity> _myAssetsEntities = [];
@@ -55,9 +57,11 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
   String? filterLocation;
   String? filterCategory;
 
-  final bool _isProcessing = false;
+  bool _isProcessing = false;
   bool? _isUpdating;
   bool _shouldPromote = false;
+  final TextEditingController descriptionController = TextEditingController();
+  final TextEditingController _priceController = TextEditingController();
 
   @override
   void initState() {
@@ -65,16 +69,12 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
     super.initState();
     _isUpdating = widget.isUpd;
     if (widget.isUpd) {
-      _market = MarketModel(
-          marketId: '',
-          category: '',
-          userId: '',
-          price: '1',
-          description: '',
-          location: '',
-          user: UserModel());
+      _market = widget.market;
     }
-    _resourceFile = [];
+    descriptionController.text = _market?.description ?? '';
+    _priceController.text = _market?.price ?? '';
+    _selectedCategory = _market?.category;
+    _selectedLocation = _market?.location;
     _fileProcessing = [];
   }
 
@@ -89,7 +89,7 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
         child: Scaffold(
           key: _scaffoldKey,
           appBar: AppBar(
-            title: const Text('Create Listing'),
+            title: Text(widget.isUpd ? 'Edit Listing' : 'Create Listing'),
             automaticallyImplyLeading: false, // Used for removing back buttoon.
             actions: [
               IconButton(
@@ -106,7 +106,7 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 TextFormField(
-                  initialValue: price,
+                  controller: _priceController,
                   onChanged: (String val) => price = val,
                   textInputAction: TextInputAction.next,
                   keyboardType: TextInputType.text,
@@ -117,7 +117,7 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
                 ),
                 const SizedBox(height: 24.0),
                 DetectableTextField(
-                  controller: TextEditingController(text: description),
+                  controller: descriptionController,
 
                   detectionRegExp: detectionRegExp(hashtag: false)!,
                   onDetectionTyped: (String text) {},
@@ -150,7 +150,7 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
                     underline: Container(),
                     value: _selectedCategory,
                     isExpanded: true,
-                    icon: const Icon(Icons.keyboard_arrow_right),
+                    icon: const Icon(Icons.keyboard_arrow_down),
                     iconSize: 24,
                     elevation: 16,
                     onChanged: (String? newValue) {
@@ -219,7 +219,7 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
                                 'Location',
                                 style: bodyText2.copyWith(color: hintColor),
                               ),
-                        trailing: const Icon(Icons.keyboard_arrow_right),
+                        trailing: const Icon(Icons.keyboard_arrow_down),
                       ),
                     );
                   },
@@ -233,145 +233,165 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
                 const SizedBox(
                   height: 12,
                 ),
-                GestureDetector(
-                  onTap: () {
-                    if (createMarketController.imageFileList.length < 5) {
-                      createMarketController.onPickImage();
-                    } else {
-                      showSnackbar(
-                          message: 'You can only upload up to 5 images.');
-                    }
-                  },
-                  child: FieldContainer(
-                    child: Row(
-                      children: [
-                        SvgPicture.asset('assets/svgs/file.svg'),
-                        const SizedBox(width: 16.0),
-                        Expanded(
-                          child: Text('Add Attachment',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium
-                                  ?.copyWith(color: hintColor)),
-                        ),
-                        const SizedBox(width: 16.0),
-                        SvgPicture.asset('assets/svgs/upload.svg'),
-                      ],
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 8.0),
-                Preview(controller: createMarketController),
-                Column(
-                  children: [
-                    SizedBox(
-                      height: 55,
-                      child: Align(
-                        alignment: Alignment.center,
-                        child: SwitchListTile(
-                          value: _shouldPromote,
-                          onChanged: (bool value) {
-                            setState(() {
-                              _shouldPromote = value;
-                            });
-                          },
-                          title: Row(
+                widget.isUpd
+                    ? const SizedBox()
+                    : GestureDetector(
+                        onTap: () {
+                          if (createMarketController.imageFileList.length < 5) {
+                            createMarketController.onPickImage();
+                          } else {
+                            showSnackbar(
+                                message: 'You can only upload up to 5 images.');
+                          }
+                        },
+                        child: FieldContainer(
+                          child: Row(
                             children: [
-                              SvgPicture.asset('assets/svgs/rocket.svg'),
-                              const SizedBox(
-                                width: 30,
+                              SvgPicture.asset('assets/svgs/file.svg'),
+                              const SizedBox(width: 16.0),
+                              Expanded(
+                                child: Text('Add Attachment',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium
+                                        ?.copyWith(color: hintColor)),
                               ),
-                              const Text(
-                                'Boost Post',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w600, fontSize: 18),
-                              ),
+                              const SizedBox(width: 16.0),
+                              SvgPicture.asset('assets/svgs/upload.svg'),
                             ],
                           ),
                         ),
                       ),
-                    ),
-                    if (_shouldPromote)
-                      Padding(
-                        padding: const EdgeInsets.only(left: 20.0, right: 20),
-                        child: Stack(
-                          children: [
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(10),
-                              child: Image.asset(
-                                'assets/images/boostbanner.png',
-                                width: size.width,
-                                height: size.width / 2,
-                                fit: BoxFit.cover,
+                const SizedBox(height: 8.0),
+                widget.isUpd
+                    ? const SizedBox()
+                    : Preview(controller: createMarketController),
+                widget.isUpd
+                    ? const SizedBox()
+                    : Column(
+                        children: [
+                          SizedBox(
+                            height: 55,
+                            child: Align(
+                              alignment: Alignment.center,
+                              child: SwitchListTile(
+                                value: _shouldPromote,
+                                onChanged: (bool value) {
+                                  setState(() {
+                                    _shouldPromote = value;
+                                  });
+                                },
+                                title: Row(
+                                  children: [
+                                    SvgPicture.asset('assets/svgs/rocket.svg'),
+                                    const SizedBox(
+                                      width: 30,
+                                    ),
+                                    const Text(
+                                      'Boost Post',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 18),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
-                            const Positioned(
-                              bottom: 20,
-                              left: 20,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                          ),
+                          if (_shouldPromote)
+                            Padding(
+                              padding:
+                                  const EdgeInsets.only(left: 20.0, right: 20),
+                              child: Stack(
                                 children: [
-                                  TextWidget(
-                                    text: 'Reach\na Wider Audience',
-                                    color: Color(0xFFFFFFFF),
-                                    fontWeight: FontWeight.w800,
-                                    size: 20,
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(10),
+                                    child: Image.asset(
+                                      'assets/images/boostbanner.png',
+                                      width: size.width,
+                                      height: size.width / 2,
+                                      fit: BoxFit.cover,
+                                    ),
                                   ),
-                                  SizedBox(
-                                    height: 10,
-                                  ),
-                                  Row(
-                                    children: [
-                                      Icon(
-                                        Icons.check_box,
-                                        color: Colors.white,
-                                        size: 20,
-                                      ),
-                                      SizedBox(
-                                        width: 10,
-                                      ),
-                                      TextWidget(
-                                        text: 'More Goods/Service Sale',
-                                        color: Colors.white,
-                                      ),
-                                    ],
-                                  ),
-                                  Row(
-                                    children: [
-                                      Icon(
-                                        Icons.check_box,
-                                        color: Colors.white,
-                                        size: 20,
-                                      ),
-                                      SizedBox(
-                                        width: 10,
-                                      ),
-                                      TextWidget(
-                                        text: 'More connections',
-                                        color: Colors.white,
-                                      )
-                                    ],
-                                  ),
+                                  const Positioned(
+                                    bottom: 20,
+                                    left: 20,
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        TextWidget(
+                                          text: 'Reach\na Wider Audience',
+                                          color: Color(0xFFFFFFFF),
+                                          fontWeight: FontWeight.w800,
+                                          size: 20,
+                                        ),
+                                        SizedBox(
+                                          height: 10,
+                                        ),
+                                        Row(
+                                          children: [
+                                            Icon(
+                                              Icons.check_box,
+                                              color: Colors.white,
+                                              size: 20,
+                                            ),
+                                            SizedBox(
+                                              width: 10,
+                                            ),
+                                            TextWidget(
+                                              text: 'More Goods/Service Sale',
+                                              color: Colors.white,
+                                            ),
+                                          ],
+                                        ),
+                                        Row(
+                                          children: [
+                                            Icon(
+                                              Icons.check_box,
+                                              color: Colors.white,
+                                              size: 20,
+                                            ),
+                                            SizedBox(
+                                              width: 10,
+                                            ),
+                                            TextWidget(
+                                              text: 'More connections',
+                                              color: Colors.white,
+                                            )
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  )
                                 ],
                               ),
-                            )
-                          ],
-                        ),
+                            ),
+                          const SizedBox(height: 24.0),
+                        ],
                       ),
-                    const SizedBox(height: 24.0),
-                  ],
-                ),
                 MCustomButton(
                   onPressed: () async {
-                    if ((description?.isEmpty == true) ||
-                        (price?.isEmpty == true)) {
-                      showSnackBar(context,
-                          message:
-                              'Please select price and description to create a listing');
+                    setState(() {
+                      _isProcessing = true;
+                    });
+                    if (descriptionController.text.isEmpty ||
+                        _priceController.text.isEmpty) {
+                      showSnackBar(
+                        context,
+                        message:
+                            'Please enter price and description to create a listing',
+                      );
+                      setState(() {
+                        _isProcessing = false;
+                      });
                       return;
                     } else {
                       await _onChangeForum();
                     }
+                    setState(() {
+                      _isProcessing = false;
+                    });
                   },
                   label: _isUpdating! ? 'Update' : 'Sell',
                   isProcessing: _isProcessing,
@@ -386,117 +406,30 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
   }
 
   Future<void> _onChangeForum() async {
-    createMarketController.createForum({
-      'category': _selectedCategory,
-      'location': _selectedLocation,
-      'description': description,
-      'price': price,
-      'timestamp': DateTime.now().millisecondsSinceEpoch,
-    }, _shouldPromote);
-
-    // setState(() {
-    //   _isProcessing = true;
-    // });
-
-    // List<String> fileUrls = [];
-
-    // for (int i = 0; i < _myAssetsEntities.length; i++) {
-    //   File? file = await toFile(_myAssetsEntities[i]);
-    //   _resourceFile?.add(file!);
-    // }
-
-    // for (int i = 0; i < _resourceFile!.length; i++) {
-    //   final int bytes = _resourceFile![i].readAsBytesSync().lengthInBytes;
-    //   final double kb = bytes / 1024;
-    //   final double mb = kb / 1024;
-    //   if (mb >= 3) {
-    //     setState(() {
-    //       _isProcessing = false;
-    //     });
-    //     showSnackBar(context, message: 'Image size should be maximum 3 MB.');
-    //     return;
-    //   }
-
-    //   // Call the image upload API and obtain the image URL
-    //   final dynamic res = await ApiService.uploadFile(_resourceFile![i]);
-    //   if (res == null) {
-    //     return;
-    //   } else {
-    //     fileUrls.add(res['fileUrl']);
-    //   }
-    // }
-    // print(fileUrls);
-
-    // setState(() {
-    //   _isProcessing = false;
-    // });
-
-    // final appUser = Provider.of<UserController>(context, listen: false);
-    // final appForums = Provider.of<AppCommunities>(context, listen: false);
-    // _resourceFile?.clear();
-    // unFocusKeyboard(context);
-    // setState(() {
-    //   _isProcessing = true;
-    // });
-    // for (int i = 0; i < _myAssetsEntities.length; i++) {
-    //   Future<File?>? file = await toFile(_myAssetsEntities[i]);
-    //   _resourceFile?.add(file);
-    // }
-    // List<String> fileUrls = [];
-    // int l = _resourceFile.length;
-    // for (int i = 0; i < l; i++) {
-    //   final bytes = _resourceFile[i].readAsBytesSync().lengthInBytes;
-    //   final kb = bytes / 1024;
-    //   final mb = kb / 1024;
-    //   if (mb >= 3) {
-    //     setState(() {
-    //       _isProcessing = false;
-    //     });
-    //     showSnackBar(context, message: 'Image size should be maximum 3 MB.');
-    //     return;
-    //   }
-    //   MyResponse res = await _firebase.uploadFile(_resourceFile[i]);
-    //   if (res.success) {
-    //     fileUrls.add(res.data.toString());
-    //     // setState(() {
-    //     //   _fileProcessing[i] = true;
-    //     // });
-    //   }
-    // }
-    // if (_myAssetsEntities.length == fileUrls.length) {
-    //   _forum.industryId = _forum.industryId ?? _industry.industryId;
-    //   _forum.uid = _forum.uid ?? _firebase.uid;
-    //   // title: _titleController.text;
-    //   // description: _desController.text;
-    //   _forum.categoryId = _forum.categoryId ?? _industry?.categoryId;
-    //   _forum.user = appUser.user;
-    //   _forum.timestamp =
-    //       _forum.timestamp ?? DateTime.now().millisecondsSinceEpoch;
-    //   _forum.forumId = _forum.forumId =
-    //       _forum.forumId ?? _firebase.uniqueKey(Constants.FORUMS);
-
-    //   _forum.images ??= [];
-    //   _forum.images.addAll(fileUrls);
-
-    //   } else {
-
-    //       // updateBossOfTheWeekTimeStamp();
-    //       _isUpdating = false;
-
-    //       Navigator.push(
-    //         context,
-    //         MaterialPageRoute(
-    //           builder: (BuildContext context) => const BottomNavScreen(2, true),
-    //         ),
-    //       );
-    //   }
-    // } else {
-    //   setState(() {
-    //     _isProcessing = false;
-    //   });
-    //   showSnackBar(context,
-    //       message: 'An error occurred. Please try again later.');
-    // }
+    if (widget.isUpd == false) {
+      await createMarketController.createForum(<String, dynamic>{
+        'category': _selectedCategory,
+        'location': _selectedLocation,
+        'description': description,
+        'price': price,
+        'timestamp': DateTime.now().millisecondsSinceEpoch,
+      }, _shouldPromote);
+    } else {
+      await _marketController.updatePost(<String, dynamic>{
+        'marketId': _market?.marketId,
+        'category': _selectedCategory,
+        'location': _selectedLocation,
+        'description': descriptionController.text,
+        'price': _priceController.text,
+        'promote': _market?.promote,
+        'comments': _market?.comments,
+        'likes': _market?.likes,
+        'coins': _market?.coins,
+        'userId': _market?.userId,
+        'user': _market?.user,
+      });
+      Get.back();
+    }
   }
 
   Future<void> _onImagePicker() async {

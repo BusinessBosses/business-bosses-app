@@ -31,7 +31,7 @@ class _CommunityRulesScreenState extends State<CommunityRulesScreen> {
     });
 
     try {
-      final response = await http.get(
+      final http.Response response = await http.get(
         Uri.parse('https://orca-app-5dg8w.ondigitalocean.app/api/v1/admin'),
       );
 
@@ -89,11 +89,11 @@ class _CommunityRulesScreenState extends State<CommunityRulesScreen> {
         width: double.infinity,
         child: SingleChildScrollView(
           child: isLoading
-              ? Center(
-                  child: Container(
+              ? const Center(
+                  child: SizedBox(
                     width: 40,
                     height: 40,
-                    child: const CircularProgressIndicator(),
+                    child: CircularProgressIndicator(),
                   ),
                 )
               : Text(

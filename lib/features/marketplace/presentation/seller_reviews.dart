@@ -33,6 +33,7 @@ class _SellerReviewScreenState extends State<SellerReviewScreen> {
   int threeStar = 0;
   int fourStar = 0;
   int fiveStar = 0;
+  double currentRating = 0;
   bool loading = true;
   final ProfileController _profileController = Get.find();
 
@@ -153,18 +154,25 @@ class _SellerReviewScreenState extends State<SellerReviewScreen> {
                     const SizedBox(
                       height: 10,
                     ),
-                    MCustomButton(
-                      height: 50,
-                      buttonType: ButtonType.elevated,
-                      onPressed: () async {
-                        await rateSeller();
-                      },
-                      width: 200,
-                      child: const Text(
-                        'Rate Seller',
-                        style: TextStyle(fontWeight: FontWeight.bold),
+                    if ((reviews == null ||
+                            reviews!
+                                .where((ReviewModel review) =>
+                                    review.rater.uid ==
+                                    _profileController.myProfile.uid)
+                                .isEmpty) &&
+                        widget.user.uid != _profileController.myProfile.uid)
+                      MCustomButton(
+                        height: 50,
+                        buttonType: ButtonType.elevated,
+                        onPressed: () async {
+                          await rateSeller();
+                        },
+                        width: 200,
+                        child: const Text(
+                          'Rate Seller',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
                       ),
-                    ),
                     const SizedBox(
                       height: 20,
                     ),
@@ -193,7 +201,7 @@ class _SellerReviewScreenState extends State<SellerReviewScreen> {
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
-                                  Text(widget.user.averageRating.toString(),
+                                  Text(cUser!.averageRating.toString(),
                                       style: const TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 20,
@@ -207,7 +215,7 @@ class _SellerReviewScreenState extends State<SellerReviewScreen> {
                                       )),
                                 ],
                               ),
-                              Text('Based on ${reviews?.length} reviews'),
+                              Text('Based on ${reviews?.length ?? 0} reviews'),
                               Row(
                                 children: [
                                   Icon(
@@ -657,13 +665,20 @@ class _SellerReviewScreenState extends State<SellerReviewScreen> {
                                 },
                               );
                               await processData();
-                              setState(
-                                () {
-                                  rater = 0;
-                                  reviewText = '';
-                                  isSending = false;
-                                },
-                              );
+                              final Map<String, dynamic> currentUser =
+                                  await ProfileController.loadData(
+                                      widget.user.uid);
+                              if (mounted) {
+                                setState(
+                                  () {
+                                    cUser =
+                                        UserModel.fromMap(currentUser['user']);
+                                    rater = 0;
+                                    reviewText = '';
+                                    isSending = false;
+                                  },
+                                );
+                              }
                               Navigator.of(context).pop();
                             },
                             child: const Text('Rate'),

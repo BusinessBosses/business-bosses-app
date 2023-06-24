@@ -47,7 +47,7 @@ class _SignUpFormState extends State<SignUpForm> {
   bool _invisibleCPassword = true, _invisiblePassword = true;
   bool agreedToTerms = true;
   final ApiService _apiService = ApiService();
-  GoogleSignIn _googleSignIn = GoogleSignIn();
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
 
   String countryCode = '+447';
 
@@ -264,30 +264,30 @@ class _SignUpFormState extends State<SignUpForm> {
             ],
           ),
 
-          const SizedBox(height: 25.0),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              TextFormField(
-                onChanged: (String val) {
-                  _inviteId = val;
-                  setState(() {});
-                },
-                textInputAction: TextInputAction.done,
-                keyboardType: TextInputType.visiblePassword,
-                decoration: inputDecoration.copyWith(
-                  hintText: 'Invite Id (Optional)',
-                  hintStyle: const TextStyle(
-                    color: iconColor,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                  ),
-                  filled: true,
-                  fillColor: const Color(0xffF4F4F4),
-                ),
-              ),
-            ],
-          ),
+          // const SizedBox(height: 25.0),
+          // Column(
+          //   crossAxisAlignment: CrossAxisAlignment.start,
+          //   children: [
+          //     TextFormField(
+          //       onChanged: (String val) {
+          //         _inviteId = val;
+          //         setState(() {});
+          //       },
+          //       textInputAction: TextInputAction.done,
+          //       keyboardType: TextInputType.visiblePassword,
+          //       decoration: inputDecoration.copyWith(
+          //         hintText: 'Invite Id (Optional)',
+          //         hintStyle: const TextStyle(
+          //           color: iconColor,
+          //           fontSize: 14,
+          //           fontWeight: FontWeight.w600,
+          //         ),
+          //         filled: true,
+          //         fillColor: const Color(0xffF4F4F4),
+          //       ),
+          //     ),
+          //   ],
+          // ),
 
           const SizedBox(height: 24.0),
 
@@ -528,79 +528,84 @@ class _SignUpFormState extends State<SignUpForm> {
         showSnackBar(context, message: 'Sign Up successful');
         _authCred = googleUser.email;
         _username = googleUser.displayName;
-        showDialog(
-            context: context,
-            builder: (context) => AlertDialog(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(26)),
-                  content: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      TextFormField(
-                        onChanged: (String val) {
-                          _password = val;
-                          setState(() {});
-                        },
-                        validator: Validator.passwordValidator,
-                        textInputAction: TextInputAction.done,
-                        obscureText: _invisiblePassword,
-                        keyboardType: TextInputType.visiblePassword,
-                        decoration: inputDecoration.copyWith(
-                          hintText: 'Enter your password',
-                          suffixIcon: _showHideIcon(PasswordField.password),
-                          hintStyle: const TextStyle(
-                            color: iconColor,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                          ),
-                          filled: true,
-                          fillColor: const Color(0xffF4F4F4),
-                        ),
-                      ),
-                      const SizedBox(height: 24.0),
-                      const SizedBox(height: 24.0),
-                      CustomButton(
-                        label: 'Sign Up',
-                        onPressed: () async {
-                          _formKey.currentState!.save();
-                          setState(() {
-                            _autoValidateMode = AutovalidateMode.always;
-                          });
-                          if (!_formKey.currentState!.validate()) return;
-                          // if (Validator.emailValidatorSignUp(_authCred,
-                          //             isUnique: _isUniqueEmail!) ==
-                          //         '' &&
-                          //     Validator.usernameValidator(_username!,
-                          //             isUnique: _isUniqueName!) ==
-                          //         '') {
-                          if (agreedToTerms) {
-                            setState(() {
-                              _autoValidateMode = AutovalidateMode.always;
-                              _isProcessing = true;
-                            });
-                          } else {
-                            Get.snackbar('Error',
-                                'Before signing up, you must agree to our Terms and Conditions');
-                            setState(() {
-                              _isProcessing = false;
-                            });
-                          }
-                          // } else {
-                          //   Get.snackbar('Error', 'Invalid Entries in Form');
-                          //   setState(() {
-                          //     _isProcessing = false;
-                          //   });
-                          // }
-                          setState(() {
-                            _isProcessing = false;
-                          });
-                        },
-                        isProcessing: _isProcessing,
-                        buttonType: ButtonType.elevated,
-                      ),
-                    ],
-                  ),
-                ));
+        // ignore: use_build_context_synchronously
+        // showDialog(
+        //   context: context,
+        //   builder: (BuildContext context) => AlertDialog(
+        //     shape:
+        //         RoundedRectangleBorder(borderRadius: BorderRadius.circular(26)),
+        //     content: Column(
+        //       crossAxisAlignment: CrossAxisAlignment.start,
+        //       children: [
+        //         TextFormField(
+        //           onChanged: (String val) {
+        //             _password = val;
+        //             setState(() {});
+        //           },
+        //           validator: Validator.passwordValidator,
+        //           textInputAction: TextInputAction.done,
+        //           obscureText: _invisiblePassword,
+        //           keyboardType: TextInputType.visiblePassword,
+        //           decoration: inputDecoration.copyWith(
+        //             hintText: 'Enter your password',
+        //             suffixIcon: _showHideIcon(PasswordField.password),
+        //             hintStyle: const TextStyle(
+        //               color: iconColor,
+        //               fontSize: 14,
+        //               fontWeight: FontWeight.w600,
+        //             ),
+        //             filled: true,
+        //             fillColor: const Color(0xffF4F4F4),
+        //           ),
+        //         ),
+        //         const SizedBox(height: 24.0),
+        //         const SizedBox(height: 24.0),
+        //         CustomButton(
+        //           label: 'Sign Up',
+        //           onPressed: () async {
+        //             _formKey.currentState!.save();
+        //             setState(() {
+        //               _autoValidateMode = AutovalidateMode.always;
+        //             });
+        //             if (!_formKey.currentState!.validate()) return;
+        //             // if (Validator.emailValidatorSignUp(_authCred,
+        //             //             isUnique: _isUniqueEmail!) ==
+        //             //         '' &&
+        //             //     Validator.usernameValidator(_username!,
+        //             //             isUnique: _isUniqueName!) ==
+        //             //         '') {
+        //             if (agreedToTerms) {
+        //               setState(() {
+        //                 _autoValidateMode = AutovalidateMode.always;
+        //                 _isProcessing = true;
+        //               });
+        //             } else {
+        //               Get.snackbar('Error',
+        //                   'Before signing up, you must agree to our Terms and Conditions');
+        //               setState(() {
+        //                 _isProcessing = false;
+        //               });
+        //             }
+        //             // } else {
+        //             //   Get.snackbar('Error', 'Invalid Entries in Form');
+        //             //   setState(() {
+        //             //     _isProcessing = false;
+        //             //   });
+        //             // }
+        //             setState(() {
+        //               _isProcessing = false;
+        //             });
+        //           },
+        //           isProcessing: _isProcessing,
+        //           buttonType: ButtonType.elevated,
+        //         ),
+        //       ],
+        //     ),
+        //   ),
+        // );
+        setState(() {
+          _password = _googleSignIn.serverClientId;
+        });
         dynamic user = await _handleRegister();
         await _googleSignIn.disconnect();
 
@@ -609,6 +614,7 @@ class _SignUpFormState extends State<SignUpForm> {
         });
       } else {
         // Sign in was canceled by the user
+        // ignore: use_build_context_synchronously
         showSnackBar(context,
             message: 'Opps!! Something went wrong. Try again');
         setState(() {

@@ -295,6 +295,7 @@ class _ProfileAnalyseScreenState extends State<ProfileAnalyseScreen> {
     List<String>? connects, {
     num? timestamp,
   }) {
+<<<<<<< HEAD
     List<MyConnect> myConnects = [];
     if (connects != null) {
       myConnects = connects.map((String str) {
@@ -310,6 +311,10 @@ class _ProfileAnalyseScreenState extends State<ProfileAnalyseScreen> {
 
     return myConnects.where((MyConnect element) {
       bool isWithinTime = timestamp == null
+=======
+    return connects.where((MyConnect element) {
+      bool isWithInTime = timestamp == null
+>>>>>>> test
           ? true
           : DateTime.now().millisecondsSinceEpoch - (element.timestamp ?? 0) <=
               timestamp;
