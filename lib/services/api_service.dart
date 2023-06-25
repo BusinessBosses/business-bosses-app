@@ -250,7 +250,8 @@ class ApiService {
           'Authorization': 'bearer $token'
         },
       );
-      log(response.body.toString());
+
+      log(response.body);
 
       return ApiResponseModel.fromMap(jsonDecode(response.body));
     } catch (e) {

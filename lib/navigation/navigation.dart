@@ -1,5 +1,6 @@
 // ignore_for_file: always_specify_types
 
+import 'package:business_bosses_v2/analytics/presentation/explorebusinessbosses_screen.dart';
 import 'package:business_bosses_v2/features/connects/controller/referrals_controller.dart';
 import 'package:business_bosses_v2/features/connects/presentation/referals_screen.dart';
 import 'package:business_bosses_v2/features/posts/presentation/confirmation.dart';
@@ -178,9 +179,9 @@ class Nav {
         page: () => const RelevantUsersScreen(),
         binding: BindingsBuilder.put(() => CompleteSearchController())),
     GetPage(
-        name: Routes.profileanalysescreen,
-        page: () => const ProfileAnalyseScreen(),
-        binding: BindingsBuilder.put(() => CompleteSearchController())),
+      name: Routes.profileanalysescreen,
+      page: () => const ProfileAnalyseScreen(),
+    ),
     GetPage(
       name: Routes.inviteafriendscreen,
       page: () => const InviteAFriendTermsAndConditions(),
@@ -188,6 +189,10 @@ class Nav {
     GetPage(
       name: Routes.premiumscreen,
       page: () => const PremiumScreen(),
+    ),
+    GetPage(
+      name: Routes.explorebusinessbossesscreen,
+      page: () => const ExplorebusinessbossesScreen(),
     ),
   ];
 }

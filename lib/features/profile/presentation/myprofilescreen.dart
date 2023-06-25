@@ -15,7 +15,6 @@ import '../../../navigation/routes.dart';
 import '../../marketplace/controllers/market_controller.dart';
 import '../../marketplace/models/market_model.dart';
 import '../../marketplace/widgets/marketplace_item.dart';
-import '../../posts/controllers/posts_controller.dart';
 import '../widgets/my_profile_header.dart';
 
 bool isExpanded = false;
@@ -37,11 +36,17 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
   List<PostModel> _posts = [];
 
   final ProfileController profileController = Get.find();
+  final MarketController marketController = Get.find();
 
   Future<void> loadData(String uid) async {
     setState(() {
       isLoading = true;
     });
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final Map<String, dynamic> res =
+        await ProfileController.loadData(prefs.getString(Constants.USER_ID)!);
+
+    _posts = res['posts'];
 
     setState(() {
       isLoading = false;
@@ -91,34 +96,59 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
               ];
             },
             body: DefaultTabController(
-              length: 3,
+              length: marketController.markets
+                      .where((MarketModel market) =>
+                          market.userId == profileController.myProfile.uid)
+                      .isEmpty
+                  ? 2
+                  : 3,
               child: Column(
                 children: [
                   // if (_publicUser.uid !=
                   //     'FirebaseAuth.instance.currentUser.uid') ...{
                   OutlineButtonHeader(context, profileController.myProfile),
-                  // const SizedBox(height: 8.0),
+                  const SizedBox(height: 15.0),
                   // },
 
-                  const Material(
-                    color: Colors.white,
+                  const SizedBox(
+                    width: double.infinity,
+                    height: 1.5,
+                    child: ColoredBox(color: backgroundcolorinterface),
+                  ),
+                  Material(
+                    color: const Color(0xFFF9F9F9),
                     child: TabBar(
-                      indicatorColor: primaryColorLT,
-                      labelStyle: TextStyle(fontWeight: FontWeight.w500),
+                      indicatorColor:
+                          primaryColorLT, // Replace primaryColorLT with the desired color
+                      labelStyle: const TextStyle(fontWeight: FontWeight.w500),
                       labelColor: Colors.black,
-                      tabs: [
-                        Tab(
-                          text: 'About',
-                        ),
-                        Tab(
-                          text: 'Posts',
-                        ),
-                        Tab(
-                          text: 'Shop',
-                        ),
-                      ],
+                      tabs: marketController.markets
+                              .where((MarketModel market) =>
+                                  market.userId ==
+                                  profileController.myProfile.uid)
+                              .isEmpty
+                          ? [
+                              Tab(
+                                text: 'About',
+                              ),
+                              Tab(
+                                text: 'Posts',
+                              ),
+                            ]
+                          : [
+                              Tab(
+                                text: 'About',
+                              ),
+                              Tab(
+                                text: 'Posts',
+                              ),
+                              Tab(
+                                text: 'Shop',
+                              ),
+                            ],
                     ),
                   ),
+
                   const SizedBox(
                     width: double.infinity,
                     height: 1.5,
@@ -141,97 +171,97 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                             ],
                           ),
                         ),
-                        GetBuilder<PostsController>(
-                            builder: (PostsController postsController) {
-                          return profilepostsdisplay(
-                            context,
-                            profileController.myProfile,
-                            postsController.posts
-                                .where((post) =>
-                                    post.user?.uid ==
-                                    profileController.myProfile.uid)
-                                .toList(),
-                            loading: isLoading,
-                          );
-                        }),
-                        SingleChildScrollView(
-                          child: Column(
-                            children: [
-                              GetBuilder<MarketController>(
-                                builder: (MarketController marketController) {
-                                  return Obx(() {
-                                    if (marketController.loading.value) {
-                                      return const Center(
-                                          child: CircularProgressIndicator());
-                                    } else if (marketController.error.value) {
-                                      return const SafetyModel(
-                                        isLoading: false,
-                                        title: 'Error While Loading Data',
-                                        subTitle: 'Try Reloading Again',
-                                        icon: Icon(
-                                          Icons.warning,
-                                          size: 60,
-                                        ),
-                                      );
-                                    } else {
-                                      return marketController.markets
-                                              .where((MarketModel market) =>
-                                                  market.userId ==
-                                                  profileController
-                                                      .myProfile.uid)
-                                              .isEmpty
-                                          ? const SafetyModel(
-                                              isLoading: false,
-                                              icon: Icon(
-                                                Icons.warning,
-                                                color: Colors.grey,
-                                                size: 80.0,
-                                              ),
-                                              title:
-                                                  'This user has no items in store',
-                                              // subTitle: '',
-                                            )
-                                          : ListView.builder(
-                                              shrinkWrap: true,
-                                              physics:
-                                                  const NeverScrollableScrollPhysics(),
-                                              itemCount: marketController
-                                                  .markets
-                                                  .where((MarketModel market) =>
-                                                      market.userId ==
-                                                      profileController
-                                                          .myProfile.uid)
-                                                  .length,
-                                              itemBuilder:
-                                                  (BuildContext context,
-                                                      int index) {
-                                                final List<MarketModel>
-                                                    filteredMarkets =
-                                                    marketController.markets
-                                                        .where((MarketModel
-                                                                market) =>
+                        profilepostsdisplay(
+                          context,
+                          profileController.myProfile,
+                          _posts,
+                          loading: isLoading,
+                        ),
+                        if (marketController.markets
+                            .where((MarketModel market) =>
+                                market.userId !=
+                                profileController.myProfile.uid)
+                            .isEmpty)
+                          SingleChildScrollView(
+                            child: Column(
+                              children: [
+                                GetBuilder<MarketController>(
+                                  builder: (MarketController marketController) {
+                                    return Obx(() {
+                                      if (marketController.loading.value) {
+                                        return const Center(
+                                            child: CircularProgressIndicator());
+                                      } else if (marketController.error.value) {
+                                        return const SafetyModel(
+                                          isLoading: false,
+                                          title: 'Error While Loading Data',
+                                          subTitle: 'Try Reloading Again',
+                                          icon: Icon(
+                                            Icons.warning,
+                                            size: 60,
+                                          ),
+                                        );
+                                      } else {
+                                        return marketController.markets
+                                                .where((MarketModel market) =>
+                                                    market.userId ==
+                                                    profileController
+                                                        .myProfile.uid)
+                                                .isEmpty
+                                            ? const SafetyModel(
+                                                isLoading: false,
+                                                icon: Icon(
+                                                  Icons.warning,
+                                                  color: Colors.grey,
+                                                  size: 80.0,
+                                                ),
+                                                title:
+                                                    'This user has no items in store',
+                                                // subTitle: '',
+                                              )
+                                            : ListView.builder(
+                                                shrinkWrap: true,
+                                                physics:
+                                                    const NeverScrollableScrollPhysics(),
+                                                itemCount: marketController
+                                                    .markets
+                                                    .where(
+                                                        (MarketModel market) =>
                                                             market.userId ==
                                                             profileController
                                                                 .myProfile.uid)
-                                                        .toList();
-                                                final MarketModel market =
-                                                    filteredMarkets[index];
+                                                    .length,
+                                                itemBuilder:
+                                                    (BuildContext context,
+                                                        int index) {
+                                                  final List<MarketModel>
+                                                      filteredMarkets =
+                                                      marketController.markets
+                                                          .where((MarketModel
+                                                                  market) =>
+                                                              market.userId ==
+                                                              profileController
+                                                                  .myProfile
+                                                                  .uid)
+                                                          .toList();
+                                                  final MarketModel market =
+                                                      filteredMarkets[index];
 
-                                                return MarketTile(
-                                                  post: market,
-                                                );
-                                              },
-                                            );
-                                    }
-                                  });
-                                },
-                              ),
-                              const SizedBox(
-                                height: 100,
-                              )
-                            ],
+                                                  return MarketTile(
+                                                    post: market,
+                                                  );
+                                                },
+                                              );
+                                      }
+                                    });
+                                  },
+                                ),
+                                const SizedBox(
+                                  height: 100,
+                                )
+                              ],
+                            ),
                           ),
-                        ),
                       ],
                     ),
                   ),

@@ -4,7 +4,7 @@ class MyConnect {
   String? id;
   String? connectedBy;
   String? connectedTo;
-  int? timestamp;
+  num? timestamp;
   String? status;
 
   MyConnect({

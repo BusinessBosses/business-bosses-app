@@ -87,6 +87,7 @@ class CreatePostController extends GetxController {
 
         if (response.success) {
           _postsController.addNewPost(response.data, profileController);
+
           if (shouldPromote.value == true) {
             Get.to(() => BoostPost(
                   postId: response.data['postId'],
@@ -106,6 +107,7 @@ class CreatePostController extends GetxController {
           if (response.success) {
             imageFileList.clear();
             _postsController.addNewPost(response.data, profileController);
+
             if (shouldPromote.value == true) {
               Get.to(() => BoostPost(
                     postId: response.data['postId'],

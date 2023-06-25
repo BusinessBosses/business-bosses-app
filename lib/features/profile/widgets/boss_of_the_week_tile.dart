@@ -9,7 +9,6 @@ import '../../../common/widgets/popup/bossup_challenge_popup.dart';
 import '../../../navigation/routes.dart';
 import '../../../services/api_service.dart';
 import '../../../utils/theme/theme.dart';
-import '../../home/controller/home_controller.dart';
 import '../../moreinfoscreens/bossuppartner.dart';
 import '../controller/profile_controller.dart';
 
@@ -28,7 +27,6 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
   bool connectedbutton = true;
   final ProfileController _profileController = Get.find();
   late UserModel? user;
-  final HomeController homeController = Get.find();
 
   @override
   void initState() {
@@ -177,7 +175,13 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                                     user?.companyName == null &&
                                     user?.location == null)
                                   const SizedBox(height: 12.0),
-                                Text(user?.name ?? '',
+                                Text(
+                                    user?.name != null &&
+                                            user!.name!.length <= 20
+                                        ? user!.name!
+                                        : user?.name != null
+                                            ? '${user!.name!.substring(0, 20)}...'
+                                            : '',
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
                                     style: const TextStyle(
@@ -225,75 +229,77 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                     ),
                   ),
                 ),
-                homeController.bossUp != null &&
-                        homeController.bossUp!.isNotEmpty
-                    ? GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (BuildContext context) =>
-                                    const Bossuppartner()),
-                          );
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.only(right: 0, top: 5),
-                          child: Container(
-                            height: 40,
-                            decoration: BoxDecoration(
-                              color: const Color(0xFFFFFFFF),
-                              borderRadius: BorderRadius.circular(10),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.grey.withOpacity(0.3),
-                                  spreadRadius: 20,
-                                  blurRadius: 500,
-                                  offset: const Offset(0, 3),
-                                ),
-                              ],
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (BuildContext context) =>
+                              const Bossuppartner()),
+                    );
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 0, top: 5),
+                    child: Container(
+                      height: 40,
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFFFFFFF),
+                        borderRadius: BorderRadius.circular(10),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.3),
+                            spreadRadius: 20,
+                            blurRadius: 500,
+                            offset: const Offset(0, 3),
+                          ),
+                        ],
+                      ),
+                      child: Row(
+                        children: [
+                          const Padding(
+                            padding: EdgeInsets.only(
+                              left: 10,
                             ),
-                            child: Row(
-                              children: [
-                                const Padding(
-                                  padding: EdgeInsets.only(
-                                    left: 10,
-                                  ),
-                                  child: Center(
-                                    child: Padding(
-                                      padding: EdgeInsets.all(2),
-                                      child: Text('Boss Up by'),
-                                    ),
-                                  ),
+                            child: Center(
+                              child: Padding(
+                                padding: EdgeInsets.all(2),
+                                child: Text(
+                                  'Boss Up by',
+                                  style: TextStyle(fontSize: 11),
                                 ),
-                                const SizedBox(width: 10),
-                                Text(
-                                  homeController.bossUp != null &&
-                                          homeController.bossUp!.isNotEmpty
-                                      ? homeController
-                                              .bossUp!.last['companyName'] ??
-                                          ''
-                                      : '',
-                                  style: const TextStyle(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                  overflow: TextOverflow.ellipsis,
-                                  softWrap: false,
-                                ),
-                                const Spacer(),
-                                Padding(
-                                  padding: const EdgeInsets.only(right: 10.0),
-                                  child: SvgPicture.asset(
-                                    'assets/svgs/nexticon.svg',
-                                    color: textColor,
-                                  ),
-                                )
-                              ],
+                              ),
                             ),
                           ),
-                        ),
-                      )
-                    : const SizedBox(),
+                          const SizedBox(width: 10),
+                          Text(
+                            '|',
+                            style: TextStyle(
+                                fontSize: 20,
+                                color: textColor.withOpacity(0.5)),
+                          ),
+                          const SizedBox(width: 10),
+                          Text(
+                            'Partners'.substring(0, 8),
+                            style: const TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                            softWrap: false,
+                          ),
+                          const Spacer(),
+                          Padding(
+                            padding: const EdgeInsets.only(right: 10.0),
+                            child: SvgPicture.asset(
+                              'assets/svgs/nexticon.svg',
+                              color: textColor,
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
               ],
             )
           : qouteWidget(quotes),
@@ -389,17 +395,12 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
               ),
             ),
             onPressed: () async {
-              if (_profileController.myProfile.connectedCount == 0 &&
-                  _profileController.myProfile.connectionCount == 0) {
-                _share();
-              } else {
-                Get.toNamed(Routes.referscreen, arguments: {
-                  'user': user,
-                  'onRefer': (refs) {
-                    updateReferals(refs);
-                  }
-                });
-              }
+              Get.toNamed(Routes.referscreen, arguments: {
+                'user': user,
+                'onRefer': (refs) {
+                  updateReferals(refs);
+                }
+              });
             },
             child: const Text(
               'Refer',
@@ -466,12 +467,5 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
       'userId': _profileController.myProfile.uid,
       'connectedId': userId
     });
-  }
-
-  void _share() {
-    String message =
-        'Have a look at ${user?.username}\'s profile on Business Bosses\n'
-        'https://businessbosses.onelink.me/xLWk/36a2ff16';
-    socialShare(message);
   }
 }

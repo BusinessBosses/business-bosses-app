@@ -133,6 +133,7 @@ class _AnalyserScreenState extends State<AnalyserScreen> {
                                                 ),
                                                 SvgPicture.asset(
                                                   'assets/svgs/nextbutton.svg',
+                                                  color: primaryColorLT,
                                                 ),
                                               ],
                                             ),
@@ -239,7 +240,7 @@ class _AnalyserScreenState extends State<AnalyserScreen> {
                     color: textColor),
               ),
               onTap: () {
-                Get.toNamed(Routes.communityrulesscreen,
+                Get.toNamed(Routes.explorebusinessbossesscreen,
                     arguments: 'Description');
               },
               trailing: SvgPicture.asset('assets/svgs/nexticon.svg')),

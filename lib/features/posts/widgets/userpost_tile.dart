@@ -147,7 +147,12 @@ class _PostTileState extends State<PostTile> {
                       }
                     },
                     child: Text(
-                      widget.post.user!.name ?? widget.post.user!.username,
+                      widget.post.user!.name != null &&
+                              widget.post.user!.name!.length <= 20
+                          ? widget.post.user!.name!
+                          : widget.post.user!.name != null
+                              ? "${widget.post.user!.name!.substring(0, 20)}..."
+                              : widget.post.user!.username,
                       style: Theme.of(context).textTheme.bodyLarge,
                     ),
                   ),
