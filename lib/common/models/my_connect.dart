@@ -2,24 +2,24 @@ import 'package:flutter/foundation.dart';
 
 class MyConnect {
   String? id;
-  String? connectedBy;
+  // String? connectedBy;
   String? connectedTo;
   num? timestamp;
-  String? status;
+  // String? status;
 
   MyConnect({
     this.id,
-    this.connectedBy,
+    // this.connectedBy,
     this.connectedTo,
     this.timestamp,
-    this.status,
+    // this.status,
   });
 
   Map toMap() {
     return {
       'id': id,
-      'connectedBy': connectedBy,
-      'connectedTo': connectedTo,
+      // 'connectedBy': connectedBy,
+      'connect': connectedTo,
       'timestamp': timestamp,
       // 'status': this.status,
     };
@@ -28,8 +28,8 @@ class MyConnect {
   factory MyConnect.fromMap(Map map) {
     return MyConnect(
       id: map['id'] as String,
-      connectedBy: map['connectedBy'] as String,
-      connectedTo: map['connectedTo'] as String,
+      // connectedBy: map['connectedBy'] as String,
+      connectedTo: map['connect'] as String,
       timestamp: map['timestamp'] as int,
       // status: map['status'] as String,
     );
@@ -79,23 +79,23 @@ class MyConnect {
     return items;
   }
 
-  bool get isEmpty {
-    if ((connectedBy?.isEmpty ?? true) &&
-            (connectedTo?.isEmpty ?? true) &&
-            timestamp == null /*&&
-        (status?.isEmpty ?? true)*/
-        ) return true;
-    return false;
-  }
+  // bool get isEmpty {
+  //   if ((connectedBy?.isEmpty ?? true) &&
+  //           (connectedTo?.isEmpty ?? true) &&
+  //           timestamp == null /*&&
+  //       (status?.isEmpty ?? true)*/
+  //       ) return true;
+  //   return false;
+  // }
 
-  bool get isNotEmpty {
-    if ((connectedBy?.isNotEmpty ?? false) &&
-            (connectedTo?.isNotEmpty ?? false) &&
-            timestamp != null /*&&
-        (status?.isNotEmpty ?? false)*/
-        ) return true;
-    return false;
-  }
+  // bool get isNotEmpty {
+  //   if ((connectedBy?.isNotEmpty ?? false) &&
+  //           (connectedTo?.isNotEmpty ?? false) &&
+  //           timestamp != null /*&&
+  //       (status?.isNotEmpty ?? false)*/
+  //       ) return true;
+  //   return false;
+  // }
 
   static String connectId(String myUser, String publicUserUid) {
     return myUser.substring(0, 12) + publicUserUid.substring(0, 12);

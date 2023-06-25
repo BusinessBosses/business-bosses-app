@@ -15,7 +15,8 @@ class ProfileController extends GetxController {
   void processDataToState(dynamic userData, List interests) {
     final UserModel modelizedData = UserModel.fromMap({
       ...userData,
-      'connections': userData['connections']['connections'],
+      'connections':
+          userData['connections'].map((mp) => mp['connect']).toList(),
       'connecteds': userData['connecteds'],
       'interests': interests
     });
@@ -24,8 +25,8 @@ class ProfileController extends GetxController {
   }
 
   void toggleInterests(Industry industry) {
-    final int index = myProfile.interests!
-        .indexWhere((Industry element) => element.industryId == industry.industryId);
+    final int index = myProfile.interests!.indexWhere(
+        (Industry element) => element.industryId == industry.industryId);
     if (index != -1) {
       myProfile.interests!.removeAt(index);
     } else {
@@ -123,7 +124,8 @@ class ProfileController extends GetxController {
         'user': {
           ...response.data['user']['data'],
           'connections': response.data['user']['data']['connections']
-              ['connections']
+              .map((mp) => mp['connect'])
+              .toList()
         }
       };
     }
