@@ -31,6 +31,7 @@ class _ProfileAnalyseScreenState extends State<ProfileAnalyseScreen> {
   bool error = false;
   List<MyConnect> _myConnections = [];
   List<MyConnect> _myConnecteds = [];
+  List<MyConnect> _disconnections = [];
   @override
   void didChangeDependencies() {
     if (!_isInit) {
@@ -63,6 +64,12 @@ class _ProfileAnalyseScreenState extends State<ProfileAnalyseScreen> {
         final MyConnect modelizedData =
             MyConnect.fromMap(response.data['connecteds'][i]);
         _myConnecteds.add(modelizedData);
+      }
+
+      for (var i = 0; i < response.data['disconnections'].length; i++) {
+        final MyConnect modelizedData =
+            MyConnect.fromMap(response.data['disconnections'][i]);
+        _disconnections.add(modelizedData);
       }
     } else {
       error = true;
@@ -168,7 +175,7 @@ class _ProfileAnalyseScreenState extends State<ProfileAnalyseScreen> {
                               ),
                               Expanded(
                                 child: CustomChildButton(
-                                  value: Disconnected([],
+                                  value: Disconnected(_disconnections,
                                           timestamp: TimeFormat.ONE_WEEK)
                                       .length,
                                   onPressed: () {},
@@ -213,7 +220,7 @@ class _ProfileAnalyseScreenState extends State<ProfileAnalyseScreen> {
                               ),
                               Expanded(
                                 child: CustomChildButton(
-                                  value: Disconnected([],
+                                  value: Disconnected(_disconnections,
                                           timestamp: TimeFormat.ONE_MONTH)
                                       .length,
                                   onPressed: () {},
@@ -400,15 +407,15 @@ class _ProfileAnalyseScreenState extends State<ProfileAnalyseScreen> {
     }).toList();
   }
 
-  List<Disconnection> Disconnected(
-    List<Disconnection> disconnections, {
+  List<MyConnect> Disconnected(
+    List<MyConnect> disconnections, {
     // String statue,
     num? timestamp,
   }) {
-    return disconnections.where((Disconnection element) {
+    return disconnections.where((MyConnect element) {
       bool isWithInTime = timestamp == null
           ? true
-          : DateTime.now().millisecondsSinceEpoch - element.timeStamp <=
+          : DateTime.now().millisecondsSinceEpoch - element.timestamp! <=
               timestamp;
       return isWithInTime;
     }).toList();
@@ -430,7 +437,8 @@ class _ProfileAnalyseScreenState extends State<ProfileAnalyseScreen> {
 
   int getDisconnectedValue(int val, num time) {
     final ProfileController userCtrl = Get.find();
-    return ((Disconnected([], timestamp: time).length) / val).round();
+    return ((Disconnected(_disconnections, timestamp: time).length) / val)
+        .round();
   }
 }
 

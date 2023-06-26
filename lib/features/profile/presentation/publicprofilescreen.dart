@@ -72,12 +72,12 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
 
   Future<void> disconnect(String userId) async {
     // ignore: unused_local_variable
-    final ApiResponseModel res = await ApiService.post(
-        path: '/connection/disconnect',
-        body: {
-          'userId': _profileController.myProfile.uid,
-          'connectedId': userId
-        });
+    final ApiResponseModel res =
+        await ApiService.post(path: '/connection/disconnect', body: {
+      'userId': _profileController.myProfile.uid,
+      'connectedId': userId,
+      'timestamp': DateTime.now().millisecondsSinceEpoch
+    });
   }
 
   // void updateReferals(int refs) {
