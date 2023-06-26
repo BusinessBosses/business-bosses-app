@@ -128,21 +128,21 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                   profileController.myProfile.uid)
                               .isEmpty
                           ? [
-                              Tab(
+                              const Tab(
                                 text: 'About',
                               ),
-                              Tab(
+                              const Tab(
                                 text: 'Posts',
                               ),
                             ]
                           : [
-                              Tab(
+                              const Tab(
                                 text: 'About',
                               ),
-                              Tab(
+                              const Tab(
                                 text: 'Posts',
                               ),
-                              Tab(
+                              const Tab(
                                 text: 'Shop',
                               ),
                             ],
@@ -181,7 +181,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                             .where((MarketModel market) =>
                                 market.userId !=
                                 profileController.myProfile.uid)
-                            .isEmpty)
+                            .isNotEmpty)
                           SingleChildScrollView(
                             child: Column(
                               children: [
