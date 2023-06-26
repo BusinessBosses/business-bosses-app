@@ -395,132 +395,163 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
 
                     Expanded(
                       child: TabBarView(
-                        children: [
-                          // Container(),
-                          SingleChildScrollView(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const SizedBox(
-                                  height: 30,
-                                ),
-                                profileinfodisplay(context, publicUser),
-                              ],
-                            ),
-                          ),
-                          // Container()
-                          profilepostsdisplay(
-                            context,
-                            publicUser,
-                            _posts,
-                            loading: isLoading,
-                          ),
-                          if (_marketController.markets
-                              .where((MarketModel market) =>
-                                  market.userId == publicUser.uid)
-                              .isNotEmpty)
-                            SingleChildScrollView(
-                              child: Stack(
-                                children: <Widget>[
-                                  Container(
-                                    padding: const EdgeInsets.all(0),
-                                    height: 100,
-                                    width: double.infinity,
-                                    child: ClipRRect(
-                                      child: FittedBox(
-                                        fit: BoxFit.fill,
-                                        child: Image.asset(
-                                            'assets/images/sellerbackground.jpg'),
-                                      ),
-                                    ),
-                                  ),
-                                  Column(
+                        children: _marketController.markets
+                                .where((MarketModel market) =>
+                                    market.userId == publicUser.uid)
+                                .isEmpty
+                            ? [
+                                SingleChildScrollView(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      GetBuilder<MarketController>(builder:
-                                          (MarketController homeController) {
-                                        return Obx(() {
-                                          if (_marketController.loading.value) {
-                                            return const Center(
-                                                child:
-                                                    CircularProgressIndicator());
-                                          } else if (_marketController
-                                              .error.value) {
-                                            return const SafetyModel(
-                                              isLoading: false,
-                                              title: 'Error While Loading Data',
-                                              subTitle: 'Try Reloading Again',
-                                              icon: Icon(
-                                                Icons.warning,
-                                                size: 60,
-                                              ),
-                                            );
-                                          } else {
-                                            return _marketController.markets
-                                                    .where(
-                                                        (MarketModel market) =>
-                                                            market.userId ==
-                                                            publicUser.uid)
-                                                    .isEmpty
-                                                ? const SafetyModel(
-                                                    isLoading: false,
-                                                    icon: Icon(
-                                                      Icons.warning,
-                                                      color: Colors.grey,
-                                                      size: 80.0,
-                                                    ),
-                                                    title:
-                                                        'This user has no items in store',
-                                                    // subTitle: '',
-                                                  )
-                                                : ListView.builder(
-                                                    shrinkWrap: true,
-                                                    physics:
-                                                        const NeverScrollableScrollPhysics(),
-                                                    itemCount: _marketController
-                                                        .markets
+                                      const SizedBox(
+                                        height: 30,
+                                      ),
+                                      profileinfodisplay(context, publicUser),
+                                    ],
+                                  ),
+                                ),
+                                // Container()
+                                profilepostsdisplay(
+                                  context,
+                                  publicUser,
+                                  _posts,
+                                  loading: isLoading,
+                                ),
+                              ]
+                            : [
+                                // Container(),
+                                SingleChildScrollView(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      const SizedBox(
+                                        height: 30,
+                                      ),
+                                      profileinfodisplay(context, publicUser),
+                                    ],
+                                  ),
+                                ),
+                                // Container()
+                                profilepostsdisplay(
+                                  context,
+                                  publicUser,
+                                  _posts,
+                                  loading: isLoading,
+                                ),
+
+                                SingleChildScrollView(
+                                  child: Stack(
+                                    children: <Widget>[
+                                      Container(
+                                        padding: const EdgeInsets.all(0),
+                                        height: 100,
+                                        width: double.infinity,
+                                        child: ClipRRect(
+                                          child: FittedBox(
+                                            fit: BoxFit.fill,
+                                            child: Image.asset(
+                                                'assets/images/sellerbackground.jpg'),
+                                          ),
+                                        ),
+                                      ),
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          GetBuilder<MarketController>(builder:
+                                              (MarketController
+                                                  homeController) {
+                                            return Obx(() {
+                                              if (_marketController
+                                                  .loading.value) {
+                                                return const Center(
+                                                    child:
+                                                        CircularProgressIndicator());
+                                              } else if (_marketController
+                                                  .error.value) {
+                                                return const SafetyModel(
+                                                  isLoading: false,
+                                                  title:
+                                                      'Error While Loading Data',
+                                                  subTitle:
+                                                      'Try Reloading Again',
+                                                  icon: Icon(
+                                                    Icons.warning,
+                                                    size: 60,
+                                                  ),
+                                                );
+                                              } else {
+                                                return _marketController.markets
                                                         .where((MarketModel
                                                                 market) =>
                                                             market.userId ==
                                                             publicUser.uid)
-                                                        .length,
-                                                    itemBuilder:
-                                                        (BuildContext context,
-                                                            int index) {
-                                                      final List<MarketModel>
-                                                          filteredMarkets =
-                                                          _marketController
-                                                              .markets
-                                                              .where((MarketModel
-                                                                      market) =>
-                                                                  market
-                                                                      .userId ==
-                                                                  publicUser
-                                                                      .uid)
-                                                              .toList();
-                                                      final MarketModel market =
-                                                          filteredMarkets[
-                                                              index];
+                                                        .isEmpty
+                                                    ? const SafetyModel(
+                                                        isLoading: false,
+                                                        icon: Icon(
+                                                          Icons.warning,
+                                                          color: Colors.grey,
+                                                          size: 80.0,
+                                                        ),
+                                                        title:
+                                                            'This user has no items in store',
+                                                        // subTitle: '',
+                                                      )
+                                                    : ListView.builder(
+                                                        shrinkWrap: true,
+                                                        physics:
+                                                            const NeverScrollableScrollPhysics(),
+                                                        itemCount: _marketController
+                                                            .markets
+                                                            .where((MarketModel
+                                                                    market) =>
+                                                                market.userId ==
+                                                                publicUser.uid)
+                                                            .length,
+                                                        itemBuilder:
+                                                            (BuildContext
+                                                                    context,
+                                                                int index) {
+                                                          final List<
+                                                                  MarketModel>
+                                                              filteredMarkets =
+                                                              _marketController
+                                                                  .markets
+                                                                  .where((MarketModel
+                                                                          market) =>
+                                                                      market
+                                                                          .userId ==
+                                                                      publicUser
+                                                                          .uid)
+                                                                  .toList();
+                                                          final MarketModel
+                                                              market =
+                                                              filteredMarkets[
+                                                                  index];
 
-                                                      return MarketTile(
-                                                        post: market,
+                                                          return MarketTile(
+                                                            post: market,
+                                                          );
+                                                        },
                                                       );
-                                                    },
-                                                  );
-                                          }
-                                        });
-                                      }),
-                                      const SizedBox(
-                                        height: 200,
-                                      )
+                                              }
+                                            });
+                                          }),
+                                          const SizedBox(
+                                            height: 200,
+                                          )
+                                        ],
+                                      ),
                                     ],
                                   ),
-                                ],
-                              ),
-                            ),
-                        ],
+                                ),
+                              ],
                       ),
                     ),
                   ],

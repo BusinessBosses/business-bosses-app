@@ -46,7 +46,7 @@ class _FilterUsersState extends State<FilterUsers> {
             padding: EdgeInsets.all(20),
             child: Text(
               'Recommended Connections',
-              style: TextStyle(fontWeight: FontWeight.w700, fontSize: 20),
+              style: TextStyle(fontWeight: FontWeight.w700, fontSize: 18),
             ),
           ),
           Container(
