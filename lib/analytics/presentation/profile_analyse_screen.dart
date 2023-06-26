@@ -29,7 +29,8 @@ class _ProfileAnalyseScreenState extends State<ProfileAnalyseScreen> {
   late TooltipBehavior _tooltipBehavior;
   bool loading = false;
   bool error = false;
-  List<MyConnect> myConnects = [];
+  List<MyConnect> _myConnections = [];
+  List<MyConnect> _myConnecteds = [];
   @override
   void didChangeDependencies() {
     if (!_isInit) {
@@ -50,11 +51,18 @@ class _ProfileAnalyseScreenState extends State<ProfileAnalyseScreen> {
     });
 
     final ApiResponseModel response =
-        await ApiService.get(path: 'connection/get-raw-connections');
+        await ApiService.get(path: 'connection/analysis');
     if (response.success) {
-      for (var i = 0; i < response.data.length; i++) {
-        final MyConnect modelizedData = MyConnect.fromMap(response.data[i]);
-        myConnects.add(modelizedData);
+      for (var i = 0; i < response.data['connections'].length; i++) {
+        final MyConnect modelizedData =
+            MyConnect.fromMap(response.data['connections'][i]);
+        _myConnections.add(modelizedData);
+      }
+
+      for (var i = 0; i < response.data['connecteds'].length; i++) {
+        final MyConnect modelizedData =
+            MyConnect.fromMap(response.data['connecteds'][i]);
+        _myConnecteds.add(modelizedData);
       }
     } else {
       error = true;
@@ -142,7 +150,7 @@ class _ProfileAnalyseScreenState extends State<ProfileAnalyseScreen> {
                             children: [
                               Expanded(
                                 child: CustomChildButton(
-                                  value: _connections(myConnects,
+                                  value: _connections(_myConnections,
                                           timestamp: TimeFormat.ONE_WEEK)
                                       .length,
                                   onPressed: () {},
@@ -151,7 +159,7 @@ class _ProfileAnalyseScreenState extends State<ProfileAnalyseScreen> {
                               ),
                               Expanded(
                                 child: CustomChildButton(
-                                  value: _connections(myConnects,
+                                  value: _connections(_myConnecteds,
                                           timestamp: TimeFormat.ONE_WEEK)
                                       .length,
                                   onPressed: () {},
@@ -181,7 +189,7 @@ class _ProfileAnalyseScreenState extends State<ProfileAnalyseScreen> {
                             children: [
                               Expanded(
                                 child: CustomChildButton(
-                                  value: _connections(myConnects,
+                                  value: _connections(_myConnections,
                                           timestamp: TimeFormat.ONE_MONTH)
                                       .length,
 
@@ -196,7 +204,7 @@ class _ProfileAnalyseScreenState extends State<ProfileAnalyseScreen> {
                               ),
                               Expanded(
                                 child: CustomChildButton(
-                                  value: _connections(myConnects,
+                                  value: _connections(_myConnecteds,
                                           timestamp: TimeFormat.ONE_MONTH)
                                       .length,
                                   onPressed: () {},
@@ -408,12 +416,14 @@ class _ProfileAnalyseScreenState extends State<ProfileAnalyseScreen> {
 
   int getConnectionValue(double val, num time) {
     final ProfileController userCtrl = Get.find();
-    return ((_connections(myConnects, timestamp: time).length) / val).round();
+    return ((_connections(_myConnections, timestamp: time).length) / val)
+        .round();
   }
 
   int getConnectedValue(int val, num time) {
     final ProfileController userCtrl = Get.find();
-    return ((_connections(myConnects, timestamp: TimeFormat.ONE_MONTH).length) /
+    return ((_connections(_myConnecteds, timestamp: TimeFormat.ONE_MONTH)
+                .length) /
             val)
         .round();
   }

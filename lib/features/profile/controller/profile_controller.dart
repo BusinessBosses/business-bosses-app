@@ -115,7 +115,8 @@ class ProfileController extends GetxController {
         'user': {
           ...response.data['user']['data'],
           'connections': response.data['user']['data']['connections']
-              ['connections']
+              .map((mp) => mp['connect'])
+              .toList()
         }
       };
     } else {

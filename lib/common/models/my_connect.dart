@@ -27,7 +27,7 @@ class MyConnect {
 
   factory MyConnect.fromMap(Map map) {
     return MyConnect(
-      id: map['id'] as String,
+      id: map['id'].toString(),
       // connectedBy: map['connectedBy'] as String,
       connectedTo: map['connect'] as String,
       timestamp: map['timestamp'] as int,
