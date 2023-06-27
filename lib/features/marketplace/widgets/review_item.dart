@@ -94,7 +94,7 @@ class _ReviewTileState extends State<ReviewTile> {
                       }
                     },
                     child: Text(
-                      '${widget.post.rater.name}',
+                      '${widget.post.rater.name!.length <= 15 ? widget.post.rater.name : "${widget.post.rater.name!.substring(0, 15)}..."}',
                       style: Theme.of(context).textTheme.bodyLarge,
                     ),
                   ),

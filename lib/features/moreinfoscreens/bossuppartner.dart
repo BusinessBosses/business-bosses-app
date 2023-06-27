@@ -1,9 +1,13 @@
 import 'dart:core';
+
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
 
+import '../../action/action.dart';
+import '../../utils/constants/constants.dart';
 import '../../utils/theme/theme.dart';
 
 // ignore: public_member_api_docs
@@ -189,7 +193,9 @@ class BossuppartnerItem extends StatelessWidget {
                           fontSize: 15,
                         ),
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        _contactUs(context);
+                      },
                     ),
                   ),
                 ),
@@ -203,5 +209,18 @@ class BossuppartnerItem extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  Future<void> _contactUs(BuildContext context) async {
+    Uri mailUrl = Uri.parse('mailto:support@businessbosses.co.uk');
+    try {
+      if (await canLaunchUrl(mailUrl)) {
+        await launchUrl(mailUrl);
+      } else {
+        throw 'Could not launch $mailUrl';
+      }
+    } catch (e) {
+      showSnackBar(context, message: '${Constants.STGW}, try again later');
+    }
   }
 }

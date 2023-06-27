@@ -108,7 +108,12 @@ class _PublicProfileTileState extends State<PublicProfileTile> {
                 children: [
                   const SizedBox(height: 6.0),
                   Text(
-                    widget.myProfile.name ?? '',
+                    widget.myProfile.name != null &&
+                            widget.myProfile.name!.length <= 20
+                        ? widget.myProfile.name!
+                        : widget.myProfile.name != null
+                            ? '${widget.myProfile.name!.substring(0, 20)}...'
+                            : '',
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(

@@ -175,7 +175,13 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                                     user?.companyName == null &&
                                     user?.location == null)
                                   const SizedBox(height: 12.0),
-                                Text(user?.name ?? '',
+                                Text(
+                                    user?.name != null &&
+                                            user!.name!.length <= 20
+                                        ? user!.name!
+                                        : user?.name != null
+                                            ? '${user!.name!.substring(0, 20)}...'
+                                            : '',
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
                                     style: const TextStyle(
@@ -257,9 +263,19 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                             child: Center(
                               child: Padding(
                                 padding: EdgeInsets.all(2),
-                                child: Text('Boss Up by'),
+                                child: Text(
+                                  'Boss Up by',
+                                  style: TextStyle(fontSize: 11),
+                                ),
                               ),
                             ),
+                          ),
+                          const SizedBox(width: 10),
+                          Text(
+                            '|',
+                            style: TextStyle(
+                                fontSize: 20,
+                                color: textColor.withOpacity(0.5)),
                           ),
                           const SizedBox(width: 10),
                           Text(
@@ -442,14 +458,16 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
   Future<void> disconnect(String userId) async {
     await ApiService.post(path: '/connection/disconnect', body: {
       'userId': _profileController.myProfile.uid,
-      'connectedId': userId
+      'connectedId': userId,
+      'timestamp': DateTime.now().millisecondsSinceEpoch
     });
   }
 
   Future<void> connect(String userId) async {
     await ApiService.post(path: '/connection/connect', body: {
       'userId': _profileController.myProfile.uid,
-      'connectedId': userId
+      'connectedId': userId,
+      'timestamp': DateTime.now().millisecondsSinceEpoch
     });
   }
 }

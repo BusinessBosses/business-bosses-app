@@ -13,7 +13,7 @@ class Preview extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 0),
       child: GridView.builder(
         physics: const NeverScrollableScrollPhysics(),
         shrinkWrap: true,
@@ -28,10 +28,14 @@ class Preview extends StatelessWidget {
           childAspectRatio: (1 / 1),
         ),
         itemBuilder: (BuildContext context, int i) {
-          return ImageItem(
-            file: isUrl ? null : File(controller.imageFileList[i].path),
-            onRemove: () => controller.removeImage(i),
-            imageUrl: isUrl ? controller.imageUrlList[i] : null,
+          return Stack(
+            children: [
+              ImageItem(
+                file: isUrl ? null : File(controller.imageFileList[i].path),
+                onRemove: () => controller.removeImage(i),
+                imageUrl: isUrl ? controller.imageUrlList[i] : null,
+              ),
+            ],
           );
         },
       ),

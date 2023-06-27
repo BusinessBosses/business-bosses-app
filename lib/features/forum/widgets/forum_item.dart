@@ -43,7 +43,6 @@ class ForumItem extends StatefulWidget {
 }
 
 class _ForumItemState extends State<ForumItem> {
-  final bool _isInit = false;
   List<String> blocked = [];
 
   final List<PopupMenuEntry<String>> myPopup = <PopupMenuEntry<String>>[
@@ -401,12 +400,17 @@ class _ForumItemState extends State<ForumItem> {
                               arguments: widget.forum.user);
                         },
                         child: Text(
-                          widget.forum.user?.name ?? '',
+                          widget.forum.user?.name != null &&
+                                  widget.forum.user!.name!.length <= 15
+                              ? widget.forum.user!.name!
+                              : widget.forum.user?.name != null
+                                  ? '${widget.forum.user!.name!.substring(0, 15)}...'
+                                  : "",
                           style: Theme.of(context).textTheme.bodyLarge,
                         ),
                       ),
                       subtitle: Text(
-                        widget.forum.user!.bio ?? '',
+                        widget.forum.user?.bio ?? '',
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -466,7 +470,8 @@ class _ForumItemState extends State<ForumItem> {
                             widget.controller!.postLike(
                                 profileController.myProfile.uid,
                                 widget.forum.forumId,
-                                'forum');
+                                'forum',
+                                widget.forum.user?.uid);
                           },
                           icon: widget.forum.likes?.contains(
                                       profileController.myProfile.uid) ==

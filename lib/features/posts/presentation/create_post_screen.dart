@@ -15,6 +15,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 import '../../../common/dialogs/snackbar.dart';
+import '../../../common/models/api_response_model.dart';
+import '../../../navigation/routes.dart';
 import '../../profile/controller/profile_controller.dart';
 
 /// CREATE POST SCREEN
@@ -167,7 +169,10 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                     height: 10,
                   ),
                   if (controller.imageFileList.isNotEmpty)
-                    Preview(controller: controller),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Preview(controller: controller),
+                    ),
                   const SizedBox(
                     width: double.infinity,
                     height: 1,
@@ -189,8 +194,8 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                       onPressed: () async {
                         if (controller.imageFileList.length > 5) {
                           /// If the user has selected more than five images, show an error message
-                          showSnackbar(
-                              message: 'You can select up to five images.');
+                          Get.snackbar(
+                              'Error', 'You can select up to five images.');
                         } else {
                           /// Otherwise, create the post
                           if (widget.postId == null) {
@@ -199,14 +204,19 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                               'timestamp':
                                   DateTime.now().millisecondsSinceEpoch,
                             }, _profileController);
+                            Get.snackbar(
+                                'Success', 'Post created successfully');
+                            Get.offAllNamed(Routes.bottomNavigation);
                           } else {
-                            ApiService.put(
+                            await ApiService.put(
                               path: 'post/update-post/${widget.postId}',
                               body: {
                                 'title': _titleCtrl.text.trim(),
                               },
                             );
-                            Get.back();
+                            Get.snackbar(
+                                'Success', 'Post updated successfully');
+                            Get.offAllNamed(Routes.bottomNavigation);
                           }
                         }
                       },

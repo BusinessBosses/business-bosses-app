@@ -3,15 +3,19 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../action/action.dart';
 import '../../../common/models/user_model.dart';
 import '../../../common/widgets/buttons/my_outlined_button.dart';
 import '../../../utils/theme/theme.dart';
+import '../../chat/chat_room_screen.dart';
+import '../controller/profile_controller.dart';
 
 Widget OutlineButtonHeader(
   UserModel publicUser,
   UserModel myProfile,
   VoidCallback onConnect,
 ) {
+  final ProfileController profileController = Get.find();
   bool connectedbutton = true;
   return Container(
     height: 50.0,
@@ -43,7 +47,12 @@ Widget OutlineButtonHeader(
         child: MCustomButton(
           margin: const EdgeInsets.symmetric(horizontal: 4.0),
           onPressed: () {
-            Get.toNamed(Routes.chatRoom, arguments: publicUser);
+            Get.to(
+              () => ChatRoomScreen(
+                frommarketplace: false,
+              ),
+              arguments: publicUser,
+            );
           },
           child: const Text('Message'),
         ),
@@ -52,7 +61,16 @@ Widget OutlineButtonHeader(
         child: MCustomButton(
             margin: const EdgeInsets.symmetric(horizontal: 4.0),
             onPressed: () async {
-              Get.toNamed(Routes.referscreen, arguments: {'user': publicUser});
+              if (profileController.myProfile.connectedCount == 0 &&
+                  profileController.myProfile.connectionCount == 0) {
+                String message =
+                    'Have a look at ${publicUser.username}\'s profile on Business Bosses\n'
+                    'https://businessbosses.onelink.me/xLWk/36a2ff16';
+                socialShare(message);
+              } else {
+                Get.toNamed(Routes.referscreen,
+                    arguments: {'user': publicUser});
+              }
             },
             child: const Text('Refer')),
       ),

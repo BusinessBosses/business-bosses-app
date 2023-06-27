@@ -17,6 +17,8 @@ import '../../../../navigation/routes.dart';
 import '../../../../utils/theme/theme.dart';
 import '../../../common/models/comment_model.dart';
 import '../../../common/widgets/buttons/my_outlined_button.dart';
+import '../../chat/chat_room_screen.dart';
+import '../../profile/presentation/publicprofilescreen.dart';
 import '../controllers/market_controller.dart';
 import '../models/market_model.dart';
 import '../presentation/sell_screen.dart';
@@ -142,7 +144,7 @@ class _MarketTileState extends State<MarketTile> {
                       }
                     },
                     child: Text(
-                      '${widget.post.user.name}',
+                      '${widget.post.user.name!.length <= 20 ? widget.post.user.name : "${widget.post.user.name!.substring(0, 20)}..."}',
                       style: Theme.of(context).textTheme.bodyLarge,
                     ),
                   ),
@@ -382,34 +384,43 @@ class _MarketTileState extends State<MarketTile> {
                                 const SizedBox(
                                   width: 5,
                                 ),
-                                const Icon(
-                                  Icons.star,
-                                  color: Color.fromRGBO(255, 202, 40, 1),
-                                  size: 16,
-                                ),
-                                Text(
-                                  widget.post.user.averageRating.toString(),
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 13),
-                                ),
-                                const SizedBox(
-                                  width: 5,
-                                ),
-                                GestureDetector(
-                                  onTap: () {
-                                    Get.to(() => SellerReviewScreen(
-                                        user: widget.post.user));
-                                  },
-                                  child: const Text(
-                                    'Seller reviews',
-                                    style: TextStyle(
-                                      fontSize: 13,
-                                      fontWeight: FontWeight.bold,
-                                      decoration: TextDecoration.underline,
-                                    ),
-                                  ),
-                                ),
+                                widget.post.user.averageRating == 0
+                                    ? Container()
+                                    : Row(
+                                        children: [
+                                          const Icon(
+                                            Icons.star,
+                                            color:
+                                                Color.fromRGBO(255, 202, 40, 1),
+                                            size: 16,
+                                          ),
+                                          Text(
+                                            widget.post.user.averageRating
+                                                .toString(),
+                                            style: const TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 13),
+                                          ),
+                                          const SizedBox(
+                                            width: 5,
+                                          ),
+                                          GestureDetector(
+                                            onTap: () {
+                                              Get.to(() => SellerReviewScreen(
+                                                  user: widget.post.user));
+                                            },
+                                            child: const Text(
+                                              'Seller reviews',
+                                              style: TextStyle(
+                                                fontSize: 13,
+                                                fontWeight: FontWeight.bold,
+                                                decoration:
+                                                    TextDecoration.underline,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                               ],
                             ),
                           ),
@@ -547,8 +558,11 @@ class _MarketTileState extends State<MarketTile> {
                                           margin: const EdgeInsets.only(
                                               right: 0.0, bottom: 10, top: 10),
                                           onPressed: () {
-                                            Get.toNamed(
-                                              Routes.chatRoom,
+                                            Get.to(
+                                              () => ChatRoomScreen(
+                                                frommarketplace: true,
+                                                market: widget.post,
+                                              ),
                                               arguments: widget.post.user,
                                             );
                                           },
@@ -744,6 +758,21 @@ class _MarketTileState extends State<MarketTile> {
               title: const TextWidget(
                 text: 'Report this post',
                 color: Colors.red,
+              ),
+            ),
+            ListTile(
+              onTap: () {
+                Get.to(
+                  () => PublicProfileScreen(
+                    store: true,
+                  ),
+                  arguments: widget.post.user,
+                );
+              },
+              contentPadding: EdgeInsets.zero,
+              title: const TextWidget(
+                text: 'View Store',
+                color: Colors.blue,
               ),
             )
           ],

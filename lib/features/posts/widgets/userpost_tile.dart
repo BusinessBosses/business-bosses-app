@@ -147,7 +147,12 @@ class _PostTileState extends State<PostTile> {
                       }
                     },
                     child: Text(
-                      widget.post.user!.name ?? widget.post.user!.username,
+                      widget.post.user!.name != null &&
+                              widget.post.user!.name!.length <= 20
+                          ? widget.post.user!.name!
+                          : widget.post.user!.name != null
+                              ? "${widget.post.user!.name!.substring(0, 20)}..."
+                              : widget.post.user!.username,
                       style: Theme.of(context).textTheme.bodyLarge,
                     ),
                   ),
@@ -386,12 +391,11 @@ class _PostTileState extends State<PostTile> {
                         ? TextButton.icon(
                             onPressed: () async {
                               widget.controller.postCoin(
-                                profileController.myProfile.uid,
-                                widget.post.postId,
-                                profileController,
-                                'post',
-                                widget.post.user!.uid
-                              );
+                                  profileController.myProfile.uid,
+                                  widget.post.postId,
+                                  profileController,
+                                  'post',
+                                  widget.post.user!.uid);
                             },
                             icon: widget.post.coins?.contains(
                                         profileController.myProfile.uid) ==
@@ -488,6 +492,14 @@ class _PostTileState extends State<PostTile> {
                       ),
                       GestureDetector(
                         onTap: () {
+                          ApiService.post(
+                            path: 'blockedpost',
+                            body: <String, dynamic>{
+                              'userId': widget.post.user?.uid
+                            },
+                          );
+                          widget.controller
+                              .removePostsByUserId(widget.post.user?.uid);
                           navigateTo(context);
                           showSnackBar(context,
                               message: 'User has been blocked');
