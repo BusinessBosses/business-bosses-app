@@ -232,28 +232,31 @@ class HomeController extends GetxController {
     showDialog(
       barrierDismissible: false,
       context: Get.context!,
-      builder: (BuildContext context) => AlertDialog(
-        title: const TextWidget(
-          text: 'Access token expired',
-          fontWeight: FontWeight.w700,
-          size: 18,
+      builder: (BuildContext context) => WillPopScope(
+        onWillPop: () async => false,
+        child: AlertDialog(
+          title: const TextWidget(
+            text: 'Access token expired',
+            fontWeight: FontWeight.w700,
+            size: 18,
+          ),
+          content: const TextWidget(
+            text:
+                'Your access token has expired. therefore, you will be required to login again to generate a new one. ',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                ApiService().logout();
+                Navigator.of(context).pop(context);
+              },
+              child: const TextWidget(
+                text: 'Create new Access Token',
+                color: primaryColorLT,
+              ),
+            )
+          ],
         ),
-        content: const TextWidget(
-          text:
-              'Your access token has expired. therefore, you will be required to login again to generate a new one. ',
-        ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              ApiService().logout();
-              Navigator.of(context).pop(context);
-            },
-            child: const TextWidget(
-              text: 'Create new Access Token',
-              color: primaryColorLT,
-            ),
-          )
-        ],
       ),
     );
   }

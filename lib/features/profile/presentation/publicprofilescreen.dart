@@ -33,7 +33,7 @@ class PublicProfileScreen extends StatefulWidget {
 
 class _PublicProfileScreenState extends State<PublicProfileScreen> {
   final ProfileController _profileController = Get.find();
-  final MarketController _marketController = Get.find();
+  final MarketController _marketController = Get.put(MarketController());
   List<PostModel> _posts = [];
   late UserModel publicUser;
   bool isLoading = true;
