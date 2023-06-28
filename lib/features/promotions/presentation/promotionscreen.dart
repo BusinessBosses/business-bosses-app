@@ -6,6 +6,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 import '../../../action/action.dart';
+import '../../../navigation/routes.dart';
 
 class PromotionScreen extends StatefulWidget {
   static const String routeName = '/promotion-screen';
@@ -29,6 +30,7 @@ class _PromotionScreenState extends State<PromotionScreen> {
 
   @override
   Widget build(BuildContext context) {
+    ProfileController profileController = Get.find();
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -164,6 +166,67 @@ class _PromotionScreenState extends State<PromotionScreen> {
                     ),
                     const SizedBox(
                       height: 3,
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Get.toNamed(Routes.premiumscreen);
+                      },
+                      child: Column(
+                        children: [
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Container(
+                              decoration: BoxDecoration(
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withOpacity(0.09),
+                                    blurRadius: 500.0,
+                                    spreadRadius: 0.0,
+                                  ),
+                                ],
+                              ),
+                              child: !profileController.myProfile.isSubscribed
+                                  ? Align(
+                                      alignment: Alignment.center,
+                                      child: Stack(
+                                        alignment: Alignment.center,
+                                        children: [
+                                          SvgPicture.asset(
+                                            'assets/svgs/subscribebuttonback.svg',
+                                            width: 200,
+                                            fit: BoxFit.contain,
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 0.0),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                const Text(
+                                                  'Subscribe to Premium',
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.w700,
+                                                    fontSize: 15,
+                                                  ),
+                                                ),
+                                                const SizedBox(
+                                                  width: 15,
+                                                ),
+                                                SvgPicture.asset(
+                                                  'assets/svgs/nextbutton.svg',
+                                                  color: primaryColorLT,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    )
+                                  : Container()),
+                        ],
+                      ),
                     ),
                     const SizedBox(
                       height: 20,

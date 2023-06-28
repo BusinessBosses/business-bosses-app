@@ -46,7 +46,7 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
       width: double.infinity,
       color: backgroundcolorinterface,
       padding:
-          const EdgeInsets.only(top: 0.0, bottom: 15.0, left: 15, right: 15),
+          const EdgeInsets.only(top: 0.0, bottom: 10.0, left: 15, right: 15),
       child: user != null
           ? Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -175,7 +175,13 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                                     user?.companyName == null &&
                                     user?.location == null)
                                   const SizedBox(height: 12.0),
-                                Text(user?.name ?? '',
+                                Text(
+                                    user?.name != null &&
+                                            user!.name!.length <= 20
+                                        ? user!.name!
+                                        : user?.name != null
+                                            ? '${user!.name!.substring(0, 20)}...'
+                                            : '',
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
                                     style: const TextStyle(
@@ -233,11 +239,11 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                     );
                   },
                   child: Padding(
-                    padding: const EdgeInsets.only(right: 15, top: 5),
+                    padding: const EdgeInsets.only(right: 0, top: 5),
                     child: Container(
                       height: 40,
                       decoration: BoxDecoration(
-                        color: const Color(0xFFF4F4F4),
+                        color: const Color(0xFFFFFFFF),
                         borderRadius: BorderRadius.circular(10),
                         boxShadow: [
                           BoxShadow(
@@ -250,34 +256,45 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                       ),
                       child: Row(
                         children: [
-                          Padding(
-                            padding: const EdgeInsets.only(
+                          const Padding(
+                            padding: EdgeInsets.only(
                               left: 10,
                             ),
-                            child: Container(
-                              height: 25,
-                              width: 100,
-                              decoration: BoxDecoration(
-                                color: const Color(0xFFEAEAEA),
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              child: const Center(
-                                child: Padding(
-                                  padding: EdgeInsets.all(2),
-                                  child: Text('Boss Up by'),
+                            child: Center(
+                              child: Padding(
+                                padding: EdgeInsets.all(2),
+                                child: Text(
+                                  'Boss Up by',
+                                  style: TextStyle(fontSize: 11),
                                 ),
                               ),
                             ),
                           ),
                           const SizedBox(width: 10),
-                          const Text(
-                            'Partner',
+                          Text(
+                            '|',
                             style: TextStyle(
+                                fontSize: 20,
+                                color: textColor.withOpacity(0.5)),
+                          ),
+                          const SizedBox(width: 10),
+                          Text(
+                            'Partners'.substring(0, 8),
+                            style: const TextStyle(
                               fontSize: 15,
                               fontWeight: FontWeight.bold,
-                              decoration: TextDecoration.underline,
                             ),
+                            overflow: TextOverflow.ellipsis,
+                            softWrap: false,
                           ),
+                          const Spacer(),
+                          Padding(
+                            padding: const EdgeInsets.only(right: 10.0),
+                            child: SvgPicture.asset(
+                              'assets/svgs/nexticon.svg',
+                              color: textColor,
+                            ),
+                          )
                         ],
                       ),
                     ),
@@ -441,14 +458,16 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
   Future<void> disconnect(String userId) async {
     await ApiService.post(path: '/connection/disconnect', body: {
       'userId': _profileController.myProfile.uid,
-      'connectedId': userId
+      'connectedId': userId,
+      'timestamp': DateTime.now().millisecondsSinceEpoch
     });
   }
 
   Future<void> connect(String userId) async {
     await ApiService.post(path: '/connection/connect', body: {
       'userId': _profileController.myProfile.uid,
-      'connectedId': userId
+      'connectedId': userId,
+      'timestamp': DateTime.now().millisecondsSinceEpoch
     });
   }
 }

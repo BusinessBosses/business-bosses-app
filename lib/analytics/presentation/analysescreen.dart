@@ -72,12 +72,81 @@ class _AnalyserScreenState extends State<AnalyserScreen> {
             ),
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              const Text(
-                'Hi',
-                style: TextStyle(
-                    fontSize: 25,
-                    color: textColor,
-                    fontWeight: FontWeight.w700),
+              Row(
+                children: [
+                  const Text(
+                    'Hi',
+                    style: TextStyle(
+                        fontSize: 25,
+                        color: textColor,
+                        fontWeight: FontWeight.w700),
+                  ),
+                  const Spacer(),
+                  Padding(
+                    padding: const EdgeInsets.only(right: 15.0),
+                    child: GestureDetector(
+                      onTap: () {
+                        Get.toNamed(Routes.premiumscreen);
+                      },
+                      child: Column(
+                        children: [
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Container(
+                              decoration: BoxDecoration(
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withOpacity(0.09),
+                                    blurRadius: 500.0,
+                                    spreadRadius: 0.0,
+                                  ),
+                                ],
+                              ),
+                              child: !profileController.myProfile.isSubscribed
+                                  ? Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Stack(
+                                        alignment: Alignment.centerLeft,
+                                        children: [
+                                          SvgPicture.asset(
+                                            'assets/svgs/subscribebuttonback.svg',
+                                            width: 200,
+                                            fit: BoxFit.contain,
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 15.0),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              children: [
+                                                const Text(
+                                                  'Subscribe to Premium',
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.w700,
+                                                    fontSize: 15,
+                                                  ),
+                                                ),
+                                                const SizedBox(
+                                                  width: 15,
+                                                ),
+                                                SvgPicture.asset(
+                                                  'assets/svgs/nextbutton.svg',
+                                                  color: primaryColorLT,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    )
+                                  : Container()),
+                        ],
+                      ),
+                    ),
+                  )
+                ],
               ),
               Text(
                 '@${profileController.myProfile.username}',
@@ -171,7 +240,7 @@ class _AnalyserScreenState extends State<AnalyserScreen> {
                     color: textColor),
               ),
               onTap: () {
-                Get.toNamed(Routes.communityrulesscreen,
+                Get.toNamed(Routes.explorebusinessbossesscreen,
                     arguments: 'Description');
               },
               trailing: SvgPicture.asset('assets/svgs/nexticon.svg')),

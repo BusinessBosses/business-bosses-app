@@ -16,6 +16,7 @@ import '../marketplace/models/market_model.dart';
 import '../marketplace/presentation/market_members.dart';
 import '../marketplace/presentation/sell_screen.dart';
 import '../marketplace/widgets/marketplace_item.dart';
+import '../moreinfoscreens/bossuppartner.dart';
 import '../profile/controller/profile_controller.dart';
 
 /// Buying and Selling screen
@@ -330,7 +331,10 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                       children: <Widget>[
                                         Container(
                                           margin: const EdgeInsets.only(
-                                              top: 10, right: 20, left: 20),
+                                              top: 10,
+                                              right: 20,
+                                              left: 20,
+                                              bottom: 10),
                                           height: 150,
                                           width: double.infinity,
                                           child: ClipRRect(
@@ -566,14 +570,104 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                 ]),
                               ],
                             ),
-                          )
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (BuildContext context) =>
+                                        const Bossuppartner()),
+                              );
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.only(
+                                right: 20,
+                                left: 20,
+                                bottom: 10,
+                              ),
+                              child: Container(
+                                height: 40,
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFFF4F4F4),
+                                  borderRadius: BorderRadius.circular(10),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.grey.withOpacity(0.3),
+                                      spreadRadius: 20,
+                                      blurRadius: 500,
+                                      offset: const Offset(0, 3),
+                                    ),
+                                  ],
+                                ),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      color: const Color(0xFFFFFFFF)
+                                          .withAlpha(150),
+                                      borderRadius: BorderRadius.circular(10),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.white.withOpacity(1),
+                                          spreadRadius: 20,
+                                          blurRadius: 500,
+                                          offset: const Offset(0, 3),
+                                        ),
+                                      ]),
+                                  child: Row(
+                                    children: [
+                                      const Padding(
+                                        padding: EdgeInsets.only(
+                                          left: 10,
+                                        ),
+                                        child: Center(
+                                          child: Padding(
+                                            padding: EdgeInsets.all(2),
+                                            child: Text(
+                                              'Boss Up by',
+                                              style: TextStyle(fontSize: 11),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(width: 10),
+                                      Text(
+                                        '|',
+                                        style: TextStyle(
+                                            fontSize: 20,
+                                            color: textColor.withOpacity(0.5)),
+                                      ),
+                                      const SizedBox(width: 10),
+                                      Text(
+                                        'Partners'.substring(0, 8),
+                                        style: const TextStyle(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                        overflow: TextOverflow.ellipsis,
+                                        softWrap: false,
+                                      ),
+                                      const Spacer(),
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(right: 10.0),
+                                        child: SvgPicture.asset(
+                                          'assets/svgs/nexticon.svg',
+                                          color: textColor,
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                     )
                   ];
                 },
                 body: Padding(
-                  padding: const EdgeInsets.only(bottom: 100, top: 13),
+                  padding: const EdgeInsets.only(bottom: 50, top: 0),
                   child: Obx(() {
                     if (_marketController.loading.value) {
                       return const Center(child: CircularProgressIndicator());
@@ -703,11 +797,12 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
               decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(10),
-                  boxShadow: const [
+                  boxShadow: [
                     BoxShadow(
-                      color: Colors.black,
-                      blurRadius: 500.0, // soften the shadow
-                      spreadRadius: 15, //extend the shadow
+                      offset: Offset(0, 0),
+                      color: Colors.black.withAlpha(80),
+                      blurRadius: 100.0, // soften the shadow
+                      spreadRadius: 5, //extend the shadow
                     )
                   ]),
               child: Obx(

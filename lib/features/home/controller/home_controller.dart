@@ -21,6 +21,7 @@ class HomeController extends GetxController {
   final MarketController _marketController = Get.put(MarketController());
   RxBool error = RxBool(false);
   RxBool loading = RxBool(false);
+  List<Map<String, dynamic>>? bossUp = [];
   RxBool refreshing = RxBool(false);
 
   /// SHOW WHEN ACCESS TOKEN EXPIRES
@@ -84,15 +85,17 @@ class HomeController extends GetxController {
   /// DailyCoin
   void addCoinDaily() {
     int currentTimestamp = DateTime.now().millisecondsSinceEpoch;
-
+    int dataTime = _profileController.myProfile.bossOfTheWeekUpTimeStamp ?? 0;
     int lastExecutionTimestamp = sandBox.read('lastExecutionTimestamp') ?? 0;
-    if (currentTimestamp - lastExecutionTimestamp >= 24 * 60 * 60 * 1000) {
+    if ((currentTimestamp - lastExecutionTimestamp >= 24 * 60 * 60 * 1000) &&
+        (dataTime - lastExecutionTimestamp >= 24 * 60 * 60 * 1000)) {
       // The action hasn't been executed today, save the current timestamp
       sandBox.write('lastExecutionTimestamp', currentTimestamp);
       ApiService.put(
         path: 'users/${_profileController.myProfile.uid}',
         body: <String, dynamic>{
           'coinscount': _profileController.myProfile.coinscount! + 1,
+          'bossOfTheWeekUpTimeStamp': currentTimestamp,
         },
       );
       _profileController.updateCoinCount(1);
@@ -106,15 +109,20 @@ class HomeController extends GetxController {
     error(false);
     update();
     final ApiResponseModel response = await HomeRepository.fetchData();
+    final ApiResponseModel partner = await HomeRepository.fetchPartner();
     if (response.success) {
       _postsController.processPostsAndForumsData(response.data['posts']);
-      _profileController.processDataToState(response.data['user']);
+      _profileController.processDataToState(
+          response.data['user'], response.data['interests']);
       _chatController.processDataToState(
           response.data['chats'], _profileController.myProfile.uid);
       socket.emit('handshake', _profileController.myProfile.uid);
       _marketController.initMarket();
       _marketController.initUsers();
       addCoinDaily();
+      if (partner.data['count'] > 0) {
+        bossUp?.addAll(partner.data['rows'].cast<Map<String, dynamic>>());
+      }
     } else {
       error(true);
       socket.disconnect();
@@ -137,7 +145,8 @@ class HomeController extends GetxController {
     final ApiResponseModel response = await HomeRepository.fetchRefreshData();
     if (response.success) {
       _postsController.processPostsAndForumsData(response.data['posts']);
-      _profileController.processDataToState(response.data['user']);
+      _profileController.processDataToState(
+          response.data['user'], response.data['interests']);
     } else {
       error(true);
       showSnackbar(title: 'OOPS!', message: response.message, error: true);

@@ -101,43 +101,68 @@ class _AllForumScreenState extends State<AllForumScreen> {
                               const SizedBox(
                                 height: 10,
                               ),
-                              Align(
-                                  alignment: Alignment.centerRight,
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(right: 20),
-                                    child: ElevatedButton(
-                                      style: ElevatedButton.styleFrom(
-                                          minimumSize: const Size(150, 45)),
-                                      onPressed: () {
-                                        Get.toNamed(Routes.createForum,
-                                            arguments: {
-                                              'isBossUp': false,
-                                              'industryId': industry.industryId,
-                                              'categoryId': industry.categoryId
-                                            });
-                                      },
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          Text(
-                                            industry.categoryId!.toString() ==
-                                                    Constants.LEARNINGID
-                                                ? 'Start a Topic'
-                                                : 'Create Opportunities',
-                                            style: const TextStyle(
-                                                fontSize: 15,
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.w500),
-                                          ),
-                                          const SizedBox(
-                                            width: 5,
-                                          ),
-                                          SvgPicture.asset(
-                                              'assets/svgs/startatopic.svg')
-                                        ],
-                                      ),
+                              Row(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 20.0),
+                                    child: Row(
+                                      children: [
+                                        Text('Info'),
+                                        SizedBox(
+                                          width: 5,
+                                        ),
+                                        SvgPicture.asset(
+                                          'assets/svgs/info.svg',
+                                          height: 20,
+                                        ),
+                                      ],
                                     ),
-                                  )),
+                                  ),
+                                  Spacer(),
+                                  Align(
+                                      alignment: Alignment.centerRight,
+                                      child: Padding(
+                                        padding:
+                                            const EdgeInsets.only(right: 20),
+                                        child: ElevatedButton(
+                                          style: ElevatedButton.styleFrom(
+                                              minimumSize: const Size(150, 45)),
+                                          onPressed: () {
+                                            Get.toNamed(Routes.createForum,
+                                                arguments: {
+                                                  'isBossUp': false,
+                                                  'industryId':
+                                                      industry.industryId,
+                                                  'categoryId':
+                                                      industry.categoryId
+                                                });
+                                          },
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              Text(
+                                                industry.categoryId!
+                                                            .toString() ==
+                                                        Constants.LEARNINGID
+                                                    ? 'Start a Topic'
+                                                    : 'Create Opportunities',
+                                                style: const TextStyle(
+                                                    fontSize: 15,
+                                                    color: Colors.white,
+                                                    fontWeight:
+                                                        FontWeight.w500),
+                                              ),
+                                              const SizedBox(
+                                                width: 5,
+                                              ),
+                                              SvgPicture.asset(
+                                                  'assets/svgs/startatopic.svg')
+                                            ],
+                                          ),
+                                        ),
+                                      )),
+                                ],
+                              ),
                               Container(
                                 decoration: BoxDecoration(
                                   boxShadow: [

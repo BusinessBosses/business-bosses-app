@@ -1,9 +1,9 @@
 import 'dart:async';
+import 'package:business_bosses_v2/features/chat/chat_room_screen.dart';
 import 'package:business_bosses_v2/features/chat/controllers/chat_controller.dart';
 import 'package:business_bosses_v2/features/chat/models/my_message.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
-import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -200,7 +200,12 @@ class _ChatItemState extends State<ChatItem> {
       onTap: () {
         widget.chatController
             .seen(widget.myChatUser.user.uid, _homeController.socket);
-        Get.toNamed(Routes.chatRoom, arguments: widget.myChatUser.user);
+        Get.to(
+          () => ChatRoomScreen(
+            frommarketplace: false,
+          ),
+          arguments: widget.myChatUser.user,
+        );
       },
       child: Container(
         key: widget.key,
@@ -232,8 +237,12 @@ class _ChatItemState extends State<ChatItem> {
                     children: [
                       Expanded(
                         child: Text(
-                          widget.myChatUser.user.name ??
-                              widget.myChatUser.user.username,
+                          widget.myChatUser.user.name != null &&
+                                  widget.myChatUser.user.name!.length <= 20
+                              ? widget.myChatUser.user.name!
+                              : widget.myChatUser.user.name != null
+                                  ? '${widget.myChatUser.user.name!.substring(0, 20)}...'
+                                  : widget.myChatUser.user.username,
                           style: Theme.of(context).textTheme.bodyLarge,
                         ),
                       ),
@@ -272,9 +281,7 @@ class _ChatItemState extends State<ChatItem> {
                                     ),
                               )
                             : Text(
-                                widget.myChatUser.messageText ??
-                                    widget.myChatUser.image ??
-                                    '',
+                                widget.myChatUser.messageText ?? 'Image',
                                 maxLines: 1,
                                 style: Theme.of(context)
                                     .textTheme

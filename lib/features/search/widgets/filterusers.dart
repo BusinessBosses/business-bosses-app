@@ -82,6 +82,7 @@ class _FilterUsersState extends State<FilterUsers> {
                                               : widget.filterItems[i].uid),
                                     )
                                   : -1;
+                          // ignore: curly_braces_in_flow_control_structures
                           if (!widget.isSearch) if (i == 0) {
                             return Column(
                               children: [
@@ -208,8 +209,15 @@ class _FilterUsersState extends State<FilterUsers> {
                                           },
                                         ),
                                       ),
-                                      title: Text(widget.filterItems[i].name ??
-                                          widget.filterItems[i].username),
+                                      title: Text(widget.filterItems[i].name !=
+                                                  null &&
+                                              widget.filterItems[i].name!
+                                                      .length <=
+                                                  20
+                                          ? widget.filterItems[i].name!
+                                          : widget.filterItems[i].name != null
+                                              ? '${widget.filterItems[i].name!.substring(0, 20)}...'
+                                              : widget.filterItems[i].username),
                                       subtitle: Text(
                                         widget.filterItems[i].bio ?? '',
                                         maxLines: 1,

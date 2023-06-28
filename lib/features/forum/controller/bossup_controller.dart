@@ -7,7 +7,6 @@ import 'package:business_bosses_v2/features/home/controller/home_controller.dart
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 import '../../../utils/constants/constants.dart';
@@ -86,7 +85,7 @@ class BossUpController extends GetxController {
   }
 
   /// LIKE AND UNLIKE FUNCTION
-  void postLike(String userId, String postId, String type) {
+  void postLike(String userId, String postId, String type, String receiverUid) {
     final int postIndex =
         forums.indexWhere((ForumModel element) => element.forumId == postId);
     if (postIndex != -1) {
@@ -100,11 +99,20 @@ class BossUpController extends GetxController {
       }
     }
     update();
-    socket.emit('like', {
-      'postId': postId,
-      'userId': userId,
-      'type': type,
-    });
+    if (_profileController.myProfile.uid != receiverUid) {
+      socket.emit('like', {
+        'postId': postId,
+        'userId': userId,
+        'type': type,
+        'receiverUid': receiverUid,
+      });
+    } else {
+      socket.emit('like', {
+        'postId': postId,
+        'userId': userId,
+        'type': type,
+      });
+    }
   }
 
   void joinAndLeaveIndustry(String userId, String industryId) {
@@ -141,7 +149,6 @@ class BossUpController extends GetxController {
 
   /// ADD NEW POST TO STATE
   void addNewForum(Map<String, dynamic> newPost) async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
     ForumModel modelizedNewPost = ForumModel.fromMap({
       ...newPost,
       'coins': <String>[],

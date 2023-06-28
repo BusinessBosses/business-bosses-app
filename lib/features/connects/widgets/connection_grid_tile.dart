@@ -46,7 +46,7 @@ class ConnectionGridTile extends StatelessWidget {
             ),
             const SizedBox(height: 8.0),
             Text(
-              'user.name',
+              user.name ?? '',
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
               textAlign: TextAlign.center,

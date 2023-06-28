@@ -10,7 +10,6 @@ import '../../../utils/theme/theme.dart';
 Container OutlineButtonHeader(BuildContext context, UserModel myProfile) {
   return Container(
     height: 50.0,
-    margin: const EdgeInsets.only(top: 10),
     padding: const EdgeInsets.all(4.0),
     alignment: Alignment.center,
     child: Row(
@@ -52,7 +51,7 @@ Container OutlineButtonHeader(BuildContext context, UserModel myProfile) {
         Expanded(
           child: OutlinedButton(
             onPressed: () {
-              Navigator.pushNamed(context, '/promotionScreen');
+              Get.toNamed(Routes.promotionscreen);
             },
             child: Row(
               mainAxisSize: MainAxisSize.min,
@@ -80,7 +79,7 @@ Container OutlineButtonHeader(BuildContext context, UserModel myProfile) {
         Expanded(
           child: OutlinedButton(
             onPressed: () {
-              Navigator.pushNamed(context, '/analyseScreen');
+              Get.toNamed(Routes.analysescreen);
             },
             child: Row(
               mainAxisSize: MainAxisSize.min,

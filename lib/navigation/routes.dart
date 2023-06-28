@@ -7,6 +7,7 @@ class Routes {
   }
 
   static const String home = '/homeScreen';
+  static const String allCommunitiesScreen = '/bossupScreen';
   static const String login = '/loginScreen';
   static const String registration = '/registerScreen';
   static const String codeVerification = '/codeVerificationScreen';
@@ -47,4 +48,6 @@ class Routes {
   static const String inviteafriendscreen = '/inviteafriendScreen';
   static const String premiumscreen = '/premiumScreen';
   static const String nullscreen = '/nullscreen';
+  static const String explorebusinessbossesscreen =
+      '/explorebusinessbossesscreen';
 }

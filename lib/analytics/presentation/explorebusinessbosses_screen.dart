@@ -3,37 +3,37 @@ import 'package:flutter_svg/svg.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-import '../posts/widgets/my_container.dart';
+import '../../features/posts/widgets/my_container.dart';
 import '../../utils/theme/theme.dart';
 
-class InviteAFriendTermsAndConditions extends StatefulWidget {
-  static const String routeName = '/invite-terms-conditions';
+class ExplorebusinessbossesScreen extends StatefulWidget {
+  static const String routeName = '/explorebusinessbossesscreen';
 
-  const InviteAFriendTermsAndConditions({Key? key}) : super(key: key);
+  const ExplorebusinessbossesScreen({Key? key}) : super(key: key);
 
   @override
-  _InviteAFriendTermsAndConditionsState createState() =>
-      _InviteAFriendTermsAndConditionsState();
+  _ExplorebusinessbossesScreenState createState() =>
+      _ExplorebusinessbossesScreenState();
 }
 
-class _InviteAFriendTermsAndConditionsState
-    extends State<InviteAFriendTermsAndConditions> {
+class _ExplorebusinessbossesScreenState
+    extends State<ExplorebusinessbossesScreen> {
   String? description;
   bool isLoading = false;
 
   @override
   void initState() {
     super.initState();
-    fetchTermsAndConditions();
+    fetchDescription();
   }
 
-  Future<void> fetchTermsAndConditions() async {
+  Future<void> fetchDescription() async {
     setState(() {
       isLoading = true;
     });
 
     try {
-      final http.Response response = await http.get(
+      final response = await http.get(
         Uri.parse('https://orca-app-5dg8w.ondigitalocean.app/api/v1/admin'),
       );
 
@@ -44,26 +44,17 @@ class _InviteAFriendTermsAndConditionsState
             data['data'] != null &&
             data['data']['rows'] != null) {
           final rows = data['data']['rows'];
-          final terms = rows.firstWhere(
-            (item) => item['title'] == 'terms',
+          final features = rows.firstWhere(
+            (item) => item['title'] == 'features',
             orElse: () => null,
           );
 
-          if (terms != null && terms['description'] != null) {
+          if (features != null && features['description'] != null) {
             setState(() {
-              description = terms['description'];
+              description = features['description'];
             });
-          } else {
-            // Handle the case when 'terms' object or 'description' is not found
-            print("'terms' object or 'description' not found in the response");
           }
-        } else {
-          // Handle the case when the response data is not in the expected format
-          print('Invalid response format');
         }
-      } else {
-        // Handle API error
-        print('API request failed with status code ${response.statusCode}');
       }
     } catch (error) {
       // Handle network or parsing errors
@@ -88,7 +79,7 @@ class _InviteAFriendTermsAndConditionsState
         ),
         centerTitle: true,
         title: const Text(
-          'Invite a Friend Terms & Conditions',
+          'Explore Business Bosses',
           textAlign: TextAlign.center,
           style: TextStyle(fontSize: 20),
         ),
@@ -100,11 +91,11 @@ class _InviteAFriendTermsAndConditionsState
         width: double.infinity,
         child: SingleChildScrollView(
           child: isLoading
-              ? const Center(
-                  child: SizedBox(
+              ? Center(
+                  child: Container(
                     width: 40,
                     height: 40,
-                    child: CircularProgressIndicator(),
+                    child: const CircularProgressIndicator(),
                   ),
                 )
               : Text(

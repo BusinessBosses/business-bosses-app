@@ -12,10 +12,34 @@ import 'package:get/get.dart';
 import 'package:sendgrid_mailer/sendgrid_mailer.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
+import '../../../navigation/routes.dart';
+import '../../../services/api_service.dart';
+
 /// Initalize Auth controller
 class AuthController extends GetxController {
   /// AUTH LOADING STATE
   RxBool isLoading = RxBool(false);
+
+  final GlobalKey<State> _key = GlobalKey<State>();
+
+  final ApiService _apiService = ApiService();
+
+  String? _authCred, _password;
+
+  static bool isValidEmail(String email) {
+    if (email.isEmpty) return false;
+    return RegExp(
+            r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+        .hasMatch(email);
+  }
+
+  bool emailValidatorExists(String? val, {required bool isUnique}) {
+    if (!isValidEmail(val!)) {
+      return false;
+    } else {
+      return true;
+    }
+  }
 
   /// SEND OTP TO USER EMAIL FOR VERIFICATION
   void sendOtp({
@@ -92,7 +116,7 @@ class AuthController extends GetxController {
       fromAddress,
       subject,
       content: <Content>[content],
-      templateId: dotenv.env['SENDGRID_TEMPLATE_ID'],
+      templateId: dotenv.env['SENDGRID_FORGOT_TEMPLATE_ID'],
       customArgs: {'username': emailAddress, 'otp': code.toString()},
     );
     mailer.send(email).then((Result<void> result) {
@@ -140,8 +164,19 @@ class AuthController extends GetxController {
         nonce: nonce,
       );
 
-      dartdeveloper.log(
-          'email: ${appleCredential.email}, name: ${appleCredential.familyName}');
+      _authCred = appleCredential.email;
+      _password = 'password';
+
+      if (appleCredential.email != null) {
+        dynamic user = await _handleLogin();
+        if (user['success'] == false) {
+          Get.snackbar('Error', user['error']);
+        } else {
+          Get.offAndToNamed(Routes.bottomNavigation);
+        }
+      } else {
+        Get.snackbar('Error', 'Couldn\'t authenticate with Apple');
+      }
 
       // print(appleCredential.email);
     } catch (e) {
@@ -173,6 +208,18 @@ class AuthController extends GetxController {
       await AuthRepository.login(
           <String, dynamic>{'email': authCred, 'password': password});
       isLoading(false);
+      Get.toNamed(Routes.bottomNavigation);
+    }
+  }
+
+  Future<dynamic> _handleLogin() async {
+    if (emailValidatorExists(_authCred, isUnique: false)) {
+      dartdeveloper.log('exists');
+      Get.snackbar('Account Exists',
+          'An account already exists for your Apple ID try logging in instead');
+    } else {
+      dynamic user = await _apiService.login(_authCred!, _password!);
+      return user;
     }
   }
 }
