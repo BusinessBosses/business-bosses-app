@@ -346,7 +346,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
                                   TextStyle(color: Colors.grey, fontSize: 12),
                             ),
                             const SizedBox(
-                              height: 40,
+                              height: 100,
                             )
                           ],
                         ),
