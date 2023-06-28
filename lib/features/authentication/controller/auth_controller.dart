@@ -93,6 +93,7 @@ class AuthController extends GetxController {
   /// SEND OTP TO USER EMAIL FOR FORGOT PASSWORD
   void sendOtpPassword({
     required String emailAddress,
+    required String username,
     required VoidCallback onError,
   }) {
     Random rng = Random();
@@ -105,7 +106,7 @@ class AuthController extends GetxController {
     final Personalization personalization = Personalization(
       <Address>[toAddress],
       dynamicTemplateData: <String, dynamic>{
-        'username': emailAddress,
+        'username': username,
         'otp': code.toString()
       },
       subject: subject,
@@ -117,7 +118,7 @@ class AuthController extends GetxController {
       subject,
       content: <Content>[content],
       templateId: dotenv.env['SENDGRID_FORGOT_TEMPLATE_ID'],
-      customArgs: {'username': emailAddress, 'otp': code.toString()},
+      customArgs: {'username': username, 'otp': code.toString()},
     );
     mailer.send(email).then((Result<void> result) {
       if (result.isError) {
@@ -172,7 +173,7 @@ class AuthController extends GetxController {
         if (user['success'] == false) {
           Get.snackbar('Error', user['error']);
         } else {
-          Get.offAndToNamed(Routes.bottomNavigation);
+          Get.offAndToNamed(Routes.home);
         }
       } else {
         Get.snackbar('Error', 'Couldn\'t authenticate with Apple');
@@ -208,7 +209,7 @@ class AuthController extends GetxController {
       await AuthRepository.login(
           <String, dynamic>{'email': authCred, 'password': password});
       isLoading(false);
-      Get.toNamed(Routes.bottomNavigation);
+      Get.toNamed(Routes.home);
     }
   }
 

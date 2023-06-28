@@ -206,7 +206,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                             }, _profileController);
                             Get.snackbar(
                                 'Success', 'Post created successfully');
-                            Get.offAllNamed(Routes.bottomNavigation);
+                            Get.offAllNamed(Routes.home);
                           } else {
                             await ApiService.put(
                               path: 'post/update-post/${widget.postId}',
@@ -216,7 +216,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                             );
                             Get.snackbar(
                                 'Success', 'Post updated successfully');
-                            Get.offAllNamed(Routes.bottomNavigation);
+                            Get.offAllNamed(Routes.home);
                           }
                         }
                       },
