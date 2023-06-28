@@ -2,6 +2,7 @@ import 'package:business_bosses_v2/common/widgets/safety_model.dart';
 import 'package:business_bosses_v2/common/widgets/text_widget.dart';
 import 'package:business_bosses_v2/features/forum/models/forum_model.dart';
 import 'package:business_bosses_v2/features/forum/widgets/forum_item.dart';
+import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/posts/controllers/posts_controller.dart';
 import 'package:business_bosses_v2/features/posts/models/post_model.dart';
 import 'package:business_bosses_v2/features/posts/widgets/userpost_tile.dart';
@@ -151,7 +152,7 @@ class FilterPosts extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final PostsController postsController = Get.find();
+    final HomeController homeController = Get.find();
     return filterItems.isEmpty
         ? SafetyModel(
             icon: const Icon(
@@ -171,7 +172,7 @@ class FilterPosts extends StatelessWidget {
             itemBuilder: (BuildContext context, int i) {
               return PostTile(
                 post: filterItems[i],
-                controller: postsController,
+                controller: homeController,
               );
             },
           );

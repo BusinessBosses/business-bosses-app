@@ -31,12 +31,12 @@ class BottomNavScreen extends StatefulWidget {
 
 class _BottomNavScreenState extends State<BottomNavScreen> {
   final FirebaseAnalytics _analytics = FirebaseAnalytics.instance;
-  final PostsController _postsController = Get.put(PostsController());
-  final ProfileController _profileController = Get.put(ProfileController());
-  final ChatController _chatController = Get.put(ChatController());
-  final HomeController _homeController = Get.put(HomeController());
-  final MarketController _marketController = Get.put(MarketController());
-  final BossUpController _bossUpController = Get.put(BossUpController());
+  // final PostsController _postsController = Get.put(PostsController());
+  // final ProfileController _profileController = Get.put(ProfileController());
+  // final ChatController _chatController = Get.put(ChatController());
+  // final HomeController _homeController = Get.put(HomeController());
+  // final MarketController _marketController = Get.put(MarketController());
+  // final BossUpController _bossUpController = Get.put(BossUpController());
   int _activeIndex = 0;
   final List<String> screens = [
     Routes.home,

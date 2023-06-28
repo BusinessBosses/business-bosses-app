@@ -1,3 +1,4 @@
+import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/posts/controllers/posts_controller.dart';
 import 'package:business_bosses_v2/features/posts/models/post_model.dart';
 import 'package:business_bosses_v2/features/posts/widgets/post_images.dart';
@@ -25,7 +26,7 @@ import '../presentation/create_post_screen.dart';
 // import 'rep';
 class PostTile extends StatefulWidget {
   final PostModel post;
-  final PostsController controller;
+  final HomeController controller;
   final Function(int)? onPageChange;
 
   ///

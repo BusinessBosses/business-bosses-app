@@ -1,4 +1,3 @@
-
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
@@ -15,7 +14,7 @@ class AuthRepository {
     if (response.success) {
       sandBox.write(Constants.ACCESS_TOKEN, response.data['accessToken']);
       if (response.data['hasUpdatedProfile']) {
-        Get.toNamed(Routes.bottomNavigation);
+        Get.toNamed(Routes.home);
       } else {
         Get.toNamed(Routes.updateProfile, arguments: response.data);
       }

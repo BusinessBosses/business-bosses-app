@@ -135,9 +135,8 @@ class MyApp extends StatelessWidget {
               AnalyticsServices.getAnalyticObserver()
             ],
             navigatorKey: navigatorKey,
-            initialRoute: userId == '' || userId == null
-                ? Routes.login
-                : Routes.bottomNavigation,
+            initialRoute:
+                userId == '' || userId == null ? Routes.login : Routes.home,
 
             // initialRoute: Routes.updateProfile,
             getPages: Nav.routes,
