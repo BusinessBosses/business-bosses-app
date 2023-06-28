@@ -20,7 +20,6 @@ class PublicProfileTile extends StatefulWidget {
 class _PublicProfileTileState extends State<PublicProfileTile> {
   @override
   Widget build(BuildContext context) {
-    final ProfileController profileController = Get.find();
     // fetchData();
     // setState(() {});
     return Container(

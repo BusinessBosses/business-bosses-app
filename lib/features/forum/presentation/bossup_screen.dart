@@ -279,7 +279,7 @@ class _BossUpSectionState extends State<BossUpSection> {
                                                 child: Row(
                                                   children: [
                                                     SvgPicture.asset(
-                                                      'assets/svgs/topics.svg',
+                                                      'assets/svgs/entries.svg',
                                                       height: 11.5,
                                                       color: textColor,
                                                     ),
@@ -288,7 +288,7 @@ class _BossUpSectionState extends State<BossUpSection> {
                                                         children: [
                                                           TextSpan(
                                                             text:
-                                                                ' Topics: (${controller.totalForums.value}) ',
+                                                                ' Entries: (${controller.totalForums.value}) ',
                                                             style:
                                                                 const TextStyle(
                                                               fontSize: 12,
