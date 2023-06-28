@@ -399,15 +399,34 @@ class _ForumItemState extends State<ForumItem> {
                           Get.toNamed(Routes.publicProfile,
                               arguments: widget.forum.user);
                         },
-                        child: Text(
-                          widget.forum.user?.name != null &&
-                                  widget.forum.user!.name!.length <= 15
-                              ? widget.forum.user!.name!
-                              : widget.forum.user?.name != null
-                                  ? '${widget.forum.user!.name!.substring(0, 15)}...'
-                                  : "",
-                          style: Theme.of(context).textTheme.bodyLarge,
-                        ),
+                        child: widget.forum.user!.isSubscribed
+                            ? Row(
+                                children: [
+                                  Text(
+                                    widget.forum.user?.name != null &&
+                                            widget.forum.user!.name!.length <=
+                                                15
+                                        ? widget.forum.user!.name!
+                                        : widget.forum.user?.name != null
+                                            ? '${widget.forum.user!.name!.substring(0, 15)}...'
+                                            : "",
+                                    style:
+                                        Theme.of(context).textTheme.bodyLarge,
+                                  ),
+                                  const SizedBox(width: 7),
+                                  SvgPicture.asset(
+                                      'assets/svgs/premiumbadge.svg')
+                                ],
+                              )
+                            : Text(
+                                widget.forum.user?.name != null &&
+                                        widget.forum.user!.name!.length <= 15
+                                    ? widget.forum.user!.name!
+                                    : widget.forum.user?.name != null
+                                        ? '${widget.forum.user!.name!.substring(0, 15)}...'
+                                        : "",
+                                style: Theme.of(context).textTheme.bodyLarge,
+                              ),
                       ),
                       subtitle: Text(
                         widget.forum.user?.bio ?? '',

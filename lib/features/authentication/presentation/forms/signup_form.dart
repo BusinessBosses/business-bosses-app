@@ -167,8 +167,8 @@ class _SignUpFormState extends State<SignUpForm> {
       _username = googleUser.displayName;
       _password = googleUser.serverAuthCode;
 
-      showPasswordDialog();
-      // await _handleRegister();
+      // showPasswordDialog();
+      await _handleRegister();
       await _googleSignIn.disconnect();
     } else {
       showSnackBar(context, message: 'Opps!! Something went wrong. Try again');

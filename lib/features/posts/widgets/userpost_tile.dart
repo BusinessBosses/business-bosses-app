@@ -146,15 +146,31 @@ class _PostTileState extends State<PostTile> {
                             arguments: widget.post.user);
                       }
                     },
-                    child: Text(
-                      widget.post.user!.name != null &&
-                              widget.post.user!.name!.length <= 20
-                          ? widget.post.user!.name!
-                          : widget.post.user!.name != null
-                              ? "${widget.post.user!.name!.substring(0, 20)}..."
-                              : widget.post.user!.username,
-                      style: Theme.of(context).textTheme.bodyLarge,
-                    ),
+                    child: widget.post.user!.isSubscribed
+                        ? Row(
+                            children: [
+                              Text(
+                                widget.post.user!.name != null &&
+                                        widget.post.user!.name!.length <= 20
+                                    ? widget.post.user!.name!
+                                    : widget.post.user!.name != null
+                                        ? "${widget.post.user!.name!.substring(0, 20)}..."
+                                        : widget.post.user!.username,
+                                style: Theme.of(context).textTheme.bodyLarge,
+                              ),
+                              const SizedBox(width: 7),
+                              SvgPicture.asset('assets/svgs/premiumbadge.svg')
+                            ],
+                          )
+                        : Text(
+                            widget.post.user!.name != null &&
+                                    widget.post.user!.name!.length <= 20
+                                ? widget.post.user!.name!
+                                : widget.post.user!.name != null
+                                    ? "${widget.post.user!.name!.substring(0, 20)}..."
+                                    : widget.post.user!.username,
+                            style: Theme.of(context).textTheme.bodyLarge,
+                          ),
                   ),
                   trailing: SizedBox(
                     height: 30,

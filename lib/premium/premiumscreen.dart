@@ -93,6 +93,9 @@ class _PremiumScreenState extends State<PremiumScreen> {
 
   ///intialize the payment
   Future<void> makePayment() async {
+    setState(() {
+      _isProcessing = true;
+    });
     final ApiResponseModel res =
         await ApiService.post(path: 'subscription', body: {
       'price': plans[_currentIndex]['price'],
@@ -106,6 +109,9 @@ class _PremiumScreenState extends State<PremiumScreen> {
     } else {
       showSnackBar(context, message: res.message);
     }
+    setState(() {
+      _isProcessing = false;
+    });
   }
 
   @override
@@ -136,9 +142,9 @@ class _PremiumScreenState extends State<PremiumScreen> {
               color: backgroundcolorinterface,
             ),
             SizedBox(
-              height: MediaQuery.of(context).size.height -
-                  AppBar().preferredSize.height -
-                  20, // Adjust the height as needed
+              // height: MediaQuery.of(context).size.height -
+              //     AppBar().preferredSize.height -
+              //     20, // Adjust the height as needed
               child: Stack(
                 alignment: Alignment.topCenter,
                 children: [
@@ -346,7 +352,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
                                   TextStyle(color: Colors.grey, fontSize: 12),
                             ),
                             const SizedBox(
-                              height: 100,
+                              height: 50,
                             )
                           ],
                         ),
