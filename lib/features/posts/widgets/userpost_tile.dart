@@ -47,7 +47,6 @@ class PostTile extends StatefulWidget {
 class _PostTileState extends State<PostTile> {
   bool hide = false;
   final ProfileController profileController = Get.find();
-  late UserModel publicUser;
 
   Future<void> connect(String userId) async {
     // ignore: unused_local_variable
@@ -70,52 +69,37 @@ class _PostTileState extends State<PostTile> {
   }
 
   void connectToUser() async {
+    print(
+        "This are my connected users ${profileController.myProfile.connecteds}");
     final int checkConnected = profileController.myProfile.connecteds == null
         ? -1
         : profileController.myProfile.connecteds!
-            .indexWhere((String element) => element == publicUser.uid);
+            .indexWhere((String element) => element == widget.post.user!.uid);
     if (checkConnected == -1) {
       // connecteds.add(user);
-      profileController.updateConnections(publicUser.uid);
-      setState(() {
-        publicUser = UserModel.fromMap({
-          ...publicUser.toMap(),
-          'connectionCount': publicUser.connectionCount == null
-              ? 1
-              : publicUser.connectionCount! + 1
-        });
-      });
-      await connect(publicUser.uid);
+      profileController.updateConnections(widget.post.user!.uid);
+      // setState(() {
+      //   publicUser = UserModel.fromMap({
+      //     ...widget.post.user!.toMap(),
+      //     'connectionCount': widget.post.user!.connectionCount == null
+      //         ? 1
+      //         : widget.post.user!.connectionCount! + 1
+      //   });
+      // });
+      await connect(widget.post.user!.uid);
     } else {
-      profileController.updateConnections(publicUser.uid);
+      profileController.updateConnections(widget.post.user!.uid);
 
-      setState(() {
-        publicUser = UserModel.fromMap({
-          ...publicUser.toMap(),
-          'connectionCount': publicUser.connectionCount == null
-              ? null
-              : publicUser.connectionCount! - 1
-        });
-      });
+      // setState(() {
+      //   publicUser = UserModel.fromMap({
+      //     ...widget.post.user!.toMap(),
+      //     'connectionCount': widget.post.user!.connectionCount == null
+      //         ? null
+      //         : widget.post.user!.connectionCount! - 1
+      //   });
+      // });
       // connecteds.removeAt(checkConnected);
-      await disconnect(publicUser.uid);
-    }
-  }
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-
-    if (Get.arguments == null) {
-      // print("back");
-      // Get.back();
-      publicUser = widget.post.user!;
-    } else {
-      // print("yo");
-
-      publicUser = widget.post.user!;
-      // print(publicUser.username);
+      await disconnect(widget.post.user!.uid);
     }
   }
 
@@ -385,7 +369,7 @@ class _PostTileState extends State<PostTile> {
                             SizedBox(
                               height: 10,
                             ),
-                            premiumButtonHeader(publicUser,
+                            premiumButtonHeader(widget.post.user!,
                                 profileController.myProfile, connectToUser)
                           ],
                         )

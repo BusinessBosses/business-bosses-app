@@ -319,7 +319,8 @@ class HomeController extends GetxController {
     if (response.success) {
       processPostsAndForumsData(response.data['posts']);
       profileController.processDataToState(
-          response.data['user'], response.data['interests']);
+          {...response.data['user'], 'connecteds': response.data['connecteds']},
+          response.data['interests']);
       _chatController.processDataToState(
           response.data['chats'], profileController.myProfile.uid);
       socket.emit('handshake', profileController.myProfile.uid);
