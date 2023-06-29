@@ -3,6 +3,13 @@
 import 'package:business_bosses_v2/analytics/presentation/explorebusinessbosses_screen.dart';
 import 'package:business_bosses_v2/features/connects/controller/referrals_controller.dart';
 import 'package:business_bosses_v2/features/connects/presentation/referals_screen.dart';
+import 'package:business_bosses_v2/features/forum/controller/bossup_controller.dart';
+import 'package:business_bosses_v2/features/home/all_communities_screen.dart';
+import 'package:business_bosses_v2/features/home/controller/commumities_controller.dart';
+import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
+import 'package:business_bosses_v2/features/home/home_screen.dart';
+import 'package:business_bosses_v2/features/home/marketplace_screen.dart';
+import 'package:business_bosses_v2/features/marketplace/controllers/market_controller.dart';
 import 'package:business_bosses_v2/features/posts/presentation/confirmation.dart';
 import 'package:business_bosses_v2/features/settings/community_rules_screen.dart';
 import 'package:business_bosses_v2/analytics/presentation/my_ranking_screen.dart';
@@ -69,17 +76,22 @@ class Nav {
       page: () => const Bossuppartner(),
     ),
     GetPage(
-      name: Routes.bottomNavigation,
-      page: () => const BottomNavScreen(0, true),
-      // binding: BindingsBuilder(
-      //   () {
-      //     Get.put(ProfileController());
-      //     Get.put(ChatController());
-      //     Get.put(PostsController());
-      //     Get.put(HomeController());
-      //   },
-      // ),
+      name: Routes.home,
+      page: () => const HomeScreen(),
+      binding: BindingsBuilder.put(() => HomeController()),
     ),
+    // GetPage(
+    //   name: Routes.bottomNavigation,
+    //   page: () => const BottomNavScreen(0, true),
+    //   // binding: BindingsBuilder(
+    //   //   () {
+    //   //     Get.put(ProfileController());
+    //   //     Get.put(ChatController());
+    //   //     Get.put(PostsController());
+    //   //     Get.put(HomeController());
+    //   //   },
+    //   // ),
+    // ),
     GetPage(
       name: Routes.notifications,
       page: () => const NotificationsScreen(),
@@ -129,6 +141,20 @@ class Nav {
       name: Routes.allforumscreen,
       page: () => const AllForumScreen(),
       binding: BindingsBuilder.put(() => ForumController()),
+    ),
+    GetPage(
+      name: Routes.marketPlace,
+      page: () => const MarketplaceScreen(),
+      binding: BindingsBuilder.put(() => MarketController()),
+    ),
+    GetPage(
+      name: Routes.allCommunitiesScreen,
+      page: () => const AllCommunitiesScreen(),
+      bindings: [
+        BindingsBuilder.put(() => BossUpController()),
+        BindingsBuilder.put(() => CommunitiesController()),
+      ],
+      binding: BindingsBuilder.put(() => BossUpController()),
     ),
     GetPage(
       name: Routes.referalsscreen,

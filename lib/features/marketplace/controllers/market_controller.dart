@@ -1,4 +1,5 @@
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
+import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -20,6 +21,7 @@ class MarketController extends GetxController {
   RxBool loading = RxBool(false);
   RxBool isJoined = RxBool(false);
   bool isLoading = true;
+  final HomeController _homeController = Get.find();
   final ProfileController _profileController = Get.find();
 
   /// PROCESS RAW API DATA, MODELIZE AND SAVE TO STATE
@@ -208,17 +210,17 @@ class MarketController extends GetxController {
   }
 
   Future<void> initUsers() async {
-    loading(true);
-    error(false);
+    // loading(true);
+    // error(false);
     update();
 
     final ApiResponseModel response = await HomeRepository.fetchMarketMembers();
     if (response.success) {
       processMembersToState(response.data['rows']);
     } else {
-      error(true);
+      // error(true);
     }
-    loading(false);
+    // loading(false);
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final String? userId = prefs.getString(Constants.USER_ID);
     bool isJoin = users.any((UserModel user) => user.uid == userId);
@@ -229,26 +231,28 @@ class MarketController extends GetxController {
     update();
   }
 
-  initSocket() {
-    socket = IO.io(Constants.socketUrl, <String, dynamic>{
-      'autoConnect': false,
-      'transports': <String>['websocket'],
-    });
-    socket.connect();
-    socket.onConnect((_) {
-      print('Connection established');
-    });
+  // initSocket() {
+  //   socket = IO.io(Constants.socketUrl, <String, dynamic>{
+  //     'autoConnect': false,
+  //     'transports': <String>['websocket'],
+  //   });
+  //   socket.connect();
+  //   socket.onConnect((_) {
+  //     print('Connection established');
+  //   });
 
-    socket.onDisconnect((_) => print('Connection Disconnection'));
-    socket.onConnectError((err) => print(err));
-    socket.onError((err) => print(err));
-  }
+  //   socket.onDisconnect((_) => print('Connection Disconnection'));
+  //   socket.onConnectError((err) => print(err));
+  //   socket.onError((err) => print(err));
+  // }
 
   @override
   void onInit() {
     // TODO: implement onInit
-    initSocket();
+    socket = _homeController.socket;
     isLoading = false;
+    initMarket();
+    initUsers();
     update();
     super.onInit();
   }

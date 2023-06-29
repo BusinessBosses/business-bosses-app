@@ -150,7 +150,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
         // Get.back();
         // return;
       }
-      Get.toNamed(Routes.bottomNavigation);
+      Get.toNamed(Routes.home);
     } else {
       Get.snackbar('Error', response.message);
     }
