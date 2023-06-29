@@ -9,7 +9,7 @@ import 'package:get/get.dart';
 class ProfileController extends GetxController {
   /// MODELIZED PROFILE DATA
   UserModel myProfile = UserModel();
-  UserModel? bossOfTheWeek = UserModel();
+  dynamic bossOfTheWeek = UserModel();
 
   ///MODELIZE RAW DATA AND PUSH TO STATE
   void processDataToState(dynamic userData, List interests) {
@@ -39,6 +39,8 @@ class ProfileController extends GetxController {
   void processBossToState(dynamic userData) {
     final UserModel modelizedData = UserModel.fromMap({
       ...userData,
+      'connections': userData['connections'].map((e) => e['userId']).toList(),
+      'connecteds': userData['connecteds'].map((e) => e['userId']).toList()
     });
     bossOfTheWeek = modelizedData;
     update();
