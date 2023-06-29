@@ -1,4 +1,4 @@
-import 'package:business_bosses_v2/features/posts/controllers/posts_controller.dart';
+import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/posts/widgets/post_like_comment.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -16,7 +16,8 @@ class PostInteractionsWidget extends StatelessWidget {
 
   final Function() sharePost;
 
-  const PostInteractionsWidget({super.key, 
+  const PostInteractionsWidget({
+    super.key,
     required this.post,
     required this.profileController,
     required this.sharePost,
@@ -24,9 +25,8 @@ class PostInteractionsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<PostsController>(
-      init: PostsController(),
-      builder: (PostsController controller) {
+    return GetBuilder<HomeController>(
+      builder: (HomeController controller) {
         return Container(
           padding: const EdgeInsets.only(left: 15, right: 15),
           child: Column(
@@ -75,12 +75,11 @@ class PostInteractionsWidget extends StatelessWidget {
                     onPressed: post.user!.uid == profileController.myProfile.uid
                         ? () async {
                             controller.postCoin(
-                              profileController.myProfile.uid,
-                              post.postId,
-                              profileController,
-                              'post',
-                              post.user!.uid
-                            );
+                                profileController.myProfile.uid,
+                                post.postId,
+                                profileController,
+                                'post',
+                                post.user!.uid);
                           }
                         : null,
                     icon:

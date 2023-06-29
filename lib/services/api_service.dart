@@ -148,6 +148,10 @@ class ApiService {
     }
   }
 
+  // Future<String?> checkIfEmailExist (String email) async {
+  //   final ApiResponseModel response = await
+  // }
+
   /// VERIFY USERNAME OR EMAIL DURING SIGNUP
   Future<bool?> verifyUnique(String username, String email) async {
     Map<String, dynamic> data = {
@@ -215,7 +219,7 @@ class ApiService {
     required String path,
   }) async {
     final String? token = sandBox.read(Constants.ACCESS_TOKEN);
-    log(token!);
+    log(token ?? '');
     try {
       final http.Response response = await http.get(
         Uri.parse('${Constants.baseUrl}/$path'),
@@ -250,7 +254,8 @@ class ApiService {
           'Authorization': 'bearer $token'
         },
       );
-      log(response.body.toString());
+
+      log(response.body);
 
       return ApiResponseModel.fromMap(jsonDecode(response.body));
     } catch (e) {

@@ -10,7 +10,6 @@ import '../../../utils/theme/theme.dart';
 Container OutlineButtonHeader(BuildContext context, UserModel myProfile) {
   return Container(
     height: 50.0,
-    margin: const EdgeInsets.only(top: 10),
     padding: const EdgeInsets.all(4.0),
     alignment: Alignment.center,
     child: Row(

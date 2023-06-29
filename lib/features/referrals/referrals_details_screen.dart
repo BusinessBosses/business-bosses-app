@@ -90,7 +90,9 @@ class _ReferralsDetailsScreenState extends State<ReferralsDetailsScreen> {
                           //   iconSize: 24.0,
                           // ),
 
-                          title: Text(_users[i].name),
+                          title: Text(_users[i].name.length <= 20
+                              ? _users[i].name
+                              : '${_users[i].name.substring(0, 20)}...'),
                           subtitle: Text(
                             _users[i].bio,
                             maxLines: 1,

@@ -36,6 +36,8 @@ PODS:
   - DKPhotoGallery/Resource (0.0.17):
     - SDWebImage
     - SwiftyGif
+  - emoji_picker_flutter (0.0.1):
+    - Flutter
   - facebook_app_events (0.0.1):
     - FBAudienceNetwork (~> 6.12)
     - FBSDKCoreKit (~> 15.1)
@@ -250,6 +252,7 @@ PODS:
     - Flutter
 
 DEPENDENCIES:
+  - emoji_picker_flutter (from `.symlinks/plugins/emoji_picker_flutter/ios`)
   - facebook_app_events (from `.symlinks/plugins/facebook_app_events/ios`)
   - file_picker (from `.symlinks/plugins/file_picker/ios`)
   - firebase_analytics (from `.symlinks/plugins/firebase_analytics/ios`)
@@ -308,6 +311,8 @@ SPEC REPOS:
     - SwiftyGif
 
 EXTERNAL SOURCES:
+  emoji_picker_flutter:
+    :path: ".symlinks/plugins/emoji_picker_flutter/ios"
   facebook_app_events:
     :path: ".symlinks/plugins/facebook_app_events/ios"
   file_picker:
@@ -353,6 +358,7 @@ SPEC CHECKSUMS:
   AppAuth: 3bb1d1cd9340bd09f5ed189fb00b1cc28e1e8570
   DKImagePickerController: b512c28220a2b8ac7419f21c491fc8534b7601ac
   DKPhotoGallery: fdfad5125a9fdda9cc57df834d49df790dbb4179
+  emoji_picker_flutter: df19dac03a2b39ac667dc8d1da939ef3a9e21347
   facebook_app_events: 1b116476dfbe0fbb66cb21419cf9a6f30b391057
   FBAEMKit: c7f82b5145d446bcbbcd50485c032689032fc6a2
   FBAudienceNetwork: e0fcc9091fced34910ed0b6da06f129db46ac9e6

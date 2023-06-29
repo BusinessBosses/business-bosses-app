@@ -67,7 +67,7 @@ class _LoginFormState extends State<LoginForm> {
           Get.snackbar('Error', user['error']);
           await _googleSignIn.disconnect();
         } else {
-          Get.offAndToNamed(Routes.bottomNavigation);
+          Get.offAndToNamed(Routes.home);
         }
 
         setState(() {
@@ -203,7 +203,7 @@ class _LoginFormState extends State<LoginForm> {
                   if (user['success'] == false) {
                     Get.snackbar('Error', user['error']);
                   } else {
-                    Get.offAndToNamed(Routes.bottomNavigation);
+                    Get.offAndToNamed(Routes.home);
                   }
                 }
                 setState(() {

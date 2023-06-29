@@ -111,14 +111,16 @@ class CompleteSearchController extends GetxController {
   Future<void> connect(String userId) async {
     await ApiService.post(path: '/connection/connect', body: {
       'userId': _profileController.myProfile.uid,
-      'connectedId': userId
+      'connectedId': userId,
+      'timestamp': DateTime.now().millisecondsSinceEpoch
     });
   }
 
   Future<void> disconnect(String userId) async {
     await ApiService.post(path: '/connection/disconnect', body: {
       'userId': _profileController.myProfile.uid,
-      'connectedId': userId
+      'connectedId': userId,
+      'timestamp': DateTime.now().millisecondsSinceEpoch
     });
   }
 

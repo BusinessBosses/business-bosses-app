@@ -1465,7 +1465,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
         // Get.back();
         // return;
       }
-      Get.toNamed(Routes.bottomNavigation);
+      Get.toNamed(Routes.home);
     } else {
       Get.snackbar('Error', response.message);
     }

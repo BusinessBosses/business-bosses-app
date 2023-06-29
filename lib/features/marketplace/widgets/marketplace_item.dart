@@ -144,7 +144,7 @@ class _MarketTileState extends State<MarketTile> {
                       }
                     },
                     child: Text(
-                      '${widget.post.user.name}',
+                      '${widget.post.user.name!.length <= 20 ? widget.post.user.name : "${widget.post.user.name!.substring(0, 20)}..."}',
                       style: Theme.of(context).textTheme.bodyLarge,
                     ),
                   ),
@@ -384,34 +384,43 @@ class _MarketTileState extends State<MarketTile> {
                                 const SizedBox(
                                   width: 5,
                                 ),
-                                const Icon(
-                                  Icons.star,
-                                  color: Color.fromRGBO(255, 202, 40, 1),
-                                  size: 16,
-                                ),
-                                Text(
-                                  widget.post.user.averageRating.toString(),
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 13),
-                                ),
-                                const SizedBox(
-                                  width: 5,
-                                ),
-                                GestureDetector(
-                                  onTap: () {
-                                    Get.to(() => SellerReviewScreen(
-                                        user: widget.post.user));
-                                  },
-                                  child: const Text(
-                                    'Seller reviews',
-                                    style: TextStyle(
-                                      fontSize: 13,
-                                      fontWeight: FontWeight.bold,
-                                      decoration: TextDecoration.underline,
-                                    ),
-                                  ),
-                                ),
+                                widget.post.user.averageRating == 0
+                                    ? Container()
+                                    : Row(
+                                        children: [
+                                          const Icon(
+                                            Icons.star,
+                                            color:
+                                                Color.fromRGBO(255, 202, 40, 1),
+                                            size: 16,
+                                          ),
+                                          Text(
+                                            widget.post.user.averageRating
+                                                .toString(),
+                                            style: const TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 13),
+                                          ),
+                                          const SizedBox(
+                                            width: 5,
+                                          ),
+                                          GestureDetector(
+                                            onTap: () {
+                                              Get.to(() => SellerReviewScreen(
+                                                  user: widget.post.user));
+                                            },
+                                            child: const Text(
+                                              'Seller reviews',
+                                              style: TextStyle(
+                                                fontSize: 13,
+                                                fontWeight: FontWeight.bold,
+                                                decoration:
+                                                    TextDecoration.underline,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                               ],
                             ),
                           ),

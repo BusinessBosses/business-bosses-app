@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
+import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/posts/controllers/posts_controller.dart';
 import 'package:business_bosses_v2/features/posts/repository/post_repository.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
@@ -14,7 +15,7 @@ import '../presentation/boost_post_screen.dart';
 
 /// CREATEPOSTCONTROLLER
 class CreatePostController extends GetxController {
-  final PostsController _postsController = Get.find();
+  final HomeController _homeController = Get.find();
 
   /// ALL USERS FOR MENTIONS
   RxList<UserModel> users = RxList<UserModel>(<UserModel>[]);
@@ -86,7 +87,8 @@ class CreatePostController extends GetxController {
         final ApiResponseModel response = await PostRepository.createPost(body);
 
         if (response.success) {
-          _postsController.addNewPost(response.data, profileController);
+          _homeController.addNewPost(response.data, profileController);
+
           if (shouldPromote.value == true) {
             Get.to(() => BoostPost(
                   postId: response.data['postId'],
@@ -105,7 +107,8 @@ class CreatePostController extends GetxController {
 
           if (response.success) {
             imageFileList.clear();
-            _postsController.addNewPost(response.data, profileController);
+            _homeController.addNewPost(response.data, profileController);
+
             if (shouldPromote.value == true) {
               Get.to(() => BoostPost(
                     postId: response.data['postId'],

@@ -68,12 +68,20 @@ class ConnectionController extends GetxController {
 
   Future<void> connect(String userId) async {
     final ApiResponseModel res = await ApiService.post(
-        path: '/connection/connect', body: {'connectedId': userId});
+        path: '/connection/connect',
+        body: {
+          'connectedId': userId,
+          'timestamp': DateTime.now().millisecondsSinceEpoch
+        });
   }
 
   Future<void> disconnect(String userId) async {
     final ApiResponseModel res = await ApiService.post(
-        path: '/connection/disconnect', body: {'connectedId': userId});
+        path: '/connection/disconnect',
+        body: {
+          'connectedId': userId,
+          'timestamp': DateTime.now().millisecondsSinceEpoch
+        });
   }
 
   void connectToUser(UserModel user) async {

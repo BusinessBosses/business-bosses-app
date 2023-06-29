@@ -1,3 +1,4 @@
+import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -79,7 +80,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     },
                     validator: Validator.emailValidator,
                     keyboardType: TextInputType.emailAddress,
-                    textInputAction: TextInputAction.next,
+                    textInputAction: TextInputAction.done,
                     decoration: inputDecoration.copyWith(
                       hintText: 'Enter your email',
                     ),
@@ -100,13 +101,15 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                         setState(() {
                           _isProcessing = true;
                         });
-                        bool? result = await _verifyUnique('', _email!);
-                        setState(() {
-                          _isUniqueEmail = result;
-                        });
-                        if (_isUniqueEmail == false) {
+                        String? result = await checkIfEmailExist(_email!);
+                        // print(result);
+                        // setState(() {
+                        //   _isUniqueEmail = result != null;
+                        // });
+                        if (result != null) {
                           AuthController().sendOtpPassword(
                               emailAddress: _email!,
+                              username: result,
                               onError: () {
                                 setState(() {
                                   _isProcessing = false;
@@ -136,12 +139,22 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   }
 
   bool _isProcessing = false;
-
-  Future<bool?> _verifyUnique(String username, String email) async {
-    bool? user = await _apiService.verifyUnique(
-      username,
-      email,
-    );
-    return user;
+  Future<String?> checkIfEmailExist(String email) async {
+    final ApiResponseModel response =
+        await ApiService.get(path: 'users/email/$email');
+    if (response.success) {
+      return response.data.runtimeType == String
+          ? null
+          : response.data['username'];
+    }
+    return null;
   }
+
+  // Future<bool?> _verifyUnique(String username, String email) async {
+  //   bool? user = await _apiService.verifyUnique(
+  //     username,
+  //     email,
+  //   );
+  //   return user;
+  // }
 }

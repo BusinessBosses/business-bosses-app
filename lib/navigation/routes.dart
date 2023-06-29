@@ -13,7 +13,7 @@ class Routes {
   static const String codeVerification = '/codeVerificationScreen';
   static const String otpScreen = '/otpScreen';
   static const String resetPassword = '/resetPasswordScreen';
-  static const String bottomNavigation = '/bottomNavScreen';
+  // static const String bottomNavigation = '/bottomNavScreen';
   static const String myProfile = '/myProfileScreen';
   static const String updateProfile = '/updateProfileScreen';
   static const String publicProfile = '/publicProfileScreen';
@@ -48,4 +48,6 @@ class Routes {
   static const String inviteafriendscreen = '/inviteafriendScreen';
   static const String premiumscreen = '/premiumScreen';
   static const String nullscreen = '/nullscreen';
+  static const String explorebusinessbossesscreen =
+      '/explorebusinessbossesscreen';
 }

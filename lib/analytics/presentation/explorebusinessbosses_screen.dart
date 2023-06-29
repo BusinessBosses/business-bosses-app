@@ -3,35 +3,37 @@ import 'package:flutter_svg/svg.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-import '../posts/widgets/my_container.dart';
+import '../../features/posts/widgets/my_container.dart';
 import '../../utils/theme/theme.dart';
 
-class CommunityRulesScreen extends StatefulWidget {
-  static const String routeName = '/communityrulesscreen';
+class ExplorebusinessbossesScreen extends StatefulWidget {
+  static const String routeName = '/explorebusinessbossesscreen';
 
-  const CommunityRulesScreen({Key? key}) : super(key: key);
+  const ExplorebusinessbossesScreen({Key? key}) : super(key: key);
 
   @override
-  _CommunityRulesScreenState createState() => _CommunityRulesScreenState();
+  _ExplorebusinessbossesScreenState createState() =>
+      _ExplorebusinessbossesScreenState();
 }
 
-class _CommunityRulesScreenState extends State<CommunityRulesScreen> {
+class _ExplorebusinessbossesScreenState
+    extends State<ExplorebusinessbossesScreen> {
   String? description;
   bool isLoading = false;
 
   @override
   void initState() {
     super.initState();
-    fetchRulesDescription();
+    fetchDescription();
   }
 
-  Future<void> fetchRulesDescription() async {
+  Future<void> fetchDescription() async {
     setState(() {
       isLoading = true;
     });
 
     try {
-      final http.Response response = await http.get(
+      final response = await http.get(
         Uri.parse('https://orca-app-5dg8w.ondigitalocean.app/api/v1/admin'),
       );
 
@@ -42,14 +44,14 @@ class _CommunityRulesScreenState extends State<CommunityRulesScreen> {
             data['data'] != null &&
             data['data']['rows'] != null) {
           final rows = data['data']['rows'];
-          final rules = rows.firstWhere(
-            (item) => item['title'] == 'rules',
+          final features = rows.firstWhere(
+            (item) => item['title'] == 'features',
             orElse: () => null,
           );
 
-          if (rules != null && rules['description'] != null) {
+          if (features != null && features['description'] != null) {
             setState(() {
-              description = rules['description'];
+              description = features['description'];
             });
           }
         }
@@ -77,7 +79,7 @@ class _CommunityRulesScreenState extends State<CommunityRulesScreen> {
         ),
         centerTitle: true,
         title: const Text(
-          'Community Rules',
+          'Explore Business Bosses',
           textAlign: TextAlign.center,
           style: TextStyle(fontSize: 20),
         ),
@@ -89,11 +91,11 @@ class _CommunityRulesScreenState extends State<CommunityRulesScreen> {
         width: double.infinity,
         child: SingleChildScrollView(
           child: isLoading
-              ? const Center(
-                  child: SizedBox(
+              ? Center(
+                  child: Container(
                     width: 40,
                     height: 40,
-                    child: CircularProgressIndicator(),
+                    child: const CircularProgressIndicator(),
                   ),
                 )
               : Text(

@@ -10,6 +10,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 import '../../../navigation/routes.dart';
+import '../models/industry.dart';
 import '../../../utils/theme/theme.dart';
 import '../widgets/forum_item.dart';
 import '../widgets/joinedbutton.dart';
@@ -29,8 +30,36 @@ class AllForumScreen extends StatefulWidget {
 class _AllForumScreenState extends State<AllForumScreen> {
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   final ScrollController scrollController = ScrollController();
+  late Industry industry;
   final ProfileController _myProfile = Get.find();
   // final List<ForumModel> forums = [];
+
+  void toggleJoinAndLeaveIndustry(ForumController controller) {
+    final String myUid = _myProfile.myProfile.uid;
+    // print(myUid);
+    if (industry.joinedUsers?.contains(myUid) ?? false) {
+      industry.joinedUsers!.removeWhere((String element) => element == myUid);
+    } else {
+      if (industry.joinedUsers == null) {
+        industry.joinedUsers = [myUid];
+      } else {
+        industry.joinedUsers!.add(myUid);
+      }
+    }
+    setState(() {});
+    controller.joinAndLeaveIndustry(myUid, industry.industryId!);
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    if (Get.arguments == null) {
+      Get.back();
+    } else {
+      industry = Get.arguments;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +77,7 @@ class _AllForumScreenState extends State<AllForumScreen> {
               ),
               centerTitle: true,
               title: Text(
-                controller.industry.industry ?? 'Topic',
+                industry.industry ?? 'Topic',
                 textAlign: TextAlign.center,
                 style: const TextStyle(fontSize: 20),
               ),
@@ -72,46 +101,68 @@ class _AllForumScreenState extends State<AllForumScreen> {
                               const SizedBox(
                                 height: 10,
                               ),
-                              Align(
-                                  alignment: Alignment.centerRight,
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(right: 20),
-                                    child: ElevatedButton(
-                                      style: ElevatedButton.styleFrom(
-                                          minimumSize: const Size(150, 45)),
-                                      onPressed: () {
-                                        Get.toNamed(Routes.createForum,
-                                            arguments: {
-                                              'isBossUp': false,
-                                              'industryId': controller
-                                                  .industry.industryId,
-                                              'categoryId':
-                                                  controller.industry.categoryId
-                                            });
-                                      },
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          Text(
-                                            controller.industry.categoryId!
-                                                        .toString() ==
-                                                    Constants.LEARNINGID
-                                                ? 'Start a Topic'
-                                                : 'Create Opportunities',
-                                            style: const TextStyle(
-                                                fontSize: 15,
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.w500),
-                                          ),
-                                          const SizedBox(
-                                            width: 5,
-                                          ),
-                                          SvgPicture.asset(
-                                              'assets/svgs/startatopic.svg')
-                                        ],
-                                      ),
+                              Row(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 20.0),
+                                    child: Row(
+                                      children: [
+                                        Text('Info'),
+                                        SizedBox(
+                                          width: 5,
+                                        ),
+                                        SvgPicture.asset(
+                                          'assets/svgs/info.svg',
+                                          height: 20,
+                                        ),
+                                      ],
                                     ),
-                                  )),
+                                  ),
+                                  Spacer(),
+                                  Align(
+                                      alignment: Alignment.centerRight,
+                                      child: Padding(
+                                        padding:
+                                            const EdgeInsets.only(right: 20),
+                                        child: ElevatedButton(
+                                          style: ElevatedButton.styleFrom(
+                                              minimumSize: const Size(150, 45)),
+                                          onPressed: () {
+                                            Get.toNamed(Routes.createForum,
+                                                arguments: {
+                                                  'isBossUp': false,
+                                                  'industryId':
+                                                      industry.industryId,
+                                                  'categoryId':
+                                                      industry.categoryId
+                                                });
+                                          },
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              Text(
+                                                industry.categoryId!
+                                                            .toString() ==
+                                                        Constants.LEARNINGID
+                                                    ? 'Start a Topic'
+                                                    : 'Create Opportunities',
+                                                style: const TextStyle(
+                                                    fontSize: 15,
+                                                    color: Colors.white,
+                                                    fontWeight:
+                                                        FontWeight.w500),
+                                              ),
+                                              const SizedBox(
+                                                width: 5,
+                                              ),
+                                              SvgPicture.asset(
+                                                  'assets/svgs/startatopic.svg')
+                                            ],
+                                          ),
+                                        ),
+                                      )),
+                                ],
+                              ),
                               Container(
                                 decoration: BoxDecoration(
                                   boxShadow: [
@@ -154,8 +205,8 @@ class _AllForumScreenState extends State<AllForumScreen> {
                                                 child: FittedBox(
                                                   fit: BoxFit.fill,
                                                   child: CachedNetworkImage(
-                                                    imageUrl: controller
-                                                        .industry.photo!,
+                                                    imageUrl: industry.photo ??
+                                                        'http://44.210.87.234/learningImages/events.jpg',
                                                     memCacheHeight: 256,
                                                     memCacheWidth: 256,
                                                     placeholder: (BuildContext
@@ -179,8 +230,7 @@ class _AllForumScreenState extends State<AllForumScreen> {
                                               padding: const EdgeInsets.only(
                                                   right: 35),
                                               child: Text(
-                                                controller
-                                                        .industry.description ??
+                                                industry.description ??
                                                     'Industry Description',
                                                 style: const TextStyle(
                                                     fontSize: 15,
@@ -226,12 +276,11 @@ class _AllForumScreenState extends State<AllForumScreen> {
                                                           text: TextSpan(
                                                             children: [
                                                               TextSpan(
-                                                                text: controller
-                                                                            .industry
+                                                                text: industry
                                                                             .joinedUsers ==
                                                                         null
                                                                     ? 'Members: 0'
-                                                                    : 'Members: (${controller.industry.joinedUsers?.where((String element) => element.isNotEmpty).toList().length ?? 0})',
+                                                                    : 'Members: (${industry.joinedUsers?.where((String element) => element.isNotEmpty).toList().length ?? 0})',
                                                                 style:
                                                                     const TextStyle(
                                                                   fontSize: 12,
@@ -251,9 +300,8 @@ class _AllForumScreenState extends State<AllForumScreen> {
                                                                         Get.toNamed(
                                                                           Routes
                                                                               .specificuserlistscreen,
-                                                                          arguments: controller
-                                                                              .industry
-                                                                              .industryId,
+                                                                          arguments:
+                                                                              industry.industryId,
                                                                         );
                                                                       },
                                                               ),
@@ -301,8 +349,7 @@ class _AllForumScreenState extends State<AllForumScreen> {
                                                           text: TextSpan(
                                                             children: [
                                                               TextSpan(
-                                                                text: controller
-                                                                            .industry
+                                                                text: industry
                                                                             .categoryId!
                                                                             .toString() ==
                                                                         'd479f179-3f41-4d84-915d-33110cf5b4fb'
@@ -346,16 +393,15 @@ class _AllForumScreenState extends State<AllForumScreen> {
                                                           MainAxisAlignment.end,
                                                       children: [
                                                         JoinedButton(
-                                                          controller.industry
-                                                                  .joinedUsers
+                                                          industry.joinedUsers
                                                                   ?.contains(
                                                                       _myProfile
                                                                           .myProfile
                                                                           .uid) ??
                                                               false,
                                                           () {
-                                                            controller
-                                                                .toggleJoinAndLeaveIndustry();
+                                                            toggleJoinAndLeaveIndustry(
+                                                                controller);
                                                           },
                                                         ),
                                                       ],

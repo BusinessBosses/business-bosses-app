@@ -34,7 +34,8 @@ class _InvitedUsersScreenState extends State<InvitedUsersScreen> {
       _controller.addListener(_scrollListener);
       invitedUsers = ModalRoute.of(context)!.settings.arguments as List<Invite>;
       if (invitedUsers.isEmpty) navigateTo(context);
-      invitedUsers.sort((Invite a, Invite b) => b.timestamp!.compareTo(a.timestamp as num));
+      invitedUsers.sort(
+          (Invite a, Invite b) => b.timestamp!.compareTo(a.timestamp as num));
       _loadNextConnections();
       _isInit = true;
     }
@@ -87,7 +88,9 @@ class _InvitedUsersScreenState extends State<InvitedUsersScreen> {
                           //   radius: 30.0,
                           //   placeHolder: Icons.person,
                           // ),
-                          title: Text(_users[i].name),
+                          title: Text(_users[i].name.length <= 20
+                              ? _users[i].name
+                              : '${_users[i].name.substring(0, 20)}...'),
                           subtitle: Text(
                             _users[i].bio,
                             maxLines: 1,

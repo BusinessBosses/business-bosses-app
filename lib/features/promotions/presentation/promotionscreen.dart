@@ -216,6 +216,7 @@ class _PromotionScreenState extends State<PromotionScreen> {
                                                 ),
                                                 SvgPicture.asset(
                                                   'assets/svgs/nextbutton.svg',
+                                                  color: primaryColorLT,
                                                 ),
                                               ],
                                             ),
