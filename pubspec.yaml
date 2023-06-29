@@ -60,6 +60,7 @@ dependencies:
   http: ^0.13.5
   image_picker: ^0.8.7+4
   intl: ^0.17.0
+  mailer: ^6.0.1
   photo_manager: ^2.5.0
   pin_code_fields: ^7.4.0
   sendgrid_mailer: ^0.1.3
