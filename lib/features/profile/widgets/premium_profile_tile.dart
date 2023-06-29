@@ -7,7 +7,6 @@ import '../../../action/action.dart';
 import '../../../common/models/user_model.dart';
 import '../../../common/widgets/buttons/my_outlined_button.dart';
 import '../../../utils/theme/theme.dart';
-import '../controller/profile_controller.dart';
 
 ///this is the connect and refer button for only those that have made premium subscription
 Widget premiumButtonHeader(
@@ -15,7 +14,6 @@ Widget premiumButtonHeader(
   UserModel myProfile,
   VoidCallback onConnect,
 ) {
-  final ProfileController profileController = Get.find();
   bool connectedbutton = true;
   return Container(
     height: 38.0,
@@ -47,8 +45,8 @@ Widget premiumButtonHeader(
         child: MCustomButton(
             margin: const EdgeInsets.symmetric(horizontal: 4.0),
             onPressed: () async {
-              if (profileController.myProfile.connectedCount == 0 &&
-                  profileController.myProfile.connectionCount == 0) {
+              if (myProfile.connectedCount == 0 &&
+                  myProfile.connectionCount == 0) {
                 String message =
                     'Have a look at ${publicUser.username}\'s profile on Business Bosses\n'
                     'https://businessbosses.onelink.me/xLWk/36a2ff16';
