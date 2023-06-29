@@ -8,9 +8,11 @@ import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../utils/theme/theme.dart';
 import '../action/action.dart';
+import '../common/models/api_response_model.dart';
 import '../common/widgets/buttons/custom_button.dart';
 import '../features/marketplace/presentation/subscription_confirmation.dart';
 import '../features/profile/controller/profile_controller.dart';
@@ -27,7 +29,8 @@ class PremiumScreen extends StatefulWidget {
 
 class _PremiumScreenState extends State<PremiumScreen> {
   int _currentIndex = 0;
-
+  String paymentMethodId = '';
+  final ProfileController _profileController = Get.find();
   final Map<int, Widget> _segments = {
     0: const Padding(
       padding: EdgeInsets.all(8),
@@ -50,42 +53,34 @@ class _PremiumScreenState extends State<PremiumScreen> {
 
   late String duration;
   List<Map<String, dynamic>> plans = <Map<String, dynamic>>[
-    <String, dynamic>{'price': '4.99', 'plan': 'monthly', 'isSubscribed': true},
     <String, dynamic>{
-      'price': '49.99',
+      'price': dotenv.env['TEST_MONTHLY_PRICE'],
+      'plan': 'monthly',
+    },
+    <String, dynamic>{
+      'price': dotenv.env['TEST_YEARLY_PRICE'],
       'plan': 'annually',
-      'isSubscribed': true
     },
   ];
 
+  /// send the data to the backend
   Future<void> addSubscription() async {
-    ApiService.post(path: 'subscription', body: plans[_currentIndex]);
+    ApiService.post(path: 'subscription', body: {
+      'price': plans[_currentIndex]['price'],
+      'plan': plans[_currentIndex]['plan'],
+    });
   }
 
   void displaySheet() async {
     try {
-      await Stripe.instance.presentPaymentSheet().then((value) async {
-        await addSubscription();
-
-        Navigator.of(context).push(MaterialPageRoute(
-          builder: (BuildContext context) => const SubscriptionConfirmation(),
-        ));
-
-        paymantIntent = null;
-      }).onError((Object? error, StackTrace stackTrace) {
-        setState(() {
-          _isProcessing = false;
-        });
-        print(' =>> $error');
-        showSnackBar(context,
-            message: 'Opps!! Something went wrong. Try again');
-      });
-    } on StripeException {
+      await addSubscription();
+      // Navigate to SubscriptionConfirmation page
+      Navigator.of(context).push(MaterialPageRoute(
+        builder: (BuildContext context) => const SubscriptionConfirmation(),
+      ));
       setState(() {
         _isProcessing = false;
       });
-      showSnackBar(context, message: 'Opps!! Something went wrong. Try again');
-      // print('Here ->>>>>> $e');
     } catch (e) {
       setState(() {
         _isProcessing = false;
@@ -96,62 +91,23 @@ class _PremiumScreenState extends State<PremiumScreen> {
     }
   }
 
-  String calculateAmount(String amount) {
-    final int calculatedAmount = ((double.parse(amount)) * 100).toInt();
-    return calculatedAmount.toString();
-  }
-
-  Future<dynamic> createPaymentIntent(String amount, String currency) async {
-    try {
-      Map<String, dynamic> body = {
-        'amount': calculateAmount(plans[_currentIndex]['price']),
-        'currency': currency,
-        'payment_method_types[]': 'card'
-      };
-
-      http.Response res = await http.post(
-          Uri.parse('https://api.stripe.com/v1/payment_intents'),
-          body: body,
-          headers: {
-            'Authorization': 'Bearer ${dotenv.env['STRIPE_SEC_KEY']}',
-            'Content-Type': 'application/x-www-form-urlencoded'
-          });
-
-      // log(res.body);
-
-      return jsonDecode(res.body);
-    } catch (e) {
-      setState(() {
-        _isProcessing = false;
-      });
-      log('Here ->>>>>> $e');
-
-      showSnackBar(context, message: 'Opps!! Something went wrong. Try again');
-    }
-  }
-
+  ///intialize the payment
   Future<void> makePayment() async {
-    try {
-      setState(() {
-        _isProcessing = true;
-      });
-      paymantIntent = await createPaymentIntent(
-          plans[_currentIndex]['price'].toString(), 'USD');
-      await Stripe.instance
-          .initPaymentSheet(
-        paymentSheetParameters: SetupPaymentSheetParameters(
-          paymentIntentClientSecret: paymantIntent!['client_secret'],
-          merchantDisplayName: 'Business Bosses',
-        ),
-      )
-          .then((void value) {
-        // log(value.toString());
-        print('everythings here is working!');
-      });
+    setState(() {
+      _isProcessing = true;
+    });
+    final ApiResponseModel res =
+        await ApiService.post(path: 'subscription', body: {
+      'price': plans[_currentIndex]['price'],
+      'plan': plans[_currentIndex]['plan'],
+    });
 
-      displaySheet();
-    } catch (e) {
-      log(e.toString());
+    if (res.success) {
+      if (await canLaunchUrlString(res.data)) {
+        await launchUrlString(res.data, mode: LaunchMode.externalApplication);
+      }
+    } else {
+      showSnackBar(context, message: res.message);
     }
     setState(() {
       _isProcessing = false;
@@ -186,9 +142,9 @@ class _PremiumScreenState extends State<PremiumScreen> {
               color: backgroundcolorinterface,
             ),
             SizedBox(
-              height: MediaQuery.of(context).size.height -
-                  AppBar().preferredSize.height -
-                  20, // Adjust the height as needed
+              // height: MediaQuery.of(context).size.height -
+              //     AppBar().preferredSize.height -
+              //     20, // Adjust the height as needed
               child: Stack(
                 alignment: Alignment.topCenter,
                 children: [
@@ -396,7 +352,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
                                   TextStyle(color: Colors.grey, fontSize: 12),
                             ),
                             const SizedBox(
-                              height: 40,
+                              height: 50,
                             )
                           ],
                         ),

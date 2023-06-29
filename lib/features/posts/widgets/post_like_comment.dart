@@ -1,4 +1,5 @@
 import 'package:business_bosses_v2/common/models/comment_model.dart';
+import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/posts/models/post_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -32,7 +33,7 @@ class PostLikeCommentItem extends StatefulWidget {
 class _PostLikeCommentItemState extends State<PostLikeCommentItem> {
   bool _isLoadingLikes = true, _isLoadingComments = true;
   final CommentController _commentController = Get.put(CommentController());
-  final PostsController _postsController = Get.find();
+  final HomeController _homeController = Get.find();
 
   @override
   void initState() {
@@ -108,7 +109,7 @@ class _PostLikeCommentItemState extends State<PostLikeCommentItem> {
                           setState(() {
                             _commentController.comments.add(comment);
                           });
-                          _postsController.comment(
+                          _homeController.comment(
                             widget.post.postId,
                             comment,
                           );

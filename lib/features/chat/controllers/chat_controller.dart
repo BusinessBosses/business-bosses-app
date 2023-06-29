@@ -78,6 +78,7 @@ class ChatController extends GetxController {
     final Set<String> chatIds = <String>{...counterIds};
     final List<String> uniqueChatIds = chatIds.toList();
     chats.clear();
+
     for (int i = 0; i < uniqueChatIds.length; i++) {
       final String e = uniqueChatIds[i];
 
@@ -85,7 +86,10 @@ class ChatController extends GetxController {
           .where((MessageModel element) =>
               element.senderUid == e || element.receiverUid == e)
           .toList();
-      chats.addAll(chat); // Add all chat elements instead of accessing chat[i]
+      if (chat.isNotEmpty) {
+        chats
+            .add(chat[0]); // Add all chat elements instead of accessing chat[i]
+      }
     }
   }
 

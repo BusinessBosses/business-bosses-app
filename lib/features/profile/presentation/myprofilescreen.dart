@@ -1,3 +1,4 @@
+import 'package:business_bosses_v2/features/home/widgets/bottom_bar.dart';
 import 'package:business_bosses_v2/features/posts/models/post_model.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/features/profile/widgets/profileinfodisplay.dart';
@@ -36,7 +37,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
   List<PostModel> _posts = [];
 
   final ProfileController profileController = Get.find();
-  final MarketController marketController = Get.find();
+  final MarketController marketController = Get.put(MarketController());
 
   Future<void> loadData(String uid) async {
     setState(() {
@@ -83,77 +84,43 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                   })
             ],
           ),
-          body: NestedScrollView(
-            headerSliverBuilder:
-                (BuildContext context, bool innerBoxIsScrolled) {
-              return <Widget>[
-                SliverStickyHeader(
-                  sticky: false,
-                  header: MyProfileHeader(
-                    myProfile: profileController.myProfile,
-                  ),
-                )
-              ];
-            },
-            body: DefaultTabController(
-              length: marketController.markets
-                      .where((MarketModel market) =>
-                          market.userId == profileController.myProfile.uid)
-                      .isEmpty
-                  ? 2
-                  : 3,
-              child: Column(
-                children: [
-                  // if (_publicUser.uid !=
-                  //     'FirebaseAuth.instance.currentUser.uid') ...{
-                  OutlineButtonHeader(context, profileController.myProfile),
-                  const SizedBox(height: 15.0),
-                  // },
-
-                  const SizedBox(
-                    width: double.infinity,
-                    height: 1.5,
-                    child: ColoredBox(color: backgroundcolorinterface),
-                  ),
-                  Material(
-                    color: const Color(0xFFF9F9F9),
-                    child: TabBar(
-                      indicatorColor:
-                          primaryColorLT, // Replace primaryColorLT with the desired color
-                      labelStyle: const TextStyle(fontWeight: FontWeight.w500),
-                      labelColor: Colors.black,
-                      tabs: marketController.markets
+          body: SizedBox(
+            height: MediaQuery.of(context).size.height,
+            width: MediaQuery.of(context).size.width,
+            child: Stack(
+              children: [
+                Container(
+                  height: MediaQuery.of(context).size.height,
+                  width: MediaQuery.of(context).size.width,
+                  color: Colors.white,
+                  child: NestedScrollView(
+                    headerSliverBuilder:
+                        (BuildContext context, bool innerBoxIsScrolled) {
+                      return <Widget>[
+                        SliverStickyHeader(
+                          sticky: false,
+                          header: MyProfileHeader(
+                            myProfile: profileController.myProfile,
+                          ),
+                        )
+                      ];
+                    },
+                    body: DefaultTabController(
+                      length: marketController.markets
                               .where((MarketModel market) =>
                                   market.userId ==
                                   profileController.myProfile.uid)
                               .isEmpty
-                          ? [
-                              const Tab(
-                                text: 'About',
-                              ),
-                              const Tab(
-                                text: 'Posts',
-                              ),
-                            ]
-                          : [
-                              const Tab(
-                                text: 'About',
-                              ),
-                              const Tab(
-                                text: 'Posts',
-                              ),
-                              const Tab(
-                                text: 'Shop',
-                              ),
-                            ],
-                    ),
-                  ),
-
-                  const SizedBox(
-                    width: double.infinity,
-                    height: 1.5,
-                    child: ColoredBox(color: backgroundcolorinterface),
-                  ), // Container(
+                          ? 2
+                          : 3,
+                      child: Column(
+                        children: [
+                          // if (_publicUser.uid !=
+                          //     'FirebaseAuth.instance.currentUser.uid') ...{
+                          OutlineButtonHeader(
+                              context, profileController.myProfile),
+                          const SizedBox(height: 15.0),
+                          // },
 
                   Expanded(
                     child: TabBarView(
@@ -291,10 +258,186 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                 ),
                               ),
                             ],
+                          const SizedBox(
+                            width: double.infinity,
+                            height: 1.5,
+                            child: ColoredBox(color: backgroundcolorinterface),
+                          ),
+                          Material(
+                            color: const Color(0xFFF9F9F9),
+                            child: TabBar(
+                              indicatorColor:
+                                  primaryColorLT, // Replace primaryColorLT with the desired color
+                              labelStyle:
+                                  const TextStyle(fontWeight: FontWeight.w500),
+                              labelColor: Colors.black,
+                              tabs: marketController.markets
+                                      .where((MarketModel market) =>
+                                          market.userId ==
+                                          profileController.myProfile.uid)
+                                      .isEmpty
+                                  ? [
+                                      const Tab(
+                                        text: 'About',
+                                      ),
+                                      const Tab(
+                                        text: 'Posts',
+                                      ),
+                                    ]
+                                  : [
+                                      const Tab(
+                                        text: 'About',
+                                      ),
+                                      const Tab(
+                                        text: 'Posts',
+                                      ),
+                                      const Tab(
+                                        text: 'Shop',
+                                      ),
+                                    ],
+                            ),
+                          ),
+
+                          const SizedBox(
+                            width: double.infinity,
+                            height: 1.5,
+                            child: ColoredBox(color: backgroundcolorinterface),
+                          ), // Container(
+
+                          Expanded(
+                            child: TabBarView(
+                              children: [
+                                SingleChildScrollView(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      const SizedBox(
+                                        height: 30,
+                                      ),
+                                      profileinfodisplay(
+                                          context, profileController.myProfile),
+                                    ],
+                                  ),
+                                ),
+                                profilepostsdisplay(
+                                  context,
+                                  profileController.myProfile,
+                                  _posts,
+                                  loading: isLoading,
+                                ),
+                                if (marketController.markets
+                                    .where((MarketModel market) =>
+                                        market.userId !=
+                                        profileController.myProfile.uid)
+                                    .isNotEmpty)
+                                  SingleChildScrollView(
+                                    child: Column(
+                                      children: [
+                                        GetBuilder<MarketController>(
+                                          builder: (MarketController
+                                              marketController) {
+                                            return Obx(() {
+                                              if (marketController
+                                                  .loading.value) {
+                                                return const Center(
+                                                    child:
+                                                        CircularProgressIndicator());
+                                              } else if (marketController
+                                                  .error.value) {
+                                                return const SafetyModel(
+                                                  isLoading: false,
+                                                  title:
+                                                      'Error While Loading Data',
+                                                  subTitle:
+                                                      'Try Reloading Again',
+                                                  icon: Icon(
+                                                    Icons.warning,
+                                                    size: 60,
+                                                  ),
+                                                );
+                                              } else {
+                                                return marketController.markets
+                                                        .where((MarketModel
+                                                                market) =>
+                                                            market.userId ==
+                                                            profileController
+                                                                .myProfile.uid)
+                                                        .isEmpty
+                                                    ? const SafetyModel(
+                                                        isLoading: false,
+                                                        icon: Icon(
+                                                          Icons.warning,
+                                                          color: Colors.grey,
+                                                          size: 80.0,
+                                                        ),
+                                                        title:
+                                                            'This user has no items in store',
+                                                        // subTitle: '',
+                                                      )
+                                                    : ListView.builder(
+                                                        shrinkWrap: true,
+                                                        physics:
+                                                            const NeverScrollableScrollPhysics(),
+                                                        itemCount: marketController
+                                                            .markets
+                                                            .where((MarketModel
+                                                                    market) =>
+                                                                market.userId ==
+                                                                profileController
+                                                                    .myProfile
+                                                                    .uid)
+                                                            .length,
+                                                        itemBuilder:
+                                                            (BuildContext
+                                                                    context,
+                                                                int index) {
+                                                          final List<
+                                                                  MarketModel>
+                                                              filteredMarkets =
+                                                              marketController
+                                                                  .markets
+                                                                  .where((MarketModel
+                                                                          market) =>
+                                                                      market
+                                                                          .userId ==
+                                                                      profileController
+                                                                          .myProfile
+                                                                          .uid)
+                                                                  .toList();
+                                                          final MarketModel
+                                                              market =
+                                                              filteredMarkets[
+                                                                  index];
+
+                                                          return MarketTile(
+                                                            post: market,
+                                                          );
+                                                        },
+                                                      );
+                                              }
+                                            });
+                                          },
+                                        ),
+                                        const SizedBox(
+                                          height: 100,
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                ],
-              ),
+                ),
+                BottomBar(
+                  activeIndex: 3,
+                )
+              ],
             ),
           ),
         );

@@ -13,7 +13,7 @@ class Routes {
   static const String codeVerification = '/codeVerificationScreen';
   static const String otpScreen = '/otpScreen';
   static const String resetPassword = '/resetPasswordScreen';
-  static const String bottomNavigation = '/bottomNavScreen';
+  // static const String bottomNavigation = '/bottomNavScreen';
   static const String myProfile = '/myProfileScreen';
   static const String updateProfile = '/updateProfileScreen';
   static const String publicProfile = '/publicProfileScreen';
