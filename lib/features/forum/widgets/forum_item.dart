@@ -7,18 +7,22 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 import '../../../action/action.dart';
+import '../../../common/models/api_response_model.dart';
 import '../../../common/models/comment_model.dart';
 import '../../../common/widgets/popup/my_popup_menu_button.dart';
 import '../../../common/widgets/text_widget.dart';
 import '../../../common/widgets/user_avatar_with_badge.dart';
+import '../../../services/api_service.dart';
 import '../../../utils/theme/theme.dart';
 import '../../../utils/time_format.dart';
 import '../../posts/widgets/all_images_item.dart';
 import '../../profile/controller/profile_controller.dart';
+import '../../profile/widgets/premium_profile_tile.dart';
 import 'forum_like_comment.dart';
 
 class ForumItem extends StatefulWidget {
   final ForumModel forum;
+
   // final VoidCallback? commented;
   // final Function? likeUnlikeForum;
   // final Function? onUpdateForum;
@@ -44,6 +48,41 @@ class ForumItem extends StatefulWidget {
 
 class _ForumItemState extends State<ForumItem> {
   List<String> blocked = [];
+  final ProfileController profileController = Get.find();
+
+  Future<void> connect(String userId) async {
+    // ignore: unused_local_variable
+    final ApiResponseModel res =
+        await ApiService.post(path: '/connection/connect', body: {
+      'userId': profileController.myProfile.uid,
+      'connectedId': userId,
+      'timestamp': DateTime.now().millisecondsSinceEpoch
+    });
+  }
+
+  Future<void> disconnect(String userId) async {
+    // ignore: unused_local_variable
+    final ApiResponseModel res =
+        await ApiService.post(path: '/connection/disconnect', body: {
+      'userId': profileController.myProfile.uid,
+      'connectedId': userId,
+      'timestamp': DateTime.now().millisecondsSinceEpoch
+    });
+  }
+
+  void connectToUser() async {
+    final int checkConnected = profileController.myProfile.connecteds == null
+        ? -1
+        : profileController.myProfile.connecteds!
+            .indexWhere((String element) => element == widget.forum.user!.uid);
+    if (checkConnected == -1) {
+      profileController.updateConnections(widget.forum.user!.uid);
+      await connect(widget.forum.user!.uid);
+    } else {
+      profileController.updateConnections(widget.forum.user!.uid);
+      await disconnect(widget.forum.user!.uid);
+    }
+  }
 
   final List<PopupMenuEntry<String>> myPopup = <PopupMenuEntry<String>>[
     const PopupMenuItem<String>(
@@ -399,7 +438,7 @@ class _ForumItemState extends State<ForumItem> {
                           Get.toNamed(Routes.publicProfile,
                               arguments: widget.forum.user);
                         },
-                        child: widget.forum.user!.isSubscribed
+                        child: widget.forum.user!.isSubscribed == true
                             ? Row(
                                 children: [
                                   Text(
@@ -428,11 +467,27 @@ class _ForumItemState extends State<ForumItem> {
                                 style: Theme.of(context).textTheme.bodyLarge,
                               ),
                       ),
-                      subtitle: Text(
-                        widget.forum.user?.bio ?? '',
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
+                      subtitle: widget.forum.user!.isSubscribed
+                          ? Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  widget.forum.user?.bio ?? '',
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                premiumButtonHeader(widget.forum.user!,
+                                    profileController.myProfile, connectToUser)
+                              ],
+                            )
+                          : Text(
+                              widget.forum.user?.bio ?? '',
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
                     ),
                     widget.forum.title == null
                         ? Container()
