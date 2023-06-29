@@ -1,18 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
-import '../../../action/action.dart';
 import '../../../common/models/user_model.dart';
-import '../../../common/params.dart';
 import '../../../common/widgets/buttons/my_outlined_button.dart';
 import '../../../common/widgets/user_avatar_with_badge.dart';
+import '../../../navigation/routes.dart';
 import '../../../utils/theme/theme.dart';
-import '../../profile/presentation/publicprofilescreen.dart';
+import '../../search/controller/search_controller.dart';
 
-class ConnectionGridTile extends StatelessWidget {
+class ConnectionGridTile extends StatefulWidget {
   final UserModel user;
   final bool status;
   final Function()? onChangeConnectionStatus;
   final Function()? onTap;
+
+  @override
+  State<ConnectionGridTile> createState() => _ConnectionGridTileState();
 
   const ConnectionGridTile({
     Key? key,
@@ -21,14 +24,15 @@ class ConnectionGridTile extends StatelessWidget {
     this.onChangeConnectionStatus,
     this.onTap,
   }) : super(key: key);
+}
 
+class _ConnectionGridTileState extends State<ConnectionGridTile> {
   @override
   Widget build(BuildContext context) {
+    CompleteSearchController controller = Get.find();
     return InkWell(
       onTap: () {
-        navigateTo(context,
-            routeName: PublicProfileScreen.routeName,
-            arguments: Params(arg1: user.uid));
+        Get.toNamed(Routes.publicProfile, arguments: widget.user);
       },
       borderRadius: BorderRadius.circular(radius),
       child: Ink(
@@ -38,7 +42,7 @@ class ConnectionGridTile extends StatelessWidget {
         child: Column(
           children: [
             UserAvatarWithBadge(
-              user: user,
+              user: widget.user,
               height: 64.0,
               width: 64.0,
               radius: 64.0,
@@ -46,28 +50,31 @@ class ConnectionGridTile extends StatelessWidget {
             ),
             const SizedBox(height: 8.0),
             Text(
-              user.name ?? '',
+              widget.user.name ?? '',
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.bodyLarge,
             ),
             const SizedBox(height: 4.0),
-            Text(
-              user.category ?? user.industry ?? '@${user.username}',
-              overflow: TextOverflow.ellipsis,
-              textAlign: TextAlign.center,
-              maxLines: 2,
-            ),
+            if (widget.user.category != null)
+              Text(widget.user.category.toString(),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    fontSize: 14,
+                  )),
             const SizedBox(height: 12.0),
             MCustomButton(
-              buttonType: status ? ButtonType.outline : ButtonType.elevated,
-              onPressed: onChangeConnectionStatus,
+              buttonType:
+                  widget.status ? ButtonType.outline : ButtonType.elevated,
+              onPressed: widget.onChangeConnectionStatus,
               height: 36.0,
               width: 120.0,
               child: Text(
-                status ? 'Connected' : 'Connect',
-                style: TextStyle(color: status ? primaryColorLT : Colors.white),
+                widget.status ? 'Connected' : 'Connect',
+                style: TextStyle(
+                    color: widget.status ? primaryColorLT : Colors.white),
               ),
             ),
           ],

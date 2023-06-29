@@ -281,7 +281,7 @@ class _BossUpSectionState extends State<BossUpSection> {
                                                 child: Row(
                                                   children: [
                                                     SvgPicture.asset(
-                                                      'assets/svgs/topics.svg',
+                                                      'assets/svgs/entries.svg',
                                                       height: 11.5,
                                                       color: textColor,
                                                     ),
