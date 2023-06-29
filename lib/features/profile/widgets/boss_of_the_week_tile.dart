@@ -476,6 +476,13 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
       'connectedId': userId,
       'timestamp': DateTime.now().millisecondsSinceEpoch
     });
+    setState(() {
+      _profileController.bossOfTheWeek?.connecteds
+          ?.removeWhere((string) => string == _profileController.myProfile.uid);
+
+      user?.connecteds
+          ?.removeWhere((string) => string == _profileController.myProfile.uid);
+    });
   }
 
   Future<void> connect(String userId) async {
@@ -483,6 +490,12 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
       'userId': _profileController.myProfile.uid,
       'connectedId': userId,
       'timestamp': DateTime.now().millisecondsSinceEpoch
+    });
+    setState(() {
+      _profileController.bossOfTheWeek?.connecteds
+          ?.add(_profileController.myProfile.uid);
+
+      user?.connecteds?.add(_profileController.myProfile.uid);
     });
   }
 
