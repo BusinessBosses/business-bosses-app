@@ -603,263 +603,124 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                       ],
                                     ),
                                   ),
-                                ]),
-                              ],
-                            ),
-                          ),
-                          hmeController.bossUp != null &&
-                                  hmeController.bossUp!.isNotEmpty
-                              ? GestureDetector(
-                                  onTap: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (BuildContext context) =>
-                                              const Bossuppartner()),
-                                    );
-                                  },
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(
-                                      right: 20,
-                                      left: 20,
-                                      bottom: 10,
-                                    ),
-                                    child: Container(
-                                      height: 40,
-                                      decoration: BoxDecoration(
-                                        color: const Color(0xFFF4F4F4),
-                                        borderRadius: BorderRadius.circular(10),
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color: Colors.grey.withOpacity(0.3),
-                                            spreadRadius: 20,
-                                            blurRadius: 500,
-                                            offset: const Offset(0, 3),
-                                          ),
-                                        ],
-                                      ),
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                            color: const Color(0xFFFFFFFF)
-                                                .withAlpha(150),
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                            boxShadow: [
-                                              BoxShadow(
-                                                color:
-                                                    Colors.white.withOpacity(1),
-                                                spreadRadius: 20,
-                                                blurRadius: 500,
-                                                offset: const Offset(0, 3),
-                                              ),
-                                            ]),
-                                        child: Row(
-                                          children: [
-                                            const Padding(
-                                              padding: EdgeInsets.only(
-                                                left: 10,
-                                              ),
-                                              child: Center(
-                                                child: Padding(
-                                                  padding: EdgeInsets.all(2),
-                                                  child: Text(
-                                                    'Boss Up by',
-                                                    style:
-                                                        TextStyle(fontSize: 11),
+                                  hmeController.bossUp != null &&
+                                          hmeController.bossUp!.isNotEmpty
+                                      ? GestureDetector(
+                                          onTap: () {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (BuildContext
+                                                          context) =>
+                                                      const Bossuppartner()),
+                                            );
+                                          },
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(
+                                              right: 20,
+                                              left: 20,
+                                              bottom: 10,
+                                            ),
+                                            child: Container(
+                                              height: 40,
+                                              decoration: BoxDecoration(
+                                                color: const Color(0xFFF4F4F4),
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                                boxShadow: [
+                                                  BoxShadow(
+                                                    color: Colors.grey
+                                                        .withOpacity(0.3),
+                                                    spreadRadius: 20,
+                                                    blurRadius: 500,
+                                                    offset: const Offset(0, 3),
                                                   ),
-                                                ),
+                                                ],
                                               ),
-                                            ),
-                                            const SizedBox(width: 10),
-                                            Text(
-                                              '|',
-                                              style: TextStyle(
-                                                  fontSize: 20,
-                                                  color: textColor
-                                                      .withOpacity(0.5)),
-                                            ),
-                                            const SizedBox(width: 10),
-                                            Text(
-                                              hmeController.bossUp != null &&
-                                                      hmeController
-                                                          .bossUp!.isNotEmpty
-                                                  ? hmeController.bossUp!.last[
-                                                          'companyName'] ??
-                                                      ''
-                                                  : '',
-                                              style: const TextStyle(
-                                                fontSize: 15,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                              overflow: TextOverflow.ellipsis,
-                                              softWrap: false,
-                                            ),
-                                            const Spacer(),
-                                            Padding(
-                                              padding: const EdgeInsets.only(
-                                                  right: 10.0),
-                                              child: SvgPicture.asset(
-                                                'assets/svgs/nexticon.svg',
-                                                color: textColor,
-                                              ),
-                                            )
-                                          ],
-                                  GestureDetector(
-                                    onTap: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (BuildContext context) =>
-                                                const Bossuppartner()),
-                                      );
-                                    },
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(
-                                        right: 20,
-                                        left: 20,
-                                        bottom: 10,
-                                      ),
-                                      child: Container(
-                                        height: 40,
-                                        decoration: BoxDecoration(
-                                          color: const Color(0xFFF4F4F4),
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          boxShadow: [
-                                            BoxShadow(
-                                              color:
-                                                  Colors.grey.withOpacity(0.3),
-                                              spreadRadius: 20,
-                                              blurRadius: 500,
-                                              offset: const Offset(0, 3),
-                                            ),
-                                          ],
-                                        ),
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                              color: const Color(0xFFFFFFFF)
-                                                  .withAlpha(150),
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                              boxShadow: [
-                                                BoxShadow(
-                                                  color: Colors.white
-                                                      .withOpacity(1),
-                                                  spreadRadius: 20,
-                                                  blurRadius: 500,
-                                                  offset: const Offset(0, 3),
-                                                ),
-                                              ]),
-                                          child: Row(
-                                            children: [
-                                              const Padding(
-                                                padding: EdgeInsets.only(
-                                                  left: 10,
-                                                ),
-                                                child: Center(
-                                                  child: Padding(
-                                                    padding: EdgeInsets.all(2),
-                                                    child: Text(
-                                                      'Boss Up by',
-                                                      style: TextStyle(
-                                                          fontSize: 11),
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                    color:
+                                                        const Color(0xFFFFFFFF)
+                                                            .withAlpha(150),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10),
+                                                    boxShadow: [
+                                                      BoxShadow(
+                                                        color: Colors.white
+                                                            .withOpacity(1),
+                                                        spreadRadius: 20,
+                                                        blurRadius: 500,
+                                                        offset:
+                                                            const Offset(0, 3),
+                                                      ),
+                                                    ]),
+                                                child: Row(
+                                                  children: [
+                                                    const Padding(
+                                                      padding: EdgeInsets.only(
+                                                        left: 10,
+                                                      ),
+                                                      child: Center(
+                                                        child: Padding(
+                                                          padding:
+                                                              EdgeInsets.all(2),
+                                                          child: Text(
+                                                            'Boss Up by',
+                                                            style: TextStyle(
+                                                                fontSize: 11),
+                                                          ),
+                                                        ),
+                                                      ),
                                                     ),
-                                                  ),
+                                                    const SizedBox(width: 10),
+                                                    Text(
+                                                      '|',
+                                                      style: TextStyle(
+                                                          fontSize: 20,
+                                                          color: textColor
+                                                              .withOpacity(
+                                                                  0.5)),
+                                                    ),
+                                                    const SizedBox(width: 10),
+                                                    Text(
+                                                      hmeController.bossUp !=
+                                                                  null &&
+                                                              hmeController
+                                                                  .bossUp!
+                                                                  .isNotEmpty
+                                                          ? hmeController
+                                                                      .bossUp!
+                                                                      .last[
+                                                                  'companyName'] ??
+                                                              ''
+                                                          : '',
+                                                      style: const TextStyle(
+                                                        fontSize: 15,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                      ),
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                      softWrap: false,
+                                                    ),
+                                                    const Spacer(),
+                                                    Padding(
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              right: 10.0),
+                                                      child: SvgPicture.asset(
+                                                        'assets/svgs/nexticon.svg',
+                                                        color: textColor,
+                                                      ),
+                                                    )
+                                                  ],
                                                 ),
                                               ),
-                                              const SizedBox(width: 10),
-                                              Text(
-                                                '|',
-                                                style: TextStyle(
-                                                    fontSize: 20,
-                                                    color: textColor
-                                                        .withOpacity(0.5)),
-                                              ),
-                                              const SizedBox(width: 10),
-                                              Text(
-                                                'Partners'.substring(0, 8),
-                                                style: const TextStyle(
-                                                  fontSize: 15,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                                overflow: TextOverflow.ellipsis,
-                                                softWrap: false,
-                                              ),
-                                              const Spacer(),
-                                              Padding(
-                                                padding: const EdgeInsets.only(
-                                                    right: 10.0),
-                                                child: SvgPicture.asset(
-                                                  'assets/svgs/nexticon.svg',
-                                                  color: textColor,
-                                                ),
-                                              )
-                                            ],
+                                            ),
                                           ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                )
-                              : const SizedBox(),
-                        ],
-                      ),
-                    )
-                  ];
-                },
-                body: Padding(
-                  padding: const EdgeInsets.only(bottom: 50, top: 0),
-                  child: Obx(() {
-                    if (_marketController.loading.value) {
-                      return const Center(child: CircularProgressIndicator());
-                    } else if (_marketController.error.value) {
-                      return const SafetyModel(
-                        isLoading: false,
-                        title: 'Error While Loading Data',
-                        subTitle: 'Try Reloading Again',
-                        icon: Icon(
-                          Icons.warning,
-                          size: 60,
-                        ),
-                      );
-                    } else {
-                      return _marketController.markets.isEmpty
-                          ? filterCategory != null || filterLocation != null
-                              ? SafetyModel(
-                                  isLoading: false,
-                                  icon: const Icon(
-                                    Icons.shopping_cart,
-                                    color: Colors.grey,
-                                    size: 80.0,
-                                  ),
-                                  title: 'No Items Available For This Search',
-                                  // subTitle: '',
-                                  clickableText: 'View All',
-                                  onTap: () {
-                                    setState(() {
-                                      filterLocation = null;
-                                      filterCode = null;
-                                      filterCategory = null;
-                                      _selectedLocation = null;
-                                      _selectedCategory = null;
-                                      _marketController.initMarket();
-                                    });
-                                  },
-                                )
-                              : SafetyModel(
-                                  isLoading: false,
-                                  icon: const Icon(
-                                    Icons.edit,
-                                    color: Colors.grey,
-                                    size: 80.0,
-                                  ),
-                                  title: 'Be the first one to Sell your Item',
-                                  // subTitle: '',
-                                  clickableText: 'Start a topic',
-                                  onTap: () {
-                                    Get.to(
-                                      () => const CreateSellingitemScreen(
-                                        isUpd: false,
+                                        )
+                                      : const SizedBox(),
                                 ],
                               ),
                             )
