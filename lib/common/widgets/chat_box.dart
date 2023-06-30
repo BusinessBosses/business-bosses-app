@@ -93,10 +93,15 @@ class ChatBox extends StatelessWidget {
                                           child: Stack(
                                             children: [
                                               if (message.isRawImage ?? false)
-                                                Image.file(
-                                                  File(message.image!),
-                                                  width: size.width * 0.6,
-                                                  height: size.width * 0.6,
+                                                ClipRRect(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          10.0),
+                                                  child: Image.file(
+                                                    File(message.image!),
+                                                    width: size.width * 0.6,
+                                                    height: size.width * 0.6,
+                                                  ),
                                                 )
                                               else
                                                 NetworkImageWithPlaceHolder(
@@ -213,10 +218,15 @@ class ChatBox extends StatelessWidget {
                                           child: Stack(
                                             children: [
                                               if (message.isRawImage ?? false)
-                                                Image.file(
-                                                  File(message.image!),
-                                                  width: size.width * 0.6,
-                                                  height: size.width * 0.6,
+                                                ClipRRect(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          10.0),
+                                                  child: Image.file(
+                                                    File(message.image!),
+                                                    width: size.width * 0.6,
+                                                    height: size.width * 0.6,
+                                                  ),
                                                 )
                                               else
                                                 NetworkImageWithPlaceHolder(

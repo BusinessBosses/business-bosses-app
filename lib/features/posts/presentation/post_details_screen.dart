@@ -1,3 +1,4 @@
+import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/posts/widgets/likecommentandcointile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
@@ -38,7 +39,7 @@ class PostDetailsScreen extends StatelessWidget {
     // String? postId;
     // int? postIndex;
     ProfileController profileController = Get.find();
-    PostsController controller = Get.find();
+    HomeController controller = Get.find();
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
