@@ -16,9 +16,11 @@ import '../models/reviews_model.dart';
 class ReviewTile extends StatefulWidget {
   final ReviewModel post;
   final Future<void> Function() process;
+  final Future<void> Function(int, int, String) edit;
 
   ///
-  const ReviewTile({Key? key, required this.post, required this.process})
+  const ReviewTile(
+      {Key? key, required this.post, required this.process, required this.edit})
       : super(key: key);
 
   @override
@@ -124,6 +126,10 @@ class _ReviewTileState extends State<ReviewTile> {
                                     ),
                                     onSelected: (String val) {
                                       if (val == 'Edit Rating') {
+                                        widget.edit(
+                                            widget.post.id,
+                                            widget.post.rating,
+                                            widget.post.reviewText);
                                       } else if (val == 'Delete Rating') {
                                         showDialog(
                                           context: context,
