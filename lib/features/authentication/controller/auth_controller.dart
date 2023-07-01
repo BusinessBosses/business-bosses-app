@@ -123,6 +123,7 @@ class AuthController extends GetxController {
     mailer.send(email).then((Result<void> result) {
       if (result.isError) {
         onError();
+        print(result.asError?.error);
       } else {
         Get.to(() => ForgotPasswordVerificationScreen(
               otp: code.toString(),
@@ -130,6 +131,7 @@ class AuthController extends GetxController {
             ));
       }
     }).catchError((dynamic e) {
+      print(e);
       onError();
     });
   }
