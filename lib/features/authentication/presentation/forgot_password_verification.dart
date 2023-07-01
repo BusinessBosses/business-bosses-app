@@ -118,7 +118,8 @@ class _ForgotPasswordVerificationScreenState
                       _isProcessing = true;
                     });
                     if (widget.otp.isNotEmpty && widget.otp == currentText) {
-                      Get.snackbar('Success', 'You have verified succesfully!');
+                      Get.snackbar(
+                          'Success', 'Email has been verified succesfully!');
                       Get.to(() => ResetPasswordScreen(
                             email: widget.emailAddress,
                           ));
