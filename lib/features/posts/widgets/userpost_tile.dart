@@ -78,26 +78,26 @@ class _PostTileState extends State<PostTile> {
     if (checkConnected == -1) {
       // connecteds.add(user);
       profileController.updateConnections(widget.post.user!.uid);
-      // setState(() {
-      //   publicUser = UserModel.fromMap({
-      //     ...widget.post.user!.toMap(),
-      //     'connectionCount': widget.post.user!.connectionCount == null
-      //         ? 1
-      //         : widget.post.user!.connectionCount! + 1
-      //   });
-      // });
+      setState(() {
+        UserModel.fromMap({
+          ...widget.post.user!.toMap(),
+          'connectionCount': widget.post.user!.connectionCount == null
+              ? 1
+              : widget.post.user!.connectionCount! + 1
+        });
+      });
       await connect(widget.post.user!.uid);
     } else {
       profileController.updateConnections(widget.post.user!.uid);
 
-      // setState(() {
-      //   publicUser = UserModel.fromMap({
-      //     ...widget.post.user!.toMap(),
-      //     'connectionCount': widget.post.user!.connectionCount == null
-      //         ? null
-      //         : widget.post.user!.connectionCount! - 1
-      //   });
-      // });
+      setState(() {
+        UserModel.fromMap({
+          ...widget.post.user!.toMap(),
+          'connectionCount': widget.post.user!.connectionCount == null
+              ? null
+              : widget.post.user!.connectionCount! - 1
+        });
+      });
       // connecteds.removeAt(checkConnected);
       await disconnect(widget.post.user!.uid);
     }

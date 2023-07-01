@@ -168,7 +168,20 @@ class _SignUpFormState extends State<SignUpForm> {
       _password = googleUser.serverAuthCode;
 
       // showPasswordDialog();
-      await _handleRegister();
+      // await _handleRegister();
+      dynamic user = await _handleRegister();
+      if (user['success'] == false) {
+        Get.snackbar('Error', user['error']);
+      } else {
+        Get.snackbar('Success', 'You have registered succesfully!');
+        Get.toNamed(
+          Routes.updateProfile,
+          arguments: UserModel(
+            username: _username!,
+            email: _authCred!,
+          ),
+        );
+      }
       await _googleSignIn.disconnect();
     } else {
       showSnackBar(context, message: 'Opps!! Something went wrong. Try again');
