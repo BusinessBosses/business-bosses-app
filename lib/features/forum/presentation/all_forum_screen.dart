@@ -183,11 +183,8 @@ class _AllForumScreenState extends State<AllForumScreen> {
                                       child: ClipRRect(
                                         borderRadius:
                                             BorderRadius.circular(15.0),
-                                        child: FittedBox(
-                                          fit: BoxFit.fill,
-                                          child: Image.asset(
-                                              'assets/images/postbackground.png'),
-                                        ),
+                                        child: const ColoredBox(
+                                            color: Colors.white),
                                       ),
                                     ),
                                     Column(
@@ -255,7 +252,7 @@ class _AllForumScreenState extends State<AllForumScreen> {
                                                         const EdgeInsets.only(
                                                             bottom: 8,
                                                             top: 8,
-                                                            left: 10,
+                                                            left: 0,
                                                             right: 10),
                                                     child: Row(
                                                       children: [
@@ -354,7 +351,7 @@ class _AllForumScreenState extends State<AllForumScreen> {
                                                                             .toString() ==
                                                                         'd479f179-3f41-4d84-915d-33110cf5b4fb'
                                                                     ? ' Topics: (${controller.totalForums.value}) '
-                                                                    : ' Opport..: (${controller.totalForums.value})',
+                                                                    : ' Opport.: (${controller.totalForums.value})',
                                                                 style:
                                                                     const TextStyle(
                                                                   fontSize: 12,

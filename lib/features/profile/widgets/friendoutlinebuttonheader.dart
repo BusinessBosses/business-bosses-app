@@ -23,26 +23,29 @@ Widget OutlineButtonHeader(
     width: double.infinity,
     child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
       Expanded(
-          child: MCustomButton(
-              buttonType: connectedbutton == true
-                  ? ButtonType.outline
-                  : ButtonType.elevated,
-              margin: const EdgeInsets.symmetric(horizontal: 4.0),
-              child: FittedBox(
-                child: myProfile.connecteds != null &&
-                        myProfile.connecteds!.contains(publicUser.uid)
-                    ? const Text(
-                        'Connected',
-                        style: TextStyle(color: primaryColorLT),
-                      )
-                    : const Text(
-                        'Connect',
-                        style: TextStyle(color: primaryColorLT),
-                      ),
-              ),
-              onPressed: () async {
-                onConnect();
-              })),
+        child: MCustomButton(
+          buttonType: myProfile.connecteds != null &&
+                  myProfile.connecteds!.contains(publicUser.uid)
+              ? ButtonType.outline
+              : ButtonType.elevated,
+          margin: const EdgeInsets.symmetric(horizontal: 4.0),
+          child: FittedBox(
+            child: myProfile.connecteds != null &&
+                    myProfile.connecteds!.contains(publicUser.uid)
+                ? const Text(
+                    'Connected',
+                    style: TextStyle(color: primaryColorLT),
+                  )
+                : const Text(
+                    'Connect',
+                    style: TextStyle(color: Colors.white),
+                  ),
+          ),
+          onPressed: () async {
+            onConnect();
+          },
+        ),
+      ),
       Expanded(
         child: MCustomButton(
           margin: const EdgeInsets.symmetric(horizontal: 4.0),

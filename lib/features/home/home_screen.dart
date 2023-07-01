@@ -168,7 +168,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ),
                         ),
-                        BottomBar(
+                        const BottomBar(
                           activeIndex: 0,
                         ),
                       ],
