@@ -294,7 +294,7 @@ class HomeController extends GetxController {
     int dataTime = profileController.myProfile.bossOfTheWeekUpTimeStamp ?? 0;
     int lastExecutionTimestamp = sandBox.read('lastExecutionTimestamp') ?? 0;
     if ((currentTimestamp - lastExecutionTimestamp >= 24 * 60 * 60 * 1000) &&
-        (dataTime - lastExecutionTimestamp >= 24 * 60 * 60 * 1000)) {
+        (currentTimestamp - dataTime >= 24 * 60 * 60 * 1000)) {
       // The action hasn't been executed today, save the current timestamp
       sandBox.write('lastExecutionTimestamp', currentTimestamp);
       ApiService.put(
