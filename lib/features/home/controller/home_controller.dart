@@ -1,6 +1,7 @@
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/common/models/comment_model.dart';
+import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/common/widgets/text_widget.dart';
 import 'package:business_bosses_v2/features/chat/controllers/chat_controller.dart';
 import 'package:business_bosses_v2/features/forum/controller/bossup_controller.dart';
@@ -9,6 +10,7 @@ import 'package:business_bosses_v2/features/forum/models/industry.dart';
 import 'package:business_bosses_v2/features/home/controller/commumities_controller.dart';
 import 'package:business_bosses_v2/features/home/repository/home_repository.dart';
 import 'package:business_bosses_v2/features/marketplace/controllers/market_controller.dart';
+import 'package:business_bosses_v2/features/marketplace/models/market_model.dart';
 import 'package:business_bosses_v2/features/posts/models/post_model.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
@@ -23,11 +25,14 @@ class HomeController extends GetxController {
   // final PostsController _postsController = Get.find();
   late final ProfileController profileController;
   late final ChatController _chatController;
-  final MarketController _marketController = Get.put(MarketController());
+  // final MarketController _marketController = Get.put(MarketController());
   // final CommunitiesController _communitiesController =
   //     Get.put(CommunitiesController());
+
   RxBool error = RxBool(false);
   List<Industry> industries = [];
+  List<ForumModel> bossupForums = [];
+
   RxInt paginationPage = RxInt(1);
   RxBool loading = RxBool(false);
   List<Map<String, dynamic>>? bossUp = [];
@@ -36,6 +41,24 @@ class HomeController extends GetxController {
   RxList<ForumModel> forums = RxList<ForumModel>(<ForumModel>[]);
   List<Map<String, dynamic>> mixedPosts = [];
   List<String> blocked = [];
+  RxList<MarketModel> markets = RxList<MarketModel>(<MarketModel>[]);
+  RxList<UserModel> marketMembers = RxList<UserModel>(<UserModel>[]);
+
+  void addIndustries(List<Industry> data) {
+    industries = data;
+  }
+
+  void addBossupForums(List<ForumModel> data) {
+    bossupForums = data;
+  }
+
+  void addMarkets(RxList<MarketModel> data) {
+    markets = data;
+  }
+
+  void addMarketMembers(RxList<UserModel> data) {
+    marketMembers = data;
+  }
 
   /// PROCESS RAW API DATA, MODELIZE AND SAVE TO STATE
   void processPostsToState(dynamic post) {
@@ -340,8 +363,8 @@ class HomeController extends GetxController {
       _chatController.processDataToState(
           response.data['chats'], profileController.myProfile.uid);
       socket.emit('handshake', profileController.myProfile.uid);
-      _marketController.initMarket();
-      _marketController.initUsers();
+      // _marketController.initMarket();
+      // _marketController.initUsers();
       addCoinDaily();
       if (partner.data['count'] > 0) {
         bossUp?.addAll(partner.data['rows'].cast<Map<String, dynamic>>());

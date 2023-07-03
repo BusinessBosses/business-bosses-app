@@ -39,6 +39,7 @@ class MarketController extends GetxController {
             .toList()
       }));
     }
+    _homeController.addMarkets(markets);
     // update();
   }
 
@@ -53,6 +54,7 @@ class MarketController extends GetxController {
         ),
       );
     }
+    _homeController.addMarketMembers(users);
     // update();
   }
 
@@ -251,8 +253,13 @@ class MarketController extends GetxController {
     // TODO: implement onInit
     socket = _homeController.socket;
     isLoading = false;
-    initMarket();
-    initUsers();
+    if (_homeController.markets.isEmpty) {
+      initMarket();
+      initUsers();
+    } else {
+      users = _homeController.marketMembers;
+      markets = _homeController.markets;
+    }
     update();
     super.onInit();
   }
