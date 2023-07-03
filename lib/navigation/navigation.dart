@@ -154,7 +154,7 @@ class Nav {
         BindingsBuilder.put(() => BossUpController()),
         BindingsBuilder.put(() => CommunitiesController()),
       ],
-      binding: BindingsBuilder.put(() => BossUpController()),
+      // binding: BindingsBuilder.put(() => BossUpController()),
     ),
     GetPage(
       name: Routes.referalsscreen,
