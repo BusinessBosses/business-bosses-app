@@ -315,7 +315,7 @@ class HomeController extends GetxController {
     error(false);
     update();
     final ApiResponseModel response = await HomeRepository.fetchData();
-    // final ApiResponseModel partner = await HomeRepository.fetchPartner();
+    final ApiResponseModel partner = await HomeRepository.fetchPartner();
     if (response.success) {
       processPostsAndForumsData(response.data['posts']);
       profileController.processDataToState(
@@ -327,9 +327,9 @@ class HomeController extends GetxController {
       // _marketController.initMarket();
       // _marketController.initUsers();
       addCoinDaily();
-      // if (partner.data['count'] > 0) {
-      //   bossUp?.addAll(partner.data['rows'].cast<Map<String, dynamic>>());
-      // }
+      if (partner.data['count'] > 0) {
+        bossUp?.addAll(partner.data['rows'].cast<Map<String, dynamic>>());
+      }
     } else {
       error(true);
       socket.disconnect();

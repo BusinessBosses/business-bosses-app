@@ -25,6 +25,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
 
   String? _email;
   String? _password;
+  String? _confirmPassword;
   final ApiService _apiService = ApiService();
   bool _invisiblePassword = true;
 
@@ -103,10 +104,13 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                   const SizedBox(height: 12.0),
                   TextFormField(
                     onChanged: (String val) {
-                      _password = val;
+                      _confirmPassword = val;
                       setState(() {});
                     },
-                    validator: Validator.passwordValidator,
+                    validator: (_) {
+                      return Validator.confirmPasswordValidator(
+                          _password!, _confirmPassword!);
+                    },
                     textInputAction: TextInputAction.done,
                     obscureText: _invisiblePassword,
                     keyboardType: TextInputType.visiblePassword,
@@ -133,6 +137,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                         setState(() {
                           _autovalidateMode = AutovalidateMode.always;
                         });
+                        if (!_formKey.currentState!.validate()) return;
                         setState(() {
                           _isProcessing = true;
                         });
@@ -143,8 +148,8 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                             _isProcessing = false;
                           });
                         } else {
-                          Get.snackbar(
-                              'Success', 'Password changed succesfully!');
+                          Get.snackbar('Success',
+                              'Password reset completed succesfully!');
                           Get.toNamed(Routes.login);
                         }
                       },

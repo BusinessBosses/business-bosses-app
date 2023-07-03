@@ -9,6 +9,7 @@ import 'package:get/get.dart';
 import '../../../action/action.dart';
 import '../../../common/models/api_response_model.dart';
 import '../../../common/models/comment_model.dart';
+import '../../../common/models/user_model.dart';
 import '../../../common/widgets/popup/my_popup_menu_button.dart';
 import '../../../common/widgets/text_widget.dart';
 import '../../../common/widgets/user_avatar_with_badge.dart';
@@ -77,9 +78,25 @@ class _ForumItemState extends State<ForumItem> {
             .indexWhere((String element) => element == widget.forum.user!.uid);
     if (checkConnected == -1) {
       profileController.updateConnections(widget.forum.user!.uid);
+      setState(() {
+        UserModel.fromMap({
+          ...widget.forum.user!.toMap(),
+          'connectionCount': widget.forum.user!.connectionCount == null
+              ? 1
+              : widget.forum.user!.connectionCount! + 1
+        });
+      });
       await connect(widget.forum.user!.uid);
     } else {
       profileController.updateConnections(widget.forum.user!.uid);
+      setState(() {
+        UserModel.fromMap({
+          ...widget.forum.user!.toMap(),
+          'connectionCount': widget.forum.user!.connectionCount == null
+              ? null
+              : widget.forum.user!.connectionCount! - 1
+        });
+      });
       await disconnect(widget.forum.user!.uid);
     }
   }
@@ -107,6 +124,7 @@ class _ForumItemState extends State<ForumItem> {
   @override
   Widget build(BuildContext context) {
     final ProfileController profileController = Get.find();
+    // print(widget.forum.user!.uid);
     return blocked.contains(widget.forum.user!.uid)
         ? Container()
         : Column(
