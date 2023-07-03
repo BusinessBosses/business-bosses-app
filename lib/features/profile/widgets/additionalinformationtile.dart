@@ -448,7 +448,7 @@ class _AdditionalInfoTileState extends State<AdditionalInfoTile> {
       if (analyser == Analyser.category) {
         MyTitle category = res.data;
         setState(() {
-          _category = category.category;
+          _category = category.title;
         });
       } else if (analyser == Analyser.industry) {
         Industry industry = res.data;

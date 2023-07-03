@@ -39,6 +39,8 @@ class ProfileController extends GetxController {
   void processBossToState(dynamic userData) {
     final UserModel modelizedData = UserModel.fromMap({
       ...userData,
+      'connections': userData['connections'].map((e) => e['userId']).toList(),
+      'connecteds': userData['connecteds'].map((e) => e['userId']).toList()
     });
     bossOfTheWeek = modelizedData;
     update();
@@ -126,7 +128,7 @@ class ProfileController extends GetxController {
           ...response.data['user']['data'],
           'connections': response.data['user']['data']['connections']
               .map((mp) => mp['connect'])
-              .toList()
+              .toList() 
         }
       };
     }

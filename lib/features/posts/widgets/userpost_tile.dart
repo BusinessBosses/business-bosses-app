@@ -4,6 +4,7 @@ import 'package:business_bosses_v2/features/posts/models/post_model.dart';
 import 'package:business_bosses_v2/features/posts/widgets/post_images.dart';
 import 'package:business_bosses_v2/features/posts/widgets/post_like_comment.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
+import 'package:business_bosses_v2/features/profile/widgets/premium_profile_tile.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
 import 'package:detectable_text_field/widgets/detectable_text.dart';
@@ -12,7 +13,9 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 import '../../../action/action.dart';
+import '../../../common/models/api_response_model.dart';
 import '../../../common/models/comment_model.dart';
+import '../../../common/models/user_model.dart';
 import '../../../common/widgets/popup/my_popup_menu_button.dart';
 import '../../../common/widgets/ranking_badge.dart';
 import '../../../common/widgets/text_widget.dart';
@@ -43,9 +46,66 @@ class PostTile extends StatefulWidget {
 
 class _PostTileState extends State<PostTile> {
   bool hide = false;
+  final ProfileController profileController = Get.find();
+  final HomeController homeController = Get.find();
+
+  Future<void> connect(String userId) async {
+    // ignore: unused_local_variable
+    final ApiResponseModel res =
+        await ApiService.post(path: '/connection/connect', body: {
+      'userId': profileController.myProfile.uid,
+      'connectedId': userId,
+      'timestamp': DateTime.now().millisecondsSinceEpoch
+    });
+  }
+
+  Future<void> disconnect(String userId) async {
+    // ignore: unused_local_variable
+    final ApiResponseModel res =
+        await ApiService.post(path: '/connection/disconnect', body: {
+      'userId': profileController.myProfile.uid,
+      'connectedId': userId,
+      'timestamp': DateTime.now().millisecondsSinceEpoch
+    });
+  }
+
+  void connectToUser() async {
+    print(
+        "This are my connected users ${profileController.myProfile.connecteds}");
+    final int checkConnected = profileController.myProfile.connecteds == null
+        ? -1
+        : profileController.myProfile.connecteds!
+            .indexWhere((String element) => element == widget.post.user!.uid);
+    if (checkConnected == -1) {
+      // connecteds.add(user);
+      profileController.updateConnections(widget.post.user!.uid);
+      setState(() {
+        UserModel.fromMap({
+          ...widget.post.user!.toMap(),
+          'connectionCount': widget.post.user!.connectionCount == null
+              ? 1
+              : widget.post.user!.connectionCount! + 1
+        });
+      });
+      await connect(widget.post.user!.uid);
+    } else {
+      profileController.updateConnections(widget.post.user!.uid);
+
+      setState(() {
+        UserModel.fromMap({
+          ...widget.post.user!.toMap(),
+          'connectionCount': widget.post.user!.connectionCount == null
+              ? null
+              : widget.post.user!.connectionCount! - 1
+        });
+      });
+      // connecteds.removeAt(checkConnected);
+      await disconnect(widget.post.user!.uid);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    final ProfileController profileController = Get.find();
     if (hide == false) {
       final List<PopupMenuEntry<String>> myPopupMore = <PopupMenuEntry<String>>[
         const PopupMenuItem<String>(
@@ -104,8 +164,6 @@ class _PostTileState extends State<PostTile> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Container(
-            padding: const EdgeInsets.all(0.0),
-            margin: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 0.0),
             width: double.infinity,
             decoration: BoxDecoration(
                 color: Colors.white, borderRadius: BorderRadius.circular(0)),
@@ -147,15 +205,37 @@ class _PostTileState extends State<PostTile> {
                             arguments: widget.post.user);
                       }
                     },
-                    child: Text(
-                      widget.post.user!.name != null &&
-                              widget.post.user!.name!.length <= 20
-                          ? widget.post.user!.name!
-                          : widget.post.user!.name != null
-                              ? "${widget.post.user!.name!.substring(0, 20)}..."
-                              : widget.post.user!.username,
-                      style: Theme.of(context).textTheme.bodyLarge,
-                    ),
+                    child: widget.post.user!.isSubscribed
+                        ? Padding(
+                            padding: const EdgeInsets.only(top: 16.0),
+                            child: Row(
+                              children: [
+                                Text(
+                                  widget.post.user!.name != null &&
+                                          widget.post.user!.name!.length <= 20
+                                      ? widget.post.user!.name!
+                                      : widget.post.user!.name != null
+                                          ? "${widget.post.user!.name!.substring(0, 20)}..."
+                                          : widget.post.user!.username,
+                                  style: Theme.of(context).textTheme.bodyLarge,
+                                ),
+                                const SizedBox(width: 7),
+                                SvgPicture.asset(
+                                  'assets/svgs/premiumbadge.svg',
+                                  height: 16,
+                                )
+                              ],
+                            ),
+                          )
+                        : Text(
+                            widget.post.user!.name != null &&
+                                    widget.post.user!.name!.length <= 20
+                                ? widget.post.user!.name!
+                                : widget.post.user!.name != null
+                                    ? "${widget.post.user!.name!.substring(0, 20)}..."
+                                    : widget.post.user!.username,
+                            style: Theme.of(context).textTheme.bodyLarge,
+                          ),
                   ),
                   trailing: SizedBox(
                     height: 30,
@@ -279,14 +359,33 @@ class _PostTileState extends State<PostTile> {
                       ],
                     ),
                   ),
-                  subtitle: Text(
-                    widget.post.user?.bio != null &&
-                            widget.post.user!.bio!.isNotEmpty
-                        ? widget.post.user!.bio!
-                        : '',
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
+                  subtitle: widget.post.user!.isSubscribed
+                      ? Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              widget.post.user?.bio != null &&
+                                      widget.post.user!.bio!.isNotEmpty
+                                  ? widget.post.user!.bio!
+                                  : '',
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            const SizedBox(
+                              height: 5,
+                            ),
+                            premiumButtonHeader(widget.post.user!,
+                                profileController.myProfile, connectToUser)
+                          ],
+                        )
+                      : Text(
+                          widget.post.user?.bio != null &&
+                                  widget.post.user!.bio!.isNotEmpty
+                              ? widget.post.user!.bio!
+                              : '',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(
@@ -439,8 +538,9 @@ class _PostTileState extends State<PostTile> {
               ],
             ),
           ),
-          const SizedBox(
-            height: 7,
+          Container(
+            color: backgroundcolorinterface,
+            height: 5,
           )
         ],
       );
@@ -496,7 +596,7 @@ class _PostTileState extends State<PostTile> {
                           ApiService.post(
                             path: 'blockedpost',
                             body: <String, dynamic>{
-                              'userId': widget.post.user?.uid
+                              'postId': widget.post.user?.uid
                             },
                           );
                           widget.controller

@@ -12,10 +12,12 @@ class CompleteSearchController extends GetxController {
   List<UserModel> recommendedConnections = [];
   List<UserModel> searchedUsers = [];
   List<PostModel> searchedPosts = [];
+  List<PostModel> recommendedPosts = [];
   List<ForumModel> searchedForums = [];
   RxInt page = RxInt(0);
   RxBool loadingSearch = RxBool(false);
   RxBool isUserSearch = RxBool(false);
+  RxBool isPostSearch = RxBool(false);
   RxBool loading = RxBool(true);
   RxBool error = RxBool(false);
   final ProfileController _profileController = Get.find();

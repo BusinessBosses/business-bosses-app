@@ -42,15 +42,8 @@ class _FilterUsersState extends State<FilterUsers> {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Padding(
-            padding: EdgeInsets.all(20),
-            child: Text(
-              'Recommended Connections',
-              style: TextStyle(fontWeight: FontWeight.w700, fontSize: 20),
-            ),
-          ),
           Container(
-            height: MediaQuery.of(context).size.height - 182,
+            height: MediaQuery.of(context).size.height,
             color: Colors.white,
             child: widget.filterItems.isEmpty
                 ? SafetyModel(
@@ -85,7 +78,25 @@ class _FilterUsersState extends State<FilterUsers> {
                           // ignore: curly_braces_in_flow_control_structures
                           if (!widget.isSearch) if (i == 0) {
                             return Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
+                                Container(
+                                  width: MediaQuery.of(context).size.width,
+                                  color: backgroundcolorinterface,
+                                  child: const Padding(
+                                    padding: EdgeInsets.only(
+                                        left: 20,
+                                        right: 20,
+                                        top: 10,
+                                        bottom: 10),
+                                    child: Text(
+                                      'Recommended Connections',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 16),
+                                    ),
+                                  ),
+                                ),
                                 ListTile(
                                   onTap: () async {
                                     Get.toNamed(Routes.publicProfile,

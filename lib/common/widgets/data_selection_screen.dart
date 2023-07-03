@@ -54,7 +54,7 @@ class _DataSelectionScreenState extends State<DataSelectionScreen> {
       _isLoading = true;
     });
     final ApiResponseModel response =
-        await ApiService.get(path: 'category/get?page=0&size=20');
+        await ApiService.get(path: 'profession/all');
     if (response.success) {
       _categories = MyTitle.toCategoriesList(snapshot: response.data['rows']);
       setState(() {
@@ -171,7 +171,7 @@ class _DataSelectionScreenState extends State<DataSelectionScreen> {
   dynamic _getObject(String title) {
     if (widget.analyser == Analyser.category) {
       for (int i = 0; i < _categories.length; i++) {
-        if (_categories[i].category == title) return _categories[i];
+        if (_categories[i].title == title) return _categories[i];
       }
     } else {
       for (int i = 0; i < _industries.length; i++) {
@@ -186,7 +186,7 @@ class _DataSelectionScreenState extends State<DataSelectionScreen> {
       List<String> data = [];
       for (int i = 0; i < list.length; i++) {
         MyTitle cat = list[i];
-        data.add(cat.category);
+        data.add(cat.title!);
       }
       listData = data;
     } else {

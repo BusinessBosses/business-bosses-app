@@ -82,7 +82,8 @@ class BossuppartnerItem extends StatelessWidget {
   final String companyUrl;
   final bool showPartnerMessage;
 
-  const BossuppartnerItem({super.key, 
+  const BossuppartnerItem({
+    super.key,
     required this.companyName,
     required this.companyDescription,
     required this.companyUrl,
@@ -212,7 +213,21 @@ class BossuppartnerItem extends StatelessWidget {
   }
 
   Future<void> _contactUs(BuildContext context) async {
-    Uri mailUrl = Uri.parse('mailto:support@businessbosses.co.uk');
+    String? encodeQueryParameters(Map<String, String> params) {
+      return params.entries
+          .map((MapEntry<String, String> e) =>
+              '${Uri.encodeComponent(e.key)}=${Uri.encodeComponent(e.value)}')
+          .join('&');
+    }
+
+    final Uri mailUrl = Uri(
+      scheme: 'mailto',
+      path: 'support@businessbosses.co.uk',
+      query: encodeQueryParameters(<String, String>{
+        'subject': 'BossUp Partner',
+      }),
+    );
+
     try {
       if (await canLaunchUrl(mailUrl)) {
         await launchUrl(mailUrl);

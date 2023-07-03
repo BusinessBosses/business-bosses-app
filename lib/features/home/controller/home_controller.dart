@@ -3,8 +3,12 @@ import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/common/models/comment_model.dart';
 import 'package:business_bosses_v2/common/widgets/text_widget.dart';
 import 'package:business_bosses_v2/features/chat/controllers/chat_controller.dart';
+import 'package:business_bosses_v2/features/forum/controller/bossup_controller.dart';
 import 'package:business_bosses_v2/features/forum/models/forum_model.dart';
+import 'package:business_bosses_v2/features/forum/models/industry.dart';
+import 'package:business_bosses_v2/features/home/controller/commumities_controller.dart';
 import 'package:business_bosses_v2/features/home/repository/home_repository.dart';
+import 'package:business_bosses_v2/features/marketplace/controllers/market_controller.dart';
 import 'package:business_bosses_v2/features/posts/models/post_model.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
@@ -19,8 +23,11 @@ class HomeController extends GetxController {
   // final PostsController _postsController = Get.find();
   late final ProfileController profileController;
   late final ChatController _chatController;
-  // final MarketController _marketController = Get.put(MarketController());
+  final MarketController _marketController = Get.put(MarketController());
+  // final CommunitiesController _communitiesController =
+  //     Get.put(CommunitiesController());
   RxBool error = RxBool(false);
+  List<Industry> industries = [];
   RxInt paginationPage = RxInt(1);
   RxBool loading = RxBool(false);
   List<Map<String, dynamic>>? bossUp = [];
@@ -28,6 +35,7 @@ class HomeController extends GetxController {
   RxList<PostModel> posts = RxList<PostModel>(<PostModel>[]);
   RxList<ForumModel> forums = RxList<ForumModel>(<ForumModel>[]);
   List<Map<String, dynamic>> mixedPosts = [];
+  List<String> blocked = [];
 
   /// PROCESS RAW API DATA, MODELIZE AND SAVE TO STATE
   void processPostsToState(dynamic post) {
@@ -227,6 +235,14 @@ class HomeController extends GetxController {
     update();
   }
 
+  // void loadBlocked() async {
+  //   final ApiResponseModel data = await HomeRepository.fetchBlocked();
+  //   var rows = data.data['rows'];
+  //   for (var row in rows) {
+  //     blocked.addAll(List<String>.from(row['postsId']));
+  //   }
+  // }
+
   /// SHOW WHEN ACCESS TOKEN EXPIRES
   void showAccessTokenDialog() {
     showDialog(
@@ -294,7 +310,7 @@ class HomeController extends GetxController {
     int dataTime = profileController.myProfile.bossOfTheWeekUpTimeStamp ?? 0;
     int lastExecutionTimestamp = sandBox.read('lastExecutionTimestamp') ?? 0;
     if ((currentTimestamp - lastExecutionTimestamp >= 24 * 60 * 60 * 1000) &&
-        (dataTime - lastExecutionTimestamp >= 24 * 60 * 60 * 1000)) {
+        (currentTimestamp - dataTime >= 24 * 60 * 60 * 1000)) {
       // The action hasn't been executed today, save the current timestamp
       sandBox.write('lastExecutionTimestamp', currentTimestamp);
       ApiService.put(
@@ -315,20 +331,21 @@ class HomeController extends GetxController {
     error(false);
     update();
     final ApiResponseModel response = await HomeRepository.fetchData();
-    // final ApiResponseModel partner = await HomeRepository.fetchPartner();
+    final ApiResponseModel partner = await HomeRepository.fetchPartner();
     if (response.success) {
       processPostsAndForumsData(response.data['posts']);
       profileController.processDataToState(
-          response.data['user'], response.data['interests']);
+          {...response.data['user'], 'connecteds': response.data['connecteds']},
+          response.data['interests']);
       _chatController.processDataToState(
           response.data['chats'], profileController.myProfile.uid);
       socket.emit('handshake', profileController.myProfile.uid);
-      // _marketController.initMarket();
-      // _marketController.initUsers();
+      _marketController.initMarket();
+      _marketController.initUsers();
       addCoinDaily();
-      // if (partner.data['count'] > 0) {
-      //   bossUp?.addAll(partner.data['rows'].cast<Map<String, dynamic>>());
-      // }
+      if (partner.data['count'] > 0) {
+        bossUp?.addAll(partner.data['rows'].cast<Map<String, dynamic>>());
+      }
     } else {
       error(true);
       socket.disconnect();
@@ -340,6 +357,22 @@ class HomeController extends GetxController {
     }
 
     loading(false);
+    update();
+  }
+
+  Future<void> fetchIndustries() async {
+    loading(true);
+    error(false);
+    update();
+
+    final ApiResponseModel response = await HomeRepository.fetchIndustries();
+    if (response.success) {
+      industries = Industry.toIndustries(snapshot: response.data['rows']);
+    } else {
+      error(true);
+    }
+    loading(false);
+
     update();
   }
 

@@ -170,97 +170,109 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
 
                           Expanded(
                             child: TabBarView(
-                              children: [
-                                SingleChildScrollView(
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      const SizedBox(
-                                        height: 30,
-                                      ),
-                                      profileinfodisplay(
-                                          context, profileController.myProfile),
-                                    ],
-                                  ),
-                                ),
-                                profilepostsdisplay(
-                                  context,
-                                  profileController.myProfile,
-                                  _posts,
-                                  loading: isLoading,
-                                ),
-                                if (marketController.markets
-                                    .where((MarketModel market) =>
-                                        market.userId !=
-                                        profileController.myProfile.uid)
-                                    .isNotEmpty)
-                                  SingleChildScrollView(
-                                    child: Column(
-                                      children: [
-                                        GetBuilder<MarketController>(
-                                          builder: (MarketController
-                                              marketController) {
-                                            return Obx(() {
-                                              if (marketController
-                                                  .loading.value) {
-                                                return const Center(
-                                                    child:
-                                                        CircularProgressIndicator());
-                                              } else if (marketController
-                                                  .error.value) {
-                                                return const SafetyModel(
-                                                  isLoading: false,
-                                                  title:
-                                                      'Error While Loading Data',
-                                                  subTitle:
-                                                      'Try Reloading Again',
-                                                  icon: Icon(
-                                                    Icons.warning,
-                                                    size: 60,
-                                                  ),
-                                                );
-                                              } else {
-                                                return marketController.markets
-                                                        .where((MarketModel
-                                                                market) =>
-                                                            market.userId ==
-                                                            profileController
-                                                                .myProfile.uid)
-                                                        .isEmpty
-                                                    ? const SafetyModel(
+                                children: marketController.markets
+                                        .where((MarketModel market) =>
+                                            market.userId ==
+                                            profileController.myProfile.uid)
+                                        .isEmpty
+                                    ? [
+                                        SingleChildScrollView(
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              const SizedBox(
+                                                height: 30,
+                                              ),
+                                              profileinfodisplay(context,
+                                                  profileController.myProfile),
+                                            ],
+                                          ),
+                                        ),
+                                        profilepostsdisplay(
+                                          context,
+                                          profileController.myProfile,
+                                          _posts,
+                                          loading: isLoading,
+                                        ),
+                                      ]
+                                    : [
+                                        SingleChildScrollView(
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              const SizedBox(
+                                                height: 30,
+                                              ),
+                                              profileinfodisplay(context,
+                                                  profileController.myProfile),
+                                            ],
+                                          ),
+                                        ),
+                                        profilepostsdisplay(
+                                          context,
+                                          profileController.myProfile,
+                                          _posts,
+                                          loading: isLoading,
+                                        ),
+                                        SingleChildScrollView(
+                                          child: Column(
+                                            children: [
+                                              GetBuilder<MarketController>(
+                                                builder: (MarketController
+                                                    marketController) {
+                                                  return Obx(() {
+                                                    if (marketController
+                                                        .loading.value) {
+                                                      return const Center(
+                                                          child:
+                                                              CircularProgressIndicator());
+                                                    } else if (marketController
+                                                        .error.value) {
+                                                      return const SafetyModel(
                                                         isLoading: false,
+                                                        title:
+                                                            'Error While Loading Data',
+                                                        subTitle:
+                                                            'Try Reloading Again',
                                                         icon: Icon(
                                                           Icons.warning,
-                                                          color: Colors.grey,
-                                                          size: 80.0,
+                                                          size: 60,
                                                         ),
-                                                        title:
-                                                            'This user has no items in store',
-                                                        // subTitle: '',
-                                                      )
-                                                    : ListView.builder(
-                                                        shrinkWrap: true,
-                                                        physics:
-                                                            const NeverScrollableScrollPhysics(),
-                                                        itemCount: marketController
-                                                            .markets
-                                                            .where((MarketModel
-                                                                    market) =>
-                                                                market.userId ==
-                                                                profileController
-                                                                    .myProfile
-                                                                    .uid)
-                                                            .length,
-                                                        itemBuilder:
-                                                            (BuildContext
-                                                                    context,
-                                                                int index) {
-                                                          final List<
-                                                                  MarketModel>
-                                                              filteredMarkets =
-                                                              marketController
+                                                      );
+                                                    } else {
+                                                      return marketController
+                                                              .markets
+                                                              .where((MarketModel
+                                                                      market) =>
+                                                                  market
+                                                                      .userId ==
+                                                                  profileController
+                                                                      .myProfile
+                                                                      .uid)
+                                                              .isEmpty
+                                                          ? const SafetyModel(
+                                                              isLoading: false,
+                                                              icon: Icon(
+                                                                Icons.warning,
+                                                                color:
+                                                                    Colors.grey,
+                                                                size: 80.0,
+                                                              ),
+                                                              title:
+                                                                  'This user has no items in store',
+                                                              // subTitle: '',
+                                                            )
+                                                          : ListView.builder(
+                                                              shrinkWrap: true,
+                                                              physics:
+                                                                  const NeverScrollableScrollPhysics(),
+                                                              itemCount: marketController
                                                                   .markets
                                                                   .where((MarketModel
                                                                           market) =>
@@ -269,29 +281,42 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                                                       profileController
                                                                           .myProfile
                                                                           .uid)
-                                                                  .toList();
-                                                          final MarketModel
-                                                              market =
-                                                              filteredMarkets[
-                                                                  index];
+                                                                  .length,
+                                                              itemBuilder:
+                                                                  (BuildContext
+                                                                          context,
+                                                                      int index) {
+                                                                final List<
+                                                                        MarketModel>
+                                                                    filteredMarkets =
+                                                                    marketController
+                                                                        .markets
+                                                                        .where((MarketModel
+                                                                                market) =>
+                                                                            market.userId ==
+                                                                            profileController.myProfile.uid)
+                                                                        .toList();
+                                                                final MarketModel
+                                                                    market =
+                                                                    filteredMarkets[
+                                                                        index];
 
-                                                          return MarketTile(
-                                                            post: market,
-                                                          );
-                                                        },
-                                                      );
-                                              }
-                                            });
-                                          },
+                                                                return MarketTile(
+                                                                  post: market,
+                                                                );
+                                                              },
+                                                            );
+                                                    }
+                                                  });
+                                                },
+                                              ),
+                                              const SizedBox(
+                                                height: 100,
+                                              )
+                                            ],
+                                          ),
                                         ),
-                                        const SizedBox(
-                                          height: 100,
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                              ],
-                            ),
+                                      ]),
                           ),
                         ],
                       ),

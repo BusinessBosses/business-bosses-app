@@ -8,6 +8,7 @@ import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import '../../../common/widgets/safety_model.dart';
 import '../../../navigation/routes.dart';
 import '../../../utils/theme/theme.dart';
+import '../../home/controller/home_controller.dart';
 import '../../moreinfoscreens/bossuppartner.dart';
 import '../../profile/controller/profile_controller.dart';
 import '../controller/bossup_controller.dart';
@@ -27,6 +28,7 @@ class _BossUpSectionState extends State<BossUpSection> {
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   final ScrollController scrollController = ScrollController();
   final ProfileController _myProfile = Get.find();
+  final HomeController hmeController = Get.find();
 
   void toggleJoinAndLeaveIndustry(BossUpController controller) {
     final String myUid = _myProfile.myProfile.uid;
@@ -118,7 +120,7 @@ class _BossUpSectionState extends State<BossUpSection> {
                                         width: 5,
                                       ),
                                       SvgPicture.asset(
-                                          'assets/svgs/enterchallenge.svg')
+                                          'assets/svgs/startatopic.svg')
                                     ],
                                   ),
                                 ),
@@ -142,11 +144,8 @@ class _BossUpSectionState extends State<BossUpSection> {
                                   width: double.infinity,
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(15.0),
-                                    child: FittedBox(
-                                      fit: BoxFit.fill,
-                                      child: Image.asset(
-                                          'assets/images/postbackground.png'),
-                                    ),
+                                    child:
+                                        const ColoredBox(color: Colors.white),
                                   ),
                                 ),
                                 Column(
@@ -165,7 +164,7 @@ class _BossUpSectionState extends State<BossUpSection> {
                                               fit: BoxFit.fill,
                                               child: CachedNetworkImage(
                                                 imageUrl:
-                                                    'https://files.ng/bossup.jpg',
+                                                    widget.industry.photo!,
                                                 memCacheHeight: 256,
                                                 memCacheWidth: 256,
                                                 placeholder: (BuildContext
@@ -279,7 +278,7 @@ class _BossUpSectionState extends State<BossUpSection> {
                                                 child: Row(
                                                   children: [
                                                     SvgPicture.asset(
-                                                      'assets/svgs/topics.svg',
+                                                      'assets/svgs/entries.svg',
                                                       height: 11.5,
                                                       color: textColor,
                                                     ),
@@ -288,7 +287,7 @@ class _BossUpSectionState extends State<BossUpSection> {
                                                         children: [
                                                           TextSpan(
                                                             text:
-                                                                ' Topics: (${controller.totalForums.value}) ',
+                                                                ' Entries: (${controller.totalForums.value}) ',
                                                             style:
                                                                 const TextStyle(
                                                               fontSize: 12,
@@ -353,96 +352,109 @@ class _BossUpSectionState extends State<BossUpSection> {
                           const SizedBox(
                             height: 10,
                           ),
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (BuildContext context) =>
-                                        const Bossuppartner()),
-                              );
-                            },
-                            child: Padding(
-                              padding: const EdgeInsets.only(
-                                right: 20,
-                                left: 20,
-                                bottom: 10,
-                              ),
-                              child: Container(
-                                height: 40,
-                                decoration: BoxDecoration(
-                                  color: const Color(0xFFF4F4F4),
-                                  borderRadius: BorderRadius.circular(10),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.grey.withOpacity(0.3),
-                                      spreadRadius: 20,
-                                      blurRadius: 500,
-                                      offset: const Offset(0, 3),
+                          hmeController.bossUp != null &&
+                                  hmeController.bossUp!.isNotEmpty
+                              ? GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (BuildContext context) =>
+                                              const Bossuppartner()),
+                                    );
+                                  },
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                      right: 20,
+                                      left: 20,
+                                      bottom: 10,
                                     ),
-                                  ],
-                                ),
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                      color: const Color(0xFFFFFFFF)
-                                          .withAlpha(150),
-                                      borderRadius: BorderRadius.circular(10),
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Colors.white.withOpacity(1),
-                                          spreadRadius: 20,
-                                          blurRadius: 500,
-                                          offset: const Offset(0, 3),
-                                        ),
-                                      ]),
-                                  child: Row(
-                                    children: [
-                                      const Padding(
-                                        padding: EdgeInsets.only(
-                                          left: 10,
-                                        ),
-                                        child: Center(
-                                          child: Padding(
-                                            padding: EdgeInsets.all(2),
-                                            child: Text(
-                                              'Boss Up by',
-                                              style: TextStyle(fontSize: 11),
-                                            ),
+                                    child: Container(
+                                      height: 40,
+                                      decoration: BoxDecoration(
+                                        color: const Color(0xFFF4F4F4),
+                                        borderRadius: BorderRadius.circular(10),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Colors.grey.withOpacity(0.3),
+                                            spreadRadius: 20,
+                                            blurRadius: 500,
+                                            offset: const Offset(0, 3),
                                           ),
+                                        ],
+                                      ),
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                            color: const Color(0xFFFFFFFF)
+                                                .withAlpha(150),
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color:
+                                                    Colors.white.withOpacity(1),
+                                                spreadRadius: 20,
+                                                blurRadius: 500,
+                                                offset: const Offset(0, 3),
+                                              ),
+                                            ]),
+                                        child: Row(
+                                          children: [
+                                            const Padding(
+                                              padding: EdgeInsets.only(
+                                                left: 10,
+                                              ),
+                                              child: Center(
+                                                child: Padding(
+                                                  padding: EdgeInsets.all(2),
+                                                  child: Text(
+                                                    'Boss Up by',
+                                                    style:
+                                                        TextStyle(fontSize: 11),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            const SizedBox(width: 10),
+                                            Text(
+                                              '|',
+                                              style: TextStyle(
+                                                  fontSize: 20,
+                                                  color: textColor
+                                                      .withOpacity(0.5)),
+                                            ),
+                                            const SizedBox(width: 10),
+                                            Text(
+                                              hmeController.bossUp != null &&
+                                                      hmeController
+                                                          .bossUp!.isNotEmpty
+                                                  ? hmeController.bossUp!.last[
+                                                          'companyName'] ??
+                                                      ''
+                                                  : '',
+                                              style: const TextStyle(
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                              overflow: TextOverflow.ellipsis,
+                                              softWrap: false,
+                                            ),
+                                            const Spacer(),
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                  right: 10.0),
+                                              child: SvgPicture.asset(
+                                                'assets/svgs/nexticon.svg',
+                                                color: textColor,
+                                              ),
+                                            )
+                                          ],
                                         ),
                                       ),
-                                      const SizedBox(width: 10),
-                                      Text(
-                                        '|',
-                                        style: TextStyle(
-                                            fontSize: 20,
-                                            color: textColor.withOpacity(0.5)),
-                                      ),
-                                      const SizedBox(width: 10),
-                                      Text(
-                                        'Partners'.substring(0, 8),
-                                        style: const TextStyle(
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                        overflow: TextOverflow.ellipsis,
-                                        softWrap: false,
-                                      ),
-                                      const Spacer(),
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(right: 10.0),
-                                        child: SvgPicture.asset(
-                                          'assets/svgs/nexticon.svg',
-                                          color: textColor,
-                                        ),
-                                      )
-                                    ],
+                                    ),
                                   ),
-                                ),
-                              ),
-                            ),
-                          ),
+                                )
+                              : const SizedBox(),
                         ],
                       ),
                     )
