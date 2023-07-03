@@ -120,7 +120,7 @@ class _BossUpSectionState extends State<BossUpSection> {
                                         width: 5,
                                       ),
                                       SvgPicture.asset(
-                                          'assets/svgs/enterchallenge.svg')
+                                          'assets/svgs/startatopic.svg')
                                     ],
                                   ),
                                 ),
@@ -144,11 +144,8 @@ class _BossUpSectionState extends State<BossUpSection> {
                                   width: double.infinity,
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(15.0),
-                                    child: FittedBox(
-                                      fit: BoxFit.fill,
-                                      child: Image.asset(
-                                          'assets/images/postbackground.png'),
-                                    ),
+                                    child:
+                                        const ColoredBox(color: Colors.white),
                                   ),
                                 ),
                                 Column(

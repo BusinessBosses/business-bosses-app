@@ -608,8 +608,9 @@ class _MarketTileState extends State<MarketTile> {
               ],
             ),
           ),
-          const SizedBox(
-            height: 7,
+          Container(
+            color: backgroundcolorinterface,
+            height: 5,
           )
         ],
       );

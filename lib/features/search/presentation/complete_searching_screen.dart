@@ -15,6 +15,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 import '../../../action/action.dart';
+import '../widgets/filterposts.dart';
 
 class CompleteSearchingScreen extends StatefulWidget {
   static const String routeName = '/completesearchingScreen';
@@ -72,7 +73,7 @@ class _CompleteSearchingScreenState extends State<CompleteSearchingScreen>
                 tabs: const <Widget>[
                   Tab(
                     child: TextWidget(
-                      text: 'Users',
+                      text: 'People',
                       size: 20,
                       fontWeight: FontWeight.w700,
                     ),
@@ -117,7 +118,9 @@ class _CompleteSearchingScreenState extends State<CompleteSearchingScreen>
                         isSearch: controller.isUserSearch.value,
                       ),
                       FilterPosts(
-                        filterItems: controller.searchedPosts,
+                        filterItems: !controller.isPostSearch.value
+                            ? controller.searchedPosts
+                            : controller.recommendedPosts,
                         isLoading: controller.loading.value ||
                             controller.loadingSearch.value,
                       ),
@@ -139,45 +142,45 @@ class _CompleteSearchingScreenState extends State<CompleteSearchingScreen>
 }
 
 /// FILTER POSTS
-class FilterPosts extends StatelessWidget {
-  final List<PostModel> filterItems;
-  final bool isLoading;
+// class FilterPosts extends StatelessWidget {
+//   final List<PostModel> filterItems;
+//   final bool isLoading;
 
-  /// CONSTRUCTOR
-  const FilterPosts({
-    Key? key,
-    this.filterItems = const <PostModel>[],
-    this.isLoading = false,
-  }) : super(key: key);
+//   /// CONSTRUCTOR
+//   const FilterPosts({
+//     Key? key,
+//     this.filterItems = const <PostModel>[],
+//     this.isLoading = false,
+//   }) : super(key: key);
 
-  @override
-  Widget build(BuildContext context) {
-    final HomeController homeController = Get.find();
-    return filterItems.isEmpty
-        ? SafetyModel(
-            icon: const Icon(
-              Icons.edit,
-              size: 80.0,
-              color: hintColor,
-            ),
-            title: 'No post found',
-            subTitle: 'Your search posts will be displayed here!',
-            isLoading: isLoading,
-          )
-        : ListView.separated(
-            key: key,
-            separatorBuilder: (_, __) => const SizedBox(height: 8.0),
-            padding: const EdgeInsets.all(16.0),
-            itemCount: filterItems.length ?? 0,
-            itemBuilder: (BuildContext context, int i) {
-              return PostTile(
-                post: filterItems[i],
-                controller: homeController,
-              );
-            },
-          );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     final HomeController homeController = Get.find();
+//     return filterItems.isEmpty
+//         ? SafetyModel(
+//             icon: const Icon(
+//               Icons.edit,
+//               size: 80.0,
+//               color: hintColor,
+//             ),
+//             title: 'No post found',
+//             subTitle: 'Your search posts will be displayed here!',
+//             isLoading: isLoading,
+//           )
+//         : ListView.separated(
+//             key: key,
+//             separatorBuilder: (_, __) => const SizedBox(height: 8.0),
+//             padding: const EdgeInsets.all(16.0),
+//             itemCount: filterItems.length ?? 0,
+//             itemBuilder: (BuildContext context, int i) {
+//               return PostTile(
+//                 post: filterItems[i],
+//                 controller: homeController,
+//               );
+//             },
+//           );
+//   }
+// }
 
 /// FILTER FORUMS
 class FilterForum extends StatelessWidget {
