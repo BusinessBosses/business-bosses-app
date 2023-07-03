@@ -68,6 +68,7 @@ class _CreateForumScreenState extends State<CreateForumScreen> {
         return GestureDetector(
           onTap: () => unFocusKeyboard(context),
           child: Scaffold(
+            backgroundColor: backgroundcolorinterface,
             key: scaffoldKey,
             appBar: AppBar(
               title: Text(

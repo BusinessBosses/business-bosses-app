@@ -46,56 +46,93 @@ class MCustomButton extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           child ?? Container(),
-                          label != null
-                              ? Text(
-                                  label!,
-                                  style: headline6.copyWith(
-                                      fontWeight: FontWeight.bold),
-                                )
-                              : Container(),
+                          if (label != null)
+                            Text(
+                              label!,
+                              style: headline6.copyWith(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
                         ],
                       ),
                     ),
             ),
           )
-        : Container(
-            margin: margin,
-            width: width,
-            height: height,
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                elevation: 0.0,
-              ),
-              onPressed: isProcessing ? null : onPressed as void Function()?,
-              child: isProcessing
-                  ? const SizedBox(
-                      width: 24.0,
-                      height: 24.0,
-                      child: CircularProgressIndicator(),
-                    )
-                  : FittedBox(
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          child ?? Container(),
-                          label != null
-                              ? Text(
+        : buttonType == ButtonType.outlinegrey
+            ? Container(
+                margin: margin,
+                width: width,
+                height: height,
+                child: OutlinedButton(
+                  style: OutlinedButton.styleFrom(
+                    side: BorderSide(
+                      color: Colors.grey, // Adjust the color as needed
+                    ),
+                  ),
+                  onPressed:
+                      isProcessing ? null : onPressed as void Function()?,
+                  child: isProcessing
+                      ? const SizedBox(
+                          width: 24.0,
+                          height: 24.0,
+                          child: CircularProgressIndicator(),
+                        )
+                      : FittedBox(
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              child ?? Container(),
+                              if (label != null)
+                                Text(
+                                  label!,
+                                  style: headline6.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                    color: const Color(0xFF4B4B4B),
+                                  ),
+                                ),
+                            ],
+                          ),
+                        ),
+                ),
+              )
+            : Container(
+                margin: margin,
+                width: width,
+                height: height,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    elevation: 0.0,
+                  ),
+                  onPressed:
+                      isProcessing ? null : onPressed as void Function()?,
+                  child: isProcessing
+                      ? const SizedBox(
+                          width: 24.0,
+                          height: 24.0,
+                          child: CircularProgressIndicator(),
+                        )
+                      : FittedBox(
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              child ?? Container(),
+                              if (label != null)
+                                Text(
                                   label!,
                                   style: headline6.copyWith(
                                     fontWeight: FontWeight.bold,
                                     color: Colors.white,
                                   ),
-                                )
-                              : Container(),
-                        ],
-                      ),
-                    ),
-            ),
-          );
+                                ),
+                            ],
+                          ),
+                        ),
+                ),
+              );
   }
 }
 
 /// BUTTON TYPE
-// ignore: public_member_api_docs
-enum ButtonType { outline, elevated }
+enum ButtonType { outline, elevated, outlinegrey }

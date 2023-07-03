@@ -1,37 +1,32 @@
 class MyTitle {
-  String categoryId;
-  int timestamp;
-  String category;
+  int id;
+  String? title;
 
   MyTitle({
-    required this.categoryId,
-    required this.timestamp,
-    required this.category,
+    required this.id,
+    this.title,
   });
 
   factory MyTitle.toObject(Map<dynamic, dynamic> map) {
     return MyTitle(
-      categoryId: map['categoryId'] as String,
-      timestamp: int.parse(map['timestamp'].toString()),
-      category: map['category'] as String,
+      id: map['id'] as int,
+      title: map['title'] as String,
     );
   }
 
   Map<dynamic, dynamic> toMap() {
     // ignore: unnecessary_cast
     return {
-      'categoryId': categoryId,
-      'timestamp': timestamp,
-      'category': category,
+      'id': id,
+      'title': title,
     } as Map<dynamic, dynamic>;
   }
 
   Map<dynamic, dynamic> toSetMap() {
     // ignore: unnecessary_cast
     return {
-      'categoryId': categoryId,
-      'timestamp': DateTime.now().millisecondsSinceEpoch,
-      'category': category,
+      'id': id,
+      'title': title,
     } as Map<dynamic, dynamic>;
   }
 
@@ -45,7 +40,8 @@ class MyTitle {
       final MyTitle cat = MyTitle.toObject(snapshot[i]);
       cats.add(cat);
     }
-
+    // Sort the cats list alphabetically by the title property
+    cats.sort((MyTitle a, MyTitle b) => a.title!.compareTo(b.title!));
     return cats;
   }
 }

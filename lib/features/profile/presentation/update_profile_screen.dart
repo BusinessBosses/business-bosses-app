@@ -1407,7 +1407,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
       if (analyser == Analyser.category) {
         MyTitle category = res.data;
         setState(() {
-          _category = category.category;
+          _category = category.title;
         });
       } else if (analyser == Analyser.industry) {
         Industry industry = res.data;

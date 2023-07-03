@@ -47,6 +47,7 @@ class PostTile extends StatefulWidget {
 class _PostTileState extends State<PostTile> {
   bool hide = false;
   final ProfileController profileController = Get.find();
+  final HomeController homeController = Get.find();
 
   Future<void> connect(String userId) async {
     // ignore: unused_local_variable
@@ -78,26 +79,26 @@ class _PostTileState extends State<PostTile> {
     if (checkConnected == -1) {
       // connecteds.add(user);
       profileController.updateConnections(widget.post.user!.uid);
-      // setState(() {
-      //   publicUser = UserModel.fromMap({
-      //     ...widget.post.user!.toMap(),
-      //     'connectionCount': widget.post.user!.connectionCount == null
-      //         ? 1
-      //         : widget.post.user!.connectionCount! + 1
-      //   });
-      // });
+      setState(() {
+        UserModel.fromMap({
+          ...widget.post.user!.toMap(),
+          'connectionCount': widget.post.user!.connectionCount == null
+              ? 1
+              : widget.post.user!.connectionCount! + 1
+        });
+      });
       await connect(widget.post.user!.uid);
     } else {
       profileController.updateConnections(widget.post.user!.uid);
 
-      // setState(() {
-      //   publicUser = UserModel.fromMap({
-      //     ...widget.post.user!.toMap(),
-      //     'connectionCount': widget.post.user!.connectionCount == null
-      //         ? null
-      //         : widget.post.user!.connectionCount! - 1
-      //   });
-      // });
+      setState(() {
+        UserModel.fromMap({
+          ...widget.post.user!.toMap(),
+          'connectionCount': widget.post.user!.connectionCount == null
+              ? null
+              : widget.post.user!.connectionCount! - 1
+        });
+      });
       // connecteds.removeAt(checkConnected);
       await disconnect(widget.post.user!.uid);
     }
@@ -163,8 +164,6 @@ class _PostTileState extends State<PostTile> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Container(
-            padding: const EdgeInsets.all(0.0),
-            margin: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 0.0),
             width: double.infinity,
             decoration: BoxDecoration(
                 color: Colors.white, borderRadius: BorderRadius.circular(0)),
@@ -207,20 +206,26 @@ class _PostTileState extends State<PostTile> {
                       }
                     },
                     child: widget.post.user!.isSubscribed
-                        ? Row(
-                            children: [
-                              Text(
-                                widget.post.user!.name != null &&
-                                        widget.post.user!.name!.length <= 20
-                                    ? widget.post.user!.name!
-                                    : widget.post.user!.name != null
-                                        ? "${widget.post.user!.name!.substring(0, 20)}..."
-                                        : widget.post.user!.username,
-                                style: Theme.of(context).textTheme.bodyLarge,
-                              ),
-                              const SizedBox(width: 7),
-                              SvgPicture.asset('assets/svgs/premiumbadge.svg')
-                            ],
+                        ? Padding(
+                            padding: const EdgeInsets.only(top: 16.0),
+                            child: Row(
+                              children: [
+                                Text(
+                                  widget.post.user!.name != null &&
+                                          widget.post.user!.name!.length <= 20
+                                      ? widget.post.user!.name!
+                                      : widget.post.user!.name != null
+                                          ? "${widget.post.user!.name!.substring(0, 20)}..."
+                                          : widget.post.user!.username,
+                                  style: Theme.of(context).textTheme.bodyLarge,
+                                ),
+                                const SizedBox(width: 7),
+                                SvgPicture.asset(
+                                  'assets/svgs/premiumbadge.svg',
+                                  height: 16,
+                                )
+                              ],
+                            ),
                           )
                         : Text(
                             widget.post.user!.name != null &&
@@ -366,8 +371,8 @@ class _PostTileState extends State<PostTile> {
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                             ),
-                            SizedBox(
-                              height: 10,
+                            const SizedBox(
+                              height: 5,
                             ),
                             premiumButtonHeader(widget.post.user!,
                                 profileController.myProfile, connectToUser)
@@ -533,8 +538,9 @@ class _PostTileState extends State<PostTile> {
               ],
             ),
           ),
-          const SizedBox(
-            height: 7,
+          Container(
+            color: backgroundcolorinterface,
+            height: 5,
           )
         ],
       );
@@ -590,7 +596,7 @@ class _PostTileState extends State<PostTile> {
                           ApiService.post(
                             path: 'blockedpost',
                             body: <String, dynamic>{
-                              'userId': widget.post.user?.uid
+                              'postId': widget.post.user?.uid
                             },
                           );
                           widget.controller

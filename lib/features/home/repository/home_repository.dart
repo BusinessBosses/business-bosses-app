@@ -69,4 +69,11 @@ class HomeRepository {
     final ApiResponseModel response = await ApiService.get(path: 'partner/all');
     return response;
   }
+
+  /// Fetch Blocked User
+  static Future<ApiResponseModel> fetchBlocked() async {
+    final ApiResponseModel response =
+        await ApiService.get(path: 'blockedpost/user');
+    return response;
+  }
 }

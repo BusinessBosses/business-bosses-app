@@ -35,6 +35,7 @@ class HomeController extends GetxController {
   RxList<PostModel> posts = RxList<PostModel>(<PostModel>[]);
   RxList<ForumModel> forums = RxList<ForumModel>(<ForumModel>[]);
   List<Map<String, dynamic>> mixedPosts = [];
+  List<String> blocked = [];
 
   /// PROCESS RAW API DATA, MODELIZE AND SAVE TO STATE
   void processPostsToState(dynamic post) {
@@ -234,6 +235,14 @@ class HomeController extends GetxController {
     update();
   }
 
+  // void loadBlocked() async {
+  //   final ApiResponseModel data = await HomeRepository.fetchBlocked();
+  //   var rows = data.data['rows'];
+  //   for (var row in rows) {
+  //     blocked.addAll(List<String>.from(row['postsId']));
+  //   }
+  // }
+
   /// SHOW WHEN ACCESS TOKEN EXPIRES
   void showAccessTokenDialog() {
     showDialog(
@@ -301,7 +310,7 @@ class HomeController extends GetxController {
     int dataTime = profileController.myProfile.bossOfTheWeekUpTimeStamp ?? 0;
     int lastExecutionTimestamp = sandBox.read('lastExecutionTimestamp') ?? 0;
     if ((currentTimestamp - lastExecutionTimestamp >= 24 * 60 * 60 * 1000) &&
-        (dataTime - lastExecutionTimestamp >= 24 * 60 * 60 * 1000)) {
+        (currentTimestamp - dataTime >= 24 * 60 * 60 * 1000)) {
       // The action hasn't been executed today, save the current timestamp
       sandBox.write('lastExecutionTimestamp', currentTimestamp);
       ApiService.put(
@@ -429,9 +438,6 @@ class HomeController extends GetxController {
     _chatController = Get.put(ChatController());
     initSocket();
     loadData();
-    Get.put(CommunitiesController());
-    Get.put(BossUpController());
-    // fetchIndustries();
     super.onInit();
   }
 

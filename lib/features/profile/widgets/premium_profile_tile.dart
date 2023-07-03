@@ -16,8 +16,8 @@ Widget premiumButtonHeader(
 ) {
   bool connectedbutton = true;
   return Container(
-    height: 38.0,
-    padding: const EdgeInsets.all(4.0),
+    height: 32.0,
+    padding: const EdgeInsets.all(0.0),
     width: double.infinity,
     child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
       Expanded(
@@ -25,39 +25,42 @@ Widget premiumButtonHeader(
               buttonType: connectedbutton == true
                   ? ButtonType.outline
                   : ButtonType.elevated,
-              margin: const EdgeInsets.symmetric(horizontal: 4.0),
+              margin: const EdgeInsets.only(right: 8.0),
               child: FittedBox(
                 child: myProfile.connecteds != null &&
                         myProfile.connecteds!.contains(publicUser.uid)
                     ? const Text(
                         'Connected',
-                        style: TextStyle(color: primaryColorLT),
+                        style: TextStyle(
+                            color: primaryColorLT, fontWeight: FontWeight.w600),
                       )
                     : const Text(
                         'Connect',
-                        style: TextStyle(color: primaryColorLT),
+                        style: TextStyle(
+                            color: primaryColorLT, fontWeight: FontWeight.w600),
                       ),
               ),
               onPressed: () async {
                 onConnect();
               })),
       Expanded(
-        child: MCustomButton(
-            margin: const EdgeInsets.symmetric(horizontal: 4.0),
-            onPressed: () async {
-              if (myProfile.connectedCount == 0 &&
-                  myProfile.connectionCount == 0) {
-                String message =
-                    'Have a look at ${publicUser.username}\'s profile on Business Bosses\n'
-                    'https://businessbosses.onelink.me/xLWk/36a2ff16';
-                socialShare(message);
-              } else {
-                Get.toNamed(Routes.referscreen,
-                    arguments: {'user': publicUser});
-              }
-            },
-            child: const Text('Refer')),
-      ),
+          child: MCustomButton(
+        buttonType: ButtonType.outlinegrey,
+        margin: const EdgeInsets.only(right: 20.0),
+        onPressed: () async {
+          if (myProfile.connectedCount == 0 && myProfile.connectionCount == 0) {
+            String message =
+                'Have a look at ${publicUser.username}\'s profile on Business Bosses\n'
+                'https://businessbosses.onelink.me/xLWk/36a2ff16';
+            socialShare(message);
+          } else {
+            Get.toNamed(Routes.referscreen, arguments: {'user': publicUser});
+          }
+        },
+        child: const Text('Refer',
+            style: TextStyle(
+                color: Color(0xFF4B4B4B), fontWeight: FontWeight.w600)),
+      )),
     ]),
   );
 }
