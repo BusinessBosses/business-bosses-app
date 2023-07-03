@@ -145,15 +145,15 @@ class Nav {
     GetPage(
       name: Routes.marketPlace,
       page: () => const MarketplaceScreen(),
-      // binding: BindingsBuilder.put(() => MarketController()),
+      binding: BindingsBuilder.put(() => MarketController()),
     ),
     GetPage(
       name: Routes.allCommunitiesScreen,
       page: () => const AllCommunitiesScreen(),
-      // bindings: [
-      //   BindingsBuilder.put(() => BossUpController()),
-      //   BindingsBuilder.put(() => CommunitiesController()),
-      // ],
+      bindings: [
+        BindingsBuilder.put(() => BossUpController()),
+        BindingsBuilder.put(() => CommunitiesController()),
+      ],
       // binding: BindingsBuilder.put(() => BossUpController()),
     ),
     GetPage(
