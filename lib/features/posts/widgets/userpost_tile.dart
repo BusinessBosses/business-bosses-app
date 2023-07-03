@@ -47,6 +47,7 @@ class PostTile extends StatefulWidget {
 class _PostTileState extends State<PostTile> {
   bool hide = false;
   final ProfileController profileController = Get.find();
+  final HomeController homeController = Get.find();
 
   Future<void> connect(String userId) async {
     // ignore: unused_local_variable
@@ -595,7 +596,7 @@ class _PostTileState extends State<PostTile> {
                           ApiService.post(
                             path: 'blockedpost',
                             body: <String, dynamic>{
-                              'userId': widget.post.user?.uid
+                              'postId': widget.post.user?.uid
                             },
                           );
                           widget.controller
