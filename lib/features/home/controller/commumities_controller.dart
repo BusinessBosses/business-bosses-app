@@ -141,6 +141,7 @@ class CommunitiesController extends GetxController {
     // TODO: implement onInit
     socket = _homeController.socket;
     fetchIndustries();
+    // industries = _homeController.industries;
 
     super.onInit();
   }
