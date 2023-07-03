@@ -512,7 +512,9 @@ class _ForumItemState extends State<ForumItem> {
                                 style: Theme.of(context).textTheme.bodyLarge,
                               ),
                       ),
-                      subtitle: widget.forum.user!.isSubscribed
+                      subtitle: widget.forum.user!.isSubscribed &&
+                              widget.forum.user!.uid !=
+                                  profileController.myProfile.uid
                           ? Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [

@@ -258,6 +258,12 @@ class HomeController extends GetxController {
     update();
   }
 
+  void clearData() {
+    // Reset the data variables to their initial state
+    posts.clear();
+    forums.clear();
+  }
+
   // void loadBlocked() async {
   //   final ApiResponseModel data = await HomeRepository.fetchBlocked();
   //   var rows = data.data['rows'];
@@ -404,11 +410,12 @@ class HomeController extends GetxController {
     refreshing(true);
     // error(false);
     update();
+    Get.find<HomeController>().clearData();
     final ApiResponseModel response = await HomeRepository.fetchRefreshData();
     if (response.success) {
       processPostsAndForumsData(response.data['posts']);
-      profileController.processDataToState(
-          response.data['user'], response.data['interests']);
+      // profileController.processDataToState(
+      //     response.data['user'], response.data['interests']);
     } else {
       error(true);
       showSnackbar(title: 'OOPS!', message: response.message, error: true);
