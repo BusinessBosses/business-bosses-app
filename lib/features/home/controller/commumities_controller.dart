@@ -128,6 +128,7 @@ class CommunitiesController extends GetxController {
     final ApiResponseModel response = await HomeRepository.fetchIndustries();
     if (response.success) {
       industries = Industry.toIndustries(snapshot: response.data['rows']);
+      _homeController.addIndustries(industries);
     } else {
       error(true);
     }
@@ -140,7 +141,12 @@ class CommunitiesController extends GetxController {
   void onInit() {
     // TODO: implement onInit
     socket = _homeController.socket;
-    fetchIndustries();
+    if (_homeController.industries.isEmpty) {
+      fetchIndustries();
+    } else {
+      industries = _homeController.industries;
+    }
+    // industries = _homeController.industries;
 
     super.onInit();
   }

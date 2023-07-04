@@ -7,6 +7,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../common/models/user_model.dart';
+import '../../common/widgets/buttons/my_outlined_button.dart';
 import '../../common/widgets/safety_model.dart';
 import '../../services/api_service.dart';
 import '../../utils/constants/constants.dart';
@@ -258,7 +259,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                 children: [
                                   Container(
                                     width: double.infinity,
-                                    color: Colors.transparent,
+                                    color: backgroundcolorinterface,
                                     child: Stack(
                                       children: [
                                         Padding(
@@ -335,37 +336,25 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                             ),
                                           ),
                                           Container(
-                                            decoration: BoxDecoration(
-                                              boxShadow: [
-                                                BoxShadow(
-                                                  color: Colors.black
-                                                      .withOpacity(0.09),
-                                                  blurRadius:
-                                                      100.0, // soften the shadow
-                                                  spreadRadius:
-                                                      5, //extend the shadow
-                                                )
-                                              ],
+                                            decoration: const BoxDecoration(
+                                              color: backgroundcolorinterface,
                                             ),
                                             child: Stack(
                                               children: <Widget>[
                                                 Container(
                                                   margin: const EdgeInsets.only(
+                                                      bottom: 10,
                                                       top: 10,
                                                       right: 20,
-                                                      left: 20,
-                                                      bottom: 10),
+                                                      left: 20),
                                                   height: 150,
                                                   width: double.infinity,
                                                   child: ClipRRect(
                                                     borderRadius:
                                                         BorderRadius.circular(
                                                             15.0),
-                                                    child: FittedBox(
-                                                      fit: BoxFit.fill,
-                                                      child: Image.asset(
-                                                          'assets/images/postbackground.png'),
-                                                    ),
+                                                    child: const ColoredBox(
+                                                        color: Colors.white),
                                                   ),
                                                 ),
                                                 Column(
@@ -810,7 +799,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                         ),
                       ),
                     ),
-                    BottomBar(
+                    const BottomBar(
                       activeIndex: 2,
                     )
                   ],
@@ -837,61 +826,55 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
 
   Widget joinedButton() {
     return GestureDetector(
-        onTap: () async {
-          final SharedPreferences prefs = await SharedPreferences.getInstance();
-          final String? userId = prefs.getString(Constants.USER_ID);
-          await ApiService.post(path: 'members', body: <String, dynamic>{
-            'type': 'marketplace',
-          });
-          setState(() {
-            if (_marketController.isJoined.value) {
-              _marketController.users
-                  .removeWhere((UserModel user) => user.uid == userId);
-            } else {
-              _marketController.users.add(_profileController.myProfile);
-            }
-            _marketController.isJoined.value =
-                !_marketController.isJoined.value;
-          });
-        },
-        child: Container(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 12.0,
-          ),
-          alignment: Alignment.center,
-          child: Material(
-            elevation: 4.0,
-            shadowColor: Colors.black.withOpacity(0.2),
-            borderRadius: BorderRadius.circular(10),
-            child: Container(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 20.0,
-                vertical: 10.0,
-              ),
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(10),
-                  boxShadow: [
-                    BoxShadow(
-                      offset: Offset(0, 0),
-                      color: Colors.black.withAlpha(80),
-                      blurRadius: 100.0, // soften the shadow
-                      spreadRadius: 5, //extend the shadow
-                    )
-                  ]),
-              child: Obx(
-                () => Text(
-                  _marketController.isJoined.value ? 'Leave' : 'Join',
-                  style: const TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w700,
-                    color: primaryColorLT,
+      onTap: () async {
+        final SharedPreferences prefs = await SharedPreferences.getInstance();
+        final String? userId = prefs.getString(Constants.USER_ID);
+        await ApiService.post(path: 'members', body: <String, dynamic>{
+          'type': 'marketplace',
+        });
+        setState(() {
+          if (_marketController.isJoined.value) {
+            _marketController.users
+                .removeWhere((UserModel user) => user.uid == userId);
+          } else {
+            _marketController.users.add(_profileController.myProfile);
+          }
+          _marketController.isJoined.value = !_marketController.isJoined.value;
+        });
+      },
+      child: Container(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 12.0,
+        ),
+        alignment: Alignment.center,
+        child: SizedBox(
+          height: 38,
+          width: 80,
+          child: Obx(() => !_marketController.isJoined.value
+              ? const MCustomButton(
+                  child: Text(
+                    'Join',
+                    style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w700,
+                      color: primaryColorLT,
+                    ),
                   ),
-                ),
-              ),
-            ),
-          ),
-        ));
+                )
+              : const MCustomButton(
+                  buttonType: ButtonType.outlinegrey,
+                  child: Text(
+                    'Leave',
+                    style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w700,
+                      color: Color(0xFF777777),
+                    ),
+                  ),
+                )),
+        ),
+      ),
+    );
   }
 
   Widget sellingGuide() {

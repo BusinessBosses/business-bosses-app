@@ -164,8 +164,6 @@ class _PostTileState extends State<PostTile> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Container(
-            padding: const EdgeInsets.all(0.0),
-            margin: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 0.0),
             width: double.infinity,
             decoration: BoxDecoration(
                 color: Colors.white, borderRadius: BorderRadius.circular(0)),
@@ -208,20 +206,26 @@ class _PostTileState extends State<PostTile> {
                       }
                     },
                     child: widget.post.user!.isSubscribed
-                        ? Row(
-                            children: [
-                              Text(
-                                widget.post.user!.name != null &&
-                                        widget.post.user!.name!.length <= 20
-                                    ? widget.post.user!.name!
-                                    : widget.post.user!.name != null
-                                        ? "${widget.post.user!.name!.substring(0, 20)}..."
-                                        : widget.post.user!.username,
-                                style: Theme.of(context).textTheme.bodyLarge,
-                              ),
-                              const SizedBox(width: 7),
-                              SvgPicture.asset('assets/svgs/premiumbadge.svg')
-                            ],
+                        ? Padding(
+                            padding: const EdgeInsets.only(top: 16.0),
+                            child: Row(
+                              children: [
+                                Text(
+                                  widget.post.user!.name != null &&
+                                          widget.post.user!.name!.length <= 20
+                                      ? widget.post.user!.name!
+                                      : widget.post.user!.name != null
+                                          ? "${widget.post.user!.name!.substring(0, 20)}..."
+                                          : widget.post.user!.username,
+                                  style: Theme.of(context).textTheme.bodyLarge,
+                                ),
+                                const SizedBox(width: 7),
+                                SvgPicture.asset(
+                                  'assets/svgs/premiumbadge.svg',
+                                  height: 16,
+                                )
+                              ],
+                            ),
                           )
                         : Text(
                             widget.post.user!.name != null &&
@@ -355,7 +359,9 @@ class _PostTileState extends State<PostTile> {
                       ],
                     ),
                   ),
-                  subtitle: widget.post.user!.isSubscribed
+                  subtitle: widget.post.user!.isSubscribed &&
+                          widget.post.user!.uid !=
+                              profileController.myProfile.uid
                       ? Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -367,8 +373,8 @@ class _PostTileState extends State<PostTile> {
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                             ),
-                            SizedBox(
-                              height: 10,
+                            const SizedBox(
+                              height: 5,
                             ),
                             premiumButtonHeader(widget.post.user!,
                                 profileController.myProfile, connectToUser)
@@ -534,8 +540,9 @@ class _PostTileState extends State<PostTile> {
               ],
             ),
           ),
-          const SizedBox(
-            height: 7,
+          Container(
+            color: backgroundcolorinterface,
+            height: 5,
           )
         ],
       );

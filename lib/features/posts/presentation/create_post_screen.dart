@@ -173,18 +173,11 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                       padding: const EdgeInsets.symmetric(horizontal: 20),
                       child: Preview(controller: controller),
                     ),
-                  const SizedBox(
-                    width: double.infinity,
-                    height: 1,
-                    child: ColoredBox(color: backgroundcolorinterface),
-                  ),
                   widget.postId == null
                       ? PromoteSection(controller: controller)
-                      : const SizedBox(),
+                      : Container(),
                   const SizedBox(
-                    width: double.infinity,
-                    height: 1,
-                    child: ColoredBox(color: backgroundcolorinterface),
+                    height: 20,
                   ),
                   Padding(
                     padding: const EdgeInsets.only(left: 15, right: 15),

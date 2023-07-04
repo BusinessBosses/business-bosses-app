@@ -106,19 +106,34 @@ class _PublicProfileTileState extends State<PublicProfileTile> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: 6.0),
-                  Text(
-                    widget.myProfile.name != null &&
-                            widget.myProfile.name!.length <= 20
-                        ? widget.myProfile.name!
-                        : widget.myProfile.name != null
-                            ? '${widget.myProfile.name!.substring(0, 20)}...'
-                            : '',
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          fontWeight: FontWeight.bold,
+                  widget.myProfile.isSubscribed
+                      ? Row(
+                          children: [
+                            Text(
+                              widget.myProfile.name != null &&
+                                      widget.myProfile.name!.length <= 20
+                                  ? widget.myProfile.name!
+                                  : widget.myProfile.name != null
+                                      ? "${widget.myProfile.name!.substring(0, 20)}..."
+                                      : widget.myProfile.username,
+                              style: Theme.of(context).textTheme.bodyLarge,
+                            ),
+                            const SizedBox(width: 7),
+                            SvgPicture.asset(
+                              'assets/svgs/premiumbadge.svg',
+                              height: 20,
+                            )
+                          ],
+                        )
+                      : Text(
+                          widget.myProfile.name != null &&
+                                  widget.myProfile.name!.length <= 20
+                              ? widget.myProfile.name!
+                              : widget.myProfile.name != null
+                                  ? "${widget.myProfile.name!.substring(0, 20)}..."
+                                  : widget.myProfile.username,
+                          style: Theme.of(context).textTheme.bodyLarge,
                         ),
-                  ),
                   Text(
                     widget.myProfile.category ?? '',
                     maxLines: 1,

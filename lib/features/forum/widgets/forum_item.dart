@@ -130,7 +130,7 @@ class _ForumItemState extends State<ForumItem> {
         : Column(
             children: [
               Container(
-                padding: const EdgeInsets.all(0.0),
+                padding: const EdgeInsets.only(top: 0.0),
                 margin: const EdgeInsets.only(bottom: 0),
                 width: double.infinity,
                 decoration: const BoxDecoration(
@@ -141,196 +141,218 @@ class _ForumItemState extends State<ForumItem> {
                   children: [
                     ListTile(
                       contentPadding:
-                          const EdgeInsets.only(left: 15.0, right: 15),
+                          const EdgeInsets.only(left: 15.0, right: 0),
                       trailing: widget.forum.user!.uid !=
                               profileController.myProfile.uid
-                          ? GestureDetector(
-                              onTap: () {
-                                showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) =>
-                                      AlertDialog(
-                                    content: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        ListTile(
-                                          onTap: () {
-                                            // Navigator.pop(context);
-                                            showDialog(
-                                              context: context,
-                                              builder: (BuildContext context) =>
-                                                  AlertDialog(
-                                                title: const TextWidget(
-                                                  text:
-                                                      'Do you want to block user?',
-                                                  centralize: true,
-                                                  fontWeight: FontWeight.w700,
-                                                  size: 20,
-                                                ),
-                                                content: TextWidget(
-                                                  text:
-                                                      'You will no longer see undefined posts and comments on your feed',
-                                                  centralize: true,
-                                                  color: Colors.black
-                                                      .withOpacity(.6),
-                                                ),
-                                                actions: [
-                                                  TextButton(
-                                                    onPressed: () =>
-                                                        Navigator.pop(context),
-                                                    child: const TextWidget(
-                                                      text: 'Cancel',
+                          ? SizedBox(
+                              height: 30,
+                              width: 80,
+                              child: GestureDetector(
+                                  onTap: () {
+                                    showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) =>
+                                          AlertDialog(
+                                        content: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            ListTile(
+                                              onTap: () {
+                                                // Navigator.pop(context);
+                                                showDialog(
+                                                  context: context,
+                                                  builder:
+                                                      (BuildContext context) =>
+                                                          AlertDialog(
+                                                    title: const TextWidget(
+                                                      text:
+                                                          'Do you want to block user?',
+                                                      centralize: true,
                                                       fontWeight:
                                                           FontWeight.w700,
-                                                      size: 18,
-                                                      color: Colors.grey,
+                                                      size: 20,
                                                     ),
+                                                    content: TextWidget(
+                                                      text:
+                                                          'You will no longer see undefined posts and comments on your feed',
+                                                      centralize: true,
+                                                      color: Colors.black
+                                                          .withOpacity(.6),
+                                                    ),
+                                                    actions: [
+                                                      TextButton(
+                                                        onPressed: () =>
+                                                            Navigator.pop(
+                                                                context),
+                                                        child: const TextWidget(
+                                                          text: 'Cancel',
+                                                          fontWeight:
+                                                              FontWeight.w700,
+                                                          size: 18,
+                                                          color: Colors.grey,
+                                                        ),
+                                                      ),
+                                                      GestureDetector(
+                                                        onTap: () {
+                                                          Navigator.pop(
+                                                              context);
+                                                          // print(_post.user.uid);
+                                                          setState(() {
+                                                            blocked.add(widget
+                                                                .forum
+                                                                .user!
+                                                                .uid);
+                                                          });
+                                                          // widget
+                                                          //     .onBlock(_post.user.uid);
+                                                          showSnackBar(context,
+                                                              message:
+                                                                  'User has been blocked');
+                                                        },
+                                                        child: Container(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .symmetric(
+                                                            vertical: 7,
+                                                            horizontal: 14,
+                                                          ),
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            color:
+                                                                primaryColorLT,
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        5),
+                                                          ),
+                                                          child:
+                                                              const TextWidget(
+                                                            text: 'Block',
+                                                            color: Colors.white,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                          ),
+                                                        ),
+                                                      )
+                                                    ],
                                                   ),
-                                                  GestureDetector(
-                                                    onTap: () {
-                                                      Navigator.pop(context);
-                                                      // print(_post.user.uid);
-                                                      setState(() {
-                                                        blocked.add(widget
-                                                            .forum.user!.uid);
-                                                      });
-                                                      // widget
-                                                      //     .onBlock(_post.user.uid);
-                                                      showSnackBar(context,
-                                                          message:
-                                                              'User has been blocked');
-                                                    },
-                                                    child: Container(
-                                                      padding: const EdgeInsets
-                                                          .symmetric(
-                                                        vertical: 7,
-                                                        horizontal: 14,
-                                                      ),
-                                                      decoration: BoxDecoration(
-                                                        color: primaryColorLT,
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(5),
-                                                      ),
-                                                      child: const TextWidget(
-                                                        text: 'Block',
-                                                        color: Colors.white,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                      ),
-                                                    ),
-                                                  )
-                                                ],
+                                                );
+                                              },
+                                              contentPadding: EdgeInsets.zero,
+                                              title: GestureDetector(
+                                                child: TextWidget(
+                                                  text:
+                                                      'Block @${widget.forum.user?.name}',
+                                                  color: Colors.blue,
+                                                ),
                                               ),
-                                            );
-                                          },
-                                          contentPadding: EdgeInsets.zero,
-                                          title: GestureDetector(
-                                            child: TextWidget(
-                                              text:
-                                                  'Block @${widget.forum.user?.name}',
-                                              color: Colors.blue,
                                             ),
-                                          ),
-                                        ),
-                                        ListTile(
-                                          onTap: () {
-                                            Navigator.of(context).pop(context);
-                                            showDialog(
-                                              context: context,
-                                              builder: (BuildContext context) =>
-                                                  AlertDialog(
-                                                title: const TextWidget(
-                                                  text:
-                                                      'Do you want to report post?',
-                                                  centralize: true,
-                                                  fontWeight: FontWeight.w700,
-                                                  size: 20,
-                                                ),
-                                                content: TextWidget(
-                                                  text:
-                                                      'The post will be reported to admin to evaluate if it violates any community policy',
-                                                  centralize: true,
-                                                  color: Colors.black
-                                                      .withOpacity(.6),
-                                                ),
-                                                actions: [
-                                                  TextButton(
-                                                    onPressed: () =>
-                                                        Navigator.pop(context),
-                                                    child: const TextWidget(
-                                                      text: 'Cancel',
+                                            ListTile(
+                                              onTap: () {
+                                                Navigator.of(context)
+                                                    .pop(context);
+                                                showDialog(
+                                                  context: context,
+                                                  builder:
+                                                      (BuildContext context) =>
+                                                          AlertDialog(
+                                                    title: const TextWidget(
+                                                      text:
+                                                          'Do you want to report post?',
+                                                      centralize: true,
                                                       fontWeight:
                                                           FontWeight.w700,
-                                                      size: 18,
-                                                      color: Colors.grey,
+                                                      size: 20,
                                                     ),
+                                                    content: TextWidget(
+                                                      text:
+                                                          'The post will be reported to admin to evaluate if it violates any community policy',
+                                                      centralize: true,
+                                                      color: Colors.black
+                                                          .withOpacity(.6),
+                                                    ),
+                                                    actions: [
+                                                      TextButton(
+                                                        onPressed: () =>
+                                                            Navigator.pop(
+                                                                context),
+                                                        child: const TextWidget(
+                                                          text: 'Cancel',
+                                                          fontWeight:
+                                                              FontWeight.w700,
+                                                          size: 18,
+                                                          color: Colors.grey,
+                                                        ),
+                                                      ),
+                                                      GestureDetector(
+                                                        onTap: () {
+                                                          Navigator.pop(
+                                                              context);
+                                                          showSnackBar(context,
+                                                              message:
+                                                                  'Post has been Reported');
+                                                        },
+                                                        child: Container(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .symmetric(
+                                                            vertical: 7,
+                                                            horizontal: 14,
+                                                          ),
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            color:
+                                                                primaryColorLT,
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        5),
+                                                          ),
+                                                          child:
+                                                              const TextWidget(
+                                                            text: 'Report',
+                                                            color: Colors.white,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                          ),
+                                                        ),
+                                                      )
+                                                    ],
                                                   ),
-                                                  GestureDetector(
-                                                    onTap: () {
-                                                      Navigator.pop(context);
-                                                      showSnackBar(context,
-                                                          message:
-                                                              'Post has been Reported');
-                                                    },
-                                                    child: Container(
-                                                      padding: const EdgeInsets
-                                                          .symmetric(
-                                                        vertical: 7,
-                                                        horizontal: 14,
-                                                      ),
-                                                      decoration: BoxDecoration(
-                                                        color: primaryColorLT,
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(5),
-                                                      ),
-                                                      child: const TextWidget(
-                                                        text: 'Report',
-                                                        color: Colors.white,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                      ),
-                                                    ),
-                                                  )
-                                                ],
+                                                );
+                                              },
+                                              contentPadding: EdgeInsets.zero,
+                                              title: const TextWidget(
+                                                text: 'Report this post',
+                                                color: Colors.red,
                                               ),
-                                            );
-                                          },
-                                          contentPadding: EdgeInsets.zero,
-                                          title: const TextWidget(
-                                            text: 'Report this post',
-                                            color: Colors.red,
-                                          ),
-                                        )
-                                      ],
-                                    ),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    );
+
+                                    // _showMorePostOptions(context, "forumReport",
+                                    //     widget.forum.forumId, "Report this Topic.");
+                                  },
+                                  child: Container(
+                                      height: double.infinity,
+                                      color: Colors.white,
+                                      child: const Icon(
+                                        Icons.more_horiz,
+                                        size: 20,
+                                        color: Colors.black,
+                                        weight: 100,
+                                      ))
+
+                                  // color: Colors.redAccent,
                                   ),
-                                );
-
-                                // _showMorePostOptions(context, "forumReport",
-                                //     widget.forum.forumId, "Report this Topic.");
-                              },
-                              child: Container(
-                                  height: double.infinity,
-                                  color: Colors.white,
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(
-                                        left: 15, right: 10),
-                                    child: SvgPicture.asset(
-                                      'assets/svgs/more.svg',
-                                      width: 5,
-                                      height: 3,
-                                    ),
-                                  )),
-
-                              // color: Colors.redAccent,
                             )
                           : SizedBox(
                               width: 60,
                               // width: leadingWidth(widget.forum),
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
+                                mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
                                   const SizedBox(height: 0.0, width: 0.0),
                                   widget.forum.user!.uid ==
@@ -457,23 +479,28 @@ class _ForumItemState extends State<ForumItem> {
                               arguments: widget.forum.user);
                         },
                         child: widget.forum.user!.isSubscribed == true
-                            ? Row(
-                                children: [
-                                  Text(
-                                    widget.forum.user?.name != null &&
-                                            widget.forum.user!.name!.length <=
-                                                15
-                                        ? widget.forum.user!.name!
-                                        : widget.forum.user?.name != null
-                                            ? '${widget.forum.user!.name!.substring(0, 15)}...'
-                                            : "",
-                                    style:
-                                        Theme.of(context).textTheme.bodyLarge,
-                                  ),
-                                  const SizedBox(width: 7),
-                                  SvgPicture.asset(
-                                      'assets/svgs/premiumbadge.svg')
-                                ],
+                            ? Padding(
+                                padding: const EdgeInsets.only(top: 16.0),
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      widget.forum.user?.name != null &&
+                                              widget.forum.user!.name!.length <=
+                                                  15
+                                          ? widget.forum.user!.name!
+                                          : widget.forum.user?.name != null
+                                              ? '${widget.forum.user!.name!.substring(0, 15)}...'
+                                              : "",
+                                      style:
+                                          Theme.of(context).textTheme.bodyLarge,
+                                    ),
+                                    const SizedBox(width: 7),
+                                    SvgPicture.asset(
+                                      'assets/svgs/premiumbadge.svg',
+                                      height: 16,
+                                    )
+                                  ],
+                                ),
                               )
                             : Text(
                                 widget.forum.user?.name != null &&
@@ -485,7 +512,9 @@ class _ForumItemState extends State<ForumItem> {
                                 style: Theme.of(context).textTheme.bodyLarge,
                               ),
                       ),
-                      subtitle: widget.forum.user!.isSubscribed
+                      subtitle: widget.forum.user!.isSubscribed &&
+                              widget.forum.user!.uid !=
+                                  profileController.myProfile.uid
                           ? Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -494,8 +523,8 @@ class _ForumItemState extends State<ForumItem> {
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                 ),
-                                SizedBox(
-                                  height: 10,
+                                const SizedBox(
+                                  height: 5,
                                 ),
                                 premiumButtonHeader(widget.forum.user!,
                                     profileController.myProfile, connectToUser)
@@ -676,8 +705,9 @@ class _ForumItemState extends State<ForumItem> {
                   ],
                 ),
               ),
-              const SizedBox(
-                height: 7,
+              Container(
+                color: backgroundcolorinterface,
+                height: 5,
               ),
             ],
           );

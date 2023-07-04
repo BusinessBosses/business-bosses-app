@@ -48,6 +48,7 @@ class BossUpController extends GetxController {
           }));
         }
       }
+      _homeController.addBossupForums(forums);
     } else {
       error(true);
     }
@@ -168,7 +169,11 @@ class BossUpController extends GetxController {
   void onInit() {
     // TODO: implement onInit
     socket = _homeController.socket;
-    fetchForums();
+    if (_homeController.bossupForums.isEmpty) {
+      fetchForums();
+    } else {
+      forums = _homeController.bossupForums;
+    }
     super.onInit();
   }
 }
