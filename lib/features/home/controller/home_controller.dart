@@ -410,7 +410,7 @@ class HomeController extends GetxController {
     refreshing(true);
     // error(false);
     update();
-    Get.find<HomeController>().clearData();
+    clearData();
     final ApiResponseModel response = await HomeRepository.fetchRefreshData();
     if (response.success) {
       processPostsAndForumsData(response.data['posts']);
