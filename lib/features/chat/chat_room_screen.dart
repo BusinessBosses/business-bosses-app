@@ -475,7 +475,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                                                       padding:
                                                           EdgeInsets.all(15.0),
                                                       child: Text(
-                                                          'Safety tips \n\n• Check seller offers buyer protection before making payment \n• On delivery, check that the item delivered is what you ordered \n• Report any seller you’ve any concerns about'),
+                                                          'Safety tips \n\n• Check seller offers buyer protection before making payment \n• On delivery, check that the item delivered is what you ordered \n• Report any seller you have any concerns about'),
                                                     ),
                                                   ),
                                                 ),
