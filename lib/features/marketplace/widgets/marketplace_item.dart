@@ -42,6 +42,22 @@ class _MarketTileState extends State<MarketTile> {
   bool hide = false;
   final MarketController _marketController = Get.find();
   final ProfileController profileController = Get.find();
+  late MarketModel _post;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _post = widget.post;
+  }
+
+  @override
+  void didUpdateWidget(covariant MarketTile oldWidget) {
+    // TODO: implement didUpdateWidget
+    super.didUpdateWidget(oldWidget);
+    _post = widget.post;
+  }
+
   @override
   Widget build(BuildContext context) {
     if (hide == false) {
@@ -63,11 +79,11 @@ class _MarketTileState extends State<MarketTile> {
             style: bodyText2,
           ),
         ),
-        if (widget.post.promote == false)
+        if (_post.promote == false)
           const PopupMenuDivider(
             height: 0.0,
           ),
-        if (widget.post.promote == false)
+        if (_post.promote == false)
           const PopupMenuItem<String>(
             value: 'Boost',
             child: Text(
@@ -112,18 +128,17 @@ class _MarketTileState extends State<MarketTile> {
                   contentPadding: const EdgeInsets.only(left: 15, right: 15),
                   leading: GestureDetector(
                     onTap: () {
-                      if (profileController.myProfile.uid ==
-                          widget.post.user.uid) {
+                      if (profileController.myProfile.uid == _post.user.uid) {
                         if (widget.onPageChange != null) {
                           widget.onPageChange!(3);
                         }
                       } else {
                         Get.toNamed(Routes.publicProfile,
-                            arguments: widget.post.user);
+                            arguments: _post.user);
                       }
                     },
                     child: UserAvatarWithBadge(
-                      user: widget.post.user,
+                      user: _post.user,
                       height: 55.0,
                       width: 55.0,
                       radius: 50.0,
@@ -133,18 +148,17 @@ class _MarketTileState extends State<MarketTile> {
                   ),
                   title: GestureDetector(
                     onTap: () {
-                      if (profileController.myProfile.uid ==
-                          widget.post.user.uid) {
+                      if (profileController.myProfile.uid == _post.user.uid) {
                         if (widget.onPageChange != null) {
                           widget.onPageChange!(3);
                         }
                       } else {
                         Get.toNamed(Routes.publicProfile,
-                            arguments: widget.post.user);
+                            arguments: _post.user);
                       }
                     },
                     child: Text(
-                      '${widget.post.user.name!.length <= 20 ? widget.post.user.name : "${widget.post.user.name!.substring(0, 20)}..."}',
+                      '${_post.user.name!.length <= 20 ? _post.user.name : "${_post.user.name!.substring(0, 20)}..."}',
                       style: Theme.of(context).textTheme.bodyLarge,
                     ),
                   ),
@@ -162,7 +176,7 @@ class _MarketTileState extends State<MarketTile> {
                           color: Colors.white,
                           child: Padding(
                             padding: const EdgeInsets.only(left: 15),
-                            child: widget.post.user.uid ==
+                            child: _post.user.uid ==
                                     profileController.myProfile.uid
                                 ? MyPopupMenuButton(
                                     popupItems: myPopupMore,
@@ -177,7 +191,7 @@ class _MarketTileState extends State<MarketTile> {
                                         Get.to(
                                           () => CreateSellingitemScreen(
                                             isUpd: true,
-                                            market: widget.post,
+                                            market: _post,
                                           ),
                                         );
                                       } else if (val == 'Delete') {
@@ -198,12 +212,15 @@ class _MarketTileState extends State<MarketTile> {
                                               ),
                                               TextButton(
                                                 onPressed: () {
+                                                  _marketController
+                                                      .removeListing(
+                                                          _post.marketId);
                                                   ApiService.delete(
                                                       path:
-                                                          'markets/${widget.post.marketId}');
-                                                  setState(() {
-                                                    hide = true;
-                                                  });
+                                                          'markets/${_post.marketId}');
+                                                  // setState(() {
+                                                  //   hide = true;
+                                                  // });
                                                   Get.back();
                                                 },
                                                 child: const Text('Yes'),
@@ -214,12 +231,12 @@ class _MarketTileState extends State<MarketTile> {
                                       } else if (val == 'Boost') {
                                         Get.to(
                                           () => BoostMarket(
-                                              postId: widget.post.marketId),
+                                              postId: _post.marketId),
                                         );
                                       }
                                     },
                                   )
-                                : widget.post.promote
+                                : _post.promote
                                     ? MyPopupMenuButton(
                                         popupItems: myPopup,
                                         icon: const Icon(
@@ -233,7 +250,7 @@ class _MarketTileState extends State<MarketTile> {
                                             ApiService.post(
                                               path: 'blockedpost',
                                               body: <String, dynamic>{
-                                                'postId': widget.post.marketId
+                                                'postId': _post.marketId
                                               },
                                             );
                                             setState(() {
@@ -265,9 +282,8 @@ class _MarketTileState extends State<MarketTile> {
                     ),
                   ),
                   subtitle: Text(
-                    widget.post.user.bio != null &&
-                            widget.post.user.bio!.isNotEmpty
-                        ? widget.post.user.bio!
+                    _post.user.bio != null && _post.user.bio!.isNotEmpty
+                        ? _post.user.bio!
                         : '',
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -280,7 +296,7 @@ class _MarketTileState extends State<MarketTile> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      if (widget.post.promote)
+                      if (_post.promote)
                         Padding(
                           padding: const EdgeInsets.only(left: 15.0, right: 15),
                           child: Container(
@@ -314,7 +330,7 @@ class _MarketTileState extends State<MarketTile> {
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: <Widget>[
                                 Text(
-                                  widget.post.price.toString(),
+                                  _post.price.toString(),
                                   style: const TextStyle(
                                     fontWeight: FontWeight.w800,
                                   ),
@@ -326,7 +342,7 @@ class _MarketTileState extends State<MarketTile> {
                             padding:
                                 const EdgeInsets.only(left: 15.0, right: 15),
                             child: DetectableText(
-                              text: widget.post.description,
+                              text: _post.description,
                               detectionRegExp: detectionRegExp(hashtag: false)!,
                               detectedStyle: bodyText2.copyWith(
                                 color: Colors.blue,
@@ -355,9 +371,9 @@ class _MarketTileState extends State<MarketTile> {
                                   width: 1,
                                 ),
                                 Text(
-                                  widget.post.location.length > 11
-                                      ? '${widget.post.location.substring(0, 11)}...'
-                                      : widget.post.location,
+                                  _post.location.length > 11
+                                      ? '${_post.location.substring(0, 11)}...'
+                                      : _post.location,
                                   style: const TextStyle(
                                       fontWeight: FontWeight.normal,
                                       fontSize: 12,
@@ -373,9 +389,9 @@ class _MarketTileState extends State<MarketTile> {
                                   width: 3,
                                 ),
                                 Text(
-                                  widget.post.category.length > 15
-                                      ? '${widget.post.category.substring(0, 15)}...'
-                                      : widget.post.category,
+                                  _post.category.length > 15
+                                      ? '${_post.category.substring(0, 15)}...'
+                                      : _post.category,
                                   style: const TextStyle(
                                       fontWeight: FontWeight.normal,
                                       fontSize: 12,
@@ -384,7 +400,7 @@ class _MarketTileState extends State<MarketTile> {
                                 const SizedBox(
                                   width: 5,
                                 ),
-                                widget.post.user.averageRating == 0
+                                _post.user.averageRating == 0
                                     ? Container()
                                     : Row(
                                         children: [
@@ -395,8 +411,7 @@ class _MarketTileState extends State<MarketTile> {
                                             size: 16,
                                           ),
                                           Text(
-                                            widget.post.user.averageRating
-                                                .toString(),
+                                            _post.user.averageRating.toString(),
                                             style: const TextStyle(
                                                 fontWeight: FontWeight.bold,
                                                 fontSize: 13),
@@ -407,7 +422,7 @@ class _MarketTileState extends State<MarketTile> {
                                           GestureDetector(
                                             onTap: () {
                                               Get.to(() => SellerReviewScreen(
-                                                  user: widget.post.user));
+                                                  user: _post.user));
                                             },
                                             child: const Text(
                                               'Seller reviews',
@@ -428,7 +443,7 @@ class _MarketTileState extends State<MarketTile> {
                           Padding(
                             padding:
                                 const EdgeInsets.only(left: 15.0, right: 15),
-                            child: PostImagesMarket(post: widget.post),
+                            child: PostImagesMarket(post: _post),
                           ),
                           Row(
                             children: [
@@ -436,18 +451,18 @@ class _MarketTileState extends State<MarketTile> {
                                 onPressed: () async {
                                   _marketController.like(
                                       profileController.myProfile.uid,
-                                      widget.post.marketId,
+                                      _post.marketId,
                                       'market',
-                                      widget.post.userId);
+                                      _post.userId);
                                 },
-                                icon: widget.post.likes?.contains(
+                                icon: _post.likes?.contains(
                                             profileController.myProfile.uid) ==
                                         true
                                     ? SvgPicture.asset(
                                         'assets/svgs/likefilled.svg')
                                     : SvgPicture.asset('assets/svgs/like.svg'),
                                 label: Text(
-                                  '${widget.post.likes?.length ?? 0}',
+                                  '${_post.likes?.length ?? 0}',
                                   style: Theme.of(context)
                                       .textTheme
                                       .bodyMedium
@@ -463,7 +478,7 @@ class _MarketTileState extends State<MarketTile> {
                                     context: context,
                                     builder: (BuildContext context) =>
                                         PostLikeCommentItem(
-                                      post: widget.post,
+                                      post: _post,
                                       onComment:
                                           (CommentModel newComment) async {},
                                     ),
@@ -472,7 +487,7 @@ class _MarketTileState extends State<MarketTile> {
                                 icon:
                                     SvgPicture.asset('assets/svgs/comment.svg'),
                                 label: Text(
-                                  '${widget.post.comments?.length ?? 0}',
+                                  '${_post.comments?.length ?? 0}',
                                   style: Theme.of(context)
                                       .textTheme
                                       .bodyMedium
@@ -482,18 +497,17 @@ class _MarketTileState extends State<MarketTile> {
                                       ),
                                 ),
                               ),
-                              widget.post.user.uid !=
-                                      profileController.myProfile.uid
+                              _post.user.uid != profileController.myProfile.uid
                                   ? TextButton.icon(
                                       onPressed: () async {
                                         _marketController.coin(
                                           profileController.myProfile.uid,
-                                          widget.post.marketId,
+                                          _post.marketId,
                                           profileController,
                                           'market',
                                         );
                                       },
-                                      icon: widget.post.coins?.contains(
+                                      icon: _post.coins?.contains(
                                                   profileController
                                                       .myProfile.uid) ==
                                               true
@@ -502,7 +516,7 @@ class _MarketTileState extends State<MarketTile> {
                                           : SvgPicture.asset(
                                               'assets/svgs/coin.svg'),
                                       label: Text(
-                                        '${widget.post.coins?.length ?? 0}',
+                                        '${_post.coins?.length ?? 0}',
                                         style: Theme.of(context)
                                             .textTheme
                                             .bodyMedium
@@ -521,7 +535,7 @@ class _MarketTileState extends State<MarketTile> {
                                               'assets/svgs/coin.svg'),
                                           const SizedBox(width: 5),
                                           Text(
-                                            '${widget.post.coins?.length ?? 0}',
+                                            '${_post.coins?.length ?? 0}',
                                             style: Theme.of(context)
                                                 .textTheme
                                                 .bodyLarge
@@ -546,8 +560,7 @@ class _MarketTileState extends State<MarketTile> {
                               const SizedBox(
                                 width: 30,
                               ),
-                              widget.post.userId ==
-                                      profileController.myProfile.uid
+                              _post.userId == profileController.myProfile.uid
                                   ? const SizedBox()
                                   : Expanded(
                                       child: Padding(
@@ -561,9 +574,9 @@ class _MarketTileState extends State<MarketTile> {
                                             Get.to(
                                               () => ChatRoomScreen(
                                                 frommarketplace: true,
-                                                market: widget.post,
+                                                market: _post,
                                               ),
-                                              arguments: widget.post.user,
+                                              arguments: _post.user,
                                             );
                                           },
                                           child: const Text(
@@ -597,7 +610,7 @@ class _MarketTileState extends State<MarketTile> {
                     // Padding(
                     //   padding: const EdgeInsets.only(right: 15),
                     //   child: Text(
-                    //     TimeFormat.formatString(widget.post),
+                    //     TimeFormat.formatString(_post),
                     //     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     //           color: textColor.withOpacity(0.4),
                     //         ),
@@ -621,7 +634,7 @@ class _MarketTileState extends State<MarketTile> {
 
   void _sharePost() {
     String message =
-        'Have a look at ${widget.post.user.username}\'s post on Business Bosses\n'
+        'Have a look at ${_post.user.username}\'s post on Business Bosses\n'
         'https://businessbosses.onelink.me/xLWk/36a2ff16';
     socialShare(message);
   }
@@ -690,7 +703,7 @@ class _MarketTileState extends State<MarketTile> {
               contentPadding: EdgeInsets.zero,
               title: GestureDetector(
                 child: TextWidget(
-                  text: 'Block @${widget.post.user.username}',
+                  text: 'Block @${_post.user.username}',
                   color: Colors.blue,
                 ),
               ),
@@ -729,7 +742,7 @@ class _MarketTileState extends State<MarketTile> {
                           ApiService.post(
                               path: 'reportedpost',
                               body: <String, dynamic>{
-                                'postId': widget.post.marketId,
+                                'postId': _post.marketId,
                                 'reason': 'This is a bad post',
                               });
                           showSnackBar(context,
@@ -767,7 +780,7 @@ class _MarketTileState extends State<MarketTile> {
                   () => PublicProfileScreen(
                     store: true,
                   ),
-                  arguments: widget.post.user,
+                  arguments: _post.user,
                 );
               },
               contentPadding: EdgeInsets.zero,
