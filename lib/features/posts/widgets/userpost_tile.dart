@@ -359,7 +359,9 @@ class _PostTileState extends State<PostTile> {
                       ],
                     ),
                   ),
-                  subtitle: widget.post.user!.isSubscribed
+                  subtitle: widget.post.user!.isSubscribed &&
+                          widget.post.user!.uid !=
+                              profileController.myProfile.uid
                       ? Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
