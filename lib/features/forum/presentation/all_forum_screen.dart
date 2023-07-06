@@ -1,3 +1,5 @@
+import 'package:business_bosses_v2/common/widgets/popup/learningpopup.dart';
+import 'package:business_bosses_v2/common/widgets/popup/opportunitiespopup.dart';
 import 'package:business_bosses_v2/common/widgets/safety_model.dart';
 import 'package:business_bosses_v2/features/forum/controller/forum_controller.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
@@ -9,6 +11,7 @@ import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
+import '../../../common/widgets/popup/bossup_challenge_popup.dart';
 import '../../../navigation/routes.dart';
 import '../models/industry.dart';
 import '../../../utils/theme/theme.dart';
@@ -103,22 +106,39 @@ class _AllForumScreenState extends State<AllForumScreen> {
                               ),
                               Row(
                                 children: [
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 20.0),
-                                    child: Row(
-                                      children: [
-                                        Text('Info'),
-                                        SizedBox(
-                                          width: 5,
-                                        ),
-                                        SvgPicture.asset(
-                                          'assets/svgs/info.svg',
-                                          height: 20,
-                                        ),
-                                      ],
+                                  GestureDetector(
+                                    onTap: () => {
+                                      industry.categoryId!.toString() ==
+                                              Constants.LEARNINGID
+                                          ? showDialog(
+                                              context: context,
+                                              builder: (BuildContext context) =>
+                                                  const LearningPopUp(),
+                                            )
+                                          : showDialog(
+                                              context: context,
+                                              builder: (BuildContext context) =>
+                                                  const OpportunitiesPopup(),
+                                            )
+                                    },
+                                    child: Padding(
+                                      padding:
+                                          const EdgeInsets.only(left: 20.0),
+                                      child: Row(
+                                        children: [
+                                          const Text('Info'),
+                                          const SizedBox(
+                                            width: 5,
+                                          ),
+                                          SvgPicture.asset(
+                                            'assets/svgs/info.svg',
+                                            height: 20,
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ),
-                                  Spacer(),
+                                  const Spacer(),
                                   Align(
                                       alignment: Alignment.centerRight,
                                       child: Padding(

@@ -623,7 +623,7 @@ class _MarketTileState extends State<MarketTile> {
           ),
           Container(
             color: backgroundcolorinterface,
-            height: 5,
+            height: 7,
           )
         ],
       );

@@ -542,7 +542,7 @@ class _PostTileState extends State<PostTile> {
           ),
           Container(
             color: backgroundcolorinterface,
-            height: 5,
+            height: 7,
           )
         ],
       );

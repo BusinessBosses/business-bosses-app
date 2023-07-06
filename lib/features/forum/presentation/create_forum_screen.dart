@@ -200,14 +200,28 @@ class _CreateForumScreenState extends State<CreateForumScreen> {
                   ),
                   const SizedBox(height: 30),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SvgPicture.asset('assets/svgs/report.svg'),
-                      const SizedBox(
-                        width: 20,
+                      SvgPicture.asset(
+                        'assets/svgs/report.svg',
+                        height: 20,
                       ),
-                      Text(categoryId == Constants.LEARNINGID
-                          ? 'Only post articles,insights, and resources others can learn from'
-                          : 'Only post opportunities that will help you and others grows their businesses')
+                      const SizedBox(
+                        width: 2,
+                      ),
+                      Flexible(
+                        child: Text(
+                          textAlign: TextAlign.center,
+                          overflow: TextOverflow.visible,
+                          maxLines: null,
+                          style: const TextStyle(
+                              fontSize: 13, color: subtextColor),
+                          categoryId == Constants.LEARNINGID
+                              ? 'Only post articles, insights, and resources others can learn from'
+                              : 'Only post opportunities that will help you and others grow their businesses',
+                        ),
+                      ),
                     ],
                   )
                 ],
