@@ -707,7 +707,7 @@ class _ForumItemState extends State<ForumItem> {
               ),
               Container(
                 color: backgroundcolorinterface,
-                height: 5,
+                height: 7,
               ),
             ],
           );

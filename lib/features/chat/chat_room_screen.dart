@@ -454,6 +454,176 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                                       myUid: _profileController.myProfile.uid,
                                     ),
                                   ),
+                                  i == 0 && widget.frommarketplace
+                                      ? Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.end,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.end,
+                                          children: [
+                                              Container(
+                                                decoration: BoxDecoration(
+                                                  color: Colors.white,
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                ),
+                                                child: Stack(
+                                                  children: [
+                                                    ClipRRect(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10),
+                                                      child: Image.network(
+                                                        widget
+                                                            .market?.images?[0],
+                                                        fit: BoxFit.cover,
+                                                        height: 300,
+                                                      ),
+                                                    ),
+                                                    Positioned.fill(
+                                                      child: Align(
+                                                        alignment: Alignment
+                                                            .bottomCenter,
+                                                        child: Container(
+                                                          color: Colors.white,
+                                                          width:
+                                                              double.infinity,
+                                                          height: 100,
+                                                          child: Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                        .only(
+                                                                    left: 20.0,
+                                                                    right: 20,
+                                                                    top: 20),
+                                                            child: Column(
+                                                              children: [
+                                                                Row(
+                                                                  mainAxisAlignment:
+                                                                      MainAxisAlignment
+                                                                          .start,
+                                                                  children: <Widget>[
+                                                                    Text(
+                                                                      '${widget.market?.price}',
+                                                                      style:
+                                                                          const TextStyle(
+                                                                        fontWeight:
+                                                                            FontWeight.w800,
+                                                                      ),
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                                DetectableText(
+                                                                  text:
+                                                                      '${widget.market?.description}',
+                                                                  detectionRegExp:
+                                                                      detectionRegExp(
+                                                                          hashtag:
+                                                                              false)!,
+                                                                  detectedStyle:
+                                                                      bodyText2
+                                                                          .copyWith(
+                                                                    color: Colors
+                                                                        .blue,
+                                                                  ),
+                                                                  moreStyle:
+                                                                      bodyText2
+                                                                          .copyWith(
+                                                                    color: Colors
+                                                                        .redAccent,
+                                                                  ),
+                                                                  lessStyle:
+                                                                      bodyText2
+                                                                          .copyWith(
+                                                                    color: Colors
+                                                                        .redAccent,
+                                                                  ),
+                                                                  trimExpandedText:
+                                                                      '  show less',
+                                                                  basicStyle: bodyText2
+                                                                      .copyWith(
+                                                                          color:
+                                                                              textColor),
+                                                                  onTap: (_) {},
+                                                                ),
+                                                                const SizedBox(
+                                                                  height: 2,
+                                                                ),
+                                                                Row(
+                                                                  children: [
+                                                                    SvgPicture
+                                                                        .asset(
+                                                                            'assets/svgs/location.svg'),
+                                                                    const SizedBox(
+                                                                      width: 1,
+                                                                    ),
+                                                                    Text(
+                                                                      '${widget.market?.location}',
+                                                                      style: const TextStyle(
+                                                                          fontWeight: FontWeight
+                                                                              .normal,
+                                                                          fontSize:
+                                                                              12,
+                                                                          color:
+                                                                              subtextColor),
+                                                                      overflow:
+                                                                          TextOverflow
+                                                                              .ellipsis,
+                                                                      softWrap:
+                                                                          false,
+                                                                    ),
+                                                                    const SizedBox(
+                                                                      width: 5,
+                                                                    ),
+                                                                    SvgPicture
+                                                                        .asset(
+                                                                            'assets/svgs/category.svg'),
+                                                                    const SizedBox(
+                                                                      width: 3,
+                                                                    ),
+                                                                    Text(
+                                                                      '${widget.market?.category}',
+                                                                      style: const TextStyle(
+                                                                          fontWeight: FontWeight
+                                                                              .normal,
+                                                                          fontSize:
+                                                                              12,
+                                                                          color:
+                                                                              subtextColor),
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              const SizedBox(
+                                                height: 10,
+                                              ),
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    left: 50.0, bottom: 20),
+                                                child: ClipRRect(
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                  child: Container(
+                                                    color: backgroundColor,
+                                                    child: const Padding(
+                                                      padding:
+                                                          EdgeInsets.all(15.0),
+                                                      child: Text(
+                                                          'Safety tips \n\n• Check seller offers buyer protection before making payment \n• On delivery, check that the item delivered is what you ordered \n• Report any seller you have any concerns about'),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ])
+                                      : const SizedBox(),
                                 ],
                               );
                             },
