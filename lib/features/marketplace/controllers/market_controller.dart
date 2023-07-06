@@ -23,6 +23,14 @@ class MarketController extends GetxController {
   bool isLoading = true;
   final HomeController _homeController = Get.find();
   final ProfileController _profileController = Get.find();
+  void removeListing(String marketId) {
+    final int marketIndex =
+        markets.indexWhere((element) => element.marketId == marketId);
+    if (marketIndex != -1) {
+      markets.removeAt(marketIndex);
+      update();
+    }
+  }
 
   /// PROCESS RAW API DATA, MODELIZE AND SAVE TO STATE
   void processPostsToState(dynamic post) {
