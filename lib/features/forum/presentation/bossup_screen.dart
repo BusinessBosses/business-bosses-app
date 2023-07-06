@@ -70,7 +70,7 @@ class _BossUpSectionState extends State<BossUpSection> {
                   children: [
                     Container(
                       width: double.infinity,
-                      color: Colors.transparent,
+                      color: backgroundcolorinterface,
                       child: Stack(children: [
                         Padding(
                             padding: const EdgeInsets.only(left: 20, top: 25),
@@ -404,18 +404,9 @@ class _BossUpSectionState extends State<BossUpSection> {
                                       child: Container(
                                         height: 40,
                                         decoration: BoxDecoration(
-                                          color: const Color(0xFFF4F4F4),
+                                          color: Colors.white,
                                           borderRadius:
                                               BorderRadius.circular(10),
-                                          boxShadow: [
-                                            BoxShadow(
-                                              color:
-                                                  Colors.grey.withOpacity(0.3),
-                                              spreadRadius: 20,
-                                              blurRadius: 500,
-                                              offset: const Offset(0, 3),
-                                            ),
-                                          ],
                                         ),
                                         child: Container(
                                           decoration: BoxDecoration(
