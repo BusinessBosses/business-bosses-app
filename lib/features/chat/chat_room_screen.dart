@@ -582,7 +582,12 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                                                                       width: 3,
                                                                     ),
                                                                     Text(
-                                                                      '${widget.market?.category}',
+                                                                      widget.market!.category.length >
+                                                                              15
+                                                                          ? '${widget.market!.category.substring(0, 15)}...'
+                                                                          : widget
+                                                                              .market!
+                                                                              .category,
                                                                       style: const TextStyle(
                                                                           fontWeight: FontWeight
                                                                               .normal,
