@@ -76,7 +76,7 @@ class _CreateForumScreenState extends State<CreateForumScreen> {
                     ? 'Enter Challenge'
                     : categoryId == Constants.LEARNINGID
                         ? 'Start a Topic'
-                        : 'Create Opportunities',
+                        : 'Share Opportunities',
               ),
               automaticallyImplyLeading:
                   false, // Used for removing back buttoon.
@@ -198,6 +198,18 @@ class _CreateForumScreenState extends State<CreateForumScreen> {
                     label: isUpdating ? 'Update Post' : 'Post',
                     isProcessing: controller.loading.value,
                   ),
+                  const SizedBox(height: 30),
+                  Row(
+                    children: [
+                      SvgPicture.asset('assets/svgs/report.svg'),
+                      const SizedBox(
+                        width: 20,
+                      ),
+                      Text(categoryId == Constants.LEARNINGID
+                          ? 'Only post articles,insights, and resources others can learn from'
+                          : 'Only post opportunities that will help you and others grows their businesses')
+                    ],
+                  )
                 ],
               ),
             ),

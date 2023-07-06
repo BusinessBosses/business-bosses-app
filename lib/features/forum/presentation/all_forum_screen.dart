@@ -145,7 +145,7 @@ class _AllForumScreenState extends State<AllForumScreen> {
                                                             .toString() ==
                                                         Constants.LEARNINGID
                                                     ? 'Start a Topic'
-                                                    : 'Create Opportunities',
+                                                    : 'Share Opportunities',
                                                 style: const TextStyle(
                                                     fontSize: 15,
                                                     color: Colors.white,
