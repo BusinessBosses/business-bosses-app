@@ -136,7 +136,7 @@ class MyApp extends StatelessWidget {
             ],
             navigatorKey: navigatorKey,
             initialRoute:
-                userId == '' || userId == null ? Routes.login : Routes.home,
+                userId == '' || userId == null ? Routes.login : Routes.settings,
 
             // initialRoute: Routes.updateProfile,
             getPages: Nav.routes,
