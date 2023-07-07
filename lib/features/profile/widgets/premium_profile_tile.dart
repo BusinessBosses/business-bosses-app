@@ -18,14 +18,18 @@ Widget premiumButtonHeader(
   return Container(
     height: 30.0,
     padding: const EdgeInsets.all(0.0),
-    width: 82,
+    width: myProfile.connecteds != null &&
+            myProfile.connecteds!.contains(publicUser.uid)
+        ? 90
+        : 80,
     child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
       Expanded(
           child: MCustomButton(
-              buttonType: connectedbutton == true
-                  ? ButtonType.grey
-                  : ButtonType.elevated,
-              margin: const EdgeInsets.only(right: 8.0),
+              buttonType: myProfile.connecteds != null &&
+                      myProfile.connecteds!.contains(publicUser.uid)
+                  ? ButtonType.outlinegrey
+                  : ButtonType.grey,
+              margin: const EdgeInsets.only(right: 0.0),
               child: FittedBox(
                 child: myProfile.connecteds != null &&
                         myProfile.connecteds!.contains(publicUser.uid)
