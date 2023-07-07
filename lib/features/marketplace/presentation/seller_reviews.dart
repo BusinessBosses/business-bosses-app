@@ -206,13 +206,11 @@ class _SellerReviewScreenState extends State<SellerReviewScreen> {
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
-                                    Text(
-                                      currentRating.toStringAsFixed(1),
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 20,
-                                      ),
-                                    ),
+                                    Text('$currentRating',
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 20,
+                                        )),
                                     const SizedBox(
                                       width: 3,
                                     ),

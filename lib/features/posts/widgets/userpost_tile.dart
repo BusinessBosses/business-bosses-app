@@ -165,12 +165,13 @@ class _PostTileState extends State<PostTile> {
         children: <Widget>[
           Container(
             width: double.infinity,
-            decoration: const BoxDecoration(color: Colors.white),
+            decoration: BoxDecoration(
+                color: Colors.white, borderRadius: BorderRadius.circular(0)),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 ListTile(
-                  contentPadding: const EdgeInsets.only(left: 15, right: 0),
+                  contentPadding: const EdgeInsets.only(left: 15, right: 15),
                   leading: GestureDetector(
                     onTap: () {
                       if (profileController.myProfile.uid ==
@@ -185,8 +186,8 @@ class _PostTileState extends State<PostTile> {
                     },
                     child: UserAvatarWithBadge(
                       user: widget.post.user,
-                      height: 40.0,
-                      width: 40.0,
+                      height: 55.0,
+                      width: 55.0,
                       radius: 50.0,
                       placeHolder: Icons.person,
                       iconSize: 24.0,
@@ -206,7 +207,7 @@ class _PostTileState extends State<PostTile> {
                     },
                     child: widget.post.user!.isSubscribed
                         ? Padding(
-                            padding: const EdgeInsets.only(top: 0.0),
+                            padding: const EdgeInsets.only(top: 16.0),
                             child: Row(
                               children: [
                                 Text(
@@ -231,27 +232,17 @@ class _PostTileState extends State<PostTile> {
                                     widget.post.user!.name!.length <= 20
                                 ? widget.post.user!.name!
                                 : widget.post.user!.name != null
-                                    ? "${widget.post.user!.name!.substring(0, 15)}..."
+                                    ? "${widget.post.user!.name!.substring(0, 20)}..."
                                     : widget.post.user!.username,
                             style: Theme.of(context).textTheme.bodyLarge,
                           ),
                   ),
                   trailing: SizedBox(
                     height: 30,
-                    width: profileController.myProfile.connecteds != null &&
-                            profileController.myProfile.connecteds!
-                                .contains(widget.post.user!.uid)
-                        ? 140
-                        : 130,
+                    width: 80,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        widget.post.user!.isSubscribed &&
-                                widget.post.user!.uid !=
-                                    profileController.myProfile.uid
-                            ? premiumButtonHeader(widget.post.user!,
-                                profileController.myProfile, connectToUser)
-                            : Container(),
                         widget.post.isRanked
                             ? Container()
                             : Container(
@@ -266,113 +257,137 @@ class _PostTileState extends State<PostTile> {
                         Container(
                           height: double.infinity,
                           color: Colors.white,
-                          child: widget.post.user!.uid ==
-                                  profileController.myProfile.uid
-                              ? MyPopupMenuButton(
-                                  popupItems: myPopupMore,
-                                  icon: const Icon(
-                                    Icons.more_horiz,
-                                    size: 20,
-                                    color: Colors.black,
-                                    weight: 100,
-                                  ),
-                                  onSelected: (String val) {
-                                    if (val == 'Edit') {
-                                      Get.to(() => CreatePostScreen(
-                                            postId: widget.post.postId,
-                                            post: widget.post.title,
-                                          ));
-                                    } else if (val == 'Delete') {
-                                      showDialog(
-                                        context: context,
-                                        builder: (BuildContext context) =>
-                                            AlertDialog(
-                                          title: const Text(
-                                            'Delete Post',
-                                            style: bodyText1,
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 15),
+                            child: widget.post.user!.uid ==
+                                    profileController.myProfile.uid
+                                ? MyPopupMenuButton(
+                                    popupItems: myPopupMore,
+                                    icon: const Icon(
+                                      Icons.more_horiz,
+                                      size: 20,
+                                      color: Colors.black,
+                                      weight: 100,
+                                    ),
+                                    onSelected: (String val) {
+                                      if (val == 'Edit') {
+                                        Get.to(() => CreatePostScreen(
+                                              postId: widget.post.postId,
+                                              post: widget.post.title,
+                                            ));
+                                      } else if (val == 'Delete') {
+                                        showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) =>
+                                              AlertDialog(
+                                            title: const Text(
+                                              'Delete Post',
+                                              style: bodyText1,
+                                            ),
+                                            content: const Text(
+                                                'Are you sure to delete this post?'),
+                                            actions: <Widget>[
+                                              TextButton(
+                                                onPressed: () => Get.back(),
+                                                child: const Text('No'),
+                                              ),
+                                              TextButton(
+                                                onPressed: () {
+                                                  ApiService.delete(
+                                                      path:
+                                                          'post/delete-post/${widget.post.postId}');
+                                                  setState(() {
+                                                    hide = true;
+                                                  });
+                                                  Get.back();
+                                                },
+                                                child: const Text('Yes'),
+                                              ),
+                                            ],
                                           ),
-                                          content: const Text(
-                                              'Are you sure to delete this post?'),
-                                          actions: <Widget>[
-                                            TextButton(
-                                              onPressed: () => Get.back(),
-                                              child: const Text('No'),
-                                            ),
-                                            TextButton(
-                                              onPressed: () {
-                                                ApiService.delete(
-                                                    path:
-                                                        'post/delete-post/${widget.post.postId}');
-                                                setState(() {
-                                                  hide = true;
-                                                });
-                                                Get.back();
-                                              },
-                                              child: const Text('Yes'),
-                                            ),
-                                          ],
-                                        ),
-                                      );
-                                    } else if (val == 'Boost') {
-                                      Get.to(() => BoostPost(
-                                            postId: widget.post.postId,
-                                            postTitle: widget.post.title,
-                                          ));
-                                    }
-                                  },
-                                )
-                              : widget.post.promote!
-                                  ? MyPopupMenuButton(
-                                      popupItems: myPopup,
-                                      icon: const Icon(
-                                        Icons.more_horiz,
-                                        size: 20,
-                                        color: Colors.black,
-                                        weight: 100,
-                                      ),
-                                      onSelected: (String val) {
-                                        if (val == 'Hide') {
-                                          ApiService.post(
-                                            path: 'blockedpost',
-                                            body: <String, dynamic>{
-                                              'postId': widget.post.postId
-                                            },
-                                          );
-                                          setState(() {
-                                            hide = true;
-                                          });
-                                        } else if (val == 'Report') {
-                                          _showDialog();
-                                        }
-                                      },
-                                    )
-                                  : Padding(
-                                      padding:
-                                          const EdgeInsets.only(right: 15.0),
-                                      child: InkWell(
-                                        onTap: () {
-                                          _showDialog();
-                                        },
-                                        child: const Icon(
+                                        );
+                                      } else if (val == 'Boost') {
+                                        Get.to(() => BoostPost(
+                                              postId: widget.post.postId,
+                                              postTitle: widget.post.title,
+                                            ));
+                                      }
+                                    },
+                                  )
+                                : widget.post.promote!
+                                    ? MyPopupMenuButton(
+                                        popupItems: myPopup,
+                                        icon: const Icon(
                                           Icons.more_horiz,
                                           size: 20,
                                           color: Colors.black,
                                           weight: 100,
                                         ),
+                                        onSelected: (String val) {
+                                          if (val == 'Hide') {
+                                            ApiService.post(
+                                              path: 'blockedpost',
+                                              body: <String, dynamic>{
+                                                'postId': widget.post.postId
+                                              },
+                                            );
+                                            setState(() {
+                                              hide = true;
+                                            });
+                                          } else if (val == 'Report') {
+                                            _showDialog();
+                                          }
+                                        },
+                                      )
+                                    : Padding(
+                                        padding:
+                                            const EdgeInsets.only(right: 15.0),
+                                        child: InkWell(
+                                          onTap: () {
+                                            _showDialog();
+                                          },
+                                          child: const Icon(
+                                            Icons.more_horiz,
+                                            size: 20,
+                                            color: Colors.black,
+                                            weight: 100,
+                                          ),
+                                        ),
                                       ),
-                                    ),
+                          ),
                         ),
                       ],
                     ),
                   ),
-                  subtitle: Text(
-                    widget.post.user?.bio != null &&
-                            widget.post.user!.bio!.isNotEmpty
-                        ? widget.post.user!.bio!
-                        : '',
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
+                  subtitle: widget.post.user!.isSubscribed &&
+                          widget.post.user!.uid !=
+                              profileController.myProfile.uid
+                      ? Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              widget.post.user?.bio != null &&
+                                      widget.post.user!.bio!.isNotEmpty
+                                  ? widget.post.user!.bio!
+                                  : '',
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            const SizedBox(
+                              height: 5,
+                            ),
+                            premiumButtonHeader(widget.post.user!,
+                                profileController.myProfile, connectToUser)
+                          ],
+                        )
+                      : Text(
+                          widget.post.user?.bio != null &&
+                                  widget.post.user!.bio!.isNotEmpty
+                              ? widget.post.user!.bio!
+                              : '',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(
