@@ -394,32 +394,46 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
                 ),
                 Center(
                   child: Padding(
-                    padding:
-                        const EdgeInsets.only(left: 20.0, right: 20, top: 10),
-                    child: Text.rich(
-                      TextSpan(
-                        children: [
-                          const TextSpan(
-                            text:
-                                'By clicking on Post, you accept the Terms of Use, confirm that you will abide by the ',
-                          ),
+                    padding: const EdgeInsets.only(
+                      left: 20.0,
+                      right: 20,
+                      top: 20,
+                      bottom: 50,
+                    ),
+                    child: Center(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                        child: Text.rich(
                           TextSpan(
-                            text: 'Marketplace Guidelines',
-                            style: const TextStyle(
-                              color: Colors.red,
-                              decoration: TextDecoration.underline,
-                              fontSize: 12,
-                            ),
-                            recognizer: TapGestureRecognizer()
-                              ..onTap = () {
-                                // Show the popup here
-                              },
+                            children: [
+                              const TextSpan(
+                                text:
+                                    'By clicking on Post, you accept the Terms of Use, confirm that you will abide by the ',
+                                style: TextStyle(
+                                    fontSize: 12, color: subtextColor),
+                              ),
+                              TextSpan(
+                                text: 'Marketplace Guidelines',
+                                style: const TextStyle(
+                                  color: Colors.red,
+                                  decoration: TextDecoration.underline,
+                                  fontSize: 12,
+                                ),
+                                recognizer: TapGestureRecognizer()
+                                  ..onTap = () {
+                                    // Show the popup here
+                                  },
+                              ),
+                              const TextSpan(
+                                text:
+                                    ', and declare that this posting does not include any Prohibited Items.',
+                                style: TextStyle(
+                                    fontSize: 12, color: subtextColor),
+                              ),
+                            ],
                           ),
-                          const TextSpan(
-                            text:
-                                ', and declare that this posting does not include any Prohibited Items.',
-                          ),
-                        ],
+                          textAlign: TextAlign.center,
+                        ),
                       ),
                     ),
                   ),

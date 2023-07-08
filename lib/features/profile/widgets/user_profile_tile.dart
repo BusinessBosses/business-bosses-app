@@ -38,8 +38,7 @@ class _UserProfileTileState extends State<UserProfileTile> {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(1000),
                     child: NetworkImageWithPlaceHolder(
-                      imageUrl: widget.myProfile.photoUrl ??
-                          'https://w7.pngwing.com/pngs/831/88/png-transparent-user-profile-computer-icons-user-interface-mystique-miscellaneous-user-interface-design-smile-thumbnail.png',
+                      imageUrl: widget.myProfile.photoUrl ?? '',
                       height: 105.0,
                       width: 105.0,
                       radius: radius,
