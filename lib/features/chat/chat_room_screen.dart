@@ -159,7 +159,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                                 size: 16,
                               ),
                               Text(
-                                args.averageRating.toString(),
+                                args.averageRating!.toStringAsFixed(1),
                                 style: const TextStyle(
                                     fontWeight: FontWeight.bold, fontSize: 13),
                               ),
@@ -395,6 +395,98 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                                     'No message sent to ${args.username} yet',
                               )
                         : Stack(children: [
+                            ListView.builder(
+                              padding: const EdgeInsets.only(
+                                  left: 16.0,
+                                  right: 16.0,
+                                  bottom: 75.0,
+                                  top: 16.0),
+                              reverse: true,
+                              itemCount: controller
+                                  .extractConversations(args.uid,
+                                      _profileController.myProfile.uid)
+                                  .length,
+                              itemBuilder: (BuildContext context, int i) {
+                                final MessageModel message =
+                                    controller.extractConversations(args.uid,
+                                        _profileController.myProfile.uid)[i];
+                                // final reversedIndex = _messages.length - 1 - i;
+                                return Column(
+                                  children: [
+                                    InkWell(
+                                      onLongPress: () {
+                                        FocusScopeNode currentFocus =
+                                            FocusScope.of(context);
+                                        if (!currentFocus.hasPrimaryFocus) {
+                                          currentFocus.unfocus();
+                                        }
+
+                                        showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) =>
+                                              AlertDialog(
+                                            content: Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                ListTile(
+                                                  onTap: () async {
+                                                    navigateTo(context);
+                                                    await Clipboard.setData(
+                                                      ClipboardData(
+                                                        text: message
+                                                            .messageText!,
+                                                      ),
+                                                    );
+                                                    // ignore: use_build_context_synchronously
+                                                    showSnackBar(context,
+                                                        message:
+                                                            'Text Copied!');
+                                                  },
+                                                  contentPadding:
+                                                      EdgeInsets.zero,
+                                                  title: const TextWidget(
+                                                    text: 'Copy Text',
+                                                  ),
+                                                ),
+                                                ListTile(
+                                                  onTap: () {
+                                                    navigateTo(context);
+                                                    optionsDialog(context, () {
+                                                      // _isLoading = true;
+                                                      Navigator.pop(context);
+                                                      // deleteMessage(
+                                                      //     _messages[reversedIndex],
+                                                      //     reversedIndex);
+                                                      // if (reversedIndex ==
+                                                      //     _messages.length - 1) {
+                                                      //   DeleteLastMessage(_messages[
+                                                      //       reversedIndex]);
+                                                      // }
+                                                    });
+                                                  },
+                                                  contentPadding:
+                                                      EdgeInsets.zero,
+                                                  title: const TextWidget(
+                                                    text: 'Delete Message',
+                                                    color: Colors.red,
+                                                  ),
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                        );
+
+                                        // deleteMessage(_messages[reversedIndex]);
+                                      },
+                                      child: ChatBox(
+                                        message,
+                                        myUid: _profileController.myProfile.uid,
+                                      ),
+                                    ),
+                                  ],
+                                );
+                              },
+                            ),
                             showColumn
                                 ? Column(
                                     children: [
@@ -531,98 +623,6 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                                     ],
                                   )
                                 : SizedBox(),
-                            ListView.builder(
-                              padding: const EdgeInsets.only(
-                                  left: 16.0,
-                                  right: 16.0,
-                                  bottom: 75.0,
-                                  top: 16.0),
-                              reverse: true,
-                              itemCount: controller
-                                  .extractConversations(args.uid,
-                                      _profileController.myProfile.uid)
-                                  .length,
-                              itemBuilder: (BuildContext context, int i) {
-                                final MessageModel message =
-                                    controller.extractConversations(args.uid,
-                                        _profileController.myProfile.uid)[i];
-                                // final reversedIndex = _messages.length - 1 - i;
-                                return Column(
-                                  children: [
-                                    InkWell(
-                                      onLongPress: () {
-                                        FocusScopeNode currentFocus =
-                                            FocusScope.of(context);
-                                        if (!currentFocus.hasPrimaryFocus) {
-                                          currentFocus.unfocus();
-                                        }
-
-                                        showDialog(
-                                          context: context,
-                                          builder: (BuildContext context) =>
-                                              AlertDialog(
-                                            content: Column(
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: [
-                                                ListTile(
-                                                  onTap: () async {
-                                                    navigateTo(context);
-                                                    await Clipboard.setData(
-                                                      ClipboardData(
-                                                        text: message
-                                                            .messageText!,
-                                                      ),
-                                                    );
-                                                    // ignore: use_build_context_synchronously
-                                                    showSnackBar(context,
-                                                        message:
-                                                            'Text Copied!');
-                                                  },
-                                                  contentPadding:
-                                                      EdgeInsets.zero,
-                                                  title: const TextWidget(
-                                                    text: 'Copy Text',
-                                                  ),
-                                                ),
-                                                ListTile(
-                                                  onTap: () {
-                                                    navigateTo(context);
-                                                    optionsDialog(context, () {
-                                                      // _isLoading = true;
-                                                      Navigator.pop(context);
-                                                      // deleteMessage(
-                                                      //     _messages[reversedIndex],
-                                                      //     reversedIndex);
-                                                      // if (reversedIndex ==
-                                                      //     _messages.length - 1) {
-                                                      //   DeleteLastMessage(_messages[
-                                                      //       reversedIndex]);
-                                                      // }
-                                                    });
-                                                  },
-                                                  contentPadding:
-                                                      EdgeInsets.zero,
-                                                  title: const TextWidget(
-                                                    text: 'Delete Message',
-                                                    color: Colors.red,
-                                                  ),
-                                                )
-                                              ],
-                                            ),
-                                          ),
-                                        );
-
-                                        // deleteMessage(_messages[reversedIndex]);
-                                      },
-                                      child: ChatBox(
-                                        message,
-                                        myUid: _profileController.myProfile.uid,
-                                      ),
-                                    ),
-                                  ],
-                                );
-                              },
-                            ),
                           ]),
                   ),
                   Positioned(

@@ -259,175 +259,124 @@ class _AllForumScreenState extends State<AllForumScreen> {
                                             )),
                                           ],
                                         ),
-                                        Row(
-                                          children: [
-                                            Stack(
-                                              children: [
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          left: 35, top: 5),
-                                                  child: Container(
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                              left: 35, top: 0, right: 20),
+                                          child: Row(
+                                            children: [
+                                              Row(
+                                                children: [
+                                                  Padding(
                                                     padding:
                                                         const EdgeInsets.only(
-                                                            bottom: 8,
-                                                            top: 8,
-                                                            left: 0,
-                                                            right: 10),
-                                                    child: Row(
-                                                      children: [
-                                                        Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                      .only(
-                                                                  right: 8),
-                                                          child:
-                                                              SvgPicture.asset(
-                                                            'assets/svgs/members.svg',
-                                                            height: 15,
-                                                            color:
-                                                                primaryColorLT,
-                                                          ),
-                                                        ),
-                                                        RichText(
-                                                          text: TextSpan(
-                                                            children: [
-                                                              TextSpan(
-                                                                text: industry
-                                                                            .joinedUsers ==
-                                                                        null
-                                                                    ? 'Members: 0'
-                                                                    : 'Members: (${industry.joinedUsers?.where((String element) => element.isNotEmpty).toList().length ?? 0})',
-                                                                style:
-                                                                    const TextStyle(
-                                                                  fontSize: 12,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w600,
-                                                                  color:
-                                                                      primaryColorLT,
-                                                                  decoration:
-                                                                      TextDecoration
-                                                                          .underline,
-                                                                ),
-                                                                recognizer:
-                                                                    TapGestureRecognizer()
-                                                                      ..onTap =
-                                                                          () {
-                                                                        Get.toNamed(
-                                                                          Routes
-                                                                              .specificuserlistscreen,
-                                                                          arguments:
-                                                                              industry.industryId,
-                                                                        );
-                                                                      },
-                                                              ),
-                                                            ],
-                                                          ),
-                                                        ),
-                                                      ],
+                                                            right: 3, top: 5),
+                                                    child: SvgPicture.asset(
+                                                      'assets/svgs/members.svg',
+                                                      height: 15,
+                                                      color: primaryColorLT,
                                                     ),
                                                   ),
-                                                )
-                                              ],
-                                            ),
-                                            Stack(
-                                              children: [
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          left: 5, top: 5),
-                                                  child: Container(
+                                                  Padding(
                                                     padding:
                                                         const EdgeInsets.only(
-                                                            bottom: 8,
-                                                            top: 8,
-                                                            left: 10,
-                                                            right: 10),
-                                                    decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              200),
-                                                      color:
-                                                          const Color.fromARGB(
-                                                              47,
-                                                              255,
-                                                              255,
-                                                              255),
-                                                    ),
-                                                    child: Row(
-                                                      children: [
-                                                        SvgPicture.asset(
-                                                          'assets/svgs/topics.svg',
-                                                          color: textColor,
-                                                          height: 11.5,
-                                                        ),
-                                                        RichText(
-                                                          text: TextSpan(
-                                                            children: [
-                                                              TextSpan(
-                                                                text: industry
-                                                                            .categoryId!
-                                                                            .toString() ==
-                                                                        'd479f179-3f41-4d84-915d-33110cf5b4fb'
-                                                                    ? ' Topics: (${controller.totalForums.value}) '
-                                                                    : ' Opport.: (${controller.totalForums.value})',
-                                                                style:
-                                                                    const TextStyle(
-                                                                  fontSize: 12,
-                                                                  color:
-                                                                      textColor,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w600,
-                                                                ),
-                                                              ),
-                                                            ],
+                                                            top: 5.0),
+                                                    child: RichText(
+                                                      text: TextSpan(
+                                                        children: [
+                                                          TextSpan(
+                                                            text: industry
+                                                                        .joinedUsers ==
+                                                                    null
+                                                                ? 'Members: 0'
+                                                                : 'Members: (${industry.joinedUsers?.where((String element) => element.isNotEmpty).toList().length ?? 0})',
+                                                            style:
+                                                                const TextStyle(
+                                                              fontSize: 12,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w600,
+                                                              color:
+                                                                  primaryColorLT,
+                                                              decoration:
+                                                                  TextDecoration
+                                                                      .underline,
+                                                            ),
+                                                            recognizer:
+                                                                TapGestureRecognizer()
+                                                                  ..onTap = () {
+                                                                    Get.toNamed(
+                                                                      Routes
+                                                                          .specificuserlistscreen,
+                                                                      arguments:
+                                                                          industry
+                                                                              .industryId,
+                                                                    );
+                                                                  },
                                                           ),
-                                                        ),
-                                                      ],
+                                                        ],
+                                                      ),
                                                     ),
                                                   ),
-                                                ),
-                                              ],
-                                            ),
-                                            Flexible(
-                                              child: Padding(
-                                                padding: const EdgeInsets.only(
-                                                    right: 20),
-                                                child: SizedBox(
-                                                  width: MediaQuery.of(context)
-                                                      .size
-                                                      .width,
-                                                  child: Align(
-                                                    alignment:
-                                                        Alignment.centerRight,
-                                                    child: Row(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .center,
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment.end,
-                                                      children: [
-                                                        JoinedButton(
-                                                          industry.joinedUsers
-                                                                  ?.contains(
-                                                                      _myProfile
-                                                                          .myProfile
-                                                                          .uid) ??
-                                                              false,
-                                                          () {
-                                                            toggleJoinAndLeaveIndustry(
-                                                                controller);
-                                                          },
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                ),
+                                                ],
                                               ),
-                                            )
-                                          ],
+                                              Row(
+                                                children: [
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            left: 8.0, top: 5),
+                                                    child: SvgPicture.asset(
+                                                      'assets/svgs/topics.svg',
+                                                      color: textColor,
+                                                      height: 11.5,
+                                                    ),
+                                                  ),
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            top: 5.0),
+                                                    child: RichText(
+                                                      text: TextSpan(
+                                                        children: [
+                                                          TextSpan(
+                                                            text: industry
+                                                                        .categoryId!
+                                                                        .toString() ==
+                                                                    'd479f179-3f41-4d84-915d-33110cf5b4fb'
+                                                                ? ' Topics: (${controller.totalForums.value}) '
+                                                                : ' Opport.: (${controller.totalForums.value})',
+                                                            style:
+                                                                const TextStyle(
+                                                              fontSize: 12,
+                                                              color: textColor,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w600,
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                              Spacer(),
+                                              Align(
+                                                alignment:
+                                                    Alignment.centerRight,
+                                                child: JoinedButton(
+                                                  industry.joinedUsers
+                                                          ?.contains(_myProfile
+                                                              .myProfile.uid) ??
+                                                      false,
+                                                  () {
+                                                    toggleJoinAndLeaveIndustry(
+                                                        controller);
+                                                  },
+                                                ),
+                                              )
+                                            ],
+                                          ),
                                         )
                                       ],
                                     )

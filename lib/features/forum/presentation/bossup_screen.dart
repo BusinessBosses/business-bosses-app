@@ -226,155 +226,136 @@ class _BossUpSectionState extends State<BossUpSection> {
                                           )),
                                         ],
                                       ),
-                                      Row(
-                                        children: [
-                                          Stack(
-                                            children: [
-                                              Padding(
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                            left: 35, right: 20.0),
+                                        child: Row(
+                                          children: [
+                                            Row(
+                                              children: [
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          right: 8, top: 5),
+                                                  child: SvgPicture.asset(
+                                                    'assets/svgs/members.svg',
+                                                    height: 15,
+                                                    color: primaryColorLT,
+                                                  ),
+                                                ),
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          top: 5.0),
+                                                  child: RichText(
+                                                    text: TextSpan(
+                                                      children: [
+                                                        TextSpan(
+                                                          text: widget.industry
+                                                                      .joinedUsers ==
+                                                                  null
+                                                              ? 'Members: 0'
+                                                              : 'Members: (${widget.industry.joinedUsers?.where((String element) => element.isNotEmpty).toList().length ?? 0})',
+                                                          style:
+                                                              const TextStyle(
+                                                            fontSize: 12,
+                                                            fontWeight:
+                                                                FontWeight.w600,
+                                                            color:
+                                                                primaryColorLT,
+                                                            decoration:
+                                                                TextDecoration
+                                                                    .underline,
+                                                          ),
+                                                          recognizer:
+                                                              TapGestureRecognizer()
+                                                                ..onTap = () {
+                                                                  Get.toNamed(
+                                                                    Routes
+                                                                        .specificuserlistscreen,
+                                                                    arguments: widget
+                                                                        .industry
+                                                                        .industryId,
+                                                                  );
+                                                                },
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                  left: 5, top: 5),
+                                              child: Container(
                                                 padding: const EdgeInsets.only(
-                                                    left: 35, top: 5),
+                                                    bottom: 8,
+                                                    top: 8,
+                                                    left: 10,
+                                                    right: 10),
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          200),
+                                                  color: const Color.fromARGB(
+                                                      47, 255, 255, 255),
+                                                ),
                                                 child: Row(
                                                   children: [
-                                                    Padding(
-                                                      padding:
-                                                          const EdgeInsets.only(
-                                                              right: 8),
-                                                      child: SvgPicture.asset(
-                                                        'assets/svgs/members.svg',
-                                                        height: 15,
-                                                        color: primaryColorLT,
-                                                      ),
+                                                    SvgPicture.asset(
+                                                      'assets/svgs/entries.svg',
+                                                      height: 11.5,
+                                                      color: textColor,
                                                     ),
                                                     RichText(
                                                       text: TextSpan(
                                                         children: [
                                                           TextSpan(
-                                                            text: widget.industry
-                                                                        .joinedUsers ==
-                                                                    null
-                                                                ? 'Members: 0'
-                                                                : 'Members: (${widget.industry.joinedUsers?.where((String element) => element.isNotEmpty).toList().length ?? 0})',
+                                                            text:
+                                                                ' Entries: (${controller.totalForums.value}) ',
                                                             style:
                                                                 const TextStyle(
                                                               fontSize: 12,
+                                                              color: textColor,
                                                               fontWeight:
                                                                   FontWeight
                                                                       .w600,
-                                                              color:
-                                                                  primaryColorLT,
-                                                              decoration:
-                                                                  TextDecoration
-                                                                      .underline,
                                                             ),
-                                                            recognizer:
-                                                                TapGestureRecognizer()
-                                                                  ..onTap = () {
-                                                                    Get.toNamed(
-                                                                      Routes
-                                                                          .specificuserlistscreen,
-                                                                      arguments: widget
-                                                                          .industry
-                                                                          .industryId,
-                                                                    );
-                                                                  },
                                                           ),
                                                         ],
                                                       ),
                                                     ),
                                                   ],
                                                 ),
-                                              )
-                                            ],
-                                          ),
-                                          Stack(
-                                            children: [
-                                              Padding(
-                                                padding: const EdgeInsets.only(
-                                                    left: 5, top: 5),
-                                                child: Container(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          bottom: 8,
-                                                          top: 8,
-                                                          left: 10,
-                                                          right: 10),
-                                                  decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            200),
-                                                    color: const Color.fromARGB(
-                                                        47, 255, 255, 255),
-                                                  ),
-                                                  child: Row(
-                                                    children: [
-                                                      SvgPicture.asset(
-                                                        'assets/svgs/entries.svg',
-                                                        height: 11.5,
-                                                        color: textColor,
-                                                      ),
-                                                      RichText(
-                                                        text: TextSpan(
-                                                          children: [
-                                                            TextSpan(
-                                                              text:
-                                                                  ' Entries: (${controller.totalForums.value}) ',
-                                                              style:
-                                                                  const TextStyle(
-                                                                fontSize: 12,
-                                                                color:
-                                                                    textColor,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w600,
-                                                              ),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                          Flexible(
-                                            child: Padding(
-                                              padding: const EdgeInsets.only(
-                                                  right: 20),
-                                              child: SizedBox(
-                                                width: MediaQuery.of(context)
-                                                    .size
-                                                    .width,
-                                                child: Align(
-                                                  alignment:
-                                                      Alignment.centerRight,
-                                                  child: Row(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .center,
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment.end,
-                                                    children: [
-                                                      JoinedButton(
-                                                        widget.industry
-                                                                .joinedUsers
-                                                                ?.contains(
-                                                                    _myProfile
-                                                                        .myProfile
-                                                                        .uid) ??
-                                                            false,
-                                                        () {
-                                                          toggleJoinAndLeaveIndustry(
-                                                              controller);
-                                                        },
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
                                               ),
                                             ),
-                                          )
-                                        ],
+                                            Spacer(),
+                                            Align(
+                                              alignment: Alignment.centerRight,
+                                              child: Row(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.end,
+                                                children: [
+                                                  JoinedButton(
+                                                    widget.industry.joinedUsers
+                                                            ?.contains(
+                                                                _myProfile
+                                                                    .myProfile
+                                                                    .uid) ??
+                                                        false,
+                                                    () {
+                                                      toggleJoinAndLeaveIndustry(
+                                                          controller);
+                                                    },
+                                                  ),
+                                                ],
+                                              ),
+                                            )
+                                          ],
+                                        ),
                                       )
                                     ],
                                   )
