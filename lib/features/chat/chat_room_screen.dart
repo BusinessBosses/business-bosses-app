@@ -226,161 +226,167 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                             )
                             .isEmpty
                         ? widget.frommarketplace
-                            ? SingleChildScrollView(
-                                child: Column(
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                          top: 20.0, right: 20, left: 20),
-                                      child: ClipRRect(
-                                        borderRadius: const BorderRadius.all(
-                                            Radius.circular(10)),
-                                        child: Stack(
-                                          children: [
-                                            widget.market!.images != null
-                                                ? Image.network(
-                                                    widget.market?.images?[0] ??
-                                                        '',
-                                                    fit: BoxFit.contain,
-                                                    height: 350,
-                                                    width: double.infinity,
-                                                  )
-                                                : Container(),
-                                            Positioned.fill(
-                                              child: Align(
-                                                alignment:
-                                                    Alignment.bottomCenter,
-                                                child: Container(
-                                                  color: Colors.white,
-                                                  child: Padding(
-                                                    padding: const EdgeInsets
-                                                            .symmetric(
-                                                        horizontal: 20,
-                                                        vertical: 20),
-                                                    child: Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      mainAxisSize:
-                                                          MainAxisSize.min,
-                                                      children: [
-                                                        Text(
-                                                          '${widget.market?.price}',
-                                                          style:
-                                                              const TextStyle(
-                                                            fontWeight:
-                                                                FontWeight.w800,
+                            ? Container(
+                                height: double.infinity,
+                                child: SingleChildScrollView(
+                                  child: Column(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                            top: 20.0, right: 20, left: 20),
+                                        child: ClipRRect(
+                                          borderRadius: const BorderRadius.all(
+                                              Radius.circular(10)),
+                                          child: Stack(
+                                            children: [
+                                              widget.market!.images != null
+                                                  ? Image.network(
+                                                      widget.market
+                                                              ?.images?[0] ??
+                                                          '',
+                                                      fit: BoxFit.contain,
+                                                      height: 350,
+                                                      width: double.infinity,
+                                                    )
+                                                  : Container(),
+                                              Positioned.fill(
+                                                child: Align(
+                                                  alignment:
+                                                      Alignment.bottomCenter,
+                                                  child: Container(
+                                                    color: Colors.white,
+                                                    child: Padding(
+                                                      padding: const EdgeInsets
+                                                              .symmetric(
+                                                          horizontal: 20,
+                                                          vertical: 20),
+                                                      child: Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        mainAxisSize:
+                                                            MainAxisSize.min,
+                                                        children: [
+                                                          Text(
+                                                            '${widget.market?.price}',
+                                                            style:
+                                                                const TextStyle(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w800,
+                                                            ),
                                                           ),
-                                                        ),
-                                                        const SizedBox(
-                                                            height: 8),
-                                                        DetectableText(
-                                                          text:
-                                                              '${widget.market?.description}',
-                                                          detectionRegExp:
-                                                              detectionRegExp(
-                                                                  hashtag:
-                                                                      false)!,
-                                                          detectedStyle:
-                                                              bodyText2.copyWith(
-                                                                  color: Colors
-                                                                      .blue),
-                                                          moreStyle: bodyText2
-                                                              .copyWith(
-                                                                  color: Colors
-                                                                      .redAccent),
-                                                          lessStyle: bodyText2
-                                                              .copyWith(
-                                                                  color: Colors
-                                                                      .redAccent),
-                                                          trimExpandedText:
-                                                              '  show less',
-                                                          basicStyle: bodyText2
-                                                              .copyWith(
+                                                          const SizedBox(
+                                                              height: 8),
+                                                          DetectableText(
+                                                            text:
+                                                                '${widget.market?.description}',
+                                                            detectionRegExp:
+                                                                detectionRegExp(
+                                                                    hashtag:
+                                                                        false)!,
+                                                            detectedStyle:
+                                                                bodyText2.copyWith(
+                                                                    color: Colors
+                                                                        .blue),
+                                                            moreStyle: bodyText2
+                                                                .copyWith(
+                                                                    color: Colors
+                                                                        .redAccent),
+                                                            lessStyle: bodyText2
+                                                                .copyWith(
+                                                                    color: Colors
+                                                                        .redAccent),
+                                                            trimExpandedText:
+                                                                '  show less',
+                                                            basicStyle: bodyText2
+                                                                .copyWith(
+                                                                    color:
+                                                                        textColor),
+                                                            onTap: (_) {},
+                                                          ),
+                                                          const SizedBox(
+                                                              height: 2),
+                                                          Row(
+                                                            children: [
+                                                              SvgPicture.asset(
+                                                                  'assets/svgs/location.svg'),
+                                                              const SizedBox(
+                                                                  width: 5),
+                                                              Text(
+                                                                '${widget.market?.location}',
+                                                                style:
+                                                                    const TextStyle(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .normal,
+                                                                  fontSize: 12,
                                                                   color:
-                                                                      textColor),
-                                                          onTap: (_) {},
-                                                        ),
-                                                        const SizedBox(
-                                                            height: 2),
-                                                        Row(
-                                                          children: [
-                                                            SvgPicture.asset(
-                                                                'assets/svgs/location.svg'),
-                                                            const SizedBox(
-                                                                width: 5),
-                                                            Text(
-                                                              '${widget.market?.location}',
-                                                              style:
-                                                                  const TextStyle(
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .normal,
-                                                                fontSize: 12,
-                                                                color:
-                                                                    subtextColor,
+                                                                      subtextColor,
+                                                                ),
+                                                                overflow:
+                                                                    TextOverflow
+                                                                        .ellipsis,
+                                                                softWrap: false,
                                                               ),
-                                                              overflow:
-                                                                  TextOverflow
-                                                                      .ellipsis,
-                                                              softWrap: false,
-                                                            ),
-                                                            const SizedBox(
-                                                                width: 5),
-                                                            SvgPicture.asset(
-                                                                'assets/svgs/category.svg'),
-                                                            const SizedBox(
-                                                                width: 3),
-                                                            Text(
-                                                              widget.market!.category
-                                                                          .length >
-                                                                      40
-                                                                  ? '${widget.market!.category.substring(0, 40)}...'
-                                                                  : widget
-                                                                      .market!
-                                                                      .category,
-                                                              style:
-                                                                  const TextStyle(
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .normal,
-                                                                fontSize: 12,
-                                                                color:
-                                                                    subtextColor,
+                                                              const SizedBox(
+                                                                  width: 5),
+                                                              SvgPicture.asset(
+                                                                  'assets/svgs/category.svg'),
+                                                              const SizedBox(
+                                                                  width: 3),
+                                                              Text(
+                                                                widget.market!.category
+                                                                            .length >
+                                                                        40
+                                                                    ? '${widget.market!.category.substring(0, 40)}...'
+                                                                    : widget
+                                                                        .market!
+                                                                        .category,
+                                                                style:
+                                                                    const TextStyle(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .normal,
+                                                                  fontSize: 12,
+                                                                  color:
+                                                                      subtextColor,
+                                                                ),
                                                               ),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ],
+                                                            ],
+                                                          ),
+                                                        ],
+                                                      ),
                                                     ),
                                                   ),
                                                 ),
                                               ),
-                                            ),
-                                          ],
+                                            ],
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: 20.0,
-                                          bottom: 200,
-                                          right: 20,
-                                          top: 20),
-                                      child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(10),
-                                        child: Container(
-                                          color: Colors.grey.shade200,
-                                          child: const Padding(
-                                            padding: EdgeInsets.all(15.0),
-                                            child: Text(
-                                              'Safety tips \n\n• Check seller offers buyer protection before making payment \n• On delivery, check that the item delivered is what you ordered \n• Report any seller you have any concerns about',
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                            left: 20.0,
+                                            bottom: 200,
+                                            right: 20,
+                                            top: 20),
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          child: Container(
+                                            color: Colors.grey.shade200,
+                                            child: const Padding(
+                                              padding: EdgeInsets.all(15.0),
+                                              child: Text(
+                                                'Safety tips \n\n• Check seller offers buyer protection before making payment \n• On delivery, check that the item delivered is what you ordered \n• Report any seller you have any concerns about',
+                                              ),
                                             ),
                                           ),
                                         ),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
                               )
                             : SafetyModel(
@@ -395,98 +401,6 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                                     'No message sent to ${args.username} yet',
                               )
                         : Stack(children: [
-                            ListView.builder(
-                              padding: const EdgeInsets.only(
-                                  left: 16.0,
-                                  right: 16.0,
-                                  bottom: 75.0,
-                                  top: 16.0),
-                              reverse: true,
-                              itemCount: controller
-                                  .extractConversations(args.uid,
-                                      _profileController.myProfile.uid)
-                                  .length,
-                              itemBuilder: (BuildContext context, int i) {
-                                final MessageModel message =
-                                    controller.extractConversations(args.uid,
-                                        _profileController.myProfile.uid)[i];
-                                // final reversedIndex = _messages.length - 1 - i;
-                                return Column(
-                                  children: [
-                                    InkWell(
-                                      onLongPress: () {
-                                        FocusScopeNode currentFocus =
-                                            FocusScope.of(context);
-                                        if (!currentFocus.hasPrimaryFocus) {
-                                          currentFocus.unfocus();
-                                        }
-
-                                        showDialog(
-                                          context: context,
-                                          builder: (BuildContext context) =>
-                                              AlertDialog(
-                                            content: Column(
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: [
-                                                ListTile(
-                                                  onTap: () async {
-                                                    navigateTo(context);
-                                                    await Clipboard.setData(
-                                                      ClipboardData(
-                                                        text: message
-                                                            .messageText!,
-                                                      ),
-                                                    );
-                                                    // ignore: use_build_context_synchronously
-                                                    showSnackBar(context,
-                                                        message:
-                                                            'Text Copied!');
-                                                  },
-                                                  contentPadding:
-                                                      EdgeInsets.zero,
-                                                  title: const TextWidget(
-                                                    text: 'Copy Text',
-                                                  ),
-                                                ),
-                                                ListTile(
-                                                  onTap: () {
-                                                    navigateTo(context);
-                                                    optionsDialog(context, () {
-                                                      // _isLoading = true;
-                                                      Navigator.pop(context);
-                                                      // deleteMessage(
-                                                      //     _messages[reversedIndex],
-                                                      //     reversedIndex);
-                                                      // if (reversedIndex ==
-                                                      //     _messages.length - 1) {
-                                                      //   DeleteLastMessage(_messages[
-                                                      //       reversedIndex]);
-                                                      // }
-                                                    });
-                                                  },
-                                                  contentPadding:
-                                                      EdgeInsets.zero,
-                                                  title: const TextWidget(
-                                                    text: 'Delete Message',
-                                                    color: Colors.red,
-                                                  ),
-                                                )
-                                              ],
-                                            ),
-                                          ),
-                                        );
-
-                                        // deleteMessage(_messages[reversedIndex]);
-                                      },
-                                      child: ChatBox(
-                                        message,
-                                        myUid: _profileController.myProfile.uid,
-                                      ),
-                                    ),
-                                  ],
-                                );
-                              },
-                            ),
                             showColumn
                                 ? Column(
                                     children: [
@@ -623,6 +537,98 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                                     ],
                                   )
                                 : SizedBox(),
+                            ListView.builder(
+                              padding: const EdgeInsets.only(
+                                  left: 16.0,
+                                  right: 16.0,
+                                  bottom: 75.0,
+                                  top: 16.0),
+                              reverse: true,
+                              itemCount: controller
+                                  .extractConversations(args.uid,
+                                      _profileController.myProfile.uid)
+                                  .length,
+                              itemBuilder: (BuildContext context, int i) {
+                                final MessageModel message =
+                                    controller.extractConversations(args.uid,
+                                        _profileController.myProfile.uid)[i];
+                                // final reversedIndex = _messages.length - 1 - i;
+                                return Column(
+                                  children: [
+                                    InkWell(
+                                      onLongPress: () {
+                                        FocusScopeNode currentFocus =
+                                            FocusScope.of(context);
+                                        if (!currentFocus.hasPrimaryFocus) {
+                                          currentFocus.unfocus();
+                                        }
+
+                                        showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) =>
+                                              AlertDialog(
+                                            content: Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                ListTile(
+                                                  onTap: () async {
+                                                    navigateTo(context);
+                                                    await Clipboard.setData(
+                                                      ClipboardData(
+                                                        text: message
+                                                            .messageText!,
+                                                      ),
+                                                    );
+                                                    // ignore: use_build_context_synchronously
+                                                    showSnackBar(context,
+                                                        message:
+                                                            'Text Copied!');
+                                                  },
+                                                  contentPadding:
+                                                      EdgeInsets.zero,
+                                                  title: const TextWidget(
+                                                    text: 'Copy Text',
+                                                  ),
+                                                ),
+                                                ListTile(
+                                                  onTap: () {
+                                                    navigateTo(context);
+                                                    optionsDialog(context, () {
+                                                      // _isLoading = true;
+                                                      Navigator.pop(context);
+                                                      // deleteMessage(
+                                                      //     _messages[reversedIndex],
+                                                      //     reversedIndex);
+                                                      // if (reversedIndex ==
+                                                      //     _messages.length - 1) {
+                                                      //   DeleteLastMessage(_messages[
+                                                      //       reversedIndex]);
+                                                      // }
+                                                    });
+                                                  },
+                                                  contentPadding:
+                                                      EdgeInsets.zero,
+                                                  title: const TextWidget(
+                                                    text: 'Delete Message',
+                                                    color: Colors.red,
+                                                  ),
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                        );
+
+                                        // deleteMessage(_messages[reversedIndex]);
+                                      },
+                                      child: ChatBox(
+                                        message,
+                                        myUid: _profileController.myProfile.uid,
+                                      ),
+                                    ),
+                                  ],
+                                );
+                              },
+                            ),
                           ]),
                   ),
                   Positioned(
