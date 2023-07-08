@@ -100,9 +100,11 @@ class MarketModel {
       promote: map['promote'] as bool,
       likes: map['likes'] != null ? List<String>.from((map['likes'])) : null,
       coins: map['coins'] != null ? List<String>.from((map['coins'])) : null,
-      comments: List.from(map['comments'])
-          .map((e) => CommentModel.fromMap(e as Map<String, dynamic>))
-          .toList(),
+      comments: map['comments'] != null
+          ? List<dynamic>.from(map['comments'])
+              .map((e) => CommentModel.fromMap(e as Map<String, dynamic>))
+              .toList()
+          : null,
     );
   }
 
