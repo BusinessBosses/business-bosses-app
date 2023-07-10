@@ -61,7 +61,8 @@ class _WriteACommentState extends State<WriteAComment> {
           const SizedBox(width: 4.0),
           IconButton(
             onPressed: () async {
-              if (_commentController.text.isEmpty) {
+              if (_commentController.text.trim().isEmpty) {
+                // Text is empty or contains only whitespace characters
                 return;
               }
               String text = _commentController.text;
