@@ -415,6 +415,7 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
                                 ),
                                 // Container()
                                 profilepostsdisplay(
+                                  ispublicposts: true,
                                   context,
                                   publicUser,
                                   _posts,
@@ -438,6 +439,7 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
                                 ),
                                 // Container()
                                 profilepostsdisplay(
+                                  ispublicposts: true,
                                   context,
                                   publicUser,
                                   _posts,

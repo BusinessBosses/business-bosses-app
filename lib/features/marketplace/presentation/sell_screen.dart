@@ -1,6 +1,8 @@
+import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:country_list_pick/country_list_pick.dart';
 import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
 import 'package:detectable_text_field/widgets/detectable_text_field.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -9,6 +11,7 @@ import 'package:photo_manager/photo_manager.dart';
 
 import '../../../action/action.dart';
 import '../../../common/dialogs/snackbar.dart';
+import '../../../common/models/comment_model.dart';
 import '../../../common/widgets/buttons/my_outlined_button.dart';
 import '../../../common/widgets/gallery_screen.dart';
 import '../../../common/widgets/text_widget.dart';
@@ -288,18 +291,12 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
                         ),
                       ),
                 widget.isUpd
-                    ? const SizedBox()
+                    ? Container()
                     : Preview(controller: createMarketController),
                 widget.isUpd
-                    ? const SizedBox()
+                    ? Container()
                     : Column(
                         children: <Widget>[
-                          SizedBox(
-                            width: double.infinity,
-                            height: 1,
-                            child: ColoredBox(
-                                color: Colors.black.withOpacity(0.09)),
-                          ),
                           Align(
                             alignment: Alignment.center,
                             child: Container(
@@ -316,7 +313,7 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
                                             CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            'Boost Post',
+                                            'Boost this listing?',
                                             style: TextStyle(
                                               fontWeight: FontWeight.w600,
                                               fontSize: 18,
@@ -362,12 +359,6 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
                               ),
                             ),
                           ),
-                          SizedBox(
-                            width: double.infinity,
-                            height: 1,
-                            child: ColoredBox(
-                                color: Colors.black.withOpacity(0.09)),
-                          ),
                         ],
                       ),
                 const SizedBox(
@@ -403,6 +394,52 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
                     buttonType: ButtonType.elevated,
                   ),
                 ),
+                Center(
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                      left: 20.0,
+                      right: 20,
+                      top: 20,
+                      bottom: 50,
+                    ),
+                    child: Center(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                        child: Text.rich(
+                          TextSpan(
+                            children: [
+                              const TextSpan(
+                                text:
+                                    'By clicking on Post, you accept the Terms of Use, confirm that you will abide by the ',
+                                style: TextStyle(
+                                    fontSize: 12, color: subtextColor),
+                              ),
+                              TextSpan(
+                                text: 'Marketplace Guidelines',
+                                style: const TextStyle(
+                                  color: Colors.red,
+                                  decoration: TextDecoration.underline,
+                                  fontSize: 12,
+                                ),
+                                recognizer: TapGestureRecognizer()
+                                  ..onTap = () {
+                                    // Show the popup here
+                                  },
+                              ),
+                              const TextSpan(
+                                text:
+                                    ', and declare that this posting does not include any Prohibited Items.',
+                                style: TextStyle(
+                                    fontSize: 12, color: subtextColor),
+                              ),
+                            ],
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
@@ -428,11 +465,20 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
         'description': descriptionController.text,
         'price': _priceController.text,
         'promote': _market?.promote,
-        'comments': _market?.comments,
         'likes': _market?.likes,
+        'comments':
+            _market?.comments?.map((CommentModel x) => x.toMap()).toList(),
         'coins': _market?.coins,
+        'images': _market?.images,
         'userId': _market?.userId,
-        'user': _market?.user,
+        'user': _market?.user.toMap(),
+      });
+      await ApiService.put(path: 'markets/${_market?.marketId}', body: {
+        'category': _selectedCategory,
+        'location': _selectedLocation,
+        'description': descriptionController.text,
+        'price': _priceController.text,
+        'images': _market?.images,
       });
       Get.back();
     }

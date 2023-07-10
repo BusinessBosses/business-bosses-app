@@ -192,6 +192,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                           ),
                                         ),
                                         profilepostsdisplay(
+                                          ispublicposts: false,
                                           context,
                                           profileController.myProfile,
                                           _posts,
@@ -215,6 +216,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                           ),
                                         ),
                                         profilepostsdisplay(
+                                          ispublicposts: false,
                                           context,
                                           profileController.myProfile,
                                           _posts,

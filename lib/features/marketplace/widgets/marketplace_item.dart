@@ -15,10 +15,14 @@ import '../../../../common/widgets/text_widget.dart';
 import '../../../../common/widgets/user_avatar_with_badge.dart';
 import '../../../../navigation/routes.dart';
 import '../../../../utils/theme/theme.dart';
+import '../../../common/models/api_response_model.dart';
 import '../../../common/models/comment_model.dart';
+import '../../../common/models/user_model.dart';
 import '../../../common/widgets/buttons/my_outlined_button.dart';
+import '../../../common/widgets/ranking_badge.dart';
 import '../../chat/chat_room_screen.dart';
 import '../../profile/presentation/publicprofilescreen.dart';
+import '../../profile/widgets/premium_profile_tile.dart';
 import '../controllers/market_controller.dart';
 import '../models/market_model.dart';
 import '../presentation/sell_screen.dart';
@@ -43,6 +47,26 @@ class _MarketTileState extends State<MarketTile> {
   final MarketController _marketController = Get.find();
   final ProfileController profileController = Get.find();
   late MarketModel _post;
+
+  Future<void> connect(String userId) async {
+    // ignore: unused_local_variable
+    final ApiResponseModel res =
+        await ApiService.post(path: '/connection/connect', body: {
+      'userId': profileController.myProfile.uid,
+      'connectedId': userId,
+      'timestamp': DateTime.now().millisecondsSinceEpoch
+    });
+  }
+
+  Future<void> disconnect(String userId) async {
+    // ignore: unused_local_variable
+    final ApiResponseModel res =
+        await ApiService.post(path: '/connection/disconnect', body: {
+      'userId': profileController.myProfile.uid,
+      'connectedId': userId,
+      'timestamp': DateTime.now().millisecondsSinceEpoch
+    });
+  }
 
   @override
   void initState() {
@@ -139,8 +163,8 @@ class _MarketTileState extends State<MarketTile> {
                     },
                     child: UserAvatarWithBadge(
                       user: _post.user,
-                      height: 55.0,
-                      width: 55.0,
+                      height: 40.0,
+                      width: 40.0,
                       radius: 50.0,
                       placeHolder: Icons.person,
                       iconSize: 24.0,
@@ -157,17 +181,54 @@ class _MarketTileState extends State<MarketTile> {
                             arguments: _post.user);
                       }
                     },
-                    child: Text(
-                      '${_post.user.name!.length <= 20 ? _post.user.name : "${_post.user.name!.substring(0, 20)}..."}',
-                      style: Theme.of(context).textTheme.bodyLarge,
-                    ),
+                    child: _post.user.isSubscribed
+                        ? Padding(
+                            padding: const EdgeInsets.only(top: 0.0),
+                            child: Row(
+                              children: [
+                                Text(
+                                  _post.user.name != null &&
+                                          _post.user.name!.length <= 20
+                                      ? _post.user.name!
+                                      : _post.user.name != null
+                                          ? "${_post.user!.name!.substring(0, 20)}..."
+                                          : _post.user.username,
+                                  style: Theme.of(context).textTheme.bodyLarge,
+                                ),
+                                const SizedBox(width: 7),
+                                SvgPicture.asset(
+                                  'assets/svgs/premiumbadge.svg',
+                                  height: 16,
+                                )
+                              ],
+                            ),
+                          )
+                        : Text(
+                            _post.user!.name != null &&
+                                    _post.user!.name!.length <= 20
+                                ? _post.user!.name!
+                                : _post.user!.name != null
+                                    ? "${_post.user!.name!.substring(0, 15)}..."
+                                    : _post.user!.username,
+                            style: Theme.of(context).textTheme.bodyLarge,
+                          ),
                   ),
                   trailing: SizedBox(
                     height: 30,
-                    width: 80,
+                    width: profileController.myProfile.connecteds != null &&
+                            profileController.myProfile.connecteds!
+                                .contains(_post.user!.uid)
+                        ? 140
+                        : 130,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
+                        _post.user!.isSubscribed &&
+                                _post.user!.uid !=
+                                    profileController.myProfile.uid
+                            ? premiumButtonHeader(widget.post.user!,
+                                profileController.myProfile, connectToUser)
+                            : Container(),
                         const SizedBox(
                           width: 10,
                         ),
@@ -411,10 +472,12 @@ class _MarketTileState extends State<MarketTile> {
                                             size: 16,
                                           ),
                                           Text(
-                                            _post.user.averageRating.toString(),
+                                            _post.user.averageRating!
+                                                .toStringAsFixed(1),
                                             style: const TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 13),
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 13,
+                                            ),
                                           ),
                                           const SizedBox(
                                             width: 5,
@@ -623,7 +686,7 @@ class _MarketTileState extends State<MarketTile> {
           ),
           Container(
             color: backgroundcolorinterface,
-            height: 5,
+            height: 7,
           )
         ],
       );
@@ -793,6 +856,41 @@ class _MarketTileState extends State<MarketTile> {
         ),
       ),
     );
+  }
+
+  void connectToUser() async {
+    print(
+        "This are my connected users ${profileController.myProfile.connecteds}");
+    final int checkConnected = profileController.myProfile.connecteds == null
+        ? -1
+        : profileController.myProfile.connecteds!
+            .indexWhere((String element) => element == _post.user!.uid);
+    if (checkConnected == -1) {
+      // connecteds.add(user);
+      profileController.updateConnections(_post.user!.uid);
+      setState(() {
+        UserModel.fromMap({
+          ..._post.user!.toMap(),
+          'connectionCount': _post.user!.connectionCount == null
+              ? 1
+              : _post.user!.connectionCount! + 1
+        });
+      });
+      await connect(widget.post.user!.uid);
+    } else {
+      profileController.updateConnections(_post.user!.uid);
+
+      setState(() {
+        UserModel.fromMap({
+          ..._post.user!.toMap(),
+          'connectionCount': _post.user!.connectionCount == null
+              ? null
+              : _post.user!.connectionCount! - 1
+        });
+      });
+      // connecteds.removeAt(checkConnected);
+      await disconnect(_post.user!.uid);
+    }
   }
 }
 

@@ -5,6 +5,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 
+import '../../../common/widgets/popup/bossup_challenge_popup.dart';
 import '../../../common/widgets/safety_model.dart';
 import '../../../navigation/routes.dart';
 import '../../../utils/theme/theme.dart';
@@ -69,155 +70,184 @@ class _BossUpSectionState extends State<BossUpSection> {
                   children: [
                     Container(
                       width: double.infinity,
-                      color: Colors.transparent,
-                      child: Column(
-                        children: [
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Align(
-                              alignment: Alignment.centerRight,
-                              child: Padding(
-                                padding: const EdgeInsets.only(right: 20),
-                                child: ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                      minimumSize: const Size(150, 45)),
-                                  onPressed: () {
-                                    int now =
-                                        DateTime.now().millisecondsSinceEpoch;
-                                    int previousStamp = _myProfile
-                                            .myProfile.bossOfTheWeekTimeStamp ??
-                                        0;
-                                    if ((previousStamp + 2419200000) > now) {
-                                      const SnackBar snackBar = SnackBar(
-                                        duration: Duration(seconds: 4),
-                                        content: Text(
-                                            'You may have posted in Boss Up Challenge'
-                                            ' in the past 4 weeks. You Can only post once in 4 weeks.'),
-                                      );
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(snackBar);
-                                    } else {
-                                      Get.toNamed(Routes.createBossUp,
-                                          arguments: {
-                                            'isBossUp': true,
-                                            'industryId':
-                                                widget.industry.industryId
-                                          });
-                                    }
-                                  },
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      const Text(
-                                        'Enter Challenge',
-                                        style: TextStyle(
-                                            fontSize: 15,
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.w500),
-                                      ),
-                                      const SizedBox(
-                                        width: 5,
-                                      ),
-                                      SvgPicture.asset(
-                                          'assets/svgs/startatopic.svg')
-                                    ],
+                      color: backgroundcolorinterface,
+                      child: Stack(children: [
+                        Padding(
+                            padding: const EdgeInsets.only(left: 20, top: 25),
+                            child: GestureDetector(
+                              onTap: (() {
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) =>
+                                      const BossUpChallangePopUpcopy(),
+                                );
+                              }),
+                              child: Row(
+                                children: [
+                                  const Text(
+                                    'About ',
+                                    style: TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w700),
                                   ),
-                                ),
-                              )),
-                          Container(
-                            decoration: BoxDecoration(
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withOpacity(0.09),
-                                  blurRadius: 100.0, // soften the shadow
-                                  spreadRadius: 5, //extend the shadow
-                                )
-                              ],
+                                  SvgPicture.asset(
+                                    'assets/svgs/info.svg',
+                                    height: 20,
+                                  ),
+                                ],
+                              ),
+                            )),
+                        Column(
+                          children: [
+                            const SizedBox(
+                              height: 10,
                             ),
-                            child: Stack(
-                              children: [
-                                Container(
-                                  margin: const EdgeInsets.only(
-                                      top: 10, right: 20, left: 20),
-                                  height: 150,
-                                  width: double.infinity,
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(15.0),
-                                    child:
-                                        const ColoredBox(color: Colors.white),
-                                  ),
-                                ),
-                                Column(
-                                  children: [
-                                    Row(
+                            Align(
+                                alignment: Alignment.centerRight,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(right: 20),
+                                  child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                        minimumSize: const Size(150, 45)),
+                                    onPressed: () {
+                                      int now =
+                                          DateTime.now().millisecondsSinceEpoch;
+                                      int previousStamp = _myProfile.myProfile
+                                              .bossOfTheWeekTimeStamp ??
+                                          0;
+                                      if ((previousStamp + 2419200000) > now) {
+                                        const SnackBar snackBar = SnackBar(
+                                          duration: Duration(seconds: 4),
+                                          content: Text(
+                                              'You may have posted in Boss Up Challenge'
+                                              ' in the past 4 weeks. You Can only post once in 4 weeks.'),
+                                        );
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(snackBar);
+                                      } else {
+                                        Get.toNamed(Routes.createBossUp,
+                                            arguments: {
+                                              'isBossUp': true,
+                                              'industryId':
+                                                  widget.industry.industryId
+                                            });
+                                      }
+                                    },
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
                                       children: [
-                                        Container(
-                                          margin: const EdgeInsets.only(
-                                              top: 25, right: 20, left: 35),
-                                          height: 86,
-                                          width: 142,
-                                          child: ClipRRect(
-                                            borderRadius:
-                                                BorderRadius.circular(10.0),
-                                            child: FittedBox(
-                                              fit: BoxFit.fill,
-                                              child: CachedNetworkImage(
-                                                imageUrl:
-                                                    widget.industry.photo!,
-                                                memCacheHeight: 256,
-                                                memCacheWidth: 256,
-                                                placeholder: (BuildContext
-                                                            context,
-                                                        String photo) =>
-                                                    const CircularProgressIndicator(),
-                                                errorWidget:
-                                                    // ignore: always_specify_types
-                                                    (BuildContext context,
-                                                            // ignore: always_specify_types
-                                                            String photo,
-                                                            dynamic error) =>
-                                                        const Icon(Icons.error),
+                                        const Text(
+                                          'Enter Challenge',
+                                          style: TextStyle(
+                                              fontSize: 15,
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w500),
+                                        ),
+                                        const SizedBox(
+                                          width: 5,
+                                        ),
+                                        SvgPicture.asset(
+                                            'assets/svgs/startatopic.svg')
+                                      ],
+                                    ),
+                                  ),
+                                )),
+                            Container(
+                              decoration: BoxDecoration(
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withOpacity(0.09),
+                                    blurRadius: 100.0, // soften the shadow
+                                    spreadRadius: 5, //extend the shadow
+                                  )
+                                ],
+                              ),
+                              child: Stack(
+                                children: [
+                                  Container(
+                                    margin: const EdgeInsets.only(
+                                        top: 10, right: 20, left: 20),
+                                    height: 150,
+                                    width: double.infinity,
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(15.0),
+                                      child:
+                                          const ColoredBox(color: Colors.white),
+                                    ),
+                                  ),
+                                  Column(
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Container(
+                                            margin: const EdgeInsets.only(
+                                                top: 25, right: 20, left: 35),
+                                            height: 86,
+                                            width: 142,
+                                            child: ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(10.0),
+                                              child: FittedBox(
+                                                fit: BoxFit.fill,
+                                                child: CachedNetworkImage(
+                                                  imageUrl:
+                                                      widget.industry.photo!,
+                                                  memCacheHeight: 256,
+                                                  memCacheWidth: 256,
+                                                  placeholder: (BuildContext
+                                                              context,
+                                                          String photo) =>
+                                                      const CircularProgressIndicator(),
+                                                  errorWidget:
+                                                      // ignore: always_specify_types
+                                                      (BuildContext context,
+                                                              // ignore: always_specify_types
+                                                              String photo,
+                                                              dynamic error) =>
+                                                          const Icon(
+                                                              Icons.error),
+                                                ),
                                               ),
                                             ),
                                           ),
-                                        ),
-                                        Expanded(
-                                            child: Padding(
-                                          padding:
-                                              const EdgeInsets.only(right: 35),
-                                          child: Text(
-                                            widget.industry.description ??
-                                                'Industry Description',
-                                            style: const TextStyle(
-                                                fontSize: 15,
-                                                fontWeight: FontWeight.w700),
-                                            softWrap: true,
-                                            maxLines: 5,
-                                          ),
-                                        )),
-                                      ],
-                                    ),
-                                    Row(
-                                      children: [
-                                        Stack(
+                                          Expanded(
+                                              child: Padding(
+                                            padding: const EdgeInsets.only(
+                                                right: 35),
+                                            child: Text(
+                                              widget.industry.description ??
+                                                  'Industry Description',
+                                              style: const TextStyle(
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.w700),
+                                              softWrap: true,
+                                              maxLines: 5,
+                                            ),
+                                          )),
+                                        ],
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                            left: 35, right: 20.0),
+                                        child: Row(
                                           children: [
-                                            Padding(
-                                              padding: const EdgeInsets.only(
-                                                  left: 35, top: 5),
-                                              child: Row(
-                                                children: [
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            right: 8),
-                                                    child: SvgPicture.asset(
-                                                      'assets/svgs/members.svg',
-                                                      height: 15,
-                                                      color: primaryColorLT,
-                                                    ),
+                                            Row(
+                                              children: [
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          right: 8, top: 5),
+                                                  child: SvgPicture.asset(
+                                                    'assets/svgs/members.svg',
+                                                    height: 15,
+                                                    color: primaryColorLT,
                                                   ),
-                                                  RichText(
+                                                ),
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          top: 5.0),
+                                                  child: RichText(
                                                     text: TextSpan(
                                                       children: [
                                                         TextSpan(
@@ -252,13 +282,9 @@ class _BossUpSectionState extends State<BossUpSection> {
                                                       ],
                                                     ),
                                                   ),
-                                                ],
-                                              ),
-                                            )
-                                          ],
-                                        ),
-                                        Stack(
-                                          children: [
+                                                ),
+                                              ],
+                                            ),
                                             Padding(
                                               padding: const EdgeInsets.only(
                                                   left: 5, top: 5),
@@ -304,159 +330,141 @@ class _BossUpSectionState extends State<BossUpSection> {
                                                 ),
                                               ),
                                             ),
-                                          ],
-                                        ),
-                                        Flexible(
-                                          child: Padding(
-                                            padding: const EdgeInsets.only(
-                                                right: 20),
-                                            child: SizedBox(
-                                              width: MediaQuery.of(context)
-                                                  .size
-                                                  .width,
-                                              child: Align(
-                                                alignment:
-                                                    Alignment.centerRight,
-                                                child: Row(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.center,
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.end,
-                                                  children: [
-                                                    JoinedButton(
-                                                      widget.industry
-                                                              .joinedUsers
-                                                              ?.contains(
-                                                                  _myProfile
-                                                                      .myProfile
-                                                                      .uid) ??
-                                                          false,
-                                                      () {
-                                                        toggleJoinAndLeaveIndustry(
-                                                            controller);
-                                                      },
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        )
-                                      ],
-                                    )
-                                  ],
-                                )
-                              ],
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          hmeController.bossUp != null &&
-                                  hmeController.bossUp!.isNotEmpty
-                              ? GestureDetector(
-                                  onTap: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (BuildContext context) =>
-                                              const Bossuppartner()),
-                                    );
-                                  },
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(
-                                      right: 20,
-                                      left: 20,
-                                      bottom: 10,
-                                    ),
-                                    child: Container(
-                                      height: 40,
-                                      decoration: BoxDecoration(
-                                        color: const Color(0xFFF4F4F4),
-                                        borderRadius: BorderRadius.circular(10),
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color: Colors.grey.withOpacity(0.3),
-                                            spreadRadius: 20,
-                                            blurRadius: 500,
-                                            offset: const Offset(0, 3),
-                                          ),
-                                        ],
-                                      ),
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                            color: const Color(0xFFFFFFFF)
-                                                .withAlpha(150),
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                            boxShadow: [
-                                              BoxShadow(
-                                                color:
-                                                    Colors.white.withOpacity(1),
-                                                spreadRadius: 20,
-                                                blurRadius: 500,
-                                                offset: const Offset(0, 3),
-                                              ),
-                                            ]),
-                                        child: Row(
-                                          children: [
-                                            const Padding(
-                                              padding: EdgeInsets.only(
-                                                left: 10,
-                                              ),
-                                              child: Center(
-                                                child: Padding(
-                                                  padding: EdgeInsets.all(2),
-                                                  child: Text(
-                                                    'Boss Up by',
-                                                    style:
-                                                        TextStyle(fontSize: 11),
+                                            Spacer(),
+                                            Align(
+                                              alignment: Alignment.centerRight,
+                                              child: Row(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.end,
+                                                children: [
+                                                  JoinedButton(
+                                                    widget.industry.joinedUsers
+                                                            ?.contains(
+                                                                _myProfile
+                                                                    .myProfile
+                                                                    .uid) ??
+                                                        false,
+                                                    () {
+                                                      toggleJoinAndLeaveIndustry(
+                                                          controller);
+                                                    },
                                                   ),
-                                                ),
-                                              ),
-                                            ),
-                                            const SizedBox(width: 10),
-                                            Text(
-                                              '|',
-                                              style: TextStyle(
-                                                  fontSize: 20,
-                                                  color: textColor
-                                                      .withOpacity(0.5)),
-                                            ),
-                                            const SizedBox(width: 10),
-                                            Text(
-                                              hmeController.bossUp != null &&
-                                                      hmeController
-                                                          .bossUp!.isNotEmpty
-                                                  ? hmeController.bossUp!.last[
-                                                          'companyName'] ??
-                                                      ''
-                                                  : '',
-                                              style: const TextStyle(
-                                                fontSize: 15,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                              overflow: TextOverflow.ellipsis,
-                                              softWrap: false,
-                                            ),
-                                            const Spacer(),
-                                            Padding(
-                                              padding: const EdgeInsets.only(
-                                                  right: 10.0),
-                                              child: SvgPicture.asset(
-                                                'assets/svgs/nexticon.svg',
-                                                color: textColor,
+                                                ],
                                               ),
                                             )
                                           ],
                                         ),
+                                      )
+                                    ],
+                                  )
+                                ],
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            hmeController.bossUp != null &&
+                                    hmeController.bossUp!.isNotEmpty
+                                ? GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (BuildContext context) =>
+                                                const Bossuppartner()),
+                                      );
+                                    },
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(
+                                        right: 20,
+                                        left: 20,
+                                        bottom: 10,
+                                      ),
+                                      child: Container(
+                                        height: 40,
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                        ),
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                              color: const Color(0xFFFFFFFF)
+                                                  .withAlpha(150),
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                              boxShadow: [
+                                                BoxShadow(
+                                                  color: Colors.white
+                                                      .withOpacity(1),
+                                                  spreadRadius: 20,
+                                                  blurRadius: 500,
+                                                  offset: const Offset(0, 3),
+                                                ),
+                                              ]),
+                                          child: Row(
+                                            children: [
+                                              const Padding(
+                                                padding: EdgeInsets.only(
+                                                  left: 10,
+                                                ),
+                                                child: Center(
+                                                  child: Padding(
+                                                    padding: EdgeInsets.all(2),
+                                                    child: Text(
+                                                      'Boss Up by',
+                                                      style: TextStyle(
+                                                          fontSize: 11),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                              const SizedBox(width: 10),
+                                              Text(
+                                                '|',
+                                                style: TextStyle(
+                                                    fontSize: 20,
+                                                    color: textColor
+                                                        .withOpacity(0.5)),
+                                              ),
+                                              const SizedBox(width: 10),
+                                              Text(
+                                                hmeController.bossUp != null &&
+                                                        hmeController
+                                                            .bossUp!.isNotEmpty
+                                                    ? hmeController
+                                                                .bossUp!.last[
+                                                            'companyName'] ??
+                                                        ''
+                                                    : '',
+                                                style: const TextStyle(
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                                overflow: TextOverflow.ellipsis,
+                                                softWrap: false,
+                                              ),
+                                              const Spacer(),
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    right: 10.0),
+                                                child: SvgPicture.asset(
+                                                  'assets/svgs/nexticon.svg',
+                                                  color: textColor,
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                )
-                              : const SizedBox(),
-                        ],
-                      ),
+                                  )
+                                : const SizedBox(),
+                          ],
+                        ),
+                      ]),
                     )
                   ],
                 ),
