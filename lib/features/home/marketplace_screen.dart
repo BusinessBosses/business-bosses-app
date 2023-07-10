@@ -336,8 +336,17 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                             ),
                                           ),
                                           Container(
-                                            decoration: const BoxDecoration(
-                                              color: backgroundcolorinterface,
+                                            decoration: BoxDecoration(
+                                              boxShadow: [
+                                                BoxShadow(
+                                                  color: Colors.black
+                                                      .withOpacity(0.09),
+                                                  blurRadius:
+                                                      100.0, // soften the shadow
+                                                  spreadRadius:
+                                                      5, //extend the shadow
+                                                )
+                                              ],
                                             ),
                                             child: Stack(
                                               children: <Widget>[
@@ -419,170 +428,280 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                                         ),
                                                       ],
                                                     ),
-                                                    Row(
-                                                      children: <Widget>[
-                                                        Stack(
-                                                          children: [
-                                                            Padding(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .only(
-                                                                left: 35,
-                                                                top: 5,
-                                                              ),
-                                                              child: Row(
-                                                                children: [
-                                                                  Padding(
-                                                                    padding: const EdgeInsets
+                                                    Padding(
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              left: 35,
+                                                              top: 0,
+                                                              right: 20),
+                                                      child: Row(
+                                                        children: <Widget>[
+                                                          Row(
+                                                            children: [
+                                                              Padding(
+                                                                padding:
+                                                                    const EdgeInsets
                                                                             .only(
                                                                         right:
-                                                                            8),
-                                                                    child: SvgPicture
+                                                                            3,
+                                                                        top: 5),
+                                                                child:
+                                                                    SvgPicture
                                                                         .asset(
-                                                                      'assets/svgs/members.svg',
-                                                                      height:
-                                                                          15,
-                                                                      color:
-                                                                          primaryColorLT,
+                                                                  'assets/svgs/members.svg',
+                                                                  height: 15,
+                                                                  color:
+                                                                      primaryColorLT,
+                                                                ),
+                                                              ),
+                                                              GestureDetector(
+                                                                onTap: () {
+                                                                  Get.to(() =>
+                                                                      MarketMembersScreen(
+                                                                        users: _marketController
+                                                                            .users,
+                                                                      ));
+                                                                },
+                                                                child: Padding(
+                                                                  padding: const EdgeInsets
+                                                                          .only(
+                                                                      top: 5.0),
+                                                                  child:
+                                                                      RichText(
+                                                                    text:
+                                                                        TextSpan(
+                                                                      children: [
+                                                                        TextSpan(
+                                                                            text:
+                                                                                'Members: (${_marketController.users.length})',
+                                                                            style:
+                                                                                const TextStyle(
+                                                                              fontSize: 12,
+                                                                              fontWeight: FontWeight.w600,
+                                                                              color: primaryColorLT,
+                                                                              decoration: TextDecoration.underline,
+                                                                            )),
+                                                                      ],
                                                                     ),
                                                                   ),
-                                                                  GestureDetector(
-                                                                    onTap: () {
-                                                                      Get.to(() =>
-                                                                          MarketMembersScreen(
-                                                                            users:
-                                                                                _marketController.users,
-                                                                          ));
-                                                                    },
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                          Row(
+                                                            children: [
+                                                              Padding(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                            .only(
+                                                                        left: 8,
+                                                                        top: 5,
+                                                                        right:
+                                                                            3),
+                                                                child:
+                                                                    SvgPicture
+                                                                        .asset(
+                                                                  'assets/svgs/marketplace.svg',
+                                                                  color:
+                                                                      textColor,
+                                                                  height: 15,
+                                                                ),
+                                                              ),
+                                                              Obx(
+                                                                () {
+                                                                  return Padding(
+                                                                    padding: const EdgeInsets
+                                                                            .only(
+                                                                        top:
+                                                                            5.0),
                                                                     child:
                                                                         RichText(
                                                                       text:
                                                                           TextSpan(
-                                                                        children: [
+                                                                        children: <InlineSpan>[
                                                                           TextSpan(
-                                                                              text: 'Members: (${_marketController.users.length})',
-                                                                              style: const TextStyle(
-                                                                                fontSize: 12,
-                                                                                fontWeight: FontWeight.w600,
-                                                                                color: primaryColorLT,
-                                                                                decoration: TextDecoration.underline,
-                                                                              )),
+                                                                            text:
+                                                                                'Listings: ${_marketController.markets.length}',
+                                                                            style:
+                                                                                const TextStyle(
+                                                                              fontSize: 12,
+                                                                              color: textColor,
+                                                                              fontWeight: FontWeight.w600,
+                                                                            ),
+                                                                          ),
                                                                         ],
                                                                       ),
                                                                     ),
-                                                                  ),
+                                                                  );
+                                                                },
+                                                              ),
+                                                            ],
+                                                          ),
+                                                          Spacer(),
+                                                          Align(
+                                                              alignment: Alignment
+                                                                  .centerRight,
+                                                              child: Row(
+                                                                crossAxisAlignment:
+                                                                    CrossAxisAlignment
+                                                                        .center,
+                                                                mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .end,
+                                                                children: [
+                                                                  joinedButton(),
                                                                 ],
-                                                              ),
-                                                            )
-                                                          ],
-                                                        ),
-                                                        Stack(
-                                                          children: <Widget>[
-                                                            Padding(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                          .only(
-                                                                      left: 5,
-                                                                      top: 5),
-                                                              child: Container(
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                            .only(
-                                                                        bottom:
-                                                                            8,
-                                                                        top: 8,
-                                                                        left:
-                                                                            10,
-                                                                        right:
-                                                                            10),
-                                                                decoration:
-                                                                    BoxDecoration(
-                                                                  borderRadius:
-                                                                      BorderRadius
-                                                                          .circular(
-                                                                              200),
-                                                                  color: const Color
-                                                                          .fromARGB(
-                                                                      47,
-                                                                      255,
-                                                                      255,
-                                                                      255),
-                                                                ),
-                                                                child: Row(
-                                                                  children: [
-                                                                    Padding(
-                                                                      padding: const EdgeInsets
-                                                                              .only(
-                                                                          right:
-                                                                              8),
-                                                                      child: SvgPicture
-                                                                          .asset(
-                                                                        'assets/svgs/marketplace.svg',
-                                                                        color:
-                                                                            textColor,
-                                                                        height:
-                                                                            15,
-                                                                      ),
-                                                                    ),
-                                                                    Obx(
-                                                                      () {
-                                                                        return RichText(
-                                                                          text:
-                                                                              TextSpan(
-                                                                            children: <InlineSpan>[
-                                                                              TextSpan(
-                                                                                text: 'Listings: ${_marketController.markets.length}',
-                                                                                style: const TextStyle(
-                                                                                  fontSize: 12,
-                                                                                  color: textColor,
-                                                                                  fontWeight: FontWeight.w600,
-                                                                                ),
-                                                                              ),
-                                                                            ],
-                                                                          ),
-                                                                        );
-                                                                      },
-                                                                    ),
-                                                                  ],
-                                                                ),
-                                                              ),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                        Flexible(
-                                                          child: Padding(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .only(
-                                                                right: 20,
-                                                              ),
-                                                              child: SizedBox(
-                                                                width: MediaQuery.of(
-                                                                        context)
-                                                                    .size
-                                                                    .width,
-                                                                child: Align(
-                                                                    alignment:
-                                                                        Alignment
-                                                                            .centerRight,
-                                                                    child: Row(
-                                                                      crossAxisAlignment:
-                                                                          CrossAxisAlignment
-                                                                              .center,
-                                                                      mainAxisAlignment:
-                                                                          MainAxisAlignment
-                                                                              .end,
-                                                                      children: [
-                                                                        joinedButton(),
-                                                                      ],
-                                                                    )),
-                                                              )),
-                                                        )
-                                                      ],
+                                                              ))
+                                                        ],
+                                                      ),
                                                     ),
                                                     const SizedBox(
                                                       height: 5,
                                                     ),
+                                                    hmeController.bossUp !=
+                                                                null &&
+                                                            hmeController
+                                                                .bossUp!
+                                                                .isNotEmpty
+                                                        ? GestureDetector(
+                                                            onTap: () {
+                                                              Navigator.push(
+                                                                context,
+                                                                MaterialPageRoute(
+                                                                    builder: (BuildContext
+                                                                            context) =>
+                                                                        const Bossuppartner()),
+                                                              );
+                                                            },
+                                                            child: Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .only(
+                                                                right: 20,
+                                                                top: 15,
+                                                                left: 20,
+                                                                bottom: 10,
+                                                              ),
+                                                              child: Container(
+                                                                height: 40,
+                                                                decoration:
+                                                                    BoxDecoration(
+                                                                  color: const Color(
+                                                                      0xFFF4F4F4),
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              10),
+                                                                  boxShadow: [
+                                                                    BoxShadow(
+                                                                      color: Colors
+                                                                          .grey
+                                                                          .withOpacity(
+                                                                              0.3),
+                                                                      spreadRadius:
+                                                                          20,
+                                                                      blurRadius:
+                                                                          500,
+                                                                      offset:
+                                                                          const Offset(
+                                                                              0,
+                                                                              3),
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                                child:
+                                                                    Container(
+                                                                  decoration: BoxDecoration(
+                                                                      color: const Color(
+                                                                          0xFFFFFFFF),
+                                                                      borderRadius:
+                                                                          BorderRadius.circular(
+                                                                              10),
+                                                                      boxShadow: [
+                                                                        BoxShadow(
+                                                                          color: Colors
+                                                                              .white
+                                                                              .withOpacity(1),
+                                                                          spreadRadius:
+                                                                              20,
+                                                                          blurRadius:
+                                                                              500,
+                                                                          offset: const Offset(
+                                                                              0,
+                                                                              3),
+                                                                        ),
+                                                                      ]),
+                                                                  child: Row(
+                                                                    children: [
+                                                                      const Padding(
+                                                                        padding:
+                                                                            EdgeInsets.only(
+                                                                          left:
+                                                                              10,
+                                                                        ),
+                                                                        child:
+                                                                            Center(
+                                                                          child:
+                                                                              Padding(
+                                                                            padding:
+                                                                                EdgeInsets.all(2),
+                                                                            child:
+                                                                                Text(
+                                                                              'Boss Up by',
+                                                                              style: TextStyle(fontSize: 11),
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                      const SizedBox(
+                                                                          width:
+                                                                              10),
+                                                                      Text(
+                                                                        '|',
+                                                                        style: TextStyle(
+                                                                            fontSize:
+                                                                                20,
+                                                                            color:
+                                                                                textColor.withOpacity(0.5)),
+                                                                      ),
+                                                                      const SizedBox(
+                                                                          width:
+                                                                              10),
+                                                                      Text(
+                                                                        hmeController.bossUp != null && hmeController.bossUp!.isNotEmpty
+                                                                            ? hmeController.bossUp!.last['companyName'] ??
+                                                                                ''
+                                                                            : '',
+                                                                        style:
+                                                                            const TextStyle(
+                                                                          fontSize:
+                                                                              15,
+                                                                          fontWeight:
+                                                                              FontWeight.bold,
+                                                                        ),
+                                                                        overflow:
+                                                                            TextOverflow.ellipsis,
+                                                                        softWrap:
+                                                                            false,
+                                                                      ),
+                                                                      const Spacer(),
+                                                                      Padding(
+                                                                        padding:
+                                                                            const EdgeInsets.only(right: 10.0),
+                                                                        child: SvgPicture
+                                                                            .asset(
+                                                                          'assets/svgs/nexticon.svg',
+                                                                          color:
+                                                                              textColor,
+                                                                        ),
+                                                                      )
+                                                                    ],
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          )
+                                                        : const SizedBox(),
                                                   ],
                                                 )
                                               ],
@@ -592,124 +711,6 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                       ],
                                     ),
                                   ),
-                                  hmeController.bossUp != null &&
-                                          hmeController.bossUp!.isNotEmpty
-                                      ? GestureDetector(
-                                          onTap: () {
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (BuildContext
-                                                          context) =>
-                                                      const Bossuppartner()),
-                                            );
-                                          },
-                                          child: Padding(
-                                            padding: const EdgeInsets.only(
-                                              right: 20,
-                                              left: 20,
-                                              bottom: 10,
-                                            ),
-                                            child: Container(
-                                              height: 40,
-                                              decoration: BoxDecoration(
-                                                color: const Color(0xFFF4F4F4),
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
-                                                boxShadow: [
-                                                  BoxShadow(
-                                                    color: Colors.grey
-                                                        .withOpacity(0.3),
-                                                    spreadRadius: 20,
-                                                    blurRadius: 500,
-                                                    offset: const Offset(0, 3),
-                                                  ),
-                                                ],
-                                              ),
-                                              child: Container(
-                                                decoration: BoxDecoration(
-                                                    color:
-                                                        const Color(0xFFFFFFFF)
-                                                            .withAlpha(150),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            10),
-                                                    boxShadow: [
-                                                      BoxShadow(
-                                                        color: Colors.white
-                                                            .withOpacity(1),
-                                                        spreadRadius: 20,
-                                                        blurRadius: 500,
-                                                        offset:
-                                                            const Offset(0, 3),
-                                                      ),
-                                                    ]),
-                                                child: Row(
-                                                  children: [
-                                                    const Padding(
-                                                      padding: EdgeInsets.only(
-                                                        left: 10,
-                                                      ),
-                                                      child: Center(
-                                                        child: Padding(
-                                                          padding:
-                                                              EdgeInsets.all(2),
-                                                          child: Text(
-                                                            'Boss Up by',
-                                                            style: TextStyle(
-                                                                fontSize: 11),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    const SizedBox(width: 10),
-                                                    Text(
-                                                      '|',
-                                                      style: TextStyle(
-                                                          fontSize: 20,
-                                                          color: textColor
-                                                              .withOpacity(
-                                                                  0.5)),
-                                                    ),
-                                                    const SizedBox(width: 10),
-                                                    Text(
-                                                      hmeController.bossUp !=
-                                                                  null &&
-                                                              hmeController
-                                                                  .bossUp!
-                                                                  .isNotEmpty
-                                                          ? hmeController
-                                                                      .bossUp!
-                                                                      .last[
-                                                                  'companyName'] ??
-                                                              ''
-                                                          : '',
-                                                      style: const TextStyle(
-                                                        fontSize: 15,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                      ),
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                      softWrap: false,
-                                                    ),
-                                                    const Spacer(),
-                                                    Padding(
-                                                      padding:
-                                                          const EdgeInsets.only(
-                                                              right: 10.0),
-                                                      child: SvgPicture.asset(
-                                                        'assets/svgs/nexticon.svg',
-                                                        color: textColor,
-                                                      ),
-                                                    )
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        )
-                                      : const SizedBox(),
                                 ],
                               ),
                             )

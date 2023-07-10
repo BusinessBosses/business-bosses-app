@@ -21,7 +21,7 @@ class LearningPopUp extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             SizedBox(
-              height: SizeConfig.safeBlockVertical * 3,
+              height: 20,
             ),
             Text(
               'LEARNING',
@@ -31,14 +31,14 @@ class LearningPopUp extends StatelessWidget {
                   ?.copyWith(fontWeight: FontWeight.w900, color: Colors.black),
             ),
             SizedBox(
-              height: SizeConfig.safeBlockVertical * 3,
+              height: 20,
             ),
             Text('Welcome to Boss Up Learning',
                 textAlign: TextAlign.center,
                 style: bodyText1.copyWith(
                     fontWeight: FontWeight.w700, color: Colors.red)),
             SizedBox(
-              height: SizeConfig.safeBlockVertical * 3,
+              height: 20,
             ),
             const Row(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -54,7 +54,7 @@ class LearningPopUp extends StatelessWidget {
               ],
             ),
             SizedBox(
-              height: SizeConfig.safeBlockVertical * 2,
+              height: 20,
             ),
             SizedBox(
               height: SizeConfig.safeBlockVertical * 3,
