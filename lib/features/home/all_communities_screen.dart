@@ -73,269 +73,279 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
             width: MediaQuery.of(context).size.width,
             child: Stack(
               children: [
-                Container(
-                  height: MediaQuery.of(context).size.height,
-                  width: MediaQuery.of(context).size.width,
-                  color: Colors.white,
-                  child: DefaultTabController(
-                      length: _isSearching ? 2 : 3, // number of tabs
-                      child: Scaffold(
-                          backgroundColor: backgroundcolorinterface,
-                          appBar: AppBar(
-                            automaticallyImplyLeading: false,
-                            title: _isSearching
-                                ? Searchbar(
-                                    hintText: 'Search',
-                                    onChange: (String query) {
-                                      if (_searchTabController.index == 0) {
-                                        controller.onSearch(
-                                            _searchTabController.index, query);
-                                      }
-                                    },
-                                    onSubmit: (String query) {
-                                      if (_searchTabController.index == 1) {
-                                        controller.onSearch(
-                                            _searchTabController.index, query);
-                                      }
-                                    },
-                                  )
-                                : const Text('Boss Up'),
-                            actions: mActions,
-                            bottom: !_isSearching
-                                ? const TabBar(
-                                    labelStyle:
-                                        TextStyle(fontWeight: FontWeight.w500),
-                                    labelColor: Colors.black,
-                                    tabs: [
-                                        Tab(
-                                          text: 'Challenge',
-                                        ),
-                                        Tab(
-                                          text: 'Learning',
-                                        ),
-                                        Tab(
-                                          text: 'Opportunities',
-                                        ),
-                                      ])
-                                : TabBar(
-                                    controller: _searchTabController,
-                                    labelStyle: const TextStyle(
-                                        fontWeight: FontWeight.w500),
-                                    labelColor: Colors.black,
-                                    tabs: const [
-                                      Tab(
-                                        text: 'Groups',
-                                      ),
-                                      Tab(
-                                        text: 'Topics',
-                                      ),
-                                    ],
-                                  ),
-                          ),
-                          body: !_isSearching
-                              ? TabBarView(
-                                  children: [
-                                    // content of Tab 1
-                                    controller.loading.value
-                                        ? const Center(
-                                            child: CircularProgressIndicator(),
-                                          )
-                                        : BossUpSection(
-                                            industry: controller
-                                                .getCategoryIndustries(
-                                                    Constants.BOSSUPID)[0],
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 100.0),
+                  child: Container(
+                    height: MediaQuery.of(context).size.height,
+                    width: MediaQuery.of(context).size.width,
+                    color: Colors.white,
+                    child: DefaultTabController(
+                        length: _isSearching ? 2 : 3, // number of tabs
+                        child: Scaffold(
+                            backgroundColor: backgroundcolorinterface,
+                            appBar: AppBar(
+                              automaticallyImplyLeading: false,
+                              title: _isSearching
+                                  ? Searchbar(
+                                      hintText: 'Search',
+                                      onChange: (String query) {
+                                        if (_searchTabController.index == 0) {
+                                          controller.onSearch(
+                                              _searchTabController.index,
+                                              query);
+                                        }
+                                      },
+                                      onSubmit: (String query) {
+                                        if (_searchTabController.index == 1) {
+                                          controller.onSearch(
+                                              _searchTabController.index,
+                                              query);
+                                        }
+                                      },
+                                    )
+                                  : const Text('Boss Up'),
+                              actions: mActions,
+                              bottom: !_isSearching
+                                  ? const TabBar(
+                                      labelStyle: TextStyle(
+                                          fontWeight: FontWeight.w500),
+                                      labelColor: Colors.black,
+                                      tabs: [
+                                          Tab(
+                                            text: 'Challenge',
                                           ),
-                                    // content of Tab 2
-                                    Padding(
-                                      padding: const EdgeInsets.all(15.0),
-                                      child: controller.loading.value
-                                          ? SafetyModel(
-                                              isLoading:
-                                                  controller.loading.value,
-                                              title: '',
-                                            )
-                                          : controller.error.value
-                                              ? SafetyModel(
-                                                  isLoading: false,
-                                                  title: 'Something went wrong',
-                                                  clickableText: 'Reload',
-                                                  onTap: () async {
-                                                    await controller
-                                                        .fetchIndustries();
-                                                  },
-                                                )
-                                              : GridView.builder(
-                                                  itemCount: controller
-                                                      .getCategoryIndustries(
-                                                          Constants.LEARNINGID)
-                                                      .length,
-                                                  itemBuilder:
-                                                      (BuildContext context,
-                                                          int index) {
-                                                    return CustomTile(
-                                                      label: controller
-                                                          .getCategoryIndustries(
-                                                              Constants
-                                                                  .LEARNINGID)[
-                                                              index]
-                                                          .industry!,
-                                                      photo: controller
-                                                          .getCategoryIndustries(
-                                                              Constants
-                                                                  .LEARNINGID)[
-                                                              index]
-                                                          .photo!,
-                                                      onTap: () {
-                                                        Get.toNamed(
-                                                          Routes.allforumscreen,
-                                                          arguments: controller
-                                                              .getCategoryIndustries(
-                                                                  Constants
-                                                                      .LEARNINGID)[index],
-                                                        );
-                                                      },
-                                                    );
-                                                  },
-                                                  gridDelegate:
-                                                      const SliverGridDelegateWithFixedCrossAxisCount(
-                                                    mainAxisSpacing: 10.0,
-                                                    crossAxisSpacing: 15.0,
-                                                    crossAxisCount: 2,
-                                                  ),
-                                                ),
+                                          Tab(
+                                            text: 'Learning',
+                                          ),
+                                          Tab(
+                                            text: 'Opportunities',
+                                          ),
+                                        ])
+                                  : TabBar(
+                                      controller: _searchTabController,
+                                      labelStyle: const TextStyle(
+                                          fontWeight: FontWeight.w500),
+                                      labelColor: Colors.black,
+                                      tabs: const [
+                                        Tab(
+                                          text: 'Groups',
+                                        ),
+                                        Tab(
+                                          text: 'Topics',
+                                        ),
+                                      ],
                                     ),
-                                    // content of Tab 3
-                                    Padding(
-                                      padding: const EdgeInsets.all(15.0),
-                                      child: controller.loading.value
-                                          ? SafetyModel(
-                                              isLoading:
-                                                  controller.loading.value,
-                                              title: '',
+                            ),
+                            body: !_isSearching
+                                ? TabBarView(
+                                    children: [
+                                      // content of Tab 1
+                                      controller.loading.value
+                                          ? const Center(
+                                              child:
+                                                  CircularProgressIndicator(),
                                             )
-                                          : controller.error.value
-                                              ? SafetyModel(
-                                                  isLoading: false,
-                                                  title: 'Something went wrong',
-                                                  clickableText: 'Reload',
-                                                  onTap: () async {
-                                                    await controller
-                                                        .fetchIndustries();
-                                                  },
-                                                )
-                                              : GridView.builder(
-                                                  itemCount: controller
-                                                      .getCategoryIndustries(
-                                                          Constants
-                                                              .OPPORTUNITIESID)
-                                                      .length,
-                                                  itemBuilder:
-                                                      (BuildContext context,
-                                                          int index) {
-                                                    return CustomTile(
-                                                      label: controller
-                                                          .getCategoryIndustries(
-                                                              Constants
-                                                                  .OPPORTUNITIESID)[
-                                                              index]
-                                                          .industry!,
-                                                      photo: controller
-                                                          .getCategoryIndustries(
-                                                              Constants
-                                                                  .OPPORTUNITIESID)[
-                                                              index]
-                                                          .photo!,
-                                                      onTap: () {
-                                                        Get.toNamed(
+                                          : BossUpSection(
+                                              industry: controller
+                                                  .getCategoryIndustries(
+                                                      Constants.BOSSUPID)[0],
+                                            ),
+                                      // content of Tab 2
+                                      Padding(
+                                        padding: const EdgeInsets.all(15.0),
+                                        child: controller.loading.value
+                                            ? SafetyModel(
+                                                isLoading:
+                                                    controller.loading.value,
+                                                title: '',
+                                              )
+                                            : controller.error.value
+                                                ? SafetyModel(
+                                                    isLoading: false,
+                                                    title:
+                                                        'Something went wrong',
+                                                    clickableText: 'Reload',
+                                                    onTap: () async {
+                                                      await controller
+                                                          .fetchIndustries();
+                                                    },
+                                                  )
+                                                : GridView.builder(
+                                                    itemCount: controller
+                                                        .getCategoryIndustries(
+                                                            Constants
+                                                                .LEARNINGID)
+                                                        .length,
+                                                    itemBuilder:
+                                                        (BuildContext context,
+                                                            int index) {
+                                                      return CustomTile(
+                                                        label: controller
+                                                            .getCategoryIndustries(
+                                                                Constants
+                                                                    .LEARNINGID)[
+                                                                index]
+                                                            .industry!,
+                                                        photo: controller
+                                                            .getCategoryIndustries(
+                                                                Constants
+                                                                    .LEARNINGID)[
+                                                                index]
+                                                            .photo!,
+                                                        onTap: () {
+                                                          Get.toNamed(
                                                             Routes
                                                                 .allforumscreen,
                                                             arguments: controller
                                                                 .getCategoryIndustries(
                                                                     Constants
-                                                                        .OPPORTUNITIESID)[index]);
-                                                      },
-                                                    );
-                                                  },
-                                                  gridDelegate:
-                                                      const SliverGridDelegateWithFixedCrossAxisCount(
-                                                    mainAxisSpacing: 10.0,
-                                                    crossAxisSpacing: 15.0,
-                                                    crossAxisCount: 2,
+                                                                        .LEARNINGID)[index],
+                                                          );
+                                                        },
+                                                      );
+                                                    },
+                                                    gridDelegate:
+                                                        const SliverGridDelegateWithFixedCrossAxisCount(
+                                                      mainAxisSpacing: 10.0,
+                                                      crossAxisSpacing: 15.0,
+                                                      crossAxisCount: 2,
+                                                    ),
                                                   ),
+                                      ),
+                                      // content of Tab 3
+                                      Padding(
+                                        padding: const EdgeInsets.all(15.0),
+                                        child: controller.loading.value
+                                            ? SafetyModel(
+                                                isLoading:
+                                                    controller.loading.value,
+                                                title: '',
+                                              )
+                                            : controller.error.value
+                                                ? SafetyModel(
+                                                    isLoading: false,
+                                                    title:
+                                                        'Something went wrong',
+                                                    clickableText: 'Reload',
+                                                    onTap: () async {
+                                                      await controller
+                                                          .fetchIndustries();
+                                                    },
+                                                  )
+                                                : GridView.builder(
+                                                    itemCount: controller
+                                                        .getCategoryIndustries(
+                                                            Constants
+                                                                .OPPORTUNITIESID)
+                                                        .length,
+                                                    itemBuilder:
+                                                        (BuildContext context,
+                                                            int index) {
+                                                      return CustomTile(
+                                                        label: controller
+                                                            .getCategoryIndustries(
+                                                                Constants
+                                                                    .OPPORTUNITIESID)[
+                                                                index]
+                                                            .industry!,
+                                                        photo: controller
+                                                            .getCategoryIndustries(
+                                                                Constants
+                                                                    .OPPORTUNITIESID)[
+                                                                index]
+                                                            .photo!,
+                                                        onTap: () {
+                                                          Get.toNamed(
+                                                              Routes
+                                                                  .allforumscreen,
+                                                              arguments: controller
+                                                                  .getCategoryIndustries(
+                                                                      Constants
+                                                                          .OPPORTUNITIESID)[index]);
+                                                        },
+                                                      );
+                                                    },
+                                                    gridDelegate:
+                                                        const SliverGridDelegateWithFixedCrossAxisCount(
+                                                      mainAxisSpacing: 10.0,
+                                                      crossAxisSpacing: 15.0,
+                                                      crossAxisCount: 2,
+                                                    ),
+                                                  ),
+                                      ),
+                                    ],
+                                  )
+                                : TabBarView(
+                                    controller: _searchTabController,
+                                    children: [
+                                      Container(
+                                        color: Theme.of(context)
+                                            .scaffoldBackgroundColor,
+                                        height: double.infinity,
+                                        width: double.infinity,
+                                        child: MySearchIndustries(
+                                            searchIndustries:
+                                                controller.searchedIndustries),
+                                      ),
+                                      Container(
+                                        color: Theme.of(context)
+                                            .scaffoldBackgroundColor,
+                                        height: double.infinity,
+                                        width: double.infinity,
+                                        child: controller.searchedForums.isEmpty
+                                            ? SafetyModel(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.start,
+                                                isLoading: controller
+                                                    .loadingSearch.value,
+                                                icon: SvgPicture.asset(
+                                                    'assets/svgs/search.svg',
+                                                    color: hintColor,
+                                                    height: 80.0,
+                                                    width: 80.0),
+                                                title:
+                                                    'Search for Category name', //'Search for ${cat.category.toLowerCase()}',
+                                                subTitle:
+                                                    'Search for specific topic of Category name',
+                                                //'Search for specific topic of ${cat.category.toLowerCase()}',
+                                              )
+                                            : ListView.builder(
+                                                key: const ValueKey(
+                                                    'cat.categoryId'),
+                                                padding: const EdgeInsets.only(
+                                                  top: 8.0,
+                                                  right: 8.0,
+                                                  left: 8.0,
+                                                  bottom: 120.0,
                                                 ),
-                                    ),
-                                  ],
-                                )
-                              : TabBarView(
-                                  controller: _searchTabController,
-                                  children: [
-                                    Container(
-                                      color: Theme.of(context)
-                                          .scaffoldBackgroundColor,
-                                      height: double.infinity,
-                                      width: double.infinity,
-                                      child: MySearchIndustries(
-                                          searchIndustries:
-                                              controller.searchedIndustries),
-                                    ),
-                                    Container(
-                                      color: Theme.of(context)
-                                          .scaffoldBackgroundColor,
-                                      height: double.infinity,
-                                      width: double.infinity,
-                                      child: controller.searchedForums.isEmpty
-                                          ? SafetyModel(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              isLoading: controller
-                                                  .loadingSearch.value,
-                                              icon: SvgPicture.asset(
-                                                  'assets/svgs/search.svg',
-                                                  color: hintColor,
-                                                  height: 80.0,
-                                                  width: 80.0),
-                                              title:
-                                                  'Search for Category name', //'Search for ${cat.category.toLowerCase()}',
-                                              subTitle:
-                                                  'Search for specific topic of Category name',
-                                              //'Search for specific topic of ${cat.category.toLowerCase()}',
-                                            )
-                                          : ListView.builder(
-                                              key: const ValueKey(
-                                                  'cat.categoryId'),
-                                              padding: const EdgeInsets.only(
-                                                top: 8.0,
-                                                right: 8.0,
-                                                left: 8.0,
-                                                bottom: 120.0,
+                                                itemCount: controller
+                                                    .searchedForums.length,
+                                                itemBuilder:
+                                                    (BuildContext context,
+                                                        int i) {
+                                                  return ForumItem(
+                                                    forum: controller
+                                                        .searchedForums[i],
+                                                    controller: controller,
+                                                  );
+                                                  // return ForumItem(
+                                                  //   _searchTopics[i],
+                                                  //   key: ValueKey(_searchTopics[i].forumId),
+                                                  //   onLikeTap: (ForumModel latestForum) {
+                                                  //     _searchTopics[i].likes = latestForum.likes;
+                                                  //     setState(() {});
+                                                  //   },
+                                                  //   onCommentSent: (ForumModel latestForum) {
+                                                  //     _searchTopics[i].comments = latestForum.comments;
+                                                  //     setState(() {});
+                                                  //   },
+                                                  // );
+                                                },
                                               ),
-                                              itemCount: controller
-                                                  .searchedForums.length,
-                                              itemBuilder:
-                                                  (BuildContext context,
-                                                      int i) {
-                                                return ForumItem(
-                                                  forum: controller
-                                                      .searchedForums[i],
-                                                  controller: controller,
-                                                );
-                                                // return ForumItem(
-                                                //   _searchTopics[i],
-                                                //   key: ValueKey(_searchTopics[i].forumId),
-                                                //   onLikeTap: (ForumModel latestForum) {
-                                                //     _searchTopics[i].likes = latestForum.likes;
-                                                //     setState(() {});
-                                                //   },
-                                                //   onCommentSent: (ForumModel latestForum) {
-                                                //     _searchTopics[i].comments = latestForum.comments;
-                                                //     setState(() {});
-                                                //   },
-                                                // );
-                                              },
-                                            ),
-                                    ),
-                                  ],
-                                ))),
+                                      ),
+                                    ],
+                                  ))),
+                  ),
                 ),
                 BottomBar(
                   activeIndex: 1,

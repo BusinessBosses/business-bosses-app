@@ -1,5 +1,4 @@
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
-import 'package:business_bosses_v2/features/posts/controllers/posts_controller.dart';
 import 'package:business_bosses_v2/features/posts/models/post_model.dart';
 import 'package:business_bosses_v2/features/posts/widgets/post_images.dart';
 import 'package:business_bosses_v2/features/posts/widgets/post_like_comment.dart';
@@ -214,7 +213,7 @@ class _PostTileState extends State<PostTile> {
                                           widget.post.user!.name!.length <= 20
                                       ? widget.post.user!.name!
                                       : widget.post.user!.name != null
-                                          ? "${widget.post.user!.name!.substring(0, 20)}..."
+                                          ? '${widget.post.user!.name!.substring(0, 20)}...'
                                           : widget.post.user!.username,
                                   style: Theme.of(context).textTheme.bodyLarge,
                                 ),
@@ -231,7 +230,7 @@ class _PostTileState extends State<PostTile> {
                                     widget.post.user!.name!.length <= 20
                                 ? widget.post.user!.name!
                                 : widget.post.user!.name != null
-                                    ? "${widget.post.user!.name!.substring(0, 15)}..."
+                                    ? '${widget.post.user!.name!.substring(0, 15)}...'
                                     : widget.post.user!.username,
                             style: Theme.of(context).textTheme.bodyLarge,
                           ),
