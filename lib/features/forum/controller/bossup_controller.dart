@@ -30,8 +30,8 @@ class BossUpController extends GetxController {
     error(false);
     update();
     ApiResponseModel response;
-    response = await ForumRepository.getForums(
-        page.value, Constants.BOSS_UP_CHALLENGE_ID);
+    response =
+        await ForumRepository.getForums(page.value, Constants.BOSSUPINDUSTRYID);
     if (response.success) {
       totalForums(int.parse(response.data['count'].toString()));
       page(page.value + 1);

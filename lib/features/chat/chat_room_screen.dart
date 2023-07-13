@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:business_bosses_v2/common/models/user_model.dart';
-import 'package:flutter/foundation.dart' as foundation;
+// import 'package:flutter/foundation.dart' as foundation;
 import 'package:business_bosses_v2/features/chat/controllers/chat_controller.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
@@ -69,7 +69,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
       // print(widget.market!.toMap());
       // _chatController.seen(args.uid);
     }
-    Future.delayed(Duration(seconds: 5), () {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       setState(() {
         showColumn = false;
       });
@@ -412,12 +412,13 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                                               Radius.circular(10)),
                                           child: Stack(
                                             children: [
-                                              Image.network(
-                                                widget.market?.images?[0],
-                                                fit: BoxFit.cover,
-                                                height: 350,
-                                                width: double.infinity,
-                                              ),
+                                              if (widget.market?.images != null)
+                                                Image.network(
+                                                  widget.market?.images?[0],
+                                                  fit: BoxFit.cover,
+                                                  height: 350,
+                                                  width: double.infinity,
+                                                ),
                                               Positioned.fill(
                                                 child: Align(
                                                   alignment:
@@ -687,8 +688,8 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
 
   @override
   void dispose() {
-    _textEditingController.dispose();
     super.dispose();
+    _textEditingController.dispose();
   }
 
   // Future<void> _onSendMessage(MessageModel message) async {

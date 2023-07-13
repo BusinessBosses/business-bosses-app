@@ -89,7 +89,10 @@ class ChatController extends GetxController {
 
       final List<MessageModel> chat = chatMessages
           .where((MessageModel element) =>
-              element.senderUid == e || element.receiverUid == e)
+              (element.senderUid == e &&
+                  element.receiverUid == _profileController.myProfile.uid) ||
+              (element.receiverUid == e &&
+                  element.senderUid == _profileController.myProfile.uid))
           .toList();
       if (chat.isNotEmpty) {
         chats
