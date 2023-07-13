@@ -147,8 +147,8 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
                                             )
                                           : BossUpSection(
                                               industry: controller
-                                                  .getCategoryIndustries(
-                                                      Constants.BOSSUPID)[0],
+                                                  .getCategoryIndustries(Constants
+                                                      .BOSS_UP_CHALLENGE_CATEGORY_ID)[0],
                                             ),
                                       // content of Tab 2
                                       Padding(
