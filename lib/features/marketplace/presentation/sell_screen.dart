@@ -6,7 +6,6 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:photo_manager/photo_manager.dart';
 
 import '../../../action/action.dart';
@@ -14,7 +13,6 @@ import '../../../common/dialogs/snackbar.dart';
 import '../../../common/models/comment_model.dart';
 import '../../../common/widgets/buttons/my_outlined_button.dart';
 import '../../../common/widgets/gallery_screen.dart';
-import '../../../common/widgets/text_widget.dart';
 import '../../../utils/theme/theme.dart';
 import '../../forum/widgets/field_container.dart';
 import '../../posts/widgets/preview.dart';
@@ -84,8 +82,6 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-
     return GetBuilder<CreateMarketController>(
         builder: (CreateMarketController controller) {
       return GestureDetector(

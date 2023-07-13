@@ -391,19 +391,20 @@ class _BossUpSectionState extends State<BossUpSection> {
                                         ),
                                         child: Container(
                                           decoration: BoxDecoration(
-                                              color: const Color(0xFFFFFFFF)
-                                                  .withAlpha(150),
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                              boxShadow: [
-                                                BoxShadow(
-                                                  color: Colors.white
-                                                      .withOpacity(1),
-                                                  spreadRadius: 20,
-                                                  blurRadius: 500,
-                                                  offset: const Offset(0, 3),
-                                                ),
-                                              ]),
+                                            color: const Color(0xFFFFFFFF)
+                                                .withAlpha(150),
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            // boxShadow: [
+                                            //   BoxShadow(
+                                            //     color:
+                                            //         Colors.white.withOpacity(1),
+                                            //     spreadRadius: 20,
+                                            //     blurRadius: 500,
+                                            //     offset: const Offset(0, 3),
+                                            //   ),
+                                            // ],
+                                          ),
                                           child: Row(
                                             children: [
                                               const Padding(
