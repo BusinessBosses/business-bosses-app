@@ -336,13 +336,13 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                                                               const SizedBox(
                                                                   width: 3),
                                                               Text(
-                                                                widget.market!.category
+                                                                widget.market!.category!
                                                                             .length >
                                                                         40
-                                                                    ? '${widget.market!.category.substring(0, 40)}...'
+                                                                    ? '${widget.market!.category!.substring(0, 40)}...'
                                                                     : widget
                                                                         .market!
-                                                                        .category,
+                                                                        .category!,
                                                                 style:
                                                                     const TextStyle(
                                                                   fontWeight:
@@ -506,13 +506,13 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                                                               const SizedBox(
                                                                   width: 3),
                                                               Text(
-                                                                widget.market!.category
+                                                                widget.market!.category!
                                                                             .length >
                                                                         15
-                                                                    ? '${widget.market!.category.substring(0, 15)}...'
+                                                                    ? '${widget.market!.category!.substring(0, 15)}...'
                                                                     : widget
                                                                         .market!
-                                                                        .category,
+                                                                        .category!,
                                                                 style:
                                                                     const TextStyle(
                                                                   fontWeight:

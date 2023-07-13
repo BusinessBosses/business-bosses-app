@@ -110,9 +110,9 @@ class MarketController extends GetxController {
 
     for (final int index in postIndices) {
       final MarketModel market = markets[index];
-      final UserModel user = market.user;
-      final UserModel updatedUser =
-          user.copyWith(averageRating: newAverageRating);
+      final UserModel? user = market.user;
+      final UserModel? updatedUser =
+          user?.copyWith(averageRating: newAverageRating);
       final MarketModel updatedMarket = market.copyWith(user: updatedUser);
       markets[index] = updatedMarket;
     }
