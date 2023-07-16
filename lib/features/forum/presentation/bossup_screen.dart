@@ -508,6 +508,7 @@ class _BossUpSectionState extends State<BossUpSection> {
                               forum: controller.forums[i],
                               key: ValueKey(controller.forums[i].forumId),
                               controller: controller,
+                              isBossUp: true,
                             ),
                           ),
                         ),

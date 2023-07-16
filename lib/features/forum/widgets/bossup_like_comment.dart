@@ -1,5 +1,5 @@
 import 'package:business_bosses_v2/common/models/comment_model.dart';
-import 'package:business_bosses_v2/features/forum/controller/forum_controller.dart';
+import 'package:business_bosses_v2/features/forum/controller/bossup_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
@@ -14,24 +14,23 @@ import '../../posts/widgets/comment_item.dart';
 import '../../posts/widgets/write_comment.dart';
 import '../models/forum_model.dart';
 
-class ForumLikeCommentItem extends StatefulWidget {
+class BossUpLikeCommentItem extends StatefulWidget {
   final Function(CommentModel comment) onComment;
   final ForumModel forum;
 
-  const ForumLikeCommentItem({
+  const BossUpLikeCommentItem({
     Key? key,
     required this.onComment,
     required this.forum,
   }) : super(key: key);
 
   @override
-  _ForumLikeCommentItemState createState() => _ForumLikeCommentItemState();
+  _BossUpLikeCommentItemState createState() => _BossUpLikeCommentItemState();
 }
 
-class _ForumLikeCommentItemState extends State<ForumLikeCommentItem> {
-  final bool _isInit = false;
+class _BossUpLikeCommentItemState extends State<BossUpLikeCommentItem> {
   bool _isLoadingLikes = true, _isLoadingComments = true;
-  final ForumController _forumController = Get.find();
+  final BossUpController _bossUpController = Get.find();
   final ProfileController profileController = Get.find();
   final CommentController _commentController = Get.put(CommentController());
 
@@ -109,7 +108,7 @@ class _ForumLikeCommentItemState extends State<ForumLikeCommentItem> {
                           setState(() {
                             _commentController.comments.add(comment);
                           });
-                          _forumController.comment(
+                          _bossUpController.comment(
                             widget.forum.forumId,
                             comment,
                           );

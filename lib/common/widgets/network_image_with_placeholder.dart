@@ -72,6 +72,7 @@ class NetworkImageWithPlaceHolder extends StatelessWidget {
                           : color!.withOpacity(0.3),
                     ),
             ),
+
             placeholder: (_, __) => Container(
               color: color == null
                   ? Theme.of(context).iconTheme.color!.withOpacity(0.1)

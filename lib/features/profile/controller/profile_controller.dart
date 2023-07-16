@@ -43,6 +43,7 @@ class ProfileController extends GetxController {
       'connecteds': userData['connecteds'].map((e) => e['userId']).toList()
     });
     bossOfTheWeek = modelizedData;
+    print(userData);
     update();
   }
 
@@ -85,6 +86,7 @@ class ProfileController extends GetxController {
     final ApiResponseModel response = await ProfileRepository.fetchBoss();
     if (response.data != 'no record found') {
       processBossToState(response.data);
+      print(response.data);
     } else {
       bossOfTheWeek = null;
     }

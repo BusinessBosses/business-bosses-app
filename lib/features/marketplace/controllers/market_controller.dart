@@ -15,10 +15,11 @@ class MarketController extends GetxController {
   late IO.Socket socket;
   RxList<MarketModel> markets = RxList<MarketModel>(<MarketModel>[]);
   RxList<UserModel> users = RxList<UserModel>(<UserModel>[]);
-  RxInt paginationPage = RxInt(0);
+  RxInt paginationPage = RxInt(2);
   final int postsSize = 20;
   RxBool error = RxBool(false);
   RxBool loading = RxBool(false);
+  RxBool loadingMore = RxBool(false);
   RxBool isJoined = RxBool(false);
   bool isLoading = true;
   final HomeController _homeController = Get.find();
@@ -36,6 +37,24 @@ class MarketController extends GetxController {
   void processPostsToState(dynamic post) {
     final List psts = post;
     markets.clear();
+    for (int i = 0; i < psts.length; i++) {
+      markets.add(MarketModel.fromMap({
+        ...psts[i],
+        'likes': psts[i]['likes']
+            .map((dynamic like) => like['userId'].toString())
+            .toList(),
+        'coins': psts[i]['likes']
+            .map((dynamic coin) => coin['userId'].toString())
+            .toList()
+      }));
+    }
+    _homeController.addMarkets(markets);
+    // update();
+  }
+
+  /// PROCESS RAW API DATA, MODELIZE AND SAVE TO STATE
+  void processMorePostsToState(dynamic post) {
+    final List psts = post;
     for (int i = 0; i < psts.length; i++) {
       markets.add(MarketModel.fromMap({
         ...psts[i],
@@ -203,6 +222,7 @@ class MarketController extends GetxController {
     update();
   }
 
+  ///  INITIALIZE MARKETPLACE LISTINGS
   Future<void> initMarket() async {
     loading(true);
     error(false);
@@ -215,6 +235,22 @@ class MarketController extends GetxController {
       error(true);
     }
     loading(false);
+
+    update();
+  }
+
+  Future<void> loadMore(int size, int page) async {
+    loadingMore(true);
+    update();
+
+    final ApiResponseModel response =
+        await HomeRepository.fetchMoreMarket(size, page);
+    if (response.success) {
+      processMorePostsToState(response.data['rows']);
+    } else {
+      error(true);
+    }
+    loadingMore(false);
 
     update();
   }

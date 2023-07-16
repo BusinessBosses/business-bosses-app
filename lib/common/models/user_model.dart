@@ -31,7 +31,7 @@ class UserModel {
   final List<Industry>? interests;
   final List<String>? productsandservices;
   final List<ReferralsModel>? referals;
-  final List<String>? deviceTokens;
+  String? deviceTokens;
   final List<String>? connections;
   final List<String>? connecteds;
   final List<DisconnectionsModel>? disconnections;
@@ -116,7 +116,7 @@ class UserModel {
     List<Industry>? interests,
     List<String>? productsandservices,
     List<ReferralsModel>? referals,
-    List<String>? deviceTokens,
+    String? deviceTokens,
     List<String>? connections,
     List<String>? connecteds,
     List<DisconnectionsModel>? disconnections,
@@ -269,9 +269,8 @@ class UserModel {
               .map((e) => ReferralsModel.fromMap(e as Map<String, dynamic>))
               .toList()
           : null,
-      deviceTokens: map['deviceTokens'] != null
-          ? List<String>.from((map['deviceTokens'] as List<String>))
-          : null,
+      deviceTokens:
+          map['deviceTokens'] != null ? map['deviceTokens'] as String : null,
       connections: map['connections'] != null
           ? List<String>.from((map['connections']))
           : null,
@@ -356,7 +355,7 @@ class UserModel {
         listEquals(other.achievements, achievements) &&
         listEquals(other.productsandservices, productsandservices) &&
         listEquals(other.referals, referals) &&
-        listEquals(other.deviceTokens, deviceTokens) &&
+        other.deviceTokens == deviceTokens &&
         listEquals(other.connections, connections) &&
         listEquals(other.connecteds, connecteds) &&
         listEquals(other.disconnections, disconnections) &&
