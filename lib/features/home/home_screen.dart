@@ -27,10 +27,19 @@ class _HomeScreenState extends State<HomeScreen> {
   // final ProfileController _profileController = Get.find();
   // int currentTimestamp = DateTime.now().millisecondsSinceEpoch;
   // final GetStorage sandBox = GetStorage();
-
+  ScrollController _scrollController = ScrollController();
   @override
   void initState() {
     super.initState();
+    final HomeController homeController = Get.find();
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels >=
+              _scrollController.position.maxScrollExtent &&
+          !homeController.loadingMore.value) {
+        homeController.fetchPosts();
+      }
+    });
+
     // WidgetsBinding.instance.addPostFrameCallback((_) {
     //   addCoinDaily();
     // });
@@ -39,6 +48,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void dispose() {
     super.dispose();
+    _scrollController.dispose();
   }
 
   @override
@@ -117,6 +127,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           child: RefreshIndicator(
                             onRefresh: refreshData,
                             child: SingleChildScrollView(
+                              controller: _scrollController,
                               child: Column(
                                 children: <Widget>[
                                   const BossOfWeekProfileTile(),
@@ -159,6 +170,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                           );
                                         }
                                       },
+                                    ),
+                                  if (controller.loadingMore.value)
+                                    const Center(
+                                      child: CircularProgressIndicator(),
                                     ),
                                   const SizedBox(
                                     height: 100,
