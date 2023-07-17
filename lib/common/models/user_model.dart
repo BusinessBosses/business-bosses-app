@@ -31,7 +31,9 @@ class UserModel {
   final List<Industry>? interests;
   final List<String>? productsandservices;
   final List<ReferralsModel>? referals;
-  String? deviceTokens;
+
+  // final List<String>? deviceTokens;
+
   final List<String>? connections;
   final List<String>? connecteds;
   final List<DisconnectionsModel>? disconnections;
@@ -73,7 +75,7 @@ class UserModel {
     this.interests,
     this.productsandservices,
     this.referals,
-    this.deviceTokens,
+    // this.deviceTokens,
     this.invitations,
     this.disconnections,
     this.active,
@@ -116,7 +118,9 @@ class UserModel {
     List<Industry>? interests,
     List<String>? productsandservices,
     List<ReferralsModel>? referals,
-    String? deviceTokens,
+
+    // List<String>? deviceTokens,
+
     List<String>? connections,
     List<String>? connecteds,
     List<DisconnectionsModel>? disconnections,
@@ -160,7 +164,7 @@ class UserModel {
       interests: interests ?? this.interests,
       productsandservices: productsandservices ?? this.productsandservices,
       referals: referals ?? this.referals,
-      deviceTokens: deviceTokens ?? this.deviceTokens,
+      // deviceTokens: deviceTokens ?? this.deviceTokens,
       disconnections: disconnections ?? this.disconnections,
       active: active ?? this.active,
       deactivated: deactivated ?? this.deactivated,
@@ -205,7 +209,7 @@ class UserModel {
       'interests': interests?.map((Industry x) => x.toMap()).toList(),
       'productsandservices': productsandservices,
       'referals': referals?.map((ReferralsModel x) => x.toMap()).toList(),
-      'deviceTokens': deviceTokens,
+      // 'deviceTokens': deviceTokens,
       'connections': connections,
       'connecteds': connecteds,
       'disconnections':
@@ -269,8 +273,11 @@ class UserModel {
               .map((e) => ReferralsModel.fromMap(e as Map<String, dynamic>))
               .toList()
           : null,
-      deviceTokens:
-          map['deviceTokens'] != null ? map['deviceTokens'] as String : null,
+
+      // deviceTokens: map['deviceTokens'] != null
+      //     ? List<String>.from((map['deviceTokens'] as List<String>))
+      //     : null,
+
       connections: map['connections'] != null
           ? List<String>.from((map['connections']))
           : null,
@@ -320,101 +327,4 @@ class UserModel {
     );
   }
 
-  String toJson() => json.encode(toMap());
-
-  factory UserModel.fromJson(String source) =>
-      UserModel.fromMap(json.decode(source) as Map<String, dynamic>);
-
-  @override
-  String toString() {
-    return 'UserModel(uid: $uid, username: $username, email: $email, timestamp: $timestamp, bossOfTheWeekTimeStamp: $bossOfTheWeekTimeStamp, bossOfTheWeekUpTimeStamp: $bossOfTheWeekUpTimeStamp, photoUrl: $photoUrl, coinscount: $coinscount, name: $name, companyName: $companyName, surname: $surname, bio: $bio, website: $website, instagram: $instagram, twitter: $twitter, industry: $industry, category: $category, location: $location, achievements: $achievements, productsandservices: $productsandservices, referals: $referals, deviceTokens: $deviceTokens, disconnections: $disconnections, active: $active, deactivated: $deactivated, ageRange: $ageRange, gender: $gender, profileViews: $profileViews, connectionCount: $connectionCount, connectedCount: $connectedCount, unReadCount: $unReadCount, isRanked: $isRanked, averageRating: $averageRating)';
-  }
-
-  @override
-  bool operator ==(covariant UserModel other) {
-    if (identical(this, other)) return true;
-
-    return other.uid == uid &&
-        other.username == username &&
-        other.email == email &&
-        other.timestamp == timestamp &&
-        other.bossOfTheWeekTimeStamp == bossOfTheWeekTimeStamp &&
-        other.bossOfTheWeekUpTimeStamp == bossOfTheWeekUpTimeStamp &&
-        other.photoUrl == photoUrl &&
-        other.coinscount == coinscount &&
-        other.name == name &&
-        other.companyName == companyName &&
-        other.surname == surname &&
-        other.bio == bio &&
-        other.website == website &&
-        other.instagram == instagram &&
-        other.twitter == twitter &&
-        other.industry == industry &&
-        other.category == category &&
-        other.location == location &&
-        listEquals(other.achievements, achievements) &&
-        listEquals(other.productsandservices, productsandservices) &&
-        listEquals(other.referals, referals) &&
-        other.deviceTokens == deviceTokens &&
-        listEquals(other.connections, connections) &&
-        listEquals(other.connecteds, connecteds) &&
-        listEquals(other.disconnections, disconnections) &&
-        other.active == active &&
-        other.deactivated == deactivated &&
-        other.ageRange == ageRange &&
-        other.gender == gender &&
-        listEquals(other.profileViews, profileViews) &&
-        other.connectionCount == connectionCount &&
-        other.referalCount == referalCount &&
-        other.invitations == invitations &&
-        other.connectedCount == connectedCount &&
-        other.unReadCount == unReadCount &&
-        other.isRanked == isRanked &&
-        other.inviteId == inviteId &&
-        other.isSubscribed == isSubscribed &&
-        other.averageRating == averageRating;
-  }
-
-  @override
-  int get hashCode {
-    return uid.hashCode ^
-        username.hashCode ^
-        email.hashCode ^
-        timestamp.hashCode ^
-        bossOfTheWeekTimeStamp.hashCode ^
-        bossOfTheWeekUpTimeStamp.hashCode ^
-        photoUrl.hashCode ^
-        coinscount.hashCode ^
-        name.hashCode ^
-        companyName.hashCode ^
-        surname.hashCode ^
-        bio.hashCode ^
-        website.hashCode ^
-        instagram.hashCode ^
-        twitter.hashCode ^
-        industry.hashCode ^
-        category.hashCode ^
-        location.hashCode ^
-        achievements.hashCode ^
-        productsandservices.hashCode ^
-        referals.hashCode ^
-        deviceTokens.hashCode ^
-        connections.hashCode ^
-        connecteds.hashCode ^
-        disconnections.hashCode ^
-        active.hashCode ^
-        deactivated.hashCode ^
-        ageRange.hashCode ^
-        gender.hashCode ^
-        profileViews.hashCode ^
-        connectionCount.hashCode ^
-        referalCount.hashCode ^
-        invitations.hashCode ^
-        connectedCount.hashCode ^
-        unReadCount.hashCode ^
-        inviteId.hashCode ^
-        isRanked.hashCode ^
-        isSubscribed.hashCode ^
-        averageRating.hashCode;
-  }
 }

@@ -32,6 +32,7 @@ class HomeController extends GetxController {
 
   RxInt paginationPage = RxInt(1);
   RxBool loading = RxBool(false);
+  RxBool loadingMore = RxBool(false);
   List<Map<String, dynamic>>? bossUp = [];
   RxBool refreshing = RxBool(false);
   RxList<PostModel> posts = RxList<PostModel>(<PostModel>[]);
@@ -103,17 +104,14 @@ class HomeController extends GetxController {
       psts.add({'isForum': false, 'data': posts[i]});
     }
 
-    mixedPosts = [...frms, ...psts]..sort(
+    posts.clear();
+    forums.clear();
+
+    final List<Map<String, dynamic>> joinedPosts = [...frms, ...psts]..sort(
         (Map<String, dynamic> a, Map<String, dynamic> b) =>
             b['data'].timestamp - a['data'].timestamp);
-    // mixedPosts = Iterable.generate(math.max(posts.length, forums.length))
-    //     .expand((i) sync* {
-    //   if (i < posts.length) {
-    //     yield {'isForum': false, 'data': posts[i]};
-    //   }
-    //   if (i < forums.length) yield {'isForum': true, 'data': forums[i]};
-    // }).toList();
-    // update();
+
+    mixedPosts.addAll(joinedPosts);
   }
 
   void processPostsAndForumsData(dynamic data) {
@@ -251,7 +249,8 @@ class HomeController extends GetxController {
   }
 
   void removePostsByUserId(String? userId) {
-    mixedPosts.removeWhere((post) => post['user']['uid'] == userId);
+    mixedPosts.removeWhere(
+        (Map<String, dynamic> post) => post['user']['uid'] == userId);
     update();
   }
 
@@ -349,6 +348,23 @@ class HomeController extends GetxController {
       profileController.updateCoinCount(1);
       showCoinDialog();
     }
+  }
+
+  Future<void> fetchPosts() async {
+    loadingMore(true);
+    update();
+    final ApiResponseModel response =
+        await HomeRepository.fetchPosts(paginationPage.value);
+    if (response.success) {
+      processPostsAndForumsData(response.data);
+    } else {
+      showSnackbar(title: 'OOPS!', message: response.message, error: true);
+
+      error(true);
+    }
+
+    loadingMore(false);
+    update();
   }
 
   /// LOAD POSTS FROM REMOTE SOURCE
