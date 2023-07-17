@@ -11,7 +11,6 @@ import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
-import '../../../common/widgets/popup/bossup_challenge_popup.dart';
 import '../../../navigation/routes.dart';
 import '../models/industry.dart';
 import '../../../utils/theme/theme.dart';
@@ -429,10 +428,11 @@ class _AllForumScreenState extends State<AllForumScreen> {
 
                               itemBuilder: (BuildContext context, int i) =>
                                   ForumItem(
-                                    forum: controller.forums[i],
-                                    key: ValueKey(controller.forums[i].forumId),
-                                    controller: controller,
-                                  )),
+                                forum: controller.forums[i],
+                                key: ValueKey(controller.forums[i].forumId),
+                                controller: controller,
+                              ),
+                            ),
             ));
       },
     );
