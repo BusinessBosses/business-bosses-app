@@ -39,10 +39,12 @@ class Constants {
   static const String CONNECTS = 'connects';
   static const String QUOTE_INDEX = 'quoteIndex';
 
-  static const String LEARNINGID = 'd479f179-3f41-4d84-915d-33110cf5b4fb';
-
-  static const String OPPORTUNITIESID = '2d520b18-f549-42ca-8116-85a523091713';
-  static const String BOSSUPID = 'b3ee7915-66c3-4e41-9237-967827bcb990';
+  static const String LEARNINGID = '-Mos1VMnV53H7AZa0W8p';
+  static const String BOSS_UP_CHALLENGE_CATEGORY_ID = '-Mos1VMlx3oxZFRaw_BH';
+  // static const String BOSS_UP_CHALLENGE_ID =
+  //     '840396d6-8563-4cb4-811c-e4ddc81e170c';
+  static const String OPPORTUNITIESID = '-Mos1VMnV53H7AZa0W8q';
+  static const String BOSSUPINDUSTRYID = '-MsUOGcOT9oRXGakCcJv';
 
   static const String USERS = 'users';
   static const String INDUSTRIES = 'industries';
@@ -99,8 +101,6 @@ class Constants {
 
   static const String LAUNCH_PRO_ID = '-MsUOGcOT9oRXGakCcJv';
   // static const BOSS_UP_CHALLENGE_ID = '-MsUOGcOT9oRXGakCcJv';
-  static const String BOSS_UP_CHALLENGE_ID =
-      '840396d6-8563-4cb4-811c-e4ddc81e170c';
 
   /// STORAGE CONSTANTS
   static const String ACCESS_TOKEN = 'accessToken';

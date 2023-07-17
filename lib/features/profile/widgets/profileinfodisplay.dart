@@ -1,11 +1,13 @@
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/common/widgets/tiles/custom_tileinterests.dart';
 import 'package:business_bosses_v2/features/profile/widgets/productandserviceschip.dart';
+import 'package:business_bosses_v2/functions/my_native_functions.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../../utils/theme/theme.dart';
 
@@ -82,9 +84,10 @@ Widget profileinfodisplay(BuildContext context, UserModel publicUser) {
               const SizedBox(width: 8.0),
               if (publicUser.twitter != null)
                 GestureDetector(
-                  onTap: () {
-                    // String url =
-                    //     MyNativeFunctions.completeURL(_user.twitter!, MyUrl.twitter);
+                  onTap: () async {
+                    String url = MyNativeFunctions.completeURL(
+                        publicUser.twitter!, MyUrl.twitter);
+                    await launchUrlString(url);
                     // _onUrlLaunch(context, url);
                   },
                   child: Container(
@@ -108,9 +111,11 @@ Widget profileinfodisplay(BuildContext context, UserModel publicUser) {
               const SizedBox(width: 8.0),
               if (publicUser.instagram != null)
                 GestureDetector(
-                  onTap: () {
-                    // String url = MyNativeFunctions.completeURL(
-                    //     _user.instagram!, MyUrl.instagram);
+                  onTap: () async {
+                    String url = MyNativeFunctions.completeURL(
+                        publicUser.instagram!, MyUrl.instagram);
+                    await launchUrlString(url);
+
                     // _onUrlLaunch(context, url);
                   },
                   child: Container(

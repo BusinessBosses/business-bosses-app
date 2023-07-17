@@ -4,6 +4,7 @@ import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/features/chat/models/my_message.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
+import 'package:business_bosses_v2/features/marketplace/models/market_model.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:get/get.dart';
@@ -29,6 +30,10 @@ class ChatController extends GetxController {
             (element.senderUid == myId && element.receiverUid == counterId))
         .toList();
   }
+
+  // void addMarketPost(MarketModel marketPost){
+  //   chatMessages.insert(marketPost);
+  // }
 
   /// SET SEEN STATUS TO A CHAT TO TRUE
   void seen(String counterId, Socket socket) {
@@ -84,7 +89,10 @@ class ChatController extends GetxController {
 
       final List<MessageModel> chat = chatMessages
           .where((MessageModel element) =>
-              element.senderUid == e || element.receiverUid == e)
+              (element.senderUid == e &&
+                  element.receiverUid == _profileController.myProfile.uid) ||
+              (element.receiverUid == e &&
+                  element.senderUid == _profileController.myProfile.uid))
           .toList();
       if (chat.isNotEmpty) {
         chats

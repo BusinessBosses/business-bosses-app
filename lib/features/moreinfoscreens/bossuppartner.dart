@@ -1,5 +1,6 @@
 import 'dart:core';
 
+import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -9,6 +10,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../action/action.dart';
 import '../../utils/constants/constants.dart';
 import '../../utils/theme/theme.dart';
+import '../posts/widgets/images_viewer_screen.dart';
 
 // ignore: public_member_api_docs
 class Bossuppartner extends StatefulWidget {
@@ -68,6 +70,7 @@ class _BossuppartnerState extends State<Bossuppartner> {
             companyName: partner['companyName'],
             companyDescription: partner['companyDescription'],
             companyUrl: partner['companyUrl'],
+            companyPhoto: partner['companyPhoto'],
             showPartnerMessage: isLastItem(index),
           );
         },
@@ -80,6 +83,7 @@ class BossuppartnerItem extends StatelessWidget {
   final String companyName;
   final String companyDescription;
   final String companyUrl;
+  final String? companyPhoto;
   final bool showPartnerMessage;
 
   const BossuppartnerItem({
@@ -88,10 +92,12 @@ class BossuppartnerItem extends StatelessWidget {
     required this.companyDescription,
     required this.companyUrl,
     required this.showPartnerMessage,
+    this.companyPhoto,
   });
 
   @override
   Widget build(BuildContext context) {
+    List<dynamic> photos = [companyPhoto];
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -108,6 +114,26 @@ class BossuppartnerItem extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              GestureDetector(
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (BuildContext context) => ImagesViewerScreen(
+                        urls: photos,
+                        index: 0,
+                        text: companyName,
+                      ),
+                    ),
+                  );
+                },
+                child: NetworkImageWithPlaceHolder(
+                  imageUrl: companyPhoto,
+                  placeHolder: Icons.photo,
+                  width: MediaQuery.of(context).size.width,
+                  iconSize: 18.0,
+                  radius: 8.0,
+                ),
+              ),
               Text(
                 companyName,
                 style: const TextStyle(
