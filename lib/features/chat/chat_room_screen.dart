@@ -7,7 +7,6 @@ import 'package:business_bosses_v2/features/profile/controller/profile_controlle
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
 import 'package:detectable_text_field/widgets/detectable_text.dart';
-import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -307,54 +306,65 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                                                           ),
                                                           const SizedBox(
                                                               height: 2),
-                                                          Row(
-                                                            children: [
-                                                              SvgPicture.asset(
-                                                                  'assets/svgs/location.svg'),
-                                                              const SizedBox(
-                                                                  width: 5),
-                                                              Text(
-                                                                '${widget.market?.location}',
-                                                                style:
-                                                                    const TextStyle(
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .normal,
-                                                                  fontSize: 12,
-                                                                  color:
-                                                                      subtextColor,
-                                                                ),
-                                                                overflow:
-                                                                    TextOverflow
-                                                                        .ellipsis,
-                                                                softWrap: false,
-                                                              ),
-                                                              const SizedBox(
-                                                                  width: 5),
-                                                              SvgPicture.asset(
-                                                                  'assets/svgs/category.svg'),
-                                                              const SizedBox(
-                                                                  width: 3),
-                                                              Text(
-                                                                widget.market!.category!
-                                                                            .length >
-                                                                        40
-                                                                    ? '${widget.market!.category!.substring(0, 40)}...'
-                                                                    : widget
-                                                                        .market!
-                                                                        .category!,
-                                                                style:
-                                                                    const TextStyle(
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .normal,
-                                                                  fontSize: 12,
-                                                                  color:
-                                                                      subtextColor,
-                                                                ),
-                                                              ),
-                                                            ],
-                                                          ),
+                                                          widget.market?.location !=
+                                                                      null ||
+                                                                  widget.market
+                                                                          ?.category !=
+                                                                      null
+                                                              ? Row(
+                                                                  children: [
+                                                                    SvgPicture
+                                                                        .asset(
+                                                                            'assets/svgs/location.svg'),
+                                                                    const SizedBox(
+                                                                        width:
+                                                                            5),
+                                                                    Text(
+                                                                      '${widget.market?.location}',
+                                                                      style:
+                                                                          const TextStyle(
+                                                                        fontWeight:
+                                                                            FontWeight.normal,
+                                                                        fontSize:
+                                                                            12,
+                                                                        color:
+                                                                            subtextColor,
+                                                                      ),
+                                                                      overflow:
+                                                                          TextOverflow
+                                                                              .ellipsis,
+                                                                      softWrap:
+                                                                          false,
+                                                                    ),
+                                                                    const SizedBox(
+                                                                        width:
+                                                                            5),
+                                                                    SvgPicture
+                                                                        .asset(
+                                                                            'assets/svgs/category.svg'),
+                                                                    const SizedBox(
+                                                                        width:
+                                                                            3),
+                                                                    Text(
+                                                                      widget.market!.category!.length >
+                                                                              40
+                                                                          ? '${widget.market!.category!.substring(0, 40)}...'
+                                                                          : widget
+                                                                              .market!
+                                                                              .category!,
+                                                                      style:
+                                                                          const TextStyle(
+                                                                        fontWeight:
+                                                                            FontWeight.normal,
+                                                                        fontSize:
+                                                                            12,
+                                                                        color:
+                                                                            subtextColor,
+                                                                      ),
+                                                                    ),
+                                                                  ],
+                                                                )
+                                                              : const SizedBox(),
                                                         ],
                                                       ),
                                                     ),
@@ -477,54 +487,65 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                                                           ),
                                                           const SizedBox(
                                                               height: 2),
-                                                          Row(
-                                                            children: [
-                                                              SvgPicture.asset(
-                                                                  'assets/svgs/location.svg'),
-                                                              const SizedBox(
-                                                                  width: 5),
-                                                              Text(
-                                                                '${widget.market?.location}',
-                                                                style:
-                                                                    const TextStyle(
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .normal,
-                                                                  fontSize: 12,
-                                                                  color:
-                                                                      subtextColor,
-                                                                ),
-                                                                overflow:
-                                                                    TextOverflow
-                                                                        .ellipsis,
-                                                                softWrap: false,
-                                                              ),
-                                                              const SizedBox(
-                                                                  width: 5),
-                                                              SvgPicture.asset(
-                                                                  'assets/svgs/category.svg'),
-                                                              const SizedBox(
-                                                                  width: 3),
-                                                              Text(
-                                                                widget.market!.category!
-                                                                            .length >
-                                                                        15
-                                                                    ? '${widget.market!.category!.substring(0, 15)}...'
-                                                                    : widget
-                                                                        .market!
-                                                                        .category!,
-                                                                style:
-                                                                    const TextStyle(
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .normal,
-                                                                  fontSize: 12,
-                                                                  color:
-                                                                      subtextColor,
-                                                                ),
-                                                              ),
-                                                            ],
-                                                          ),
+                                                          widget.market?.location !=
+                                                                      null ||
+                                                                  widget.market
+                                                                          ?.category !=
+                                                                      null
+                                                              ? Row(
+                                                                  children: [
+                                                                    SvgPicture
+                                                                        .asset(
+                                                                            'assets/svgs/location.svg'),
+                                                                    const SizedBox(
+                                                                        width:
+                                                                            5),
+                                                                    Text(
+                                                                      '${widget.market?.location}',
+                                                                      style:
+                                                                          const TextStyle(
+                                                                        fontWeight:
+                                                                            FontWeight.normal,
+                                                                        fontSize:
+                                                                            12,
+                                                                        color:
+                                                                            subtextColor,
+                                                                      ),
+                                                                      overflow:
+                                                                          TextOverflow
+                                                                              .ellipsis,
+                                                                      softWrap:
+                                                                          false,
+                                                                    ),
+                                                                    const SizedBox(
+                                                                        width:
+                                                                            5),
+                                                                    SvgPicture
+                                                                        .asset(
+                                                                            'assets/svgs/category.svg'),
+                                                                    const SizedBox(
+                                                                        width:
+                                                                            3),
+                                                                    Text(
+                                                                      widget.market!.category!.length >
+                                                                              15
+                                                                          ? '${widget.market!.category!.substring(0, 15)}...'
+                                                                          : widget
+                                                                              .market!
+                                                                              .category!,
+                                                                      style:
+                                                                          const TextStyle(
+                                                                        fontWeight:
+                                                                            FontWeight.normal,
+                                                                        fontSize:
+                                                                            12,
+                                                                        color:
+                                                                            subtextColor,
+                                                                      ),
+                                                                    ),
+                                                                  ],
+                                                                )
+                                                              : const SizedBox(),
                                                         ],
                                                       ),
                                                     ),

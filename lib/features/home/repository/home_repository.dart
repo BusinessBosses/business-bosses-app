@@ -29,7 +29,7 @@ class HomeRepository {
   /// Fetch Marketplace Data
   static Future<ApiResponseModel> fetchMarket() async {
     final ApiResponseModel response =
-        await ApiService.get(path: 'markets/all?size=20&page=1');
+        await ApiService.get(path: 'markets/all?size=20&page=0');
     return response;
   }
 

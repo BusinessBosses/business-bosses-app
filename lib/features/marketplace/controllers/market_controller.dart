@@ -15,7 +15,7 @@ class MarketController extends GetxController {
   late IO.Socket socket;
   RxList<MarketModel> markets = RxList<MarketModel>(<MarketModel>[]);
   RxList<UserModel> users = RxList<UserModel>(<UserModel>[]);
-  RxInt paginationPage = RxInt(2);
+  RxInt paginationPage = RxInt(1);
   final int postsSize = 20;
   RxBool error = RxBool(false);
   RxBool loading = RxBool(false);

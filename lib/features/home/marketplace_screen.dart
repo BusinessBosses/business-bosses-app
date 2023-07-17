@@ -42,7 +42,6 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
   String? filterLocation;
   String? filterCategory;
   int pageSize = 20;
-  int pageNumber = 1;
 
   @override
   void initState() {
