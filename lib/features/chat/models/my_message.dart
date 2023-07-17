@@ -13,7 +13,7 @@ class MessageModel {
   final String receiverUid;
   final bool seen;
   final String? marketId;
-  final UserModel user;
+  final UserModel? user;
   MessageModel({
     required this.messageId,
     this.messageText,
@@ -25,7 +25,7 @@ class MessageModel {
     required this.senderUid,
     required this.receiverUid,
     required this.seen,
-    required this.user,
+    this.user,
   });
 
   MessageModel copyWith({
@@ -68,7 +68,7 @@ class MessageModel {
       'senderUid': senderUid,
       'receiverUid': receiverUid,
       'seen': seen,
-      'user': user.toMap(),
+      'user': user?.toMap(),
     };
   }
 
@@ -87,7 +87,9 @@ class MessageModel {
       senderUid: map['senderUid'] as String,
       receiverUid: map['receiverUid'] as String,
       seen: map['seen'] as bool,
-      user: UserModel.fromMap(map['user'] as Map<String, dynamic>),
+      user: map['user'] != null
+          ? UserModel.fromMap(map['user'] as Map<String, dynamic>)
+          : null,
     );
   }
 }

@@ -153,6 +153,16 @@ class ForumController extends GetxController {
     });
   }
 
+  /// COMMENT FUNCTION
+  void comment(String postId, CommentModel comment) {
+    final int postIndex =
+        forums.indexWhere((ForumModel element) => element.forumId == postId);
+    if (postIndex != -1) {
+      forums[postIndex].comments!.add(comment);
+    }
+    update();
+  }
+
   /// COIN AND UNCOIN FUNCTION
   void postCoin(String userId, String postId,
       ProfileController profileController, String type) {

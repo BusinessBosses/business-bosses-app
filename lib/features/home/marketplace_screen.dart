@@ -41,6 +41,8 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
   String? filterCode;
   String? filterLocation;
   String? filterCategory;
+  int pageSize = 20;
+  int pageNumber = 1;
 
   @override
   void initState() {
@@ -777,20 +779,55 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                           )
                                     : RefreshIndicator(
                                         onRefresh: refreshData,
-                                        child: ListView.builder(
-                                          shrinkWrap: true,
-                                          itemCount:
-                                              _marketController.markets.length,
-                                          itemBuilder: (BuildContext context,
-                                              int index) {
-                                            final MarketModel market =
-                                                _marketController
-                                                    .markets[index];
-
-                                            return MarketTile(
-                                              post: market,
-                                            );
+                                        child: NotificationListener<
+                                            ScrollNotification>(
+                                          onNotification:
+                                              (ScrollNotification scrollInfo) {
+                                            if (scrollInfo.metrics.pixels ==
+                                                scrollInfo
+                                                    .metrics.maxScrollExtent) {
+                                              _marketController.loadMore(
+                                                  pageSize,
+                                                  _marketController
+                                                      .paginationPage.value);
+                                              _marketController
+                                                  .paginationPage.value++;
+                                            }
+                                            return false;
                                           },
+                                          child: ListView.builder(
+                                            shrinkWrap: true,
+                                            itemCount: _marketController
+                                                    .markets.length +
+                                                1,
+                                            itemBuilder: (BuildContext context,
+                                                int index) {
+                                              if (index <
+                                                  _marketController
+                                                      .markets.length) {
+                                                final MarketModel market =
+                                                    _marketController
+                                                        .markets[index];
+                                                return MarketTile(post: market);
+                                              } else {
+                                                // Display a loading indicator at the end of the list
+                                                if (_marketController
+                                                    .loadingMore.value) {
+                                                  return const Padding(
+                                                    padding:
+                                                        EdgeInsets.all(8.0),
+                                                    child: Center(
+                                                      child:
+                                                          CircularProgressIndicator(),
+                                                    ),
+                                                  );
+                                                } else {
+                                                  return const SizedBox
+                                                      .shrink();
+                                                }
+                                              }
+                                            },
+                                          ),
                                         ),
                                       );
                               }

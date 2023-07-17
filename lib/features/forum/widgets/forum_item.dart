@@ -1,4 +1,5 @@
 import 'package:business_bosses_v2/features/forum/models/forum_model.dart';
+import 'package:business_bosses_v2/features/forum/widgets/bossup_like_comment.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
 import 'package:detectable_text_field/widgets/detectable_text.dart';
@@ -24,6 +25,7 @@ import 'forum_like_comment.dart';
 
 class ForumItem extends StatefulWidget {
   final ForumModel forum;
+  final bool isBossUp;
 
   // final VoidCallback? commented;
   // final Function? likeUnlikeForum;
@@ -41,6 +43,7 @@ class ForumItem extends StatefulWidget {
     // this.coinUncoinForum,
     // this.onUpdateForum,
     this.controller,
+    this.isBossUp = false,
   }) : super(key: key);
 
   @override
@@ -641,14 +644,25 @@ class _ForumItemState extends State<ForumItem> {
                         ),
                         TextButton.icon(
                           onPressed: () {
-                            showModalBottomSheet(
-                              context: context,
-                              builder: (BuildContext context) =>
-                                  ForumLikeCommentItem(
-                                forum: widget.forum,
-                                onComment: (CommentModel newComment) async {},
-                              ),
-                            );
+                            widget.isBossUp
+                                ? showModalBottomSheet(
+                                    context: context,
+                                    builder: (BuildContext context) =>
+                                        BossUpLikeCommentItem(
+                                      forum: widget.forum,
+                                      onComment:
+                                          (CommentModel newComment) async {},
+                                    ),
+                                  )
+                                : showModalBottomSheet(
+                                    context: context,
+                                    builder: (BuildContext context) =>
+                                        ForumLikeCommentItem(
+                                      forum: widget.forum,
+                                      onComment:
+                                          (CommentModel newComment) async {},
+                                    ),
+                                  );
                           },
                           icon: SvgPicture.asset('assets/svgs/comment.svg'),
                           label: Text(

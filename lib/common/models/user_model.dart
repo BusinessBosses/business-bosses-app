@@ -31,7 +31,9 @@ class UserModel {
   final List<Industry>? interests;
   final List<String>? productsandservices;
   final List<ReferralsModel>? referals;
+
   // final List<String>? deviceTokens;
+
   final List<String>? connections;
   final List<String>? connecteds;
   final List<DisconnectionsModel>? disconnections;
@@ -116,7 +118,9 @@ class UserModel {
     List<Industry>? interests,
     List<String>? productsandservices,
     List<ReferralsModel>? referals,
+
     // List<String>? deviceTokens,
+
     List<String>? connections,
     List<String>? connecteds,
     List<DisconnectionsModel>? disconnections,
@@ -269,9 +273,11 @@ class UserModel {
               .map((e) => ReferralsModel.fromMap(e as Map<String, dynamic>))
               .toList()
           : null,
+
       // deviceTokens: map['deviceTokens'] != null
       //     ? List<String>.from((map['deviceTokens'] as List<String>))
       //     : null,
+
       connections: map['connections'] != null
           ? List<String>.from((map['connections']))
           : null,
@@ -320,4 +326,5 @@ class UserModel {
           : null,
     );
   }
+
 }

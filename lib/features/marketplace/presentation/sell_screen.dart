@@ -467,7 +467,7 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
         'coins': _market?.coins,
         'images': _market?.images,
         'userId': _market?.userId,
-        'user': _market?.user.toMap(),
+        'user': _market?.user?.toMap(),
       });
       await ApiService.put(path: 'markets/${_market?.marketId}', body: {
         'category': _selectedCategory,

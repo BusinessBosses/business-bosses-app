@@ -61,10 +61,14 @@ class ChatController extends GetxController {
 
   /// EXTRACT UNIQUE CHATS ON SEARCH (REMOVE DUPLICATES)
   void searchChats(String query) {
-    searchedChats = chats
-        .where((MessageModel element) =>
-            element.user.username.toLowerCase().contains(query.toLowerCase()))
-        .toList();
+    searchedChats = chats.where((MessageModel element) {
+      if (element.user != null) {
+        return element.user!.username
+            .toLowerCase()
+            .contains(query.toLowerCase());
+      }
+      return false;
+    }).toList();
 
     update();
   }
