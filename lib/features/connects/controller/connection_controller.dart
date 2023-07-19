@@ -37,8 +37,9 @@ class ConnectionController extends GetxController {
     update();
   }
 
-  Future<void> getConnections() async {
-    final ApiResponseModel res = await ApiService.get(path: '/connection/data');
+  Future<void> getConnections(String userId) async {
+    final ApiResponseModel res =
+        await ApiService.get(path: '/connection/data/$userId');
     if (res.success) {
       for (int i = 0; i < res.data['connections']['data'].length; i++) {
         final mapData = res.data['connections']['data'][i];
@@ -103,8 +104,11 @@ class ConnectionController extends GetxController {
   @override
   void onInit() {
     // TODO: implement onInit
-
-    getConnections();
+    if (Get.arguments == null) {
+      Get.back();
+    } else {
+      getConnections(Get.arguments['uid']);
+    }
     super.onInit();
   }
 

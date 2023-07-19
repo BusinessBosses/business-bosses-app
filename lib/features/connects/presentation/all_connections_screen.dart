@@ -16,17 +16,6 @@ class AllConnectionsScreen extends StatelessWidget {
   final ConnectionController _connectionController =
       Get.put(ConnectionController());
   final ProfileController _profileController = Get.find();
-  // bool _isSearching = true;
-
-  // UserModel? _specificUser;
-
-  // final bool _isLoading = false;
-
-  // final List<UserModel> _allUsers = [];
-  // final List<UserModel> _suggestedUsers = [];
-  // final List<UserModel> _searchedUsers = [];
-  // final List<MyConnect> _myConnections = [];
-  // final List<MyConnect> _myConnected = [];
 
   AllConnectionsScreen({Key? key}) : super(key: key);
 
@@ -125,7 +114,7 @@ class AllConnectionsScreen extends StatelessWidget {
                               child: TabBarView(children: [
                                 controller.connections.isEmpty
                                     ? getSafetyModel(
-                                        '${_profileController.myProfile.uid == Get.arguments ? 'You don\'t have any' : 'User has no'} connections yet')
+                                        '${_profileController.myProfile.uid == Get.arguments['uid'] ? 'You don\'t have any' : 'User has no'} connections yet')
                                     : ListView.separated(
                                         separatorBuilder: (_, __) =>
                                             const Divider(height: 0.0),
@@ -160,7 +149,7 @@ class AllConnectionsScreen extends StatelessWidget {
                                       ),
                                 controller.connecteds.isEmpty
                                     ? getSafetyModel(
-                                        '${_profileController.myProfile.uid == Get.arguments ? 'You are' : 'User is'}  not connected yet')
+                                        '${_profileController.myProfile.uid == Get.arguments['uid'] ? 'You are' : 'User is'}  not connected yet')
                                     : ListView.separated(
                                         separatorBuilder: (_, __) =>
                                             const Divider(height: 0.0),
