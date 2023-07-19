@@ -28,7 +28,7 @@ class ChatRoomScreen extends StatefulWidget {
   static const String routeName = '/chat-room-screen';
   final bool frommarketplace;
   final MarketModel? market;
-  ChatRoomScreen({
+  const ChatRoomScreen({
     Key? key,
     required this.frommarketplace,
     this.market,
@@ -225,7 +225,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                             )
                             .isEmpty
                         ? widget.frommarketplace
-                            ? Container(
+                            ? SizedBox(
                                 height: double.infinity,
                                 child: SingleChildScrollView(
                                   child: Column(
@@ -558,7 +558,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                                       ),
                                     ],
                                   )
-                                : SizedBox(),
+                                : const SizedBox(),
                             ListView.builder(
                               padding: const EdgeInsets.only(
                                   left: 16.0,

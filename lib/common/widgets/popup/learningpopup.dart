@@ -20,7 +20,7 @@ class LearningPopUp extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             Text(
@@ -30,14 +30,14 @@ class LearningPopUp extends StatelessWidget {
                   .bodyLarge
                   ?.copyWith(fontWeight: FontWeight.w900, color: Colors.black),
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             Text('Welcome to Boss Up Learning',
                 textAlign: TextAlign.center,
                 style: bodyText1.copyWith(
                     fontWeight: FontWeight.w700, color: Colors.red)),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             const Row(
@@ -53,7 +53,7 @@ class LearningPopUp extends StatelessWidget {
                 ),
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             SizedBox(

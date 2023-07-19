@@ -46,7 +46,7 @@ Widget OutlineButtonHeader(UserModel publicUser, UserModel myProfile,
           margin: const EdgeInsets.symmetric(horizontal: 4.0),
           onPressed: () {
             Get.to(
-              () => ChatRoomScreen(
+              () => const ChatRoomScreen(
                 frommarketplace: false,
               ),
               arguments: publicUser,

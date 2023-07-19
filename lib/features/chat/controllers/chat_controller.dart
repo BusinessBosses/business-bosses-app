@@ -4,7 +4,6 @@ import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/features/chat/models/my_message.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
-import 'package:business_bosses_v2/features/marketplace/models/market_model.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:get/get.dart';
@@ -124,7 +123,7 @@ class ChatController extends GetxController {
   }
 
   void addNewChat(Map<String, dynamic> data, UserModel user) {
-    final HomeController _homeController = Get.find();
+    final HomeController homeController = Get.find();
 
     final Map<String, dynamic> body = {
       ...data,
@@ -136,14 +135,14 @@ class ChatController extends GetxController {
     chatMessages.insert(
         0, MessageModel.fromMap({...body, 'user': user.toMap()}));
     extractChats(data['senderUid']);
-    _homeController.socket.emit('new-message',
+    homeController.socket.emit('new-message',
         {'data': body, 'sender': _profileController.myProfile.toMap()});
     update();
   }
 
   void addNewChatMarket(
       Map<String, dynamic> data, UserModel user, String marketId) {
-    final HomeController _homeController = Get.find();
+    final HomeController homeController = Get.find();
 
     final Map<String, dynamic> body = {
       ...data,
@@ -156,13 +155,13 @@ class ChatController extends GetxController {
     chatMessages.insert(
         0, MessageModel.fromMap({...body, 'user': user.toMap()}));
     extractChats(data['senderUid']);
-    _homeController.socket.emit('new-message',
+    homeController.socket.emit('new-message',
         {'data': body, 'sender': _profileController.myProfile.toMap()});
     update();
   }
 
   void uploadNewChat(Map<String, dynamic> data, UserModel user) {
-    final HomeController _homeController = Get.find();
+    final HomeController homeController = Get.find();
 
     final Map<String, dynamic> body = {
       ...data,
@@ -174,7 +173,7 @@ class ChatController extends GetxController {
     chatMessages.insert(
         0, MessageModel.fromMap({...body, 'user': user.toMap()}));
     extractChats(data['senderUid']);
-    _homeController.socket.emit('new-message',
+    homeController.socket.emit('new-message',
         {'data': body, 'sender': _profileController.myProfile.toMap()});
     update();
   }
@@ -184,7 +183,7 @@ class ChatController extends GetxController {
     try {
       final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
       if (image != null) {
-        final HomeController _homeController = Get.find();
+        final HomeController homeController = Get.find();
 
         final File imageFile = File(image.path);
         final String messageId = const Uuid().v4();
@@ -212,7 +211,7 @@ class ChatController extends GetxController {
           showSnackbar(message: 'Error Uploading image');
         } else {
           final String imageUrl = uploadResponse['fileUrl'];
-          _homeController.socket.emit('new-message', {
+          homeController.socket.emit('new-message', {
             'data': {
               ...body,
               'image': imageUrl,

@@ -27,7 +27,7 @@ class _HomeScreenState extends State<HomeScreen> {
   // final ProfileController _profileController = Get.find();
   // int currentTimestamp = DateTime.now().millisecondsSinceEpoch;
   // final GetStorage sandBox = GetStorage();
-  ScrollController _scrollController = ScrollController();
+  final ScrollController _scrollController = ScrollController();
   @override
   void initState() {
     super.initState();

@@ -13,7 +13,6 @@ import '../../../functions/my_native_functions.dart';
 import '../../../utils/theme/theme.dart';
 import '../../../analytics/presentation/analysescreen.dart';
 import '../../profile/controller/profile_controller.dart';
-import '../controllers/posts_controller.dart';
 import '../models/post_model.dart';
 import '../widgets/all_images_item.dart';
 import '../widgets/create_post_user_tile.dart';

@@ -540,7 +540,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                                                 ),
                                                               ],
                                                             ),
-                                                            Spacer(),
+                                                            const Spacer(),
                                                             Align(
                                                                 alignment: Alignment
                                                                     .centerRight,

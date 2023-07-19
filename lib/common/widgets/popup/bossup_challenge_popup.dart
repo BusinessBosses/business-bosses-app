@@ -20,7 +20,7 @@ class BossUpChallangePopUpcopy extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             Text(
@@ -30,14 +30,14 @@ class BossUpChallangePopUpcopy extends StatelessWidget {
                   .bodyLarge
                   ?.copyWith(fontWeight: FontWeight.w900, color: Colors.black),
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             Text("Become 'Boss of the week' and get free promotion for a week",
                 textAlign: TextAlign.center,
                 style: bodyText1.copyWith(
                     fontWeight: FontWeight.w700, color: Colors.red)),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             const Row(
@@ -93,7 +93,7 @@ class BossUpChallangePopUpcopy extends StatelessWidget {
                 ),
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             SizedBox(

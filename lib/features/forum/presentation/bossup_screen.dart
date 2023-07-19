@@ -330,7 +330,7 @@ class _BossUpSectionState extends State<BossUpSection> {
                                                 ),
                                               ),
                                             ),
-                                            Spacer(),
+                                            const Spacer(),
                                             Align(
                                               alignment: Alignment.centerRight,
                                               child: Row(

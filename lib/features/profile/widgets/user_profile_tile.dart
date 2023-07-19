@@ -23,7 +23,7 @@ class _UserProfileTileState extends State<UserProfileTile> {
     final ProfileController profileController = Get.find();
     // fetchData();
     // setState(() {});
-    return Container(
+    return SizedBox(
       width: double.infinity,
       child: Row(
         children: [
@@ -126,7 +126,7 @@ class _UserProfileTileState extends State<UserProfileTile> {
                                   fontWeight: FontWeight.bold,
                                   color: textColor.withOpacity(0.8)),
                         ),
-                        widget.myProfile?.companyName != null &&
+                        widget.myProfile.companyName != null &&
                                 widget.myProfile.companyName != ''
                             ? Text(
                                 widget.myProfile.companyName!,
@@ -140,7 +140,7 @@ class _UserProfileTileState extends State<UserProfileTile> {
                                     )),
                               )
                             : Container(),
-                        widget.myProfile?.location != null &&
+                        widget.myProfile.location != null &&
                                 widget.myProfile.location != ''
                             ? Text(
                                 widget.myProfile.location ?? '',

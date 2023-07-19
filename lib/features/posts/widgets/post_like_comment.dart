@@ -12,7 +12,6 @@ import '../../../../utils/theme/theme.dart';
 
 import '../../../common/controllers/comment_controller.dart';
 import '../../../services/api_service.dart';
-import '../controllers/posts_controller.dart';
 import 'comment_item.dart';
 import 'write_comment.dart';
 

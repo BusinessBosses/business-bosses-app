@@ -1,9 +1,6 @@
-import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
-import '../../../action/action.dart';
 import '../../../common/models/user_model.dart';
 import '../../../common/widgets/buttons/my_outlined_button.dart';
 import '../../../utils/theme/theme.dart';

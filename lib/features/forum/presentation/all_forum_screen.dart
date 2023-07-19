@@ -359,7 +359,7 @@ class _AllForumScreenState extends State<AllForumScreen> {
                                                   ),
                                                 ],
                                               ),
-                                              Spacer(),
+                                              const Spacer(),
                                               Align(
                                                 alignment:
                                                     Alignment.centerRight,

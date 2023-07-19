@@ -70,7 +70,7 @@ class _PostTileState extends State<PostTile> {
 
   void connectToUser() async {
     print(
-        "This are my connected users ${profileController.myProfile.connecteds}");
+        'This are my connected users ${profileController.myProfile.connecteds}');
     final int checkConnected = profileController.myProfile.connecteds == null
         ? -1
         : profileController.myProfile.connecteds!

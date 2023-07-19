@@ -202,7 +202,7 @@ class _ChatItemState extends State<ChatItem> {
               widget.chatController
                   .seen(widget.myChatUser.user!.uid, _homeController.socket);
               Get.to(
-                () => ChatRoomScreen(
+                () => const ChatRoomScreen(
                   frommarketplace: false,
                 ),
                 arguments: widget.myChatUser.user,

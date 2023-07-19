@@ -102,7 +102,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                           _isProcessing = true;
                         });
                         String? result = await checkIfEmailExist(_email!);
-                        print(" this is the result $result");
+                        print(' this is the result $result');
                         // setState(() {
                         //   _isUniqueEmail = result != null;
                         // });

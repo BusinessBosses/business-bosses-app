@@ -12,7 +12,6 @@ import '../../../common/models/api_response_model.dart';
 import '../../../common/models/comment_model.dart';
 import '../../../common/models/user_model.dart';
 import '../../../common/widgets/popup/my_popup_menu_button.dart';
-import '../../../common/widgets/ranking_badge.dart';
 import '../../../common/widgets/text_widget.dart';
 import '../../../common/widgets/user_avatar_with_badge.dart';
 import '../../../services/api_service.dart';
@@ -540,7 +539,7 @@ class _ForumItemState extends State<ForumItem> {
                                           ? widget.forum.user!.name!
                                           : widget.forum.user?.name != null
                                               ? '${widget.forum.user!.name!.substring(0, 15)}...'
-                                              : "",
+                                              : '',
                                       style:
                                           Theme.of(context).textTheme.bodyLarge,
                                     ),
@@ -558,7 +557,7 @@ class _ForumItemState extends State<ForumItem> {
                                     ? widget.forum.user!.name!
                                     : widget.forum.user?.name != null
                                         ? '${widget.forum.user!.name!.substring(0, 15)}...'
-                                        : "",
+                                        : '',
                                 style: Theme.of(context).textTheme.bodyLarge,
                               ),
                       ),

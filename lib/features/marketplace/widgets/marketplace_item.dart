@@ -19,7 +19,6 @@ import '../../../common/models/api_response_model.dart';
 import '../../../common/models/comment_model.dart';
 import '../../../common/models/user_model.dart';
 import '../../../common/widgets/buttons/my_outlined_button.dart';
-import '../../../common/widgets/ranking_badge.dart';
 import '../../chat/chat_room_screen.dart';
 import '../../profile/presentation/publicprofilescreen.dart';
 import '../../profile/widgets/premium_profile_tile.dart';

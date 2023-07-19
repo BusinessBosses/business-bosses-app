@@ -26,7 +26,7 @@ class MarketController extends GetxController {
   final ProfileController _profileController = Get.find();
   void removeListing(String marketId) {
     final int marketIndex =
-        markets.indexWhere((element) => element.marketId == marketId);
+        markets.indexWhere((MarketModel element) => element.marketId == marketId);
     if (marketIndex != -1) {
       markets.removeAt(marketIndex);
       update();

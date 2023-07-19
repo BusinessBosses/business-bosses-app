@@ -6,6 +6,8 @@ import 'package:get/get.dart';
 import '../profile/controller/profile_controller.dart';
 
 class ContactScreen extends StatefulWidget {
+  const ContactScreen({super.key});
+
   @override
   _ContactScreenState createState() => _ContactScreenState();
 }
@@ -30,7 +32,7 @@ class _ContactScreenState extends State<ContactScreen> {
                 labelText: 'Message',
                 border: OutlineInputBorder(),
               ),
-              onChanged: (value) {
+              onChanged: (String value) {
                 setState(() {
                   message =
                       value; // Update the message variable when the input changes

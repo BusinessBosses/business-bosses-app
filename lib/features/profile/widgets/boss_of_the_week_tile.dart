@@ -478,10 +478,10 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
     });
     setState(() {
       _profileController.bossOfTheWeek?.connecteds
-          ?.removeWhere((string) => string == _profileController.myProfile.uid);
+          ?.removeWhere((String string) => string == _profileController.myProfile.uid);
 
       user?.connecteds
-          ?.removeWhere((string) => string == _profileController.myProfile.uid);
+          ?.removeWhere((String string) => string == _profileController.myProfile.uid);
     });
   }
 

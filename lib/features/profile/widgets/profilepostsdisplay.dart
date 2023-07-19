@@ -1,5 +1,4 @@
 import 'package:business_bosses_v2/common/models/user_model.dart';
-import 'package:business_bosses_v2/features/posts/controllers/posts_controller.dart';
 import 'package:business_bosses_v2/features/posts/models/post_model.dart';
 import 'package:business_bosses_v2/features/posts/widgets/post_grid_item.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';

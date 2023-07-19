@@ -14,8 +14,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
-import '../../../common/dialogs/snackbar.dart';
-import '../../../common/models/api_response_model.dart';
 import '../../../navigation/routes.dart';
 import '../../profile/controller/profile_controller.dart';
 

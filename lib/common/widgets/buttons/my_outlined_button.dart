@@ -102,7 +102,7 @@ class MCustomButton extends StatelessWidget {
                     height: height,
                     child: OutlinedButton(
                       style: OutlinedButton.styleFrom(
-                        side: BorderSide(
+                        side: const BorderSide(
                           color: Colors.grey, // Adjust the color as needed
                         ),
                       ),
