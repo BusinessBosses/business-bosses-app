@@ -434,11 +434,8 @@ class _PostTileState extends State<PostTile> {
                   children: [
                     TextButton.icon(
                       onPressed: () async {
-                        widget.controller.postLike(
-                            profileController.myProfile.uid,
-                            widget.post.postId,
-                            'post',
-                            widget.post.user!.uid);
+                        homeController.postLike(profileController.myProfile.uid,
+                            widget.post.postId, 'post', widget.post.user!.uid);
                       },
                       icon: widget.post.likes
                                   ?.contains(profileController.myProfile.uid) ==
@@ -476,7 +473,7 @@ class _PostTileState extends State<PostTile> {
                     widget.post.user!.uid != profileController.myProfile.uid
                         ? TextButton.icon(
                             onPressed: () async {
-                              widget.controller.postCoin(
+                              homeController.postCoin(
                                   profileController.myProfile.uid,
                                   widget.post.postId,
                                   profileController,

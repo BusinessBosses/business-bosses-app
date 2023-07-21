@@ -39,6 +39,7 @@ class HomeController extends GetxController {
   RxList<ForumModel> forums = RxList<ForumModel>(<ForumModel>[]);
   List<Map<String, dynamic>> mixedPosts = [];
   List<String> blocked = [];
+  String bossUpTitle = 'Boss Up By';
   RxList<MarketModel> markets = RxList<MarketModel>(<MarketModel>[]);
   RxList<UserModel> marketMembers = RxList<UserModel>(<UserModel>[]);
 
@@ -329,24 +330,64 @@ class HomeController extends GetxController {
     );
   }
 
+  void showCoinDialogFirst() {
+    showDialog(
+      context: Get.context!,
+      builder: (BuildContext context) => AlertDialog(
+        title: const TextWidget(
+          text: 'Congratulations',
+          fontWeight: FontWeight.bold,
+          size: 20,
+        ),
+        content: TextWidget(
+          text:
+              'You have earned 100 coins for upgrading your Business Bosses App',
+          color: Colors.black.withOpacity(.8),
+        ),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const TextWidget(
+              text: 'OK',
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
   /// DailyCoin
   void addCoinDaily() {
     int currentTimestamp = DateTime.now().millisecondsSinceEpoch;
     int dataTime = profileController.myProfile.bossOfTheWeekUpTimeStamp ?? 0;
     int lastExecutionTimestamp = sandBox.read('lastExecutionTimestamp') ?? 0;
-    if ((currentTimestamp - lastExecutionTimestamp >= 24 * 60 * 60 * 1000) &&
-        (currentTimestamp - dataTime >= 24 * 60 * 60 * 1000)) {
-      // The action hasn't been executed today, save the current timestamp
-      sandBox.write('lastExecutionTimestamp', currentTimestamp);
+    if (profileController.myProfile.bossOfTheWeekTimeStamp == null) {
       ApiService.put(
         path: 'users/${profileController.myProfile.uid}',
         body: <String, dynamic>{
-          'coinscount': profileController.myProfile.coinscount! + 1,
+          'coinscount': profileController.myProfile.coinscount! + 100,
           'bossOfTheWeekUpTimeStamp': currentTimestamp,
         },
       );
-      profileController.updateCoinCount(1);
-      showCoinDialog();
+      profileController.updateCoinCount(100);
+      showCoinDialogFirst();
+    } else {
+      if ((currentTimestamp - lastExecutionTimestamp >= 24 * 60 * 60 * 1000) &&
+          (currentTimestamp - dataTime >= 24 * 60 * 60 * 1000)) {
+        // The action hasn't been executed today, save the current timestamp
+        sandBox.write('lastExecutionTimestamp', currentTimestamp);
+        ApiService.put(
+          path: 'users/${profileController.myProfile.uid}',
+          body: <String, dynamic>{
+            'coinscount': profileController.myProfile.coinscount! + 1,
+            'bossOfTheWeekUpTimeStamp': currentTimestamp,
+          },
+        );
+        profileController.updateCoinCount(1);
+        showCoinDialog();
+      }
     }
   }
 
@@ -387,6 +428,11 @@ class HomeController extends GetxController {
       addCoinDaily();
       if (partner.data['count'] > 0) {
         bossUp?.addAll(partner.data['rows'].cast<Map<String, dynamic>>());
+        // Find the item with id = 5
+        final Map<String, dynamic> getTitle =
+            bossUp!.firstWhere((Map<String, dynamic> item) => item['id'] == 5);
+
+        bossUpTitle = getTitle['companyName'];
       }
     } else {
       error(true);
@@ -425,10 +471,19 @@ class HomeController extends GetxController {
     update();
     clearData();
     final ApiResponseModel response = await HomeRepository.fetchRefreshData();
+    final ApiResponseModel partner = await HomeRepository.fetchPartner();
     if (response.success) {
       processPostsAndForumsData(response.data['posts']);
       // profileController.processDataToState(
       //     response.data['user'], response.data['interests']);
+      if (partner.data['count'] > 0) {
+        bossUp?.addAll(partner.data['rows'].cast<Map<String, dynamic>>());
+        // Find the item with id = 5
+        final Map<String, dynamic> getTitle =
+            bossUp!.firstWhere((Map<String, dynamic> item) => item['id'] == 5);
+
+        bossUpTitle = getTitle['companyName'];
+      }
     } else {
       error(true);
       showSnackbar(title: 'OOPS!', message: response.message, error: true);

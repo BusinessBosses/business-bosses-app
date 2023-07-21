@@ -636,9 +636,9 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                                                     ),
                                                                     child: Row(
                                                                       children: [
-                                                                        const Padding(
+                                                                        Padding(
                                                                           padding:
-                                                                              EdgeInsets.only(
+                                                                              const EdgeInsets.only(
                                                                             left:
                                                                                 10,
                                                                           ),
@@ -646,10 +646,10 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                                                               Center(
                                                                             child:
                                                                                 Padding(
-                                                                              padding: EdgeInsets.all(2),
+                                                                              padding: const EdgeInsets.all(2),
                                                                               child: Text(
-                                                                                'Boss Up by',
-                                                                                style: TextStyle(fontSize: 11),
+                                                                                hmeController.bossUpTitle.toString(),
+                                                                                style: const TextStyle(fontSize: 11),
                                                                               ),
                                                                             ),
                                                                           ),
@@ -746,6 +746,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                             // subTitle: '',
                                             clickableText: 'View All',
                                             onTap: () {
+                                              print('hey');
                                               setState(() {
                                                 filterLocation = null;
                                                 filterCode = null;

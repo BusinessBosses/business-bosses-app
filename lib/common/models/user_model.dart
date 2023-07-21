@@ -264,7 +264,9 @@ class UserModel {
               .toList()
           : null,
       productsandservices: map['productsandservices'] != null
-          ? List<String>.from((map['productsandservices']))
+          ? (map['productsandservices'] is String
+              ? [map['productsandservices'] as String]
+              : List<String>.from(map['productsandservices']))
           : null,
       referals: map['referals'] != null
           ? List.from(map['referals'])
@@ -324,5 +326,4 @@ class UserModel {
           : null,
     );
   }
-
 }

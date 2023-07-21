@@ -407,16 +407,18 @@ class _BossUpSectionState extends State<BossUpSection> {
                                           ),
                                           child: Row(
                                             children: [
-                                              const Padding(
-                                                padding: EdgeInsets.only(
+                                              Padding(
+                                                padding: const EdgeInsets.only(
                                                   left: 10,
                                                 ),
                                                 child: Center(
                                                   child: Padding(
-                                                    padding: EdgeInsets.all(2),
+                                                    padding:
+                                                        const EdgeInsets.all(2),
                                                     child: Text(
-                                                      'Boss Up by',
-                                                      style: TextStyle(
+                                                      hmeController.bossUpTitle
+                                                          .toString(),
+                                                      style: const TextStyle(
                                                           fontSize: 11),
                                                     ),
                                                   ),
