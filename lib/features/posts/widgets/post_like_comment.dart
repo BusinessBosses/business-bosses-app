@@ -111,6 +111,7 @@ class _PostLikeCommentItemState extends State<PostLikeCommentItem> {
                           _homeController.comment(
                             widget.post.postId,
                             comment,
+                            'post',
                           );
                         },
                         postId: widget.post.postId,
