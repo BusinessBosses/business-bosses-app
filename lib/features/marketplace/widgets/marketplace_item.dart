@@ -436,96 +436,98 @@ class _MarketTileState extends State<MarketTile> {
                                 const SizedBox(
                                   height: 2,
                                 ),
-                                _post.location != null && _post.category != null
-                                    ? Padding(
-                                        padding: const EdgeInsets.only(
-                                            left: 15.0, right: 15),
-                                        child: Row(
-                                          children: [
-                                            SvgPicture.asset(
-                                                'assets/svgs/location.svg'),
-                                            const SizedBox(
-                                              width: 1,
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 15.0, right: 15),
+                                  child: Row(
+                                    children: [
+                                      _post.location != null &&
+                                              _post.category != null
+                                          ? Row(
+                                              children: [
+                                                SvgPicture.asset(
+                                                    'assets/svgs/location.svg'),
+                                                const SizedBox(
+                                                  width: 1,
+                                                ),
+                                                Text(
+                                                  _post.location!.length > 11
+                                                      ? '${_post.location!.substring(0, 11)}...'
+                                                      : _post.location!,
+                                                  style: const TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.normal,
+                                                      fontSize: 12,
+                                                      color: subtextColor),
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  softWrap: false,
+                                                ),
+                                                const SizedBox(
+                                                  width: 5,
+                                                ),
+                                                SvgPicture.asset(
+                                                    'assets/svgs/category.svg'),
+                                                const SizedBox(
+                                                  width: 3,
+                                                ),
+                                                Text(
+                                                  _post.category!.length > 15
+                                                      ? '${_post.category!.substring(0, 15)}...'
+                                                      : _post.category!,
+                                                  style: const TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.normal,
+                                                      fontSize: 12,
+                                                      color: subtextColor),
+                                                ),
+                                                const SizedBox(
+                                                  width: 5,
+                                                ),
+                                              ],
+                                            )
+                                          : const Row(children: <Widget>[
+                                              SizedBox(),
+                                            ],),
+                                      Row(
+                                        children: [
+                                          const Icon(
+                                            Icons.star,
+                                            color:
+                                                Color.fromRGBO(255, 202, 40, 1),
+                                            size: 16,
+                                          ),
+                                          Text(
+                                            _post.user!.averageRating!
+                                                .toStringAsFixed(1),
+                                            style: const TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 13,
                                             ),
-                                            Text(
-                                              _post.location!.length > 11
-                                                  ? '${_post.location!.substring(0, 11)}...'
-                                                  : _post.location!,
-                                              style: const TextStyle(
-                                                  fontWeight: FontWeight.normal,
-                                                  fontSize: 12,
-                                                  color: subtextColor),
-                                              overflow: TextOverflow.ellipsis,
-                                              softWrap: false,
+                                          ),
+                                          const SizedBox(
+                                            width: 5,
+                                          ),
+                                          GestureDetector(
+                                            onTap: () {
+                                              Get.to(() => SellerReviewScreen(
+                                                  user: _post.user!));
+                                            },
+                                            child: const Text(
+                                              'Seller reviews',
+                                              style: TextStyle(
+                                                fontSize: 13,
+                                                fontWeight: FontWeight.bold,
+                                                decoration:
+                                                    TextDecoration.underline,
+                                              ),
                                             ),
-                                            const SizedBox(
-                                              width: 5,
-                                            ),
-                                            SvgPicture.asset(
-                                                'assets/svgs/category.svg'),
-                                            const SizedBox(
-                                              width: 3,
-                                            ),
-                                            Text(
-                                              _post.category!.length > 15
-                                                  ? '${_post.category!.substring(0, 15)}...'
-                                                  : _post.category!,
-                                              style: const TextStyle(
-                                                  fontWeight: FontWeight.normal,
-                                                  fontSize: 12,
-                                                  color: subtextColor),
-                                            ),
-                                            const SizedBox(
-                                              width: 5,
-                                            ),
-                                            _post.user!.averageRating == 0
-                                                ? Container()
-                                                : Row(
-                                                    children: [
-                                                      const Icon(
-                                                        Icons.star,
-                                                        color: Color.fromRGBO(
-                                                            255, 202, 40, 1),
-                                                        size: 16,
-                                                      ),
-                                                      Text(
-                                                        _post.user!
-                                                            .averageRating!
-                                                            .toStringAsFixed(1),
-                                                        style: const TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontSize: 13,
-                                                        ),
-                                                      ),
-                                                      const SizedBox(
-                                                        width: 5,
-                                                      ),
-                                                      GestureDetector(
-                                                        onTap: () {
-                                                          Get.to(() =>
-                                                              SellerReviewScreen(
-                                                                  user: _post
-                                                                      .user!));
-                                                        },
-                                                        child: const Text(
-                                                          'Seller reviews',
-                                                          style: TextStyle(
-                                                            fontSize: 13,
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            decoration:
-                                                                TextDecoration
-                                                                    .underline,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                          ],
-                                        ),
-                                      )
-                                    : const SizedBox(),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
                                 const SizedBox(height: 10),
                                 Padding(
                                   padding: const EdgeInsets.only(

@@ -697,8 +697,9 @@ class _SellerReviewScreenState extends State<SellerReviewScreen> {
                                 () {
                                   cUser =
                                       UserModel.fromMap(currentUser['user']);
-                                  currentRating =
-                                      currentUser['user']['averageRating'];
+                                  currentRating = currentUser['user']
+                                          ['averageRating']
+                                      .toDouble();
                                   rater = 0;
                                   reviewText = '';
                                   isSending = false;

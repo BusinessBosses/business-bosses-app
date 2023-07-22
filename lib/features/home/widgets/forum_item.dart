@@ -17,10 +17,11 @@ import '../../../common/widgets/user_avatar_with_badge.dart';
 import '../../../services/api_service.dart';
 import '../../../utils/theme/theme.dart';
 import '../../../utils/time_format.dart';
+import '../../forum/widgets/forum_like_comment.dart';
 import '../../posts/widgets/all_images_item.dart';
 import '../../profile/controller/profile_controller.dart';
 import '../../profile/widgets/premium_profile_tile.dart';
-import 'forum_like_comment.dart';
+import '../controller/home_controller.dart';
 
 class ForumItem extends StatefulWidget {
   final ForumModel forum;
@@ -31,7 +32,7 @@ class ForumItem extends StatefulWidget {
   // final Function? onUpdateForum;
   // final Function? coinUncoinForum;
 
-  final dynamic controller;
+  final HomeController controller;
 
   // ignore: public_member_api_docs
   const ForumItem({
@@ -41,7 +42,7 @@ class ForumItem extends StatefulWidget {
     // this.likeUnlikeForum,
     // this.coinUncoinForum,
     // this.onUpdateForum,
-    this.controller,
+    required this.controller,
     this.isBossUp = false,
   }) : super(key: key);
 
@@ -126,8 +127,6 @@ class _ForumItemState extends State<ForumItem> {
 
   @override
   Widget build(BuildContext context) {
-    final ProfileController profileController = Get.find();
-    // print(widget.forum.user!.uid);
     return widget.forum.user == null
         ? const SizedBox()
         : Column(
@@ -620,10 +619,11 @@ class _ForumItemState extends State<ForumItem> {
                         TextButton.icon(
                           onPressed: () async {
                             widget.controller.postLike(
-                                profileController.myProfile.uid,
-                                widget.forum.forumId,
-                                'forum',
-                                widget.forum.user?.uid);
+                              profileController.myProfile.uid,
+                              widget.forum.forumId,
+                              'forum',
+                              widget.forum.user!.uid,
+                            );
                           },
                           icon: widget.forum.likes?.contains(
                                       profileController.myProfile.uid) ==
@@ -660,6 +660,7 @@ class _ForumItemState extends State<ForumItem> {
                                       forum: widget.forum,
                                       onComment:
                                           (CommentModel newComment) async {},
+                                      type: 'forum',
                                     ),
                                   );
                           },
@@ -679,11 +680,12 @@ class _ForumItemState extends State<ForumItem> {
                                 profileController.myProfile.uid
                             ? TextButton.icon(
                                 onPressed: () async {
-                                  widget.controller!.postCoin(
+                                  widget.controller.postCoin(
                                     profileController.myProfile.uid,
                                     widget.forum.forumId,
                                     profileController,
                                     'forum',
+                                    widget.forum.user!.uid,
                                   );
                                 },
                                 icon: widget.forum.coins?.contains(

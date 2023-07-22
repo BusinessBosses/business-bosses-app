@@ -1,25 +1,33 @@
+import 'package:business_bosses_v2/features/posts/controllers/create_post_controller.dart';
 import 'package:business_bosses_v2/features/posts/models/post_model.dart';
+import 'package:business_bosses_v2/features/posts/presentation/boost_post_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
+import 'package:get/get.dart';
 
 import '../../../action/action.dart';
+import '../../../common/dialogs/snackbar.dart';
+import '../../../common/models/api_response_model.dart';
 import '../../../common/models/my_response.dart';
 import '../../../common/widgets/network_image_with_placeholder.dart';
 import '../../../common/widgets/popup/my_popup_menu_button.dart';
 import '../../../functions/my_native_functions.dart';
+import '../../../services/api_service.dart';
 import '../../../utils/theme/theme.dart';
+import '../presentation/create_post_screen.dart';
 import 'images_viewer_screen.dart';
 
 class PostGridItem extends StatelessWidget {
   final PostModel post;
-  final Function(String postId)? onDeletePost;
+  final createPostController = CreatePostController();
+  // final Function(String postId)? onDeletePost;
   final bool hasMore;
   final Function? onTap;
 
   PostGridItem({
     Key? key,
     required this.post,
-    this.onDeletePost,
+    // this.onDeletePost,
     this.onTap,
     this.hasMore = true,
   }) : super(key: key);
@@ -142,20 +150,19 @@ class PostGridItem extends StatelessWidget {
                     ),
                     onSelected: (String val) {
                       if (val == 'Edit') {
-                        // navigateTo(
-                        //   context,
-                        //   routeName: CreatePostScreen.routeName,
-                        //   arguments: post,
-                        // );
+                        Get.to(() => CreatePostScreen(
+                              postId: post.postId,
+                              post: post.title,
+                            ));
                       } else if (val == 'Delete') {
                         _showDialog(context);
                       } else if (val == 'Boost') {
-                        // Navigator.of(context).push(
-                        //   MaterialPageRoute(
-                        //     builder: (context) => BoostP.ost(
-                        //         postId: post.postId, postTitle: post.title),
-                        //   ),
-                        // );
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => BoostPost(
+                                postId: post.postId, postTitle: post.title),
+                          ),
+                        );
                       }
                     },
                   ),
@@ -191,8 +198,8 @@ class PostGridItem extends StatelessWidget {
           ),
           TextButton(
             onPressed: () {
-              // onDeletePost(post.postId);
-              // navigateTo(context);
+              createPostController.onDeletePost(post.postId);
+              navigateTo(context);
             },
             child: const Text('Yes'),
           ),

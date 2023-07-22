@@ -39,6 +39,7 @@ class HomeController extends GetxController {
   RxList<ForumModel> forums = RxList<ForumModel>(<ForumModel>[]);
   List<Map<String, dynamic>> mixedPosts = [];
   List<String> blocked = [];
+  String bossUpTitle = 'Boss Up By';
   RxList<MarketModel> markets = RxList<MarketModel>(<MarketModel>[]);
   RxList<UserModel> marketMembers = RxList<UserModel>(<UserModel>[]);
 
@@ -125,28 +126,30 @@ class HomeController extends GetxController {
   void postLike(String userId, String postId, String type, String receiverUid) {
     if (type == 'post') {
       final int postIndex =
-          posts.indexWhere((PostModel element) => element.postId == postId);
+          mixedPosts.indexWhere((post) => post['data'].postId == postId);
       if (postIndex != -1) {
-        final bool checkLiked = posts[postIndex].likes!.contains(userId);
+        final bool checkLiked =
+            mixedPosts[postIndex]['data'].likes!.contains(userId);
         if (checkLiked) {
-          posts[postIndex]
+          mixedPosts[postIndex]['data']
               .likes!
-              .removeWhere((String element) => element == userId);
+              .removeWhere((element) => element == userId);
         } else {
-          posts[postIndex].likes!.add(userId);
+          mixedPosts[postIndex]['data'].likes!.add(userId);
         }
       }
     } else {
-      final int postIndex =
-          forums.indexWhere((ForumModel element) => element.forumId == postId);
+      final int postIndex = mixedPosts.indexWhere(
+          (dynamic post) => post['isForum'] && post['data'].forumId == postId);
       if (postIndex != -1) {
-        final bool checkLiked = forums[postIndex].likes!.contains(userId);
+        final bool checkLiked =
+            mixedPosts[postIndex]['data'].likes!.contains(userId);
         if (checkLiked) {
-          forums[postIndex]
+          mixedPosts[postIndex]['data']
               .likes!
-              .removeWhere((String element) => element == userId);
+              .removeWhere((element) => element == userId);
         } else {
-          forums[postIndex].likes!.add(userId);
+          mixedPosts[postIndex]['data'].likes!.add(userId);
         }
       }
     }
@@ -156,75 +159,104 @@ class HomeController extends GetxController {
         'postId': postId,
         'userId': userId,
         'type': type,
+        'timestamp': DateTime.now().millisecondsSinceEpoch,
         'receiverUid': receiverUid,
       });
     } else {
       socket.emit('like', {
         'postId': postId,
         'userId': userId,
+        'timestamp': DateTime.now().millisecondsSinceEpoch,
         'type': type,
       });
     }
   }
 
   /// COMMENT FUNCTION
-  void comment(String postId, CommentModel comment) {
-    final int postIndex =
-        posts.indexWhere((PostModel element) => element.postId == postId);
+  void comment(String postId, CommentModel comment, String type) {
+    int postIndex;
+    if (type == 'post') {
+      postIndex =
+          mixedPosts.indexWhere((post) => post['data'].postId == postId);
+    } else {
+      postIndex = mixedPosts.indexWhere(
+          (post) => post['isForum'] && post['data'].forumId == postId);
+    }
     if (postIndex != -1) {
-      posts[postIndex].comments!.add(comment);
+      mixedPosts[postIndex]['data'].comments!.add(comment);
     }
     update();
   }
+
+  // /// COMMENT FUNCTION
+  // void comment(String postId, CommentModel comment) {
+  //   final int postIndex =
+  //       mixedPosts.indexWhere((element) => element["data"].postId == postId);
+  //   if (postIndex != -1) {
+  //     posts[postIndex].comments!.add(comment);
+  //   } else {
+  //     final int forumIndex = mixedPosts
+  //         .indexWhere((element) => element["isForum"].forumId == postId);
+  //     if (forumIndex != -1) {
+  //       posts[forumIndex].comments!.add(comment);
+  //     }
+  //   }
+  //   update();
+  // }
 
   /// COIN AND UNCOIN FUNCTION
   void postCoin(String userId, String postId,
       ProfileController profileController, String type, String receiverUid) {
     if (type == 'post') {
       final int postIndex =
-          posts.indexWhere((PostModel element) => element.postId == postId);
+          mixedPosts.indexWhere((item) => item['data'].postId == postId);
       if (postIndex != -1) {
-        final bool checkIfCoined = posts[postIndex].coins!.contains(userId);
+        final bool checkIfCoined =
+            mixedPosts[postIndex]['data'].coins!.contains(userId);
         if (checkIfCoined) {
           profileController.updateCoinCount(1);
-          posts[postIndex]
+          mixedPosts[postIndex]['data']
               .coins!
               .removeWhere((String element) => element == userId);
         } else {
           profileController.updateCoinCount(-1);
-          posts[postIndex].coins!.add(userId);
+          mixedPosts[postIndex]['data'].coins!.add(userId);
         }
-        socket.emit('coin', {
-          'postId': postId,
-          'userId': userId,
-          'type': type,
-          'timestamp': DateTime.now().millisecondsSinceEpoch,
-          'receiverUid': receiverUid,
-        });
       }
     } else {
-      final int postIndex =
-          forums.indexWhere((ForumModel element) => element.forumId == postId);
-      if (postIndex != -1) {
-        final bool checkIfCoined = forums[postIndex].coins!.contains(userId);
+      final int forumIndex = mixedPosts.indexWhere(
+          (item) => item['isForum'] && item['data'].forumId == postId);
+      if (forumIndex != -1) {
+        final bool checkIfCoined =
+            mixedPosts[forumIndex]['data'].coins!.contains(userId);
         if (checkIfCoined) {
           profileController.updateCoinCount(1);
-          forums[postIndex]
+          mixedPosts[forumIndex]['data']
               .coins!
               .removeWhere((String element) => element == userId);
         } else {
           profileController.updateCoinCount(-1);
-          forums[postIndex].coins!.add(userId);
+          mixedPosts[forumIndex]['data'].coins!.add(userId);
         }
-        socket.emit('coin', {
-          'postId': postId,
-          'userId': userId,
-          'type': type,
-          'timestamp': DateTime.now().millisecondsSinceEpoch
-        });
       }
     }
     update();
+    if (profileController.myProfile.uid != receiverUid) {
+      socket.emit('con', {
+        'postId': postId,
+        'userId': userId,
+        'type': type,
+        'timestamp': DateTime.now().millisecondsSinceEpoch,
+        'receiverUid': receiverUid,
+      });
+    } else {
+      socket.emit('coin', {
+        'postId': postId,
+        'userId': userId,
+        'type': type,
+        'timestamp': DateTime.now().millisecondsSinceEpoch,
+      });
+    }
   }
 
   /// ADD NEW POST TO STATE
@@ -329,24 +361,64 @@ class HomeController extends GetxController {
     );
   }
 
+  void showCoinDialogFirst() {
+    showDialog(
+      context: Get.context!,
+      builder: (BuildContext context) => AlertDialog(
+        title: const TextWidget(
+          text: 'Congratulations',
+          fontWeight: FontWeight.bold,
+          size: 20,
+        ),
+        content: TextWidget(
+          text:
+              'You have earned 100 coins for upgrading your Business Bosses App',
+          color: Colors.black.withOpacity(.8),
+        ),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const TextWidget(
+              text: 'OK',
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
   /// DailyCoin
   void addCoinDaily() {
     int currentTimestamp = DateTime.now().millisecondsSinceEpoch;
     int dataTime = profileController.myProfile.bossOfTheWeekUpTimeStamp ?? 0;
     int lastExecutionTimestamp = sandBox.read('lastExecutionTimestamp') ?? 0;
-    if ((currentTimestamp - lastExecutionTimestamp >= 24 * 60 * 60 * 1000) &&
-        (currentTimestamp - dataTime >= 24 * 60 * 60 * 1000)) {
-      // The action hasn't been executed today, save the current timestamp
-      sandBox.write('lastExecutionTimestamp', currentTimestamp);
+    if (profileController.myProfile.bossOfTheWeekTimeStamp == null) {
       ApiService.put(
         path: 'users/${profileController.myProfile.uid}',
         body: <String, dynamic>{
-          'coinscount': profileController.myProfile.coinscount! + 1,
+          'coinscount': profileController.myProfile.coinscount! + 100,
           'bossOfTheWeekUpTimeStamp': currentTimestamp,
         },
       );
-      profileController.updateCoinCount(1);
-      showCoinDialog();
+      profileController.updateCoinCount(100);
+      showCoinDialogFirst();
+    } else {
+      if ((currentTimestamp - lastExecutionTimestamp >= 24 * 60 * 60 * 1000) &&
+          (currentTimestamp - dataTime >= 24 * 60 * 60 * 1000)) {
+        // The action hasn't been executed today, save the current timestamp
+        sandBox.write('lastExecutionTimestamp', currentTimestamp);
+        ApiService.put(
+          path: 'users/${profileController.myProfile.uid}',
+          body: <String, dynamic>{
+            'coinscount': profileController.myProfile.coinscount! + 1,
+            'bossOfTheWeekUpTimeStamp': currentTimestamp,
+          },
+        );
+        profileController.updateCoinCount(1);
+        showCoinDialog();
+      }
     }
   }
 
@@ -364,6 +436,16 @@ class HomeController extends GetxController {
     }
 
     loadingMore(false);
+    update();
+  }
+
+  void removePost(String postId) {
+    // final int postIndex =
+    //     mixedPosts.indexWhere((PostModel element) => element.postId == postId);
+    final int postIndex = mixedPosts.indexWhere(
+        (element) => !element['isForum'] && element['data'].postId == postId);
+    mixedPosts.removeWhere(
+        (element) => !element['isForum'] && element['data'].postId == postId);
     update();
   }
 
@@ -387,6 +469,11 @@ class HomeController extends GetxController {
       addCoinDaily();
       if (partner.data['count'] > 0) {
         bossUp?.addAll(partner.data['rows'].cast<Map<String, dynamic>>());
+        // Find the item with id = 5
+        final Map<String, dynamic> getTitle =
+            bossUp!.firstWhere((Map<String, dynamic> item) => item['id'] == 5);
+
+        bossUpTitle = getTitle['companyName'];
       }
     } else {
       error(true);
@@ -425,10 +512,19 @@ class HomeController extends GetxController {
     update();
     clearData();
     final ApiResponseModel response = await HomeRepository.fetchRefreshData();
+    final ApiResponseModel partner = await HomeRepository.fetchPartner();
     if (response.success) {
       processPostsAndForumsData(response.data['posts']);
       // profileController.processDataToState(
       //     response.data['user'], response.data['interests']);
+      if (partner.data['count'] > 0) {
+        bossUp?.addAll(partner.data['rows'].cast<Map<String, dynamic>>());
+        // Find the item with id = 5
+        final Map<String, dynamic> getTitle =
+            bossUp!.firstWhere((Map<String, dynamic> item) => item['id'] == 5);
+
+        bossUpTitle = getTitle['companyName'];
+      }
     } else {
       error(true);
       showSnackbar(title: 'OOPS!', message: response.message, error: true);
