@@ -48,7 +48,11 @@ Widget profileinfodisplay(BuildContext context, UserModel publicUser) {
               //     false)
               if (publicUser.website != null)
                 InkWell(
-                  onTap: () {
+                  onTap: () async {
+                    String url = MyNativeFunctions.completeURL(
+                        publicUser.twitter!, MyUrl.url);
+                    await launchUrlString(url);
+
                     // String url =
                     //     MyNativeFunctions
                     //         .completeURL(

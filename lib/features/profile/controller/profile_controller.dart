@@ -86,7 +86,7 @@ class ProfileController extends GetxController {
     final ApiResponseModel response = await ProfileRepository.fetchBoss();
     if (response.data != 'no record found') {
       processBossToState(response.data);
-      print(response.data);
+      // print(response.data);
     } else {
       bossOfTheWeek = null;
     }

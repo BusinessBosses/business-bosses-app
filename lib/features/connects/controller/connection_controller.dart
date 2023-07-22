@@ -39,7 +39,7 @@ class ConnectionController extends GetxController {
 
   Future<void> getConnections(String userId) async {
     final ApiResponseModel res =
-        await ApiService.get(path: '/connection/data/$userId');
+        await ApiService.get(path: 'connection/data/$userId');
     if (res.success) {
       for (int i = 0; i < res.data['connections']['data'].length; i++) {
         final Map<String, dynamic> mapData = res.data['connections']['data'][i];
