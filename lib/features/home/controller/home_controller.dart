@@ -177,6 +177,22 @@ class HomeController extends GetxController {
     update();
   }
 
+  // /// COMMENT FUNCTION
+  // void comment(String postId, CommentModel comment) {
+  //   final int postIndex =
+  //       mixedPosts.indexWhere((element) => element["data"].postId == postId);
+  //   if (postIndex != -1) {
+  //     posts[postIndex].comments!.add(comment);
+  //   } else {
+  //     final int forumIndex = mixedPosts
+  //         .indexWhere((element) => element["isForum"].forumId == postId);
+  //     if (forumIndex != -1) {
+  //       posts[forumIndex].comments!.add(comment);
+  //     }
+  //   }
+  //   update();
+  // }
+
   /// COIN AND UNCOIN FUNCTION
   void postCoin(String userId, String postId,
       ProfileController profileController, String type, String receiverUid) {
@@ -364,6 +380,16 @@ class HomeController extends GetxController {
     }
 
     loadingMore(false);
+    update();
+  }
+
+  void removePost(String postId) {
+    // final int postIndex =
+    //     mixedPosts.indexWhere((PostModel element) => element.postId == postId);
+    final int postIndex = mixedPosts.indexWhere(
+        (element) => !element['isForum'] && element['data'].postId == postId);
+    mixedPosts.removeWhere(
+        (element) => !element['isForum'] && element['data'].postId == postId);
     update();
   }
 
