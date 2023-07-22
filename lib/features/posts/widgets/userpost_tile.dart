@@ -476,7 +476,7 @@ class _PostTileState extends State<PostTile> {
                     widget.post.user!.uid != profileController.myProfile.uid
                         ? TextButton.icon(
                             onPressed: () async {
-                              widget.controller.postCoin(
+                              homeController.postCoin(
                                   profileController.myProfile.uid,
                                   widget.post.postId,
                                   profileController,

@@ -6,13 +6,13 @@ import '../../utils/theme/theme.dart';
 import '../chat/controllers/chat_controller.dart';
 import '../chat/models/my_message.dart';
 import '../forum/models/forum_model.dart';
-import '../forum/widgets/forum_item.dart';
 import '../home/controller/home_controller.dart';
 import '../home/widgets/home_appbar.dart';
 import '../posts/models/post_model.dart';
 import '../posts/widgets/userpost_tile.dart';
 import '../profile/controller/profile_controller.dart';
 import '../profile/widgets/boss_of_the_week_tile.dart';
+import 'widgets/forum_item.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key, this.onPageChange});
