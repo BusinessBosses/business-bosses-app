@@ -128,6 +128,32 @@ class CreatePostController extends GetxController {
     }
   }
 
+  /// delete a selected post
+  void onDeletePost(String postId) async {
+    try {
+      final ApiResponseModel response = await ApiService.delete(
+        path: 'post/delete-post/$postId',
+      );
+      final ProfileController profileController = Get.find();
+      final HomeController homeController = Get.find();
+
+      if (response.success) {
+        showSnackbar(message: 'Post deleted successfully!', title: 'Success');
+        profileController.removePost(postId);
+        homeController.removePost(postId);
+        return;
+      } else {
+        showSnackbar(
+            message: 'Failed to delete post.', title: 'O0PS!', error: true);
+        return;
+      }
+    } catch (e) {
+      rethrow;
+      // showSnackbar(
+      //     message: 'Error deleting post.', title: 'O0PS!', error: true);
+    }
+  }
+
   /// CHANGE PROMOTE STATE VALUE
   void togglePromote() {
     shouldPromote(!shouldPromote.value);

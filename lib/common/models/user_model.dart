@@ -263,11 +263,11 @@ class UserModel {
               .map((e) => Industry.toObject(e as Map<String, dynamic>))
               .toList()
           : null,
-      productsandservices: map['productsandservices'] != null
-          ? (map['productsandservices'] is String
-              ? [map['productsandservices'] as String]
-              : List<String>.from(map['productsandservices']))
-          : null,
+      productsandservices: map['productsandservices'] == null ||
+              map['productsandservices'].runtimeType == String
+          ? null
+          : List<String>.from((map['productsandservices'])),
+
       referals: map['referals'] != null
           ? List.from(map['referals'])
               .map((e) => ReferralsModel.fromMap(e as Map<String, dynamic>))
