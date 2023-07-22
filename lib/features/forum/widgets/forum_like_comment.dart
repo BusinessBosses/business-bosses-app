@@ -10,6 +10,7 @@ import '../../../../common/widgets/user_avatar_with_badge.dart';
 import '../../../../utils/theme/theme.dart';
 import '../../../common/controllers/comment_controller.dart';
 import '../../../services/api_service.dart';
+import '../../home/controller/home_controller.dart';
 import '../../posts/widgets/comment_item.dart';
 import '../../posts/widgets/write_comment.dart';
 import '../models/forum_model.dart';
@@ -17,11 +18,13 @@ import '../models/forum_model.dart';
 class ForumLikeCommentItem extends StatefulWidget {
   final Function(CommentModel comment) onComment;
   final ForumModel forum;
+  final String? type;
 
   const ForumLikeCommentItem({
     Key? key,
     required this.onComment,
     required this.forum,
+    this.type,
   }) : super(key: key);
 
   @override
@@ -31,7 +34,8 @@ class ForumLikeCommentItem extends StatefulWidget {
 class _ForumLikeCommentItemState extends State<ForumLikeCommentItem> {
   final bool _isInit = false;
   bool _isLoadingLikes = true, _isLoadingComments = true;
-  final ForumController _forumController = Get.find();
+  final ForumController _forumController = Get.put(ForumController());
+  final HomeController _homeController = Get.find();
   final ProfileController profileController = Get.find();
   final CommentController _commentController = Get.put(CommentController());
 
@@ -40,6 +44,11 @@ class _ForumLikeCommentItemState extends State<ForumLikeCommentItem> {
     _loadCommentWithDetails();
     _loadLikesWithDetails();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override
@@ -109,10 +118,18 @@ class _ForumLikeCommentItemState extends State<ForumLikeCommentItem> {
                           setState(() {
                             _commentController.comments.add(comment);
                           });
-                          _forumController.comment(
-                            widget.forum.forumId,
-                            comment,
-                          );
+                          if (widget.type != null && widget.type == 'forum') {
+                            _homeController.comment(
+                              widget.forum.forumId,
+                              comment,
+                              'forum',
+                            );
+                          } else {
+                            _forumController.comment(
+                              widget.forum.forumId,
+                              comment,
+                            );
+                          }
                         },
                         postId: widget.forum.forumId,
                       )
@@ -159,9 +176,11 @@ class _ForumLikeCommentItemState extends State<ForumLikeCommentItem> {
 
   Future<void> _loadCommentWithDetails() async {
     await _commentController.fetchComments(widget.forum.forumId);
-    setState(() {
-      _isLoadingComments = _commentController.loading.value;
-    });
+    if (mounted) {
+      setState(() {
+        _isLoadingComments = _commentController.loading.value;
+      });
+    }
   }
 
   final List<UserModel> _users = [];

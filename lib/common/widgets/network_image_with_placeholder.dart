@@ -54,7 +54,7 @@ class NetworkImageWithPlaceHolder extends StatelessWidget {
         child: ClipRRect(
           borderRadius: BorderRadius.circular(radius),
           child: CachedNetworkImage(
-            // memCacheHeight: cacheHeight,
+            memCacheHeight: cacheHeight,
             imageUrl:
                 imageUrl ?? '' /* == null ? 'https://www.error' : imageUrl*/,
             fit: fit,
@@ -72,7 +72,6 @@ class NetworkImageWithPlaceHolder extends StatelessWidget {
                           : color!.withOpacity(0.3),
                     ),
             ),
-
             placeholder: (_, __) => Container(
               color: color == null
                   ? Theme.of(context).iconTheme.color!.withOpacity(0.1)

@@ -267,6 +267,7 @@ class UserModel {
               map['productsandservices'].runtimeType == String
           ? null
           : List<String>.from((map['productsandservices'])),
+
       referals: map['referals'] != null
           ? List.from(map['referals'])
               .map((e) => ReferralsModel.fromMap(e as Map<String, dynamic>))

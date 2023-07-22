@@ -7,25 +7,25 @@ class SafetyModel extends StatelessWidget {
   final Widget icon;
   final String title;
   final String subTitle;
-  final String clickableText;
-  final Function? onTap;
+  final String? clickableText;
+  final Function()? onTap;
 
   final MainAxisAlignment mainAxisAlignment;
 
-  const SafetyModel(
-      {Key? key,
-      this.isLoading = true,
-      this.icon = const Icon(
-        Icons.warning,
-        size: 0.0,
-        color: Colors.grey,
-      ),
-      this.title = 'No data found',
-      this.subTitle = '',
-      this.clickableText = '',
-      this.mainAxisAlignment = MainAxisAlignment.center,
-      this.onTap})
-      : super(key: key);
+  const SafetyModel({
+    Key? key,
+    this.isLoading = true,
+    this.icon = const Icon(
+      Icons.warning,
+      size: 0.0,
+      color: Colors.grey,
+    ),
+    this.title = 'No data found',
+    this.subTitle = '',
+    this.clickableText = '',
+    this.mainAxisAlignment = MainAxisAlignment.center,
+    this.onTap,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -72,8 +72,8 @@ class SafetyModel extends StatelessWidget {
                                 ),
                               clickableText != null
                                   ? TextButton(
-                                      onPressed: () {},
-                                      child: Text(clickableText),
+                                      onPressed: onTap,
+                                      child: Text(clickableText!),
                                     )
                                   : Container(),
                             ],
