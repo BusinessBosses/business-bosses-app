@@ -6,20 +6,17 @@ import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:get/get.dart';
 
 import '../../../action/action.dart';
-import '../../../common/dialogs/snackbar.dart';
-import '../../../common/models/api_response_model.dart';
 import '../../../common/models/my_response.dart';
 import '../../../common/widgets/network_image_with_placeholder.dart';
 import '../../../common/widgets/popup/my_popup_menu_button.dart';
 import '../../../functions/my_native_functions.dart';
-import '../../../services/api_service.dart';
 import '../../../utils/theme/theme.dart';
 import '../presentation/create_post_screen.dart';
 import 'images_viewer_screen.dart';
 
 class PostGridItem extends StatelessWidget {
   final PostModel post;
-  final createPostController = CreatePostController();
+  final CreatePostController createPostController = CreatePostController();
   // final Function(String postId)? onDeletePost;
   final bool hasMore;
   final Function? onTap;
@@ -160,7 +157,7 @@ class PostGridItem extends StatelessWidget {
                       } else if (val == 'Boost') {
                         Navigator.of(context).push(
                           MaterialPageRoute(
-                            builder: (context) => BoostPost(
+                            builder: (BuildContext context) => BoostPost(
                                 postId: post.postId, postTitle: post.title),
                           ),
                         );

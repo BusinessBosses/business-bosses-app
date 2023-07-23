@@ -5,10 +5,8 @@ import 'package:get/get.dart';
 import '../../utils/theme/theme.dart';
 import '../chat/controllers/chat_controller.dart';
 import '../chat/models/my_message.dart';
-import '../forum/models/forum_model.dart';
 import '../home/controller/home_controller.dart';
 import '../home/widgets/home_appbar.dart';
-import '../posts/models/post_model.dart';
 import '../posts/widgets/userpost_tile.dart';
 import '../profile/controller/profile_controller.dart';
 import '../profile/widgets/boss_of_the_week_tile.dart';
@@ -34,15 +32,11 @@ class _HomeScreenState extends State<HomeScreen> {
     final HomeController homeController = Get.find();
     _scrollController.addListener(() {
       if (_scrollController.position.pixels >=
-              _scrollController.position.maxScrollExtent &&
+              _scrollController.position.maxScrollExtent - 300 &&
           !homeController.loadingMore.value) {
         homeController.fetchPosts();
       }
     });
-
-    // WidgetsBinding.instance.addPostFrameCallback((_) {
-    //   addCoinDaily();
-    // });
   }
 
   @override
@@ -131,7 +125,10 @@ class _HomeScreenState extends State<HomeScreen> {
                               shrinkWrap: true,
                               itemCount: controller.mixedPosts.length,
                               itemBuilder: (BuildContext context, int index) {
-                                if (controller.mixedPosts[index]['isForum']) {
+                                if (index == 0) {
+                                  return const BossOfWeekProfileTile();
+                                } else if (controller.mixedPosts[index]
+                                    ['isForum']) {
                                   return ForumItem(
                                     forum: controller.mixedPosts[index]['data'],
                                     controller: controller,

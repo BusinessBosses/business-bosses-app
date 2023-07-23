@@ -46,16 +46,16 @@ class _ReferScreenState extends State<ReferScreen> {
       final UserModel modelizedConnection = UserModel.fromMap(mapData);
       // print(_specificUser.connections);
       // _referrableConnections.add(modelizedConnection);
-      if (_specificUser.connections == null) {
-        if (_specificUser.uid != modelizedConnection.uid) {
-          _referrableConnections.add(modelizedConnection);
-        }
-      } else {
-        if (!_specificUser.connections!.contains(modelizedConnection.uid) &&
-            _specificUser.uid != modelizedConnection.uid) {
-          _referrableConnections.add(modelizedConnection);
-        }
-      }
+      // if (_specificUser.connections == null) {
+      //   if (_specificUser.uid != modelizedConnection.uid) {
+      //     _referrableConnections.add(modelizedConnection);
+      //   }
+      // } else {
+      //   if (!_specificUser.connections!.contains(modelizedConnection.uid) &&
+      //       _specificUser.uid != modelizedConnection.uid) {
+      //   }
+      // }
+      _referrableConnections.add(modelizedConnection);
     }
     setState(() {
       _isLoading = false;

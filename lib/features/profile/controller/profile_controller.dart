@@ -139,7 +139,7 @@ class ProfileController extends GetxController {
 
   void removePost(String postId) {
     final int postIndex =
-        posts.indexWhere((element) => element.postId == postId);
+        posts.indexWhere((PostModel element) => element.postId == postId);
     if (postIndex != -1) {
       posts.removeAt(postIndex);
       update();
@@ -148,7 +148,7 @@ class ProfileController extends GetxController {
 
   void updatePost(PostModel post) {
     final int postIndex =
-        posts.indexWhere((element) => element.postId == post.postId);
+        posts.indexWhere((PostModel element) => element.postId == post.postId);
     if (postIndex != -1) {
       posts[postIndex] = post;
       update();

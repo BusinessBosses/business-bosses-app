@@ -97,6 +97,7 @@ class CreatePostController extends GetxController {
           } else {
             Get.back();
           }
+          Get.snackbar('Success', 'Post created successfully');
         }
       } else {
         if (await uploadFile() == null) {
@@ -117,6 +118,7 @@ class CreatePostController extends GetxController {
             } else {
               Get.back();
             }
+            Get.snackbar('Success', 'Post created successfully');
           }
         }
       }
@@ -156,43 +158,26 @@ class CreatePostController extends GetxController {
   }
 
   /// delete a selected post
-  void onEditPost(PostModel? post, String title) async {
-    try {
-      final ApiResponseModel response = await ApiService.put(
-        path: 'post/update-post/${post?.postId}',
-        body: {'title': title},
-      );
+  Future<void> onEditPost(PostModel? post, String title) async {
+    final ApiResponseModel response = await ApiService.put(
+      path: 'post/update-post/${post?.postId}',
+      body: <String, dynamic>{'title': title},
+    );
 
+    if (response.success) {
       final ProfileController profileController = Get.find();
       final HomeController homeController = Get.find();
-
-      if (response.success) {
-        Map<String, dynamic> updatedPost = response.data;
-        PostModel modelizedPost = PostModel.fromMap({
-          ...updatedPost,
-          'comments': post?.comments,
-          'likes': post?.likes,
-          'coins': post?.coins,
-          'user': {
-            'username': profileController.myProfile.username,
-            'email': profileController.myProfile.email,
-            'uid': profileController.myProfile.uid,
-            'name': profileController.myProfile.name,
-          }
-        });
-        homeController.updatePost(modelizedPost);
-        profileController.updatePost(modelizedPost);
-        showSnackbar(message: 'Post updated successfully!', title: 'Success');
-        return;
-      } else {
-        showSnackbar(
-            message: 'Failed to editing post.', title: 'O0PS!', error: true);
-        return;
-      }
-    } catch (e) {
-      rethrow;
-      // showSnackbar(
-      //     message: 'Error deleting post.', title: 'O0PS!', error: true);
+      PostModel modelizedPost = PostModel.fromMap({
+        ...post!.toMap(),
+        ...response.data,
+      });
+      homeController.updatePost(modelizedPost);
+      profileController.updatePost(modelizedPost);
+      Get.back();
+      showSnackbar(message: 'Post updated successfully!', title: 'Success');
+    } else {
+      showSnackbar(
+          message: 'Failed to editing post.', title: 'O0PS!', error: true);
     }
   }
 

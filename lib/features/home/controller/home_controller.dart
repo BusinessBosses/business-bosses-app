@@ -35,9 +35,9 @@ class HomeController extends GetxController {
   RxBool loadingMore = RxBool(false);
   List<Map<String, dynamic>>? bossUp = [];
   RxBool refreshing = RxBool(false);
-  RxList<PostModel> posts = RxList<PostModel>(<PostModel>[]);
-  RxList<ForumModel> forums = RxList<ForumModel>(<ForumModel>[]);
-  List<Map<String, dynamic>> mixedPosts = [];
+  List<Map<String, dynamic>> mixedPosts = [
+    {'isForum': false, 'data': {}}
+  ];
   List<String> blocked = [];
   String bossUpTitle = 'Boss Up By';
   RxList<MarketModel> markets = RxList<MarketModel>(<MarketModel>[]);
@@ -60,7 +60,9 @@ class HomeController extends GetxController {
   }
 
   /// PROCESS RAW API DATA, MODELIZE AND SAVE TO STATE
-  void processPostsToState(dynamic post) {
+  RxList<PostModel> processPostsToState(dynamic post) {
+    RxList<PostModel> posts = RxList<PostModel>(<PostModel>[]);
+
     // print(post.length);
     final List psts = post;
     for (int i = 0; i < psts.length; i++) {
@@ -74,12 +76,13 @@ class HomeController extends GetxController {
             .toList()
       }));
     }
-    update();
-    // update();
+    return posts;
   }
 
   /// PROCESS RAW API Forums, MODELIZE AND SAVE TO STATE
-  void processForumsToState(dynamic forum) {
+  RxList<ForumModel> processForumsToState(dynamic forum) {
+    RxList<ForumModel> forums = RxList<ForumModel>(<ForumModel>[]);
+
     final List frms = forum;
     for (int i = 0; i < frms.length; i++) {
       forums.add(ForumModel.fromMap({
@@ -92,10 +95,10 @@ class HomeController extends GetxController {
             .toList()
       }));
     }
-    // update();
+    return forums;
   }
 
-  void joinPostsAndForums() {
+  void joinPostsAndForums(RxList<PostModel> posts, RxList<ForumModel> forums) {
     List<Map<String, dynamic>> frms = [];
     List<Map<String, dynamic>> psts = [];
     for (int i = 0; i < forums.length; i++) {
@@ -105,9 +108,6 @@ class HomeController extends GetxController {
       psts.add({'isForum': false, 'data': posts[i]});
     }
 
-    // posts.clear();
-    // forums.clear();
-
     final List<Map<String, dynamic>> joinedPosts = [...frms, ...psts]..sort(
         (Map<String, dynamic> a, Map<String, dynamic> b) =>
             b['data'].timestamp - a['data'].timestamp);
@@ -116,9 +116,10 @@ class HomeController extends GetxController {
   }
 
   void processPostsAndForumsData(dynamic data) {
-    processPostsToState(data['posts']['rows']);
-    processForumsToState(data['forums']['rows']);
-    joinPostsAndForums();
+    final RxList<PostModel> posts = processPostsToState(data['posts']['rows']);
+    final RxList<ForumModel> forums =
+        processForumsToState(data['forums']['rows']);
+    joinPostsAndForums(posts, forums);
     update();
   }
 
@@ -288,12 +289,6 @@ class HomeController extends GetxController {
     update();
   }
 
-  void clearData() {
-    // Reset the data variables to their initial state
-    posts.clear();
-    forums.clear();
-  }
-
   // void loadBlocked() async {
   //   final ApiResponseModel data = await HomeRepository.fetchBlocked();
   //   var rows = data.data['rows'];
@@ -447,21 +442,14 @@ class HomeController extends GetxController {
     update();
   }
 
-  void updatePost(PostModel? post) {
-    int postIndex;
-    postIndex = mixedPosts
-        .indexWhere((element) => element['data'].postId == post?.postId);
+  void updatePost(PostModel post) {
+    final int postIndex = mixedPosts.indexWhere(
+        (Map<String, dynamic> element) =>
+            !element['isForum'] && element['data'].postId == post.postId);
     if (postIndex != -1) {
       mixedPosts[postIndex]['data'] = post;
       update();
-    } else {
-      postIndex = mixedPosts.indexWhere((element) =>
-          element['isForum'] && element['data'].forumId == post?.postId);
-      if (postIndex != -1) {
-        mixedPosts[postIndex]['data'] = post;
-      }
     }
-    update();
   }
 
   /// LOAD POSTS FROM REMOTE SOURCE
@@ -525,7 +513,6 @@ class HomeController extends GetxController {
     refreshing(true);
     // error(false);
     update();
-    clearData();
     final ApiResponseModel response = await HomeRepository.fetchRefreshData();
     final ApiResponseModel partner = await HomeRepository.fetchPartner();
     if (response.success) {
