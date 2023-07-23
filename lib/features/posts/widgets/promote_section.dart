@@ -1,4 +1,3 @@
-import 'package:business_bosses_v2/common/widgets/typography/text_widget.dart';
 import 'package:business_bosses_v2/features/posts/controllers/create_post_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';

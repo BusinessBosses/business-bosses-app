@@ -80,16 +80,6 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
     });
   }
 
-  // void updateReferals(int refs) {
-  //   publicUser = UserModel.fromMap({
-  //     ...publicUser.toMap(),
-  //     'referalCount': publicUser.referals == null
-  //         ? refs
-  //         : publicUser.referals!.length + refs
-  //   });
-  //   setState(() {});
-  // }
-
   void connectToUser() async {
     final int checkConnected = _profileController.myProfile.connecteds == null
         ? -1
@@ -339,13 +329,12 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
                     : 3,
                 initialIndex: widget.store != null ? 2 : 0,
                 child: Column(
-                  children: [
-                    // if (_publicUser.uid !=
-                    //     'FirebaseAuth.instance.currentUser.uid') ...{
+                  children: <Widget>[
                     OutlineButtonHeader(
                       publicUser,
                       _profileController.myProfile,
                       connectToUser,
+                      context,
                     ),
                     const SizedBox(height: 15.0),
                     // },
@@ -415,6 +404,7 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
                                 ),
                                 // Container()
                                 profilepostsdisplay(
+                                  ispublicposts: true,
                                   context,
                                   publicUser,
                                   _posts,
@@ -438,6 +428,7 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
                                 ),
                                 // Container()
                                 profilepostsdisplay(
+                                  ispublicposts: true,
                                   context,
                                   publicUser,
                                   _posts,

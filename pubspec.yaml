@@ -34,7 +34,6 @@ dependencies:
   crypto: ^3.0.3
   cupertino_icons: ^1.0.2
   detectable_text_field: ^2.0.4
-  emoji_picker_flutter: ^1.6.1
   facebook_app_events: ^0.18.3
   file_picker: ^3.0.2
   firebase_analytics: ^10.2.1

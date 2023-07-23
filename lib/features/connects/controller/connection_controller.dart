@@ -37,17 +37,18 @@ class ConnectionController extends GetxController {
     update();
   }
 
-  Future<void> getConnections() async {
-    final ApiResponseModel res = await ApiService.get(path: '/connection/data');
+  Future<void> getConnections(String userId) async {
+    final ApiResponseModel res =
+        await ApiService.get(path: 'connection/data/$userId');
     if (res.success) {
       for (int i = 0; i < res.data['connections']['data'].length; i++) {
-        final mapData = res.data['connections']['data'][i];
+        final Map<String, dynamic> mapData = res.data['connections']['data'][i];
         final UserModel modelizedConnection = UserModel.fromMap(mapData);
 
         connections.add(modelizedConnection);
       }
       for (int i = 0; i < res.data['connecteds']['data'].length; i++) {
-        final mapData = res.data['connecteds']['data'][i];
+        final Map<String, dynamic> mapData = res.data['connecteds']['data'][i];
         final UserModel modelizedConnection = UserModel.fromMap(mapData);
 
         connecteds.add(modelizedConnection);
@@ -56,7 +57,8 @@ class ConnectionController extends GetxController {
       for (int i = 0;
           i < res.data['suggestedUsers']['data']['rows'].length;
           i++) {
-        final mapData = res.data['suggestedUsers']['data']['rows'][i];
+        final Map<String, dynamic> mapData =
+            res.data['suggestedUsers']['data']['rows'][i];
         final UserModel modelizedConnection = UserModel.fromMap(mapData);
 
         suggestedUsers.add(modelizedConnection);
@@ -103,8 +105,11 @@ class ConnectionController extends GetxController {
   @override
   void onInit() {
     // TODO: implement onInit
-
-    getConnections();
+    if (Get.arguments == null) {
+      Get.back();
+    } else {
+      getConnections(Get.arguments['uid']);
+    }
     super.onInit();
   }
 

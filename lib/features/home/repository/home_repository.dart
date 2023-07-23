@@ -8,6 +8,12 @@ class HomeRepository {
     return response;
   }
 
+  static Future<ApiResponseModel> fetchPosts(int page) async {
+    final ApiResponseModel response =
+        await ApiService.get(path: 'post/get-posts?page=$page&size=50');
+    return response;
+  }
+
   static Future<ApiResponseModel> fetchRefreshData() async {
     final ApiResponseModel response =
         await ApiService.get(path: 'init/refresh');
@@ -28,7 +34,15 @@ class HomeRepository {
 
   /// Fetch Marketplace Data
   static Future<ApiResponseModel> fetchMarket() async {
-    final ApiResponseModel response = await ApiService.get(path: 'markets/all');
+    final ApiResponseModel response =
+        await ApiService.get(path: 'markets/all?size=20&page=0');
+    return response;
+  }
+
+  /// Fetch Marketplace Data
+  static Future<ApiResponseModel> fetchMoreMarket(int size, int page) async {
+    final ApiResponseModel response =
+        await ApiService.get(path: 'markets/all?size=$size&page=$page');
     return response;
   }
 

@@ -65,15 +65,17 @@ class ForumController extends GetxController {
       page(page.value + 1);
       // industry = Industry.toObject(response.data['industry']);
       for (int i = 0; i < response.data['rows'].length; i++) {
-        forums.add(ForumModel.fromMap({
-          ...response.data['rows'][i],
-          'likes': response.data['rows'][i]['likes']
-              .map((dynamic like) => like['userId'].toString())
-              .toList(),
-          'coins': response.data['rows'][i]['coins']
-              .map((dynamic coin) => coin['userId'].toString())
-              .toList()
-        }));
+        if (response.data['rows'][i]['user'] != null) {
+          forums.add(ForumModel.fromMap({
+            ...response.data['rows'][i],
+            'likes': response.data['rows'][i]['likes']
+                .map((dynamic like) => like['userId'].toString())
+                .toList(),
+            'coins': response.data['rows'][i]['coins']
+                .map((dynamic coin) => coin['userId'].toString())
+                .toList()
+          }));
+        }
       }
     } else {
       error(true);
@@ -149,6 +151,16 @@ class ForumController extends GetxController {
       'industryId': industryId,
       'userId': userId,
     });
+  }
+
+  /// COMMENT FUNCTION
+  void comment(String postId, CommentModel comment) {
+    final int postIndex =
+        forums.indexWhere((ForumModel element) => element.forumId == postId);
+    if (postIndex != -1) {
+      forums[postIndex].comments!.add(comment);
+    }
+    update();
   }
 
   /// COIN AND UNCOIN FUNCTION

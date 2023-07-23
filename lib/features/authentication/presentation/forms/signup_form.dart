@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:io';
 
 // import 'package:apple_sign_in_safety/apple_sign_in.dart';
@@ -47,7 +46,7 @@ class _SignUpFormState extends State<SignUpForm> {
   bool _invisibleCPassword = true, _invisiblePassword = true;
   bool agreedToTerms = true;
   final ApiService _apiService = ApiService();
-  GoogleSignIn _googleSignIn = GoogleSignIn();
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
 
   String countryCode = '+447';
 

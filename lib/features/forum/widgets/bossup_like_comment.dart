@@ -1,6 +1,5 @@
 import 'package:business_bosses_v2/common/models/comment_model.dart';
-import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
-import 'package:business_bosses_v2/features/posts/models/post_model.dart';
+import 'package:business_bosses_v2/features/forum/controller/bossup_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
@@ -9,30 +8,31 @@ import '../../../../common/models/user_model.dart';
 import '../../../../common/widgets/safety_model.dart';
 import '../../../../common/widgets/user_avatar_with_badge.dart';
 import '../../../../utils/theme/theme.dart';
-
 import '../../../common/controllers/comment_controller.dart';
 import '../../../services/api_service.dart';
-import 'comment_item.dart';
-import 'write_comment.dart';
+import '../../posts/widgets/comment_item.dart';
+import '../../posts/widgets/write_comment.dart';
+import '../models/forum_model.dart';
 
-class PostLikeCommentItem extends StatefulWidget {
+class BossUpLikeCommentItem extends StatefulWidget {
   final Function(CommentModel comment) onComment;
-  final PostModel post;
+  final ForumModel forum;
 
-  const PostLikeCommentItem({
+  const BossUpLikeCommentItem({
     Key? key,
     required this.onComment,
-    required this.post,
+    required this.forum,
   }) : super(key: key);
 
   @override
-  _PostLikeCommentItemState createState() => _PostLikeCommentItemState();
+  _BossUpLikeCommentItemState createState() => _BossUpLikeCommentItemState();
 }
 
-class _PostLikeCommentItemState extends State<PostLikeCommentItem> {
+class _BossUpLikeCommentItemState extends State<BossUpLikeCommentItem> {
   bool _isLoadingLikes = true, _isLoadingComments = true;
+  final BossUpController _bossUpController = Get.find();
+  final ProfileController profileController = Get.find();
   final CommentController _commentController = Get.put(CommentController());
-  final HomeController _homeController = Get.find();
 
   @override
   void initState() {
@@ -103,18 +103,17 @@ class _PostLikeCommentItemState extends State<PostLikeCommentItem> {
                           widget.onComment(comment);
                           ApiService.post(path: 'comments', body: {
                             ...comment.toMap(),
-                            'receiverUid': widget.post.user?.uid
+                            'receiverUid': widget.forum.user?.uid
                           });
                           setState(() {
                             _commentController.comments.add(comment);
                           });
-                          _homeController.comment(
-                            widget.post.postId,
+                          _bossUpController.comment(
+                            widget.forum.forumId,
                             comment,
-                            'post',
                           );
                         },
-                        postId: widget.post.postId,
+                        postId: widget.forum.forumId,
                       )
                     ],
                   ),
@@ -140,7 +139,7 @@ class _PostLikeCommentItemState extends State<PostLikeCommentItem> {
                                 radius: 30.0,
                                 placeHolder: Icons.person,
                               ),
-                              title: Text(_users[i].name!),
+                              title: Text('${_users[i].name}'),
                               subtitle: Text(
                                 '${_users[i].bio}',
                                 maxLines: 1,
@@ -158,7 +157,7 @@ class _PostLikeCommentItemState extends State<PostLikeCommentItem> {
   }
 
   Future<void> _loadCommentWithDetails() async {
-    await _commentController.fetchComments(widget.post.postId);
+    await _commentController.fetchComments(widget.forum.forumId);
     setState(() {
       _isLoadingComments = _commentController.loading.value;
     });
@@ -167,14 +166,12 @@ class _PostLikeCommentItemState extends State<PostLikeCommentItem> {
   final List<UserModel> _users = [];
 
   Future<void> _loadLikesWithDetails() async {
-    for (dynamic l in widget.post.likes ?? []) {
+    for (dynamic l in widget.forum.likes ?? []) {
       final Map<String, dynamic> response = await ProfileController.loadData(l);
-      _users.add(
-        UserModel(
-            uid: l,
-            name: response['user']['name'] ?? response['user']['username'],
-            bio: response['user']['bio']),
-      );
+      _users.add(UserModel(
+          uid: l,
+          name: response['user']['name'],
+          bio: response['user']['bio']));
     }
     if (mounted) {
       setState(() {

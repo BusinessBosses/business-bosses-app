@@ -78,8 +78,9 @@ class ChatBox extends StatelessWidget {
                                       if (message.image != null)
                                         GestureDetector(
                                           onTap: () {
-                                            if (message.isRawImage ?? false)
+                                            if (message.isRawImage ?? false) {
                                               return;
+                                            }
                                             Navigator.of(context).push(
                                               MaterialPageRoute(
                                                 builder:
@@ -203,8 +204,9 @@ class ChatBox extends StatelessWidget {
                                       if (message.image != null)
                                         GestureDetector(
                                           onTap: () {
-                                            if (message.isRawImage ?? false)
+                                            if (message.isRawImage ?? false) {
                                               return;
+                                            }
                                             Navigator.of(context).push(
                                               MaterialPageRoute(
                                                 builder:

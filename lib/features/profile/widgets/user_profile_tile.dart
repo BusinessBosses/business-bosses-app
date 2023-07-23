@@ -23,7 +23,7 @@ class _UserProfileTileState extends State<UserProfileTile> {
     final ProfileController profileController = Get.find();
     // fetchData();
     // setState(() {});
-    return Container(
+    return SizedBox(
       width: double.infinity,
       child: Row(
         children: [
@@ -38,8 +38,7 @@ class _UserProfileTileState extends State<UserProfileTile> {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(1000),
                     child: NetworkImageWithPlaceHolder(
-                      imageUrl: widget.myProfile.photoUrl ??
-                          'https://w7.pngwing.com/pngs/831/88/png-transparent-user-profile-computer-icons-user-interface-mystique-miscellaneous-user-interface-design-smile-thumbnail.png',
+                      imageUrl: widget.myProfile.photoUrl ?? '',
                       height: 105.0,
                       width: 105.0,
                       radius: radius,
@@ -127,7 +126,7 @@ class _UserProfileTileState extends State<UserProfileTile> {
                                   fontWeight: FontWeight.bold,
                                   color: textColor.withOpacity(0.8)),
                         ),
-                        widget.myProfile?.companyName != null &&
+                        widget.myProfile.companyName != null &&
                                 widget.myProfile.companyName != ''
                             ? Text(
                                 widget.myProfile.companyName!,
@@ -141,7 +140,7 @@ class _UserProfileTileState extends State<UserProfileTile> {
                                     )),
                               )
                             : Container(),
-                        widget.myProfile?.location != null &&
+                        widget.myProfile.location != null &&
                                 widget.myProfile.location != ''
                             ? Text(
                                 widget.myProfile.location ?? '',

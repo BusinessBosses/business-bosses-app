@@ -4,13 +4,13 @@ import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
-import 'package:business_bosses_v2/features/posts/controllers/posts_controller.dart';
 import 'package:business_bosses_v2/features/posts/repository/post_repository.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../profile/controller/profile_controller.dart';
+import '../models/post_model.dart';
 import '../presentation/boost_post_screen.dart';
 
 /// CREATEPOSTCONTROLLER
@@ -97,6 +97,7 @@ class CreatePostController extends GetxController {
           } else {
             Get.back();
           }
+          Get.snackbar('Success', 'Post created successfully');
         }
       } else {
         if (await uploadFile() == null) {
@@ -117,6 +118,7 @@ class CreatePostController extends GetxController {
             } else {
               Get.back();
             }
+            Get.snackbar('Success', 'Post created successfully');
           }
         }
       }
@@ -126,6 +128,56 @@ class CreatePostController extends GetxController {
       showSnackbar(
           message: 'Post can\'t be empty', title: 'OOPS!', error: true);
       return;
+    }
+  }
+
+  /// delete a selected post
+  void onDeletePost(String postId) async {
+    try {
+      final ApiResponseModel response = await ApiService.delete(
+        path: 'post/delete-post/$postId',
+      );
+      final ProfileController profileController = Get.find();
+      final HomeController homeController = Get.find();
+
+      if (response.success) {
+        showSnackbar(message: 'Post deleted successfully!', title: 'Success');
+        profileController.removePost(postId);
+        homeController.removePost(postId);
+        return;
+      } else {
+        showSnackbar(
+            message: 'Failed to delete post.', title: 'O0PS!', error: true);
+        return;
+      }
+    } catch (e) {
+      rethrow;
+      // showSnackbar(
+      //     message: 'Error deleting post.', title: 'O0PS!', error: true);
+    }
+  }
+
+  /// delete a selected post
+  Future<void> onEditPost(PostModel? post, String title) async {
+    final ApiResponseModel response = await ApiService.put(
+      path: 'post/update-post/${post?.postId}',
+      body: <String, dynamic>{'title': title},
+    );
+
+    if (response.success) {
+      final ProfileController profileController = Get.find();
+      final HomeController homeController = Get.find();
+      PostModel modelizedPost = PostModel.fromMap({
+        ...post!.toMap(),
+        ...response.data,
+      });
+      homeController.updatePost(modelizedPost);
+      profileController.updatePost(modelizedPost);
+      Get.back();
+      showSnackbar(message: 'Post updated successfully!', title: 'Success');
+    } else {
+      showSnackbar(
+          message: 'Failed to editing post.', title: 'O0PS!', error: true);
     }
   }
 

@@ -30,8 +30,8 @@ class BossUpController extends GetxController {
     error(false);
     update();
     ApiResponseModel response;
-    response = await ForumRepository.getForums(
-        page.value, Constants.BOSS_UP_CHALLENGE_ID);
+    response =
+        await ForumRepository.getForums(page.value, Constants.BOSSUPINDUSTRYID);
     if (response.success) {
       totalForums(int.parse(response.data['count'].toString()));
       page(page.value + 1);
@@ -123,6 +123,16 @@ class BossUpController extends GetxController {
       'industryId': industryId,
       'userId': userId,
     });
+  }
+
+  /// COMMENT FUNCTION
+  void comment(String postId, CommentModel comment) {
+    final int postIndex =
+        forums.indexWhere((ForumModel element) => element.forumId == postId);
+    if (postIndex != -1) {
+      forums[postIndex].comments!.add(comment);
+    }
+    update();
   }
 
   /// COIN AND UNCOIN FUNCTION

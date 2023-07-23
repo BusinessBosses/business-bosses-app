@@ -1,15 +1,12 @@
 import 'package:business_bosses_v2/features/home/widgets/bottom_bar.dart';
-import 'package:business_bosses_v2/features/posts/models/post_model.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/features/profile/widgets/profileinfodisplay.dart';
 import 'package:business_bosses_v2/features/profile/widgets/profilepostsdisplay.dart';
-import 'package:business_bosses_v2/utils/constants/constants.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../../../common/widgets/safety_model.dart';
 import '../../../common/widgets/tiles/outlinebuttonheader.dart';
 import '../../../navigation/routes.dart';
@@ -33,34 +30,8 @@ class MyProfileScreen extends StatefulWidget {
 }
 
 class _MyProfileScreenState extends State<MyProfileScreen> {
-  bool isLoading = true;
-  List<PostModel> _posts = [];
-
   final ProfileController profileController = Get.find();
   final MarketController marketController = Get.put(MarketController());
-
-  Future<void> loadData(String uid) async {
-    setState(() {
-      isLoading = true;
-    });
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final Map<String, dynamic> res =
-        await ProfileController.loadData(prefs.getString(Constants.USER_ID)!);
-
-    _posts = res['posts'];
-
-    setState(() {
-      isLoading = false;
-    });
-  }
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-
-    loadData(profileController.myProfile.uid);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -192,10 +163,12 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                           ),
                                         ),
                                         profilepostsdisplay(
+                                          ispublicposts: false,
                                           context,
                                           profileController.myProfile,
-                                          _posts,
-                                          loading: isLoading,
+                                          profileController.posts,
+                                          loading:
+                                              profileController.isLoading.value,
                                         ),
                                       ]
                                     : [
@@ -215,10 +188,12 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                           ),
                                         ),
                                         profilepostsdisplay(
+                                          ispublicposts: false,
                                           context,
                                           profileController.myProfile,
-                                          _posts,
-                                          loading: isLoading,
+                                          profileController.posts,
+                                          loading:
+                                              profileController.isLoading.value,
                                         ),
                                         SingleChildScrollView(
                                           child: Column(
@@ -323,7 +298,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                     ),
                   ),
                 ),
-                BottomBar(
+                const BottomBar(
                   activeIndex: 3,
                 )
               ],

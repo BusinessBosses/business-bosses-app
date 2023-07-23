@@ -1,11 +1,16 @@
 import 'package:business_bosses_v2/common/models/comment_model.dart';
+import 'package:business_bosses_v2/features/forum/controller/forum_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
+import 'package:get/get.dart';
 import '../../../../common/models/user_model.dart';
 import '../../../../common/widgets/safety_model.dart';
 import '../../../../common/widgets/user_avatar_with_badge.dart';
 import '../../../../utils/theme/theme.dart';
+import '../../../common/controllers/comment_controller.dart';
+import '../../../services/api_service.dart';
+import '../../home/controller/home_controller.dart';
 import '../../posts/widgets/comment_item.dart';
 import '../../posts/widgets/write_comment.dart';
 import '../models/forum_model.dart';
@@ -13,11 +18,13 @@ import '../models/forum_model.dart';
 class ForumLikeCommentItem extends StatefulWidget {
   final Function(CommentModel comment) onComment;
   final ForumModel forum;
+  final String? type;
 
   const ForumLikeCommentItem({
     Key? key,
     required this.onComment,
     required this.forum,
+    this.type,
   }) : super(key: key);
 
   @override
@@ -27,12 +34,21 @@ class ForumLikeCommentItem extends StatefulWidget {
 class _ForumLikeCommentItemState extends State<ForumLikeCommentItem> {
   final bool _isInit = false;
   bool _isLoadingLikes = true, _isLoadingComments = true;
+  final ForumController _forumController = Get.put(ForumController());
+  final HomeController _homeController = Get.find();
+  final ProfileController profileController = Get.find();
+  final CommentController _commentController = Get.put(CommentController());
 
   @override
   void initState() {
     _loadCommentWithDetails();
     _loadLikesWithDetails();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override
@@ -68,7 +84,7 @@ class _ForumLikeCommentItemState extends State<ForumLikeCommentItem> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Expanded(
-                        child: _comments.isEmpty
+                        child: _commentController.comments.isEmpty
                             ? SafetyModel(
                                 isLoading: _isLoadingComments,
                                 icon: SvgPicture.asset(
@@ -83,18 +99,37 @@ class _ForumLikeCommentItemState extends State<ForumLikeCommentItem> {
                                 reverse: true,
                                 itemBuilder: (BuildContext context, int i) {
                                   final int j =
-                                      _comments.length - 1 - i; // reverse index
-                                  return CommentItem(_comments[j]);
+                                      _commentController.comments.length -
+                                          1 -
+                                          i; // reverse index
+                                  return CommentItem(
+                                      _commentController.comments[j]);
                                 },
-                                itemCount: _comments.length,
+                                itemCount: _commentController.comments.length,
                               ),
                       ),
                       WriteAComment(
                         onCommentSend: (CommentModel comment) {
                           widget.onComment(comment);
-                          setState(() {
-                            _comments.add(comment);
+                          ApiService.post(path: 'comments', body: {
+                            ...comment.toMap(),
+                            'receiverUid': widget.forum.user?.uid
                           });
+                          setState(() {
+                            _commentController.comments.add(comment);
+                          });
+                          if (widget.type != null && widget.type == 'forum') {
+                            _homeController.comment(
+                              widget.forum.forumId,
+                              comment,
+                              'forum',
+                            );
+                          } else {
+                            _forumController.comment(
+                              widget.forum.forumId,
+                              comment,
+                            );
+                          }
                         },
                         postId: widget.forum.forumId,
                       )
@@ -139,22 +174,13 @@ class _ForumLikeCommentItemState extends State<ForumLikeCommentItem> {
     );
   }
 
-  final List<CommentModel> _comments = <CommentModel>[];
-
   Future<void> _loadCommentWithDetails() async {
-    for (CommentModel c in widget.forum.comments ?? []) {
-      _comments.add(
-        CommentModel(
-          commentId: c.commentId,
-          userId: c.userId,
-          comment: c.comment,
-          timestamp: c.timestamp,
-        ),
-      );
+    await _commentController.fetchComments(widget.forum.forumId);
+    if (mounted) {
+      setState(() {
+        _isLoadingComments = _commentController.loading.value;
+      });
     }
-    setState(() {
-      _isLoadingComments = false;
-    });
   }
 
   final List<UserModel> _users = [];

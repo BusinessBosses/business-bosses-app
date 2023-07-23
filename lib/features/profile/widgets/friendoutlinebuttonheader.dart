@@ -1,5 +1,6 @@
+import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -8,15 +9,9 @@ import '../../../common/models/user_model.dart';
 import '../../../common/widgets/buttons/my_outlined_button.dart';
 import '../../../utils/theme/theme.dart';
 import '../../chat/chat_room_screen.dart';
-import '../controller/profile_controller.dart';
 
-Widget OutlineButtonHeader(
-  UserModel publicUser,
-  UserModel myProfile,
-  VoidCallback onConnect,
-) {
-  final ProfileController profileController = Get.find();
-  bool connectedbutton = true;
+Widget OutlineButtonHeader(UserModel publicUser, UserModel myProfile,
+    VoidCallback onConnect, BuildContext context) {
   return Container(
     height: 50.0,
     padding: const EdgeInsets.all(4.0),
@@ -51,7 +46,7 @@ Widget OutlineButtonHeader(
           margin: const EdgeInsets.symmetric(horizontal: 4.0),
           onPressed: () {
             Get.to(
-              () => ChatRoomScreen(
+              () => const ChatRoomScreen(
                 frommarketplace: false,
               ),
               arguments: publicUser,
@@ -64,16 +59,47 @@ Widget OutlineButtonHeader(
         child: MCustomButton(
             margin: const EdgeInsets.symmetric(horizontal: 4.0),
             onPressed: () async {
-              if (profileController.myProfile.connectedCount == 0 &&
-                  profileController.myProfile.connectionCount == 0) {
-                String message =
-                    'Have a look at ${publicUser.username}\'s profile on Business Bosses\n'
-                    'https://businessbosses.onelink.me/xLWk/36a2ff16';
-                socialShare(message);
-              } else {
-                Get.toNamed(Routes.referscreen,
-                    arguments: {'user': publicUser});
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return const AlertDialog(
+                    content: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        CircularProgressIndicator(),
+                      ],
+                    ),
+                  );
+                },
+              );
+              final ApiResponseModel res = await ApiService.get(
+                  path: '/connection/connecteds/referals/${publicUser.uid}');
+              Navigator.pop(context);
+
+              if (res.success) {
+                if (res.data.isEmpty) {
+                  String message =
+                      'Have a look at ${publicUser.username}\'s profile on Business Bosses\n'
+                      'https://businessbosses.onelink.me/xLWk/36a2ff16';
+                  socialShare(message);
+                } else {
+                  Get.toNamed(
+                    Routes.referscreen,
+                    arguments: <String, dynamic>{'user': publicUser},
+                  );
+                }
               }
+
+              // if (profileController.myProfile.connectedCount == 0 &&
+              //     profileController.myProfile.connectionCount == 0) {
+              //   String message =
+              //       'Have a look at ${publicUser.username}\'s profile on Business Bosses\n'
+              //       'https://businessbosses.onelink.me/xLWk/36a2ff16';
+              //   socialShare(message);
+              // } else {
+              //   Get.toNamed(Routes.referscreen,
+              //       arguments: {'user': publicUser});
+              // }
             },
             child: const Text('Refer')),
       ),

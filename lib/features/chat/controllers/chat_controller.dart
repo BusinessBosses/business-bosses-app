@@ -30,6 +30,10 @@ class ChatController extends GetxController {
         .toList();
   }
 
+  // void addMarketPost(MarketModel marketPost){
+  //   chatMessages.insert(marketPost);
+  // }
+
   /// SET SEEN STATUS TO A CHAT TO TRUE
   void seen(String counterId, Socket socket) {
     final List<MessageModel> userConversations = chatMessages
@@ -56,10 +60,14 @@ class ChatController extends GetxController {
 
   /// EXTRACT UNIQUE CHATS ON SEARCH (REMOVE DUPLICATES)
   void searchChats(String query) {
-    searchedChats = chats
-        .where((MessageModel element) =>
-            element.user.username.toLowerCase().contains(query.toLowerCase()))
-        .toList();
+    searchedChats = chats.where((MessageModel element) {
+      if (element.user != null) {
+        return element.user!.username
+            .toLowerCase()
+            .contains(query.toLowerCase());
+      }
+      return false;
+    }).toList();
 
     update();
   }
@@ -84,7 +92,10 @@ class ChatController extends GetxController {
 
       final List<MessageModel> chat = chatMessages
           .where((MessageModel element) =>
-              element.senderUid == e || element.receiverUid == e)
+              (element.senderUid == e &&
+                  element.receiverUid == _profileController.myProfile.uid) ||
+              (element.receiverUid == e &&
+                  element.senderUid == _profileController.myProfile.uid))
           .toList();
       if (chat.isNotEmpty) {
         chats
@@ -112,7 +123,7 @@ class ChatController extends GetxController {
   }
 
   void addNewChat(Map<String, dynamic> data, UserModel user) {
-    final HomeController _homeController = Get.find();
+    final HomeController homeController = Get.find();
 
     final Map<String, dynamic> body = {
       ...data,
@@ -124,14 +135,14 @@ class ChatController extends GetxController {
     chatMessages.insert(
         0, MessageModel.fromMap({...body, 'user': user.toMap()}));
     extractChats(data['senderUid']);
-    _homeController.socket.emit('new-message',
+    homeController.socket.emit('new-message',
         {'data': body, 'sender': _profileController.myProfile.toMap()});
     update();
   }
 
   void addNewChatMarket(
       Map<String, dynamic> data, UserModel user, String marketId) {
-    final HomeController _homeController = Get.find();
+    final HomeController homeController = Get.find();
 
     final Map<String, dynamic> body = {
       ...data,
@@ -144,13 +155,13 @@ class ChatController extends GetxController {
     chatMessages.insert(
         0, MessageModel.fromMap({...body, 'user': user.toMap()}));
     extractChats(data['senderUid']);
-    _homeController.socket.emit('new-message',
+    homeController.socket.emit('new-message',
         {'data': body, 'sender': _profileController.myProfile.toMap()});
     update();
   }
 
   void uploadNewChat(Map<String, dynamic> data, UserModel user) {
-    final HomeController _homeController = Get.find();
+    final HomeController homeController = Get.find();
 
     final Map<String, dynamic> body = {
       ...data,
@@ -162,7 +173,7 @@ class ChatController extends GetxController {
     chatMessages.insert(
         0, MessageModel.fromMap({...body, 'user': user.toMap()}));
     extractChats(data['senderUid']);
-    _homeController.socket.emit('new-message',
+    homeController.socket.emit('new-message',
         {'data': body, 'sender': _profileController.myProfile.toMap()});
     update();
   }
@@ -172,7 +183,7 @@ class ChatController extends GetxController {
     try {
       final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
       if (image != null) {
-        final HomeController _homeController = Get.find();
+        final HomeController homeController = Get.find();
 
         final File imageFile = File(image.path);
         final String messageId = const Uuid().v4();
@@ -200,7 +211,7 @@ class ChatController extends GetxController {
           showSnackbar(message: 'Error Uploading image');
         } else {
           final String imageUrl = uploadResponse['fileUrl'];
-          _homeController.socket.emit('new-message', {
+          homeController.socket.emit('new-message', {
             'data': {
               ...body,
               'image': imageUrl,

@@ -2,10 +2,8 @@ import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:get/get.dart';
 
 import '../../../common/widgets/network_image_with_placeholder.dart';
-import '../controller/profile_controller.dart';
 
 // ignore: public_member_api_docs
 class PublicProfileTile extends StatefulWidget {
@@ -41,8 +39,7 @@ class _PublicProfileTileState extends State<PublicProfileTile> {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(1000),
                     child: NetworkImageWithPlaceHolder(
-                      imageUrl: widget.myProfile.photoUrl ??
-                          'https://w7.pngwing.com/pngs/831/88/png-transparent-user-profile-computer-icons-user-interface-mystique-miscellaneous-user-interface-design-smile-thumbnail.png',
+                      imageUrl: widget.myProfile.photoUrl ?? '',
                       height: 105.0,
                       width: 105.0,
                       radius: radius,
@@ -114,7 +111,7 @@ class _PublicProfileTileState extends State<PublicProfileTile> {
                                       widget.myProfile.name!.length <= 20
                                   ? widget.myProfile.name!
                                   : widget.myProfile.name != null
-                                      ? "${widget.myProfile.name!.substring(0, 20)}..."
+                                      ? '${widget.myProfile.name!.substring(0, 20)}...'
                                       : widget.myProfile.username,
                               style: Theme.of(context).textTheme.bodyLarge,
                             ),
@@ -130,7 +127,7 @@ class _PublicProfileTileState extends State<PublicProfileTile> {
                                   widget.myProfile.name!.length <= 20
                               ? widget.myProfile.name!
                               : widget.myProfile.name != null
-                                  ? "${widget.myProfile.name!.substring(0, 20)}..."
+                                  ? '${widget.myProfile.name!.substring(0, 20)}...'
                                   : widget.myProfile.username,
                           style: Theme.of(context).textTheme.bodyLarge,
                         ),

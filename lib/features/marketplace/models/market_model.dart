@@ -7,13 +7,13 @@ import '../../../common/models/comment_model.dart';
 
 class MarketModel {
   String marketId;
-  String category;
-  String location;
+  String? category;
+  String? location;
   String description;
   String userId;
   List<dynamic>? images;
   String price;
-  UserModel user;
+  UserModel? user;
   bool promote;
   int? timestamp;
   final List<String>? likes;
@@ -21,14 +21,14 @@ class MarketModel {
   final List<CommentModel>? comments;
   MarketModel({
     required this.marketId,
-    required this.category,
+    this.category,
     required this.userId,
     required this.price,
     required this.description,
-    required this.location,
+    this.location,
     this.images,
     this.timestamp,
-    required this.user,
+    this.user,
     this.promote = false,
     this.likes,
     this.coins,
@@ -72,7 +72,7 @@ class MarketModel {
       'description': description,
       'location': location,
       'images': images,
-      'user': user.toMap(),
+      'user': user?.toMap(),
       'category': category,
       'marketId': marketId,
       'price': price,
@@ -91,18 +91,22 @@ class MarketModel {
       images: map['images'] != null
           ? List<dynamic>.from((map['images'] as List<dynamic>))
           : null,
-      user: UserModel.fromMap(map['user'] as Map<String, dynamic>),
-      category: map['category'] as String,
-      location: map['location'] as String,
+      user: map['user'] != null
+          ? UserModel.fromMap(map['user'] as Map<String, dynamic>)
+          : null,
+      category: map['category'] != null ? map['category'] as String : null,
+      location: map['location'] != null ? map['location'] as String : null,
       marketId: map['marketId'] as String,
       price: map['price'] as String,
       userId: map['userId'] as String,
       promote: map['promote'] as bool,
       likes: map['likes'] != null ? List<String>.from((map['likes'])) : null,
       coins: map['coins'] != null ? List<String>.from((map['coins'])) : null,
-      comments: List.from(map['comments'])
-          .map((e) => CommentModel.fromMap(e as Map<String, dynamic>))
-          .toList(),
+      comments: map['comments'] != null
+          ? List<dynamic>.from(map['comments'])
+              .map((e) => CommentModel.fromMap(e as Map<String, dynamic>))
+              .toList()
+          : null,
     );
   }
 

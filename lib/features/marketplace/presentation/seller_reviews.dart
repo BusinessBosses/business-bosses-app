@@ -180,266 +180,273 @@ class _SellerReviewScreenState extends State<SellerReviewScreen> {
                       height: 20,
                     ),
                     StatefulBuilder(
-                        builder: (BuildContext context, StateSetter setState) {
-                      return Container(
-                        width: MediaQuery.of(context).size.width * 0.9,
-                        padding: const EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: const Color.fromRGBO(244, 244, 244, 1),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const Text(
-                                  'Rating',
-                                  style: TextStyle(
-                                    color: Colors.red,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 10,
+                      builder: (BuildContext context, StateSetter setState) {
+                        return Container(
+                          width: MediaQuery.of(context).size.width * 0.9,
+                          padding: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: const Color.fromRGBO(244, 244, 244, 1),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Text(
+                                    'Rating',
+                                    style: TextStyle(
+                                      color: Colors.red,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 10,
+                                    ),
                                   ),
-                                ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Text('$currentRating',
-                                        style: const TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 20,
-                                        )),
-                                    const SizedBox(
-                                      width: 3,
-                                    ),
-                                    const Text('out of 5',
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Text(currentRating.toStringAsFixed(1),
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 20,
+                                          )),
+                                      const SizedBox(
+                                        width: 3,
+                                      ),
+                                      const Text('out of 5',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                          )),
+                                    ],
+                                  ),
+                                  Text(
+                                      'Based on ${reviews?.length ?? 0} reviews'),
+                                  Row(
+                                    children: [
+                                      Icon(
+                                        Icons.star,
+                                        color: widget.user.averageRating! >= 1
+                                            ? const Color.fromRGBO(
+                                                255, 202, 40, 1)
+                                            : const Color.fromRGBO(
+                                                229, 229, 229, 1),
+                                        size: 30,
+                                      ),
+                                      Icon(
+                                        Icons.star,
+                                        color: widget.user.averageRating! >= 2
+                                            ? const Color.fromRGBO(
+                                                255, 202, 40, 1)
+                                            : const Color.fromRGBO(
+                                                229, 229, 229, 1),
+                                        size: 30,
+                                      ),
+                                      Icon(
+                                        Icons.star,
+                                        color: widget.user.averageRating! >= 3
+                                            ? const Color.fromRGBO(
+                                                255, 202, 40, 1)
+                                            : const Color.fromRGBO(
+                                                229, 229, 229, 1),
+                                        size: 30,
+                                      ),
+                                      Icon(
+                                        Icons.star,
+                                        color: widget.user.averageRating! >= 4
+                                            ? const Color.fromRGBO(
+                                                255, 202, 40, 1)
+                                            : const Color.fromRGBO(
+                                                229, 229, 229, 1),
+                                        size: 30,
+                                      ),
+                                      Icon(
+                                        Icons.star,
+                                        color: widget.user.averageRating! == 5
+                                            ? const Color.fromRGBO(
+                                                255, 202, 40, 1)
+                                            : const Color.fromRGBO(
+                                                229, 229, 229, 1),
+                                        size: 30,
+                                      )
+                                    ],
+                                  ),
+                                ],
+                              ),
+                              Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  Row(
+                                    children: [
+                                      const Text(
+                                        '5 Stars',
                                         style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                        )),
-                                  ],
-                                ),
-                                Text(
-                                    'Based on ${reviews?.length ?? 0} reviews'),
-                                Row(
-                                  children: [
-                                    Icon(
-                                      Icons.star,
-                                      color: widget.user.averageRating! >= 1
-                                          ? const Color.fromRGBO(
-                                              255, 202, 40, 1)
-                                          : const Color.fromRGBO(
-                                              229, 229, 229, 1),
-                                      size: 30,
-                                    ),
-                                    Icon(
-                                      Icons.star,
-                                      color: widget.user.averageRating! >= 2
-                                          ? const Color.fromRGBO(
-                                              255, 202, 40, 1)
-                                          : const Color.fromRGBO(
-                                              229, 229, 229, 1),
-                                      size: 30,
-                                    ),
-                                    Icon(
-                                      Icons.star,
-                                      color: widget.user.averageRating! >= 3
-                                          ? const Color.fromRGBO(
-                                              255, 202, 40, 1)
-                                          : const Color.fromRGBO(
-                                              229, 229, 229, 1),
-                                      size: 30,
-                                    ),
-                                    Icon(
-                                      Icons.star,
-                                      color: widget.user.averageRating! >= 4
-                                          ? const Color.fromRGBO(
-                                              255, 202, 40, 1)
-                                          : const Color.fromRGBO(
-                                              229, 229, 229, 1),
-                                      size: 30,
-                                    ),
-                                    Icon(
-                                      Icons.star,
-                                      color: widget.user.averageRating! == 5
-                                          ? const Color.fromRGBO(
-                                              255, 202, 40, 1)
-                                          : const Color.fromRGBO(
-                                              229, 229, 229, 1),
-                                      size: 30,
-                                    )
-                                  ],
-                                ),
-                              ],
-                            ),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: [
-                                Row(
-                                  children: [
-                                    const Text(
-                                      '5 Stars',
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      width: 10,
-                                    ),
-                                    SizedBox(
-                                      width: 80,
-                                      child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(10),
-                                        child: LinearProgressIndicator(
-                                          value: reviews == null
-                                              ? 0
-                                              : fiveStar / reviews!.length,
-                                          minHeight: 10,
-                                          backgroundColor: Colors.grey,
-                                          valueColor:
-                                              const AlwaysStoppedAnimation<
-                                                      Color>(
-                                                  Color.fromRGBO(
-                                                      255, 202, 40, 1)),
+                                          fontSize: 12,
                                         ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    const Text(
-                                      '4 Stars',
-                                      style: TextStyle(
-                                        fontSize: 12,
+                                      const SizedBox(
+                                        width: 10,
                                       ),
-                                    ),
-                                    const SizedBox(
-                                      width: 10,
-                                    ),
-                                    SizedBox(
-                                      width: 80,
-                                      child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(10),
-                                        child: LinearProgressIndicator(
-                                          value: reviews == null
-                                              ? 0
-                                              : fourStar / reviews!.length,
-                                          minHeight: 10,
-                                          backgroundColor: Colors.grey,
-                                          valueColor:
-                                              const AlwaysStoppedAnimation<
-                                                      Color>(
-                                                  Color.fromRGBO(
-                                                      255, 202, 40, 1)),
+                                      SizedBox(
+                                        width: 80,
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          child: LinearProgressIndicator(
+                                            value: reviews == null
+                                                ? 0
+                                                : fiveStar / reviews!.length,
+                                            minHeight: 10,
+                                            backgroundColor: Colors.grey,
+                                            valueColor:
+                                                const AlwaysStoppedAnimation<
+                                                        Color>(
+                                                    Color.fromRGBO(
+                                                        255, 202, 40, 1)),
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    const Text(
-                                      '3 Stars',
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      width: 10,
-                                    ),
-                                    SizedBox(
-                                      width: 80,
-                                      child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(10),
-                                        child: LinearProgressIndicator(
-                                          value: reviews == null
-                                              ? 0
-                                              : threeStar / reviews!.length,
-                                          minHeight: 10,
-                                          backgroundColor: Colors.grey,
-                                          valueColor:
-                                              const AlwaysStoppedAnimation<
-                                                      Color>(
-                                                  Color.fromRGBO(
-                                                      255, 202, 40, 1)),
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      const Text(
+                                        '4 Stars',
+                                        style: TextStyle(
+                                          fontSize: 12,
                                         ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    const Text(
-                                      '2 Stars',
-                                      style: TextStyle(
-                                        fontSize: 12,
+                                      const SizedBox(
+                                        width: 10,
                                       ),
-                                    ),
-                                    const SizedBox(
-                                      width: 10,
-                                    ),
-                                    SizedBox(
-                                      width: 80,
-                                      child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(10),
-                                        child: LinearProgressIndicator(
-                                          value: reviews == null
-                                              ? 0
-                                              : twoStar / reviews!.length,
-                                          minHeight: 10,
-                                          backgroundColor: Colors.grey,
-                                          valueColor:
-                                              const AlwaysStoppedAnimation<
-                                                      Color>(
-                                                  Color.fromRGBO(
-                                                      255, 202, 40, 1)),
+                                      SizedBox(
+                                        width: 80,
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          child: LinearProgressIndicator(
+                                            value: reviews == null
+                                                ? 0
+                                                : fourStar / reviews!.length,
+                                            minHeight: 10,
+                                            backgroundColor: Colors.grey,
+                                            valueColor:
+                                                const AlwaysStoppedAnimation<
+                                                        Color>(
+                                                    Color.fromRGBO(
+                                                        255, 202, 40, 1)),
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    const Text(
-                                      '1 Star',
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      width: 10,
-                                    ),
-                                    SizedBox(
-                                      width: 80,
-                                      child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(10),
-                                        child: LinearProgressIndicator(
-                                          value: reviews == null
-                                              ? 0
-                                              : oneStar / reviews!.length,
-                                          minHeight: 10,
-                                          backgroundColor: Colors.grey,
-                                          valueColor:
-                                              const AlwaysStoppedAnimation<
-                                                      Color>(
-                                                  Color.fromRGBO(
-                                                      255, 202, 40, 1)),
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      const Text(
+                                        '3 Stars',
+                                        style: TextStyle(
+                                          fontSize: 12,
                                         ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      );
-                    }),
+                                      const SizedBox(
+                                        width: 10,
+                                      ),
+                                      SizedBox(
+                                        width: 80,
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          child: LinearProgressIndicator(
+                                            value: reviews == null
+                                                ? 0
+                                                : threeStar / reviews!.length,
+                                            minHeight: 10,
+                                            backgroundColor: Colors.grey,
+                                            valueColor:
+                                                const AlwaysStoppedAnimation<
+                                                        Color>(
+                                                    Color.fromRGBO(
+                                                        255, 202, 40, 1)),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      const Text(
+                                        '2 Stars',
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        width: 10,
+                                      ),
+                                      SizedBox(
+                                        width: 80,
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          child: LinearProgressIndicator(
+                                            value: reviews == null
+                                                ? 0
+                                                : twoStar / reviews!.length,
+                                            minHeight: 10,
+                                            backgroundColor: Colors.grey,
+                                            valueColor:
+                                                const AlwaysStoppedAnimation<
+                                                        Color>(
+                                                    Color.fromRGBO(
+                                                        255, 202, 40, 1)),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      const Text(
+                                        '1 Star',
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        width: 10,
+                                      ),
+                                      SizedBox(
+                                        width: 80,
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          child: LinearProgressIndicator(
+                                            value: reviews == null
+                                                ? 0
+                                                : oneStar / reviews!.length,
+                                            minHeight: 10,
+                                            backgroundColor: Colors.grey,
+                                            valueColor:
+                                                const AlwaysStoppedAnimation<
+                                                        Color>(
+                                                    Color.fromRGBO(
+                                                        255, 202, 40, 1)),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
                     reviews == null
                         ? const Column(
                             children: [
@@ -690,14 +697,17 @@ class _SellerReviewScreenState extends State<SellerReviewScreen> {
                                 () {
                                   cUser =
                                       UserModel.fromMap(currentUser['user']);
-                                  currentRating =
-                                      currentUser['user']['averageRating'];
+                                  currentRating = currentUser['user']
+                                          ['averageRating']
+                                      .toDouble();
                                   rater = 0;
                                   reviewText = '';
                                   isSending = false;
                                 },
                               );
                             }
+                            _marketController.updateUser(
+                                widget.user.uid, currentRating);
                             Get.back();
                           },
                           child: const Text('Rate'),

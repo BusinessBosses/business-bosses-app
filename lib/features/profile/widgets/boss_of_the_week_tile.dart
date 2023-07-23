@@ -260,16 +260,16 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                             ),
                             child: Row(
                               children: [
-                                const Padding(
-                                  padding: EdgeInsets.only(
+                                Padding(
+                                  padding: const EdgeInsets.only(
                                     left: 10,
                                   ),
                                   child: Center(
                                     child: Padding(
-                                      padding: EdgeInsets.all(2),
+                                      padding: const EdgeInsets.all(2),
                                       child: Text(
-                                        'Boss Up by',
-                                        style: TextStyle(fontSize: 11),
+                                        homeController.bossUpTitle.toString(),
+                                        style: const TextStyle(fontSize: 11),
                                       ),
                                     ),
                                   ),
@@ -477,11 +477,11 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
       'timestamp': DateTime.now().millisecondsSinceEpoch
     });
     setState(() {
-      _profileController.bossOfTheWeek?.connecteds
-          ?.removeWhere((string) => string == _profileController.myProfile.uid);
+      _profileController.bossOfTheWeek?.connecteds?.removeWhere(
+          (String string) => string == _profileController.myProfile.uid);
 
-      user?.connecteds
-          ?.removeWhere((string) => string == _profileController.myProfile.uid);
+      user?.connecteds?.removeWhere(
+          (String string) => string == _profileController.myProfile.uid);
     });
   }
 

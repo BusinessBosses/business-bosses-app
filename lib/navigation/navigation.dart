@@ -18,7 +18,6 @@ import 'package:business_bosses_v2/analytics/presentation/relevant_users_screen.
 import 'package:business_bosses_v2/features/authentication/presentation/forgot_password_screen.dart';
 import 'package:business_bosses_v2/features/authentication/presentation/login_screen.dart';
 import 'package:business_bosses_v2/features/authentication/presentation/register_screen.dart';
-import 'package:business_bosses_v2/features/chat/chat_room_screen.dart';
 import 'package:business_bosses_v2/features/chat/chat_screen.dart';
 import 'package:business_bosses_v2/features/connects/presentation/all_connections_screen.dart';
 import 'package:business_bosses_v2/features/forum/controller/create_bossup_controller.dart';
@@ -30,7 +29,6 @@ import 'package:business_bosses_v2/features/forum/presentation/specific_user_lis
 import 'package:business_bosses_v2/features/moreinfoscreens/bossuppartner.dart';
 import 'package:business_bosses_v2/features/notifications/controller/notification_controller.dart';
 import 'package:business_bosses_v2/features/notifications/notificationsscreen.dart';
-import 'package:business_bosses_v2/features/home/bottom_nav.dart';
 import 'package:business_bosses_v2/features/posts/presentation/create_post_screen.dart';
 import 'package:business_bosses_v2/features/posts/presentation/post_details_screen.dart';
 import 'package:business_bosses_v2/analytics/presentation/analysescreen.dart';

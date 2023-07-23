@@ -4,12 +4,17 @@ import 'package:business_bosses_v2/features/forum/models/industry.dart';
 import 'package:business_bosses_v2/features/posts/models/post_model.dart';
 import 'package:business_bosses_v2/features/profile/repository/profile_repository.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../../utils/constants/constants.dart';
 
 /// PROFILE CONTROLLER
 class ProfileController extends GetxController {
   /// MODELIZED PROFILE DATA
   UserModel myProfile = UserModel();
   UserModel? bossOfTheWeek = UserModel();
+  List<PostModel> posts = [];
+  RxBool isLoading = RxBool(false);
 
   ///MODELIZE RAW DATA AND PUSH TO STATE
   void processDataToState(dynamic userData, List interests) {
@@ -39,10 +44,11 @@ class ProfileController extends GetxController {
   void processBossToState(dynamic userData) {
     final UserModel modelizedData = UserModel.fromMap({
       ...userData,
-      'connections': userData['connections'].map((e) => e['userId']).toList(),
+      'connections': userData['connections'].map((e) => e['connect']).toList(),
       'connecteds': userData['connecteds'].map((e) => e['userId']).toList()
     });
     bossOfTheWeek = modelizedData;
+    print(userData);
     update();
   }
 
@@ -85,6 +91,7 @@ class ProfileController extends GetxController {
     final ApiResponseModel response = await ProfileRepository.fetchBoss();
     if (response.data != 'no record found') {
       processBossToState(response.data);
+      // print(response.data);
     } else {
       bossOfTheWeek = null;
     }
@@ -107,11 +114,7 @@ class ProfileController extends GetxController {
               psts[i]['likes'].map((coin) => coin['userId'].toString()).toList()
         }));
       }
-      // print({
-      //   ...response.data['user']['data'],
-      //   'connections': response.data['user']['data']['connections']
-      //       ['connections']
-      // });
+
       return {
         'posts': posts,
         'user': {
@@ -128,15 +131,45 @@ class ProfileController extends GetxController {
           ...response.data['user']['data'],
           'connections': response.data['user']['data']['connections']
               .map((mp) => mp['connect'])
-              .toList() 
+              .toList()
         }
       };
     }
   }
 
+  void removePost(String postId) {
+    final int postIndex =
+        posts.indexWhere((PostModel element) => element.postId == postId);
+    if (postIndex != -1) {
+      posts.removeAt(postIndex);
+      update();
+    }
+  }
+
+  void updatePost(PostModel post) {
+    final int postIndex =
+        posts.indexWhere((PostModel element) => element.postId == post.postId);
+    if (postIndex != -1) {
+      posts[postIndex] = post;
+      update();
+    }
+  }
+
+  Future<void> fetchData() async {
+    isLoading(true);
+    update();
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final Map<String, dynamic> res =
+        await ProfileController.loadData(prefs.getString(Constants.USER_ID)!);
+
+    posts = res['posts'];
+    isLoading(false);
+  }
+
   @override
   void onInit() {
     // TODO: implement onInit
+    fetchData();
     loadBoss();
     super.onInit();
   }

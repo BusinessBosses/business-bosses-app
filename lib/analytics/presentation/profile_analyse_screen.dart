@@ -9,7 +9,6 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 
 import '../../action/action.dart';
 import '../../common/models/my_connect.dart';
-import '../../common/models/my_user.dart';
 import '../../common/params.dart';
 import '../../common/widgets/buttons/custom_child_button.dart';
 import '../../utils/theme/theme.dart';
@@ -29,9 +28,9 @@ class _ProfileAnalyseScreenState extends State<ProfileAnalyseScreen> {
   late TooltipBehavior _tooltipBehavior;
   bool loading = false;
   bool error = false;
-  List<MyConnect> _myConnections = [];
-  List<MyConnect> _myConnecteds = [];
-  List<MyConnect> _disconnections = [];
+  final List<MyConnect> _myConnections = [];
+  final List<MyConnect> _myConnecteds = [];
+  final List<MyConnect> _disconnections = [];
   @override
   void didChangeDependencies() {
     if (!_isInit) {
@@ -54,19 +53,19 @@ class _ProfileAnalyseScreenState extends State<ProfileAnalyseScreen> {
     final ApiResponseModel response =
         await ApiService.get(path: 'connection/analysis');
     if (response.success) {
-      for (var i = 0; i < response.data['connections'].length; i++) {
+      for (int i = 0; i < response.data['connections'].length; i++) {
         final MyConnect modelizedData =
             MyConnect.fromMap(response.data['connections'][i]);
         _myConnections.add(modelizedData);
       }
 
-      for (var i = 0; i < response.data['connecteds'].length; i++) {
+      for (int i = 0; i < response.data['connecteds'].length; i++) {
         final MyConnect modelizedData =
             MyConnect.fromMap(response.data['connecteds'][i]);
         _myConnecteds.add(modelizedData);
       }
 
-      for (var i = 0; i < response.data['disconnections'].length; i++) {
+      for (int i = 0; i < response.data['disconnections'].length; i++) {
         final MyConnect modelizedData =
             MyConnect.fromMap(response.data['disconnections'][i]);
         _disconnections.add(modelizedData);
@@ -398,7 +397,7 @@ class _ProfileAnalyseScreenState extends State<ProfileAnalyseScreen> {
     // String statue,
     num? timestamp,
   }) {
-    return connects.where((element) {
+    return connects.where((MyConnect element) {
       bool isWithInTime = timestamp == null
           ? true
           : DateTime.now().millisecondsSinceEpoch - element.timestamp! <=

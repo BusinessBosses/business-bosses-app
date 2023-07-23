@@ -34,28 +34,28 @@ class _ReferScreenState extends State<ReferScreen> {
   bool _isProcessing = false;
   bool _isLoading = false;
 
-  Future<void> getData() async {
+  Future<void> getData(String referredUserUid) async {
     setState(() {
       _isLoading = true;
     });
     final ApiResponseModel res = await ApiService.get(
-        path: '/connection/connecteds/${_profileController.myProfile.uid}');
+        path: '/connection/connecteds/referals/$referredUserUid');
 
     for (int i = 0; i < res.data.length; i++) {
       final mapData = res.data[i];
       final UserModel modelizedConnection = UserModel.fromMap(mapData);
       // print(_specificUser.connections);
       // _referrableConnections.add(modelizedConnection);
-      if (_specificUser.connections == null) {
-        if (_specificUser.uid != modelizedConnection.uid) {
-          _referrableConnections.add(modelizedConnection);
-        }
-      } else {
-        if (!_specificUser.connections!.contains(modelizedConnection.uid) &&
-            _specificUser.uid != modelizedConnection.uid) {
-          _referrableConnections.add(modelizedConnection);
-        }
-      }
+      // if (_specificUser.connections == null) {
+      //   if (_specificUser.uid != modelizedConnection.uid) {
+      //     _referrableConnections.add(modelizedConnection);
+      //   }
+      // } else {
+      //   if (!_specificUser.connections!.contains(modelizedConnection.uid) &&
+      //       _specificUser.uid != modelizedConnection.uid) {
+      //   }
+      // }
+      _referrableConnections.add(modelizedConnection);
     }
     setState(() {
       _isLoading = false;
@@ -70,7 +70,7 @@ class _ReferScreenState extends State<ReferScreen> {
       Get.back();
     } else {
       _specificUser = Get.arguments['user'];
-      getData();
+      getData(_specificUser.uid);
     }
   }
 

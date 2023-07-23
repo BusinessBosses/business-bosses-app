@@ -122,7 +122,7 @@ class _ChatScreenState extends State<ChatScreen> {
                               return ChatItem(
                                 myChatUser: controller.searchedChats[i],
                                 key: ValueKey(
-                                    controller.searchedChats[i].user.uid),
+                                    controller.searchedChats[i].user!.uid),
                                 chatController: controller,
                               );
                             },
@@ -196,110 +196,114 @@ class _ChatItemState extends State<ChatItem> {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        widget.chatController
-            .seen(widget.myChatUser.user.uid, _homeController.socket);
-        Get.to(
-          () => ChatRoomScreen(
-            frommarketplace: false,
-          ),
-          arguments: widget.myChatUser.user,
-        );
-      },
-      child: Container(
-        key: widget.key,
-        padding: const EdgeInsets.all(16.0),
-        child: Row(
-          children: [
-            if (widget.myChatUser.receiverUid ==
-                    _profileController.myProfile.uid &&
-                !widget.myChatUser.seen)
-              const UnReadDot()
-            else
-              Container(),
-            Container(
-              width: 80.0,
-              alignment: Alignment.center,
-              child: UserAvatarWithBadge(
-                user: widget.myChatUser.user,
-                height: 52.0,
-                width: 52.0,
-                radius: 50.0,
-                placeHolder: Icons.person,
-                iconSize: 36.0,
-              ),
-            ),
-            Expanded(
-              child: Column(
+    return widget.myChatUser.user != null
+        ? InkWell(
+            onTap: () {
+              widget.chatController
+                  .seen(widget.myChatUser.user!.uid, _homeController.socket);
+              Get.to(
+                () => const ChatRoomScreen(
+                  frommarketplace: false,
+                ),
+                arguments: widget.myChatUser.user,
+              );
+            },
+            child: Container(
+              key: widget.key,
+              padding: const EdgeInsets.all(16.0),
+              child: Row(
                 children: [
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          widget.myChatUser.user.name != null &&
-                                  widget.myChatUser.user.name!.length <= 20
-                              ? widget.myChatUser.user.name!
-                              : widget.myChatUser.user.name != null
-                                  ? '${widget.myChatUser.user.name!.substring(0, 20)}...'
-                                  : widget.myChatUser.user.username,
-                          style: Theme.of(context).textTheme.bodyLarge,
-                        ),
-                      ),
-                      Text(
-                        TimeFormat.formatString(widget.myChatUser.timestamp),
-                        style: bodyText2.copyWith(
-                          color: hintColor,
-                        ),
-                      ),
-                      SizedBox(
-                        // color: Colors.redAccent,
-                        height: 22,
-                        width: 22,
-                        child: MyPopupMenuButton(
-                          popupItems: _popupItemForumMore,
-                          icon: const Icon(Icons.more_vert),
-                          onSelected: (String val) {
-                            deleteChat();
-                          },
-                        ),
-                      )
-                    ],
+                  if (widget.myChatUser.receiverUid ==
+                          _profileController.myProfile.uid &&
+                      !widget.myChatUser.seen)
+                    const UnReadDot()
+                  else
+                    Container(),
+                  Container(
+                    width: 80.0,
+                    alignment: Alignment.center,
+                    child: UserAvatarWithBadge(
+                      user: widget.myChatUser.user,
+                      height: 52.0,
+                      width: 52.0,
+                      radius: 50.0,
+                      placeHolder: Icons.person,
+                      iconSize: 36.0,
+                    ),
                   ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: widget.myChatUser.deleted == true
-                            ? Text(
-                                'This message was deleted.',
-                                maxLines: 1,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyMedium
-                                    ?.copyWith(
-                                      color: Colors.red,
-                                    ),
-                              )
-                            : Text(
-                                widget.myChatUser.messageText ?? 'Image',
-                                maxLines: 1,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyMedium
-                                    ?.copyWith(
-                                      color: textColor.withOpacity(0.8),
-                                    ),
+                  Expanded(
+                    child: Column(
+                      children: [
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                widget.myChatUser.user!.name != null &&
+                                        widget.myChatUser.user!.name!.length <=
+                                            20
+                                    ? widget.myChatUser.user!.name!
+                                    : widget.myChatUser.user!.name != null
+                                        ? '${widget.myChatUser.user!.name!.substring(0, 20)}...'
+                                        : widget.myChatUser.user!.username,
+                                style: Theme.of(context).textTheme.bodyLarge,
                               ),
-                      ),
-                    ],
-                  ),
+                            ),
+                            Text(
+                              TimeFormat.formatString(
+                                  widget.myChatUser.timestamp),
+                              style: bodyText2.copyWith(
+                                color: hintColor,
+                              ),
+                            ),
+                            SizedBox(
+                              // color: Colors.redAccent,
+                              height: 22,
+                              width: 22,
+                              child: MyPopupMenuButton(
+                                popupItems: _popupItemForumMore,
+                                icon: const Icon(Icons.more_vert),
+                                onSelected: (String val) {
+                                  deleteChat();
+                                },
+                              ),
+                            )
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: widget.myChatUser.deleted == true
+                                  ? Text(
+                                      'This message was deleted.',
+                                      maxLines: 1,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium
+                                          ?.copyWith(
+                                            color: Colors.red,
+                                          ),
+                                    )
+                                  : Text(
+                                      widget.myChatUser.messageText ?? 'Image',
+                                      maxLines: 1,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium
+                                          ?.copyWith(
+                                            color: textColor.withOpacity(0.8),
+                                          ),
+                                    ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  )
                 ],
               ),
-            )
-          ],
-        ),
-      ),
-    );
+            ),
+          )
+        : const SizedBox();
   }
 
   Future<void> deleteChat() async {}

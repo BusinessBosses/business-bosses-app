@@ -1,5 +1,4 @@
 import 'package:business_bosses_v2/common/models/user_model.dart';
-import 'package:business_bosses_v2/features/posts/controllers/posts_controller.dart';
 import 'package:business_bosses_v2/features/posts/models/post_model.dart';
 import 'package:business_bosses_v2/features/posts/widgets/post_grid_item.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
@@ -10,7 +9,7 @@ import '../../../common/widgets/safety_model.dart';
 
 Widget profilepostsdisplay(
     BuildContext context, UserModel publicUser, List<PostModel> posts,
-    {bool loading = true}) {
+    {bool loading = true, bool ispublicposts = false}) {
   // final ProfileController _profileController = Get.find();
   return loading || posts.isEmpty
       ? SafetyModel(
@@ -42,17 +41,30 @@ Widget profilepostsdisplay(
                 top: 10.0, bottom: 120, left: 10, right: 10),
             itemCount: posts.length,
             itemBuilder: (BuildContext context, int i) {
-              return PostGridItem(
-                post: posts[i],
-                key: ValueKey(posts[i].postId),
-                onTap: () {
-                  Get.toNamed(Routes.postDetails, arguments: posts[i]);
-                },
-                // onDeletePost:
-                //     _onDeletePost,
-                // onTap: () => _onPostTap(
-                //     p.posts[i]),
-              );
+              return ispublicposts == false
+                  ? PostGridItem(
+                      post: posts[i],
+                      key: ValueKey(posts[i].postId),
+                      onTap: () {
+                        Get.toNamed(Routes.postDetails, arguments: posts[i]);
+                      },
+                      // onDeletePost:
+                      //     _onDeletePost,
+                      // onTap: () => _onPostTap(
+                      //     p.posts[i]),
+                    )
+                  : PostGridItem(
+                      hasMore: false,
+                      post: posts[i],
+                      key: ValueKey(posts[i].postId),
+                      onTap: () {
+                        Get.toNamed(Routes.postDetails, arguments: posts[i]);
+                      },
+                      // onDeletePost:
+                      //     _onDeletePost,
+                      // onTap: () => _onPostTap(
+                      //     p.posts[i]),
+                    );
             },
           ),
         );
