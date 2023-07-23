@@ -275,6 +275,7 @@ class HomeController extends GetxController {
       }
     });
     mixedPosts.insert(0, {'isForum': false, 'data': modelizedNewPost});
+
     // posts.insert(0, modelizedNewPost);
 
     update();
@@ -446,6 +447,23 @@ class HomeController extends GetxController {
         (element) => !element['isForum'] && element['data'].postId == postId);
     mixedPosts.removeWhere(
         (element) => !element['isForum'] && element['data'].postId == postId);
+    update();
+  }
+
+  void updatePost(PostModel? post) {
+    int postIndex;
+    postIndex = mixedPosts
+        .indexWhere((element) => element['data'].postId == post?.postId);
+    if (postIndex != -1) {
+      mixedPosts[postIndex]['data'] = post;
+      update();
+    } else {
+      postIndex = mixedPosts.indexWhere((element) =>
+          element['isForum'] && element['data'].forumId == post?.postId);
+      if (postIndex != -1) {
+        mixedPosts[postIndex]['data'] = post;
+      }
+    }
     update();
   }
 

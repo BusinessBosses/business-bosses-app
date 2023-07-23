@@ -153,6 +153,7 @@ class PostGridItem extends StatelessWidget {
                         Get.to(() => CreatePostScreen(
                               postId: post.postId,
                               post: post.title,
+                              postDetail: post,
                             ));
                       } else if (val == 'Delete') {
                         _showDialog(context);
