@@ -280,6 +280,7 @@ class _PostTileState extends State<PostTile> {
                                       Get.to(() => CreatePostScreen(
                                             postId: widget.post.postId,
                                             post: widget.post.title,
+                                            postDetail: widget.post,
                                           ));
                                     } else if (val == 'Delete') {
                                       showDialog(
