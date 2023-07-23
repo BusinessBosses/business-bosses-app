@@ -146,7 +146,7 @@ class ProfileController extends GetxController {
     }
   }
 
-  void editPost(PostModel post) {
+  void updatePost(PostModel post) {
     final int postIndex =
         posts.indexWhere((element) => element.postId == post.postId);
     if (postIndex != -1) {
