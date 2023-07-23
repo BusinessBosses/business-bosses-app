@@ -126,60 +126,28 @@ class _HomeScreenState extends State<HomeScreen> {
                           color: Colors.white,
                           child: RefreshIndicator(
                             onRefresh: refreshData,
-                            child: SingleChildScrollView(
+                            child: ListView.builder(
                               controller: _scrollController,
-                              child: Column(
-                                children: <Widget>[
-                                  const BossOfWeekProfileTile(),
-                                  if (!controller.refreshing.value)
-                                    ListView.builder(
-                                      shrinkWrap: true,
-                                      itemCount: controller.mixedPosts.length,
-                                      physics:
-                                          const NeverScrollableScrollPhysics(),
-                                      itemBuilder:
-                                          (BuildContext context, int index) {
-                                        bool currentIndexIsForum = controller
-                                            .mixedPosts[index]['isForum'];
-
-                                        ForumModel? forumDetails =
-                                            currentIndexIsForum
-                                                ? controller.mixedPosts[index]
-                                                    ['data']
-                                                : null;
-                                        PostModel? postDetails =
-                                            currentIndexIsForum
-                                                ? null
-                                                : controller.mixedPosts[index]
-                                                    ['data'];
-
-                                        if (currentIndexIsForum) {
-                                          return ForumItem(
-                                            forum: forumDetails!,
-                                            controller: controller,
-                                          );
-                                        } else {
-                                          return PostTile(
-                                            controller: controller,
-                                            post: postDetails!,
-                                            onPageChange: (int page) {
-                                              if (widget.onPageChange != null) {
-                                                widget.onPageChange!(page);
-                                              }
-                                            },
-                                          );
-                                        }
-                                      },
-                                    ),
-                                  if (controller.loadingMore.value)
-                                    const Center(
-                                      child: CircularProgressIndicator(),
-                                    ),
-                                  const SizedBox(
-                                    height: 100,
-                                  )
-                                ],
-                              ),
+                              shrinkWrap: true,
+                              itemCount: controller.mixedPosts.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                if (controller.mixedPosts[index]['isForum']) {
+                                  return ForumItem(
+                                    forum: controller.mixedPosts[index]['data'],
+                                    controller: controller,
+                                  );
+                                } else {
+                                  return PostTile(
+                                    controller: controller,
+                                    post: controller.mixedPosts[index]['data'],
+                                    onPageChange: (int page) {
+                                      if (widget.onPageChange != null) {
+                                        widget.onPageChange!(page);
+                                      }
+                                    },
+                                  );
+                                }
+                              },
                             ),
                           ),
                         ),
@@ -189,8 +157,113 @@ class _HomeScreenState extends State<HomeScreen> {
                       ],
                     ),
                   ),
-            // bottomNavigationBar: const BottomBar(activeIndex: 0),
           );
+          // return Scaffold(
+          // backgroundColor: backgroundcolorinterface,
+          // appBar: PreferredSize(
+          //   preferredSize: const Size.fromHeight(kToolbarHeight),
+          //   child: GetBuilder<ChatController>(
+          //       builder: (ChatController chatController) {
+          //     final List<MessageModel> unseenChats = chatController.chats
+          //         .where((MessageModel element) =>
+          //             element.receiverUid ==
+          //                 controller.profileController.myProfile.uid &&
+          //             !element.seen)
+          //         .toList();
+          //     final bool hasBadge = unseenChats.isNotEmpty;
+          //     return GetBuilder<ProfileController>(
+          //       builder: (ProfileController profileController) => Homeappbar(
+          //         hasBadge: hasBadge,
+          //         coinsCount:
+          //             profileController.myProfile.coinscount?.toString() ??
+          //                 '',
+          //         hasUnreadNotification:
+          //             profileController.myProfile.unReadCount != null &&
+          //                 profileController.myProfile.unReadCount! > 0,
+          //       ),
+          //     );
+          //   }),
+          // ),
+          // body: controller.loading.value
+          //     ? const Center(
+          //         child: CircularProgressIndicator(),
+          //       )
+          //     : SizedBox(
+          //         height: MediaQuery.of(context).size.height,
+          //         width: MediaQuery.of(context).size.width,
+          //         child: Stack(
+          //           children: [
+          //             Container(
+          //               height: MediaQuery.of(context).size.height,
+          //               width: MediaQuery.of(context).size.width,
+          //               color: Colors.white,
+          //               child: RefreshIndicator(
+          //                 onRefresh: refreshData,
+          //                 child: SingleChildScrollView(
+          //                   controller: _scrollController,
+          //                   child: Column(
+          //                     children: <Widget>[
+          //                       const BossOfWeekProfileTile(),
+          //                       if (!controller.refreshing.value)
+          // ListView.builder(
+          //   shrinkWrap: true,
+          //   itemCount: controller.mixedPosts.length,
+          //   physics:
+          //       const NeverScrollableScrollPhysics(),
+          //   itemBuilder:
+          //       (BuildContext context, int index) {
+          //     bool currentIndexIsForum = controller
+          //         .mixedPosts[index]['isForum'];
+
+          //     ForumModel? forumDetails =
+          //         currentIndexIsForum
+          //             ? controller.mixedPosts[index]
+          //                 ['data']
+          //             : null;
+          //     PostModel? postDetails =
+          //         currentIndexIsForum
+          //             ? null
+          //             : controller.mixedPosts[index]
+          //                 ['data'];
+
+          //     if (currentIndexIsForum) {
+          //       return ForumItem(
+          //         forum: forumDetails!,
+          //         controller: controller,
+          //       );
+          //     } else {
+          //       return PostTile(
+          //         controller: controller,
+          //         post: postDetails!,
+          //         onPageChange: (int page) {
+          //           if (widget.onPageChange != null) {
+          //             widget.onPageChange!(page);
+          //           }
+          //         },
+          //       );
+          //     }
+          //   },
+          // ),
+          //                       if (controller.loadingMore.value)
+          //                         const Center(
+          //                           child: CircularProgressIndicator(),
+          //                         ),
+          //                       const SizedBox(
+          //                         height: 100,
+          //                       )
+          //                     ],
+          //                   ),
+          //                 ),
+          //               ),
+          //             ),
+          //             const BottomBar(
+          //               activeIndex: 0,
+          //             ),
+          //           ],
+          //         ),
+          //       ),
+          //   // bottomNavigationBar: const BottomBar(activeIndex: 0),
+          // );
         },
       ),
     );
