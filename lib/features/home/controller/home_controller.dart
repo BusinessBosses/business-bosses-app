@@ -142,8 +142,8 @@ class HomeController extends GetxController {
         }
       }
     } else {
-      final int postIndex = mixedPosts.indexWhere(
-          (dynamic post) => post['isForum'] && post['data'].forumId == postId);
+      final int postIndex = mixedPosts.indexWhere((Map<String, dynamic> post) =>
+          post['isForum'] && post['data'].forumId == postId);
       if (postIndex != -1) {
         final bool checkLiked =
             mixedPosts[postIndex]['data'].likes!.contains(userId);
@@ -234,7 +234,7 @@ class HomeController extends GetxController {
     }
     update();
     if (profileController.myProfile.uid != receiverUid) {
-      socket.emit('con', {
+      socket.emit('coin', {
         'postId': postId,
         'userId': userId,
         'type': type,
@@ -275,7 +275,7 @@ class HomeController extends GetxController {
 
   void removePostsByUserId(String? userId) {
     mixedPosts.removeWhere(
-        (Map<String, dynamic> post) => post['user']['uid'] == userId);
+        (Map<String, dynamic> post) => post['data']['user']['uid'] == userId);
     update();
   }
 
