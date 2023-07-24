@@ -126,8 +126,8 @@ class HomeController extends GetxController {
   /// LIKE AND UNLIKE FUNCTION
   void postLike(String userId, String postId, String type, String receiverUid) {
     if (type == 'post') {
-      final int postIndex = mixedPosts.indexWhere(
-          (Map<String, dynamic> post) => post['data'].postId == postId);
+      final int postIndex = mixedPosts.indexWhere((Map<String, dynamic> post) =>
+          !post['isForum'] && post['data'].postId == postId);
       if (postIndex != -1) {
         final bool checkLiked =
             mixedPosts[postIndex]['data'].likes!.contains(userId);
@@ -140,8 +140,8 @@ class HomeController extends GetxController {
         }
       }
     } else {
-      final int postIndex = mixedPosts.indexWhere(
-          (dynamic post) => post['isForum'] && post['data'].forumId == postId);
+      final int postIndex = mixedPosts.indexWhere((Map<String, dynamic> post) =>
+          post['isForum'] && post['data'].forumId == postId);
       if (postIndex != -1) {
         final bool checkLiked =
             mixedPosts[postIndex]['data'].likes!.contains(userId);
@@ -177,8 +177,8 @@ class HomeController extends GetxController {
   void comment(String postId, CommentModel comment, String type) {
     int postIndex;
     if (type == 'post') {
-      postIndex = mixedPosts.indexWhere(
-          (Map<String, dynamic> post) => post['data'].postId == postId);
+      postIndex = mixedPosts.indexWhere((Map<String, dynamic> post) =>
+          !post['isForum'] && post['data'].postId == postId);
     } else {
       postIndex = mixedPosts.indexWhere((Map<String, dynamic> post) =>
           post['isForum'] && post['data'].forumId == postId);
@@ -209,8 +209,8 @@ class HomeController extends GetxController {
   void postCoin(String userId, String postId,
       ProfileController profileController, String type, String receiverUid) {
     if (type == 'post') {
-      final int postIndex = mixedPosts.indexWhere(
-          (Map<String, dynamic> item) => item['data'].postId == postId);
+      final int postIndex = mixedPosts.indexWhere((Map<String, dynamic> item) =>
+          !item['isForum'] && item['data'].postId == postId);
       if (postIndex != -1) {
         final bool checkIfCoined =
             mixedPosts[postIndex]['data'].coins!.contains(userId);
