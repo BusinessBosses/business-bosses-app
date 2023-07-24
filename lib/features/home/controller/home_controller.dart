@@ -276,7 +276,7 @@ class HomeController extends GetxController {
         'name': profileController.myProfile.name,
       }
     });
-    mixedPosts.insert(0, {'isForum': false, 'data': modelizedNewPost});
+    mixedPosts.insert(1, {'isForum': false, 'data': modelizedNewPost});
 
     // posts.insert(0, modelizedNewPost);
 
