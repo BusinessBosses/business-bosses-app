@@ -36,7 +36,7 @@ class HomeController extends GetxController {
   List<Map<String, dynamic>>? bossUp = [];
   RxBool refreshing = RxBool(false);
   List<Map<String, dynamic>> mixedPosts = [
-    {'isForum': false, 'data': {}}
+    {'isForum': false, 'data': {}, 'shouldCount': false}
   ];
   List<String> blocked = [];
   String bossUpTitle = 'Boss Up By';
@@ -127,7 +127,9 @@ class HomeController extends GetxController {
   void postLike(String userId, String postId, String type, String receiverUid) {
     if (type == 'post') {
       final int postIndex = mixedPosts.indexWhere((Map<String, dynamic> post) =>
-          !post['isForum'] && post['data'].postId == postId);
+          post['shouldCount'] == null &&
+          !post['isForum'] &&
+          post['data'].postId == postId);
       if (postIndex != -1) {
         final bool checkLiked =
             mixedPosts[postIndex]['data'].likes!.contains(userId);
@@ -178,7 +180,9 @@ class HomeController extends GetxController {
     int postIndex;
     if (type == 'post') {
       postIndex = mixedPosts.indexWhere((Map<String, dynamic> post) =>
-          !post['isForum'] && post['data'].postId == postId);
+          post['shouldCount'] == null &&
+          !post['isForum'] &&
+          post['data'].postId == postId);
     } else {
       postIndex = mixedPosts.indexWhere((Map<String, dynamic> post) =>
           post['isForum'] && post['data'].forumId == postId);
@@ -189,28 +193,14 @@ class HomeController extends GetxController {
     update();
   }
 
-  // /// COMMENT FUNCTION
-  // void comment(String postId, CommentModel comment) {
-  //   final int postIndex =
-  //       mixedPosts.indexWhere((element) => element["data"].postId == postId);
-  //   if (postIndex != -1) {
-  //     posts[postIndex].comments!.add(comment);
-  //   } else {
-  //     final int forumIndex = mixedPosts
-  //         .indexWhere((element) => element["isForum"].forumId == postId);
-  //     if (forumIndex != -1) {
-  //       posts[forumIndex].comments!.add(comment);
-  //     }
-  //   }
-  //   update();
-  // }
-
   /// COIN AND UNCOIN FUNCTION
   void postCoin(String userId, String postId,
       ProfileController profileController, String type, String receiverUid) {
     if (type == 'post') {
       final int postIndex = mixedPosts.indexWhere((Map<String, dynamic> item) =>
-          !item['isForum'] && item['data'].postId == postId);
+          item['shouldCount'] == null &&
+          !item['isForum'] &&
+          item['data'].postId == postId);
       if (postIndex != -1) {
         final bool checkIfCoined =
             mixedPosts[postIndex]['data'].coins!.contains(userId);
