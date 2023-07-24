@@ -48,10 +48,11 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
         await ProfileController.loadData(prefs.getString(Constants.USER_ID)!);
 
     _posts = res['posts'];
-
-    setState(() {
-      isLoading = false;
-    });
+    if (mounted) {
+      setState(() {
+        isLoading = false;
+      });
+    }
   }
 
   @override

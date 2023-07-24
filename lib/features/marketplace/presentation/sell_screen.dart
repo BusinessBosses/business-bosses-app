@@ -42,7 +42,7 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
   // ignore: unused_field
   final ProfileController _profileController = Get.find();
   // ignore: unused_field
-  final MarketController _marketController = Get.find();
+  final MarketController _marketController = Get.put(MarketController());
   final CreateMarketController createMarketController =
       Get.put(CreateMarketController());
   List<bool>? _fileProcessing;
