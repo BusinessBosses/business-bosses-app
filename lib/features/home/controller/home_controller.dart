@@ -35,9 +35,9 @@ class HomeController extends GetxController {
   RxBool loadingMore = RxBool(false);
   List<Map<String, dynamic>>? bossUp = [];
   RxBool refreshing = RxBool(false);
-  RxList<PostModel> posts = RxList<PostModel>(<PostModel>[]);
-  RxList<ForumModel> forums = RxList<ForumModel>(<ForumModel>[]);
-  List<Map<String, dynamic>> mixedPosts = [];
+  List<Map<String, dynamic>> mixedPosts = [
+    {'isForum': false, 'data': {}}
+  ];
   List<String> blocked = [];
   String bossUpTitle = 'Boss Up By';
   RxList<MarketModel> markets = RxList<MarketModel>(<MarketModel>[]);
@@ -60,7 +60,9 @@ class HomeController extends GetxController {
   }
 
   /// PROCESS RAW API DATA, MODELIZE AND SAVE TO STATE
-  void processPostsToState(dynamic post) {
+  RxList<PostModel> processPostsToState(dynamic post) {
+    RxList<PostModel> posts = RxList<PostModel>(<PostModel>[]);
+
     // print(post.length);
     final List psts = post;
     for (int i = 0; i < psts.length; i++) {
@@ -74,12 +76,13 @@ class HomeController extends GetxController {
             .toList()
       }));
     }
-    update();
-    // update();
+    return posts;
   }
 
   /// PROCESS RAW API Forums, MODELIZE AND SAVE TO STATE
-  void processForumsToState(dynamic forum) {
+  RxList<ForumModel> processForumsToState(dynamic forum) {
+    RxList<ForumModel> forums = RxList<ForumModel>(<ForumModel>[]);
+
     final List frms = forum;
     for (int i = 0; i < frms.length; i++) {
       forums.add(ForumModel.fromMap({
@@ -92,10 +95,10 @@ class HomeController extends GetxController {
             .toList()
       }));
     }
-    // update();
+    return forums;
   }
 
-  void joinPostsAndForums() {
+  void joinPostsAndForums(RxList<PostModel> posts, RxList<ForumModel> forums) {
     List<Map<String, dynamic>> frms = [];
     List<Map<String, dynamic>> psts = [];
     for (int i = 0; i < forums.length; i++) {
@@ -105,9 +108,6 @@ class HomeController extends GetxController {
       psts.add({'isForum': false, 'data': posts[i]});
     }
 
-    posts.clear();
-    forums.clear();
-
     final List<Map<String, dynamic>> joinedPosts = [...frms, ...psts]..sort(
         (Map<String, dynamic> a, Map<String, dynamic> b) =>
             b['data'].timestamp - a['data'].timestamp);
@@ -116,17 +116,18 @@ class HomeController extends GetxController {
   }
 
   void processPostsAndForumsData(dynamic data) {
-    processPostsToState(data['posts']['rows']);
-    processForumsToState(data['forums']['rows']);
-    joinPostsAndForums();
+    final RxList<PostModel> posts = processPostsToState(data['posts']['rows']);
+    final RxList<ForumModel> forums =
+        processForumsToState(data['forums']['rows']);
+    joinPostsAndForums(posts, forums);
     update();
   }
 
   /// LIKE AND UNLIKE FUNCTION
   void postLike(String userId, String postId, String type, String receiverUid) {
     if (type == 'post') {
-      final int postIndex =
-          mixedPosts.indexWhere((post) => post['data'].postId == postId);
+      final int postIndex = mixedPosts.indexWhere(
+          (Map<String, dynamic> post) => post['data'].postId == postId);
       if (postIndex != -1) {
         final bool checkLiked =
             mixedPosts[postIndex]['data'].likes!.contains(userId);
@@ -176,11 +177,11 @@ class HomeController extends GetxController {
   void comment(String postId, CommentModel comment, String type) {
     int postIndex;
     if (type == 'post') {
-      postIndex =
-          mixedPosts.indexWhere((post) => post['data'].postId == postId);
-    } else {
       postIndex = mixedPosts.indexWhere(
-          (post) => post['isForum'] && post['data'].forumId == postId);
+          (Map<String, dynamic> post) => post['data'].postId == postId);
+    } else {
+      postIndex = mixedPosts.indexWhere((Map<String, dynamic> post) =>
+          post['isForum'] && post['data'].forumId == postId);
     }
     if (postIndex != -1) {
       mixedPosts[postIndex]['data'].comments!.add(comment);
@@ -188,12 +189,28 @@ class HomeController extends GetxController {
     update();
   }
 
+  // /// COMMENT FUNCTION
+  // void comment(String postId, CommentModel comment) {
+  //   final int postIndex =
+  //       mixedPosts.indexWhere((element) => element["data"].postId == postId);
+  //   if (postIndex != -1) {
+  //     posts[postIndex].comments!.add(comment);
+  //   } else {
+  //     final int forumIndex = mixedPosts
+  //         .indexWhere((element) => element["isForum"].forumId == postId);
+  //     if (forumIndex != -1) {
+  //       posts[forumIndex].comments!.add(comment);
+  //     }
+  //   }
+  //   update();
+  // }
+
   /// COIN AND UNCOIN FUNCTION
   void postCoin(String userId, String postId,
       ProfileController profileController, String type, String receiverUid) {
     if (type == 'post') {
-      final int postIndex =
-          mixedPosts.indexWhere((item) => item['data'].postId == postId);
+      final int postIndex = mixedPosts.indexWhere(
+          (Map<String, dynamic> item) => item['data'].postId == postId);
       if (postIndex != -1) {
         final bool checkIfCoined =
             mixedPosts[postIndex]['data'].coins!.contains(userId);
@@ -209,7 +226,8 @@ class HomeController extends GetxController {
       }
     } else {
       final int forumIndex = mixedPosts.indexWhere(
-          (item) => item['isForum'] && item['data'].forumId == postId);
+          (Map<String, dynamic> item) =>
+              item['isForum'] && item['data'].forumId == postId);
       if (forumIndex != -1) {
         final bool checkIfCoined =
             mixedPosts[forumIndex]['data'].coins!.contains(userId);
@@ -259,6 +277,7 @@ class HomeController extends GetxController {
       }
     });
     mixedPosts.insert(0, {'isForum': false, 'data': modelizedNewPost});
+
     // posts.insert(0, modelizedNewPost);
 
     update();
@@ -268,12 +287,6 @@ class HomeController extends GetxController {
     mixedPosts.removeWhere(
         (Map<String, dynamic> post) => post['user']['uid'] == userId);
     update();
-  }
-
-  void clearData() {
-    // Reset the data variables to their initial state
-    posts.clear();
-    forums.clear();
   }
 
   // void loadBlocked() async {
@@ -378,32 +391,32 @@ class HomeController extends GetxController {
     int currentTimestamp = DateTime.now().millisecondsSinceEpoch;
     int dataTime = profileController.myProfile.bossOfTheWeekUpTimeStamp ?? 0;
     int lastExecutionTimestamp = sandBox.read('lastExecutionTimestamp') ?? 0;
-    if (profileController.myProfile.bossOfTheWeekTimeStamp == null) {
+    // if (profileController.myProfile.bossOfTheWeekTimeStamp == null) {
+    //   ApiService.put(
+    //     path: 'users/${profileController.myProfile.uid}',
+    //     body: <String, dynamic>{
+    //       'coinscount': profileController.myProfile.coinscount! + 100,
+    //       'bossOfTheWeekUpTimeStamp': currentTimestamp,
+    //     },
+    //   );
+    //   profileController.updateCoinCount(100);
+    //   showCoinDialogFirst();
+    // } else {
+    if ((currentTimestamp - lastExecutionTimestamp >= 24 * 60 * 60 * 1000) &&
+        (currentTimestamp - dataTime >= 24 * 60 * 60 * 1000)) {
+      // The action hasn't been executed today, save the current timestamp
+      sandBox.write('lastExecutionTimestamp', currentTimestamp);
       ApiService.put(
         path: 'users/${profileController.myProfile.uid}',
         body: <String, dynamic>{
-          'coinscount': profileController.myProfile.coinscount! + 100,
+          'coinscount': profileController.myProfile.coinscount! + 1,
           'bossOfTheWeekUpTimeStamp': currentTimestamp,
         },
       );
-      profileController.updateCoinCount(100);
-      showCoinDialogFirst();
-    } else {
-      if ((currentTimestamp - lastExecutionTimestamp >= 24 * 60 * 60 * 1000) &&
-          (currentTimestamp - dataTime >= 24 * 60 * 60 * 1000)) {
-        // The action hasn't been executed today, save the current timestamp
-        sandBox.write('lastExecutionTimestamp', currentTimestamp);
-        ApiService.put(
-          path: 'users/${profileController.myProfile.uid}',
-          body: <String, dynamic>{
-            'coinscount': profileController.myProfile.coinscount! + 1,
-            'bossOfTheWeekUpTimeStamp': currentTimestamp,
-          },
-        );
-        profileController.updateCoinCount(1);
-        showCoinDialog();
-      }
+      profileController.updateCoinCount(1);
+      showCoinDialog();
     }
+    // }
   }
 
   Future<void> fetchPosts() async {
@@ -421,6 +434,22 @@ class HomeController extends GetxController {
 
     loadingMore(false);
     update();
+  }
+
+  void removePost(String postId) {
+    mixedPosts.removeWhere((Map<String, dynamic> element) =>
+        !element['isForum'] && element['data'].postId == postId);
+    update();
+  }
+
+  void updatePost(PostModel post) {
+    final int postIndex = mixedPosts.indexWhere(
+        (Map<String, dynamic> element) =>
+            !element['isForum'] && element['data'].postId == post.postId);
+    if (postIndex != -1) {
+      mixedPosts[postIndex]['data'] = post;
+      update();
+    }
   }
 
   /// LOAD POSTS FROM REMOTE SOURCE
@@ -484,7 +513,6 @@ class HomeController extends GetxController {
     refreshing(true);
     // error(false);
     update();
-    clearData();
     final ApiResponseModel response = await HomeRepository.fetchRefreshData();
     final ApiResponseModel partner = await HomeRepository.fetchPartner();
     if (response.success) {

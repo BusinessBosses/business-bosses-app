@@ -80,16 +80,6 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
     });
   }
 
-  // void updateReferals(int refs) {
-  //   publicUser = UserModel.fromMap({
-  //     ...publicUser.toMap(),
-  //     'referalCount': publicUser.referals == null
-  //         ? refs
-  //         : publicUser.referals!.length + refs
-  //   });
-  //   setState(() {});
-  // }
-
   void connectToUser() async {
     final int checkConnected = _profileController.myProfile.connecteds == null
         ? -1

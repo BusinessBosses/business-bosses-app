@@ -8,28 +8,25 @@ import 'package:business_bosses_v2/features/posts/widgets/promote_section.dart';
 import 'package:business_bosses_v2/features/posts/widgets/text_input.dart';
 import 'package:business_bosses_v2/features/posts/widgets/user_details_widget.dart';
 import 'package:business_bosses_v2/functions/unfocus_keyboard.dart';
-import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
-import '../../../navigation/routes.dart';
 import '../../profile/controller/profile_controller.dart';
+import '../models/post_model.dart';
 
 /// CREATE POST SCREEN
 class CreatePostScreen extends StatefulWidget {
   final String? postId;
   final String? post;
   final List<String?>? images;
+  final PostModel? postDetail;
 
   /// SCREEN CONSTRUCTOR
-  const CreatePostScreen({
-    Key? key,
-    this.postId,
-    this.post,
-    this.images,
-  }) : super(key: key);
+  const CreatePostScreen(
+      {Key? key, this.postId, this.post, this.images, this.postDetail})
+      : super(key: key);
   static const String routeName = '/create-post';
 
   @override
@@ -40,6 +37,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   dynamic _overlayEntry;
   final TextEditingController _titleCtrl = TextEditingController();
   final ProfileController _profileController = Get.find();
+  // final CreatePostController = Get.find();
 
   void onDetectionFinished() {
     _overlayEntry?.remove();
@@ -195,19 +193,9 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                               'timestamp':
                                   DateTime.now().millisecondsSinceEpoch,
                             }, _profileController);
-                            Get.snackbar(
-                                'Success', 'Post created successfully');
-                            Get.offAllNamed(Routes.home);
                           } else {
-                            await ApiService.put(
-                              path: 'post/update-post/${widget.postId}',
-                              body: {
-                                'title': _titleCtrl.text.trim(),
-                              },
-                            );
-                            Get.snackbar(
-                                'Success', 'Post updated successfully');
-                            Get.offAllNamed(Routes.home);
+                            await controller.onEditPost(
+                                widget.postDetail, _titleCtrl.text.trim());
                           }
                         }
                       },

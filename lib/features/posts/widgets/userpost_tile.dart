@@ -280,6 +280,7 @@ class _PostTileState extends State<PostTile> {
                                       Get.to(() => CreatePostScreen(
                                             postId: widget.post.postId,
                                             post: widget.post.title,
+                                            postDetail: widget.post,
                                           ));
                                     } else if (val == 'Delete') {
                                       showDialog(
@@ -473,33 +474,29 @@ class _PostTileState extends State<PostTile> {
                             ),
                       ),
                     ),
-                    widget.post.user!.uid != profileController.myProfile.uid
-                        ? TextButton.icon(
-                            onPressed: () async {
-                              homeController.postCoin(
-                                  profileController.myProfile.uid,
-                                  widget.post.postId,
-                                  profileController,
-                                  'post',
-                                  widget.post.user!.uid);
-                            },
-                            icon: widget.post.coins?.contains(
-                                        profileController.myProfile.uid) ==
-                                    true
-                                ? SvgPicture.asset('assets/svgs/coin.svg')
-                                : SvgPicture.asset('assets/svgs/coin.svg'),
-                            label: Text(
-                              '${widget.post.coins?.length ?? 0}',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium
-                                  ?.copyWith(
-                                    fontWeight: FontWeight.w700,
-                                    color: textColor.withOpacity(0.8),
-                                  ),
+                    // widget.post.user!.uid != profileController.myProfile.uid
+                    TextButton.icon(
+                      onPressed: () async {
+                        homeController.postCoin(
+                            profileController.myProfile.uid,
+                            widget.post.postId,
+                            profileController,
+                            'post',
+                            widget.post.user!.uid);
+                      },
+                      icon: widget.post.coins
+                                  ?.contains(profileController.myProfile.uid) ==
+                              true
+                          ? SvgPicture.asset('assets/svgs/coin.svg')
+                          : SvgPicture.asset('assets/svgs/coin.svg'),
+                      label: Text(
+                        '${widget.post.coins?.length ?? 0}',
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                              fontWeight: FontWeight.w700,
+                              color: textColor.withOpacity(0.8),
                             ),
-                          )
-                        : const SizedBox(),
+                      ),
+                    ),
                     const SizedBox(width: 8.0),
                     GestureDetector(
                       onTap: () => _sharePost(),
