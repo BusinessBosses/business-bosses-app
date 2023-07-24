@@ -391,32 +391,32 @@ class HomeController extends GetxController {
     int currentTimestamp = DateTime.now().millisecondsSinceEpoch;
     int dataTime = profileController.myProfile.bossOfTheWeekUpTimeStamp ?? 0;
     int lastExecutionTimestamp = sandBox.read('lastExecutionTimestamp') ?? 0;
-    if (profileController.myProfile.bossOfTheWeekTimeStamp == null) {
+    // if (profileController.myProfile.bossOfTheWeekTimeStamp == null) {
+    //   ApiService.put(
+    //     path: 'users/${profileController.myProfile.uid}',
+    //     body: <String, dynamic>{
+    //       'coinscount': profileController.myProfile.coinscount! + 100,
+    //       'bossOfTheWeekUpTimeStamp': currentTimestamp,
+    //     },
+    //   );
+    //   profileController.updateCoinCount(100);
+    //   showCoinDialogFirst();
+    // } else {
+    if ((currentTimestamp - lastExecutionTimestamp >= 24 * 60 * 60 * 1000) &&
+        (currentTimestamp - dataTime >= 24 * 60 * 60 * 1000)) {
+      // The action hasn't been executed today, save the current timestamp
+      sandBox.write('lastExecutionTimestamp', currentTimestamp);
       ApiService.put(
         path: 'users/${profileController.myProfile.uid}',
         body: <String, dynamic>{
-          'coinscount': profileController.myProfile.coinscount! + 100,
+          'coinscount': profileController.myProfile.coinscount! + 1,
           'bossOfTheWeekUpTimeStamp': currentTimestamp,
         },
       );
-      profileController.updateCoinCount(100);
-      showCoinDialogFirst();
-    } else {
-      if ((currentTimestamp - lastExecutionTimestamp >= 24 * 60 * 60 * 1000) &&
-          (currentTimestamp - dataTime >= 24 * 60 * 60 * 1000)) {
-        // The action hasn't been executed today, save the current timestamp
-        sandBox.write('lastExecutionTimestamp', currentTimestamp);
-        ApiService.put(
-          path: 'users/${profileController.myProfile.uid}',
-          body: <String, dynamic>{
-            'coinscount': profileController.myProfile.coinscount! + 1,
-            'bossOfTheWeekUpTimeStamp': currentTimestamp,
-          },
-        );
-        profileController.updateCoinCount(1);
-        showCoinDialog();
-      }
+      profileController.updateCoinCount(1);
+      showCoinDialog();
     }
+    // }
   }
 
   Future<void> fetchPosts() async {

@@ -32,7 +32,6 @@ class ForumLikeCommentItem extends StatefulWidget {
 }
 
 class _ForumLikeCommentItemState extends State<ForumLikeCommentItem> {
-  final bool _isInit = false;
   bool _isLoadingLikes = true, _isLoadingComments = true;
   final ForumController _forumController = Get.put(ForumController());
   final HomeController _homeController = Get.find();
