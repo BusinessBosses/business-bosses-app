@@ -8,6 +8,7 @@ import '../chat/models/my_message.dart';
 import '../home/controller/home_controller.dart';
 import '../home/widgets/home_appbar.dart';
 import '../marketplace/controllers/market_controller.dart';
+import '../posts/models/post_model.dart';
 import '../posts/widgets/userpost_tile.dart';
 import '../profile/controller/profile_controller.dart';
 import '../profile/widgets/boss_of_the_week_tile.dart';

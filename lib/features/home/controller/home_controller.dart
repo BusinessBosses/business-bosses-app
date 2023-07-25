@@ -36,7 +36,7 @@ class HomeController extends GetxController {
   List<Map<String, dynamic>>? bossUp = [];
   RxBool refreshing = RxBool(false);
   List<Map<String, dynamic>> mixedPosts = [
-    {'isForum': false, 'data': {}}
+    {'isForum': false, 'data': {}, 'shouldCount': false}
   ];
   List<String> blocked = [];
   String bossUpTitle = 'Boss Up By';
@@ -126,8 +126,10 @@ class HomeController extends GetxController {
   /// LIKE AND UNLIKE FUNCTION
   void postLike(String userId, String postId, String type, String receiverUid) {
     if (type == 'post') {
-      final int postIndex = mixedPosts.indexWhere(
-          (Map<String, dynamic> post) => post['data'].postId == postId);
+      final int postIndex = mixedPosts.indexWhere((Map<String, dynamic> post) =>
+          post['shouldCount'] == null &&
+          !post['isForum'] &&
+          post['data'].postId == postId);
       if (postIndex != -1) {
         final bool checkLiked =
             mixedPosts[postIndex]['data'].likes!.contains(userId);
@@ -140,8 +142,8 @@ class HomeController extends GetxController {
         }
       }
     } else {
-      final int postIndex = mixedPosts.indexWhere(
-          (dynamic post) => post['isForum'] && post['data'].forumId == postId);
+      final int postIndex = mixedPosts.indexWhere((Map<String, dynamic> post) =>
+          post['isForum'] && post['data'].forumId == postId);
       if (postIndex != -1) {
         final bool checkLiked =
             mixedPosts[postIndex]['data'].likes!.contains(userId);
@@ -177,8 +179,10 @@ class HomeController extends GetxController {
   void comment(String postId, CommentModel comment, String type) {
     int postIndex;
     if (type == 'post') {
-      postIndex = mixedPosts.indexWhere(
-          (Map<String, dynamic> post) => post['data'].postId == postId);
+      postIndex = mixedPosts.indexWhere((Map<String, dynamic> post) =>
+          post['shouldCount'] == null &&
+          !post['isForum'] &&
+          post['data'].postId == postId);
     } else {
       postIndex = mixedPosts.indexWhere((Map<String, dynamic> post) =>
           post['isForum'] && post['data'].forumId == postId);
@@ -189,28 +193,14 @@ class HomeController extends GetxController {
     update();
   }
 
-  // /// COMMENT FUNCTION
-  // void comment(String postId, CommentModel comment) {
-  //   final int postIndex =
-  //       mixedPosts.indexWhere((element) => element["data"].postId == postId);
-  //   if (postIndex != -1) {
-  //     posts[postIndex].comments!.add(comment);
-  //   } else {
-  //     final int forumIndex = mixedPosts
-  //         .indexWhere((element) => element["isForum"].forumId == postId);
-  //     if (forumIndex != -1) {
-  //       posts[forumIndex].comments!.add(comment);
-  //     }
-  //   }
-  //   update();
-  // }
-
   /// COIN AND UNCOIN FUNCTION
   void postCoin(String userId, String postId,
       ProfileController profileController, String type, String receiverUid) {
     if (type == 'post') {
-      final int postIndex = mixedPosts.indexWhere(
-          (Map<String, dynamic> item) => item['data'].postId == postId);
+      final int postIndex = mixedPosts.indexWhere((Map<String, dynamic> item) =>
+          item['shouldCount'] == null &&
+          !item['isForum'] &&
+          item['data'].postId == postId);
       if (postIndex != -1) {
         final bool checkIfCoined =
             mixedPosts[postIndex]['data'].coins!.contains(userId);
@@ -244,7 +234,7 @@ class HomeController extends GetxController {
     }
     update();
     if (profileController.myProfile.uid != receiverUid) {
-      socket.emit('con', {
+      socket.emit('coin', {
         'postId': postId,
         'userId': userId,
         'type': type,
@@ -285,7 +275,7 @@ class HomeController extends GetxController {
 
   void removePostsByUserId(String? userId) {
     mixedPosts.removeWhere(
-        (Map<String, dynamic> post) => post['user']['uid'] == userId);
+        (Map<String, dynamic> post) => post['data']['user']['uid'] == userId);
     update();
   }
 
