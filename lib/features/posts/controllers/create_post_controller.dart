@@ -88,6 +88,7 @@ class CreatePostController extends GetxController {
 
         if (response.success) {
           _homeController.addNewPost(response.data, profileController);
+          profileController.addNewPost(response.data);
 
           if (shouldPromote.value == true) {
             Get.to(() => BoostPost(

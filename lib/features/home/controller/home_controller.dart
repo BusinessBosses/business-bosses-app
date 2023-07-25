@@ -428,14 +428,18 @@ class HomeController extends GetxController {
 
   void removePost(String postId) {
     mixedPosts.removeWhere((Map<String, dynamic> element) =>
-        !element['isForum'] && element['data'].postId == postId);
+        element['shouldCount'] == null &&
+        !element['isForum'] &&
+        element['data'].postId == postId);
     update();
   }
 
   void updatePost(PostModel post) {
     final int postIndex = mixedPosts.indexWhere(
         (Map<String, dynamic> element) =>
-            !element['isForum'] && element['data'].postId == post.postId);
+            element['shouldCount'] == null &&
+            !element['isForum'] &&
+            element['data'].postId == post.postId);
     if (postIndex != -1) {
       mixedPosts[postIndex]['data'] = post;
       update();

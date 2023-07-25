@@ -1,4 +1,5 @@
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
+import 'package:business_bosses_v2/features/posts/controllers/create_post_controller.dart';
 import 'package:business_bosses_v2/features/posts/models/post_model.dart';
 import 'package:business_bosses_v2/features/posts/widgets/post_images.dart';
 import 'package:business_bosses_v2/features/posts/widgets/post_like_comment.dart';
@@ -300,12 +301,15 @@ class _PostTileState extends State<PostTile> {
                                             ),
                                             TextButton(
                                               onPressed: () {
-                                                ApiService.delete(
-                                                    path:
-                                                        'post/delete-post/${widget.post.postId}');
-                                                setState(() {
-                                                  hide = true;
-                                                });
+                                                // ApiService.delete(
+                                                //     path:
+                                                //         'post/delete-post/${widget.post.postId}');
+                                                // setState(() {
+                                                //   hide = true;
+                                                // });
+                                                CreatePostController()
+                                                    .onDeletePost(
+                                                        widget.post.postId);
                                                 Get.back();
                                               },
                                               child: const Text('Yes'),
