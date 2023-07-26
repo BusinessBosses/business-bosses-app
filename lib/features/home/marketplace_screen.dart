@@ -852,9 +852,6 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
     // Call the loadPosts() function from the PostsController
     // await Get.find<PostsController>().loadPosts();
     await Get.find<MarketController>().initMarket();
-    print('working');
-
-    setState(() {});
   }
 
   Future<void> refreshData() async {

@@ -583,12 +583,6 @@ class _PostTileState extends State<PostTile> {
                       ),
                       GestureDetector(
                         onTap: () {
-                          ApiService.post(
-                            path: 'blockedpost',
-                            body: <String, dynamic>{
-                              'postId': widget.post.user?.uid
-                            },
-                          );
                           widget.controller
                               .removePostsByUserId(widget.post.user?.uid);
                           navigateTo(context);

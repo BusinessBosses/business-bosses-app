@@ -34,7 +34,8 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
   bool _isSearching = false;
   Industry industry = Industry();
 
-  final CommunitiesController _communitiesController = Get.find();
+  final CommunitiesController _communitiesController =
+      Get.put(CommunitiesController());
   late final TabController _searchTabController;
 
   List<Widget> get mActions {

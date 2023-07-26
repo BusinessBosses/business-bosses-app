@@ -143,7 +143,9 @@ class HomeController extends GetxController {
       }
     } else {
       final int postIndex = mixedPosts.indexWhere((Map<String, dynamic> post) =>
-          post['isForum'] && post['data'].forumId == postId);
+          post['shouldCount'] == null &&
+          post['isForum'] &&
+          post['data'].forumId == postId);
       if (postIndex != -1) {
         final bool checkLiked =
             mixedPosts[postIndex]['data'].likes!.contains(userId);
@@ -185,7 +187,9 @@ class HomeController extends GetxController {
           post['data'].postId == postId);
     } else {
       postIndex = mixedPosts.indexWhere((Map<String, dynamic> post) =>
-          post['isForum'] && post['data'].forumId == postId);
+          post['shouldCount'] == null &&
+          post['isForum'] &&
+          post['data'].forumId == postId);
     }
     if (postIndex != -1) {
       mixedPosts[postIndex]['data'].comments!.add(comment);
@@ -217,7 +221,9 @@ class HomeController extends GetxController {
     } else {
       final int forumIndex = mixedPosts.indexWhere(
           (Map<String, dynamic> item) =>
-              item['isForum'] && item['data'].forumId == postId);
+              item['shouldCount'] == null &&
+              item['isForum'] &&
+              item['data'].forumId == postId);
       if (forumIndex != -1) {
         final bool checkIfCoined =
             mixedPosts[forumIndex]['data'].coins!.contains(userId);
@@ -274,8 +280,12 @@ class HomeController extends GetxController {
   }
 
   void removePostsByUserId(String? userId) {
-    mixedPosts.removeWhere(
-        (Map<String, dynamic> post) => post['data']['user']['uid'] == userId);
+    ApiService.post(
+      path: 'blockedpost',
+      body: <String, dynamic>{'postId': userId},
+    );
+    mixedPosts.removeWhere((Map<String, dynamic> post) =>
+        post['shouldCount'] == null && post['data'].user.uid == userId);
     update();
   }
 
