@@ -280,6 +280,10 @@ class HomeController extends GetxController {
   }
 
   void removePostsByUserId(String? userId) {
+    ApiService.post(
+      path: 'blockedpost',
+      body: <String, dynamic>{'postId': userId},
+    );
     mixedPosts.removeWhere((Map<String, dynamic> post) =>
         post['shouldCount'] == null && post['data'].user.uid == userId);
     update();
