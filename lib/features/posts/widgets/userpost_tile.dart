@@ -250,8 +250,11 @@ class _PostTileState extends State<PostTile> {
                         widget.post.user!.isSubscribed &&
                                 widget.post.user!.uid !=
                                     profileController.myProfile.uid
-                            ? premiumButtonHeader(widget.post.user!,
-                                profileController.myProfile, connectToUser)
+                            ? premiumButtonHeader(
+                                widget.post.user!,
+                                profileController.myProfile,
+                                connectToUser,
+                                context)
                             : Container(),
                         widget.post.isRanked
                             ? Container()
@@ -381,28 +384,16 @@ class _PostTileState extends State<PostTile> {
                 ),
                 Padding(
                   padding: const EdgeInsets.only(
-                      left: 15, right: 15, bottom: 0, top: 0),
+                      left: 0.0, right: 0, top: 5, bottom: 5),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       if (widget.post.promote ?? false)
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 5,
-                            horizontal: 15,
-                          ),
-                          decoration: const BoxDecoration(
-                            color: backgroundcolorinterface,
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(5),
-                            ),
-                          ),
-                          child: const TextWidget(
-                            text: 'Sponsored',
-                            fontWeight: FontWeight.w700,
-                            size: 10,
-                          ),
+                        const TextWidget(
+                          text: 'Sponsored',
+                          fontWeight: FontWeight.w700,
+                          size: 10,
                         ),
                       const SizedBox(
                         height: 10,

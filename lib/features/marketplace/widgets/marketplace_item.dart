@@ -8,7 +8,6 @@ import 'package:detectable_text_field/widgets/detectable_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-
 import '../../../../action/action.dart';
 import '../../../../common/widgets/popup/my_popup_menu_button.dart';
 import '../../../../common/widgets/text_widget.dart';
@@ -236,7 +235,8 @@ class _MarketTileState extends State<MarketTile> {
                                   ? premiumButtonHeader(
                                       widget.post.user!,
                                       profileController.myProfile,
-                                      connectToUser)
+                                      connectToUser,
+                                      context)
                                   : Container(),
                               const SizedBox(
                                 width: 10,
@@ -369,25 +369,13 @@ class _MarketTileState extends State<MarketTile> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             if (_post.promote)
-                              Padding(
-                                padding: const EdgeInsets.only(
-                                    left: 15.0, right: 15),
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                    vertical: 5,
-                                    horizontal: 5,
-                                  ),
-                                  decoration: const BoxDecoration(
-                                    color: backgroundcolorinterface,
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(5),
-                                    ),
-                                  ),
-                                  child: const TextWidget(
-                                    text: 'Sponsored',
-                                    fontWeight: FontWeight.w700,
-                                    size: 10,
-                                  ),
+                              const Padding(
+                                padding: EdgeInsets.only(
+                                    left: 0.0, right: 0, top: 5, bottom: 5),
+                                child: TextWidget(
+                                  text: 'Sponsored',
+                                  fontWeight: FontWeight.w700,
+                                  size: 10,
                                 ),
                               ),
                             const SizedBox(
@@ -486,9 +474,11 @@ class _MarketTileState extends State<MarketTile> {
                                                 ),
                                               ],
                                             )
-                                          : const Row(children: <Widget>[
-                                              SizedBox(),
-                                            ],),
+                                          : const Row(
+                                              children: <Widget>[
+                                                SizedBox(),
+                                              ],
+                                            ),
                                       Row(
                                         children: [
                                           const Icon(
