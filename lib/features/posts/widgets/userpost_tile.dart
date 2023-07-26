@@ -1,4 +1,5 @@
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
+import 'package:business_bosses_v2/features/posts/controllers/create_post_controller.dart';
 import 'package:business_bosses_v2/features/posts/models/post_model.dart';
 import 'package:business_bosses_v2/features/posts/widgets/post_images.dart';
 import 'package:business_bosses_v2/features/posts/widgets/post_like_comment.dart';
@@ -10,6 +11,7 @@ import 'package:detectable_text_field/widgets/detectable_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../../action/action.dart';
 import '../../../common/models/api_response_model.dart';
@@ -300,12 +302,15 @@ class _PostTileState extends State<PostTile> {
                                             ),
                                             TextButton(
                                               onPressed: () {
-                                                ApiService.delete(
-                                                    path:
-                                                        'post/delete-post/${widget.post.postId}');
-                                                setState(() {
-                                                  hide = true;
-                                                });
+                                                // ApiService.delete(
+                                                //     path:
+                                                //         'post/delete-post/${widget.post.postId}');
+                                                // setState(() {
+                                                //   hide = true;
+                                                // });
+                                                CreatePostController()
+                                                    .onDeletePost(
+                                                        widget.post.postId);
                                                 Get.back();
                                               },
                                               child: const Text('Yes'),
@@ -419,7 +424,9 @@ class _PostTileState extends State<PostTile> {
                             ),
                             trimExpandedText: '  show less',
                             basicStyle: bodyText2.copyWith(color: textColor),
-                            onTap: (_) {},
+                            onTap: (String link) async {
+                              await launchUrlString(link);
+                            },
                           ),
                           const SizedBox(height: 16),
                         ],

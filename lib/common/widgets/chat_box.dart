@@ -102,6 +102,7 @@ class ChatBox extends StatelessWidget {
                                                     File(message.image!),
                                                     width: size.width * 0.6,
                                                     height: size.width * 0.6,
+                                                    fit: BoxFit.cover,
                                                   ),
                                                 )
                                               else
@@ -228,6 +229,7 @@ class ChatBox extends StatelessWidget {
                                                     File(message.image!),
                                                     width: size.width * 0.6,
                                                     height: size.width * 0.6,
+                                                    fit: BoxFit.cover,
                                                   ),
                                                 )
                                               else

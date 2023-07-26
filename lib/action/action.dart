@@ -69,7 +69,7 @@ Future<void> onDetectableTextTap(
       }
     }
   }
-  showSnackBar(context, message: val);
+  // showSnackBar(context, message: val);
 }
 
 Future<void> socialShare(String message) async {

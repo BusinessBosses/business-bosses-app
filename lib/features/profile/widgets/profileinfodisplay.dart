@@ -50,7 +50,7 @@ Widget profileinfodisplay(BuildContext context, UserModel publicUser) {
                 InkWell(
                   onTap: () async {
                     String url = MyNativeFunctions.completeURL(
-                        publicUser.twitter!, MyUrl.url);
+                        publicUser.website!, MyUrl.url);
                     await launchUrlString(url);
 
                     // String url =

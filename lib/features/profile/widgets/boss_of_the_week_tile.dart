@@ -1,3 +1,4 @@
+import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -29,6 +30,39 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
   final ProfileController _profileController = Get.find();
   late UserModel? user;
   final HomeController homeController = Get.find();
+
+  Future<void> onRefer(UserModel publicUser) async {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return const AlertDialog(
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              CircularProgressIndicator(),
+            ],
+          ),
+        );
+      },
+    );
+    final ApiResponseModel res = await ApiService.get(
+        path: '/connection/connecteds/referals/${publicUser.uid}');
+    Navigator.pop(context);
+
+    if (res.success) {
+      if (res.data.isEmpty) {
+        String message =
+            'Have a look at ${publicUser.username}\'s profile on Business Bosses\n'
+            'https://businessbosses.onelink.me/xLWk/36a2ff16';
+        socialShare(message);
+      } else {
+        Get.toNamed(
+          Routes.referscreen,
+          arguments: <String, dynamic>{'user': publicUser},
+        );
+      }
+    }
+  }
 
   @override
   void initState() {
@@ -217,7 +251,9 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                                           Row(
                                             children: [
                                               Expanded(
-                                                child: outlineButtonHeader(),
+                                                child: outlineButtonHeader(() {
+                                                  onRefer(user!);
+                                                }),
                                               ),
                                             ],
                                           ),
@@ -373,7 +409,7 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
     );
   }
 
-  Widget outlineButtonHeader() {
+  Widget outlineButtonHeader(Function onRefer) {
     return Container(
       height: 50.0,
       padding: const EdgeInsets.all(0.0),
@@ -404,18 +440,8 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                 width: 1,
               ),
             ),
-            onPressed: () async {
-              if (_profileController.myProfile.connectedCount == 0 &&
-                  _profileController.myProfile.connectionCount == 0) {
-                _share();
-              } else {
-                Get.toNamed(Routes.referscreen, arguments: {
-                  'user': user,
-                  'onRefer': (refs) {
-                    updateReferals(refs);
-                  }
-                });
-              }
+            onPressed: () {
+              onRefer();
             },
             child: const Text(
               'Refer',
