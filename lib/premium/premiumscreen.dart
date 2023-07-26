@@ -343,11 +343,6 @@ class _PremiumScreenState extends State<PremiumScreen> {
                               child: Container(),
                             ),
                             const SizedBox(height: 8),
-                            const Text(
-                              'By Subscribing you accept the Terms of Service',
-                              style:
-                                  TextStyle(color: Colors.grey, fontSize: 12),
-                            ),
                             const SizedBox(
                               height: 50,
                             )

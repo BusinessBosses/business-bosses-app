@@ -164,7 +164,8 @@ class _ForumItemState extends State<ForumItem> {
                                       ? premiumButtonHeader(
                                           widget.forum.user!,
                                           profileController.myProfile,
-                                          connectToUser)
+                                          connectToUser,
+                                          context)
                                       : Container(),
                                   const SizedBox(
                                     width: 10,
