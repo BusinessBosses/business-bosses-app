@@ -18,10 +18,13 @@ class MyProfileHeader extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.only(left: 16.0, right: 16.0),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               UserProfileTile(
                 myProfile: myProfile,
+              ),
+              const SizedBox(
+                height: 13,
               ),
               Container(
                 alignment: Alignment.center,
@@ -72,6 +75,7 @@ class MyProfileHeader extends StatelessWidget {
                   ],
                 ),
               ),
+              const SizedBox(height: 16.0),
             ],
           ),
         ),
