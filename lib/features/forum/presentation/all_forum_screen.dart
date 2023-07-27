@@ -260,7 +260,7 @@ class _AllForumScreenState extends State<AllForumScreen> {
                                         ),
                                         Padding(
                                           padding: const EdgeInsets.only(
-                                              left: 35, top: 0, right: 20),
+                                              left: 35, right: 20),
                                           child: Row(
                                             children: [
                                               Row(

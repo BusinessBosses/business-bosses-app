@@ -44,12 +44,16 @@ class LearningPopUp extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Expanded(
-                  child: Text(
+                  child: Center(
+                    child: Text(
                       'A collaborative environment that encourages learning and professional development. '
-                      'Start a Topic'
+                      'Start a Topic,'
                       ' post articles, insights, and resources others can learn from To sell your products and services, list on '
                       'MarketPlace',
-                      style: bodyText2),
+                      style: bodyText2,
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
                 ),
               ],
             ),

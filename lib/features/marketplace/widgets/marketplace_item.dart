@@ -150,7 +150,7 @@ class _MarketTileState extends State<MarketTile> {
                     children: [
                       ListTile(
                         contentPadding:
-                            const EdgeInsets.only(left: 15, right: 15),
+                            const EdgeInsets.only(left: 15, right: 0),
                         leading: GestureDetector(
                           onTap: () {
                             if (profileController.myProfile.uid ==
@@ -220,12 +220,7 @@ class _MarketTileState extends State<MarketTile> {
                         ),
                         trailing: SizedBox(
                           height: 30,
-                          width:
-                              profileController.myProfile.connecteds != null &&
-                                      profileController.myProfile.connecteds!
-                                          .contains(_post.user!.uid)
-                                  ? 140
-                                  : 130,
+                          width: 140,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
@@ -238,117 +233,109 @@ class _MarketTileState extends State<MarketTile> {
                                       connectToUser,
                                       context)
                                   : Container(),
-                              const SizedBox(
-                                width: 10,
-                              ),
                               Container(
                                 height: double.infinity,
                                 color: Colors.white,
-                                child: Padding(
-                                  padding: const EdgeInsets.only(left: 15),
-                                  child: _post.user!.uid ==
-                                          profileController.myProfile.uid
-                                      ? MyPopupMenuButton(
-                                          popupItems: myPopupMore,
-                                          icon: const Icon(
-                                            Icons.more_horiz,
-                                            size: 20,
-                                            color: Colors.black,
-                                            weight: 100,
-                                          ),
-                                          onSelected: (String val) {
-                                            if (val == 'Edit') {
-                                              Get.to(
-                                                () => CreateSellingitemScreen(
-                                                  isUpd: true,
-                                                  market: _post,
+                                child: _post.user!.uid ==
+                                        profileController.myProfile.uid
+                                    ? MyPopupMenuButton(
+                                        popupItems: myPopupMore,
+                                        icon: const Icon(
+                                          Icons.more_horiz,
+                                          size: 20,
+                                          color: Colors.black,
+                                          weight: 100,
+                                        ),
+                                        onSelected: (String val) {
+                                          if (val == 'Edit') {
+                                            Get.to(
+                                              () => CreateSellingitemScreen(
+                                                isUpd: true,
+                                                market: _post,
+                                              ),
+                                            );
+                                          } else if (val == 'Delete') {
+                                            showDialog(
+                                              context: context,
+                                              builder: (BuildContext context) =>
+                                                  AlertDialog(
+                                                title: const Text(
+                                                  'Delete Listing',
+                                                  style: bodyText1,
                                                 ),
-                                              );
-                                            } else if (val == 'Delete') {
-                                              showDialog(
-                                                context: context,
-                                                builder:
-                                                    (BuildContext context) =>
-                                                        AlertDialog(
-                                                  title: const Text(
-                                                    'Delete Listing',
-                                                    style: bodyText1,
+                                                content: const Text(
+                                                    'Are you sure to delete this listing?'),
+                                                actions: <Widget>[
+                                                  TextButton(
+                                                    onPressed: () => Get.back(),
+                                                    child: const Text('No'),
                                                   ),
-                                                  content: const Text(
-                                                      'Are you sure to delete this listing?'),
-                                                  actions: <Widget>[
-                                                    TextButton(
-                                                      onPressed: () =>
-                                                          Get.back(),
-                                                      child: const Text('No'),
-                                                    ),
-                                                    TextButton(
-                                                      onPressed: () {
-                                                        _marketController
-                                                            .removeListing(
-                                                                _post.marketId);
-                                                        ApiService.delete(
-                                                            path:
-                                                                'markets/${_post.marketId}');
-                                                        // setState(() {
-                                                        //   hide = true;
-                                                        // });
-                                                        Get.back();
-                                                      },
-                                                      child: const Text('Yes'),
-                                                    ),
-                                                  ],
-                                                ),
-                                              );
-                                            } else if (val == 'Boost') {
-                                              Get.to(
-                                                () => BoostMarket(
-                                                    postId: _post.marketId),
-                                              );
-                                            }
-                                          },
-                                        )
-                                      : _post.promote
-                                          ? MyPopupMenuButton(
-                                              popupItems: myPopup,
-                                              icon: const Icon(
+                                                  TextButton(
+                                                    onPressed: () {
+                                                      _marketController
+                                                          .removeListing(
+                                                              _post.marketId);
+                                                      ApiService.delete(
+                                                          path:
+                                                              'markets/${_post.marketId}');
+                                                      // setState(() {
+                                                      //   hide = true;
+                                                      // });
+                                                      Get.back();
+                                                    },
+                                                    child: const Text('Yes'),
+                                                  ),
+                                                ],
+                                              ),
+                                            );
+                                          } else if (val == 'Boost') {
+                                            Get.to(
+                                              () => BoostMarket(
+                                                  postId: _post.marketId),
+                                            );
+                                          }
+                                        },
+                                      )
+                                    : _post.promote
+                                        ? MyPopupMenuButton(
+                                            popupItems: myPopup,
+                                            icon: const Icon(
+                                              Icons.more_horiz,
+                                              size: 20,
+                                              color: Colors.black,
+                                              weight: 100,
+                                            ),
+                                            onSelected: (String val) {
+                                              if (val == 'Hide') {
+                                                ApiService.post(
+                                                  path: 'blockedpost',
+                                                  body: <String, dynamic>{
+                                                    'postId': _post.marketId
+                                                  },
+                                                );
+                                                setState(() {
+                                                  hide = true;
+                                                });
+                                              } else if (val == 'Report') {
+                                                _showDialog();
+                                              }
+                                            },
+                                          )
+                                        : Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 14, right: 15.0),
+                                            child: InkWell(
+                                              onTap: () {
+                                                _showDialog();
+                                              },
+                                              child: const Icon(
                                                 Icons.more_horiz,
                                                 size: 20,
                                                 color: Colors.black,
                                                 weight: 100,
                                               ),
-                                              onSelected: (String val) {
-                                                if (val == 'Hide') {
-                                                  ApiService.post(
-                                                    path: 'blockedpost',
-                                                    body: <String, dynamic>{
-                                                      'postId': _post.marketId
-                                                    },
-                                                  );
-                                                  setState(() {
-                                                    hide = true;
-                                                  });
-                                                } else if (val == 'Report') {
-                                                  _showDialog();
-                                                }
-                                              },
-                                            )
-                                          : Padding(
-                                              padding: const EdgeInsets.only(
-                                                  right: 15.0),
-                                              child: InkWell(
-                                                onTap: () {
-                                                  _showDialog();
-                                                },
-                                                child: const Icon(
-                                                  Icons.more_horiz,
-                                                  size: 20,
-                                                  color: Colors.black,
-                                                  weight: 100,
-                                                ),
-                                              ),
                                             ),
-                                ),
+                                          ),
                               ),
                             ],
                           ),
@@ -371,7 +358,7 @@ class _MarketTileState extends State<MarketTile> {
                             if (_post.promote)
                               const Padding(
                                 padding: EdgeInsets.only(
-                                    left: 0.0, right: 0, top: 5, bottom: 5),
+                                    left: 15.0, right: 0, top: 0, bottom: 3),
                                 child: TextWidget(
                                   text: 'Sponsored',
                                   fontWeight: FontWeight.w700,

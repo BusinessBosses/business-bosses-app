@@ -8,7 +8,7 @@ Widget JoinedButton(bool joined, VoidCallback onTap) {
         onTap();
       },
       child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 12.0),
+          padding: const EdgeInsets.only(right: 10.0),
           alignment: Alignment.center,
           child: Material(
               elevation: 4.0,
