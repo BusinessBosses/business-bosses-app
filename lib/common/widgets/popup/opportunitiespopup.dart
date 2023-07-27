@@ -44,13 +44,17 @@ class OpportunitiesPopup extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Expanded(
-                  child: Text(
-                      'a collaborative environment that encourages sharing and discovering opportunities for professional and business growth. '
-                      'Share Opportunity'
+                  child: Center(
+                    child: Text(
+                      'A collaborative environment that encourages sharing and discovering opportunities for professional and business growth. '
+                      'Share Opportunity,'
                       ' post Distribution, Co-Founders, Affiliate Marketing, Franchises & Licensing, Investment & Grant opportunities others can gain from. To sell your products and services, list on '
-                      'MarketPlace'
+                      'MarketPlace.'
                       '',
-                      style: bodyText2),
+                      style: bodyText2,
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
                 ),
               ],
             ),

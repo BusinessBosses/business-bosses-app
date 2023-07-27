@@ -21,28 +21,12 @@ Widget premiumButtonHeader(
   return Container(
     height: 30.0,
     padding: const EdgeInsets.all(0.0),
-    width: myProfile.connecteds != null &&
-            myProfile.connecteds!.contains(publicUser.uid)
-        ? 90
-        : 80,
+    width: 80,
     child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
       Expanded(
           child: myProfile.connecteds != null &&
                   myProfile.connecteds!.contains(publicUser.uid)
               ? MCustomButton(
-                  buttonType: ButtonType.grey,
-                  margin: const EdgeInsets.only(right: 0.0),
-                  child: const FittedBox(
-                    child: Text(
-                      'Connect',
-                      style: TextStyle(
-                          color: textColor, fontWeight: FontWeight.w400),
-                    ),
-                  ),
-                  onPressed: () async {
-                    onConnect();
-                  })
-              : MCustomButton(
                   buttonType: ButtonType.outlinegrey,
                   margin: const EdgeInsets.only(right: 0.0),
                   child: const FittedBox(
@@ -84,6 +68,19 @@ Widget premiumButtonHeader(
                         );
                       }
                     }
+                  })
+              : MCustomButton(
+                  buttonType: ButtonType.grey,
+                  margin: const EdgeInsets.only(right: 0.0),
+                  child: const FittedBox(
+                    child: Text(
+                      'Connect',
+                      style: TextStyle(
+                          color: textColor, fontWeight: FontWeight.w400),
+                    ),
+                  ),
+                  onPressed: () async {
+                    onConnect();
                   }))
       // Expanded(
       //     child: MCustomButton(

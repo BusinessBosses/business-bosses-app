@@ -211,19 +211,22 @@ class _BossUpSectionState extends State<BossUpSection> {
                                             ),
                                           ),
                                           Expanded(
-                                              child: Padding(
-                                            padding: const EdgeInsets.only(
-                                                right: 35),
-                                            child: Text(
-                                              widget.industry.description ??
-                                                  'Industry Description',
-                                              style: const TextStyle(
+                                            child: Padding(
+                                              padding: const EdgeInsets.only(
+                                                  right: 35),
+                                              child: Text(
+                                                widget.industry.description
+                                                        ?.trim() ??
+                                                    'Industry Description',
+                                                style: const TextStyle(
                                                   fontSize: 15,
-                                                  fontWeight: FontWeight.w700),
-                                              softWrap: true,
-                                              maxLines: 5,
+                                                  fontWeight: FontWeight.w700,
+                                                ),
+                                                softWrap: true,
+                                                maxLines: 5,
+                                              ),
                                             ),
-                                          )),
+                                          ),
                                         ],
                                       ),
                                       Padding(
@@ -236,7 +239,7 @@ class _BossUpSectionState extends State<BossUpSection> {
                                                 Padding(
                                                   padding:
                                                       const EdgeInsets.only(
-                                                          right: 8, top: 5),
+                                                          right: 3, top: 5),
                                                   child: SvgPicture.asset(
                                                     'assets/svgs/members.svg',
                                                     height: 15,
@@ -285,73 +288,54 @@ class _BossUpSectionState extends State<BossUpSection> {
                                                 ),
                                               ],
                                             ),
-                                            Padding(
-                                              padding: const EdgeInsets.only(
-                                                  left: 5, top: 5),
-                                              child: Container(
-                                                padding: const EdgeInsets.only(
-                                                    bottom: 8,
-                                                    top: 8,
-                                                    left: 10,
-                                                    right: 10),
-                                                decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          200),
-                                                  color: const Color.fromARGB(
-                                                      47, 255, 255, 255),
+                                            Row(
+                                              children: [
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          left: 8.0, top: 5),
+                                                  child: SvgPicture.asset(
+                                                    'assets/svgs/entries.svg',
+                                                    color: textColor,
+                                                    height: 11.5,
+                                                  ),
                                                 ),
-                                                child: Row(
-                                                  children: [
-                                                    SvgPicture.asset(
-                                                      'assets/svgs/entries.svg',
-                                                      height: 11.5,
-                                                      color: textColor,
-                                                    ),
-                                                    RichText(
-                                                      text: TextSpan(
-                                                        children: [
-                                                          TextSpan(
-                                                            text:
-                                                                ' Entries: (${controller.totalForums.value}) ',
-                                                            style:
-                                                                const TextStyle(
-                                                              fontSize: 12,
-                                                              color: textColor,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w600,
-                                                            ),
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          top: 5.0),
+                                                  child: RichText(
+                                                    text: TextSpan(
+                                                      children: [
+                                                        TextSpan(
+                                                          text:
+                                                              ' Entries: (${controller.totalForums.value}) ',
+                                                          style:
+                                                              const TextStyle(
+                                                            fontSize: 12,
+                                                            color: textColor,
+                                                            fontWeight:
+                                                                FontWeight.w600,
                                                           ),
-                                                        ],
-                                                      ),
+                                                        ),
+                                                      ],
                                                     ),
-                                                  ],
+                                                  ),
                                                 ),
-                                              ),
+                                              ],
                                             ),
                                             const Spacer(),
                                             Align(
                                               alignment: Alignment.centerRight,
-                                              child: Row(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.end,
-                                                children: [
-                                                  JoinedButton(
-                                                    widget.industry.joinedUsers
-                                                            ?.contains(
-                                                                _myProfile
-                                                                    .myProfile
-                                                                    .uid) ??
-                                                        false,
-                                                    () {
-                                                      toggleJoinAndLeaveIndustry(
-                                                          controller);
-                                                    },
-                                                  ),
-                                                ],
+                                              child: JoinedButton(
+                                                widget.industry.joinedUsers
+                                                        ?.contains(_myProfile
+                                                            .myProfile.uid) ??
+                                                    false,
+                                                () {
+                                                  toggleJoinAndLeaveIndustry(
+                                                      controller);
+                                                },
                                               ),
                                             )
                                           ],

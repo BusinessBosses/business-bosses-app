@@ -435,6 +435,7 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
           ElevatedButton(
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.white,
+              elevation: 0,
               side: const BorderSide(
                 color: primaryColorLT,
                 width: 1,

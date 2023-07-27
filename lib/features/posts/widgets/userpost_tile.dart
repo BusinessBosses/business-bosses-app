@@ -239,11 +239,7 @@ class _PostTileState extends State<PostTile> {
                   ),
                   trailing: SizedBox(
                     height: 30,
-                    width: profileController.myProfile.connecteds != null &&
-                            profileController.myProfile.connecteds!
-                                .contains(widget.post.user!.uid)
-                        ? 140
-                        : 130,
+                    width: 140,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
@@ -264,9 +260,6 @@ class _PostTileState extends State<PostTile> {
                                 alignment: Alignment.center,
                                 child: const RankingBadge(),
                               ),
-                        const SizedBox(
-                          width: 10,
-                        ),
                         Container(
                           height: double.infinity,
                           color: Colors.white,
@@ -355,8 +348,8 @@ class _PostTileState extends State<PostTile> {
                                       },
                                     )
                                   : Padding(
-                                      padding:
-                                          const EdgeInsets.only(right: 15.0),
+                                      padding: const EdgeInsets.only(
+                                          left: 14, right: 15.0),
                                       child: InkWell(
                                         onTap: () {
                                           _showDialog();
@@ -384,7 +377,7 @@ class _PostTileState extends State<PostTile> {
                 ),
                 Padding(
                   padding: const EdgeInsets.only(
-                      left: 0.0, right: 0, top: 5, bottom: 5),
+                      left: 15.0, right: 15.0, top: 0, bottom: 3),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
