@@ -14,6 +14,7 @@ import '../models/market_model.dart';
 class MarketController extends GetxController {
   late IO.Socket socket;
   RxList<MarketModel> markets = RxList<MarketModel>(<MarketModel>[]);
+  RxList<MarketModel> searchResult = RxList<MarketModel>(<MarketModel>[]);
   RxList<UserModel> users = RxList<UserModel>(<UserModel>[]);
   RxInt paginationPage = RxInt(1);
   final int postsSize = 20;
@@ -22,11 +23,12 @@ class MarketController extends GetxController {
   RxBool loadingMore = RxBool(false);
   RxBool isJoined = RxBool(false);
   bool isLoading = true;
+  RxBool isfiltered = RxBool(false);
   final HomeController _homeController = Get.find();
   final ProfileController _profileController = Get.find();
   void removeListing(String marketId) {
-    final int marketIndex =
-        markets.indexWhere((MarketModel element) => element.marketId == marketId);
+    final int marketIndex = markets
+        .indexWhere((MarketModel element) => element.marketId == marketId);
     if (marketIndex != -1) {
       markets.removeAt(marketIndex);
       update();
@@ -34,22 +36,43 @@ class MarketController extends GetxController {
   }
 
   /// PROCESS RAW API DATA, MODELIZE AND SAVE TO STATE
-  void processPostsToState(dynamic post) {
-    final List psts = post;
-    markets.clear();
-    for (int i = 0; i < psts.length; i++) {
-      markets.add(MarketModel.fromMap({
-        ...psts[i],
-        'likes': psts[i]['likes']
-            .map((dynamic like) => like['userId'].toString())
-            .toList(),
-        'coins': psts[i]['likes']
-            .map((dynamic coin) => coin['userId'].toString())
-            .toList()
-      }));
+  void processPostsToState(dynamic post, {bool? isSearch}) {
+    if (isSearch ?? false) {
+      isfiltered(true);
+      final List psts = post;
+      for (int i = 0; i < psts.length; i++) {
+        searchResult.add(MarketModel.fromMap({
+          ...psts[i],
+          'likes': psts[i]['likes']
+              .map((dynamic like) => like['userId'].toString())
+              .toList(),
+          'coins': psts[i]['likes']
+              .map((dynamic coin) => coin['userId'].toString())
+              .toList()
+        }));
+      }
+
+      // update();
+    } else {
+      final List psts = post;
+      markets.clear();
+      for (int i = 0; i < psts.length; i++) {
+        markets.add(MarketModel.fromMap({
+          ...psts[i],
+          'likes': psts[i]['likes']
+              .map((dynamic like) => like['userId'].toString())
+              .toList(),
+          'coins': psts[i]['likes']
+              .map((dynamic coin) => coin['userId'].toString())
+              .toList()
+        }));
+      }
+      _homeController.addMarkets(markets);
     }
-    _homeController.addMarkets(markets);
-    // update();
+  }
+
+  void updateFiltered() {
+    isfiltered = RxBool(false);
   }
 
   /// PROCESS RAW API DATA, MODELIZE AND SAVE TO STATE
@@ -147,7 +170,7 @@ class MarketController extends GetxController {
     final ApiResponseModel response =
         await HomeRepository.filterMarket(location, category);
     if (response.success) {
-      processPostsToState(response.data);
+      processPostsToState(response.data, isSearch: true);
     } else {
       error(true);
     }
