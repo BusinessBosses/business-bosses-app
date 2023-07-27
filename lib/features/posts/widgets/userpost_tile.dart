@@ -383,8 +383,8 @@ class _PostTileState extends State<PostTile> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(
-                      left: 0.0, right: 0, top: 5, bottom: 5),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 5.0, horizontal: 15),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
