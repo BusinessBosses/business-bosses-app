@@ -149,12 +149,7 @@ class _ForumItemState extends State<ForumItem> {
                               profileController.myProfile.uid
                           ? SizedBox(
                               height: 30,
-                              width: profileController.myProfile.connecteds !=
-                                          null &&
-                                      profileController.myProfile.connecteds!
-                                          .contains(widget.forum.user!.uid)
-                                  ? 140
-                                  : 130,
+                              width: 140,
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [

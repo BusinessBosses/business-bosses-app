@@ -52,8 +52,6 @@ class _UserProfileTileState extends State<UserProfileTile> {
               ),
               if (widget.myProfile.isRanked ?? false)
                 Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     Container(
                       height: 36,
@@ -65,7 +63,7 @@ class _UserProfileTileState extends State<UserProfileTile> {
                         boxShadow: const [
                           BoxShadow(
                             color: Colors.black,
-                            blurRadius: 5.0, // soften the shadow
+                            blurRadius: 5000000.0, // soften the shadow
                             spreadRadius: 0.02, // extend the shadow
                           )
                         ],

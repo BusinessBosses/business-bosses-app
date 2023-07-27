@@ -166,9 +166,6 @@ Widget profileinfodisplay(BuildContext context, UserModel publicUser) {
                       color: subtextColor),
                 ),
               ),
-              const SizedBox(
-                height: 10,
-              ),
               SizedBox(
                 width: double.infinity,
                 child: ListView.builder(
@@ -222,7 +219,7 @@ Widget profileinfodisplay(BuildContext context, UserModel publicUser) {
             ],
           ),
         const SizedBox(
-          height: 25,
+          height: 20,
         ),
         // _profileController.myProfile
         //                 .productsandservices ==
@@ -251,7 +248,7 @@ Widget profileinfodisplay(BuildContext context, UserModel publicUser) {
                 ),
               ),
               const SizedBox(
-                height: 10,
+                height: 5,
               ),
               buildChoiceChips(publicUser.productsandservices != null
                   ? publicUser.productsandservices!
@@ -274,7 +271,7 @@ Widget profileinfodisplay(BuildContext context, UserModel publicUser) {
             ),
           ),
         const SizedBox(
-          height: 20,
+          height: 10,
         ),
         Column(children: [
           ListView.builder(
@@ -301,11 +298,13 @@ Widget profileinfodisplay(BuildContext context, UserModel publicUser) {
             itemCount:
                 publicUser.interests != null ? publicUser.interests!.length : 0,
           ),
-          const SizedBox(
-            width: double.infinity,
-            height: 1,
-            child: ColoredBox(color: backgroundcolorinterface),
-          ),
+          publicUser.interests != null && publicUser.interests!.isNotEmpty
+              ? const SizedBox(
+                  width: double.infinity,
+                  height: 1,
+                  child: ColoredBox(color: backgroundcolorinterface),
+                )
+              : Container(),
           const SizedBox(
             height: 150,
           )
