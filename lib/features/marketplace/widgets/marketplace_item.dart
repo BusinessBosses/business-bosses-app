@@ -357,8 +357,9 @@ class _MarketTileState extends State<MarketTile> {
                           children: [
                             if (_post.promote)
                               const Padding(
-                                padding: EdgeInsets.only(
-                                    left: 15.0, right: 0, top: 0, bottom: 3),
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 15, vertical: 5),
+
                                 child: TextWidget(
                                   text: 'Sponsored',
                                   fontWeight: FontWeight.w700,
