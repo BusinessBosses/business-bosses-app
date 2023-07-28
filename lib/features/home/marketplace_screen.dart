@@ -214,7 +214,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                       filterCategory = null;
                                       _selectedLocation = null;
                                       _selectedCategory = null;
-                                      _marketController.initMarket();
+                                      _marketController.updateFiltered();
                                       Navigator.of(context).pop();
                                     });
                                   },
@@ -731,9 +731,29 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                   ),
                                 );
                               } else {
-                                return _marketController.markets.isEmpty
-                                    ? filterCategory != null ||
-                                            filterLocation != null
+                                return _marketController.markets.isEmpty &&
+                                        !_marketController.isfiltered.value
+                                    ? SafetyModel(
+                                        isLoading: false,
+                                        icon: const Icon(
+                                          Icons.edit,
+                                          color: Colors.grey,
+                                          size: 80.0,
+                                        ),
+                                        title:
+                                            'Be the first one to Sell your Item',
+                                        // subTitle: '',
+                                        clickableText: 'Start a topic',
+                                        onTap: () {
+                                          Get.to(
+                                            () => const CreateSellingitemScreen(
+                                              isUpd: false,
+                                            ),
+                                          );
+                                        },
+                                      )
+                                    : _marketController.searchResult.isEmpty &&
+                                            _marketController.isfiltered.value
                                         ? SafetyModel(
                                             isLoading: false,
                                             icon: const Icon(
@@ -746,90 +766,91 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                             // subTitle: '',
                                             clickableText: 'View All',
                                             onTap: () {
-                                              print('hey');
                                               setState(() {
                                                 filterLocation = null;
                                                 filterCode = null;
                                                 filterCategory = null;
                                                 _selectedLocation = null;
                                                 _selectedCategory = null;
-                                                _marketController.initMarket();
+                                                // _marketController.initMarket();
+                                                _marketController
+                                                    .updateFiltered();
                                               });
                                             },
                                           )
-                                        : SafetyModel(
-                                            isLoading: false,
-                                            icon: const Icon(
-                                              Icons.edit,
-                                              color: Colors.grey,
-                                              size: 80.0,
-                                            ),
-                                            title:
-                                                'Be the first one to Sell your Item',
-                                            // subTitle: '',
-                                            clickableText: 'Start a topic',
-                                            onTap: () {
-                                              Get.to(
-                                                () =>
-                                                    const CreateSellingitemScreen(
-                                                  isUpd: false,
-                                                ),
-                                              );
-                                            },
-                                          )
-                                    : RefreshIndicator(
-                                        onRefresh: refreshData,
-                                        child: NotificationListener<
-                                            ScrollNotification>(
-                                          onNotification:
-                                              (ScrollNotification scrollInfo) {
-                                            if (scrollInfo.metrics.pixels ==
-                                                scrollInfo
-                                                    .metrics.maxScrollExtent) {
-                                              _marketController.loadMore(
-                                                  pageSize,
+                                        : RefreshIndicator(
+                                            onRefresh: refreshData,
+                                            child: NotificationListener<
+                                                ScrollNotification>(
+                                              onNotification:
+                                                  (ScrollNotification
+                                                      scrollInfo) {
+                                                if (scrollInfo.metrics.pixels ==
+                                                    scrollInfo.metrics
+                                                        .maxScrollExtent) {
+                                                  _marketController.loadMore(
+                                                      pageSize,
+                                                      _marketController
+                                                          .paginationPage
+                                                          .value);
                                                   _marketController
-                                                      .paginationPage.value);
-                                              _marketController
-                                                  .paginationPage.value++;
-                                            }
-                                            return false;
-                                          },
-                                          child: ListView.builder(
-                                            shrinkWrap: true,
-                                            itemCount: _marketController
-                                                    .markets.length +
-                                                1,
-                                            itemBuilder: (BuildContext context,
-                                                int index) {
-                                              if (index <
-                                                  _marketController
-                                                      .markets.length) {
-                                                final MarketModel market =
-                                                    _marketController
-                                                        .markets[index];
-                                                return MarketTile(post: market);
-                                              } else {
-                                                // Display a loading indicator at the end of the list
-                                                if (_marketController
-                                                    .loadingMore.value) {
-                                                  return const Padding(
-                                                    padding:
-                                                        EdgeInsets.all(8.0),
-                                                    child: Center(
-                                                      child:
-                                                          CircularProgressIndicator(),
-                                                    ),
-                                                  );
-                                                } else {
-                                                  return const SizedBox
-                                                      .shrink();
+                                                      .paginationPage.value++;
                                                 }
-                                              }
-                                            },
-                                          ),
-                                        ),
-                                      );
+                                                return false;
+                                              },
+                                              child: ListView.builder(
+                                                shrinkWrap: true,
+                                                itemCount: _marketController
+                                                        .isfiltered.value
+                                                    ? _marketController
+                                                        .searchResult.length
+                                                    : _marketController
+                                                            .markets.length +
+                                                        1,
+                                                itemBuilder:
+                                                    (BuildContext context,
+                                                        int index) {
+                                                  if (index <
+                                                      (_marketController
+                                                              .isfiltered.value
+                                                          ? _marketController
+                                                              .searchResult
+                                                              .length
+                                                          : _marketController
+                                                              .markets
+                                                              .length)) {
+                                                    final MarketModel market =
+                                                        _marketController
+                                                                .isfiltered
+                                                                .value
+                                                            ? _marketController
+                                                                    .searchResult[
+                                                                index]
+                                                            : _marketController
+                                                                .markets[index];
+                                                    return MarketTile(
+                                                        post: market);
+                                                  } else {
+                                                    // Display a loading indicator at the end of the list
+                                                    if (_marketController
+                                                        .loadingMore.value) {
+                                                      return const Padding(
+                                                        padding:
+                                                            EdgeInsets.all(8.0),
+                                                        child: Center(
+                                                          child:
+                                                              CircularProgressIndicator(),
+                                                        ),
+                                                      );
+                                                    } else {
+                                                      return const SizedBox
+                                                          .shrink();
+                                                    }
+                                                  }
+                                                },
+                                              ),
+                                            ),
+                                          );
                               }
                             }),
                           ),
