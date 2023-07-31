@@ -458,46 +458,49 @@ class _BossUpSectionState extends State<BossUpSection> {
               )
             ];
           },
-          body: controller.loading.value
-              ? SafetyModel(
-                  isLoading: controller.loading.value,
-                  title: '',
-                )
-              : controller.error.value
-                  ? SafetyModel(
-                      isLoading: false,
-                      title: 'Something went wrong',
-                      clickableText: 'Reload',
-                      onTap: () async {
-                        await controller.fetchForums();
-                      },
-                    )
-                  : !controller.loading.value &&
-                          !controller.error.value &&
-                          controller.forums.isEmpty
-                      ? const SafetyModel(
-                          isLoading: false,
-                          title: 'No post',
-                          subTitle: 'This industry has no post',
-                        )
-                      : RefreshIndicator(
-                          onRefresh: refreshData,
-                          child: ListView.builder(
-                            itemCount: controller.forums.length,
+          body: Padding(
+            padding: const EdgeInsets.only(bottom: 30),
+            child: controller.loading.value
+                ? SafetyModel(
+                    isLoading: controller.loading.value,
+                    title: '',
+                  )
+                : controller.error.value
+                    ? SafetyModel(
+                        isLoading: false,
+                        title: 'Something went wrong',
+                        clickableText: 'Reload',
+                        onTap: () async {
+                          await controller.fetchForums();
+                        },
+                      )
+                    : !controller.loading.value &&
+                            !controller.error.value &&
+                            controller.forums.isEmpty
+                        ? const SafetyModel(
+                            isLoading: false,
+                            title: 'No post',
+                            subTitle: 'This industry has no post',
+                          )
+                        : RefreshIndicator(
+                            onRefresh: refreshData,
+                            child: ListView.builder(
+                              itemCount: controller.forums.length,
 
-                            // <-- this will disable scroll
+                              // <-- this will disable scroll
 
-                            //controller: differentController,
+                              //controller: differentController,
 
-                            itemBuilder: (BuildContext context, int i) =>
-                                ForumItem(
-                              forum: controller.forums[i],
-                              key: ValueKey(controller.forums[i].forumId),
-                              controller: controller,
-                              isBossUp: true,
+                              itemBuilder: (BuildContext context, int i) =>
+                                  ForumItem(
+                                forum: controller.forums[i],
+                                key: ValueKey(controller.forums[i].forumId),
+                                controller: controller,
+                                isBossUp: true,
+                              ),
                             ),
                           ),
-                        ),
+          ),
         );
       }
     });

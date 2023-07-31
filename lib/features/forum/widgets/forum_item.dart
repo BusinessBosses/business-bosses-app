@@ -719,7 +719,7 @@ class _ForumItemState extends State<ForumItem> {
                               ),
                         const SizedBox(width: 8.0),
                         GestureDetector(
-                          onTap: () => _sharePost(widget.forum),
+                          onTap: () => _sharePost(),
                           child: SvgPicture.asset(
                             'assets/svgs/share.svg',
                             height: 18.0,
@@ -751,7 +751,12 @@ class _ForumItemState extends State<ForumItem> {
           );
   }
 
-  void _sharePost(ForumModel forum) {}
+  void _sharePost() {
+    String message =
+        'Have a look at ${widget.forum.user?.username ?? 'Business Bosses'}\'s post on Business Bosses\n'
+        'https://businessbosses.onelink.me/xLWk/36a2ff16';
+    socialShare(message);
+  }
 
   leadingWidth(ForumModel? forum) {}
 

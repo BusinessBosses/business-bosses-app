@@ -129,7 +129,7 @@ class _ReviewTileState extends State<ReviewTile> {
                                         widget.edit(
                                             widget.post.id,
                                             widget.post.rating,
-                                            widget.post.reviewText);
+                                            widget.post.reviewText ?? '');
                                       } else if (val == 'Delete Rating') {
                                         showDialog(
                                           context: context,
@@ -212,7 +212,7 @@ class _ReviewTileState extends State<ReviewTile> {
                           Padding(
                             padding: const EdgeInsets.only(left: 3.0, top: 4),
                             child: DetectableText(
-                              text: widget.post.reviewText,
+                              text: widget.post.reviewText ?? '',
                               detectionRegExp: detectionRegExp(hashtag: false)!,
                               detectedStyle: bodyText2.copyWith(
                                 color: Colors.blue,

@@ -378,7 +378,6 @@ class _PostTileState extends State<PostTile> {
                 Padding(
                   padding:
                       const EdgeInsets.symmetric(vertical: 5.0, horizontal: 15),
-
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -469,12 +468,15 @@ class _PostTileState extends State<PostTile> {
                     // widget.post.user!.uid != profileController.myProfile.uid
                     TextButton.icon(
                       onPressed: () async {
-                        homeController.postCoin(
-                            profileController.myProfile.uid,
-                            widget.post.postId,
-                            profileController,
-                            'post',
-                            widget.post.user!.uid);
+                        if (widget.post.user!.uid !=
+                            profileController.myProfile.uid) {
+                          homeController.postCoin(
+                              profileController.myProfile.uid,
+                              widget.post.postId,
+                              profileController,
+                              'post',
+                              widget.post.user!.uid);
+                        }
                       },
                       icon: widget.post.coins
                                   ?.contains(profileController.myProfile.uid) ==
