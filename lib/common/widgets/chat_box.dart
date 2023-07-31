@@ -184,9 +184,11 @@ class ChatBox extends StatelessWidget {
                           child: Container(
                             padding: const EdgeInsets.all(8.0),
                             margin: const EdgeInsets.symmetric(vertical: 8.0),
-                            decoration: const BoxDecoration(
-                              color: Colors.redAccent,
-                              borderRadius: BorderRadius.only(
+                            decoration: BoxDecoration(
+                              color: message.image != null
+                                  ? Colors.white
+                                  : Colors.redAccent,
+                              borderRadius: const BorderRadius.only(
                                 bottomLeft: Radius.circular(radiusValue),
                                 topLeft: Radius.circular(radiusValue),
                                 bottomRight: Radius.circular(radiusValue),

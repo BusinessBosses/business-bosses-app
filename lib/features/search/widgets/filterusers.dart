@@ -69,7 +69,7 @@ class _FilterUsersState extends State<FilterUsers> {
                                       .indexWhere(
                                       (String element) =>
                                           element ==
-                                          (i == 0
+                                          (i == 0 && !widget.isSearch
                                               ? profileController
                                                   .bossOfTheWeek?.uid
                                               : widget.filterItems[i].uid),
@@ -188,14 +188,7 @@ class _FilterUsersState extends State<FilterUsers> {
                                           margin: const EdgeInsets.symmetric(
                                               horizontal: 4.0),
                                           child: FittedBox(
-                                            child: _profileController.myProfile
-                                                            .connecteds !=
-                                                        null &&
-                                                    _profileController
-                                                        .myProfile.connecteds!
-                                                        .contains(
-                                                      widget.filterItems[i].uid,
-                                                    )
+                                            child: checkConnected != -1
                                                 ? const Text(
                                                     'Connected',
                                                     style: TextStyle(
