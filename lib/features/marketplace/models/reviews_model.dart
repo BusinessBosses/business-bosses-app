@@ -8,7 +8,7 @@ class ReviewModel {
   String sellerId;
   int rating;
   String userId;
-  String reviewText;
+  String? reviewText;
   UserModel rater;
   String createdAt;
   ReviewModel(
@@ -17,7 +17,7 @@ class ReviewModel {
       required this.rating,
       required this.id,
       required this.rater,
-      required this.reviewText,
+      this.reviewText,
       required this.createdAt});
 
   ReviewModel copyWith({
