@@ -6,6 +6,7 @@ import 'package:business_bosses_v2/features/profile/repository/profile_repositor
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../common/models/comment_model.dart';
 import '../../../utils/constants/constants.dart';
 
 /// PROFILE CONTROLLER
@@ -135,6 +136,26 @@ class ProfileController extends GetxController {
         }
       };
     }
+  }
+
+  /// ADD NEW POST TO STATE
+  void addNewPost(
+    Map<String, dynamic> newPost,
+  ) async {
+    PostModel modelizedNewPost = PostModel.fromMap({
+      ...newPost,
+      'coins': <String>[],
+      'likes': <String>[],
+      'comments': <CommentModel>[],
+      'user': {
+        'username': myProfile.username,
+        'email': myProfile.email,
+        'uid': myProfile.uid,
+        'name': myProfile.name,
+      }
+    });
+    posts.insert(0, modelizedNewPost);
+    update();
   }
 
   void removePost(String postId) {

@@ -49,6 +49,7 @@ class UserModel {
   final bool? isRanked;
   final String? inviteId;
   final double? averageRating;
+  final bool? isUpdated;
 
   UserModel({
     this.uid = '',
@@ -91,6 +92,7 @@ class UserModel {
     this.inviteId,
     this.averageRating,
     this.isSubscribed = false,
+    this.isUpdated,
   });
 
   UserModel copyWith({
@@ -136,6 +138,7 @@ class UserModel {
     String? inviteId,
     double? averageRating,
     bool? isSubscribed = false,
+    bool? isUpdated,
   }) {
     return UserModel(
       uid: uid ?? this.uid,
@@ -180,6 +183,7 @@ class UserModel {
       connecteds: connecteds ?? this.connecteds,
       averageRating: averageRating ?? this.averageRating,
       isSubscribed: isSubscribed ?? this.isSubscribed,
+      isUpdated: isUpdated ?? this.isUpdated,
     );
   }
 
@@ -227,6 +231,7 @@ class UserModel {
       'inviteId': inviteId,
       'averageRating': averageRating,
       'isSubscribed': isSubscribed,
+      'isUpdated': isUpdated,
     };
   }
 
@@ -318,6 +323,7 @@ class UserModel {
       isRanked: map['isRanked'] != null ? map['isRanked'] as bool : null,
       isSubscribed:
           map['isSubscribed'] != null ? map['isSubscribed'] as bool : false,
+      isUpdated: map['isUpdated'] != null ? map['isUpdated'] as bool : false,
       inviteId: map['inviteId'] != null ? map['inviteId'] as String : null,
       averageRating: map['averageRating'] != null
           ? (map['averageRating'] is int

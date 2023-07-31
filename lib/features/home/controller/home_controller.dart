@@ -143,7 +143,9 @@ class HomeController extends GetxController {
       }
     } else {
       final int postIndex = mixedPosts.indexWhere((Map<String, dynamic> post) =>
-          post['isForum'] && post['data'].forumId == postId);
+          post['shouldCount'] == null &&
+          post['isForum'] &&
+          post['data'].forumId == postId);
       if (postIndex != -1) {
         final bool checkLiked =
             mixedPosts[postIndex]['data'].likes!.contains(userId);
@@ -185,7 +187,9 @@ class HomeController extends GetxController {
           post['data'].postId == postId);
     } else {
       postIndex = mixedPosts.indexWhere((Map<String, dynamic> post) =>
-          post['isForum'] && post['data'].forumId == postId);
+          post['shouldCount'] == null &&
+          post['isForum'] &&
+          post['data'].forumId == postId);
     }
     if (postIndex != -1) {
       mixedPosts[postIndex]['data'].comments!.add(comment);
@@ -217,7 +221,9 @@ class HomeController extends GetxController {
     } else {
       final int forumIndex = mixedPosts.indexWhere(
           (Map<String, dynamic> item) =>
-              item['isForum'] && item['data'].forumId == postId);
+              item['shouldCount'] == null &&
+              item['isForum'] &&
+              item['data'].forumId == postId);
       if (forumIndex != -1) {
         final bool checkIfCoined =
             mixedPosts[forumIndex]['data'].coins!.contains(userId);
@@ -274,8 +280,12 @@ class HomeController extends GetxController {
   }
 
   void removePostsByUserId(String? userId) {
-    mixedPosts.removeWhere(
-        (Map<String, dynamic> post) => post['data']['user']['uid'] == userId);
+    ApiService.post(
+      path: 'blockedpost',
+      body: <String, dynamic>{'postId': userId},
+    );
+    mixedPosts.removeWhere((Map<String, dynamic> post) =>
+        post['shouldCount'] == null && post['data'].user.uid == userId);
     update();
   }
 
@@ -381,32 +391,38 @@ class HomeController extends GetxController {
     int currentTimestamp = DateTime.now().millisecondsSinceEpoch;
     int dataTime = profileController.myProfile.bossOfTheWeekUpTimeStamp ?? 0;
     int lastExecutionTimestamp = sandBox.read('lastExecutionTimestamp') ?? 0;
-    // if (profileController.myProfile.bossOfTheWeekTimeStamp == null) {
-    //   ApiService.put(
-    //     path: 'users/${profileController.myProfile.uid}',
-    //     body: <String, dynamic>{
-    //       'coinscount': profileController.myProfile.coinscount! + 100,
-    //       'bossOfTheWeekUpTimeStamp': currentTimestamp,
-    //     },
-    //   );
-    //   profileController.updateCoinCount(100);
-    //   showCoinDialogFirst();
-    // } else {
-    if ((currentTimestamp - lastExecutionTimestamp >= 24 * 60 * 60 * 1000) &&
-        (currentTimestamp - dataTime >= 24 * 60 * 60 * 1000)) {
-      // The action hasn't been executed today, save the current timestamp
-      sandBox.write('lastExecutionTimestamp', currentTimestamp);
+    if (profileController.myProfile.isUpdated == true) {
       ApiService.put(
         path: 'users/${profileController.myProfile.uid}',
         body: <String, dynamic>{
-          'coinscount': profileController.myProfile.coinscount! + 1,
+          'coinscount': profileController.myProfile.coinscount! + 100,
           'bossOfTheWeekUpTimeStamp': currentTimestamp,
+          'isUpdated': false,
         },
       );
-      profileController.updateCoinCount(1);
-      showCoinDialog();
+      profileController.myProfile = UserModel.fromMap({
+        ...profileController.myProfile.toMap(),
+        'isUpdated': false
+      });
+      sandBox.write('lastExecutionTimestamp', currentTimestamp);
+      profileController.updateCoinCount(100);
+      showCoinDialogFirst();
+    } else {
+      if ((currentTimestamp - lastExecutionTimestamp >= 24 * 60 * 60 * 1000) &&
+          (currentTimestamp - dataTime >= 24 * 60 * 60 * 1000)) {
+        // The action hasn't been executed today, save the current timestamp
+        sandBox.write('lastExecutionTimestamp', currentTimestamp);
+        ApiService.put(
+          path: 'users/${profileController.myProfile.uid}',
+          body: <String, dynamic>{
+            'coinscount': profileController.myProfile.coinscount! + 1,
+            'bossOfTheWeekUpTimeStamp': currentTimestamp,
+          },
+        );
+        profileController.updateCoinCount(1);
+        showCoinDialog();
+      }
     }
-    // }
   }
 
   Future<void> fetchPosts() async {
@@ -428,14 +444,18 @@ class HomeController extends GetxController {
 
   void removePost(String postId) {
     mixedPosts.removeWhere((Map<String, dynamic> element) =>
-        !element['isForum'] && element['data'].postId == postId);
+        element['shouldCount'] == null &&
+        !element['isForum'] &&
+        element['data'].postId == postId);
     update();
   }
 
   void updatePost(PostModel post) {
     final int postIndex = mixedPosts.indexWhere(
         (Map<String, dynamic> element) =>
-            !element['isForum'] && element['data'].postId == post.postId);
+            element['shouldCount'] == null &&
+            !element['isForum'] &&
+            element['data'].postId == post.postId);
     if (postIndex != -1) {
       mixedPosts[postIndex]['data'] = post;
       update();

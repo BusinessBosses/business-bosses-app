@@ -120,9 +120,9 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                       itemBuilder:
                                           (BuildContext context, int i) {
                                         String formattedDate =
-                                            TimeFormat.toDayFormat(
-                                          controller.notifications[i].timestamp,
-                                        );
+                                            TimeFormat.toDayFormat(controller
+                                                .notifications[i].timestamp);
+
                                         return Column(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,

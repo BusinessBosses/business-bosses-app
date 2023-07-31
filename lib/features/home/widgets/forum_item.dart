@@ -6,7 +6,6 @@ import 'package:detectable_text_field/widgets/detectable_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-
 import '../../../action/action.dart';
 import '../../../common/models/api_response_model.dart';
 import '../../../common/models/comment_model.dart';
@@ -163,7 +162,8 @@ class _ForumItemState extends State<ForumItem> {
                                       ? premiumButtonHeader(
                                           widget.forum.user!,
                                           profileController.myProfile,
-                                          connectToUser)
+                                          connectToUser,
+                                          context)
                                       : Container(),
                                   const SizedBox(
                                     width: 10,

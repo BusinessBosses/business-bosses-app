@@ -8,7 +8,6 @@ import 'package:detectable_text_field/widgets/detectable_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-
 import '../../../../action/action.dart';
 import '../../../../common/widgets/popup/my_popup_menu_button.dart';
 import '../../../../common/widgets/text_widget.dart';
@@ -151,7 +150,7 @@ class _MarketTileState extends State<MarketTile> {
                     children: [
                       ListTile(
                         contentPadding:
-                            const EdgeInsets.only(left: 15, right: 15),
+                            const EdgeInsets.only(left: 15, right: 0),
                         leading: GestureDetector(
                           onTap: () {
                             if (profileController.myProfile.uid ==
@@ -221,12 +220,7 @@ class _MarketTileState extends State<MarketTile> {
                         ),
                         trailing: SizedBox(
                           height: 30,
-                          width:
-                              profileController.myProfile.connecteds != null &&
-                                      profileController.myProfile.connecteds!
-                                          .contains(_post.user!.uid)
-                                  ? 140
-                                  : 130,
+                          width: 140,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
@@ -236,119 +230,112 @@ class _MarketTileState extends State<MarketTile> {
                                   ? premiumButtonHeader(
                                       widget.post.user!,
                                       profileController.myProfile,
-                                      connectToUser)
+                                      connectToUser,
+                                      context)
                                   : Container(),
-                              const SizedBox(
-                                width: 10,
-                              ),
                               Container(
                                 height: double.infinity,
                                 color: Colors.white,
-                                child: Padding(
-                                  padding: const EdgeInsets.only(left: 15),
-                                  child: _post.user!.uid ==
-                                          profileController.myProfile.uid
-                                      ? MyPopupMenuButton(
-                                          popupItems: myPopupMore,
-                                          icon: const Icon(
-                                            Icons.more_horiz,
-                                            size: 20,
-                                            color: Colors.black,
-                                            weight: 100,
-                                          ),
-                                          onSelected: (String val) {
-                                            if (val == 'Edit') {
-                                              Get.to(
-                                                () => CreateSellingitemScreen(
-                                                  isUpd: true,
-                                                  market: _post,
+                                child: _post.user!.uid ==
+                                        profileController.myProfile.uid
+                                    ? MyPopupMenuButton(
+                                        popupItems: myPopupMore,
+                                        icon: const Icon(
+                                          Icons.more_horiz,
+                                          size: 20,
+                                          color: Colors.black,
+                                          weight: 100,
+                                        ),
+                                        onSelected: (String val) {
+                                          if (val == 'Edit') {
+                                            Get.to(
+                                              () => CreateSellingitemScreen(
+                                                isUpd: true,
+                                                market: _post,
+                                              ),
+                                            );
+                                          } else if (val == 'Delete') {
+                                            showDialog(
+                                              context: context,
+                                              builder: (BuildContext context) =>
+                                                  AlertDialog(
+                                                title: const Text(
+                                                  'Delete Listing',
+                                                  style: bodyText1,
                                                 ),
-                                              );
-                                            } else if (val == 'Delete') {
-                                              showDialog(
-                                                context: context,
-                                                builder:
-                                                    (BuildContext context) =>
-                                                        AlertDialog(
-                                                  title: const Text(
-                                                    'Delete Listing',
-                                                    style: bodyText1,
+                                                content: const Text(
+                                                    'Are you sure to delete this listing?'),
+                                                actions: <Widget>[
+                                                  TextButton(
+                                                    onPressed: () => Get.back(),
+                                                    child: const Text('No'),
                                                   ),
-                                                  content: const Text(
-                                                      'Are you sure to delete this listing?'),
-                                                  actions: <Widget>[
-                                                    TextButton(
-                                                      onPressed: () =>
-                                                          Get.back(),
-                                                      child: const Text('No'),
-                                                    ),
-                                                    TextButton(
-                                                      onPressed: () {
-                                                        _marketController
-                                                            .removeListing(
-                                                                _post.marketId);
-                                                        ApiService.delete(
-                                                            path:
-                                                                'markets/${_post.marketId}');
-                                                        // setState(() {
-                                                        //   hide = true;
-                                                        // });
-                                                        Get.back();
-                                                      },
-                                                      child: const Text('Yes'),
-                                                    ),
-                                                  ],
-                                                ),
-                                              );
-                                            } else if (val == 'Boost') {
-                                              Get.to(
-                                                () => BoostMarket(
-                                                    postId: _post.marketId),
-                                              );
-                                            }
-                                          },
-                                        )
-                                      : _post.promote
-                                          ? MyPopupMenuButton(
-                                              popupItems: myPopup,
-                                              icon: const Icon(
+                                                  TextButton(
+                                                    onPressed: () {
+                                                      _marketController
+                                                          .removeListing(
+                                                              _post.marketId);
+                                                      ApiService.delete(
+                                                          path:
+                                                              'markets/${_post.marketId}');
+                                                      // setState(() {
+                                                      //   hide = true;
+                                                      // });
+                                                      Get.back();
+                                                    },
+                                                    child: const Text('Yes'),
+                                                  ),
+                                                ],
+                                              ),
+                                            );
+                                          } else if (val == 'Boost') {
+                                            Get.to(
+                                              () => BoostMarket(
+                                                  postId: _post.marketId),
+                                            );
+                                          }
+                                        },
+                                      )
+                                    : _post.promote
+                                        ? MyPopupMenuButton(
+                                            popupItems: myPopup,
+                                            icon: const Icon(
+                                              Icons.more_horiz,
+                                              size: 20,
+                                              color: Colors.black,
+                                              weight: 100,
+                                            ),
+                                            onSelected: (String val) {
+                                              if (val == 'Hide') {
+                                                ApiService.post(
+                                                  path: 'blockedpost',
+                                                  body: <String, dynamic>{
+                                                    'postId': _post.marketId
+                                                  },
+                                                );
+                                                setState(() {
+                                                  hide = true;
+                                                });
+                                              } else if (val == 'Report') {
+                                                _showDialog();
+                                              }
+                                            },
+                                          )
+                                        : Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 14, right: 15.0),
+                                            child: InkWell(
+                                              onTap: () {
+                                                _showDialog();
+                                              },
+                                              child: const Icon(
                                                 Icons.more_horiz,
                                                 size: 20,
                                                 color: Colors.black,
                                                 weight: 100,
                                               ),
-                                              onSelected: (String val) {
-                                                if (val == 'Hide') {
-                                                  ApiService.post(
-                                                    path: 'blockedpost',
-                                                    body: <String, dynamic>{
-                                                      'postId': _post.marketId
-                                                    },
-                                                  );
-                                                  setState(() {
-                                                    hide = true;
-                                                  });
-                                                } else if (val == 'Report') {
-                                                  _showDialog();
-                                                }
-                                              },
-                                            )
-                                          : Padding(
-                                              padding: const EdgeInsets.only(
-                                                  right: 15.0),
-                                              child: InkWell(
-                                                onTap: () {
-                                                  _showDialog();
-                                                },
-                                                child: const Icon(
-                                                  Icons.more_horiz,
-                                                  size: 20,
-                                                  color: Colors.black,
-                                                  weight: 100,
-                                                ),
-                                              ),
                                             ),
-                                ),
+                                          ),
                               ),
                             ],
                           ),
@@ -369,25 +356,14 @@ class _MarketTileState extends State<MarketTile> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             if (_post.promote)
-                              Padding(
-                                padding: const EdgeInsets.only(
-                                    left: 15.0, right: 15),
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                    vertical: 5,
-                                    horizontal: 5,
-                                  ),
-                                  decoration: const BoxDecoration(
-                                    color: backgroundcolorinterface,
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(5),
-                                    ),
-                                  ),
-                                  child: const TextWidget(
-                                    text: 'Sponsored',
-                                    fontWeight: FontWeight.w700,
-                                    size: 10,
-                                  ),
+                              const Padding(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 15, vertical: 5),
+
+                                child: TextWidget(
+                                  text: 'Sponsored',
+                                  fontWeight: FontWeight.w700,
+                                  size: 10,
                                 ),
                               ),
                             const SizedBox(
@@ -486,9 +462,11 @@ class _MarketTileState extends State<MarketTile> {
                                                 ),
                                               ],
                                             )
-                                          : const Row(children: <Widget>[
-                                              SizedBox(),
-                                            ],),
+                                          : const Row(
+                                              children: <Widget>[
+                                                SizedBox(),
+                                              ],
+                                            ),
                                       Row(
                                         children: [
                                           const Icon(

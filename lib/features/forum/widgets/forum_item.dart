@@ -149,12 +149,7 @@ class _ForumItemState extends State<ForumItem> {
                               profileController.myProfile.uid
                           ? SizedBox(
                               height: 30,
-                              width: profileController.myProfile.connecteds !=
-                                          null &&
-                                      profileController.myProfile.connecteds!
-                                          .contains(widget.forum.user!.uid)
-                                  ? 140
-                                  : 130,
+                              width: 140,
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
@@ -164,7 +159,8 @@ class _ForumItemState extends State<ForumItem> {
                                       ? premiumButtonHeader(
                                           widget.forum.user!,
                                           profileController.myProfile,
-                                          connectToUser)
+                                          connectToUser,
+                                          context)
                                       : Container(),
                                   const SizedBox(
                                     width: 10,
@@ -723,7 +719,7 @@ class _ForumItemState extends State<ForumItem> {
                               ),
                         const SizedBox(width: 8.0),
                         GestureDetector(
-                          onTap: () => _sharePost(widget.forum),
+                          onTap: () => _sharePost(),
                           child: SvgPicture.asset(
                             'assets/svgs/share.svg',
                             height: 18.0,
@@ -755,7 +751,12 @@ class _ForumItemState extends State<ForumItem> {
           );
   }
 
-  void _sharePost(ForumModel forum) {}
+  void _sharePost() {
+    String message =
+        'Have a look at ${widget.forum.user?.username ?? 'Business Bosses'}\'s post on Business Bosses\n'
+        'https://businessbosses.onelink.me/xLWk/36a2ff16';
+    socialShare(message);
+  }
 
   leadingWidth(ForumModel? forum) {}
 
