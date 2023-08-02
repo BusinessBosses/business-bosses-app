@@ -158,7 +158,7 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
                       underline: Container(),
                       value: _selectedCategory,
                       isExpanded: true,
-                      icon: const Icon(Icons.keyboard_arrow_down),
+                      icon: const Icon(Icons.keyboard_arrow_right),
                       iconSize: 24,
                       elevation: 16,
                       onChanged: (String? newValue) {
