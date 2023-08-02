@@ -113,10 +113,11 @@ class _CreateForumScreenState extends State<CreateForumScreen> {
                     keyboardType: TextInputType.text,
                     maxLength: 50,
                     decoration: inputDecoration.copyWith(
-                      hintText: isbossup == true
-                          ? 'Enter Business name'
-                          : 'Enter Topic Title',
-                    ),
+                        hintText: isbossup == true
+                            ? 'Enter Business name'
+                            : categoryId == Constants.LEARNINGID
+                                ? 'Enter Topic Title'
+                                : 'Enter Opportunity Title'),
                   ),
                   const SizedBox(height: 24.0),
                   DetectableTextField(
@@ -135,10 +136,11 @@ class _CreateForumScreenState extends State<CreateForumScreen> {
                     },
 
                     decoration: inputDecoration.copyWith(
-                      hintText: isbossup == true
-                          ? 'Describe your Business'
-                          : 'Enter your Description',
-                    ),
+                        hintText: isbossup == true
+                            ? 'Describe your Business'
+                            : categoryId == Constants.LEARNINGID
+                                ? 'Enter your Description'
+                                : 'Describe the Opportunity'),
                   ),
                   const SizedBox(height: 12.0),
                   if (!isUpdating)
@@ -201,7 +203,7 @@ class _CreateForumScreenState extends State<CreateForumScreen> {
                   const SizedBox(height: 30),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       SvgPicture.asset(
                         'assets/svgs/report.svg',
@@ -212,14 +214,14 @@ class _CreateForumScreenState extends State<CreateForumScreen> {
                       ),
                       Flexible(
                         child: Text(
-                          textAlign: TextAlign.center,
+                          textAlign: TextAlign.left,
                           overflow: TextOverflow.visible,
                           maxLines: null,
                           style: const TextStyle(
                               fontSize: 13, color: subtextColor),
                           categoryId == Constants.LEARNINGID
-                              ? 'Only post articles, insights, and resources others can learn from'
-                              : 'Only post opportunities that will help you and others grow their businesses',
+                              ? '(i) Only post articles, insights, and resources others can learn from\n(ii) To sell your products and services, list on Marketplace '
+                              : '(i)Only post opportunities that will help you and others grow their businesses\n(ii) To sell your products and services, list on Marketplace',
                         ),
                       ),
                     ],

@@ -259,7 +259,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         ),
                         child: ListTile(
                           title: Text(
-                            'Cancel Premium Subscription',
+                            'Premium Subscription',
                             style: Theme.of(context).textTheme.bodyLarge,
                           ),
                         ),

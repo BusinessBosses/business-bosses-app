@@ -200,10 +200,11 @@ class _MarketTileState extends State<MarketTile> {
                                             .textTheme
                                             .bodyLarge,
                                       ),
-                                      const SizedBox(width: 7),
+                                      const SizedBox(width: 5),
                                       SvgPicture.asset(
                                         'assets/svgs/premiumbadge.svg',
-                                        height: 16,
+                                        height: 9,
+                                        color: primaryColorLT,
                                       )
                                     ],
                                   ),
@@ -359,7 +360,6 @@ class _MarketTileState extends State<MarketTile> {
                               const Padding(
                                 padding: EdgeInsets.symmetric(
                                     horizontal: 15, vertical: 5),
-
                                 child: TextWidget(
                                   text: 'Sponsored',
                                   fontWeight: FontWeight.w700,
@@ -427,8 +427,8 @@ class _MarketTileState extends State<MarketTile> {
                                                   width: 1,
                                                 ),
                                                 Text(
-                                                  _post.location!.length > 11
-                                                      ? '${_post.location!.substring(0, 11)}...'
+                                                  _post.location!.length > 50
+                                                      ? '${_post.location!.substring(0, 50)}...'
                                                       : _post.location!,
                                                   style: const TextStyle(
                                                       fontWeight:
@@ -448,8 +448,8 @@ class _MarketTileState extends State<MarketTile> {
                                                   width: 3,
                                                 ),
                                                 Text(
-                                                  _post.category!.length > 15
-                                                      ? '${_post.category!.substring(0, 15)}...'
+                                                  _post.category!.length > 50
+                                                      ? '${_post.category!.substring(0, 50)}...'
                                                       : _post.category!,
                                                   style: const TextStyle(
                                                       fontWeight:
@@ -467,41 +467,44 @@ class _MarketTileState extends State<MarketTile> {
                                                 SizedBox(),
                                               ],
                                             ),
-                                      Row(
-                                        children: [
-                                          const Icon(
-                                            Icons.star,
-                                            color:
-                                                Color.fromRGBO(255, 202, 40, 1),
-                                            size: 16,
+                                    ],
+                                  ),
+                                ),
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.only(left: 13.0, top: 3),
+                                  child: Row(
+                                    children: [
+                                      const Icon(
+                                        Icons.star,
+                                        color: Color.fromRGBO(255, 202, 40, 1),
+                                        size: 16,
+                                      ),
+                                      Text(
+                                        _post.user!.averageRating!
+                                            .toStringAsFixed(1),
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 13,
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        width: 5,
+                                      ),
+                                      GestureDetector(
+                                        onTap: () {
+                                          Get.to(() => SellerReviewScreen(
+                                              user: _post.user!));
+                                        },
+                                        child: const Text(
+                                          'Seller reviews',
+                                          style: TextStyle(
+                                            fontSize: 13,
+                                            fontWeight: FontWeight.bold,
+                                            decoration:
+                                                TextDecoration.underline,
                                           ),
-                                          Text(
-                                            _post.user!.averageRating!
-                                                .toStringAsFixed(1),
-                                            style: const TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 13,
-                                            ),
-                                          ),
-                                          const SizedBox(
-                                            width: 5,
-                                          ),
-                                          GestureDetector(
-                                            onTap: () {
-                                              Get.to(() => SellerReviewScreen(
-                                                  user: _post.user!));
-                                            },
-                                            child: const Text(
-                                              'Seller reviews',
-                                              style: TextStyle(
-                                                fontSize: 13,
-                                                fontWeight: FontWeight.bold,
-                                                decoration:
-                                                    TextDecoration.underline,
-                                              ),
-                                            ),
-                                          ),
-                                        ],
+                                        ),
                                       ),
                                     ],
                                   ),
