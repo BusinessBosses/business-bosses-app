@@ -614,19 +614,63 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                                                 ),
                                                 ListTile(
                                                   onTap: () {
-                                                    navigateTo(context);
-                                                    optionsDialog(context, () {
-                                                      // _isLoading = true;
-                                                      Navigator.pop(context);
-                                                      // deleteMessage(
-                                                      //     _messages[reversedIndex],
-                                                      //     reversedIndex);
-                                                      // if (reversedIndex ==
-                                                      //     _messages.length - 1) {
-                                                      //   DeleteLastMessage(_messages[
-                                                      //       reversedIndex]);
-                                                      // }
-                                                    });
+                                                    Navigator.of(context)
+                                                        .pop(context);
+                                                    showDialog(
+                                                      context: context,
+                                                      builder: (context) {
+                                                        return AlertDialog(
+                                                          title: TextWidget(
+                                                              text:
+                                                                  'Delete this Message'),
+                                                          actions: [
+                                                            TextButton(
+                                                                onPressed: () {
+                                                                  Navigator.of(
+                                                                          context)
+                                                                      .pop();
+                                                                },
+                                                                child:
+                                                                    TextWidget(
+                                                                  text:
+                                                                      'Cancel',
+                                                                )),
+                                                            TextButton(
+                                                                onPressed: () {
+                                                                  Navigator.of(
+                                                                          context)
+                                                                      .pop();
+                                                                  controller
+                                                                      .deleteMessage(
+                                                                          message
+                                                                              .messageId);
+                                                                },
+                                                                child:
+                                                                    TextWidget(
+                                                                  text:
+                                                                      'Delete',
+                                                                  color:
+                                                                      primaryColorLT,
+                                                                ))
+                                                          ],
+                                                        );
+                                                      },
+                                                    );
+                                                    // optionsDialog(context, () {
+                                                    //   // _isLoading = true;
+                                                    //   print('sdf');
+                                                    //   Navigator.pop(context);
+                                                    //   controller.deleteMessage(
+                                                    //       message.messageId);
+                                                    //   // deleteMessage(
+                                                    //   //     _messages[reversedIndex],
+                                                    //   //     reversedIndex);
+                                                    //   // if (reversedIndex ==
+                                                    //   //     _messages.length - 1) {
+                                                    //   //   DeleteLastMessage(_messages[
+                                                    //   //       reversedIndex]);
+                                                    //   // }
+                                                    // });
                                                   },
                                                   contentPadding:
                                                       EdgeInsets.zero,
