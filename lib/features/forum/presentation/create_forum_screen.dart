@@ -230,9 +230,11 @@ class _CreateForumScreenState extends State<CreateForumScreen> {
                           maxLines: null,
                           style: const TextStyle(
                               fontSize: 13, color: subtextColor),
-                          categoryId == Constants.LEARNINGID
+                          isbossup == true
                               ? 'To sell your products and services, list on Marketplace'
-                              : 'To sell your products and services, list on Marketplace',
+                              : categoryId == Constants.LEARNINGID
+                                  ? 'To sell your products and services, list on Marketplace'
+                                  : 'To sell your products and services, list on Marketplace',
                         ),
                       ),
                     ],

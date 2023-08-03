@@ -10,6 +10,7 @@ import 'package:business_bosses_v2/features/home/controller/home_controller.dart
 import 'package:business_bosses_v2/features/home/home_screen.dart';
 import 'package:business_bosses_v2/features/home/marketplace_screen.dart';
 import 'package:business_bosses_v2/features/marketplace/controllers/market_controller.dart';
+import 'package:business_bosses_v2/features/marketplace/presentation/renewconfirmation.dart';
 import 'package:business_bosses_v2/features/posts/presentation/confirmation.dart';
 import 'package:business_bosses_v2/features/settings/community_rules_screen.dart';
 import 'package:business_bosses_v2/analytics/presentation/my_ranking_screen.dart';
@@ -217,6 +218,10 @@ class Nav {
     GetPage(
       name: Routes.explorebusinessbossesscreen,
       page: () => const ExplorebusinessbossesScreen(),
+    ),
+    GetPage(
+      name: Routes.renewconfirmation,
+      page: () => const Renewconfirmation(),
     ),
   ];
 }
