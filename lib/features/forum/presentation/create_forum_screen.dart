@@ -201,6 +201,17 @@ class _CreateForumScreenState extends State<CreateForumScreen> {
                     isProcessing: controller.loading.value,
                   ),
                   const SizedBox(height: 30),
+                  Flexible(
+                    child: Text(
+                      textAlign: TextAlign.left,
+                      overflow: TextOverflow.visible,
+                      maxLines: null,
+                      style: const TextStyle(fontSize: 13, color: subtextColor),
+                      categoryId == Constants.LEARNINGID
+                          ? 'Only post articles, insights, and resources others can learn from To sell your products and services, list on Marketplace'
+                          : 'Only post opportunities that will help you and others grow their businesses To sell your products and services, list on Marketplace',
+                    ),
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -220,8 +231,8 @@ class _CreateForumScreenState extends State<CreateForumScreen> {
                           style: const TextStyle(
                               fontSize: 13, color: subtextColor),
                           categoryId == Constants.LEARNINGID
-                              ? '(i) Only post articles, insights, and resources others can learn from\n(ii) To sell your products and services, list on Marketplace '
-                              : '(i)Only post opportunities that will help you and others grow their businesses\n(ii) To sell your products and services, list on Marketplace',
+                              ? 'To sell your products and services, list on Marketplace'
+                              : 'To sell your products and services, list on Marketplace',
                         ),
                       ),
                     ],

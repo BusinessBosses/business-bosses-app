@@ -63,7 +63,7 @@ class OpportunitiesPopup extends StatelessWidget {
             Row(
               children: [
                 SvgPicture.asset(
-                  'assets/svgs/info.svg',
+                  'assets/svgs/report.svg',
                   color: primaryColorLT,
                 ),
                 const SizedBox(
