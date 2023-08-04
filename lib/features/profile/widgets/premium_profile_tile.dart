@@ -81,24 +81,6 @@ Widget premiumButtonHeader(
                   onPressed: () async {
                     onConnect();
                   }))
-      // Expanded(
-      //     child: MCustomButton(
-      //   buttonType: ButtonType.outlinegrey,
-      //   margin: const EdgeInsets.only(right: 20.0),
-      //   onPressed: () async {
-      //     if (myProfile.connectedCount == 0 && myProfile.connectionCount == 0) {
-      //       String message =
-      //           'Have a look at ${publicUser.username}\'s profile on Business Bosses\n'
-      //           'https://businessbosses.onelink.me/xLWk/36a2ff16';
-      //       socialShare(message);
-      //     } else {
-      //       Get.toNamed(Routes.referscreen, arguments: {'user': publicUser});
-      //     }
-      //   },
-      //   child: const Text('Refer',
-      //       style: TextStyle(
-      //           color: Color(0xFF4B4B4B), fontWeight: FontWeight.w600)),
-      // )),
     ]),
   );
 }

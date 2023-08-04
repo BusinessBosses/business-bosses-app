@@ -542,10 +542,11 @@ class _ForumItemState extends State<ForumItem> {
                                       style:
                                           Theme.of(context).textTheme.bodyLarge,
                                     ),
-                                    const SizedBox(width: 7),
+                                    const SizedBox(width: 5),
                                     SvgPicture.asset(
                                       'assets/svgs/premiumbadge.svg',
-                                      height: 16,
+                                      height: 9,
+                                      color: primaryColorLT,
                                     )
                                   ],
                                 ),
@@ -605,6 +606,23 @@ class _ForumItemState extends State<ForumItem> {
                                   onDetectableTextTap(context, val),
                             ),
                           ),
+                    if (widget.forum.industry != null)
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 7, horizontal: 5),
+                        margin: const EdgeInsets.symmetric(
+                          horizontal: 15,
+                          vertical: 5,
+                        ),
+                        decoration: const BoxDecoration(
+                            color: backgroundcolorinterface,
+                            borderRadius: BorderRadius.all(Radius.circular(5))),
+                        child: TextWidget(
+                          text: widget.forum.industry!,
+                          fontWeight: FontWeight.w700,
+                          size: 10,
+                        ),
+                      ),
                     widget.forum.images == null
                         ? Container()
                         : Padding(
