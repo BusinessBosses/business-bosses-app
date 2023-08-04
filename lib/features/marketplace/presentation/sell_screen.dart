@@ -406,7 +406,7 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
                             children: [
                               const TextSpan(
                                 text:
-                                    'By clicking on Post, you accept the Terms of Use, confirm that you will abide by the ',
+                                    'By clicking on Sell, you confirm that you will abide by the ',
                                 style: TextStyle(
                                     fontSize: 12, color: subtextColor),
                               ),
@@ -424,7 +424,7 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
                               ),
                               const TextSpan(
                                 text:
-                                    ', and declare that this posting does not include any Prohibited Items.',
+                                    ', and declare that the listing does not include any Prohibited Items',
                                 style: TextStyle(
                                     fontSize: 12, color: subtextColor),
                               ),

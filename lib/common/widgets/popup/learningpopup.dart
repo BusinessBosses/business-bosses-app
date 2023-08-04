@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 import '../../../utils/size_config.dart';
 import '../../../utils/theme/theme.dart';
@@ -36,7 +37,7 @@ class LearningPopUp extends StatelessWidget {
             Text('Welcome to Boss Up Learning',
                 textAlign: TextAlign.center,
                 style: bodyText1.copyWith(
-                    fontWeight: FontWeight.w700, color: Colors.red)),
+                    fontWeight: FontWeight.w700, color: textColor)),
             const SizedBox(
               height: 20,
             ),
@@ -48,13 +49,30 @@ class LearningPopUp extends StatelessWidget {
                     child: Text(
                       'A collaborative environment that encourages learning and professional development. '
                       'Start a Topic,'
-                      ' post articles, insights, and resources others can learn from To sell your products and services, list on '
-                      'MarketPlace',
+                      ' post articles, insights, and resources others can learn from.',
                       style: bodyText2,
                       textAlign: TextAlign.center,
                     ),
                   ),
                 ),
+              ],
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            Row(
+              children: [
+                SvgPicture.asset(
+                  'assets/svgs/report.svg',
+                  color: primaryColorLT,
+                ),
+                const SizedBox(
+                  width: 5,
+                ),
+                const Text(
+                  'To sell your products and services, list on Marketplace',
+                  style: TextStyle(color: primaryColorLT),
+                )
               ],
             ),
             const SizedBox(

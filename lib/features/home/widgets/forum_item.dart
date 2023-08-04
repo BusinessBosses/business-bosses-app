@@ -542,10 +542,11 @@ class _ForumItemState extends State<ForumItem> {
                                       style:
                                           Theme.of(context).textTheme.bodyLarge,
                                     ),
-                                    const SizedBox(width: 7),
+                                    const SizedBox(width: 5),
                                     SvgPicture.asset(
                                       'assets/svgs/premiumbadge.svg',
-                                      height: 16,
+                                      height: 9,
+                                      color: primaryColorLT,
                                     )
                                   ],
                                 ),
