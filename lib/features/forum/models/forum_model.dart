@@ -10,6 +10,7 @@ class ForumModel {
   final String forumId;
   final String industryId;
   final String? description;
+  final String? industry;
   final String? title;
   final List<String>? images;
   final int? timestamp;
@@ -22,6 +23,7 @@ class ForumModel {
     required this.forumId,
     required this.industryId,
     this.description,
+    this.industry,
     this.title,
     this.images,
     this.timestamp,
@@ -37,6 +39,7 @@ class ForumModel {
     String? industryId,
     String? description,
     String? title,
+    String? industry,
     List<String>? images,
     int? timestamp,
     List<String>? likes,
@@ -50,6 +53,7 @@ class ForumModel {
       industryId: industryId ?? this.industryId,
       description: description ?? this.description,
       title: title ?? this.title,
+      industry: industry ?? this.industry,
       images: images ?? this.images,
       timestamp: timestamp ?? this.timestamp,
       likes: likes ?? this.likes,
@@ -66,6 +70,7 @@ class ForumModel {
       'industryId': industryId,
       'description': description,
       'title': title,
+      'industry': industry,
       'images': images,
       'timestamp': timestamp,
       'likes': likes,
@@ -83,6 +88,7 @@ class ForumModel {
       description:
           map['description'] != null ? map['description'] as String : null,
       title: map['title'] != null ? map['title'] as String : null,
+      industry: map['industry'] != null ? map['industry'] as String : null,
       images: map['images'] != null ? List<String>.from((map['images'])) : null,
       timestamp: map['timestamp'] != null
           ? int.parse(map['timestamp'].toString())
@@ -97,47 +103,5 @@ class ForumModel {
           : null,
       isRanked: map['isRanked'] ?? false,
     );
-  }
-
-  String toJson() => json.encode(toMap());
-
-  factory ForumModel.fromJson(String source) =>
-      ForumModel.fromMap(json.decode(source) as Map<String, dynamic>);
-
-  @override
-  String toString() {
-    return 'ForumModel(forumId: $forumId, industryId: $industryId, description: $description, title: $title, images: $images, timestamp: $timestamp, likes: $likes, coins: $coins, comments: $comments, user: $user, isRanked: $isRanked)';
-  }
-
-  @override
-  bool operator ==(covariant ForumModel other) {
-    if (identical(this, other)) return true;
-
-    return other.forumId == forumId &&
-        other.industryId == industryId &&
-        other.description == description &&
-        other.title == title &&
-        listEquals(other.images, images) &&
-        other.timestamp == timestamp &&
-        listEquals(other.likes, likes) &&
-        listEquals(other.coins, coins) &&
-        listEquals(other.comments, comments) &&
-        other.user == user &&
-        other.isRanked == isRanked;
-  }
-
-  @override
-  int get hashCode {
-    return forumId.hashCode ^
-        industryId.hashCode ^
-        description.hashCode ^
-        title.hashCode ^
-        images.hashCode ^
-        timestamp.hashCode ^
-        likes.hashCode ^
-        coins.hashCode ^
-        comments.hashCode ^
-        user.hashCode ^
-        isRanked.hashCode;
   }
 }

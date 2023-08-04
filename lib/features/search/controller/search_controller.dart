@@ -99,8 +99,22 @@ class CompleteSearchController extends GetxController {
     if (response.success) {
       page(page.value + 1);
 
-      for (int i = 0; i < response.data['rows'].length; i++) {
-        recommendedConnections.add(UserModel.fromMap(response.data['rows'][i]));
+      for (int i = 0; i < response.data['recommendedUsers'].length; i++) {
+        recommendedConnections
+            .add(UserModel.fromMap(response.data['recommendedUsers'][i]));
+      }
+
+      for (int i = 0; i < response.data['recommendedPosts'].length; i++) {
+        final Map<String, dynamic> post = response.data['recommendedPosts'][i];
+        recommendedPosts.add(PostModel.fromMap({
+          ...post,
+          'likes': post['likes']
+              .map((dynamic like) => like['userId'].toString())
+              .toList(),
+          'coins': post['coins']
+              .map((dynamic coin) => coin['userId'].toString())
+              .toList()
+        }));
       }
     } else {
       error(true);
