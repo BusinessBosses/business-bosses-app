@@ -9,9 +9,11 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:url_launcher/url_launcher_string.dart';
 import 'package:yaml/yaml.dart';
 
 import '../../action/action.dart';
+import '../../common/models/api_response_model.dart';
 import '../../navigation/routes.dart';
 import '../../services/api_service.dart';
 import '../../utils/constants/constants.dart';
@@ -29,6 +31,27 @@ class _SettingsScreenState extends State<SettingsScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final ApiService _apiService = ApiService();
   ProfileController profileController = Get.find();
+  bool _isProcessing = false;
+
+  Future<void> cancelSubscription(String userId) async {
+    // setState(() {
+    //   _isProcessing = true;
+    // });
+    final ApiResponseModel res = await ApiService.get(
+      path: 'subscription/cancel/$userId',
+    );
+
+    if (res.success) {
+      if (await canLaunchUrlString(res.data)) {
+        await launchUrlString(res.data, mode: LaunchMode.externalApplication);
+      }
+    } else {
+      showSnackBar(context, message: res.message);
+    }
+    // setState(() {
+    //   _isProcessing = false;
+    // });
+  }
 
   String version = '';
 
@@ -79,7 +102,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 ? Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
                     child: InkWell(
-                      onTap: () {},
+                      onTap: () async {
+                        await cancelSubscription(
+                            profileController.myProfile.uid);
+                      },
                       borderRadius: BorderRadius.circular(radiusValue),
                       child: Ink(
                         decoration: BoxDecoration(
@@ -105,173 +131,195 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         showModalBottomSheet(
                             context: context,
                             builder: (BuildContext context) {
-                              return Container(
-                                height: 700,
-                                padding: const EdgeInsets.all(16.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Row(
-                                      children: [
-                                        Text(
-                                          'Are you sure?',
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyLarge
-                                              ?.copyWith(
-                                                fontSize:
-                                                    20, // Set your desired font size
-                                              ),
-                                        ),
-                                        const Spacer(),
-                                        GestureDetector(
-                                          onTap: () {
-                                            Get.back();
-                                          },
-                                          child: SvgPicture.asset(
-                                              'assets/svgs/close.svg'),
-                                        )
-                                      ],
-                                    ),
-                                    const SizedBox(height: 10),
-                                    const Text(
-                                      'By unsubscribing, you will lose access to the following features:',
-                                      style: TextStyle(
-                                          color: Colors.grey, fontSize: 16),
-                                    ),
-                                    Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        const SizedBox(height: 30),
-                                        Row(
-                                          children: [
-                                            SvgPicture.asset(
-                                              'assets/svgs/goldcheckmark.svg',
-                                              height: 25,
-                                            ),
-                                            const SizedBox(width: 15),
-                                            const Expanded(
-                                              child: Text(
-                                                'Your profile will no longer display the Premium Badge',
-                                                style: TextStyle(
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.w600,
+                              return StatefulBuilder(builder:
+                                  (BuildContext context, StateSetter setState) {
+                                return Container(
+                                  height: 700,
+                                  padding: const EdgeInsets.all(16.0),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Text(
+                                            'Are you sure?',
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyLarge
+                                                ?.copyWith(
+                                                  fontSize:
+                                                      20, // Set your desired font size
                                                 ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        const SizedBox(height: 10),
-                                        Row(
-                                          children: [
-                                            SvgPicture.asset(
-                                                'assets/svgs/coin.svg',
-                                                height: 30),
-                                            const SizedBox(width: 15),
-                                            const Expanded(
-                                              child: Text(
-                                                'You will no longer receive 500 coins every month.',
-                                                style: TextStyle(
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.w600,
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        const SizedBox(height: 10),
-                                        Row(
-                                          children: [
-                                            SvgPicture.asset(
-                                                'assets/svgs/rocket.svg',
-                                                height: 25),
-                                            const SizedBox(width: 15),
-                                            const Expanded(
-                                              child: Text(
-                                                'You won\'t be able to boost your posts for free using coins.',
-                                                style: TextStyle(
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.w600,
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        const SizedBox(height: 15),
-                                        Row(
-                                          children: [
-                                            SvgPicture.asset(
-                                                'assets/svgs/moreconnections.svg',
-                                                height: 20),
-                                            const SizedBox(width: 15),
-                                            const Expanded(
-                                              child: Text(
-                                                'Your connections and referrals may be limited compared to Premium members.',
-                                                style: TextStyle(
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.w600,
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        const SizedBox(height: 15),
-                                        Row(
-                                          children: [
-                                            SvgPicture.asset(
-                                                'assets/svgs/rankingicon.svg',
-                                                height: 23),
-                                            const SizedBox(width: 15),
-                                            const Expanded(
-                                              child: Text(
-                                                'Your posts and listings may not rank as high as they did.',
-                                                style: TextStyle(
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.w600,
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                    const SizedBox(height: 20),
-                                    Row(
-                                      children: [
-                                        ElevatedButton(
-                                          onPressed: () {},
-                                          style: ElevatedButton.styleFrom(
-                                            fixedSize: const Size(
-                                                double.infinity,
-                                                40), // Set the desired height (e.g., 50 pixels)
                                           ),
-                                          child:
-                                              const Text('Cancel Subscription'),
-                                        ),
-                                        const SizedBox(
-                                          width: 10,
-                                        ),
-                                        MCustomButton(
-                                          buttonType: ButtonType.outlinegrey,
-                                          onPressed: () {
-                                            Get.back();
-                                          },
-                                          height: 40,
-                                          width: 80,
-                                          child: const Text(
-                                            'Keep',
-                                            style:
-                                                TextStyle(color: Colors.grey),
+                                          const Spacer(),
+                                          GestureDetector(
+                                            onTap: () {
+                                              Get.back();
+                                            },
+                                            child: SvgPicture.asset(
+                                                'assets/svgs/close.svg'),
+                                          )
+                                        ],
+                                      ),
+                                      const SizedBox(height: 10),
+                                      const Text(
+                                        'By unsubscribing, you will lose access to the following features:',
+                                        style: TextStyle(
+                                            color: Colors.grey, fontSize: 16),
+                                      ),
+                                      Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          const SizedBox(height: 30),
+                                          Row(
+                                            children: [
+                                              SvgPicture.asset(
+                                                'assets/svgs/goldcheckmark.svg',
+                                                height: 25,
+                                              ),
+                                              const SizedBox(width: 15),
+                                              const Expanded(
+                                                child: Text(
+                                                  'Your profile will no longer display the Premium Badge',
+                                                  style: TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.w600,
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
                                           ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              );
+                                          const SizedBox(height: 10),
+                                          Row(
+                                            children: [
+                                              SvgPicture.asset(
+                                                  'assets/svgs/coin.svg',
+                                                  height: 30),
+                                              const SizedBox(width: 15),
+                                              const Expanded(
+                                                child: Text(
+                                                  'You will no longer receive 500 coins every month.',
+                                                  style: TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.w600,
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          const SizedBox(height: 10),
+                                          Row(
+                                            children: [
+                                              SvgPicture.asset(
+                                                  'assets/svgs/rocket.svg',
+                                                  height: 25),
+                                              const SizedBox(width: 15),
+                                              const Expanded(
+                                                child: Text(
+                                                  'You won\'t be able to boost your posts for free using coins.',
+                                                  style: TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.w600,
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          const SizedBox(height: 15),
+                                          Row(
+                                            children: [
+                                              SvgPicture.asset(
+                                                  'assets/svgs/moreconnections.svg',
+                                                  height: 20),
+                                              const SizedBox(width: 15),
+                                              const Expanded(
+                                                child: Text(
+                                                  'Your connections and referrals may be limited compared to Premium members.',
+                                                  style: TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.w600,
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          const SizedBox(height: 15),
+                                          Row(
+                                            children: [
+                                              SvgPicture.asset(
+                                                  'assets/svgs/rankingicon.svg',
+                                                  height: 23),
+                                              const SizedBox(width: 15),
+                                              const Expanded(
+                                                child: Text(
+                                                  'Your posts and listings may not rank as high as they did.',
+                                                  style: TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.w600,
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                      const SizedBox(height: 20),
+                                      Row(
+                                        children: [
+                                          ElevatedButton(
+                                            onPressed: () async {
+                                              setState(() {
+                                                _isProcessing = true;
+                                              });
+                                              await cancelSubscription(
+                                                  profileController
+                                                      .myProfile.uid);
+                                              setState(() {
+                                                _isProcessing = false;
+                                              });
+                                            },
+                                            style: ElevatedButton.styleFrom(
+                                              fixedSize: const Size(
+                                                  double.infinity,
+                                                  40), // Set the desired height (e.g., 50 pixels)
+                                            ),
+                                            child: _isProcessing
+                                                ? const SizedBox(
+                                                    width: 24.0,
+                                                    height: 24.0,
+                                                    child:
+                                                        CircularProgressIndicator(
+                                                      color: Colors.white,
+                                                    ),
+                                                  )
+                                                : Text('Cancel Subscription'),
+                                          ),
+                                          const SizedBox(
+                                            width: 10,
+                                          ),
+                                          MCustomButton(
+                                            buttonType: ButtonType.outlinegrey,
+                                            onPressed: () {
+                                              Get.back();
+                                            },
+                                            height: 40,
+                                            width: 80,
+                                            child: const Text(
+                                              'Keep',
+                                              style:
+                                                  TextStyle(color: Colors.grey),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              });
                             });
                       },
                       borderRadius: BorderRadius.circular(radiusValue),

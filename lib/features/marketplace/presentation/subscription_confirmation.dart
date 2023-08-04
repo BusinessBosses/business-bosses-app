@@ -1,13 +1,15 @@
-import 'package:business_bosses_v2/features/home/bottom_nav.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 import '../../../common/widgets/buttons/my_button.dart';
 import '../../../common/widgets/text_widget.dart';
+import '../../../navigation/routes.dart';
 import '../../../utils/theme/theme.dart';
 
+// ignore: public_member_api_docs
 class SubscriptionConfirmation extends StatelessWidget {
+  // ignore: public_member_api_docs
   const SubscriptionConfirmation({Key? key}) : super(key: key);
 
   @override
@@ -73,7 +75,7 @@ class SubscriptionConfirmation extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(9.3)),
                             child: const TextWidget(
                               text:
-                                  'Congratulations on choosing to upgrade to premium! It\'s always great to reach with a wider audience. 🎉',
+                                  "Congratulations on becoming a valued subscriber! Welcome to our premium membership program. 🎉 We are thrilled to have you on board, and we promise to provide you with an exceptional experience and exclusive benefits throughout your subscription journey. Thank you for choosing us, and we look forward to serving you with the best we have to offer!",
                               size: 12,
                               fontWeight: FontWeight.w600,
                               color: Colors.black,
@@ -89,7 +91,7 @@ class SubscriptionConfirmation extends StatelessWidget {
                     const SizedBox(
                       width: double.infinity,
                       child: TextWidget(
-                        text: 'Well Done!',
+                        text: 'Enjoy Premium Subscription!',
                         fontWeight: FontWeight.w800,
                         size: 20,
                         color: Color(0xff333333),
@@ -120,7 +122,7 @@ class SubscriptionConfirmation extends StatelessWidget {
                               Row(
                                 children: [
                                   TextWidget(
-                                    text: 'Payment pending approval',
+                                    text: 'Payment Confirmed',
                                     size: 18,
                                     fontWeight: FontWeight.w700,
                                   )
@@ -129,12 +131,6 @@ class SubscriptionConfirmation extends StatelessWidget {
                               SizedBox(
                                 height: 15,
                               ),
-                              TextWidget(
-                                text:
-                                    'Your subscription has been sent for review. Most subscription are reviewed in 24 hours, although in some cases it will take longer.',
-                                size: 13,
-                                fontWeight: FontWeight.w400,
-                              )
                             ],
                           ),
                         )
@@ -151,11 +147,8 @@ class SubscriptionConfirmation extends StatelessWidget {
                       ),
                       label: 'Ok',
                       onPressed: () {
-                        Get.to(() => const BottomNavScreen(3, true));
+                        Get.offAndToNamed(Routes.home);
                       },
-                    ),
-                    const SizedBox(
-                      height: 40,
                     ),
                   ],
                 ),
