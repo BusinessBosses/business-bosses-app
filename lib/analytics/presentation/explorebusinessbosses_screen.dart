@@ -1,6 +1,9 @@
+import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:http/http.dart' as http;
+import 'package:url_launcher/url_launcher.dart';
 import 'dart:convert';
 
 import '../../features/posts/widgets/my_container.dart';
@@ -98,10 +101,24 @@ class _ExplorebusinessbossesScreenState
                     child: CircularProgressIndicator(),
                   ),
                 )
-              : Text(
-                  description ?? 'Description',
-                  style: bodyText2,
-                ),
+              : description == null
+                  ? const Text(
+                      'Description',
+                      style: bodyText2,
+                    )
+                  : Linkify(
+                      onOpen: (LinkableElement link) async {
+                        if (await canLaunchUrl(Uri.parse(link.url))) {
+                          await launchUrl(Uri.parse(link.url));
+                        } else {
+                          showSnackbar(
+                              message: 'Could not launch URL: ${link.url}');
+                        }
+                      },
+                      text: description!,
+                      style: bodyText2,
+                      linkStyle: const TextStyle(color: Colors.blue),
+                    ),
         ),
       ),
     );
