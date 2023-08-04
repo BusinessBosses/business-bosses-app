@@ -197,7 +197,7 @@ class _ChatItemState extends State<ChatItem> {
 
   bool getUnreadMessages() {
     final List<MessageModel> unread = widget.chatController.chatMessages
-        .where((element) =>
+        .where((MessageModel element) =>
             element.receiverUid == _profileController.myProfile.uid &&
             element.senderUid == widget.myChatUser.user!.uid &&
             !element.seen)
