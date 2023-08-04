@@ -58,6 +58,21 @@ class ChatController extends GetxController {
     update();
   }
 
+  void deleteMessage(String messageId) {
+    final HomeController homeController = Get.find();
+    final int messageIndex = chatMessages.indexWhere(
+      (element) => element.messageId == messageId,
+    );
+    if (messageIndex != -1) {
+      chatMessages.removeAt(messageIndex);
+      extractChats(_profileController.myProfile.uid);
+      update();
+    }
+
+    homeController.socket.emit('delete-message',
+        {'messageId': messageId, 'userId': _profileController.myProfile.uid});
+  }
+
   /// EXTRACT UNIQUE CHATS ON SEARCH (REMOVE DUPLICATES)
   void searchChats(String query) {
     searchedChats = chats.where((MessageModel element) {

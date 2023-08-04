@@ -115,10 +115,11 @@ class _PublicProfileTileState extends State<PublicProfileTile> {
                                       : widget.myProfile.username,
                               style: Theme.of(context).textTheme.bodyLarge,
                             ),
-                            const SizedBox(width: 7),
+                            const SizedBox(width: 5),
                             SvgPicture.asset(
                               'assets/svgs/premiumbadge.svg',
-                              height: 20,
+                              height: 9,
+                              color: primaryColorLT,
                             )
                           ],
                         )

@@ -29,50 +29,55 @@ class _RelevantUsersScreenState extends State<RelevantUsersScreen> {
     return GetBuilder<CompleteSearchController>(
         builder: (CompleteSearchController controller) {
       return Scaffold(
-          backgroundColor: backgroundcolorinterface,
-          appBar: AppBar(
-            leading: IconButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
-            ),
-            centerTitle: true,
-            title: const Text(
-              'Connect',
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 20),
-            ),
+        backgroundColor: backgroundcolorinterface,
+        appBar: AppBar(
+          leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
           ),
-          body: controller.recommendedConnections.isEmpty &&
-                  !controller.loading.value
-              ? _safetyModal(_user)
-              : StaggeredGridView.countBuilder(
-                  padding: const EdgeInsets.all(8.0),
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 8.0,
-                  mainAxisSpacing: 8.0,
-                  itemCount: controller.recommendedConnections.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    bool checkConnected =
-                        profileController.myProfile.connecteds != null &&
-                                profileController.myProfile.connecteds!
-                                    .contains(
-                                  controller.recommendedConnections[index].uid,
-                                )
-                            ? true
-                            : false;
-                    return ConnectionGridTile(
-                      user: controller.recommendedConnections[index],
-                      status: checkConnected,
-                      onChangeConnectionStatus: () {
-                        controller.connectToUser(
-                            controller.recommendedConnections[index]);
-                      },
-                    );
-                  },
-                  staggeredTileBuilder: (_) => const StaggeredTile.fit(1),
-                ));
+          centerTitle: true,
+          title: const Text(
+            'Connect',
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 20),
+          ),
+        ),
+        body: controller.loading.value
+            ? Center(
+                child:
+                    CircularProgressIndicator(), // Circular Progress Indicator
+              )
+            : controller.recommendedConnections.isEmpty
+                ? _safetyModal(_user)
+                : StaggeredGridView.countBuilder(
+                    padding: const EdgeInsets.all(8.0),
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 8.0,
+                    mainAxisSpacing: 8.0,
+                    itemCount: controller.recommendedConnections.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      bool checkConnected = profileController
+                                      .myProfile.connecteds !=
+                                  null &&
+                              profileController.myProfile.connecteds!.contains(
+                                controller.recommendedConnections[index].uid,
+                              )
+                          ? true
+                          : false;
+                      return ConnectionGridTile(
+                        user: controller.recommendedConnections[index],
+                        status: checkConnected,
+                        onChangeConnectionStatus: () {
+                          controller.connectToUser(
+                              controller.recommendedConnections[index]);
+                        },
+                      );
+                    },
+                    staggeredTileBuilder: (_) => const StaggeredTile.fit(1),
+                  ),
+      );
     });
   }
 

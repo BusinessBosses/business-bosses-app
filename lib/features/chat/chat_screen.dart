@@ -168,6 +168,7 @@ class ChatItem extends StatefulWidget {
   // ignore: public_member_api_docs
   final MessageModel myChatUser;
   final ChatController chatController;
+
   // final Key key;
   // ignore: public_member_api_docs
   const ChatItem({
@@ -194,6 +195,16 @@ class _ChatItemState extends State<ChatItem> {
   final ProfileController _profileController = Get.find();
   final HomeController _homeController = Get.find();
 
+  bool getUnreadMessages() {
+    final List<MessageModel> unread = widget.chatController.chatMessages
+        .where((element) =>
+            element.receiverUid == _profileController.myProfile.uid &&
+            element.senderUid == widget.myChatUser.user!.uid &&
+            !element.seen)
+        .toList();
+    return unread.isNotEmpty;
+  }
+
   @override
   Widget build(BuildContext context) {
     return widget.myChatUser.user != null
@@ -213,12 +224,7 @@ class _ChatItemState extends State<ChatItem> {
               padding: const EdgeInsets.all(16.0),
               child: Row(
                 children: [
-                  if (widget.myChatUser.receiverUid ==
-                          _profileController.myProfile.uid &&
-                      !widget.myChatUser.seen)
-                    const UnReadDot()
-                  else
-                    Container(),
+                  if (getUnreadMessages()) const UnReadDot() else Container(),
                   Container(
                     width: 80.0,
                     alignment: Alignment.center,
