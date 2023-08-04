@@ -1,8 +1,8 @@
 import 'dart:core';
 
 import 'package:business_bosses_v2/common/models/user_model.dart';
-import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -58,7 +58,7 @@ class _BossuppartnerState extends State<Bossuppartner> {
         ),
         centerTitle: true,
         title: const Text(
-          'Our Boss Up Partner',
+          'Our Partners',
           textAlign: TextAlign.center,
           style: TextStyle(fontSize: 20),
         ),
@@ -137,18 +137,20 @@ class BossuppartnerItem extends StatelessWidget {
                           ),
                         );
                       },
-                      child: NetworkImageWithPlaceHolder(
-                        imageUrl: companyPhoto,
-                        placeHolder: Icons.photo,
-                        width: MediaQuery.of(context).size.width,
-                        iconSize: 18.0,
-                        radius: 8.0,
+                      child: Align(
+                        alignment: Alignment.center,
+                        child: companyPhoto != null
+                            ? CachedNetworkImage(
+                                imageUrl: companyPhoto!,
+                                memCacheWidth: 750,
+                              )
+                            : const SizedBox(),
                       ),
                     ),
                     Text(
                       companyName,
                       style: const TextStyle(
-                        fontSize: 25,
+                        fontSize: 18,
                         color: textColor,
                         fontWeight: FontWeight.w700,
                       ),
