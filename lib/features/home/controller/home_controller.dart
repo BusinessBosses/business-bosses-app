@@ -92,7 +92,7 @@ class HomeController extends GetxController {
             .toList(),
         'coins': frms[i]['coins']
             .map((dynamic coin) => coin['userId'].toString())
-            .toList()
+            .toList(),
       }));
     }
     return forums;
@@ -400,10 +400,8 @@ class HomeController extends GetxController {
           'isUpdated': false,
         },
       );
-      profileController.myProfile = UserModel.fromMap({
-        ...profileController.myProfile.toMap(),
-        'isUpdated': false
-      });
+      profileController.myProfile = UserModel.fromMap(
+          {...profileController.myProfile.toMap(), 'isUpdated': false});
       sandBox.write('lastExecutionTimestamp', currentTimestamp);
       profileController.updateCoinCount(100);
       showCoinDialogFirst();

@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:business_bosses_v2/common/widgets/buttons/my_outlined_button.dart';
+import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/features/settings/settingsItemModal.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +15,7 @@ import '../../action/action.dart';
 import '../../navigation/routes.dart';
 import '../../services/api_service.dart';
 import '../../utils/constants/constants.dart';
+import '../marketplace/presentation/renewconfirmation.dart';
 import '../posts/widgets/settings_item.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -25,6 +28,7 @@ class SettingsScreen extends StatefulWidget {
 class _SettingsScreenState extends State<SettingsScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final ApiService _apiService = ApiService();
+  ProfileController profileController = Get.find();
 
   String version = '';
 
@@ -71,6 +75,222 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ),
             ),
             const SizedBox(height: 24.0),
+            profileController.myProfile.isSubscribed
+                ? Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: InkWell(
+                      onTap: () {},
+                      borderRadius: BorderRadius.circular(radiusValue),
+                      child: Ink(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(radiusValue),
+                        ),
+                        child: ListTile(
+                          title: Text(
+                            'Renew Premium Subscription',
+                            style: Theme.of(context).textTheme.bodyLarge,
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+                : Container(),
+            const SizedBox(height: 10.0),
+            profileController.myProfile.isSubscribed
+                ? Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: InkWell(
+                      onTap: () {
+                        showModalBottomSheet(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return Container(
+                                height: 700,
+                                padding: const EdgeInsets.all(16.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Text(
+                                          'Are you sure?',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyLarge
+                                              ?.copyWith(
+                                                fontSize:
+                                                    20, // Set your desired font size
+                                              ),
+                                        ),
+                                        const Spacer(),
+                                        GestureDetector(
+                                          onTap: () {
+                                            Get.back();
+                                          },
+                                          child: SvgPicture.asset(
+                                              'assets/svgs/close.svg'),
+                                        )
+                                      ],
+                                    ),
+                                    const SizedBox(height: 10),
+                                    const Text(
+                                      'By unsubscribing, you will lose access to the following features:',
+                                      style: TextStyle(
+                                          color: Colors.grey, fontSize: 16),
+                                    ),
+                                    Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        const SizedBox(height: 30),
+                                        Row(
+                                          children: [
+                                            SvgPicture.asset(
+                                              'assets/svgs/goldcheckmark.svg',
+                                              height: 25,
+                                            ),
+                                            const SizedBox(width: 15),
+                                            const Expanded(
+                                              child: Text(
+                                                'Your profile will no longer display the Premium Badge',
+                                                style: TextStyle(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.w600,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        const SizedBox(height: 10),
+                                        Row(
+                                          children: [
+                                            SvgPicture.asset(
+                                                'assets/svgs/coin.svg',
+                                                height: 30),
+                                            const SizedBox(width: 15),
+                                            const Expanded(
+                                              child: Text(
+                                                'You will no longer receive 500 coins every month.',
+                                                style: TextStyle(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.w600,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        const SizedBox(height: 10),
+                                        Row(
+                                          children: [
+                                            SvgPicture.asset(
+                                                'assets/svgs/rocket.svg',
+                                                height: 25),
+                                            const SizedBox(width: 15),
+                                            const Expanded(
+                                              child: Text(
+                                                'You won\'t be able to boost your posts for free using coins.',
+                                                style: TextStyle(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.w600,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        const SizedBox(height: 15),
+                                        Row(
+                                          children: [
+                                            SvgPicture.asset(
+                                                'assets/svgs/moreconnections.svg',
+                                                height: 20),
+                                            const SizedBox(width: 15),
+                                            const Expanded(
+                                              child: Text(
+                                                'Your connections and referrals may be limited compared to Premium members.',
+                                                style: TextStyle(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.w600,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        const SizedBox(height: 15),
+                                        Row(
+                                          children: [
+                                            SvgPicture.asset(
+                                                'assets/svgs/rankingicon.svg',
+                                                height: 23),
+                                            const SizedBox(width: 15),
+                                            const Expanded(
+                                              child: Text(
+                                                'Your posts and listings may not rank as high as they did.',
+                                                style: TextStyle(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.w600,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(height: 20),
+                                    Row(
+                                      children: [
+                                        ElevatedButton(
+                                          onPressed: () {},
+                                          style: ElevatedButton.styleFrom(
+                                            fixedSize: const Size(
+                                                double.infinity,
+                                                40), // Set the desired height (e.g., 50 pixels)
+                                          ),
+                                          child:
+                                              const Text('Cancel Subscription'),
+                                        ),
+                                        const SizedBox(
+                                          width: 10,
+                                        ),
+                                        MCustomButton(
+                                          buttonType: ButtonType.outlinegrey,
+                                          onPressed: () {
+                                            Get.back();
+                                          },
+                                          height: 40,
+                                          width: 80,
+                                          child: const Text(
+                                            'Keep',
+                                            style:
+                                                TextStyle(color: Colors.grey),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              );
+                            });
+                      },
+                      borderRadius: BorderRadius.circular(radiusValue),
+                      child: Ink(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(radiusValue),
+                        ),
+                        child: ListTile(
+                          title: Text(
+                            'Cancel Subscription',
+                            style: Theme.of(context).textTheme.bodyLarge,
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+                : Container(),
+            const SizedBox(height: 10.0),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: InkWell(

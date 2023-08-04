@@ -87,12 +87,11 @@ void processDeepLink(Uri uri) {
   log(uri.toString());
   if (uri.scheme == 'myapp' && uri.host == 'app.subscription') {
     String? successParam = uri.queryParameters['success'];
+    String? cancelParam = uri.queryParameters['cancel'];
+
     if (successParam != null) {
       bool success = successParam.toLowerCase() == 'true';
       if (success) {
-        showAboutDialog(
-            context: navigatorKey.currentState!.context,
-            applicationName: 'here at $uri');
         Navigator.pushNamed(
           navigatorKey.currentState!.context,
           Routes.transactionConfirmation,
@@ -100,6 +99,13 @@ void processDeepLink(Uri uri) {
       } else {
         Get.snackbar('Canceled', 'Transaction Canceled');
       }
+    }
+
+    if (cancelParam != null) {
+      Navigator.pushNamed(
+        navigatorKey.currentState!.context,
+        Routes.settings,
+      );
     }
   }
 }
