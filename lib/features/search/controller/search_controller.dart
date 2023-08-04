@@ -1,7 +1,6 @@
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/features/forum/models/forum_model.dart';
-import 'package:business_bosses_v2/features/home/repository/home_repository.dart';
 import 'package:business_bosses_v2/features/posts/models/post_model.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/features/search/repository/search_repository.dart';
@@ -31,59 +30,89 @@ class CompleteSearchController extends GetxController {
   Future<void> search(String query, {int currentIndex = 0}) async {
     loadingSearch(true);
     update();
+    searchedUsers.clear();
+    searchedPosts.clear();
+    isUserSearch(true);
+    isPostSearch(true);
+    final ApiResponseModel response =
+        await SearchRepository.search(query.trim());
+    if (response.success) {
+      for (int i = 0; i < response.data['users'].length; i++) {
+        final mapData = response.data['users'][i];
+        final UserModel modelizedData = UserModel.fromMap(mapData);
 
-    if (currentIndex == 0) {
-      isUserSearch(true);
-      update();
-      searchedUsers.clear();
-      final ApiResponseModel response =
-          await SearchRepository.searchUsers(query.trim());
-      if (response.success) {
-        for (int i = 0; i < response.data.length; i++) {
-          final mapData = response.data[i];
-          final UserModel modelizedData = UserModel.fromMap(mapData);
-
-          searchedUsers.add(modelizedData);
-        }
+        searchedUsers.add(modelizedData);
       }
-    } else if (currentIndex == 1) {
-      searchedPosts.clear();
-      final ApiResponseModel response =
-          await SearchRepository.searchPosts(query.trim());
-      if (response.success) {
-        for (int i = 0; i < response.data['rows'].length; i++) {
-          final mapData = response.data['rows'][i];
-          // final PostModel modelizedData = PostModel.fromMap(mapData);
 
-          searchedPosts.add(PostModel.fromMap({
-            ...mapData,
-            'likes': mapData['likes']
-                .map((dynamic like) => like['userId'].toString())
-                .toList(),
-            'coins': mapData['likes']
-                .map((dynamic coin) => coin['userId'].toString())
-                .toList()
-          }));
-        }
-      }
-    } else {
-      searchedForums.clear();
-      final ApiResponseModel response =
-          await HomeRepository.searchIndustries(query.trim());
-      if (response.success) {
-        for (int i = 0; i < response.data['rows'].length; i++) {
-          searchedForums.add(ForumModel.fromMap({
-            ...response.data['rows'][i],
-            'likes': response.data['rows'][i]['likes']
-                .map((dynamic like) => like['userId'].toString())
-                .toList(),
-            'coins': response.data['rows'][i]['coins']
-                .map((dynamic coin) => coin['userId'].toString())
-                .toList()
-          }));
-        }
+      for (int i = 0; i < response.data['posts']['rows'].length; i++) {
+        final mapData = response.data['posts']['rows'][i];
+        // final PostModel modelizedData = PostModel.fromMap(mapData);
+
+        searchedPosts.add(PostModel.fromMap({
+          ...mapData,
+          'likes': mapData['likes']
+              .map((dynamic like) => like['userId'].toString())
+              .toList(),
+          'coins': mapData['likes']
+              .map((dynamic coin) => coin['userId'].toString())
+              .toList()
+        }));
       }
     }
+
+    // if (currentIndex == 0) {
+    //   isUserSearch(true);
+    //   update();
+    // searchedUsers.clear();
+    // searchedPosts.clear();
+    // final ApiResponseModel response =
+    //     await SearchRepository.searchUsers(query.trim());
+    //   if (response.success) {
+    // for (int i = 0; i < response.data.length; i++) {
+    //   final mapData = response.data[i];
+    //   final UserModel modelizedData = UserModel.fromMap(mapData);
+
+    //   searchedUsers.add(modelizedData);
+    // }
+    //   }
+    // } else if (currentIndex == 1) {
+    //   searchedPosts.clear();
+    //   final ApiResponseModel response =
+    //       await SearchRepository.searchPosts(query.trim());
+    //   if (response.success) {
+    // for (int i = 0; i < response.data['rows'].length; i++) {
+    //   final mapData = response.data['rows'][i];
+    //   // final PostModel modelizedData = PostModel.fromMap(mapData);
+
+    //   searchedPosts.add(PostModel.fromMap({
+    //     ...mapData,
+    //     'likes': mapData['likes']
+    //         .map((dynamic like) => like['userId'].toString())
+    //         .toList(),
+    //     'coins': mapData['likes']
+    //         .map((dynamic coin) => coin['userId'].toString())
+    //         .toList()
+    //   }));
+    // }
+    // }
+    // } else {
+    //   searchedForums.clear();
+    //   final ApiResponseModel response =
+    //       await HomeRepository.searchIndustries(query.trim());
+    //   if (response.success) {
+    //     for (int i = 0; i < response.data['rows'].length; i++) {
+    //       searchedForums.add(ForumModel.fromMap({
+    //         ...response.data['rows'][i],
+    //         'likes': response.data['rows'][i]['likes']
+    //             .map((dynamic like) => like['userId'].toString())
+    //             .toList(),
+    //         'coins': response.data['rows'][i]['coins']
+    //             .map((dynamic coin) => coin['userId'].toString())
+    //             .toList()
+    //       }));
+    //     }
+    //   }
+    // }
 
     loadingSearch(false);
     update();

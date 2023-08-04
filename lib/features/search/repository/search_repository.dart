@@ -9,14 +9,27 @@ class SearchRepository {
     return response;
   }
 
-  static Future<ApiResponseModel> searchUsers(String query) async {
-    final ApiResponseModel response =
-        await ApiService.get(path: '/users/name/$query');
+  // static Future<ApiResponseModel> searchUsers(String query) async {
+  //   final ApiResponseModel response =
+  //       await ApiService.get(path: '/users/name/$query');
 
-    return response;
-  }
+  //   return response;
+  // }
 
-  static Future<ApiResponseModel> searchPosts(String query) async {
+  // static Future<ApiResponseModel> searchPosts(String query) async {
+  // String searchQuery = '';
+  // if (query.contains('#')) {
+  //   searchQuery = '%23${query.split('#')[1]}';
+  // } else {
+  //   searchQuery = query;
+  // }
+  // final ApiResponseModel response =
+  //     await ApiService.get(path: 'post/search/$searchQuery');
+
+  // return response;
+  // }
+
+  static Future<ApiResponseModel> search(String query) async {
     String searchQuery = '';
     if (query.contains('#')) {
       searchQuery = '%23${query.split('#')[1]}';
@@ -24,7 +37,7 @@ class SearchRepository {
       searchQuery = query;
     }
     final ApiResponseModel response =
-        await ApiService.get(path: 'post/search/$searchQuery');
+        await ApiService.get(path: 'search/$searchQuery');
 
     return response;
   }
