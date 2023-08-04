@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 import '../../../common/models/user_model.dart';
 import '../../../common/widgets/user_avatar_with_badge.dart';
+import '../../../utils/theme/theme.dart';
 
 class AllLikes extends StatelessWidget {
   final List<UserModel> postLikedByUser;
@@ -21,7 +23,22 @@ class AllLikes extends StatelessWidget {
             radius: 30.0,
             placeHolder: Icons.person,
           ),
-          title: Text(postLikedByUser[i].name!),
+          title: postLikedByUser[i].isSubscribed == true
+              ? Padding(
+                  padding: const EdgeInsets.only(top: 0.0),
+                  child: Row(
+                    children: [
+                      Text(postLikedByUser[i].name!),
+                      const SizedBox(width: 5),
+                      SvgPicture.asset(
+                        'assets/svgs/premiumbadge.svg',
+                        height: 9,
+                        color: primaryColorLT,
+                      )
+                    ],
+                  ),
+                )
+              : Text(postLikedByUser[i].name!),
           subtitle: Text(
             postLikedByUser[i].bio!,
             maxLines: 1,

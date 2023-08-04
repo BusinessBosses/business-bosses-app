@@ -3,6 +3,9 @@
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/common/widgets/user_avatar_with_badge.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+
+import '../../../utils/theme/theme.dart';
 
 class OverlayUsersItems extends StatelessWidget {
   final String? initialText;
@@ -59,7 +62,19 @@ class OverlayUsersItems extends StatelessWidget {
                         radius: 40.0,
                         placeHolder: Icons.person,
                       ),
-                      title: Text(users[i].name ?? '@${users[i].username}'),
+                      title: users[i].isSubscribed == true
+                          ? Row(
+                              children: [
+                                Text(users[i].name ?? '@${users[i].username}'),
+                                const SizedBox(width: 5),
+                                SvgPicture.asset(
+                                  'assets/svgs/premiumbadge.svg',
+                                  height: 9,
+                                  color: primaryColorLT,
+                                )
+                              ],
+                            )
+                          : Text(users[i].name ?? '@${users[i].username}'),
                       subtitle: Text('@${users[i].username}'),
                     );
                   },

@@ -140,7 +140,19 @@ class _PostLikeCommentItemState extends State<PostLikeCommentItem> {
                                 radius: 30.0,
                                 placeHolder: Icons.person,
                               ),
-                              title: Text('${_users[i].name}'),
+                              title: _users[i].isSubscribed == true
+                                  ? Row(
+                                      children: [
+                                        Text('${_users[i].name}'),
+                                        const SizedBox(width: 5),
+                                        SvgPicture.asset(
+                                          'assets/svgs/premiumbadge.svg',
+                                          height: 9,
+                                          color: primaryColorLT,
+                                        )
+                                      ],
+                                    )
+                                  : Text('${_users[i].name}'),
                               subtitle: Text(
                                 '${_users[i].bio}',
                                 maxLines: 1,

@@ -3,6 +3,7 @@ import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
 import 'package:detectable_text_field/widgets/detectable_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 import '../../../../common/widgets/popup/my_popup_menu_button.dart';
@@ -95,10 +96,25 @@ class _ReviewTileState extends State<ReviewTile> {
                             arguments: widget.post.rater);
                       }
                     },
-                    child: Text(
-                      '${widget.post.rater.name!.length <= 15 ? widget.post.rater.name : "${widget.post.rater.name!.substring(0, 15)}..."}',
-                      style: Theme.of(context).textTheme.bodyLarge,
-                    ),
+                    child: widget.post.rater.isSubscribed == true
+                        ? Row(
+                            children: [
+                              Text(
+                                '${widget.post.rater.name!.length <= 15 ? widget.post.rater.name : "${widget.post.rater.name!.substring(0, 15)}..."}',
+                                style: Theme.of(context).textTheme.bodyLarge,
+                              ),
+                              const SizedBox(width: 5),
+                              SvgPicture.asset(
+                                'assets/svgs/premiumbadge.svg',
+                                height: 9,
+                                color: primaryColorLT,
+                              )
+                            ],
+                          )
+                        : Text(
+                            '${widget.post.rater.name!.length <= 15 ? widget.post.rater.name : "${widget.post.rater.name!.substring(0, 15)}..."}',
+                            style: Theme.of(context).textTheme.bodyLarge,
+                          ),
                   ),
                   trailing: SizedBox(
                     height: 30,

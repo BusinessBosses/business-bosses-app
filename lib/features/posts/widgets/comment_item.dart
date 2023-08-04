@@ -2,6 +2,7 @@ import 'package:business_bosses_v2/common/models/comment_model.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 import '../../../common/models/my_response.dart';
@@ -64,11 +65,27 @@ class _CommentItemState extends State<CommentItem> {
                           radius: 30.0,
                           placeHolder: Icons.person,
                         ),
-                        title: Text(
-                          widget.comment.user?.name ??
-                              widget.comment.user!.username,
-                          style: bodyText1,
-                        ),
+                        title: widget.comment.user!.isSubscribed == true
+                            ? Row(
+                                children: [
+                                  Text(
+                                    widget.comment.user?.name ??
+                                        widget.comment.user!.username,
+                                    style: bodyText1,
+                                  ),
+                                  const SizedBox(width: 5),
+                                  SvgPicture.asset(
+                                    'assets/svgs/premiumbadge.svg',
+                                    height: 9,
+                                    color: primaryColorLT,
+                                  )
+                                ],
+                              )
+                            : Text(
+                                widget.comment.user?.name ??
+                                    widget.comment.user!.username,
+                                style: bodyText1,
+                              ),
                         subtitle: Text(
                           TimeFormat.formatString(widget.comment.timestamp!),
                           style: bodyText2.copyWith(

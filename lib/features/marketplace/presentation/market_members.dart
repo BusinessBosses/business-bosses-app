@@ -82,7 +82,19 @@ class _MarketMembersScreenState extends State<MarketMembersScreen> {
                             radius: 30.0,
                             placeHolder: Icons.person,
                           ),
-                          title: Text(widget.users[i].name!),
+                          title: widget.users[i].isSubscribed == true
+                              ? Row(
+                                  children: [
+                                    Text(widget.users[i].name!),
+                                    const SizedBox(width: 5),
+                                    SvgPicture.asset(
+                                      'assets/svgs/premiumbadge.svg',
+                                      height: 9,
+                                      color: primaryColorLT,
+                                    )
+                                  ],
+                                )
+                              : Text(widget.users[i].name!),
                           subtitle: Text(
                             widget.users[i].bio!,
                             maxLines: 1,

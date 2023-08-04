@@ -243,16 +243,51 @@ class _ChatItemState extends State<ChatItem> {
                         Row(
                           children: [
                             Expanded(
-                              child: Text(
-                                widget.myChatUser.user!.name != null &&
-                                        widget.myChatUser.user!.name!.length <=
-                                            20
-                                    ? widget.myChatUser.user!.name!
-                                    : widget.myChatUser.user!.name != null
-                                        ? '${widget.myChatUser.user!.name!.substring(0, 20)}...'
-                                        : widget.myChatUser.user!.username,
-                                style: Theme.of(context).textTheme.bodyLarge,
-                              ),
+                              child: widget.myChatUser.user!.isSubscribed ==
+                                      true
+                                  ? Padding(
+                                      padding: const EdgeInsets.only(top: 0.0),
+                                      child: Row(
+                                        children: [
+                                          Text(
+                                            widget.myChatUser.user!.name !=
+                                                        null &&
+                                                    widget.myChatUser.user!
+                                                            .name!.length <=
+                                                        20
+                                                ? widget.myChatUser.user!.name!
+                                                : widget.myChatUser.user!
+                                                            .name !=
+                                                        null
+                                                    ? '${widget.myChatUser.user!.name!.substring(0, 20)}...'
+                                                    : widget.myChatUser.user!
+                                                        .username,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyLarge,
+                                          ),
+                                          const SizedBox(width: 5),
+                                          SvgPicture.asset(
+                                            'assets/svgs/premiumbadge.svg',
+                                            height: 9,
+                                            color: primaryColorLT,
+                                          )
+                                        ],
+                                      ),
+                                    )
+                                  : Text(
+                                      widget.myChatUser.user!.name != null &&
+                                              widget.myChatUser.user!.name!
+                                                      .length <=
+                                                  20
+                                          ? widget.myChatUser.user!.name!
+                                          : widget.myChatUser.user!.name != null
+                                              ? '${widget.myChatUser.user!.name!.substring(0, 20)}...'
+                                              : widget
+                                                  .myChatUser.user!.username,
+                                      style:
+                                          Theme.of(context).textTheme.bodyLarge,
+                                    ),
                             ),
                             Text(
                               TimeFormat.formatString(

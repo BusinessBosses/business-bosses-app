@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 import '../../../common/models/user_model.dart';
@@ -49,13 +50,34 @@ class _ConnectionGridTileState extends State<ConnectionGridTile> {
               placeHolder: Icons.person,
             ),
             const SizedBox(height: 8.0),
-            Text(
-              widget.user.name ?? widget.user.username ?? '',
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-              textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.bodyLarge,
-            ),
+            widget.user!.isSubscribed == true
+                ? Padding(
+                    padding: const EdgeInsets.only(top: 0.0),
+                    child: Row(
+                      children: [
+                        Text(
+                          widget.user.name ?? widget.user.username ?? '',
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          textAlign: TextAlign.center,
+                          style: Theme.of(context).textTheme.bodyLarge,
+                        ),
+                        const SizedBox(width: 5),
+                        SvgPicture.asset(
+                          'assets/svgs/premiumbadge.svg',
+                          height: 9,
+                          color: primaryColorLT,
+                        )
+                      ],
+                    ),
+                  )
+                : Text(
+                    widget.user.name ?? widget.user.username ?? '',
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.bodyLarge,
+                  ),
             const SizedBox(height: 4.0),
             if (widget.user.category != null)
               Text(widget.user.category.toString(),
