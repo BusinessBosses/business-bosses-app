@@ -50,7 +50,7 @@ class _ConnectionGridTileState extends State<ConnectionGridTile> {
             ),
             const SizedBox(height: 8.0),
             Text(
-              widget.user.name ?? '',
+              widget.user.name ?? widget.user.username ?? '',
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
               textAlign: TextAlign.center,

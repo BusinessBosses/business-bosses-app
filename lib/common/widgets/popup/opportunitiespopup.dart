@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 import '../../../utils/size_config.dart';
 import '../../../utils/theme/theme.dart';
@@ -48,14 +49,30 @@ class OpportunitiesPopup extends StatelessWidget {
                     child: Text(
                       'A collaborative environment that encourages sharing and discovering opportunities for professional and business growth. '
                       'Share Opportunity,'
-                      ' post Distribution, Co-Founders, Affiliate Marketing, Franchises & Licensing, Investment & Grant opportunities others can gain from. To sell your products and services, list on '
-                      'MarketPlace.'
-                      '',
+                      ' post Distribution, Co-Founders, Affiliate Marketing, Franchises & Licensing, Investment & Grant opportunities others can gain from.',
                       style: bodyText2,
                       textAlign: TextAlign.center,
                     ),
                   ),
                 ),
+              ],
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            Row(
+              children: [
+                SvgPicture.asset(
+                  'assets/svgs/report.svg',
+                  color: primaryColorLT,
+                ),
+                const SizedBox(
+                  width: 5,
+                ),
+                const Text(
+                  'To sell your products and services, list on Marketplace',
+                  style: TextStyle(color: primaryColorLT),
+                )
               ],
             ),
             const SizedBox(

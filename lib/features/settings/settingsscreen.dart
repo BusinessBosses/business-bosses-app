@@ -15,6 +15,7 @@ import '../../action/action.dart';
 import '../../navigation/routes.dart';
 import '../../services/api_service.dart';
 import '../../utils/constants/constants.dart';
+import '../marketplace/presentation/renewconfirmation.dart';
 import '../posts/widgets/settings_item.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -74,7 +75,29 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ),
             ),
             const SizedBox(height: 24.0),
-            !profileController.myProfile.isSubscribed
+            profileController.myProfile.isSubscribed
+                ? Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: InkWell(
+                      onTap: () {},
+                      borderRadius: BorderRadius.circular(radiusValue),
+                      child: Ink(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(radiusValue),
+                        ),
+                        child: ListTile(
+                          title: Text(
+                            'Renew Premium Subscription',
+                            style: Theme.of(context).textTheme.bodyLarge,
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+                : Container(),
+            const SizedBox(height: 10.0),
+            profileController.myProfile.isSubscribed
                 ? Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
                     child: InkWell(
@@ -259,7 +282,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         ),
                         child: ListTile(
                           title: Text(
-                            'Cancel Premium Subscription',
+                            'Cancel Subscription',
                             style: Theme.of(context).textTheme.bodyLarge,
                           ),
                         ),

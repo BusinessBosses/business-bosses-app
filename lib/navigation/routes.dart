@@ -50,4 +50,5 @@ class Routes {
   static const String nullscreen = '/nullscreen';
   static const String explorebusinessbossesscreen =
       '/explorebusinessbossesscreen';
+  static const String renewconfirmation = '/renewconfirmation';
 }
