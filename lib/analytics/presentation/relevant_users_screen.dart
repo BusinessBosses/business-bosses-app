@@ -28,6 +28,11 @@ class _RelevantUsersScreenState extends State<RelevantUsersScreen> {
   Widget build(BuildContext context) {
     return GetBuilder<CompleteSearchController>(
         builder: (CompleteSearchController controller) {
+      final List<UserModel> filteredConnections = controller
+          .recommendedConnections
+          .where((UserModel element) =>
+              element.photoUrl != null && element.photoUrl!.isNotEmpty)
+          .toList();
       return Scaffold(
         backgroundColor: backgroundcolorinterface,
         appBar: AppBar(
@@ -45,7 +50,7 @@ class _RelevantUsersScreenState extends State<RelevantUsersScreen> {
           ),
         ),
         body: controller.loading.value
-            ? Center(
+            ? const Center(
                 child:
                     CircularProgressIndicator(), // Circular Progress Indicator
               )
@@ -56,26 +61,24 @@ class _RelevantUsersScreenState extends State<RelevantUsersScreen> {
                     crossAxisCount: 2,
                     crossAxisSpacing: 8.0,
                     mainAxisSpacing: 8.0,
-                    itemCount: controller.recommendedConnections.length,
+                    itemCount: filteredConnections.length,
                     itemBuilder: (BuildContext context, int index) {
-                      bool checkConnected = profileController
-                                      .myProfile.connecteds !=
-                                  null &&
+                      bool checkConnected =
+                          profileController.myProfile.connecteds != null &&
                               profileController.myProfile.connecteds!.contains(
-                                controller.recommendedConnections[index].uid,
-                              )
-                          ? true
-                          : false;
+                                filteredConnections[index].uid,
+                              );
+
                       return ConnectionGridTile(
-                        user: controller.recommendedConnections[index],
+                        user: filteredConnections[index],
                         status: checkConnected,
                         onChangeConnectionStatus: () {
-                          controller.connectToUser(
-                              controller.recommendedConnections[index]);
+                          controller.connectToUser(filteredConnections[index]);
                         },
                       );
                     },
-                    staggeredTileBuilder: (_) => const StaggeredTile.fit(1),
+                    staggeredTileBuilder: (int index) =>
+                        const StaggeredTile.fit(1),
                   ),
       );
     });
