@@ -179,7 +179,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                     padding: const EdgeInsets.only(left: 15, right: 15),
                     child: CustomButton(
                       buttonType: ButtonType.elevated,
-                      label: widget.postId == null ? 'Post' : 'Edit',
+                      label: widget.postId == null ? 'Post' : 'Update Post',
                       onPressed: () async {
                         if (controller.imageFileList.length > 5) {
                           /// If the user has selected more than five images, show an error message

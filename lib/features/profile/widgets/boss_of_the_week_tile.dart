@@ -422,8 +422,8 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
             },
             child: Text(
               user?.connecteds != null &&
-                      user!.connecteds!
-                          .contains(_profileController.myProfile.uid)
+                      _profileController.myProfile.connecteds!
+                          .contains(user!.uid)
                   ? 'Connected'
                   : 'Connect',
               style: const TextStyle(color: Colors.white),
@@ -459,10 +459,10 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
   }
 
   void connectToUser() async {
-    final int checkConnected = user?.connecteds == null
+    final int checkConnected = _profileController.myProfile.connecteds == null
         ? -1
-        : user!.connecteds!.indexWhere(
-            (String element) => element == _profileController.myProfile.uid);
+        : _profileController.myProfile.connecteds!
+            .indexWhere((String element) => element == user?.uid);
     if (checkConnected == -1) {
       _profileController.updateConnections(user!.uid);
       setState(() {
@@ -498,7 +498,7 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
   }
 
   Future<void> disconnect(String userId) async {
-    await ApiService.post(path: '/connection/disconnect', body: {
+    ApiService.post(path: '/connection/disconnect', body: {
       'userId': _profileController.myProfile.uid,
       'connectedId': userId,
       'timestamp': DateTime.now().millisecondsSinceEpoch
@@ -513,7 +513,7 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
   }
 
   Future<void> connect(String userId) async {
-    await ApiService.post(path: '/connection/connect', body: {
+    ApiService.post(path: '/connection/connect', body: {
       'userId': _profileController.myProfile.uid,
       'connectedId': userId,
       'timestamp': DateTime.now().millisecondsSinceEpoch

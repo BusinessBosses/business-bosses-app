@@ -32,12 +32,18 @@ class BossUpController extends GetxController {
     ApiResponseModel response;
     response =
         await ForumRepository.getForums(page.value, Constants.BOSSUPINDUSTRYID);
+
     if (response.success) {
       totalForums(int.parse(response.data['count'].toString()));
       page(page.value + 1);
-      for (int i = 0; i < response.data['rows'].length; i++) {
+
+      // Separate lists for ranked and non-ranked posts
+      List<ForumModel> rankedForums = [];
+      List<ForumModel> nonRankedForums = [];
+
+      for (int i = response.data['rows'].length - 1; i >= 0; i--) {
         if (response.data['rows'][i]['user'] != null) {
-          forums.add(ForumModel.fromMap({
+          ForumModel forum = ForumModel.fromMap({
             ...response.data['rows'][i],
             'likes': response.data['rows'][i]['likes']
                 .map((dynamic like) => like['userId'].toString())
@@ -45,15 +51,28 @@ class BossUpController extends GetxController {
             'coins': response.data['rows'][i]['coins']
                 .map((dynamic coin) => coin['userId'].toString())
                 .toList()
-          }));
+          });
+
+          if (forum.isRanked != null && forum.isRanked!) {
+            rankedForums.add(forum);
+          } else {
+            nonRankedForums.add(forum);
+          }
         }
       }
+
+      // Combine ranked and non-ranked posts, with ranked posts at the beginning
+      List<ForumModel> combinedForums = [...rankedForums, ...nonRankedForums];
+
+      forums.clear(); // Clear the existing list before adding new forums
+      forums.addAll(combinedForums); // Add the combined list of forums
+
       _homeController.addBossupForums(forums);
     } else {
       error(true);
     }
-    loading(false);
 
+    loading(false);
     update();
   }
 
