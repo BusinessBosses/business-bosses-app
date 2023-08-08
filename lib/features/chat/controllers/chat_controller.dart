@@ -61,7 +61,7 @@ class ChatController extends GetxController {
   void deleteMessage(String messageId) {
     final HomeController homeController = Get.find();
     final int messageIndex = chatMessages.indexWhere(
-      (element) => element.messageId == messageId,
+      (MessageModel element) => element.messageId == messageId,
     );
     if (messageIndex != -1) {
       chatMessages.removeAt(messageIndex);

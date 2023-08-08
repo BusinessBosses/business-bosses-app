@@ -618,9 +618,9 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                                                         .pop(context);
                                                     showDialog(
                                                       context: context,
-                                                      builder: (context) {
+                                                      builder: (BuildContext context) {
                                                         return AlertDialog(
-                                                          title: TextWidget(
+                                                          title: const TextWidget(
                                                               text:
                                                                   'Delete this Message'),
                                                           actions: [
@@ -631,7 +631,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                                                                       .pop();
                                                                 },
                                                                 child:
-                                                                    TextWidget(
+                                                                    const TextWidget(
                                                                   text:
                                                                       'Cancel',
                                                                 )),
@@ -646,7 +646,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                                                                               .messageId);
                                                                 },
                                                                 child:
-                                                                    TextWidget(
+                                                                    const TextWidget(
                                                                   text:
                                                                       'Delete',
                                                                   color:

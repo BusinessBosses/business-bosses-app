@@ -114,7 +114,7 @@ class _CompleteSearchingScreenState extends State<CompleteSearchingScreen>
                         isSearch: controller.isUserSearch.value,
                       ),
                       FilterPosts(
-                        filterItems: !controller.isPostSearch.value
+                        filterItems: controller.isPostSearch.value
                             ? controller.searchedPosts
                             : controller.recommendedPosts,
                         isLoading: controller.loading.value ||
