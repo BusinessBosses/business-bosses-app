@@ -46,7 +46,7 @@ class _BossUpSectionState extends State<BossUpSection> {
     }
     setState(() {});
 
-    controller.joinAndLeaveIndustry(myUid, widget.industry.industryId!);
+    controller.joinAndLeaveIndustry(myUid, widget.industry);
   }
 
   @override

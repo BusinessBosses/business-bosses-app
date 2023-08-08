@@ -2,6 +2,7 @@ import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/common/models/comment_model.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/features/forum/models/forum_model.dart';
+import 'package:business_bosses_v2/features/forum/models/industry.dart';
 import 'package:business_bosses_v2/features/forum/repository/forum_repository.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
@@ -118,11 +119,12 @@ class BossUpController extends GetxController {
     }
   }
 
-  void joinAndLeaveIndustry(String userId, String industryId) {
+  void joinAndLeaveIndustry(String userId, Industry industry) {
     socket.emit('join-leave-industry', {
-      'industryId': industryId,
+      'industryId': industry.industryId,
       'userId': userId,
     });
+    _profileController.toggleInterests(industry);
   }
 
   /// COMMENT FUNCTION
