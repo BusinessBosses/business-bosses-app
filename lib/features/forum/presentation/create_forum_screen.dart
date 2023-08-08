@@ -208,8 +208,8 @@ class _CreateForumScreenState extends State<CreateForumScreen> {
                       maxLines: null,
                       style: const TextStyle(fontSize: 13, color: subtextColor),
                       categoryId == Constants.LEARNINGID
-                          ? 'Only post articles, insights, and resources others can learn from To sell your products and services, list on Marketplace'
-                          : 'Only post opportunities that will help you and others grow their businesses To sell your products and services, list on Marketplace',
+                          ? 'Only post articles, insights, and resources others can learn from.'
+                          : 'Only post opportunities that will help you and others grow their businesses.',
                     ),
                   ),
                   Row(
