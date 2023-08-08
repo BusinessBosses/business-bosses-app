@@ -429,6 +429,7 @@ class HomeController extends GetxController {
     final ApiResponseModel response =
         await HomeRepository.fetchPosts(paginationPage.value);
     if (response.success) {
+      paginationPage(paginationPage.value + 1);
       processPostsAndForumsData(response.data);
     } else {
       showSnackbar(title: 'OOPS!', message: response.message, error: true);
