@@ -385,7 +385,7 @@ class _PromotionScreenState extends State<PromotionScreen> {
         'An app to meet entrepreneurs and grow your business. Join now for FREE promotion\n'
         'https://businessbosses.onelink.me/xLWk/36a2ff16\n'
         'Invite id: $_referralId';
-
+    logEvent(_profileController.myProfile.inviteId, 'invite');
     socialShare(message);
   }
 }

@@ -54,6 +54,7 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
         String message =
             'Have a look at ${publicUser.username}\'s profile on Business Bosses\n'
             'https://businessbosses.onelink.me/xLWk/36a2ff16';
+        logEvent(publicUser.uid, 'user');
         socialShare(message);
       } else {
         Get.toNamed(
@@ -455,6 +456,7 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
   }
 
   void _sharePost(dynamic message) {
+    logEvent('usershare', 'user');
     socialShare(message);
   }
 
@@ -530,6 +532,7 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
     String message =
         'Have a look at ${user?.username}\'s profile on Business Bosses\n'
         'https://businessbosses.onelink.me/xLWk/36a2ff16';
+    logEvent(user?.uid, 'user');
     socialShare(message);
   }
 }

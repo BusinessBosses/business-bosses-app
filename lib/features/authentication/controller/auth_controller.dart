@@ -6,6 +6,7 @@ import 'package:business_bosses_v2/features/authentication/presentation/code_ver
 import 'package:business_bosses_v2/features/authentication/presentation/forgot_password_verification.dart';
 import 'package:business_bosses_v2/features/authentication/repository/auth_repository.dart';
 import 'package:crypto/crypto.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
@@ -171,6 +172,7 @@ class AuthController extends GetxController {
       _password = 'password';
 
       if (appleCredential.email != null) {
+        await logEvents('login', 'Apple SignIn');
         dynamic user = await _handleLogin();
         if (user['success'] == false) {
           Get.snackbar('Error', user['error']);
@@ -224,5 +226,12 @@ class AuthController extends GetxController {
       dynamic user = await _apiService.login(_authCred!, _password!);
       return user;
     }
+  }
+
+  logEvents(dynamic event, dynamic method) async {
+    await FirebaseAnalytics.instance.logEvent(
+      name: event,
+      parameters: <String, dynamic>{'method': method},
+    );
   }
 }

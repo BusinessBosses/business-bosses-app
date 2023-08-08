@@ -81,6 +81,7 @@ Widget OutlineButtonHeader(UserModel publicUser, UserModel myProfile,
                   String message =
                       'Have a look at ${publicUser.username}\'s profile on Business Bosses\n'
                       'https://businessbosses.onelink.me/xLWk/36a2ff16';
+                  logEvent(publicUser.uid, 'user');
                   socialShare(message);
                 } else {
                   Get.toNamed(

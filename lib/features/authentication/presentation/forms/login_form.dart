@@ -7,6 +7,7 @@ import 'package:business_bosses_v2/common/widgets/text_widget.dart'
     show TextWidget;
 import 'package:business_bosses_v2/features/authentication/controller/auth_controller.dart';
 import 'package:country_picker/country_picker.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -67,6 +68,7 @@ class _LoginFormState extends State<LoginForm> {
           Get.snackbar('Error', user['error']);
           await _googleSignIn.disconnect();
         } else {
+          await logEvents('login', 'google');
           Get.offAndToNamed(Routes.home);
         }
 
@@ -224,6 +226,7 @@ class _LoginFormState extends State<LoginForm> {
                   if (user['success'] == false) {
                     Get.snackbar('Error', user['error']);
                   } else {
+                    await logEvents('login', 'email');
                     Get.offAndToNamed(Routes.home);
                   }
                 }
@@ -324,5 +327,12 @@ class _LoginFormState extends State<LoginForm> {
       _token!,
     );
     return user;
+  }
+
+  logEvents(dynamic event, dynamic method) async {
+    await FirebaseAnalytics.instance.logEvent(
+      name: event,
+      parameters: <String, dynamic>{'method': method},
+    );
   }
 }
