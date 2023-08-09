@@ -176,16 +176,26 @@ class _LoginFormState extends State<LoginForm> {
               ],
             ),
             const SizedBox(height: 30.0),
-            GestureDetector(
-              onTap: () {
-                Get.toNamed(Routes.resetPassword);
-              },
-              child: Container(
-                width: double.infinity,
-                alignment: Alignment.centerRight,
-                child: Text('Forgot Password?',
+            Align(
+              alignment: Alignment.centerRight,
+              child: GestureDetector(
+                onTap: () {
+                  Get.toNamed(Routes.resetPassword);
+                },
+                child: Container(
+                  width:
+                      150, // You can adjust the width according to your needs
+                  alignment: Alignment.centerRight,
+                  child: Text(
+                    'Forgot Password?',
                     style: headline6.copyWith(
-                        fontWeight: FontWeight.bold, fontSize: 14)),
+                      fontWeight: FontWeight.bold,
+                      fontSize: 14,
+                      decoration: TextDecoration.underline,
+                    ),
+                  ),
+                ),
+
               ),
             ),
             const SizedBox(height: 30.0),
