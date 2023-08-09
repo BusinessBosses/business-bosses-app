@@ -110,6 +110,7 @@ class CreatePostController extends GetxController {
           if (response.success) {
             imageFileList.clear();
             _homeController.addNewPost(response.data, profileController);
+            profileController.addNewPost(response.data);
 
             if (shouldPromote.value == true) {
               Get.to(() => BoostPost(
