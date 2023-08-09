@@ -529,6 +529,7 @@ class HomeController extends GetxController {
       processPostsAndForumsData(response.data['posts']);
       // profileController.processDataToState(
       //     response.data['user'], response.data['interests']);
+      bossUp?.clear();
       if (partner.data['count'] > 0) {
         bossUp?.addAll(partner.data['rows'].cast<Map<String, dynamic>>());
         // Find the item with id = 5
