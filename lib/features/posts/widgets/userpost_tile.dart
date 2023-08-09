@@ -531,6 +531,7 @@ class _PostTileState extends State<PostTile> {
     String message =
         'Have a look at ${widget.post.user?.username ?? 'Business Bosses'}\'s post on Business Bosses\n'
         'https://businessbosses.onelink.me/xLWk/36a2ff16';
+    logEvent(widget.post.postId, 'post');
     socialShare(message);
   }
 

@@ -21,9 +21,14 @@ class CommunitiesController extends GetxController {
   RxBool searchError = RxBool(false);
 
   List<Industry> getCategoryIndustries(String categoryId) {
-    return industries
+    final List<Industry> filteredIndustries = industries
         .where((Industry element) => element.categoryId == categoryId)
         .toList();
+
+    filteredIndustries
+        .sort((a, b) => a.industry!.compareTo(b.industry!)); // Sort here
+
+    return filteredIndustries;
   }
 
   Future<void> onSearch(int index, String query) async {
@@ -128,6 +133,8 @@ class CommunitiesController extends GetxController {
     final ApiResponseModel response = await HomeRepository.fetchIndustries();
     if (response.success) {
       industries = Industry.toIndustries(snapshot: response.data['rows']);
+      industries
+          .sort((a, b) => a.industry!.compareTo(b.industry!)); // Sort here
       _homeController.addIndustries(industries);
     } else {
       error(true);

@@ -282,6 +282,7 @@ class PostDetailsScreen extends StatelessWidget {
     String message =
         'Have a look at ${post.user!.username}\'s post on Business Bosses\n'
         'https://businessbosses.onelink.me/xLWk/36a2ff16';
+    logEvent(post.postId, 'post');
     socialShare(message);
   }
 }

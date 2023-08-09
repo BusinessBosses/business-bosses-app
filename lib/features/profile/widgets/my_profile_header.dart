@@ -58,7 +58,7 @@ class MyProfileHeader extends StatelessWidget {
                         // );
                       },
                       caption: 'Connected',
-                      value: myProfile.connectedCount ?? 0,
+                      value: myProfile.connecteds?.length ?? 0,
                     )),
                     Expanded(
                       child: CustomChildButton(

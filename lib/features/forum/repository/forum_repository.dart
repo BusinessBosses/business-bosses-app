@@ -4,14 +4,14 @@ import 'package:business_bosses_v2/services/api_service.dart';
 class ForumRepository {
   static Future<ApiResponseModel> getForums(int page, String industryId) async {
     final ApiResponseModel response = await ApiService.get(
-        path: 'forum/get-industry-forums/$industryId?size=50&page=$page');
+        path: 'forum/get-industry-forums/$industryId?size=100&page=$page');
     return response;
   }
 
   static Future<ApiResponseModel> getForumMembers(
       int page, String industryId) async {
     final ApiResponseModel response = await ApiService.get(
-        path: 'industry/get-joined-users/$industryId?size=50&page=$page');
+        path: 'industry/get-joined-users/$industryId?size=100&page=$page');
     return response;
   }
 

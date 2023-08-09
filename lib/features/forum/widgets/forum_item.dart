@@ -756,6 +756,7 @@ class _ForumItemState extends State<ForumItem> {
     String message =
         'Have a look at ${widget.forum.user?.username ?? 'Business Bosses'}\'s post on Business Bosses\n'
         'https://businessbosses.onelink.me/xLWk/36a2ff16';
+    logEvent(widget.forum.forumId, 'forum');
     socialShare(message);
   }
 

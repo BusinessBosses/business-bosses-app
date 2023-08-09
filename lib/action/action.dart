@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs
 
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:social_share/social_share.dart';
@@ -86,4 +87,14 @@ Future<void> socialShare(String message) async {
     // debugPrint('socialShare: $e');
     // return MyResponse(success: false, message: e.toString());
   }
+}
+
+logEvent(dynamic id, dynamic type) async {
+  await FirebaseAnalytics.instance.logEvent(
+    name: 'share',
+    parameters: <String, dynamic>{
+      'content_id': id,
+      'content_type': type,
+    },
+  );
 }

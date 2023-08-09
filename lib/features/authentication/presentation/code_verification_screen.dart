@@ -1,4 +1,5 @@
 import 'package:business_bosses_v2/common/models/user_model.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -136,6 +137,7 @@ class _CodeVerificationScreenState extends State<CodeVerificationScreen> {
                     } else {
                       Get.snackbar(
                           'Success', 'You have registered succesfully!');
+                      await logEvents('signup', 'email');
                       Get.toNamed(
                         Routes.updateProfile,
                         arguments: UserModel(
@@ -173,6 +175,13 @@ class _CodeVerificationScreenState extends State<CodeVerificationScreen> {
     dynamic user = await _apiService.register(
         widget.emailAddress, widget.password, widget.userName, widget.inviteId);
     return user;
+  }
+
+  logEvents(dynamic event, dynamic method) async {
+    await FirebaseAnalytics.instance.logEvent(
+      name: event,
+      parameters: <String, dynamic>{'method': method},
+    );
   }
 }
 
