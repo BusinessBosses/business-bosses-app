@@ -106,8 +106,21 @@ class _SpecificUserListScreenState extends State<SpecificUserListScreen> {
                               //   radius: 30.0,
                               //   placeHolder: Icons.person,
                               // ),
-                              title: Text(controller.members[i].name ??
-                                  controller.members[i].username),
+                              title: controller.members[i].isSubscribed == true
+                                  ? Row(
+                                      children: [
+                                        Text(controller.members[i].name ??
+                                            controller.members[i].username),
+                                        const SizedBox(width: 5),
+                                        SvgPicture.asset(
+                                          'assets/svgs/premiumbadge.svg',
+                                          height: 9,
+                                          color: primaryColorLT,
+                                        )
+                                      ],
+                                    )
+                                  : Text(controller.members[i].name ??
+                                      controller.members[i].username),
                               subtitle: Text(
                                 controller.members[i].bio ?? '',
                                 maxLines: 1,

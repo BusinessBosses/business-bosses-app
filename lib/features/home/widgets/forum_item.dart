@@ -274,11 +274,34 @@ class _ForumItemState extends State<ForumItem> {
                                                     contentPadding:
                                                         EdgeInsets.zero,
                                                     title: GestureDetector(
-                                                      child: TextWidget(
-                                                        text:
-                                                            'Block @${widget.forum.user?.name}',
-                                                        color: Colors.blue,
-                                                      ),
+                                                      child: widget.forum.user
+                                                                  ?.isSubscribed ==
+                                                              true
+                                                          ? Row(
+                                                              children: [
+                                                                TextWidget(
+                                                                  text:
+                                                                      'Block @${widget.forum.user?.name}',
+                                                                  color: Colors
+                                                                      .blue,
+                                                                ),
+                                                                const SizedBox(
+                                                                    width: 5),
+                                                                SvgPicture
+                                                                    .asset(
+                                                                  'assets/svgs/premiumbadge.svg',
+                                                                  height: 9,
+                                                                  color:
+                                                                      primaryColorLT,
+                                                                )
+                                                              ],
+                                                            )
+                                                          : TextWidget(
+                                                              text:
+                                                                  'Block @${widget.forum.user?.name}',
+                                                              color:
+                                                                  Colors.blue,
+                                                            ),
                                                     ),
                                                   ),
                                                   ListTile(

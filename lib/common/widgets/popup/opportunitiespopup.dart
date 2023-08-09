@@ -48,8 +48,8 @@ class OpportunitiesPopup extends StatelessWidget {
                   child: Center(
                     child: Text(
                       'A collaborative environment that encourages sharing and discovering opportunities for professional and business growth. '
-                      'Share Opportunity,'
-                      ' post Distribution, Co-Founders, Affiliate Marketing, Franchises & Licensing, Investment & Grant opportunities others can gain from.',
+                      'Share'
+                      ' Distribution, Co-Founders, Affiliate Marketing, Franchises & Licensing, Investment & Grant opportunities others can gain from.',
                       style: bodyText2,
                       textAlign: TextAlign.center,
                     ),
@@ -65,12 +65,13 @@ class OpportunitiesPopup extends StatelessWidget {
                 SvgPicture.asset(
                   'assets/svgs/report.svg',
                   color: primaryColorLT,
+                  height: 20,
                 ),
                 const SizedBox(
                   width: 5,
                 ),
                 const Text(
-                  'To sell your products and services, list on Marketplace',
+                  'To sell your products and services, \n list on Marketplace',
                   style: TextStyle(color: primaryColorLT),
                 )
               ],

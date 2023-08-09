@@ -212,19 +212,43 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                                     user?.companyName == null &&
                                     user?.location == null)
                                   const SizedBox(height: 12.0),
-                                Text(
-                                    user?.name != null &&
-                                            user!.name!.length <= 20
-                                        ? user!.name!
-                                        : user?.name != null
-                                            ? '${user!.name!.substring(0, 20)}...'
-                                            : '',
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: const TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.bold,
-                                    )),
+                                user?.isSubscribed == true
+                                    ? Row(
+                                        children: [
+                                          Text(
+                                              user?.name != null &&
+                                                      user!.name!.length <= 20
+                                                  ? user!.name!
+                                                  : user?.name != null
+                                                      ? '${user!.name!.substring(0, 20)}...'
+                                                      : '',
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: const TextStyle(
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.bold,
+                                              )),
+                                          const SizedBox(width: 5),
+                                          SvgPicture.asset(
+                                            'assets/svgs/premiumbadge.svg',
+                                            height: 9,
+                                            color: primaryColorLT,
+                                          )
+                                        ],
+                                      )
+                                    : Text(
+                                        user?.name != null &&
+                                                user!.name!.length <= 20
+                                            ? user!.name!
+                                            : user?.name != null
+                                                ? '${user!.name!.substring(0, 20)}...'
+                                                : '',
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: const TextStyle(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.bold,
+                                        )),
                                 if (user?.category != null)
                                   Text(user!.category.toString(),
                                       maxLines: 1,

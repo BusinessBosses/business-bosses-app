@@ -1,6 +1,7 @@
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 import '../../../common/models/user_model.dart';
@@ -147,8 +148,26 @@ class _FilterUsersState extends State<FilterUsers> {
                                       }
                                     },
                                   ),
-                                  title: Text(
-                                      profileController.bossOfTheWeek?.name ??
+                                  title: profileController
+                                              .bossOfTheWeek?.isSubscribed ==
+                                          true
+                                      ? Row(
+                                          children: [
+                                            Text(profileController
+                                                    .bossOfTheWeek?.name ??
+                                                profileController
+                                                    .bossOfTheWeek?.username ??
+                                                ''),
+                                            const SizedBox(width: 5),
+                                            SvgPicture.asset(
+                                              'assets/svgs/premiumbadge.svg',
+                                              height: 9,
+                                              color: primaryColorLT,
+                                            )
+                                          ],
+                                        )
+                                      : Text(profileController
+                                              .bossOfTheWeek?.name ??
                                           profileController
                                               .bossOfTheWeek?.username ??
                                           ''),
@@ -213,15 +232,44 @@ class _FilterUsersState extends State<FilterUsers> {
                                           },
                                         ),
                                       ),
-                                      title: Text(widget.filterItems[i].name !=
-                                                  null &&
-                                              widget.filterItems[i].name!
-                                                      .length <=
-                                                  20
-                                          ? widget.filterItems[i].name!
-                                          : widget.filterItems[i].name != null
-                                              ? '${widget.filterItems[i].name!.substring(0, 20)}...'
-                                              : widget.filterItems[i].username),
+                                      title: widget.filterItems[i]
+                                                  .isSubscribed ==
+                                              true
+                                          ? Row(
+                                              children: [
+                                                Text(widget.filterItems[i]
+                                                                .name !=
+                                                            null &&
+                                                        widget.filterItems[i]
+                                                                .name!.length <=
+                                                            20
+                                                    ? widget
+                                                        .filterItems[i].name!
+                                                    : widget.filterItems[i]
+                                                                .name !=
+                                                            null
+                                                        ? '${widget.filterItems[i].name!.substring(0, 20)}...'
+                                                        : widget.filterItems[i]
+                                                            .username),
+                                                const SizedBox(width: 5),
+                                                SvgPicture.asset(
+                                                  'assets/svgs/premiumbadge.svg',
+                                                  height: 9,
+                                                  color: primaryColorLT,
+                                                )
+                                              ],
+                                            )
+                                          : Text(widget.filterItems[i].name !=
+                                                      null &&
+                                                  widget.filterItems[i].name!
+                                                          .length <=
+                                                      20
+                                              ? widget.filterItems[i].name!
+                                              : widget.filterItems[i].name !=
+                                                      null
+                                                  ? '${widget.filterItems[i].name!.substring(0, 20)}...'
+                                                  : widget
+                                                      .filterItems[i].username),
                                       subtitle: Text(
                                         widget.filterItems[i].bio ?? '',
                                         maxLines: 1,

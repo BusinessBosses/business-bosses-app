@@ -221,12 +221,29 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
                                     );
                                   },
                                   contentPadding: EdgeInsets.zero,
-                                  title: TextWidget(
-                                    text: blocked == true
-                                        ? 'Unblock @${publicUser.name}'
-                                        : 'Block @${publicUser.name}',
-                                    color: Colors.blue,
-                                  ),
+                                  title: publicUser.isSubscribed == true
+                                      ? Row(
+                                          children: [
+                                            TextWidget(
+                                              text: blocked == true
+                                                  ? 'Unblock @${publicUser.name}'
+                                                  : 'Block @${publicUser.name}',
+                                              color: Colors.blue,
+                                            ),
+                                            const SizedBox(width: 5),
+                                            SvgPicture.asset(
+                                              'assets/svgs/premiumbadge.svg',
+                                              height: 9,
+                                              color: primaryColorLT,
+                                            )
+                                          ],
+                                        )
+                                      : TextWidget(
+                                          text: blocked == true
+                                              ? 'Unblock @${publicUser.name}'
+                                              : 'Block @${publicUser.name}',
+                                          color: Colors.blue,
+                                        ),
                                 ),
                                 ListTile(
                                   onTap: () {

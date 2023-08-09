@@ -65,12 +65,13 @@ class LearningPopUp extends StatelessWidget {
                 SvgPicture.asset(
                   'assets/svgs/report.svg',
                   color: primaryColorLT,
+                  height: 20,
                 ),
                 const SizedBox(
                   width: 5,
                 ),
                 const Text(
-                  'To sell your products and services, list on Marketplace',
+                  'To sell your products and services, \n list on Marketplace',
                   style: TextStyle(color: primaryColorLT),
                 )
               ],

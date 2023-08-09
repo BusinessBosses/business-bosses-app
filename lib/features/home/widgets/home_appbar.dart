@@ -47,7 +47,7 @@ class Homeappbar extends StatelessWidget {
                   color: hintColor,
                 ),
               ),
-              hintText: 'Search people',
+              hintText: 'Search people & posts',
             ),
           ),
         ),
