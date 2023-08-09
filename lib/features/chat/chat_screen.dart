@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'package:business_bosses_v2/common/models/user_model.dart';
+import 'package:business_bosses_v2/common/widgets/text_widget.dart';
 import 'package:business_bosses_v2/features/chat/chat_room_screen.dart';
 import 'package:business_bosses_v2/features/chat/controllers/chat_controller.dart';
 import 'package:business_bosses_v2/features/chat/models/my_message.dart';
@@ -347,7 +349,36 @@ class _ChatItemState extends State<ChatItem> {
         : const SizedBox();
   }
 
-  Future<void> deleteChat() async {}
+  Future<void> deleteChat() async {
+    final UserModel chatParty = widget.myChatUser.user!;
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: TextWidget(
+              text: 'All Messages with ${chatParty.username} will be deleted'),
+          actions: [
+            TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const TextWidget(
+                  text: 'Cancel',
+                )),
+            TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  widget.chatController.deleteChat(chatParty.uid);
+                },
+                child: const TextWidget(
+                  text: 'Delete',
+                  color: primaryColorLT,
+                ))
+          ],
+        );
+      },
+    );
+  }
 
   // ignore: always_declare_return_types
   showSnackBAr(String message) {

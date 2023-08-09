@@ -34,10 +34,9 @@ class NotificationController extends GetxController {
             MyNotification.fromMap(response.data['notifications']['rows'][i]));
 
         _page(_page.value + 1);
-
-        _profileController.updateProfile(
-            {..._profileController.myProfile.toMap(), 'unReadCount': 0});
       }
+      _profileController.updateProfile(
+          {..._profileController.myProfile.toMap(), 'unReadCount': 0});
     } else {
       error(true);
     }
