@@ -49,7 +49,7 @@ class ProfileController extends GetxController {
       'connecteds': userData['connecteds'].map((e) => e['userId']).toList()
     });
     bossOfTheWeek = modelizedData;
-    print(userData);
+    // print(userData);
     update();
   }
 
