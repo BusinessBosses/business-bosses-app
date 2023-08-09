@@ -383,7 +383,7 @@ class _PostTileState extends State<PostTile> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      if (widget.post.promote ?? false)
+                      if (widget.post.promote! && widget.post.approved!)
                         const TextWidget(
                           text: 'Sponsored',
                           fontWeight: FontWeight.w700,
