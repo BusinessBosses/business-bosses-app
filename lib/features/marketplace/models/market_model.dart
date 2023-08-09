@@ -15,6 +15,7 @@ class MarketModel {
   String price;
   UserModel? user;
   bool promote;
+  bool approved;
   int? timestamp;
   final List<String>? likes;
   final List<String>? coins;
@@ -30,6 +31,7 @@ class MarketModel {
     this.timestamp,
     this.user,
     this.promote = false,
+    this.approved = false,
     this.likes,
     this.coins,
     this.comments,
@@ -45,6 +47,7 @@ class MarketModel {
     String? price,
     UserModel? user,
     bool? promote,
+    bool? approved,
     int? timestamp,
     List<String>? likes,
     List<String>? coins,
@@ -60,6 +63,7 @@ class MarketModel {
       price: price ?? this.price,
       userId: userId ?? this.userId,
       promote: promote ?? this.promote,
+      approved: approved ?? this.approved,
       timestamp: timestamp ?? this.timestamp,
       likes: likes ?? this.likes,
       coins: coins ?? this.coins,
@@ -78,6 +82,7 @@ class MarketModel {
       'price': price,
       'userId': userId,
       'promote': promote,
+      'approved': approved,
       'timestamp': timestamp,
       'likes': likes,
       'coins': coins,
@@ -100,6 +105,7 @@ class MarketModel {
       price: map['price'] as String,
       userId: map['userId'] as String,
       promote: map['promote'] as bool,
+      approved: map['approved'] as bool,
       likes: map['likes'] != null ? List<String>.from((map['likes'])) : null,
       coins: map['coins'] != null ? List<String>.from((map['coins'])) : null,
       comments: map['comments'] != null
@@ -117,6 +123,6 @@ class MarketModel {
 
   @override
   String toString() {
-    return 'MarketModel(description: $description, location: $location, images: $images, user: $user, category: $category, marketId: $marketId, price: $price, userId: $userId, promote: $promote, timestamp: $timestamp)';
+    return 'MarketModel(description: $description, location: $location, images: $images, user: $user, category: $category, marketId: $marketId, price: $price, userId: $userId, promote: $promote, approved: $approved, timestamp: $timestamp)';
   }
 }

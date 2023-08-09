@@ -356,7 +356,7 @@ class _MarketTileState extends State<MarketTile> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            if (_post.promote)
+                            if (_post.promote && _post.approved)
                               const Padding(
                                 padding: EdgeInsets.symmetric(
                                     horizontal: 15, vertical: 5),
