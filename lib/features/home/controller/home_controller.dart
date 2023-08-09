@@ -270,6 +270,7 @@ class HomeController extends GetxController {
         'email': profileController.myProfile.email,
         'uid': profileController.myProfile.uid,
         'name': profileController.myProfile.name,
+        'bio': profileController.myProfile.bio
       }
     });
     mixedPosts.insert(1, {'isForum': false, 'data': modelizedNewPost});
