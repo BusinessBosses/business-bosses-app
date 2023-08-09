@@ -151,6 +151,7 @@ class ForumController extends GetxController {
       'industryId': industryId,
       'userId': userId,
     });
+    _profileController.toggleInterests(industry);
   }
 
   /// COMMENT FUNCTION
