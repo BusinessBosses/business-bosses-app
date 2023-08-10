@@ -67,24 +67,24 @@ class UserAvatarWithBadge extends StatelessWidget {
                 ? Column(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: <Widget>[
-                      Container(
-                        height: 32,
-                        width: 32,
-                        padding: const EdgeInsets.all(3),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(30.0),
-                          border: Border.all(
-                            color: Theme.of(context).primaryColor,
-                          ),
-                        ),
-                        child: SvgPicture.asset(
-                          'assets/svgs/bosseek.svg',
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 5,
-                      ),
+                      // Container(
+                      //   height: 32,
+                      //   width: 32,
+                      //   padding: const EdgeInsets.all(3),
+                      //   decoration: BoxDecoration(
+                      //     color: Colors.white,
+                      //     borderRadius: BorderRadius.circular(30.0),
+                      //     border: Border.all(
+                      //       color: Theme.of(context).primaryColor,
+                      //     ),
+                      //   ),
+                      //   child: SvgPicture.asset(
+                      //     'assets/svgs/bosseek.svg',
+                      //   ),
+                      // ),
+                      // const SizedBox(
+                      //   height: 5,
+                      // ),
                       Text(
                         'Boss of the week',
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(

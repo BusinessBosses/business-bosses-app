@@ -39,6 +39,7 @@ class MarketController extends GetxController {
   void processPostsToState(dynamic post, {bool? isSearch}) {
     if (isSearch ?? false) {
       isfiltered(true);
+      searchResult.clear();
       final List psts = post;
       for (int i = 0; i < psts.length; i++) {
         searchResult.add(MarketModel.fromMap({

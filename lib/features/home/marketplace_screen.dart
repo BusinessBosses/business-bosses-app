@@ -772,7 +772,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                                 filterCategory = null;
                                                 _selectedLocation = null;
                                                 _selectedCategory = null;
-                                                // _marketController.initMarket();
+                                                //_marketController.initMarket();
                                                 _marketController
                                                     .updateFiltered();
                                               });
