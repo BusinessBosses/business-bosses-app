@@ -3,6 +3,7 @@
 import 'package:intl/intl.dart';
 
 class TimeFormat {
+  static const num ONE_SECOND = 1000;
   static const num ONE_MINUTE = 60000;
   static const num ONE_HOUR = 3600000;
   static const num ONE_DAY = 86400000;
@@ -19,6 +20,10 @@ class TimeFormat {
   //Time conversion
   static String formatString(int? timestamp) {
     num delta = DateTime.now().millisecondsSinceEpoch - timestamp!;
+    if (delta < 1 * ONE_SECOND) {
+      num seconds = toSeconds(delta);
+      return '${(seconds < 1 ? 1 : seconds).toInt()} $ONE_SECOND_AGO';
+    }
     if (delta < 1 * ONE_MINUTE) {
       num seconds = toSeconds(delta);
       return '${(seconds <= 0 ? 1 : seconds).toInt()} $ONE_SECOND_AGO';
