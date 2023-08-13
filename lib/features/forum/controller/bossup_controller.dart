@@ -67,7 +67,7 @@ class BossUpController extends GetxController {
       // Combine ranked and non-ranked posts, with ranked posts at the beginning
       List<ForumModel> combinedForums = [...rankedForums, ...nonRankedForums];
 
-      forums.clear(); // Clear the existing list before adding new forums
+      // Clear the existing list before adding new forums
       forums.addAll(combinedForums); // Add the combined list of forums
 
       _homeController.addBossupForums(forums);
