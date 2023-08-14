@@ -42,7 +42,7 @@ class BossUpController extends GetxController {
       List<ForumModel> rankedForums = [];
       List<ForumModel> nonRankedForums = [];
 
-      for (int i = response.data['rows'].length - 1; i >= 0; i--) {
+      for (int i = 0; i < response.data['rows'].length; i++) {
         if (response.data['rows'][i]['user'] != null) {
           ForumModel forum = ForumModel.fromMap({
             ...response.data['rows'][i],
@@ -61,11 +61,13 @@ class BossUpController extends GetxController {
           }
         }
       }
-
+      // After categorizing ranked and non-ranked forums
+      nonRankedForums
+          .sort((a, b) => b.likes!.length.compareTo(a.likes!.length));
       // Combine ranked and non-ranked posts, with ranked posts at the beginning
       List<ForumModel> combinedForums = [...rankedForums, ...nonRankedForums];
 
-      forums.clear(); // Clear the existing list before adding new forums
+      // Clear the existing list before adding new forums
       forums.addAll(combinedForums); // Add the combined list of forums
 
       _homeController.addBossupForums(forums);
