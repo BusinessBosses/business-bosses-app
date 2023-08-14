@@ -133,7 +133,7 @@ class _PublicProfileTileState extends State<PublicProfileTile> {
                           style: Theme.of(context).textTheme.bodyLarge,
                         ),
                   Text(
-                    widget.myProfile.category ?? '',
+                    widget.myProfile.category ?? widget.myProfile.bio ?? '',
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(

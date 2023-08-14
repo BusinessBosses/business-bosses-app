@@ -210,7 +210,8 @@ class ApiService {
       log(response.body);
       return ApiResponseModel.fromMap(jsonDecode(response.body));
     } catch (e) {
-      throw e.toString();
+      showSnackbar(message: e.toString());
+      return ApiResponseModel(success: false, message: e.toString(), data: {});
     }
   }
 
@@ -234,7 +235,8 @@ class ApiService {
 
       return ApiResponseModel.fromMap(jsonDecode(response.body));
     } catch (e) {
-      rethrow;
+      showSnackbar(message: e.toString());
+      return ApiResponseModel(success: false, message: e.toString(), data: {});
     }
   }
 
@@ -259,7 +261,8 @@ class ApiService {
 
       return ApiResponseModel.fromMap(jsonDecode(response.body));
     } catch (e) {
-      throw e.toString();
+      showSnackbar(message: e.toString());
+      return ApiResponseModel(success: false, message: e.toString(), data: {});
     }
   }
 
@@ -280,7 +283,8 @@ class ApiService {
       log(response.body);
       return ApiResponseModel.fromMap(jsonDecode(response.body));
     } catch (e) {
-      throw e.toString();
+      showSnackbar(message: e.toString());
+      return ApiResponseModel(success: false, message: e.toString(), data: {});
     }
   }
 }
