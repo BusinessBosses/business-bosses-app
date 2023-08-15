@@ -34,6 +34,12 @@ class ForumController extends GetxController {
     update();
   }
 
+  Future<void> deleteForum(String forumId) async {
+    forums.removeWhere((element) => element.forumId == forumId);
+    update();
+    await ForumRepository.deleteForum(forumId);
+  }
+
   void toggleJoinAndLeaveIndustry() {
     final String myUid = _profileController.myProfile.uid;
     // print(myUid);

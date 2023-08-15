@@ -28,6 +28,8 @@ class HomeController extends GetxController {
 
   RxBool error = RxBool(false);
   List<Industry> industries = [];
+  List<UserModel> bossupMembers = [];
+
   List<ForumModel> bossupForums = [];
 
   RxInt paginationPage = RxInt(1);
@@ -53,6 +55,10 @@ class HomeController extends GetxController {
 
   void addMarkets(RxList<MarketModel> data) {
     markets = data;
+  }
+
+  void addBossupMembers(List<UserModel> data) {
+    bossupMembers = data;
   }
 
   void addMarketMembers(RxList<UserModel> data) {

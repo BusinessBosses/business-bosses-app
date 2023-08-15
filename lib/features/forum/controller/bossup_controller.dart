@@ -100,6 +100,8 @@ class BossUpController extends GetxController {
       for (int i = 0; i < response.data.length; i++) {
         members.add(UserModel.fromMap(response.data[i]));
       }
+
+      _homeController.addBossupMembers(members);
     } else {
       errorMembers(true);
     }

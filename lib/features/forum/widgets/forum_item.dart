@@ -1,3 +1,4 @@
+import 'package:business_bosses_v2/features/forum/controller/forum_controller.dart';
 import 'package:business_bosses_v2/features/forum/models/forum_model.dart';
 import 'package:business_bosses_v2/features/forum/widgets/bossup_like_comment.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
@@ -438,7 +439,7 @@ class _ForumItemState extends State<ForumItem> {
                                                     'isBossUp': false,
                                                   });
                                             } else if (val == 'Delete') {
-                                              _showDialog();
+                                              _showDialog(widget.forum.forumId);
                                             }
                                           },
                                         )
@@ -785,5 +786,35 @@ class _ForumItemState extends State<ForumItem> {
 
   leadingWidth(ForumModel? forum) {}
 
-  void _showDialog() {}
+  void _showDialog(String forumId) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const TextWidget(
+              text: 'Are you sure you want to delete this forum?'),
+          actions: [
+            TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const TextWidget(
+                  text: 'Cancel',
+                )),
+            TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  final ForumController controller = Get.find();
+
+                  controller.deleteForum(forumId);
+                },
+                child: const TextWidget(
+                  text: 'Delete',
+                  color: primaryColorLT,
+                ))
+          ],
+        );
+      },
+    );
+  }
 }

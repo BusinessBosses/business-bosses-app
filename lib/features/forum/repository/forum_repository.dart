@@ -23,6 +23,15 @@ class ForumRepository {
     return response;
   }
 
+  /// DELETE FORUM
+  static Future<ApiResponseModel> deleteForum(String forumId) async {
+    final ApiResponseModel response = await ApiService.delete(
+      path: 'forum/delete/$forumId',
+    );
+
+    return response;
+  }
+
   /// EDIT POST REPOSITORY
   static Future<ApiResponseModel> editForum(Map<String, dynamic> body) async {
     final ApiResponseModel response = await ApiService.put(

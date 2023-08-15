@@ -85,6 +85,7 @@ class CreateForumController extends GetxController {
           _forumController.addNewForum(response.data);
 
           Get.back();
+          Get.snackbar('Success', 'Post created successfully');
         }
       } else {
         if (await uploadFile() == null) {
@@ -98,6 +99,7 @@ class CreateForumController extends GetxController {
             _forumController.addNewForum(response.data);
 
             Get.back();
+            Get.snackbar('Success', 'Post created successfully');
           }
         }
       }
