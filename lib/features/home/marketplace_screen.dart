@@ -215,6 +215,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                       _selectedLocation = null;
                                       _selectedCategory = null;
                                       _marketController.updateFiltered();
+                                      _marketController.initMarket();
                                       Navigator.of(context).pop();
                                     });
                                   },
@@ -525,7 +526,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                                                             TextSpan(
                                                                           children: <InlineSpan>[
                                                                             TextSpan(
-                                                                              text: 'Listings: ${_marketController.markets.length}',
+                                                                              text: 'Listings: (${_marketController.markets.length})',
                                                                               style: const TextStyle(
                                                                                 fontSize: 12,
                                                                                 color: textColor,
@@ -775,6 +776,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                                 //_marketController.initMarket();
                                                 _marketController
                                                     .updateFiltered();
+                                                _marketController.initMarket();
                                               });
                                             },
                                           )
