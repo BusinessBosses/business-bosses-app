@@ -148,7 +148,11 @@ Widget profileinfodisplay(BuildContext context, UserModel publicUser) {
         //     ? Container()
         //     :
         if (publicUser.achievements != null &&
-            publicUser.achievements!.isNotEmpty)
+            publicUser.achievements!.isNotEmpty &&
+            publicUser.achievements!
+                .where((String element) => element.isNotEmpty)
+                .toList()
+                .isNotEmpty)
           Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -231,7 +235,11 @@ Widget profileinfodisplay(BuildContext context, UserModel publicUser) {
         //     ? Container()
         //     :
         if (publicUser.productsandservices != null &&
-            publicUser.productsandservices!.isNotEmpty)
+            publicUser.productsandservices!.isNotEmpty &&
+            publicUser.productsandservices!
+                .where((element) => element.isNotEmpty)
+                .toList()
+                .isNotEmpty)
           Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -252,6 +260,8 @@ Widget profileinfodisplay(BuildContext context, UserModel publicUser) {
               ),
               buildChoiceChips(publicUser.productsandservices != null
                   ? publicUser.productsandservices!
+                      .where((String element) => element.isNotEmpty)
+                      .toList()
                   : [])
             ],
           ),
