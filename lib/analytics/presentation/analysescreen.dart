@@ -1,6 +1,8 @@
 import 'dart:core';
 
 import 'package:business_bosses_v2/common/models/user_model.dart';
+import 'package:business_bosses_v2/common/widgets/buttons/subscribe_to_premium_button.dart';
+import 'package:business_bosses_v2/features/marketplace/presentation/subscription_confirmation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -104,43 +106,7 @@ class _AnalyserScreenState extends State<AnalyserScreen> {
                                 ],
                               ),
                               child: !profileController.myProfile.isSubscribed
-                                  ? Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Stack(
-                                        alignment: Alignment.centerLeft,
-                                        children: [
-                                          SvgPicture.asset(
-                                            'assets/svgs/subscribebuttonback.svg',
-                                            width: 200,
-                                            fit: BoxFit.contain,
-                                          ),
-                                          Padding(
-                                            padding: const EdgeInsets.only(
-                                                left: 15.0),
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              children: [
-                                                const Text(
-                                                  'Subscribe to Premium',
-                                                  style: TextStyle(
-                                                    fontWeight: FontWeight.w700,
-                                                    fontSize: 15,
-                                                  ),
-                                                ),
-                                                const SizedBox(
-                                                  width: 15,
-                                                ),
-                                                SvgPicture.asset(
-                                                  'assets/svgs/nextbutton.svg',
-                                                  color: primaryColorLT,
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    )
+                                  ? subscribetopremiumbutton()
                                   : Container()),
                         ],
                       ),

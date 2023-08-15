@@ -20,12 +20,8 @@ class _PublicProfileTileState extends State<PublicProfileTile> {
   Widget build(BuildContext context) {
     // fetchData();
     // setState(() {});
-    return Container(
+    return SizedBox(
       width: double.infinity,
-      padding: const EdgeInsets.only(
-        top: 0.0,
-        bottom: 0.0,
-      ),
       child: Row(
         children: [
           Stack(
@@ -133,28 +129,39 @@ class _PublicProfileTileState extends State<PublicProfileTile> {
                           style: Theme.of(context).textTheme.bodyLarge,
                         ),
                   Text(
-                    widget.myProfile.category ?? widget.myProfile.bio ?? '',
+                    widget.myProfile.category ?? '',
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
+                        fontWeight: FontWeight.bold,
+                        color: textColor.withOpacity(0.8)),
                   ),
-                  Text(widget.myProfile.companyName ?? '',
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyLarge
-                          ?.copyWith(fontWeight: FontWeight.normal)),
-                  Text(
-                    widget.myProfile.location ?? '',
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: textColor.withOpacity(0.6),
-                        ),
-                  ),
+                  widget.myProfile.companyName != null &&
+                          widget.myProfile.companyName != ''
+                      ? Text(
+                          widget.myProfile.companyName!,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.normal,
+                              color: textColor.withOpacity(
+                                0.8,
+                              )),
+                        )
+                      : Container(),
+                  widget.myProfile.location != null &&
+                          widget.myProfile.location != ''
+                      ? Text(
+                          widget.myProfile.location ?? '',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style:
+                              Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                    color: textColor.withOpacity(0.6),
+                                  ),
+                        )
+                      : Container(),
                 ],
               ),
             ),

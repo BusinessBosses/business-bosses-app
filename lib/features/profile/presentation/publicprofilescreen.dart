@@ -115,7 +115,6 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     if (Get.arguments == null) {
       // print("back");
@@ -124,7 +123,7 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
       // print("yo");
 
       publicUser = Get.arguments;
-      // print(publicUser.username);
+      // print(publicUser.productsandservices);
       loadData();
     }
   }
@@ -316,9 +315,6 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
                             ),
                           ),
                         );
-
-                        // _showMorePostOptions(context, "accountReport",
-                        //     _publicUser?.uid.toString(), "Report this User.");
                       },
                       child: SvgPicture.asset('assets/svgs/more.svg')),
                 )
