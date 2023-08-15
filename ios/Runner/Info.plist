@@ -18,7 +18,7 @@
 		<key>CFBundleDevelopmentRegion</key>
 		<string>xyz.codexia.businessbosses</string>
 		<key>CFBundleDisplayName</key>
-		<string>Business Bosses V2</string>
+		<string>Business Bosses</string>
 		<key>CFBundleExecutable</key>
 		<string>$(EXECUTABLE_NAME)</string>
 		<key>CFBundleIdentifier</key>

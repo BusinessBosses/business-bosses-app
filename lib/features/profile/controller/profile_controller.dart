@@ -123,7 +123,8 @@ class ProfileController extends GetxController {
           'connections': response.data['user']['data']['connections']
               .map((mp) => mp['connect'])
               .toList()
-        }
+        },
+        'industries': response.data['industries']
       };
     } else {
       return {
@@ -133,7 +134,8 @@ class ProfileController extends GetxController {
           'connections': response.data['user']['data']['connections']
               .map((mp) => mp['connect'])
               .toList()
-        }
+        },
+        'industries': response.data['industries']
       };
     }
   }

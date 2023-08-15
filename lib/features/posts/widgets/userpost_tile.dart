@@ -5,6 +5,7 @@ import 'package:business_bosses_v2/features/posts/widgets/post_images.dart';
 import 'package:business_bosses_v2/features/posts/widgets/post_like_comment.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/features/profile/widgets/premium_profile_tile.dart';
+import 'package:business_bosses_v2/functions/my_native_functions.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
 import 'package:detectable_text_field/widgets/detectable_text.dart';
@@ -410,7 +411,9 @@ class _PostTileState extends State<PostTile> {
                             trimExpandedText: '  show less',
                             basicStyle: bodyText2.copyWith(color: textColor),
                             onTap: (String link) async {
-                              await launchUrlString(link);
+                              String url = MyNativeFunctions.completeURL(
+                                  link, MyUrl.url);
+                              await launchUrlString(url);
                             },
                           ),
                           const SizedBox(height: 16),
