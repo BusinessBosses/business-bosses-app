@@ -64,6 +64,7 @@ class _CreateBossUpScreenState extends State<CreateBossUpScreen> {
         return GestureDetector(
           onTap: () => unFocusKeyboard(context),
           child: Scaffold(
+            backgroundColor: backgroundcolorinterface,
             key: scaffoldKey,
             appBar: AppBar(
               title: //Text(Provider.of<AppCommunities>(context, listen: false).label(_industry.categoryId, isUpdating: _isUpdating)),
@@ -153,7 +154,14 @@ class _CreateBossUpScreenState extends State<CreateBossUpScreen> {
                                     ?.copyWith(color: hintColor)),
                           ),
                           const SizedBox(width: 16.0),
-                          SvgPicture.asset('assets/svgs/upload.svg'),
+                          CircleAvatar(
+                            radius: 26 / 1.38,
+                            backgroundColor: backgroundColor,
+                            child: SvgPicture.asset(
+                              'assets/svgs/addimagepost.svg',
+                              height: 18,
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -189,6 +197,29 @@ class _CreateBossUpScreenState extends State<CreateBossUpScreen> {
                     },
                     label: isUpdating ? 'Update Post' : 'Post',
                     isProcessing: controller.loading.value,
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Center(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        SvgPicture.asset(
+                          'assets/svgs/report.svg',
+                          color: primaryColorLT,
+                          height: 18,
+                        ),
+                        const SizedBox(
+                          width: 5,
+                        ),
+                        const Text(
+                          'To sell your products and services, list on Marketplace',
+                          style: TextStyle(color: primaryColorLT),
+                        )
+                      ],
+                    ),
                   ),
                 ],
               ),

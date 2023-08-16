@@ -245,6 +245,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
                                                 SvgPicture.asset(
                                                   'assets/svgs/goldcheckmark.svg',
                                                   height: 25,
+                                                  color: primaryColorLT,
                                                 ),
                                                 const SizedBox(width: 15),
                                                 const Text(
@@ -262,7 +263,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
                                                 SvgPicture.asset(
                                                     'assets/svgs/coin.svg',
                                                     height: 30),
-                                                const SizedBox(width: 15),
+                                                const SizedBox(width: 10),
                                                 const Text(
                                                   'Get 500 coins per month',
                                                   style: TextStyle(
