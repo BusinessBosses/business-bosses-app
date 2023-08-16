@@ -30,28 +30,28 @@ class ImageItem extends StatelessWidget {
                   fit: BoxFit.cover,
                 ),
         ),
-        if (file != null)
-          Positioned(
-            right: 5.0,
-            top: 5.0,
-            child: GestureDetector(
-              onTap: onRemove,
-              child: Container(
-                height: 30.0,
-                width: 30.0,
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  color: Colors.black54,
-                  borderRadius: BorderRadius.circular(40.0),
-                ),
-                child: const Icon(
-                  Icons.close,
-                  size: 18.0,
-                  color: Colors.white,
-                ),
+        // if (file != null)
+        Positioned(
+          right: 5.0,
+          top: 5.0,
+          child: GestureDetector(
+            onTap: onRemove,
+            child: Container(
+              height: 30.0,
+              width: 30.0,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: Colors.black54,
+                borderRadius: BorderRadius.circular(40.0),
+              ),
+              child: const Icon(
+                Icons.close,
+                size: 18.0,
+                color: Colors.white,
               ),
             ),
           ),
+        ),
       ],
     );
   }
