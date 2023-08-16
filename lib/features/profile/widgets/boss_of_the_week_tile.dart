@@ -109,32 +109,27 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                             fontSize: 25,
                             color: Color(0xff333333)),
                       ),
-                      Expanded(
-                          child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          GestureDetector(
-                              child: Container(
-                                  color: Colors.transparent,
-                                  width: 50,
-                                  height: 50,
-                                  child: Align(
-                                    alignment: Alignment.centerRight,
-                                    child: SvgPicture.asset(
-                                      'assets/svgs/more.svg',
-                                      height: 20,
-                                      fit: BoxFit.none,
-                                    ),
-                                  )),
-                              onTap: () {
-                                showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) =>
-                                      const BossUpChallangePopUpcopy(),
-                                );
-                              })
-                        ],
-                      ))
+                      const Spacer(),
+                      GestureDetector(
+                        onTap: () {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) =>
+                                const BossUpChallangePopUpcopy(),
+                          );
+                        },
+                        child: Container(
+                          color: Colors.transparent,
+                          width: 50,
+                          height: 50,
+                          child: SvgPicture.asset(
+                            'assets/svgs/more.svg',
+                            height: 20,
+                            fit: BoxFit.none,
+                            alignment: Alignment.centerRight,
+                          ),
+                        ),
+                      )
                     ],
                   ),
                 ),

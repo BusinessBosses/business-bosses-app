@@ -439,12 +439,15 @@ class _SignUpFormState extends State<SignUpForm> {
           const SizedBox(height: 10.0),
           if (Platform.isIOS)
             Stack(children: [
-              SignInWithAppleButton(
+              Container(
                 height: 55,
-                text: 'SIgn up with Apple',
-                onPressed: () async {
-                  AuthController().appleAuthentication();
-                },
+                child: SignInWithAppleButton(
+                  height: 40,
+                  text: 'Sign up with Apple',
+                  onPressed: () async {
+                    AuthController().appleAuthentication();
+                  },
+                ),
               ),
             ])
         ],
