@@ -313,13 +313,13 @@ class HomeController extends GetxController {
         onWillPop: () async => false,
         child: AlertDialog(
           title: const TextWidget(
-            text: 'Access token expired',
+            text: 'Access Expired',
             fontWeight: FontWeight.w700,
             size: 18,
           ),
           content: const TextWidget(
             text:
-                'Your access token has expired. therefore, you will be required to login again to generate a new one. ',
+                'We\'ve upgraded the Business Bosses app with new features and functionality to provide you with an enhanced Boss experience.',
           ),
           actions: [
             TextButton(
@@ -328,7 +328,7 @@ class HomeController extends GetxController {
                 Navigator.of(context).pop(context);
               },
               child: const TextWidget(
-                text: 'Create new Access Token',
+                text: 'Reset your password & Sign in',
                 color: primaryColorLT,
               ),
             )
