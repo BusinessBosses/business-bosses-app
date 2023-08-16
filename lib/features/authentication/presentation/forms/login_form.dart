@@ -277,11 +277,14 @@ class _LoginFormState extends State<LoginForm> {
             const SizedBox(height: 10.0),
 
             if (Platform.isIOS)
-              SignInWithAppleButton(
+              Container(
                 height: 55,
-                onPressed: () async {
-                  AuthController().appleAuthentication();
-                },
+                child: SignInWithAppleButton(
+                  height: 40,
+                  onPressed: () async {
+                    AuthController().appleAuthentication();
+                  },
+                ),
               )
           ],
         ),
