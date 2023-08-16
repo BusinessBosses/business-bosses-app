@@ -563,7 +563,10 @@ class _SignUpFormState extends State<SignUpForm> {
 
   Future<dynamic> _handleRegister() async {
     dynamic user = await _apiService.register(
-        _authCred!, _password!, _username!, _inviteId);
+        _authCred!,
+        _password ?? DateTime.now().millisecondsSinceEpoch.toString(),
+        _username!,
+        _inviteId);
     return user;
   }
 }
