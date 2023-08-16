@@ -176,36 +176,21 @@ class _LoginFormState extends State<LoginForm> {
               ],
             ),
             const SizedBox(height: 30.0),
-            Row(
-              children: [
-                const Expanded(
-                  child: Text(
-                    'Kindly reset your password with this button',
-                    style: TextStyle(fontSize: 13),
+            GestureDetector(
+              onTap: () {
+                Get.toNamed(Routes.resetPassword);
+              },
+              child: Container(
+                alignment: Alignment.centerRight,
+                child: Text(
+                  'Forgot Password?',
+                  style: headline6.copyWith(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 14,
+                    decoration: TextDecoration.underline,
                   ),
                 ),
-                SvgPicture.asset(
-                  'assets/svgs/nexticon.svg',
-                  color: textColor,
-                ),
-                GestureDetector(
-                  onTap: () {
-                    Get.toNamed(Routes.resetPassword);
-                  },
-                  child: Container(
-                    width: 150,
-                    alignment: Alignment.centerRight,
-                    child: Text(
-                      'Forgot Password?',
-                      style: headline6.copyWith(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 14,
-                        decoration: TextDecoration.underline,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
+              ),
             ),
 
             const SizedBox(height: 30.0),
