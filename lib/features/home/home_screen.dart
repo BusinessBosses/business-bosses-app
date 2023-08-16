@@ -1,3 +1,4 @@
+import 'package:business_bosses_v2/features/forum/controller/bossup_controller.dart';
 import 'package:business_bosses_v2/features/home/widgets/bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -28,6 +29,7 @@ class _HomeScreenState extends State<HomeScreen> {
   // final GetStorage sandBox = GetStorage();
   final ScrollController _scrollController = ScrollController();
   final MarketController marketController = Get.put(MarketController());
+  final BossUpController bossUpController = Get.put(BossUpController());
   @override
   void initState() {
     super.initState();
