@@ -151,6 +151,7 @@ class PostGridItem extends StatelessWidget {
                               postId: post.postId,
                               post: post.title,
                               postDetail: post,
+                              images: post.images,
                             ));
                       } else if (val == 'Delete') {
                         _showDialog(context);
