@@ -144,48 +144,51 @@ class _CreateForumScreenState extends State<CreateForumScreen> {
                     ),
                   ),
                   SizedBox(height: 12.0),
-                  if (!isUpdating)
-                    GestureDetector(
-                      onTap: () {
-                        if (controller.imageFileList.length < 5) {
-                          controller.onPickImage();
-                        } else {
-                          showSnackbar(
-                              message: 'You can only upload up to 5 images.');
-                        }
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                        child: FieldContainer(
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: Text(
-                                  'Add Attachment',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyMedium
-                                      ?.copyWith(color: hintColor),
-                                ),
+                  // if (!isUpdating)
+                  GestureDetector(
+                    onTap: () {
+                      if (controller.imageFileList.length < 5) {
+                        controller.onPickImage(isUpdating: true);
+                      } else {
+                        showSnackbar(
+                            message: 'You can only upload up to 5 images.');
+                      }
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: FieldContainer(
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                'Add Attachment',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium
+                                    ?.copyWith(color: hintColor),
                               ),
-                              SizedBox(width: 16.0),
-                              CircleAvatar(
-                                radius: 26 / 1.38,
-                                backgroundColor: backgroundColor,
-                                child: SvgPicture.asset(
-                                  'assets/svgs/addimagepost.svg',
-                                  height: 18,
-                                ),
+                            ),
+                            SizedBox(width: 16.0),
+                            CircleAvatar(
+                              radius: 26 / 1.38,
+                              backgroundColor: backgroundColor,
+                              child: SvgPicture.asset(
+                                'assets/svgs/addimagepost.svg',
+                                height: 18,
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
                       ),
                     ),
+                  ),
                   SizedBox(height: 8.0),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    child: Preview(controller: controller),
+                    child: Preview(
+                      controller: controller,
+                      isUpdating: true,
+                    ),
                   ),
                   SizedBox(height: 24.0),
                   Padding(

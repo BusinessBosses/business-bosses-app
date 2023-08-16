@@ -14,13 +14,19 @@ class CreateForumController extends GetxController {
   RxBool loading = false.obs;
   late ImagePicker _picker;
   RxList<XFile> imageFileList = RxList<XFile>(<XFile>[]);
-  RxList<String> imageUrlList = RxList<String>(<String>[]);
+  RxList<String> updatingImageFileList = RxList<String>(<String>[]);
+  // RxList<String> imageUrlList = RxList<String>(<String>[]);
   final ForumController _forumController = Get.put(ForumController());
+
+  void addUpdatingImageFileList(List<String> imagePath) {
+    updatingImageFileList.addAll(imagePath);
+    update();
+  }
 
   ///ADD IMAGES FOR PREVIEW
   void initializeForumEditImage(List<String>? images) {
     if (images != null) {
-      imageUrlList.addAll(images);
+      updatingImageFileList.addAll(images);
     }
     WidgetsBinding.instance.addPostFrameCallback((_) {
       update();
@@ -50,6 +56,49 @@ class CreateForumController extends GetxController {
     }
 
     for (int i = 0; i < imageFileList.length; i++) {
+      final int bytes = resourceFile[i].readAsBytesSync().lengthInBytes;
+      final double kb = bytes / 1024;
+      final double mb = kb / 1024;
+
+      if (mb >= 5) {
+        showSnackbar(message: 'Image size should be maximum 10 MB.');
+        loading(false);
+        return null;
+      } else {
+        final dynamic res = await ApiService.uploadFile(resourceFile[i]);
+
+        if (res == null) {
+          return null;
+        } else {
+          fileUrls.add(res['fileUrl']);
+        }
+      }
+    }
+
+    return fileUrls;
+  }
+
+  /// UPLOAD UPDATING IMAGES (NEW IMAGES ADDED WHEN EDITING)
+  ///
+  Future<dynamic> uploadUpdatingFile() async {
+    /// RAW FILES
+    final List<String> rawFiles = updatingImageFileList
+        .where((element) => !element.contains("http"))
+        .toList();
+
+    /// UPLOADED FILE URLS
+
+    List<String> fileUrls = <String>[];
+
+    /// FILED SELECTED FILES
+    List<File> resourceFile = <File>[];
+
+    for (int i = 0; i < rawFiles.length; i++) {
+      File file = File(rawFiles[i]);
+      resourceFile.add(file);
+    }
+
+    for (int i = 0; i < rawFiles.length; i++) {
       final int bytes = resourceFile[i].readAsBytesSync().lengthInBytes;
       final double kb = bytes / 1024;
       final double mb = kb / 1024;
@@ -118,21 +167,55 @@ class CreateForumController extends GetxController {
       loading(true);
       update();
 
-      final ApiResponseModel response = await ForumRepository.editForum(body);
+      final List<String> hasNewUpload = updatingImageFileList
+          .where((element) => !element.contains("http"))
+          .toList();
+      if (hasNewUpload.isEmpty) {
+        final ApiResponseModel response = await ForumRepository.editForum(body);
 
-      if (response.success) {
-        imageUrlList.clear();
-        final int forumIndex = _forumController.forums.indexWhere(
-            (ForumModel element) => element.forumId == body['forumId']);
-        _forumController.updateForum(forumIndex, <String, dynamic>{
-          ...response.data,
-          'likes': body['likes'],
-          'coins': body['coins'],
-          'user': body['user'],
-          'comments': body['comments']
-        });
+        if (response.success) {
+          updatingImageFileList.clear();
+          final int forumIndex = _forumController.forums.indexWhere(
+              (ForumModel element) => element.forumId == body['forumId']);
+          _forumController.updateForum(forumIndex, <String, dynamic>{
+            ...response.data,
+            'likes': body['likes'],
+            'coins': body['coins'],
+            'user': body['user'],
+            'comments': body['comments']
+          });
 
-        Get.back();
+          Get.back();
+        }
+      } else {
+        final List<String>? uploadedFiles = await uploadUpdatingFile();
+        if (uploadedFiles == null) {
+          showSnackbar(message: 'Error Uploading image');
+        } else {
+          final List<String> alreadyUploadedFileUrls = updatingImageFileList
+              .where((element) => element.contains("http"))
+              .toList();
+          //////stopped here
+          final ApiResponseModel response = await ForumRepository.editForum({
+            ...body,
+            'images': [...alreadyUploadedFileUrls, ...uploadedFiles]
+          });
+
+          if (response.success) {
+            updatingImageFileList.clear();
+            final int forumIndex = _forumController.forums.indexWhere(
+                (ForumModel element) => element.forumId == body['forumId']);
+            _forumController.updateForum(forumIndex, <String, dynamic>{
+              ...response.data,
+              'likes': body['likes'],
+              'coins': body['coins'],
+              'user': body['user'],
+              'comments': body['comments']
+            });
+
+            Get.back();
+          }
+        }
       }
 
       loading(false);
@@ -152,12 +235,26 @@ class CreateForumController extends GetxController {
     update();
   }
 
+  void removeUpdatingImage(int index) {
+    RxList<String> myAE = updatingImageFileList;
+    myAE.removeAt(index);
+    updatingImageFileList = myAE;
+    update();
+  }
+
   /// PICK IMAGE FROM DEVICE GALLERY
-  Future<void> onPickImage() async {
+  Future<void> onPickImage({bool isUpdating = false}) async {
     try {
       final List<XFile> pickedFileList = await _picker.pickMultiImage();
-      imageFileList =
-          RxList<XFile>(<XFile>[...pickedFileList, ...imageFileList]);
+      if (isUpdating) {
+        final List<String> paths =
+            pickedFileList.map((XFile e) => e.path).toList();
+        updatingImageFileList =
+            RxList<String>(<String>[...paths, ...updatingImageFileList]);
+      } else {
+        imageFileList =
+            RxList<XFile>(<XFile>[...pickedFileList, ...imageFileList]);
+      }
       update();
     } catch (e) {
       rethrow;
@@ -177,7 +274,7 @@ class CreateForumController extends GetxController {
   void onClose() {
     // TODO: implement onClose
     imageFileList.clear();
-    imageUrlList.clear();
+    updatingImageFileList.clear();
     super.onClose();
   }
 }
