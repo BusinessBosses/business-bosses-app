@@ -281,6 +281,7 @@ class _PostTileState extends State<PostTile> {
                                             postId: widget.post.postId,
                                             post: widget.post.title,
                                             postDetail: widget.post,
+                                            images: widget.post.images,
                                           ));
                                     } else if (val == 'Delete') {
                                       showDialog(

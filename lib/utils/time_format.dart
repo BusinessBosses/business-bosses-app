@@ -10,43 +10,56 @@ class TimeFormat {
   static const num ONE_WEEK = 604800000;
   static const num ONE_MONTH = 1000 * 60 * 60 * 24 * 30;
 
+  static const String MANY_SECONDS_AGO = 'secs ago';
+  static const String MANY_MINUTES_AGO = 'mins ago';
+  static const String MANY_HOURS_AGO = 'hours ago';
+  static const String MANY_DAYS_AGO = 'days ago';
+  static const String MANY_MONTHS_AGO = 'months ago';
+  static const String MANY_YEARS_AGO = 'years ago';
+
   static const String ONE_SECOND_AGO = 'sec ago';
   static const String ONE_MINUTE_AGO = 'min ago';
-  static const String ONE_HOUR_AGO = 'hours ago';
-  static const String ONE_DAY_AGO = 'days ago';
-  static const String ONE_MONTH_AGO = 'months ago';
-  static const String ONE_YEAR_AGO = 'years ago';
+  static const String ONE_HOUR_AGO = 'hour ago';
+  static const String ONE_DAY_AGO = 'day ago';
+  static const String ONE_MONTH_AGO = 'month ago';
+  static const String ONE_YEAR_AGO = 'year ago';
 
   //Time conversion
   static String formatString(int? timestamp) {
     num delta = DateTime.now().millisecondsSinceEpoch - timestamp!;
-
     if (delta < 1 * ONE_SECOND) {
       num seconds = toSeconds(delta);
-      return '${(seconds < 1 ? 1 : seconds).toInt()} ${seconds.toInt() == 1 ? 'second ago' : ONE_SECOND_AGO}';
+      return '${(seconds < 1 ? 1 : seconds).toInt()} $MANY_SECONDS_AGO';
     }
     if (delta < 1 * ONE_MINUTE) {
       num seconds = toSeconds(delta);
-      return '${(seconds <= 0 ? 1 : seconds).toInt()} ${seconds.toInt() == 1 ? 'second ago' : ONE_SECOND_AGO}';
+      String secondsLabel =
+          seconds.toInt() == 1 ? ONE_SECOND_AGO : MANY_SECONDS_AGO;
+      return '${(seconds <= 0 ? 1 : seconds).toInt()} $secondsLabel';
     }
     if (delta < 45 * ONE_MINUTE) {
       num minutes = toMinutes(delta);
-      return '${(minutes <= 0 ? 1 : minutes).toInt()} ${minutes.toInt() == 1 ? 'minute ago' : ONE_MINUTE_AGO}';
+      String minutesLabel =
+          minutes.toInt() == 1 ? ONE_MINUTE_AGO : MANY_MINUTES_AGO;
+      return '${(minutes <= 0 ? 1 : minutes).toInt()} $minutesLabel';
     }
     if (delta < 24 * ONE_HOUR) {
       num hours = toHours(delta);
-      return '${(hours <= 0 ? 1 : hours).toInt()} ${hours.toInt() == 1 ? 'hour ago' : ONE_HOUR_AGO}';
+      String hoursLabel = hours.toInt() == 1 ? ONE_HOUR_AGO : MANY_HOURS_AGO;
+      return '${(hours <= 0 ? 1 : hours).toInt()} $hoursLabel';
     }
     if (delta < 48 * ONE_HOUR) {
       return 'yesterday';
     }
     if (delta < 30 * ONE_DAY) {
       num days = toDays(delta);
-      return '${(days <= 0 ? 1 : days).toInt()} ${days.toInt() == 1 ? 'day ago' : ONE_DAY_AGO}';
+      String daysLabel = days.toInt() == 1 ? ONE_DAY_AGO : MANY_DAYS_AGO;
+      return '${(days <= 0 ? 1 : days).toInt()} $daysLabel';
     }
     if (delta < 12 * 4 * ONE_WEEK) {
       num months = toMonths(delta);
-      return '${(months <= 0 ? 1 : months).toInt()} ${months.toInt() == 1 ? 'month ago' : ONE_MONTH_AGO}';
+      String monthLabel = months.toInt() == 1 ? ONE_MONTH_AGO : MANY_MONTHS_AGO;
+      return '${(months <= 0 ? 1 : months).toInt()} $monthLabel';
     } else {
       String formatDate(DateTime timestamp) {
         DateFormat formatter = DateFormat('d MMMM, yyyy');

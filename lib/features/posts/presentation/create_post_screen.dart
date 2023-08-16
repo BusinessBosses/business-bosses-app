@@ -12,6 +12,7 @@ import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../../profile/controller/profile_controller.dart';
 import '../models/post_model.dart';
@@ -37,7 +38,8 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   dynamic _overlayEntry;
   final TextEditingController _titleCtrl = TextEditingController();
   final ProfileController _profileController = Get.find();
-  // final CreatePostController = Get.find();
+  final CreatePostController _createPostController =
+      Get.put(CreatePostController());
 
   void onDetectionFinished() {
     _overlayEntry?.remove();
@@ -48,7 +50,10 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   @override
   void initState() {
     super.initState();
-    Get.put(CreatePostController());
+    if (widget.images != null) {
+      _createPostController.imageFileList
+          .addAll(widget.images!.map((String? image) => XFile(image!)));
+    }
   }
 
   @override

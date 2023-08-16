@@ -73,39 +73,31 @@ class SubscriptionConfirmation extends StatelessWidget {
                             decoration: BoxDecoration(
                                 color: backgroundcolorinterface,
                                 borderRadius: BorderRadius.circular(9.3)),
-                            child: const TextWidget(
-                              text:
-                                  "Congratulations on becoming a valued subscriber! Welcome to our premium membership program. 🎉 We are thrilled to have you on board, and we promise to provide you with an exceptional experience and exclusive benefits throughout your subscription journey. Thank you for choosing us, and we look forward to serving you with the best we have to offer!",
-                              size: 12,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.black,
-                              centralize: true,
+                            child: const Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                TextWidget(
+                                  text:
+                                      'Congratulations on becoming a valued subscriber! Welcome to our premium membership program. 🎉',
+                                  size: 15,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.black,
+                                  centralize: true,
+                                ),
+                              ],
                             ),
                           ),
                         )
                       ],
                     ),
                     const SizedBox(
-                      height: 30,
+                      height: 50,
                     ),
-                    const SizedBox(
-                      width: double.infinity,
-                      child: TextWidget(
-                        text: 'Enjoy Premium Subscription!',
-                        fontWeight: FontWeight.w800,
-                        size: 20,
-                        color: Color(0xff333333),
-                        centralize: true,
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 91,
-                    ),
-                    const Row(
+                    Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        CircleAvatar(
+                        const CircleAvatar(
                           radius: 14,
                           backgroundColor: Color(0xFFF01C29),
                           child: CircleAvatar(
@@ -113,13 +105,13 @@ class SubscriptionConfirmation extends StatelessWidget {
                             backgroundColor: Colors.white,
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           width: 25,
                         ),
                         Expanded(
                           child: Column(
                             children: [
-                              Row(
+                              const Row(
                                 children: [
                                   TextWidget(
                                     text: 'Payment Confirmed',
@@ -128,16 +120,139 @@ class SubscriptionConfirmation extends StatelessWidget {
                                   )
                                 ],
                               ),
-                              SizedBox(
-                                height: 15,
+                              Column(
+                                children: [
+                                  Stack(
+                                    children: [
+                                      Container(
+                                        decoration: BoxDecoration(
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color: Colors.black
+                                                  .withOpacity(0.03),
+                                              blurRadius: 50.0,
+                                              spreadRadius: 0.0,
+                                            ),
+                                          ],
+                                        ),
+                                        child: SvgPicture.asset(
+                                          'assets/svgs/premiumdescback.svg',
+                                          width:
+                                              MediaQuery.of(context).size.width,
+                                          fit: BoxFit.contain,
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                            top: 60.0, left: 30),
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            const Text(
+                                              'Whats included:',
+                                              style: TextStyle(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            const SizedBox(height: 30),
+                                            Row(
+                                              children: [
+                                                SvgPicture.asset(
+                                                  'assets/svgs/goldcheckmark.svg',
+                                                  height: 25,
+                                                  color: primaryColorLT,
+                                                ),
+                                                const SizedBox(width: 15),
+                                                const Text(
+                                                  'Premium Badge',
+                                                  style: TextStyle(
+                                                      fontSize: 14,
+                                                      fontWeight:
+                                                          FontWeight.w600),
+                                                )
+                                              ],
+                                            ),
+                                            const SizedBox(height: 10),
+                                            Row(
+                                              children: [
+                                                SvgPicture.asset(
+                                                    'assets/svgs/coin.svg',
+                                                    height: 30),
+                                                const SizedBox(width: 10),
+                                                const Text(
+                                                  'Get 500 coins per month',
+                                                  style: TextStyle(
+                                                      fontSize: 14,
+                                                      fontWeight:
+                                                          FontWeight.w600),
+                                                )
+                                              ],
+                                            ),
+                                            const SizedBox(height: 10),
+                                            Row(
+                                              children: [
+                                                SvgPicture.asset(
+                                                    'assets/svgs/rocket.svg',
+                                                    height: 25),
+                                                const SizedBox(width: 15),
+                                                const Text(
+                                                  'Boost post FREE with coins',
+                                                  style: TextStyle(
+                                                      fontSize: 14,
+                                                      fontWeight:
+                                                          FontWeight.w600),
+                                                )
+                                              ],
+                                            ),
+                                            const SizedBox(height: 15),
+                                            Row(
+                                              children: [
+                                                SvgPicture.asset(
+                                                    'assets/svgs/moreconnections.svg',
+                                                    height: 20),
+                                                const SizedBox(width: 15),
+                                                const Text(
+                                                  'More connections & referrals',
+                                                  style: TextStyle(
+                                                      fontSize: 14,
+                                                      fontWeight:
+                                                          FontWeight.w600),
+                                                )
+                                              ],
+                                            ),
+                                            const SizedBox(height: 15),
+                                            Row(
+                                              children: [
+                                                SvgPicture.asset(
+                                                    'assets/svgs/rankingicon.svg',
+                                                    height: 23),
+                                                const SizedBox(width: 15),
+                                                const Text(
+                                                  'Rank higher on posts & listing',
+                                                  style: TextStyle(
+                                                      fontSize: 14,
+                                                      fontWeight:
+                                                          FontWeight.w600),
+                                                )
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ],
                               ),
                             ],
                           ),
-                        )
+                        ),
                       ],
                     ),
                     const SizedBox(
-                      height: 150,
+                      height: 10,
                     ),
                     MyButton(
                       labelStyle: const TextStyle(

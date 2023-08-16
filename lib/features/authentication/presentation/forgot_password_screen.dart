@@ -1,5 +1,6 @@
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 import '../../../action/action.dart';
@@ -30,8 +31,20 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     return GestureDetector(
       onTap: () => unFocusKeyboard(context),
       child: Scaffold(
+        backgroundColor: backgroundcolorinterface,
         appBar: AppBar(
-          title: const Text('Forgot password'),
+          leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
+          ),
+          centerTitle: true,
+          title: const Text(
+            'Forgot password',
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 20),
+          ),
         ),
         body: Form(
           key: _formKey,
