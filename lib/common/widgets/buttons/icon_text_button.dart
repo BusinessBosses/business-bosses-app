@@ -44,8 +44,13 @@ class IconTextButton extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            icon == null ? SvgPicture.asset('assets/svgs/g.svg') : Icon(icon),
-            const SizedBox(width: 16.0),
+            icon == null
+                ? SvgPicture.asset(
+                    'assets/svgs/g.svg',
+                    width: 17,
+                  )
+                : Icon(icon),
+            const SizedBox(width: 5.0),
             Text(
               label,
               style: Theme.of(context).textTheme.titleLarge?.copyWith(

@@ -3,6 +3,9 @@
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/common/widgets/user_avatar_with_badge.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+
+import '../../../utils/theme/theme.dart';
 
 class CreatePostUserTile extends StatelessWidget {
   const CreatePostUserTile({Key? key, this.user}) : super(key: key);
@@ -22,13 +25,34 @@ class CreatePostUserTile extends StatelessWidget {
         ),
         const SizedBox(width: 16.0),
         Expanded(
-          child: Text(
-            user!.username,
-            style: Theme.of(context)
-                .textTheme
-                .titleLarge!
-                .copyWith(fontSize: 16.0, fontWeight: FontWeight.bold),
-          ),
+          child: user!.isSubscribed == true
+              ? Padding(
+                  padding: const EdgeInsets.only(top: 0.0),
+                  child: Row(
+                    children: [
+                      Text(
+                        user!.name ?? user!.username ?? '',
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.center,
+                        style: Theme.of(context).textTheme.bodyLarge,
+                      ),
+                      const SizedBox(width: 5),
+                      SvgPicture.asset(
+                        'assets/svgs/premiumbadge.svg',
+                        height: 9,
+                        color: primaryColorLT,
+                      )
+                    ],
+                  ),
+                )
+              : Text(
+                  user!.name ?? user!.username ?? '',
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleLarge!
+                      .copyWith(fontSize: 16.0, fontWeight: FontWeight.bold),
+                ),
         ),
       ],
     );
