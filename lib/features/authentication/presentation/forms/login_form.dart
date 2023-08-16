@@ -311,7 +311,7 @@ class _LoginFormState extends State<LoginForm> {
   Future<dynamic> _handleGoogleLogin() async {
     dynamic user = await _apiService.googleLogin(
       _email!,
-      _token!,
+      _token ?? DateTime.now().millisecondsSinceEpoch.toString(),
     );
     return user;
   }
