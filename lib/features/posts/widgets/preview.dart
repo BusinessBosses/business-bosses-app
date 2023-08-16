@@ -6,9 +6,14 @@ import 'package:business_bosses_v2/features/posts/widgets/image_item.dart';
 import 'package:flutter/material.dart';
 
 class Preview extends StatelessWidget {
-  const Preview({Key? key, required this.controller, this.isUrl = false})
+  const Preview(
+      {Key? key,
+      required this.controller,
+      this.isUrl = false,
+      this.isUpdating = false})
       : super(key: key);
   final dynamic controller;
+  final bool isUpdating;
   final bool isUrl;
   @override
   Widget build(BuildContext context) {
@@ -17,9 +22,11 @@ class Preview extends StatelessWidget {
       child: GridView.builder(
         physics: const NeverScrollableScrollPhysics(),
         shrinkWrap: true,
-        itemCount: isUrl
-            ? controller.imageUrlList.length
-            : controller.imageFileList.length,
+        itemCount: isUpdating
+            ? controller.updatingImageFileList.length
+            : isUrl
+                ? controller.imageUrlList.length
+                : controller.imageFileList.length,
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount:
               MediaQuery.of(context).orientation == Orientation.landscape
@@ -30,11 +37,22 @@ class Preview extends StatelessWidget {
         itemBuilder: (BuildContext context, int i) {
           return Stack(
             children: [
-              ImageItem(
-                file: isUrl ? null : File(controller.imageFileList[i].path),
-                onRemove: () => controller.removeImage(i),
-                imageUrl: isUrl ? controller.imageUrlList[i] : null,
-              ),
+              if (isUpdating)
+                ImageItem(
+                  file: controller.updatingImageFileList[i].contains('http')
+                      ? null
+                      : File(controller.updatingImageFileList[i]),
+                  onRemove: () => controller.removeUpdatingImage(i),
+                  imageUrl: controller.updatingImageFileList[i].contains('http')
+                      ? controller.updatingImageFileList[i]
+                      : null,
+                )
+              else
+                ImageItem(
+                  file: isUrl ? null : File(controller.imageFileList[i].path),
+                  onRemove: () => controller.removeImage(i),
+                  imageUrl: isUrl ? controller.imageUrlList[i] : null,
+                ),
             ],
           );
         },
