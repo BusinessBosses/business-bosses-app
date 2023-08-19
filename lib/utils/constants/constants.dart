@@ -41,6 +41,7 @@ class Constants {
 
   static const String LEARNINGID = '-Mos1VMnV53H7AZa0W8p';
   static const String BOSS_UP_CHALLENGE_CATEGORY_ID = '-Mos1VMlx3oxZFRaw_BH';
+  static const String MARKET_PLACE_CATEGORY_ID = 'market_category_id';
   // static const String BOSS_UP_CHALLENGE_ID =
   //     '840396d6-8563-4cb4-811c-e4ddc81e170c';
   static const String OPPORTUNITIESID = '-Mos1VMnV53H7AZa0W8q';
