@@ -115,12 +115,12 @@ class _BossUpSectionState extends State<BossUpSection> {
                                       int previousStamp = _myProfile.myProfile
                                               .bossOfTheWeekTimeStamp ??
                                           0;
-                                      if ((previousStamp + 2419200000) > now) {
+                                      if ((previousStamp + 1209600000) > now) {
                                         const SnackBar snackBar = SnackBar(
                                           duration: Duration(seconds: 4),
                                           content: Text(
                                               'You may have posted in Boss Up Challenge'
-                                              ' in the past 4 weeks. You Can only post once in 4 weeks.'),
+                                              ' in the past 12 weeks. You Can only post once in 12 weeks.'),
                                         );
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(snackBar);
