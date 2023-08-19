@@ -315,29 +315,29 @@ class _SignUpFormState extends State<SignUpForm> {
           ),
 
           const SizedBox(height: 25.0),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              TextFormField(
-                onChanged: (String val) {
-                  _inviteId = val;
-                  setState(() {});
-                },
-                textInputAction: TextInputAction.done,
-                keyboardType: TextInputType.visiblePassword,
-                decoration: inputDecoration.copyWith(
-                  hintText: 'Invite Id (Optional)',
-                  hintStyle: const TextStyle(
-                    color: iconColor,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                  ),
-                  filled: true,
-                  fillColor: const Color(0xffF4F4F4),
-                ),
-              ),
-            ],
-          ),
+          // Column(
+          //   crossAxisAlignment: CrossAxisAlignment.start,
+          //   children: [
+          //     TextFormField(
+          //       onChanged: (String val) {
+          //         _inviteId = val;
+          //         setState(() {});
+          //       },
+          //       textInputAction: TextInputAction.done,
+          //       keyboardType: TextInputType.visiblePassword,
+          //       decoration: inputDecoration.copyWith(
+          //         hintText: 'Invite Id (Optional)',
+          //         hintStyle: const TextStyle(
+          //           color: iconColor,
+          //           fontSize: 14,
+          //           fontWeight: FontWeight.w600,
+          //         ),
+          //         filled: true,
+          //         fillColor: const Color(0xffF4F4F4),
+          //       ),
+          //     ),
+          //   ],
+          // ),
 
           const SizedBox(height: 24.0),
 
