@@ -3,6 +3,7 @@ import 'package:business_bosses_v2/common/widgets/tiles/custom_tileinterests.dar
 import 'package:business_bosses_v2/features/profile/widgets/productandserviceschip.dart';
 import 'package:business_bosses_v2/functions/my_native_functions.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
+import 'package:business_bosses_v2/utils/constants/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:flutter_svg/svg.dart';
@@ -296,9 +297,15 @@ Widget profileinfodisplay(BuildContext context, UserModel publicUser) {
                         ? publicUser.interests![i].industry!
                         : '',
                     onTap: () {
-                      if (i == 0) {
+                      if (publicUser.interests![i].categoryId ==
+                          Constants.BOSS_UP_CHALLENGE_CATEGORY_ID) {
                         Get.toNamed(
                           Routes.allCommunitiesScreen,
+                        );
+                      } else if (publicUser.interests![i].categoryId ==
+                          Constants.MARKET_PLACE_CATEGORY_ID) {
+                        Get.toNamed(
+                          Routes.marketPlace,
                         );
                       } else {
                         Get.toNamed(
