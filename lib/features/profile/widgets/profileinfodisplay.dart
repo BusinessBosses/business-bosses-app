@@ -296,10 +296,16 @@ Widget profileinfodisplay(BuildContext context, UserModel publicUser) {
                         ? publicUser.interests![i].industry!
                         : '',
                     onTap: () {
-                      Get.toNamed(
-                        Routes.allforumscreen,
-                        arguments: publicUser.interests![i],
-                      );
+                      if (i == 0) {
+                        Get.toNamed(
+                          Routes.allCommunitiesScreen,
+                        );
+                      } else {
+                        Get.toNamed(
+                          Routes.allforumscreen,
+                          arguments: publicUser.interests![i],
+                        );
+                      }
                     },
                   ),
                 ],
