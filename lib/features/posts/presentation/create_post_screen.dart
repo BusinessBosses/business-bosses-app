@@ -50,10 +50,11 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   @override
   void initState() {
     super.initState();
-    if (widget.images != null) {
-      _createPostController.imageFileList
-          .addAll(widget.images!.map((String? image) => XFile(image!)));
-    }
+    // if (widget.pos != null) {
+    // _createPostController.imageFileList
+    //     .addAll(widget.images!.map((String? image) => XFile(image!)));
+    _createPostController.initializePostEditImage(widget.postDetail?.images);
+    // }
   }
 
   @override
@@ -165,15 +166,21 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                   const SizedBox(
                     height: 10,
                   ),
-                  AddImageWidget(controller: controller),
+                  AddImageWidget(
+                    controller: controller,
+                    isUpdating: widget.postDetail != null,
+                  ),
                   const SizedBox(
                     height: 10,
                   ),
-                  if (controller.imageFileList.isNotEmpty)
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: Preview(controller: controller),
+                  // if (controller.imageFileList.isNotEmpty)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Preview(
+                      controller: controller,
+                      isUpdating: widget.postDetail != null,
                     ),
+                  ),
                   widget.postId == null
                       ? PromoteSection(controller: controller)
                       : Container(),

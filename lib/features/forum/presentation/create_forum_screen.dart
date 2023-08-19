@@ -187,7 +187,7 @@ class _CreateForumScreenState extends State<CreateForumScreen> {
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
                     child: Preview(
                       controller: controller,
-                      isUpdating: true,
+                      isUpdating: isUpdating,
                     ),
                   ),
                   SizedBox(height: 24.0),
@@ -201,7 +201,7 @@ class _CreateForumScreenState extends State<CreateForumScreen> {
                             'title': title.trim(),
                             'description': description.trim(),
                             'industryId': industryId,
-                          });
+                          }, isBossup: isbossup);
                         } else {
                           controller.createForum({
                             'title': title.trim(),

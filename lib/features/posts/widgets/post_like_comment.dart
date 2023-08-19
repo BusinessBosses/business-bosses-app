@@ -1,6 +1,8 @@
+import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/common/models/comment_model.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/posts/models/post_model.dart';
+import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
@@ -37,7 +39,7 @@ class _PostLikeCommentItemState extends State<PostLikeCommentItem> {
   @override
   void initState() {
     _loadCommentWithDetails();
-    _loadLikesWithDetails();
+    _loadLikesWithDetails(widget.post.postId);
     super.initState();
   }
 
@@ -133,6 +135,10 @@ class _PostLikeCommentItemState extends State<PostLikeCommentItem> {
                           itemCount: _users.length,
                           itemBuilder: (BuildContext context, int i) {
                             return ListTile(
+                              onTap: () {
+                                Get.toNamed(Routes.publicProfile,
+                                    arguments: _users[i]);
+                              },
                               leading: UserAvatarWithBadge(
                                 user: _users[i],
                                 height: 48.0,
@@ -178,16 +184,23 @@ class _PostLikeCommentItemState extends State<PostLikeCommentItem> {
 
   final List<UserModel> _users = [];
 
-  Future<void> _loadLikesWithDetails() async {
-    for (dynamic l in widget.post.likes ?? []) {
-      final Map<String, dynamic> response = await ProfileController.loadData(l);
-      _users.add(
-        UserModel(
-            uid: l,
-            name: response['user']['name'] ?? response['user']['username'],
-            bio: response['user']['bio']),
-      );
+  Future<void> _loadLikesWithDetails(String postId) async {
+    final ApiResponseModel response =
+        await ApiService.get(path: 'likes/post/$postId');
+    if (response.success) {
+      for (var i = 0; i < response.data['rows'].length; i++) {
+        _users.add(UserModel.fromMap(response.data['rows'][i]['user']));
+      }
     }
+    // for (dynamic l in widget.post.likes ?? []) {
+    //   final Map<String, dynamic> response = await ProfileController.loadData(l);
+    //   _users.add(
+    //     UserModel(
+    //         uid: l,
+    //         name: response['user']['name'] ?? response['user']['username'],
+    //         bio: response['user']['bio']),
+    //   );
+    // }
     if (mounted) {
       setState(() {
         _isLoadingLikes = false;

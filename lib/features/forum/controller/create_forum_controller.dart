@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
+import 'package:business_bosses_v2/features/forum/controller/bossup_controller.dart';
 import 'package:business_bosses_v2/features/forum/controller/forum_controller.dart';
 import 'package:business_bosses_v2/features/forum/models/forum_model.dart';
 import 'package:business_bosses_v2/features/forum/repository/forum_repository.dart';
@@ -83,7 +84,7 @@ class CreateForumController extends GetxController {
   Future<dynamic> uploadUpdatingFile() async {
     /// RAW FILES
     final List<String> rawFiles = updatingImageFileList
-        .where((element) => !element.contains("http"))
+        .where((element) => !element.contains("http") && element.isNotEmpty)
         .toList();
 
     /// UPLOADED FILE URLS
@@ -162,28 +163,44 @@ class CreateForumController extends GetxController {
   }
 
   /// EDIT POST CONTROLLER (EDIT POST TO REMOTE DATA SOURCE)
-  Future<void> editForum(Map<String, dynamic> body) async {
+  Future<void> editForum(Map<String, dynamic> body,
+      {bool isBossup = true}) async {
     if (validateCreatePostData(body)) {
       loading(true);
       update();
 
       final List<String> hasNewUpload = updatingImageFileList
-          .where((element) => !element.contains("http"))
+          .where((element) => !element.contains("http") && element.isNotEmpty)
           .toList();
       if (hasNewUpload.isEmpty) {
-        final ApiResponseModel response = await ForumRepository.editForum(body);
+        final ApiResponseModel response = await ForumRepository.editForum(
+            {...body, 'images': updatingImageFileList});
 
         if (response.success) {
           updatingImageFileList.clear();
-          final int forumIndex = _forumController.forums.indexWhere(
-              (ForumModel element) => element.forumId == body['forumId']);
-          _forumController.updateForum(forumIndex, <String, dynamic>{
-            ...response.data,
-            'likes': body['likes'],
-            'coins': body['coins'],
-            'user': body['user'],
-            'comments': body['comments']
-          });
+          final BossUpController bossUpController = Get.find();
+
+          if (isBossup) {
+            final int forumIndex = bossUpController.forums.indexWhere(
+                (ForumModel element) => element.forumId == body['forumId']);
+            bossUpController.updateForum(forumIndex, <String, dynamic>{
+              ...response.data,
+              'likes': body['likes'],
+              'coins': body['coins'],
+              'user': body['user'],
+              'comments': body['comments']
+            });
+          } else {
+            final int forumIndex = _forumController.forums.indexWhere(
+                (ForumModel element) => element.forumId == body['forumId']);
+            _forumController.updateForum(forumIndex, <String, dynamic>{
+              ...response.data,
+              'likes': body['likes'],
+              'coins': body['coins'],
+              'user': body['user'],
+              'comments': body['comments']
+            });
+          }
 
           Get.back();
         }
@@ -203,15 +220,29 @@ class CreateForumController extends GetxController {
 
           if (response.success) {
             updatingImageFileList.clear();
-            final int forumIndex = _forumController.forums.indexWhere(
-                (ForumModel element) => element.forumId == body['forumId']);
-            _forumController.updateForum(forumIndex, <String, dynamic>{
-              ...response.data,
-              'likes': body['likes'],
-              'coins': body['coins'],
-              'user': body['user'],
-              'comments': body['comments']
-            });
+            final BossUpController bossUpController = Get.find();
+
+            if (isBossup) {
+              final int forumIndex = bossUpController.forums.indexWhere(
+                  (ForumModel element) => element.forumId == body['forumId']);
+              bossUpController.updateForum(forumIndex, <String, dynamic>{
+                ...response.data,
+                'likes': body['likes'],
+                'coins': body['coins'],
+                'user': body['user'],
+                'comments': body['comments']
+              });
+            } else {
+              final int forumIndex = _forumController.forums.indexWhere(
+                  (ForumModel element) => element.forumId == body['forumId']);
+              _forumController.updateForum(forumIndex, <String, dynamic>{
+                ...response.data,
+                'likes': body['likes'],
+                'coins': body['coins'],
+                'user': body['user'],
+                'comments': body['comments']
+              });
+            }
 
             Get.back();
           }
