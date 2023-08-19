@@ -86,6 +86,14 @@ class BossUpController extends GetxController {
     update();
   }
 
+  void deleteForum(String forumId) {
+    final HomeController homeController = Get.find();
+    forums.removeWhere((element) => element.forumId == forumId);
+    homeController.removeForum(forumId);
+
+    update();
+  }
+
   Future<void> fetchIndustryUsers(String industryId,
       {bool isNext = false}) async {
     members.clear();

@@ -1,6 +1,7 @@
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/common/models/comment_model.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
+import 'package:business_bosses_v2/features/forum/controller/bossup_controller.dart';
 import 'package:business_bosses_v2/features/forum/models/forum_model.dart';
 import 'package:business_bosses_v2/features/forum/models/industry.dart';
 import 'package:business_bosses_v2/features/forum/repository/forum_repository.dart';
@@ -9,6 +10,9 @@ import 'package:business_bosses_v2/features/profile/controller/profile_controlle
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
+
+import '../../../common/dialogs/snackbar.dart';
+import '../../../services/api_service.dart';
 
 class ForumController extends GetxController {
   late IO.Socket socket;
