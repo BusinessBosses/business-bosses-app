@@ -6,6 +6,7 @@ import 'package:detectable_text_field/widgets/detectable_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:jiffy/jiffy.dart';
 import '../../../action/action.dart';
 import '../../../common/models/api_response_model.dart';
 import '../../../common/models/comment_model.dart';
@@ -778,7 +779,10 @@ class _ForumItemState extends State<ForumItem> {
                         Padding(
                           padding: const EdgeInsets.only(right: 15),
                           child: Text(
-                            TimeFormat.formatString(widget.forum.timestamp!),
+                            Jiffy.parseFromMillisecondsSinceEpoch(
+                                    widget.forum.timestamp!)
+                                .fromNow(),
+                            // TimeFormat.formatString(widget.forum.timestamp!),
                             style: Theme.of(context)
                                 .textTheme
                                 .bodyMedium
