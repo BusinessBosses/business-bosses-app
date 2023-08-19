@@ -1,3 +1,5 @@
+import 'package:business_bosses_v2/features/forum/controller/bossup_controller.dart';
+import 'package:business_bosses_v2/features/forum/controller/forum_controller.dart';
 import 'package:business_bosses_v2/features/forum/models/forum_model.dart';
 import 'package:business_bosses_v2/features/forum/widgets/bossup_like_comment.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
@@ -812,5 +814,33 @@ class _ForumItemState extends State<ForumItem> {
 
   leadingWidth(ForumModel? forum) {}
 
-  void _showDialog() {}
+  void _showDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        title: const Text(
+          'Delete Post',
+          style: bodyText1,
+        ),
+        content: const Text('Are you sure you want to delete this post?'),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => Get.back(),
+            child: const Text('No'),
+          ),
+          TextButton(
+            onPressed: () {
+              widget.controller.removeForum(widget.forum.forumId);
+              if (Get.isRegistered<BossUpController>()) {
+                Get.find<BossUpController>().deleteForum(widget.forum.forumId);
+              }
+              // ForumController().onDeleteForum(widget.forum.forumId);
+              Get.back();
+            },
+            child: const Text('Yes'),
+          ),
+        ],
+      ),
+    );
+  }
 }
