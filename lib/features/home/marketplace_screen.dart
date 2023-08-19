@@ -1,3 +1,4 @@
+import 'package:business_bosses_v2/features/forum/models/industry.dart';
 import 'package:business_bosses_v2/features/home/widgets/bottom_bar.dart';
 import 'package:business_bosses_v2/features/home/widgets/sellingpopup.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -887,9 +888,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
       onTap: () async {
         final SharedPreferences prefs = await SharedPreferences.getInstance();
         final String? userId = prefs.getString(Constants.USER_ID);
-        await ApiService.post(path: 'members', body: <String, dynamic>{
-          'type': 'marketplace',
-        });
+
         setState(() {
           if (_marketController.isJoined.value) {
             _marketController.users
@@ -898,6 +897,19 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
             _marketController.users.add(_profileController.myProfile);
           }
           _marketController.isJoined.value = !_marketController.isJoined.value;
+        });
+        final Map<String, dynamic> marketData = <String, dynamic>{
+          'industryId': 'market_place_id',
+          'categoryId': Constants.MARKET_PLACE_CATEGORY_ID,
+          'description': '- Sell your products and services \n - Find Supplies',
+          'industry': 'Market Place',
+          'photo': 'http://44.210.87.234/learningImages/marketplace.jpg',
+          'active': true,
+          'timestamp': DateTime.now().millisecondsSinceEpoch
+        };
+        _profileController.toggleInterests(Industry.toObject(marketData));
+        await ApiService.post(path: 'members', body: <String, dynamic>{
+          'type': 'marketplace',
         });
       },
       child: Container(

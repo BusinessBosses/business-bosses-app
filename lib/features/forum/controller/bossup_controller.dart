@@ -79,6 +79,13 @@ class BossUpController extends GetxController {
     update();
   }
 
+  void updateForum(int index, Map<String, dynamic> data) {
+    if (index != -1) {
+      forums[index] = ForumModel.fromMap(data);
+    }
+    update();
+  }
+
   Future<void> fetchIndustryUsers(String industryId,
       {bool isNext = false}) async {
     members.clear();
