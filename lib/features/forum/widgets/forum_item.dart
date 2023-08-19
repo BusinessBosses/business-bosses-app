@@ -438,7 +438,7 @@ class _ForumItemState extends State<ForumItem> {
                                                   arguments: {
                                                     'isUpdating': true,
                                                     'forum': widget.forum,
-                                                    'isBossUp': false,
+                                                    'isBossUp': widget.isBossUp,
                                                   });
                                             } else if (val == 'Delete') {
                                               _showDialog(widget.forum.forumId);
@@ -638,7 +638,9 @@ class _ForumItemState extends State<ForumItem> {
                             padding: const EdgeInsets.only(
                                 left: 15, right: 15, top: 10),
                             child: AllImagesItem(
-                              widget.forum.images!,
+                              widget.forum.images!
+                                  .where((element) => element.isNotEmpty)
+                                  .toList(),
                             ),
                           ),
                     Row(

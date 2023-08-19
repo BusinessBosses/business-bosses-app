@@ -9,8 +9,11 @@ import 'package:flutter_svg/svg.dart';
 import '../../../common/dialogs/snackbar.dart';
 
 class AddImageWidget extends StatelessWidget {
-  const AddImageWidget({Key? key, required this.controller}) : super(key: key);
+  const AddImageWidget(
+      {Key? key, required this.controller, this.isUpdating = false})
+      : super(key: key);
   final CreatePostController controller;
+  final bool isUpdating;
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +32,7 @@ class AddImageWidget extends StatelessWidget {
           GestureDetector(
             onTap: () {
               if (controller.imageFileList.length < 5) {
-                controller.onPickImage();
+                controller.onPickImage(isUpdating: isUpdating);
               } else {
                 showSnackbar(message: 'You can only upload up to 5 images.');
               }

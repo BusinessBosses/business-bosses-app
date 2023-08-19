@@ -6,6 +6,7 @@ import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/posts/repository/post_repository.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -22,6 +23,7 @@ class CreatePostController extends GetxController {
 
   /// SELECTED IMAGES
   RxList<XFile> imageFileList = RxList<XFile>(<XFile>[]);
+  RxList<String> updatingImageFileList = RxList<String>(<String>[]);
 
   /// PROMOTE STATE
   RxBool shouldPromote = false.obs;
@@ -159,42 +161,74 @@ class CreatePostController extends GetxController {
     }
   }
 
+  Future<dynamic> uploadUpdatingFile() async {
+    /// RAW FILES
+    final List<String> rawFiles = updatingImageFileList
+        .where((element) => !element.contains("http") && element.isNotEmpty)
+        .toList();
+
+    /// UPLOADED FILE URLS
+
+    List<String> fileUrls = <String>[];
+
+    /// FILED SELECTED FILES
+    List<File> resourceFile = <File>[];
+
+    for (int i = 0; i < rawFiles.length; i++) {
+      File file = File(rawFiles[i]);
+      resourceFile.add(file);
+    }
+
+    for (int i = 0; i < rawFiles.length; i++) {
+      final int bytes = resourceFile[i].readAsBytesSync().lengthInBytes;
+      final double kb = bytes / 1024;
+      final double mb = kb / 1024;
+
+      if (mb >= 5) {
+        showSnackbar(message: 'Image size should be maximum 10 MB.');
+        loading(false);
+        return null;
+      } else {
+        final dynamic res = await ApiService.uploadFile(resourceFile[i]);
+
+        if (res == null) {
+          return null;
+        } else {
+          fileUrls.add(res['fileUrl']);
+        }
+      }
+    }
+
+    return fileUrls;
+  }
+
+  void initializePostEditImage(List<String>? images) {
+    if (images != null) {
+      updatingImageFileList.addAll(images);
+    }
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      update();
+    });
+  }
+
   /// delete a selected post
   Future<void> onEditPost(PostModel? post, String title) async {
     loading(true);
     update();
-    if (imageFileList.isEmpty) {
-      final ApiResponseModel response = await ApiService.put(
-        path: 'post/update-post/${post?.postId}',
-        body: <String, dynamic>{'title': title},
-      );
-
-      if (response.success) {
-        final ProfileController profileController = Get.find();
-        final HomeController homeController = Get.find();
-        PostModel modelizedPost = PostModel.fromMap({
-          ...post!.toMap(),
-          ...response.data,
-        });
-        homeController.updatePost(modelizedPost);
-        profileController.updatePost(modelizedPost);
-        Get.back();
-        showSnackbar(message: 'Post updated successfully!', title: 'Success');
-      } else {
-        showSnackbar(
-            message: 'Failed to editing post.', title: 'O0PS!', error: true);
-      }
-    } else {
-      if (await uploadFile() == null) {
-        showSnackbar(message: 'Error Uploading image');
-      } else {
+    if (validateCreatePostData(post!.toMap())) {
+      final List<String> hasNewUpload = updatingImageFileList
+          .where((element) => !element.contains("http") && element.isNotEmpty)
+          .toList();
+      if (hasNewUpload.isEmpty) {
         final ApiResponseModel response = await ApiService.put(
           path: 'post/update-post/${post?.postId}',
-          body: <String, dynamic>{'title': title, 'images': await uploadFile()},
+          body: <String, dynamic>{
+            'title': title,
+            'images': updatingImageFileList
+          },
         );
 
         if (response.success) {
-          imageFileList.clear();
           final ProfileController profileController = Get.find();
           final HomeController homeController = Get.find();
           PostModel modelizedPost = PostModel.fromMap({
@@ -208,6 +242,41 @@ class CreatePostController extends GetxController {
         } else {
           showSnackbar(
               message: 'Failed to editing post.', title: 'O0PS!', error: true);
+        }
+      } else {
+        final List<String>? uploadedFiles = await uploadUpdatingFile();
+        if (uploadedFiles == null) {
+          showSnackbar(message: 'Error Uploading image');
+        } else {
+          final List<String> alreadyUploadedFileUrls = updatingImageFileList
+              .where((element) => element.contains("http"))
+              .toList();
+
+          final ApiResponseModel response = await ApiService.put(
+            path: 'post/update-post/${post?.postId}',
+            body: <String, dynamic>{
+              'title': title,
+              'images': [...alreadyUploadedFileUrls, ...uploadedFiles]
+            },
+          );
+          if (response.success) {
+            final ProfileController profileController = Get.find();
+            final HomeController homeController = Get.find();
+            PostModel modelizedPost = PostModel.fromMap({
+              ...post!.toMap(),
+              ...response.data,
+            });
+            homeController.updatePost(modelizedPost);
+            profileController.updatePost(modelizedPost);
+            Get.back();
+            showSnackbar(
+                message: 'Post updated successfully!', title: 'Success');
+          } else {
+            showSnackbar(
+                message: 'Failed to editing post.',
+                title: 'O0PS!',
+                error: true);
+          }
         }
       }
     }
@@ -229,12 +298,27 @@ class CreatePostController extends GetxController {
     update();
   }
 
+  void removeUpdatingImage(int index) {
+    RxList<String> myAE = updatingImageFileList;
+    myAE.removeAt(index);
+    updatingImageFileList = myAE;
+    update();
+  }
+
   /// PICK IMAGE FROM DEVICE GALLERY
-  Future<void> onPickImage() async {
+  Future<void> onPickImage({bool isUpdating = false}) async {
+    // print(" $updatingImageFileList $isUpdating");
     try {
       final List<XFile> pickedFileList = await _picker.pickMultiImage();
-      imageFileList =
-          RxList<XFile>(<XFile>[...pickedFileList, ...imageFileList]);
+      if (isUpdating) {
+        final List<String> paths =
+            pickedFileList.map((XFile e) => e.path).toList();
+        updatingImageFileList =
+            RxList<String>(<String>[...paths, ...updatingImageFileList]);
+      } else {
+        imageFileList =
+            RxList<XFile>(<XFile>[...pickedFileList, ...imageFileList]);
+      }
       update();
     } catch (e) {
       // handle error
