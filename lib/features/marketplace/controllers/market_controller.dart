@@ -35,6 +35,13 @@ class MarketController extends GetxController {
     }
   }
 
+  void updateListing(int index, Map<String, dynamic> data) {
+    if (index != -1) {
+      markets[index] = MarketModel.fromMap(data);
+    }
+    update();
+  }
+
   /// PROCESS RAW API DATA, MODELIZE AND SAVE TO STATE
   void processPostsToState(dynamic post, {bool? isSearch}) {
     if (isSearch ?? false) {
@@ -105,7 +112,6 @@ class MarketController extends GetxController {
         ),
       );
     }
-    _homeController.addMarketMembers(users);
     // update();
   }
 
