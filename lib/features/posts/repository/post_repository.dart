@@ -16,4 +16,12 @@ class PostRepository {
 
     return response;
   }
+
+  /// EDIT POST REPOSITORY
+  static Future<ApiResponseModel> editPost(Map<String, dynamic> body) async {
+    final ApiResponseModel response = await ApiService.put(
+        path: 'post/update-post/${body['postId']}', body: body);
+
+    return response;
+  }
 }

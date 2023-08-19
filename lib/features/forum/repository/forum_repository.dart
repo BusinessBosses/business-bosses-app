@@ -48,4 +48,12 @@ class ForumRepository {
 
     return response;
   }
+
+  /// EDIT FORUM REPOSITORY
+  static Future<ApiResponseModel> editListing(Map<String, dynamic> body) async {
+    final ApiResponseModel response =
+        await ApiService.put(path: 'markets/${body['marketId']}', body: body);
+
+    return response;
+  }
 }

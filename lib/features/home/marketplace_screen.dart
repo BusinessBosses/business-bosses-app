@@ -13,7 +13,6 @@ import '../../common/widgets/buttons/my_outlined_button.dart';
 import '../../common/widgets/safety_model.dart';
 import '../../services/api_service.dart';
 import '../../utils/constants/constants.dart';
-import '../../utils/size_config.dart';
 import '../../utils/theme/theme.dart';
 import '../marketplace/controllers/market_controller.dart';
 import '../marketplace/models/market_model.dart';

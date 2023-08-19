@@ -294,7 +294,7 @@ class _PostTileState extends State<PostTile> {
                                             style: bodyText1,
                                           ),
                                           content: const Text(
-                                              'Are you sure to delete this post?'),
+                                              'Are you sure you want to delete this post?'),
                                           actions: <Widget>[
                                             TextButton(
                                               onPressed: () => Get.back(),

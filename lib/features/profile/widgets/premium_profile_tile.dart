@@ -16,6 +16,7 @@ Widget premiumButtonHeader(
   VoidCallback onConnect,
   BuildContext context,
 ) {
+  // ignore: unused_local_variable
   bool connectedbutton = true;
   return Container(
     height: 30.0,
