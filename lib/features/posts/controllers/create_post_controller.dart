@@ -161,58 +161,26 @@ class CreatePostController extends GetxController {
 
   /// delete a selected post
   Future<void> onEditPost(PostModel? post, String title) async {
-    loading(true);
-    update();
-    if (imageFileList.isEmpty) {
-      final ApiResponseModel response = await ApiService.put(
-        path: 'post/update-post/${post?.postId}',
-        body: <String, dynamic>{'title': title},
-      );
+    final ApiResponseModel response = await ApiService.put(
+      path: 'post/update-post/${post?.postId}',
+      body: <String, dynamic>{'title': title},
+    );
 
-      if (response.success) {
-        final ProfileController profileController = Get.find();
-        final HomeController homeController = Get.find();
-        PostModel modelizedPost = PostModel.fromMap({
-          ...post!.toMap(),
-          ...response.data,
-        });
-        homeController.updatePost(modelizedPost);
-        profileController.updatePost(modelizedPost);
-        Get.back();
-        showSnackbar(message: 'Post updated successfully!', title: 'Success');
-      } else {
-        showSnackbar(
-            message: 'Failed to editing post.', title: 'O0PS!', error: true);
-      }
+    if (response.success) {
+      final ProfileController profileController = Get.find();
+      final HomeController homeController = Get.find();
+      PostModel modelizedPost = PostModel.fromMap({
+        ...post!.toMap(),
+        ...response.data,
+      });
+      homeController.updatePost(modelizedPost);
+      profileController.updatePost(modelizedPost);
+      Get.back();
+      showSnackbar(message: 'Post updated successfully!', title: 'Success');
     } else {
-      if (await uploadFile() == null) {
-        showSnackbar(message: 'Error Uploading image');
-      } else {
-        final ApiResponseModel response = await ApiService.put(
-          path: 'post/update-post/${post?.postId}',
-          body: <String, dynamic>{'title': title, 'images': await uploadFile()},
-        );
-
-        if (response.success) {
-          imageFileList.clear();
-          final ProfileController profileController = Get.find();
-          final HomeController homeController = Get.find();
-          PostModel modelizedPost = PostModel.fromMap({
-            ...post!.toMap(),
-            ...response.data,
-          });
-          homeController.updatePost(modelizedPost);
-          profileController.updatePost(modelizedPost);
-          Get.back();
-          showSnackbar(message: 'Post updated successfully!', title: 'Success');
-        } else {
-          showSnackbar(
-              message: 'Failed to editing post.', title: 'O0PS!', error: true);
-        }
-      }
+      showSnackbar(
+          message: 'Failed to editing post.', title: 'O0PS!', error: true);
     }
-    loading(false);
-    update();
   }
 
   /// CHANGE PROMOTE STATE VALUE
