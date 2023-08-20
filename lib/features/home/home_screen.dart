@@ -110,8 +110,41 @@ class _HomeScreenState extends State<HomeScreen> {
               }),
             ),
             body: controller.loading.value
-                ? const Center(
-                    child: CircularProgressIndicator(),
+                ? Center(
+                    child: Padding(
+                      padding: const EdgeInsets.only(bottom: 50.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Stack(
+                            children: [
+                              Positioned.fill(
+                                child: Align(
+                                  alignment: Alignment.center,
+                                  child: Image.asset(
+                                    'assets/app/app_logo_2.png',
+                                    height: 40,
+                                    width: 40,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 45,
+                                height: 45,
+                                child: CircularProgressIndicator(),
+                              ),
+                            ],
+                          ),
+                          const Padding(
+                            padding: EdgeInsets.only(top: 20.0),
+                            child: Text(
+                              'Start, Grow and Promote Your Business Globally',
+                              style: TextStyle(fontSize: 16),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
                   )
                 : SizedBox(
                     height: MediaQuery.of(context).size.height,

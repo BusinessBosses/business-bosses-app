@@ -16,7 +16,7 @@ Widget JoinedButton(bool joined, VoidCallback onTap) {
               borderRadius: BorderRadius.circular(10),
               child: SizedBox(
                   height: 38,
-                  width: 80,
+                  width: 75,
                   child: !joined
                       ? const MCustomButton(
                           child: Text(

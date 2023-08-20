@@ -49,10 +49,26 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
     super.initState();
   }
 
+  String formatCount(int count) {
+    if (count >= 1000) {
+      double countInK = count / 1000;
+      if (countInK >= 1000) {
+        return '${(countInK / 1000).toStringAsFixed(1)}M';
+      } else {
+        return '${countInK.toStringAsFixed(1)}K';
+      }
+    } else {
+      return count.toString();
+    }
+  }
+
   filterResults() {}
 
   @override
   Widget build(BuildContext context) {
+    int userCount = _marketController.users.length ?? 0;
+    String formattedUserCount = formatCount(userCount);
+
     return GetBuilder<MarketController>(
         builder: (MarketController homeController) {
       return Scaffold(
@@ -75,6 +91,9 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                           child: StatefulBuilder(builder:
                               (BuildContext context, StateSetter setState) {
                             return AlertDialog(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(16.0),
+                              ),
                               title: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
@@ -206,33 +225,42 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                 ),
                               ),
                               actions: <Widget>[
-                                TextButton(
-                                  child: const Text('Reset'),
-                                  onPressed: () {
-                                    setState(() {
-                                      filterLocation = null;
-                                      filterCode = null;
-                                      filterCategory = null;
-                                      _selectedLocation = null;
-                                      _selectedCategory = null;
-                                      _marketController.updateFiltered();
-                                      _marketController.initMarket();
-                                      Navigator.of(context).pop();
-                                    });
-                                  },
-                                ),
-                                ElevatedButton(
-                                  child: const Text('Search'),
-                                  onPressed: () {
-                                    setState(() {
-                                      filterLocation = _selectedLocation;
-                                      filterCategory = _selectedCategory;
-                                      _marketController.filterMarket(
-                                          filterLocation, filterCategory);
-                                    });
-                                    Navigator.of(context).pop();
-                                  },
-                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      right: 25.0, bottom: 10),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      TextButton(
+                                        child: const Text('Reset'),
+                                        onPressed: () {
+                                          setState(() {
+                                            filterLocation = null;
+                                            filterCode = null;
+                                            filterCategory = null;
+                                            _selectedLocation = null;
+                                            _selectedCategory = null;
+                                            _marketController.updateFiltered();
+                                            _marketController.initMarket();
+                                            Navigator.of(context).pop();
+                                          });
+                                        },
+                                      ),
+                                      ElevatedButton(
+                                        child: const Text('Search'),
+                                        onPressed: () {
+                                          setState(() {
+                                            filterLocation = _selectedLocation;
+                                            filterCategory = _selectedCategory;
+                                            _marketController.filterMarket(
+                                                filterLocation, filterCategory);
+                                          });
+                                          Navigator.of(context).pop();
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                )
                               ],
                             );
                           }),
@@ -442,7 +470,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                                         padding:
                                                             const EdgeInsets
                                                                     .only(
-                                                                left: 35,
+                                                                left: 32,
                                                                 top: 0,
                                                                 right: 20),
                                                         child: Row(
@@ -452,7 +480,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                                                 Padding(
                                                                   padding: const EdgeInsets
                                                                           .only(
-                                                                      right: 3,
+                                                                      right: 2,
                                                                       top: 5),
                                                                   child:
                                                                       SvgPicture
@@ -483,7 +511,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                                                           TextSpan(
                                                                         children: [
                                                                           TextSpan(
-                                                                              text: 'Members: (${_marketController.users.length})',
+                                                                              text: 'Members ($formattedUserCount)',
                                                                               style: const TextStyle(
                                                                                 fontSize: 12,
                                                                                 fontWeight: FontWeight.w600,
@@ -516,6 +544,13 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                                                 ),
                                                                 Obx(
                                                                   () {
+                                                                    int postCount =
+                                                                        _marketController.markets.length ??
+                                                                            0;
+                                                                    String
+                                                                        formattedpostCount =
+                                                                        formatCount(
+                                                                            postCount);
                                                                     return Padding(
                                                                       padding: const EdgeInsets
                                                                               .only(
@@ -527,7 +562,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                                                             TextSpan(
                                                                           children: <InlineSpan>[
                                                                             TextSpan(
-                                                                              text: 'Listings: (${_marketController.markets.length})',
+                                                                              text: 'Listings ($formattedpostCount)',
                                                                               style: const TextStyle(
                                                                                 fontSize: 12,
                                                                                 color: textColor,
@@ -918,7 +953,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
         alignment: Alignment.center,
         child: SizedBox(
           height: 38,
-          width: 80,
+          width: 75,
           child: Obx(() => !_marketController.isJoined.value
               ? const MCustomButton(
                   child: Text(
