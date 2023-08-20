@@ -147,7 +147,12 @@ class _AllForumScreenState extends State<AllForumScreen> {
                                           const EdgeInsets.only(left: 20.0),
                                       child: Row(
                                         children: [
-                                          const Text('Info'),
+                                          const Text(
+                                            'Info',
+                                            style: TextStyle(
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.w700),
+                                          ),
                                           const SizedBox(
                                             width: 5,
                                           ),
