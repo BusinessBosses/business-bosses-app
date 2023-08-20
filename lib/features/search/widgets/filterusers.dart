@@ -172,7 +172,10 @@ class _FilterUsersState extends State<FilterUsers> {
                                               .bossOfTheWeek?.username ??
                                           ''),
                                   subtitle: Text(
-                                    profileController.bossOfTheWeek?.bio ?? '',
+                                    profileController.bossOfTheWeek?.bio ??
+                                        profileController
+                                            .bossOfTheWeek?.category ??
+                                        '',
                                     maxLines: 1,
                                   ),
                                 ),
@@ -271,7 +274,9 @@ class _FilterUsersState extends State<FilterUsers> {
                                                   : widget
                                                       .filterItems[i].username),
                                       subtitle: Text(
-                                        widget.filterItems[i].bio ?? '',
+                                        widget.filterItems[i].bio ??
+                                            widget.filterItems[i].category ??
+                                            '',
                                         maxLines: 1,
                                       ),
                                     ),

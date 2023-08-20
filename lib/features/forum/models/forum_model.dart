@@ -89,7 +89,16 @@ class ForumModel {
           map['description'] != null ? map['description'] as String : null,
       title: map['title'] != null ? map['title'] as String : null,
       industry: map['industry'] != null ? map['industry'] as String : null,
-      images: map['images'] != null ? List<String>.from((map['images'])) : null,
+      images: map['images'] != null && map['images'] != ''
+          ? List<String>.from((map['images']))
+                  .where((element) => element.isNotEmpty)
+                  .toList()
+                  .isEmpty
+              ? null
+              : List<String>.from((map['images']))
+                  .where((element) => element.isNotEmpty)
+                  .toList()
+          : null,
       timestamp: map['timestamp'] != null
           ? int.parse(map['timestamp'].toString())
           : null,

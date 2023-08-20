@@ -1,11 +1,13 @@
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 
 import '../../../action/action.dart';
 import '../../../common/params.dart';
 import '../../../common/widgets/safety_model.dart';
 import '../../../common/widgets/user_avatar_with_badge.dart';
+import '../../../navigation/routes.dart';
 import '../../../utils/theme/theme.dart';
 import '../../profile/presentation/publicprofilescreen.dart';
 
@@ -66,14 +68,8 @@ class _MarketMembersScreenState extends State<MarketMembersScreen> {
                       children: [
                         ListTile(
                           onTap: () async {
-                            dynamic result = await navigateTo(
-                              context,
-                              routeName: PublicProfileScreen.routeName,
-                              arguments: Params(arg1: widget.users[i].uid),
-                            );
-                            if (result == null) {
-                              Navigator.of(context).pop();
-                            }
+                            Get.toNamed(Routes.publicProfile,
+                                arguments: widget.users[i]);
                           },
                           leading: UserAvatarWithBadge(
                             user: widget.users[i],

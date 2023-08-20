@@ -1,3 +1,4 @@
+import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/common/models/comment_model.dart';
 import 'package:business_bosses_v2/features/forum/controller/bossup_controller.dart';
 import 'package:flutter/material.dart';
@@ -37,7 +38,7 @@ class _BossUpLikeCommentItemState extends State<BossUpLikeCommentItem> {
   @override
   void initState() {
     _loadCommentWithDetails();
-    _loadLikesWithDetails();
+    _loadLikesWithDetails(widget.forum.forumId);
     super.initState();
   }
 
@@ -177,13 +178,13 @@ class _BossUpLikeCommentItemState extends State<BossUpLikeCommentItem> {
 
   final List<UserModel> _users = [];
 
-  Future<void> _loadLikesWithDetails() async {
-    for (dynamic l in widget.forum.likes ?? []) {
-      final Map<String, dynamic> response = await ProfileController.loadData(l);
-      _users.add(UserModel(
-          uid: l,
-          name: response['user']['name'],
-          bio: response['user']['bio']));
+  Future<void> _loadLikesWithDetails(String forumId) async {
+    final ApiResponseModel response =
+        await ApiService.get(path: 'likes/post/$forumId');
+    if (response.success) {
+      for (var i = 0; i < response.data['rows'].length; i++) {
+        _users.add(UserModel.fromMap(response.data['rows'][i]['user']));
+      }
     }
     if (mounted) {
       setState(() {

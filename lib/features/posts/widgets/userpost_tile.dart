@@ -12,6 +12,7 @@ import 'package:detectable_text_field/widgets/detectable_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:jiffy/jiffy.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../../action/action.dart';
@@ -293,7 +294,7 @@ class _PostTileState extends State<PostTile> {
                                             style: bodyText1,
                                           ),
                                           content: const Text(
-                                              'Are you sure to delete this post?'),
+                                              'Are you sure you want to delete this post?'),
                                           actions: <Widget>[
                                             TextButton(
                                               onPressed: () => Get.back(),
@@ -509,7 +510,10 @@ class _PostTileState extends State<PostTile> {
                     Padding(
                       padding: const EdgeInsets.only(right: 15),
                       child: Text(
-                        TimeFormat.formatString(widget.post.timestamp),
+                        Jiffy.parseFromMillisecondsSinceEpoch(
+                                widget.post.timestamp)
+                            .fromNow(),
+                        // TimeFormat.formatString(widget.post.timestamp),
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                               color: textColor.withOpacity(0.4),
                             ),
