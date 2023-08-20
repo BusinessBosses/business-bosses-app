@@ -36,6 +36,19 @@ class _AllForumScreenState extends State<AllForumScreen> {
   final ProfileController _myProfile = Get.find();
   // final List<ForumModel> forums = [];
 
+  String formatCount(int count) {
+    if (count >= 1000) {
+      double countInK = count / 1000;
+      if (countInK >= 1000) {
+        return '${(countInK / 1000).toStringAsFixed(1)}m';
+      } else {
+        return '${countInK.toStringAsFixed(1)}k';
+      }
+    } else {
+      return count.toString();
+    }
+  }
+
   void toggleJoinAndLeaveIndustry(ForumController controller) {
     final String myUid = _myProfile.myProfile.uid;
     // print(myUid);
@@ -65,8 +78,17 @@ class _AllForumScreenState extends State<AllForumScreen> {
 
   @override
   Widget build(BuildContext context) {
+    int userCount = industry.joinedUsers
+            ?.where((String element) => element.isNotEmpty)
+            .toList()
+            .length ??
+        0;
+
+    String formattedUserCount = formatCount(userCount);
     return GetBuilder<ForumController>(
       builder: (ForumController controller) {
+        int postCount = controller.totalForums.value ?? 0;
+        String formattedpostCount = formatCount(postCount);
         return Scaffold(
             backgroundColor: backgroundcolorinterface,
             key: scaffoldKey,
@@ -260,7 +282,7 @@ class _AllForumScreenState extends State<AllForumScreen> {
                                         ),
                                         Padding(
                                           padding: const EdgeInsets.only(
-                                              left: 35, right: 20),
+                                              left: 32, right: 20),
                                           child: Row(
                                             children: [
                                               Row(
@@ -268,7 +290,7 @@ class _AllForumScreenState extends State<AllForumScreen> {
                                                   Padding(
                                                     padding:
                                                         const EdgeInsets.only(
-                                                            right: 3, top: 5),
+                                                            right: 2, top: 5),
                                                     child: SvgPicture.asset(
                                                       'assets/svgs/members.svg',
                                                       height: 15,
@@ -286,8 +308,8 @@ class _AllForumScreenState extends State<AllForumScreen> {
                                                             text: industry
                                                                         .joinedUsers ==
                                                                     null
-                                                                ? 'Members: 0'
-                                                                : 'Members: (${industry.joinedUsers?.where((String element) => element.isNotEmpty).toList().length ?? 0})',
+                                                                ? 'Members (0)'
+                                                                : 'Members ($formattedUserCount)',
                                                             style:
                                                                 const TextStyle(
                                                               fontSize: 12,
@@ -323,7 +345,9 @@ class _AllForumScreenState extends State<AllForumScreen> {
                                                   Padding(
                                                     padding:
                                                         const EdgeInsets.only(
-                                                            left: 8.0, top: 5),
+                                                            left: 8.0,
+                                                            top: 5,
+                                                            right: 2),
                                                     child: SvgPicture.asset(
                                                       'assets/svgs/topics.svg',
                                                       color: textColor,
@@ -342,8 +366,8 @@ class _AllForumScreenState extends State<AllForumScreen> {
                                                                         .categoryId!
                                                                         .toString() ==
                                                                     'd479f179-3f41-4d84-915d-33110cf5b4fb'
-                                                                ? ' Topics: (${controller.totalForums.value}) '
-                                                                : ' Opport.: (${controller.totalForums.value})',
+                                                                ? 'Topics ($formattedpostCount) '
+                                                                : 'Opport. ($formattedpostCount)',
                                                             style:
                                                                 const TextStyle(
                                                               fontSize: 12,
