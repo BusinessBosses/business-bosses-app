@@ -31,6 +31,19 @@ class _BossUpSectionState extends State<BossUpSection> {
   final ProfileController _myProfile = Get.find();
   final HomeController hmeController = Get.find();
 
+  String formatCount(int count) {
+    if (count >= 1000) {
+      double countInK = count / 1000;
+      if (countInK >= 1000) {
+        return '${(countInK / 1000).toStringAsFixed(1)}m';
+      } else {
+        return '${countInK.toStringAsFixed(1)}k';
+      }
+    } else {
+      return count.toString();
+    }
+  }
+
   void toggleJoinAndLeaveIndustry(BossUpController controller) {
     final String myUid = _myProfile.myProfile.uid;
     // print(myUid);
@@ -51,7 +64,15 @@ class _BossUpSectionState extends State<BossUpSection> {
 
   @override
   Widget build(BuildContext context) {
+    int userCount = widget.industry.joinedUsers
+            ?.where((String element) => element.isNotEmpty)
+            .toList()
+            .length ??
+        0;
+    String formattedUserCount = formatCount(userCount);
     return GetBuilder<BossUpController>(builder: (BossUpController controller) {
+      int postCount = controller.totalForums.value ?? 0;
+      String formattedpostCount = formatCount(postCount);
       if (controller.loading.value) {
         return const Center(
           child: CircularProgressIndicator(),
@@ -231,7 +252,7 @@ class _BossUpSectionState extends State<BossUpSection> {
                                       ),
                                       Padding(
                                         padding: const EdgeInsets.only(
-                                            left: 35, right: 20.0),
+                                            left: 32, right: 20.0),
                                         child: Row(
                                           children: [
                                             Row(
@@ -239,7 +260,7 @@ class _BossUpSectionState extends State<BossUpSection> {
                                                 Padding(
                                                   padding:
                                                       const EdgeInsets.only(
-                                                          right: 3, top: 5),
+                                                          right: 2, top: 5),
                                                   child: SvgPicture.asset(
                                                     'assets/svgs/members.svg',
                                                     height: 15,
@@ -257,8 +278,8 @@ class _BossUpSectionState extends State<BossUpSection> {
                                                           text: widget.industry
                                                                       .joinedUsers ==
                                                                   null
-                                                              ? 'Members: 0'
-                                                              : 'Members: (${widget.industry.joinedUsers?.where((String element) => element.isNotEmpty).toList().length ?? 0})',
+                                                              ? 'Members (0)'
+                                                              : 'Members ($formattedUserCount)',
                                                           style:
                                                               const TextStyle(
                                                             fontSize: 12,
@@ -293,7 +314,9 @@ class _BossUpSectionState extends State<BossUpSection> {
                                                 Padding(
                                                   padding:
                                                       const EdgeInsets.only(
-                                                          left: 8.0, top: 5),
+                                                          left: 8.0,
+                                                          top: 5,
+                                                          right: 2),
                                                   child: SvgPicture.asset(
                                                     'assets/svgs/entries.svg',
                                                     color: textColor,
@@ -309,7 +332,7 @@ class _BossUpSectionState extends State<BossUpSection> {
                                                       children: [
                                                         TextSpan(
                                                           text:
-                                                              ' Entries: (${controller.totalForums.value}) ',
+                                                              'Entries ($formattedpostCount) ',
                                                           style:
                                                               const TextStyle(
                                                             fontSize: 12,

@@ -433,8 +433,9 @@ class HomeController extends GetxController {
   Future<void> fetchPosts() async {
     loadingMore(true);
     update();
-    final ApiResponseModel response =
-        await HomeRepository.fetchPosts(paginationPage.value);
+    final ApiResponseModel response = await HomeRepository.fetchPosts(
+        paginationPage.value,
+        mixedPosts[mixedPosts.length - 1]['data'].timestamp);
     if (response.success) {
       paginationPage(paginationPage.value + 1);
       processPostsAndForumsData(response.data);
@@ -453,6 +454,16 @@ class HomeController extends GetxController {
         element['shouldCount'] == null &&
         !element['isForum'] &&
         element['data'].postId == postId);
+    update();
+  }
+
+  void removeForum(String forumId) {
+    mixedPosts.removeWhere((Map<String, dynamic> element) =>
+        element['shouldCount'] == null &&
+        element['isForum'] &&
+        element['data'].forumId == forumId);
+
+    bossupForums.removeWhere((element) => element.forumId == forumId);
     update();
   }
 
