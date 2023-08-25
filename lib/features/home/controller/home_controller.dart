@@ -499,12 +499,12 @@ class HomeController extends GetxController {
       addCoinDaily();
       if (partner.data['count'] > 0) {
         bossUp?.addAll(partner.data['rows'].cast<Map<String, dynamic>>());
-        bossUp?.removeWhere((item) => item['id'] == 5);
         // Find the item with id = 5
         final Map<String, dynamic> getTitle =
             bossUp!.firstWhere((Map<String, dynamic> item) => item['id'] == 5);
 
         bossUpTitle = getTitle['companyName'];
+        bossUp?.removeWhere((item) => item['id'] == 5);
       }
     } else {
       error(true);
