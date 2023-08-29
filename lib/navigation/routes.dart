@@ -51,4 +51,5 @@ class Routes {
   static const String explorebusinessbossesscreen =
       '/explorebusinessbossesscreen';
   static const String renewconfirmation = '/renewconfirmation';
+  static const String subscriptionconfirmation = '/subscriptionconfirmation';
 }
