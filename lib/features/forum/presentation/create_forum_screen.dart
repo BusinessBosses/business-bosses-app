@@ -148,7 +148,7 @@ class _CreateForumScreenState extends State<CreateForumScreen> {
                   GestureDetector(
                     onTap: () {
                       if (controller.imageFileList.length < 5) {
-                        controller.onPickImage(isUpdating: true);
+                        controller.onPickImage(isUpdating: isUpdating);
                       } else {
                         showSnackbar(
                             message: 'You can only upload up to 5 images.');

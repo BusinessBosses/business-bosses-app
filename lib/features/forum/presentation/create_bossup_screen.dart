@@ -147,11 +147,13 @@ class _CreateBossUpScreenState extends State<CreateBossUpScreen> {
                           SvgPicture.asset('assets/svgs/file.svg'),
                           const SizedBox(width: 16.0),
                           Expanded(
-                            child: Text('Add Attachment',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyMedium
-                                    ?.copyWith(color: hintColor)),
+                            child: Text(
+                              'Add Attachment',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium
+                                  ?.copyWith(color: hintColor),
+                            ),
                           ),
                           const SizedBox(width: 16.0),
                           CircleAvatar(
