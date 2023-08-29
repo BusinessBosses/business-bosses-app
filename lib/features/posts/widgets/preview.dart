@@ -6,12 +6,12 @@ import 'package:business_bosses_v2/features/posts/widgets/image_item.dart';
 import 'package:flutter/material.dart';
 
 class Preview extends StatelessWidget {
-  const Preview(
-      {Key? key,
-      required this.controller,
-      this.isUrl = false,
-      this.isUpdating = false})
-      : super(key: key);
+  const Preview({
+    Key? key,
+    required this.controller,
+    this.isUrl = false,
+    this.isUpdating = false,
+  }) : super(key: key);
   final dynamic controller;
   final bool isUpdating;
   final bool isUrl;
