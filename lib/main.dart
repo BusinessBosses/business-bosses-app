@@ -31,8 +31,8 @@ void main() async {
   Stripe.publishableKey =
       'pk_live_51MAcspEGsMsi6baUVnDR3Vlfh14vm73Oz9Z4LwYcvzOTdd6AvRRHrGCkpIoYmTfe2iSXm7ju2RQtO4UYJTvodFPR008RO7V1j3';
 
-// Stripe.publishableKey =
-//       'pk_test_51MAcspEGsMsi6baUQ14KJlYZVcpaKiRtC5wnN42Jq3vOl68JwSahkzoiUOrOh9zGyG9nDj1bML8jOlfwMDai51Rm00vWZoIAgE';
+  // Stripe.publishableKey =
+  //     'pk_test_51MAcspEGsMsi6baUQ14KJlYZVcpaKiRtC5wnN42Jq3vOl68JwSahkzoiUOrOh9zGyG9nDj1bML8jOlfwMDai51Rm00vWZoIAgE';
 
   FirebaseMessaging.instance.getToken().then((String? value) {
     // print(value);
@@ -77,11 +77,11 @@ Future<void> initUniLinks() async {
     if (uri != null) {
       processDeepLink(uri);
     } else {
-      print('sdfsadfa');
+      // print('sdfsadfa');
     }
   }, onError: (err) {
     // Handle any errors that occur during deep link handling
-    print('Error initializing UniLinks: $err');
+    // print('Error initializing UniLinks: $err');
   });
 }
 
@@ -97,7 +97,7 @@ void processDeepLink(Uri uri) {
       if (success) {
         Navigator.pushNamed(
           navigatorKey.currentState!.context,
-          Routes.transactionConfirmation,
+          Routes.subscriptionconfirmation,
         );
       } else {
         Get.snackbar('Canceled', 'Transaction Canceled');
