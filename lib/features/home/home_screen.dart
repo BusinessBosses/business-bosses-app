@@ -23,16 +23,18 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   // final ProfileController _profileController = Get.find();
   // int currentTimestamp = DateTime.now().millisecondsSinceEpoch;
   // final GetStorage sandBox = GetStorage();
   final ScrollController _scrollController = ScrollController();
   final MarketController marketController = Get.put(MarketController());
   final BossUpController bossUpController = Get.put(BossUpController());
+
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     final HomeController homeController = Get.find();
     _scrollController.addListener(() {
       if (_scrollController.position.pixels >=
@@ -44,9 +46,19 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    final HomeController homeController = Get.find();
+    if (state.index == 0) {
+      homeController.fetchPosts(fromBackground: true);
+    }
+    super.didChangeAppLifecycleState(state);
+  }
+
+  @override
   void dispose() {
-    super.dispose();
     _scrollController.dispose();
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
   }
 
   @override
