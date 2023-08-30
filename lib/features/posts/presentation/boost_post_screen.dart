@@ -51,12 +51,13 @@ class _BoostPostState extends State<BoostPost> {
     },
   ];
 
-  Future<void> updatePost() async {
+  Future<void> updatePost(String method) async {
     ApiService.put(
         path: 'post/update-post/${widget.postId}',
         body: <String, dynamic>{
           'promote': true,
           'plan': '$initPlan dollars',
+          'paymentMethod': method,
         });
   }
 
@@ -69,7 +70,7 @@ class _BoostPostState extends State<BoostPost> {
   void displaySheet() async {
     try {
       await Stripe.instance.presentPaymentSheet().then((value) async {
-        await updatePost();
+        await updatePost('card');
 
         Navigator.of(context).push(MaterialPageRoute(
           builder: (BuildContext context) => const Confirmation(),
@@ -145,7 +146,7 @@ class _BoostPostState extends State<BoostPost> {
           },
         );
 
-        await updatePost();
+        await updatePost('coin');
         profileController.updateCoinCount(-(int.parse(initPlan) * 100));
 
         setState(() {

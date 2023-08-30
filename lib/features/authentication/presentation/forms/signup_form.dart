@@ -176,6 +176,7 @@ class _SignUpFormState extends State<SignUpForm> {
         Get.toNamed(
           Routes.updateProfile,
           arguments: UserModel(
+            name: _username!,
             username: _username!,
             email: _authCred!,
           ),
