@@ -430,12 +430,19 @@ class HomeController extends GetxController {
     }
   }
 
-  Future<void> fetchPosts() async {
-    loadingMore(true);
+  Future<void> fetchPosts({bool fromBackground = false}) async {
+    if (fromBackground) {
+      mixedPosts.removeRange(1, mixedPosts.length);
+      loading(true);
+    } else {
+      loadingMore(true);
+    }
     update();
     final ApiResponseModel response = await HomeRepository.fetchPosts(
-        paginationPage.value,
-        mixedPosts[mixedPosts.length - 1]['data'].timestamp);
+        fromBackground ? 0 : paginationPage.value,
+        fromBackground
+            ? DateTime.now().millisecondsSinceEpoch
+            : mixedPosts[mixedPosts.length - 1]['data'].timestamp);
     if (response.success) {
       paginationPage(paginationPage.value + 1);
       processPostsAndForumsData(response.data);
@@ -445,7 +452,11 @@ class HomeController extends GetxController {
       error(true);
     }
 
-    loadingMore(false);
+    if (fromBackground) {
+      loading(false);
+    } else {
+      loadingMore(false);
+    }
     update();
   }
 
