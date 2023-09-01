@@ -184,6 +184,7 @@ class _SignUpFormState extends State<SignUpForm> {
       }
       await _googleSignIn.disconnect();
     } else {
+      // ignore: use_build_context_synchronously
       showSnackBar(context, message: 'Opps!! Something went wrong. Try again');
     }
 
