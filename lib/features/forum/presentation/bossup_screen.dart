@@ -71,7 +71,7 @@ class _BossUpSectionState extends State<BossUpSection> {
         0;
     String formattedUserCount = formatCount(userCount);
     return GetBuilder<BossUpController>(builder: (BossUpController controller) {
-      int postCount = controller.totalForums.value ?? 0;
+      int postCount = controller.totalForums.value;
       String formattedpostCount = formatCount(postCount);
       if (controller.loading.value) {
         return const Center(

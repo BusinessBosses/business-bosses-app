@@ -177,7 +177,7 @@ class BossUpController extends GetxController {
 
   /// COIN AND UNCOIN FUNCTION
   void postCoin(String userId, String postId,
-      ProfileController profileController, String type) {
+      ProfileController profileController, String type, String receiverUid) {
     final int postIndex =
         forums.indexWhere((ForumModel element) => element.forumId == postId);
     if (postIndex != -1) {
@@ -195,6 +195,7 @@ class BossUpController extends GetxController {
         'postId': postId,
         'userId': userId,
         'type': type,
+        'receiverUid': receiverUid,
       });
     }
     update();
