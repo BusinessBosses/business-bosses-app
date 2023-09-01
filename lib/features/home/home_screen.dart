@@ -6,9 +6,11 @@ import 'package:get/get.dart';
 import '../../utils/theme/theme.dart';
 import '../chat/controllers/chat_controller.dart';
 import '../chat/models/my_message.dart';
+import '../forum/models/forum_model.dart';
 import '../home/controller/home_controller.dart';
 import '../home/widgets/home_appbar.dart';
 import '../marketplace/controllers/market_controller.dart';
+import '../posts/models/post_model.dart';
 import '../posts/widgets/userpost_tile.dart';
 import '../profile/controller/profile_controller.dart';
 import '../profile/widgets/boss_of_the_week_tile.dart';
@@ -48,6 +50,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     final HomeController homeController = Get.find();
+
     if (state.index == 0) {
       homeController.fetchPosts(fromBackground: true);
     }
@@ -63,6 +66,9 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
+    int normalPostCounter =
+        0; // Declare normalPostCounter outside of the ListView.builder
+
     return WillPopScope(
       onWillPop: () async {
         showDialog(
@@ -176,22 +182,74 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                               itemBuilder: (BuildContext context, int index) {
                                 if (index == 0) {
                                   return const BossOfWeekProfileTile();
-                                } else if (controller.mixedPosts[index]
-                                    ['isForum']) {
-                                  return ForumItem(
-                                    forum: controller.mixedPosts[index]['data'],
-                                    controller: controller,
-                                  );
                                 } else {
-                                  return PostTile(
-                                    controller: controller,
-                                    post: controller.mixedPosts[index]['data'],
-                                    onPageChange: (int page) {
-                                      if (widget.onPageChange != null) {
-                                        widget.onPageChange!(page);
-                                      }
-                                    },
-                                  );
+                                  final mixedPost =
+                                      controller.mixedPosts[index];
+
+                                  if (mixedPost['isForum']) {
+                                    // Handle ForumModel
+                                    final forumModel =
+                                        mixedPost['data'] as ForumModel;
+                                    return ForumItem(
+                                      forum: forumModel,
+                                      controller: controller,
+                                    );
+                                  } else if (mixedPost['isSponsored']) {
+                                    // Handle Sponsored PostModel
+                                    final sponsoredIndex = (index / 3).floor();
+                                    if (sponsoredIndex <
+                                        controller.sponsoredPosts.length) {
+                                      final promotedPosts = controller
+                                              .sponsoredPosts[sponsoredIndex]
+                                          ['data'];
+                                      return PostTile(
+                                        controller: controller,
+                                        post: promotedPosts,
+                                        onPageChange: (int page) {
+                                          if (widget.onPageChange != null) {
+                                            widget.onPageChange!(page);
+                                          }
+                                        },
+                                      );
+                                    } else {
+                                      // Handle case where there are no more sponsored posts
+                                      return SizedBox(); // You can return an empty widget or something else
+                                    }
+                                  } else if (index % 3 == 0) {
+                                    // Display Sponsored Post after every 3 non-sponsored posts
+                                    final sponsoredIndex = (index / 3).floor();
+                                    if (sponsoredIndex <
+                                        controller.sponsoredPosts.length) {
+                                      final promotedPosts = controller
+                                              .sponsoredPosts[sponsoredIndex]
+                                          ['data'];
+                                      return PostTile(
+                                        controller: controller,
+                                        post: promotedPosts,
+                                        onPageChange: (int page) {
+                                          if (widget.onPageChange != null) {
+                                            widget.onPageChange!(page);
+                                          }
+                                        },
+                                      );
+                                    } else {
+                                      // Handle case where there are no more sponsored posts
+                                      return SizedBox(); // You can return an empty widget or something else
+                                    }
+                                  } else {
+                                    // Handle regular non-promoted PostModel
+                                    final nonPromotedPostModel =
+                                        mixedPost['data'] as PostModel;
+                                    return PostTile(
+                                      controller: controller,
+                                      post: nonPromotedPostModel,
+                                      onPageChange: (int page) {
+                                        if (widget.onPageChange != null) {
+                                          widget.onPageChange!(page);
+                                        }
+                                      },
+                                    );
+                                  }
                                 }
                               },
                             ),
