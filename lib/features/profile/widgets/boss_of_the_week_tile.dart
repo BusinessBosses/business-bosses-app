@@ -328,17 +328,25 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                                     ),
                                   ),
                                   const SizedBox(width: 10),
-                                  Padding(
-                                    padding: const EdgeInsets.only(
-                                        left: 0.0, bottom: 4),
-                                    child: Text(
-                                      '|',
-                                      style: TextStyle(
-                                        fontSize: 20,
-                                        color: textColor.withOpacity(0.5),
-                                      ),
-                                    ),
-                                  ),
+                                  Platform.isIOS
+                                      ? Padding(
+                                          padding: const EdgeInsets.only(
+                                              left: 0.0, bottom: 4),
+                                          child: Text(
+                                            '|',
+                                            style: TextStyle(
+                                              fontSize: 20,
+                                              color: textColor.withOpacity(0.5),
+                                            ),
+                                          ),
+                                        )
+                                      : Text(
+                                          '|',
+                                          style: TextStyle(
+                                            fontSize: 20,
+                                            color: textColor.withOpacity(0.5),
+                                          ),
+                                        ),
                                   const SizedBox(width: 10),
                                   Platform.isIOS
                                       ? Padding(
@@ -355,7 +363,7 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                                                 : '',
                                             style: const TextStyle(
                                               fontSize: 15,
-                                              // fontWeight: FontWeight.bold,
+                                              fontWeight: FontWeight.bold,
                                             ),
                                             overflow: TextOverflow.ellipsis,
                                             softWrap: false,
