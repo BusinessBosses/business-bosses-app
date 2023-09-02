@@ -219,7 +219,7 @@ class MarketController extends GetxController {
 
   /// COIN AND UNCOIN FUNCTION
   void coin(String userId, String postId, ProfileController profileController,
-      String type) {
+      String type, String receiverUid) {
     final int postIndex =
         markets.indexWhere((MarketModel element) => element.marketId == postId);
     if (postIndex != -1) {
@@ -237,6 +237,7 @@ class MarketController extends GetxController {
         'postId': postId,
         'userId': userId,
         'type': type,
+        'receiverUid': receiverUid,
       });
     }
     update();

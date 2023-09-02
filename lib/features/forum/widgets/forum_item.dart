@@ -2,7 +2,6 @@ import 'package:business_bosses_v2/features/forum/controller/bossup_controller.d
 import 'package:business_bosses_v2/features/forum/controller/forum_controller.dart';
 import 'package:business_bosses_v2/features/forum/models/forum_model.dart';
 import 'package:business_bosses_v2/features/forum/widgets/bossup_like_comment.dart';
-import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/functions/my_native_functions.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
@@ -714,6 +713,7 @@ class _ForumItemState extends State<ForumItem> {
                                     widget.forum.forumId,
                                     profileController,
                                     'forum',
+                                    widget.forum.user!.uid,
                                   );
                                 },
                                 icon: widget.forum.coins?.contains(

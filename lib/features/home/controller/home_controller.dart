@@ -17,6 +17,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
+import '../../../navigation/routes.dart';
+
 class HomeController extends GetxController {
   late IO.Socket socket;
   // final PostsController _postsController = Get.find();
@@ -529,6 +531,10 @@ class HomeController extends GetxController {
 
     loading(false);
     update();
+    if (profileController.myProfile.bio == null) {
+      Get.offAndToNamed(Routes.updateProfile,
+          arguments: profileController.myProfile);
+    }
   }
 
   Future<void> fetchIndustries() async {
