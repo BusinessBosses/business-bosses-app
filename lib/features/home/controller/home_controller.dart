@@ -40,7 +40,7 @@ class HomeController extends GetxController {
   List<Map<String, dynamic>>? bossUp = [];
   RxBool refreshing = RxBool(false);
   List<Map<String, dynamic>> mixedPosts = [
-    {'isForum': false, 'data': {}, 'shouldCount': false}
+    {'isForum': false, 'data': {}, 'shouldCount': false, 'isSponsored': false}
   ];
   List<Map<String, dynamic>> sponsoredPosts = [
     {'isForum': false, 'data': {}, 'shouldCount': false, 'isSponsored': true}
@@ -381,7 +381,8 @@ class HomeController extends GetxController {
         'bio': profileController.myProfile.bio
       }
     });
-    mixedPosts.insert(1, {'isForum': false, 'data': modelizedNewPost});
+    mixedPosts.insert(
+        1, {'isForum': false, 'data': modelizedNewPost, 'isSponsored': false});
 
     // posts.insert(0, modelizedNewPost);
 
