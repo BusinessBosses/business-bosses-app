@@ -180,6 +180,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                               SvgPicture.asset(
                                                 'assets/svgs/goldcheckmark.svg',
                                                 height: 25,
+                                                color: primaryColorLT,
                                               ),
                                               const SizedBox(width: 15),
                                               const Expanded(
@@ -296,7 +297,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                                       color: Colors.white,
                                                     ),
                                                   )
-                                                : Text('Cancel Subscription'),
+                                                : const Text(
+                                                    'Cancel Subscription'),
                                           ),
                                           const SizedBox(
                                             width: 10,
