@@ -207,41 +207,72 @@ class _PostTileState extends State<PostTile> {
                       }
                     },
                     child: widget.post.user!.isSubscribed
-                        ? Padding(
-                            padding: const EdgeInsets.only(top: 0.0),
-                            child: Row(
-                              children: [
-                                Text(
-                                  widget.post.user!.name != null &&
-                                          widget.post.user!.name!.length <= 20
-                                      ? widget.post.user!.name!
-                                      : widget.post.user!.name != null
-                                          ? '${widget.post.user!.name!.substring(0, 20)}...'
-                                          : widget.post.user!.username,
-                                  style: Theme.of(context).textTheme.bodyLarge,
+                        ? profileController.myProfile.uid ==
+                                widget.post.user!.uid
+                            ? Padding(
+                                padding: const EdgeInsets.only(top: 0.0),
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      widget.post.user!.name != null &&
+                                              widget.post.user!.name!.length <=
+                                                  20
+                                          ? widget.post.user!.name!
+                                          : widget.post.user!.name != null
+                                              ? '${widget.post.user!.name!.substring(0, 20)}...'
+                                              : widget.post.user!.username,
+                                      style:
+                                          Theme.of(context).textTheme.bodyLarge,
+                                    ),
+                                    const SizedBox(width: 5),
+                                    SvgPicture.asset(
+                                      'assets/svgs/premiumbadge.svg',
+                                      height: 9,
+                                      color: primaryColorLT,
+                                    )
+                                  ],
                                 ),
-                                const SizedBox(width: 5),
-                                SvgPicture.asset(
-                                  'assets/svgs/premiumbadge.svg',
-                                  height: 9,
-                                  color: primaryColorLT,
-                                )
-                              ],
-                            ),
-                          )
+                              )
+                            : Padding(
+                                padding: const EdgeInsets.only(top: 0.0),
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      widget.post.user!.name != null &&
+                                              widget.post.user!.name!.length <=
+                                                  15
+                                          ? widget.post.user!.name!
+                                          : widget.post.user!.name != null
+                                              ? '${widget.post.user!.name!.substring(0, 12)}...'
+                                              : widget.post.user!.username,
+                                      style:
+                                          Theme.of(context).textTheme.bodyLarge,
+                                    ),
+                                    const SizedBox(width: 5),
+                                    SvgPicture.asset(
+                                      'assets/svgs/premiumbadge.svg',
+                                      height: 9,
+                                      color: primaryColorLT,
+                                    )
+                                  ],
+                                ),
+                              )
                         : Text(
                             widget.post.user!.name != null &&
                                     widget.post.user!.name!.length <= 20
                                 ? widget.post.user!.name!
                                 : widget.post.user!.name != null
-                                    ? '${widget.post.user!.name!.substring(0, 15)}...'
+                                    ? '${widget.post.user!.name!.substring(0, 12)}...'
                                     : widget.post.user!.username,
                             style: Theme.of(context).textTheme.bodyLarge,
                           ),
                   ),
                   trailing: SizedBox(
                     height: 30,
-                    width: 140,
+                    width:
+                        profileController.myProfile.uid != widget.post.user!.uid
+                            ? 140
+                            : 80,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [

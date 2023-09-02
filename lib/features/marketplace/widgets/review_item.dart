@@ -100,7 +100,7 @@ class _ReviewTileState extends State<ReviewTile> {
                         ? Row(
                             children: [
                               Text(
-                                '${widget.post.rater.name!.length <= 15 ? widget.post.rater.name : "${widget.post.rater.name!.substring(0, 15)}..."}',
+                                '${widget.post.rater.name!.length <= 15 ? widget.post.rater.name : "${widget.post.rater.name!.substring(0, 12)}..."}',
                                 style: Theme.of(context).textTheme.bodyLarge,
                               ),
                               const SizedBox(width: 5),
@@ -112,7 +112,7 @@ class _ReviewTileState extends State<ReviewTile> {
                             ],
                           )
                         : Text(
-                            '${widget.post.rater.name!.length <= 15 ? widget.post.rater.name : "${widget.post.rater.name!.substring(0, 15)}..."}',
+                            '${widget.post.rater.name!.length <= 15 ? widget.post.rater.name : "${widget.post.rater.name!.substring(0, 12)}..."}',
                             style: Theme.of(context).textTheme.bodyLarge,
                           ),
                   ),
