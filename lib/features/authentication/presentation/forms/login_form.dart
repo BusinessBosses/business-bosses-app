@@ -15,6 +15,7 @@ import 'package:get/get.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 import '../../../../action/action.dart';
+import '../../../../common/models/user_model.dart';
 import '../../../../common/widgets/buttons/icon_text_button.dart';
 import '../../../../navigation/routes.dart';
 import '../../../../services/api_service.dart';
@@ -69,7 +70,12 @@ class _LoginFormState extends State<LoginForm> {
           await _googleSignIn.disconnect();
         } else {
           await logEvents('login', 'google');
-          Get.offAndToNamed(Routes.home);
+          if (user['data']['bio'] != null) {
+            Get.offAndToNamed(Routes.home);
+          } else {
+            Get.offAndToNamed(Routes.updateProfile,
+                arguments: UserModel.fromMap(user['data']));
+          }
         }
 
         setState(() {
@@ -211,7 +217,12 @@ class _LoginFormState extends State<LoginForm> {
                     Get.snackbar('Error', user['error']);
                   } else {
                     await logEvents('login', 'email');
-                    Get.offAndToNamed(Routes.home);
+                    if (user['data']['bio'] != null) {
+                      Get.offAndToNamed(Routes.home);
+                    } else {
+                      Get.offAndToNamed(Routes.updateProfile,
+                          arguments: UserModel.fromMap(user['data']));
+                    }
                   }
                 }
                 setState(() {

@@ -17,6 +17,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
+import '../../../navigation/routes.dart';
+
 class HomeController extends GetxController {
   late IO.Socket socket;
   // final PostsController _postsController = Get.find();
@@ -38,7 +40,10 @@ class HomeController extends GetxController {
   List<Map<String, dynamic>>? bossUp = [];
   RxBool refreshing = RxBool(false);
   List<Map<String, dynamic>> mixedPosts = [
-    {'isForum': false, 'data': {}, 'shouldCount': false}
+    {'isForum': false, 'data': {}, 'shouldCount': false, 'isSponsored': false}
+  ];
+  List<Map<String, dynamic>> sponsoredPosts = [
+    {'isForum': false, 'data': {}, 'shouldCount': false, 'isSponsored': true}
   ];
   List<String> blocked = [];
   String bossUpTitle = 'Boss Up By';
@@ -85,6 +90,25 @@ class HomeController extends GetxController {
     return posts;
   }
 
+  RxList<PostModel> processPromotedPostsToState(dynamic post) {
+    RxList<PostModel> promotedPosts = RxList<PostModel>(<PostModel>[]);
+
+    // print(post.length);
+    final List psts = post;
+    for (int i = 0; i < psts.length; i++) {
+      promotedPosts.add(PostModel.fromMap({
+        ...psts[i],
+        'likes': psts[i]['likes']
+            .map((dynamic like) => like['userId'].toString())
+            .toList(),
+        'coins': psts[i]['coins']
+            .map((dynamic coin) => coin['userId'].toString())
+            .toList()
+      }));
+    }
+    return promotedPosts;
+  }
+
   /// PROCESS RAW API Forums, MODELIZE AND SAVE TO STATE
   RxList<ForumModel> processForumsToState(dynamic forum) {
     RxList<ForumModel> forums = RxList<ForumModel>(<ForumModel>[]);
@@ -104,28 +128,106 @@ class HomeController extends GetxController {
     return forums;
   }
 
-  void joinPostsAndForums(RxList<PostModel> posts, RxList<ForumModel> forums) {
+  // void joinPostsAndForums(RxList<PostModel> posts, RxList<ForumModel> forums) {
+  //   List<Map<String, dynamic>> frms = [];
+  //   List<Map<String, dynamic>> psts = [];
+  //   for (int i = 0; i < forums.length; i++) {
+  //     frms.add({'isForum': true, 'data': forums[i], 'isSponsored': false});
+  //   }
+  //   for (int i = 0; i < posts.length; i++) {
+  //     psts.add({'isForum': false, 'data': posts[i], 'isSponsored': false});
+  //   }
+
+  //   final List<Map<String, dynamic>> joinedPosts = [...frms, ...psts]..sort(
+  //       (Map<String, dynamic> a, Map<String, dynamic> b) =>
+  //           b['data'].timestamp - a['data'].timestamp);
+
+  //   mixedPosts.addAll(joinedPosts);
+  // }
+
+  // void processPostsAndForumsData(dynamic data) {
+  //   final RxList<PostModel> posts = processPostsToState(data['posts']['rows']);
+  //   final RxList<ForumModel> forums =
+  //       processForumsToState(data['forums']['rows']);
+  //   joinPostsAndForums(posts, forums);
+  //   update();
+  // }
+
+  // void joinPostsAndForums(RxList<PostModel> posts,
+  //     RxList<PostModel> sponsoredPosts, RxList<ForumModel> forums) {
+  //   List<Map<String, dynamic>> frms = [];
+  //   List<Map<String, dynamic>> psts = [];
+  //   List<Map<String, dynamic>> promotedPst = [];
+  //   for (int i = 0; i < forums.length; i++) {
+  //     frms.add({'isForum': true, 'data': forums[i], 'isPromotedPost': false});
+  //   }
+
+  //   for (int i = 0; i < posts.length; i++) {
+  //     psts.add({'isForum': false, 'data': posts[i], 'isPromotedPost': false});
+  //   }
+
+  //   for (int i = 0; i < sponsoredPosts.length; i++) {
+  //     promotedPst.add({
+  //       'isForum': false,
+  //       'data': sponsoredPosts[i],
+  //       'isPromotedPost': true
+  //     });
+  //   }
+
+  //   final List<Map<String, dynamic>> joinedPosts = [...frms, ...psts]..sort(
+  //       (Map<String, dynamic> a, Map<String, dynamic> b) =>
+  //           b['data'].timestamp - a['data'].timestamp);
+
+  //   final List<Map<String, dynamic>> joinedPromotedPosts = [...promotedPst]
+  //     ..sort((Map<String, dynamic> a, Map<String, dynamic> b) =>
+  //         b['data'].timestamp - a['data'].timestamp);
+
+  //   mixedPosts.addAll(joinedPosts);
+  // }
+
+  void joinPostsAndForums(RxList<PostModel> posts,
+      RxList<PostModel> promotedPosts, RxList<ForumModel> forums) {
     List<Map<String, dynamic>> frms = [];
     List<Map<String, dynamic>> psts = [];
+    List<Map<String, dynamic>> sponsoredPst = [];
+
+    // Convert forum and regular posts into map entries
     for (int i = 0; i < forums.length; i++) {
-      frms.add({'isForum': true, 'data': forums[i]});
+      frms.add({'isForum': true, 'data': forums[i], 'isSponsored': false});
     }
+
     for (int i = 0; i < posts.length; i++) {
-      psts.add({'isForum': false, 'data': posts[i]});
+      psts.add({'isForum': false, 'data': posts[i], 'isSponsored': false});
+    }
+
+    for (int i = 0; i < promotedPosts.length; i++) {
+      psts.add(
+          {'isForum': false, 'data': promotedPosts[i], 'isSponsored': true});
+    }
+
+    for (int i = 0; i < promotedPosts.length; i++) {
+      sponsoredPst.add(
+          {'isForum': false, 'data': promotedPosts[i], 'isSponsored': true});
     }
 
     final List<Map<String, dynamic>> joinedPosts = [...frms, ...psts]..sort(
         (Map<String, dynamic> a, Map<String, dynamic> b) =>
             b['data'].timestamp - a['data'].timestamp);
 
+    final List<Map<String, dynamic>> joinedSponsoredPosts = sponsoredPst
+      ..sort((a, b) => b['data'].timestamp - a['data'].timestamp);
+
     mixedPosts.addAll(joinedPosts);
+    sponsoredPosts.addAll(joinedSponsoredPosts);
   }
 
   void processPostsAndForumsData(dynamic data) {
     final RxList<PostModel> posts = processPostsToState(data['posts']['rows']);
+    final RxList<PostModel> promotedPosts =
+        processPromotedPostsToState(data['promotedPosts']['rows']);
     final RxList<ForumModel> forums =
         processForumsToState(data['forums']['rows']);
-    joinPostsAndForums(posts, forums);
+    joinPostsAndForums(posts, promotedPosts, forums);
     update();
   }
 
@@ -279,7 +381,8 @@ class HomeController extends GetxController {
         'bio': profileController.myProfile.bio
       }
     });
-    mixedPosts.insert(1, {'isForum': false, 'data': modelizedNewPost});
+    mixedPosts.insert(
+        1, {'isForum': false, 'data': modelizedNewPost, 'isSponsored': false});
 
     // posts.insert(0, modelizedNewPost);
 
@@ -529,6 +632,10 @@ class HomeController extends GetxController {
 
     loading(false);
     update();
+    if (profileController.myProfile.bio == null) {
+      Get.offAndToNamed(Routes.updateProfile,
+          arguments: profileController.myProfile);
+    }
   }
 
   Future<void> fetchIndustries() async {
@@ -587,7 +694,7 @@ class HomeController extends GetxController {
     });
 
     socket.on('handshake', (data) {
-      print(data);
+      // print(data);
     });
 
     socket.on('new-message', (data) {

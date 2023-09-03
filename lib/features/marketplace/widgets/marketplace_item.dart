@@ -578,6 +578,7 @@ class _MarketTileState extends State<MarketTile> {
                                                 _post.marketId,
                                                 profileController,
                                                 'market',
+                                                _post.user!.uid,
                                               );
                                             },
                                             icon: _post.coins?.contains(
