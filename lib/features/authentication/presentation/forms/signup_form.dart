@@ -176,6 +176,7 @@ class _SignUpFormState extends State<SignUpForm> {
         Get.toNamed(
           Routes.updateProfile,
           arguments: UserModel(
+            name: _username!,
             username: _username!,
             email: _authCred!,
           ),
@@ -183,6 +184,7 @@ class _SignUpFormState extends State<SignUpForm> {
       }
       await _googleSignIn.disconnect();
     } else {
+      // ignore: use_build_context_synchronously
       showSnackBar(context, message: 'Opps!! Something went wrong. Try again');
     }
 

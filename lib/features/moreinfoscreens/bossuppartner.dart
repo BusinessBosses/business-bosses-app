@@ -191,17 +191,20 @@ class BossuppartnerItem extends StatelessWidget {
                           width: 15.0,
                         ),
                         const SizedBox(width: 4.0),
-                        GestureDetector(
-                          onTap: () async {
-                            final Uri url = Uri.parse(companyUrl);
-                            if (!await launchUrl(url)) {
-                              throw Exception('Could not launch $url');
-                            }
-                          },
-                          child: Text(
-                            companyUrl,
-                            style: const TextStyle(
-                              decoration: TextDecoration.underline,
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: () async {
+                              final Uri url = Uri.parse(companyUrl);
+                              if (!await launchUrl(url)) {
+                                throw Exception('Could not launch $url');
+                              }
+                            },
+                            child: Text(
+                              companyUrl,
+                              style: const TextStyle(
+                                decoration: TextDecoration.underline,
+                              ),
+                              overflow: TextOverflow.ellipsis,
                             ),
                           ),
                         ),

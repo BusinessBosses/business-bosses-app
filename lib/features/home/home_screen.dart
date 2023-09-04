@@ -6,9 +6,11 @@ import 'package:get/get.dart';
 import '../../utils/theme/theme.dart';
 import '../chat/controllers/chat_controller.dart';
 import '../chat/models/my_message.dart';
+import '../forum/models/forum_model.dart';
 import '../home/controller/home_controller.dart';
 import '../home/widgets/home_appbar.dart';
 import '../marketplace/controllers/market_controller.dart';
+import '../posts/models/post_model.dart';
 import '../posts/widgets/userpost_tile.dart';
 import '../profile/controller/profile_controller.dart';
 import '../profile/widgets/boss_of_the_week_tile.dart';
@@ -23,16 +25,18 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   // final ProfileController _profileController = Get.find();
   // int currentTimestamp = DateTime.now().millisecondsSinceEpoch;
   // final GetStorage sandBox = GetStorage();
   final ScrollController _scrollController = ScrollController();
   final MarketController marketController = Get.put(MarketController());
   final BossUpController bossUpController = Get.put(BossUpController());
+
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     final HomeController homeController = Get.find();
     _scrollController.addListener(() {
       if (_scrollController.position.pixels >=
@@ -44,13 +48,27 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    final HomeController homeController = Get.find();
+
+    if (state.index == 0) {
+      homeController.fetchPosts(fromBackground: true);
+    }
+    super.didChangeAppLifecycleState(state);
+  }
+
+  @override
   void dispose() {
-    super.dispose();
     _scrollController.dispose();
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    int normalPostCounter =
+        0; // Declare normalPostCounter outside of the ListView.builder
+
     return WillPopScope(
       onWillPop: () async {
         showDialog(
@@ -110,8 +128,41 @@ class _HomeScreenState extends State<HomeScreen> {
               }),
             ),
             body: controller.loading.value
-                ? const Center(
-                    child: CircularProgressIndicator(),
+                ? Center(
+                    child: Padding(
+                      padding: const EdgeInsets.only(bottom: 50.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Stack(
+                            children: [
+                              Positioned.fill(
+                                child: Align(
+                                  alignment: Alignment.center,
+                                  child: Image.asset(
+                                    'assets/app/app_logo_2.png',
+                                    height: 40,
+                                    width: 40,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 45,
+                                height: 45,
+                                child: CircularProgressIndicator(),
+                              ),
+                            ],
+                          ),
+                          const Padding(
+                            padding: EdgeInsets.only(top: 20.0),
+                            child: Text(
+                              'Start, Grow and Promote Your Business Globally',
+                              style: TextStyle(fontSize: 16),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
                   )
                 : SizedBox(
                     height: MediaQuery.of(context).size.height,
@@ -131,22 +182,74 @@ class _HomeScreenState extends State<HomeScreen> {
                               itemBuilder: (BuildContext context, int index) {
                                 if (index == 0) {
                                   return const BossOfWeekProfileTile();
-                                } else if (controller.mixedPosts[index]
-                                    ['isForum']) {
-                                  return ForumItem(
-                                    forum: controller.mixedPosts[index]['data'],
-                                    controller: controller,
-                                  );
                                 } else {
-                                  return PostTile(
-                                    controller: controller,
-                                    post: controller.mixedPosts[index]['data'],
-                                    onPageChange: (int page) {
-                                      if (widget.onPageChange != null) {
-                                        widget.onPageChange!(page);
-                                      }
-                                    },
-                                  );
+                                  final mixedPost =
+                                      controller.mixedPosts[index];
+
+                                  if (mixedPost['isForum']) {
+                                    // Handle ForumModel
+                                    final forumModel =
+                                        mixedPost['data'] as ForumModel;
+                                    return ForumItem(
+                                      forum: forumModel,
+                                      controller: controller,
+                                    );
+                                  } else if (mixedPost['isSponsored']) {
+                                    // Handle Sponsored PostModel
+                                    final sponsoredIndex = (index / 3).floor();
+                                    if (sponsoredIndex <
+                                        controller.sponsoredPosts.length) {
+                                      final promotedPosts = controller
+                                              .sponsoredPosts[sponsoredIndex]
+                                          ['data'];
+                                      return PostTile(
+                                        controller: controller,
+                                        post: promotedPosts,
+                                        onPageChange: (int page) {
+                                          if (widget.onPageChange != null) {
+                                            widget.onPageChange!(page);
+                                          }
+                                        },
+                                      );
+                                    } else {
+                                      // Handle case where there are no more sponsored posts
+                                      return SizedBox(); // You can return an empty widget or something else
+                                    }
+                                  } else if (index % 3 == 0) {
+                                    // Display Sponsored Post after every 3 non-sponsored posts
+                                    final sponsoredIndex = (index / 3).floor();
+                                    if (sponsoredIndex <
+                                        controller.sponsoredPosts.length) {
+                                      final promotedPosts = controller
+                                              .sponsoredPosts[sponsoredIndex]
+                                          ['data'];
+                                      return PostTile(
+                                        controller: controller,
+                                        post: promotedPosts,
+                                        onPageChange: (int page) {
+                                          if (widget.onPageChange != null) {
+                                            widget.onPageChange!(page);
+                                          }
+                                        },
+                                      );
+                                    } else {
+                                      // Handle case where there are no more sponsored posts
+                                      return SizedBox(); // You can return an empty widget or something else
+                                    }
+                                  } else {
+                                    // Handle regular non-promoted PostModel
+                                    final nonPromotedPostModel =
+                                        mixedPost['data'] as PostModel;
+                                    return PostTile(
+                                      controller: controller,
+                                      post: nonPromotedPostModel,
+                                      onPageChange: (int page) {
+                                        if (widget.onPageChange != null) {
+                                          widget.onPageChange!(page);
+                                        }
+                                      },
+                                    );
+                                  }
                                 }
                               },
                             ),
