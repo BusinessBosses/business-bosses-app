@@ -8,6 +8,7 @@ import 'package:detectable_text_field/widgets/detectable_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../../../action/action.dart';
 import '../../../../common/widgets/popup/my_popup_menu_button.dart';
 import '../../../../common/widgets/text_widget.dart';
@@ -406,7 +407,26 @@ class _MarketTileState extends State<MarketTile> {
                                     trimExpandedText: '  show less',
                                     basicStyle:
                                         bodyText2.copyWith(color: textColor),
-                                    onTap: (_) {},
+                                    onTap: (String text) async {
+                                      final Uri url = Uri.parse(text);
+                                      if ((url.scheme == 'http' ||
+                                          url.scheme == 'https')) {
+                                        if (!await launchUrl(url)) {
+                                          throw Exception(
+                                              'Could not launch $url');
+                                        }
+                                      } else if (text.startsWith('wa.me')) {
+                                        // Handle "wa.me" links
+                                        final Uri whatsappUrl =
+                                            Uri.parse('https://$text');
+                                        if (await launchUrl(whatsappUrl)) {
+                                          await launchUrl(whatsappUrl);
+                                        } else {
+                                          throw Exception(
+                                              'Could not launch $whatsappUrl');
+                                        }
+                                      }
+                                    },
                                   ),
                                 ),
                                 const SizedBox(
