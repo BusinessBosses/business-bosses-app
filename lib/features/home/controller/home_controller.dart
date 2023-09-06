@@ -620,6 +620,10 @@ class HomeController extends GetxController {
         bossUpTitle = getTitle['companyName'];
         bossUp?.removeWhere((item) => item['id'] == 5);
       }
+      if (profileController.myProfile.bio == null) {
+        Get.offAndToNamed(Routes.updateProfile,
+            arguments: profileController.myProfile);
+      }
     } else {
       error(true);
       socket.disconnect();
@@ -632,10 +636,6 @@ class HomeController extends GetxController {
 
     loading(false);
     update();
-    if (profileController.myProfile.bio == null) {
-      Get.offAndToNamed(Routes.updateProfile,
-          arguments: profileController.myProfile);
-    }
   }
 
   Future<void> fetchIndustries() async {
