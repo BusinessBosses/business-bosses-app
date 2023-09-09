@@ -66,9 +66,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    int normalPostCounter =
-        0; // Declare normalPostCounter outside of the ListView.builder
-
     return WillPopScope(
       onWillPop: () async {
         showDialog(
