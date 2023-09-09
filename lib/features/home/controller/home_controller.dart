@@ -608,8 +608,6 @@ class HomeController extends GetxController {
       _chatController.processDataToState(
           response.data['chats'], profileController.myProfile.uid);
       socket.emit('handshake', profileController.myProfile.uid);
-      // _marketController.initMarket();
-      // _marketController.initUsers();
       addCoinDaily();
       if (partner.data['count'] > 0) {
         bossUp?.addAll(partner.data['rows'].cast<Map<String, dynamic>>());
@@ -626,11 +624,15 @@ class HomeController extends GetxController {
       }
     } else {
       error(true);
+      update();
       socket.disconnect();
       if (response.message == 'send a valid token') {
         showAccessTokenDialog();
       } else {
-        showSnackbar(title: 'OOPS!', message: response.message, error: true);
+        showSnackbar(
+            title: 'OOPS!',
+            message: 'Check your Internet Connection!',
+            error: true);
       }
     }
 
