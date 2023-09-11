@@ -3,13 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
-import '../../../action/action.dart';
-import '../../../common/params.dart';
 import '../../../common/widgets/safety_model.dart';
 import '../../../common/widgets/user_avatar_with_badge.dart';
 import '../../../navigation/routes.dart';
 import '../../../utils/theme/theme.dart';
-import '../../profile/presentation/publicprofilescreen.dart';
 
 /// MARKET MEMBERS SCREEN
 class MarketMembersScreen extends StatefulWidget {
@@ -81,7 +78,8 @@ class _MarketMembersScreenState extends State<MarketMembersScreen> {
                           title: widget.users[i].isSubscribed == true
                               ? Row(
                                   children: [
-                                    Text(widget.users[i].name!),
+                                    Text(widget.users[i].name ??
+                                        widget.users[i].username),
                                     const SizedBox(width: 5),
                                     SvgPicture.asset(
                                       'assets/svgs/premiumbadge.svg',
@@ -90,9 +88,10 @@ class _MarketMembersScreenState extends State<MarketMembersScreen> {
                                     )
                                   ],
                                 )
-                              : Text(widget.users[i].name!),
+                              : Text(widget.users[i].name ??
+                                  widget.users[i].username),
                           subtitle: Text(
-                            widget.users[i].bio!,
+                            widget.users[i].bio ?? '',
                             maxLines: 1,
                           ),
                         ),
