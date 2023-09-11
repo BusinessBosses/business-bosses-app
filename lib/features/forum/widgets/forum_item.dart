@@ -640,7 +640,7 @@ class _ForumItemState extends State<ForumItem> {
                                 left: 15, right: 15, top: 10),
                             child: AllImagesItem(
                               widget.forum.images!
-                                  .where((element) => element.isNotEmpty)
+                                  .where((String element) => element.isNotEmpty)
                                   .toList(),
                             ),
                           ),

@@ -68,7 +68,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
 
   @override
   Widget build(BuildContext context) {
-    int userCount = _marketController.users.length ?? 0;
+    int userCount = _marketController.users.length;
     String formattedUserCount = formatCount(userCount);
 
     return GetBuilder<MarketController>(
@@ -411,7 +411,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                                           Container(
                                                             margin:
                                                                 const EdgeInsets
-                                                                        .only(
+                                                                    .only(
                                                                     top: 25,
                                                                     right: 20,
                                                                     left: 35),
@@ -471,7 +471,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                                       Padding(
                                                         padding:
                                                             const EdgeInsets
-                                                                    .only(
+                                                                .only(
                                                                 left: 32,
                                                                 top: 0,
                                                                 right: 20),
@@ -480,10 +480,13 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                                             Row(
                                                               children: [
                                                                 Padding(
-                                                                  padding: const EdgeInsets
+                                                                  padding:
+                                                                      const EdgeInsets
                                                                           .only(
-                                                                      right: 2,
-                                                                      top: 5),
+                                                                          right:
+                                                                              2,
+                                                                          top:
+                                                                              5),
                                                                   child:
                                                                       SvgPicture
                                                                           .asset(
@@ -504,7 +507,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                                                   child:
                                                                       Padding(
                                                                     padding: const EdgeInsets
-                                                                            .only(
+                                                                        .only(
                                                                         top:
                                                                             5.0),
                                                                     child:
@@ -530,11 +533,15 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                                             Row(
                                                               children: [
                                                                 Padding(
-                                                                  padding: const EdgeInsets
+                                                                  padding:
+                                                                      const EdgeInsets
                                                                           .only(
-                                                                      left: 8,
-                                                                      top: 5,
-                                                                      right: 3),
+                                                                          left:
+                                                                              8,
+                                                                          top:
+                                                                              5,
+                                                                          right:
+                                                                              3),
                                                                   child:
                                                                       SvgPicture
                                                                           .asset(
@@ -547,15 +554,16 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                                                 Obx(
                                                                   () {
                                                                     int postCount =
-                                                                        _marketController.markets.length ??
-                                                                            0;
+                                                                        _marketController
+                                                                            .markets
+                                                                            .length;
                                                                     String
                                                                         formattedpostCount =
                                                                         formatCount(
                                                                             postCount);
                                                                     return Padding(
                                                                       padding: const EdgeInsets
-                                                                              .only(
+                                                                          .only(
                                                                           top:
                                                                               5.0),
                                                                       child:
@@ -743,8 +751,9 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                                                               ),
                                                                         const Spacer(),
                                                                         Padding(
-                                                                          padding:
-                                                                              const EdgeInsets.only(right: 10.0),
+                                                                          padding: const EdgeInsets
+                                                                              .only(
+                                                                              right: 10.0),
                                                                           child:
                                                                               SvgPicture.asset(
                                                                             'assets/svgs/nexticon.svg',

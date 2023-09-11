@@ -215,7 +215,7 @@ class HomeController extends GetxController {
             b['data'].timestamp - a['data'].timestamp);
 
     final List<Map<String, dynamic>> joinedSponsoredPosts = sponsoredPst
-      ..sort((a, b) => b['data'].timestamp - a['data'].timestamp);
+      ..sort((Map<String, dynamic> a, Map<String, dynamic> b) => b['data'].timestamp - a['data'].timestamp);
 
     mixedPosts.addAll(joinedPosts);
     sponsoredPosts.addAll(joinedSponsoredPosts);
@@ -577,7 +577,7 @@ class HomeController extends GetxController {
         element['isForum'] &&
         element['data'].forumId == forumId);
 
-    bossupForums.removeWhere((element) => element.forumId == forumId);
+    bossupForums.removeWhere((ForumModel element) => element.forumId == forumId);
     update();
   }
 
@@ -608,8 +608,6 @@ class HomeController extends GetxController {
       _chatController.processDataToState(
           response.data['chats'], profileController.myProfile.uid);
       socket.emit('handshake', profileController.myProfile.uid);
-      // _marketController.initMarket();
-      // _marketController.initUsers();
       addCoinDaily();
       if (partner.data['count'] > 0) {
         bossUp?.addAll(partner.data['rows'].cast<Map<String, dynamic>>());
@@ -618,24 +616,28 @@ class HomeController extends GetxController {
             bossUp!.firstWhere((Map<String, dynamic> item) => item['id'] == 5);
 
         bossUpTitle = getTitle['companyName'];
-        bossUp?.removeWhere((item) => item['id'] == 5);
+        bossUp?.removeWhere((Map<String, dynamic> item) => item['id'] == 5);
+      }
+      if (profileController.myProfile.bio == null) {
+        Get.offAndToNamed(Routes.updateProfile,
+            arguments: profileController.myProfile);
       }
     } else {
       error(true);
+      update();
       socket.disconnect();
       if (response.message == 'send a valid token') {
         showAccessTokenDialog();
       } else {
-        showSnackbar(title: 'OOPS!', message: response.message, error: true);
+        showSnackbar(
+            title: 'OOPS!',
+            message: 'Check your Internet Connection!',
+            error: true);
       }
     }
 
     loading(false);
     update();
-    if (profileController.myProfile.bio == null) {
-      Get.offAndToNamed(Routes.updateProfile,
-          arguments: profileController.myProfile);
-    }
   }
 
   Future<void> fetchIndustries() async {
