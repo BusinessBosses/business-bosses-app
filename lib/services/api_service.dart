@@ -235,7 +235,7 @@ class ApiService {
 
       return ApiResponseModel.fromMap(jsonDecode(response.body));
     } catch (e) {
-      showSnackbar(message: e.toString());
+      showSnackbar(message: e.toString(), error: true);
       return ApiResponseModel(success: false, message: e.toString(), data: {});
     }
   }
