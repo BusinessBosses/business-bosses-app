@@ -2,7 +2,6 @@ import 'dart:core';
 
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/common/widgets/buttons/subscribe_to_premium_button.dart';
-import 'package:business_bosses_v2/features/marketplace/presentation/subscription_confirmation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';

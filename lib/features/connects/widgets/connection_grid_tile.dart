@@ -50,7 +50,7 @@ class _ConnectionGridTileState extends State<ConnectionGridTile> {
               placeHolder: Icons.person,
             ),
             const SizedBox(height: 8.0),
-            widget.user!.isSubscribed == true
+            widget.user.isSubscribed == true
                 ? Padding(
                     padding: const EdgeInsets.only(top: 0.0),
                     child: Row(

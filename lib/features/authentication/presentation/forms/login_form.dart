@@ -273,7 +273,7 @@ class _LoginFormState extends State<LoginForm> {
             const SizedBox(height: 10.0),
 
             if (Platform.isIOS)
-              Container(
+              SizedBox(
                 height: 55,
                 child: SignInWithAppleButton(
                   height: 40,

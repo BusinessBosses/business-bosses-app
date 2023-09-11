@@ -1,7 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'dart:convert';
 
-import 'package:flutter/foundation.dart';
 
 import 'package:business_bosses_v2/common/models/comment_model.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
@@ -91,12 +89,12 @@ class ForumModel {
       industry: map['industry'] != null ? map['industry'] as String : null,
       images: map['images'] != null && map['images'] != ''
           ? List<String>.from((map['images']))
-                  .where((element) => element.isNotEmpty)
+                  .where((String element) => element.isNotEmpty)
                   .toList()
                   .isEmpty
               ? null
               : List<String>.from((map['images']))
-                  .where((element) => element.isNotEmpty)
+                  .where((String element) => element.isNotEmpty)
                   .toList()
           : null,
       timestamp: map['timestamp'] != null

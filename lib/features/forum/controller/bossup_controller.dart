@@ -63,7 +63,7 @@ class BossUpController extends GetxController {
       }
       // After categorizing ranked and non-ranked forums
       nonRankedForums
-          .sort((a, b) => b.likes!.length.compareTo(a.likes!.length));
+          .sort((ForumModel a, ForumModel b) => b.likes!.length.compareTo(a.likes!.length));
       // Combine ranked and non-ranked posts, with ranked posts at the beginning
       List<ForumModel> combinedForums = [...rankedForums, ...nonRankedForums];
 
@@ -88,7 +88,7 @@ class BossUpController extends GetxController {
 
   void deleteForum(String forumId) {
     final HomeController homeController = Get.find();
-    forums.removeWhere((element) => element.forumId == forumId);
+    forums.removeWhere((ForumModel element) => element.forumId == forumId);
     homeController.removeForum(forumId);
 
     update();
