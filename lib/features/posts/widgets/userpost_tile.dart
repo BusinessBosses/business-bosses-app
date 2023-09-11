@@ -417,40 +417,45 @@ class _PostTileState extends State<PostTile> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       if (widget.post.promote! && widget.post.approved!)
-                        const TextWidget(
-                          text: 'Sponsored',
-                          fontWeight: FontWeight.w700,
-                          size: 10,
+                        const Column(
+                          children: [
+                            TextWidget(
+                              text: 'Sponsored',
+                              fontWeight: FontWeight.w700,
+                              size: 10,
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                          ],
                         ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          DetectableText(
-                            text: widget.post.title,
-                            detectionRegExp: detectionRegExp(hashtag: false)!,
-                            detectedStyle: bodyText2.copyWith(
-                              color: Colors.blue,
+                      if (widget.post.title.isNotEmpty)
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            DetectableText(
+                              text: widget.post.title,
+                              detectionRegExp: detectionRegExp(hashtag: false)!,
+                              detectedStyle: bodyText2.copyWith(
+                                color: Colors.blue,
+                              ),
+                              moreStyle: bodyText2.copyWith(
+                                color: Colors.redAccent,
+                              ),
+                              lessStyle: bodyText2.copyWith(
+                                color: Colors.redAccent,
+                              ),
+                              trimExpandedText: '  show less',
+                              basicStyle: bodyText2.copyWith(color: textColor),
+                              onTap: (String link) async {
+                                String url = MyNativeFunctions.completeURL(
+                                    link, MyUrl.url);
+                                await launchUrlString(url);
+                              },
                             ),
-                            moreStyle: bodyText2.copyWith(
-                              color: Colors.redAccent,
-                            ),
-                            lessStyle: bodyText2.copyWith(
-                              color: Colors.redAccent,
-                            ),
-                            trimExpandedText: '  show less',
-                            basicStyle: bodyText2.copyWith(color: textColor),
-                            onTap: (String link) async {
-                              String url = MyNativeFunctions.completeURL(
-                                  link, MyUrl.url);
-                              await launchUrlString(url);
-                            },
-                          ),
-                          const SizedBox(height: 16),
-                        ],
-                      ),
+                            const SizedBox(height: 10),
+                          ],
+                        ),
                       if (widget.post.images?.isNotEmpty ?? false)
                         PostImages(
                           post: widget.post,
