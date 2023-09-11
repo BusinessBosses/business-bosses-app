@@ -441,7 +441,7 @@ class _SignUpFormState extends State<SignUpForm> {
           const SizedBox(height: 10.0),
           if (Platform.isIOS)
             Stack(children: [
-              Container(
+              SizedBox(
                 height: 55,
                 child: SignInWithAppleButton(
                   height: 40,

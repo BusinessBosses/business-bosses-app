@@ -77,7 +77,7 @@ class ChatController extends GetxController {
     final String myId = _profileController.myProfile.uid;
     final HomeController homeController = Get.find();
 
-    chatMessages.removeWhere((element) =>
+    chatMessages.removeWhere((MessageModel element) =>
         (element.senderUid == chatPartyId && element.receiverUid == myId) ||
         (element.senderUid == myId && element.receiverUid == chatPartyId));
     extractChats(myId);

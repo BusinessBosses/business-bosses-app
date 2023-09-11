@@ -75,7 +75,7 @@ class CreateMarketController extends GetxController {
   Future<dynamic> uploadUpdatingFile() async {
     /// RAW FILES
     final List<String> rawFiles = updatingImageFileList
-        .where((element) => !element.contains("http"))
+        .where((String element) => !element.contains('http'))
         .toList();
 
     /// UPLOADED FILE URLS
@@ -181,7 +181,7 @@ class CreateMarketController extends GetxController {
       update();
 
       final List<String> hasNewUpload = updatingImageFileList
-          .where((element) => !element.contains("http"))
+          .where((String element) => !element.contains('http'))
           .toList();
       if (hasNewUpload.isEmpty) {
         final ApiResponseModel response =
@@ -207,7 +207,7 @@ class CreateMarketController extends GetxController {
           showSnackbar(message: 'Error Uploading image');
         } else {
           final List<String> alreadyUploadedFileUrls = updatingImageFileList
-              .where((element) => element.contains("http"))
+              .where((String element) => element.contains('http'))
               .toList();
           //////stopped here
           final ApiResponseModel response = await ForumRepository.editForum({

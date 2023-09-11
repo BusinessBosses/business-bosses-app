@@ -202,12 +202,12 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                                     if (index == 0) {
                                       return const BossOfWeekProfileTile();
                                     } else {
-                                      final mixedPost =
+                                      final Map<String, dynamic> mixedPost =
                                           controller.mixedPosts[index];
 
                                       if (mixedPost['isForum']) {
                                         // Handle ForumModel
-                                        final forumModel =
+                                        final ForumModel forumModel =
                                             mixedPost['data'] as ForumModel;
                                         return ForumItem(
                                           forum: forumModel,
@@ -215,7 +215,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                                         );
                                       } else if (mixedPost['isSponsored']) {
                                         // Handle Sponsored PostModel
-                                        final sponsoredIndex =
+                                        final int sponsoredIndex =
                                             (index / 3).floor();
                                         if (sponsoredIndex <
                                             controller.sponsoredPosts.length) {
@@ -233,11 +233,11 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                                           );
                                         } else {
                                           // Handle case where there are no more sponsored posts
-                                          return SizedBox(); // You can return an empty widget or something else
+                                          return const SizedBox(); // You can return an empty widget or something else
                                         }
                                       } else if (index % 3 == 0) {
                                         // Display Sponsored Post after every 3 non-sponsored posts
-                                        final sponsoredIndex =
+                                        final int sponsoredIndex =
                                             (index / 3).floor();
                                         if (sponsoredIndex <
                                             controller.sponsoredPosts.length) {
@@ -255,11 +255,11 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                                           );
                                         } else {
                                           // Handle case where there are no more sponsored posts
-                                          return SizedBox(); // You can return an empty widget or something else
+                                          return const SizedBox(); // You can return an empty widget or something else
                                         }
                                       } else {
                                         // Handle regular non-promoted PostModel
-                                        final nonPromotedPostModel =
+                                        final PostModel nonPromotedPostModel =
                                             mixedPost['data'] as PostModel;
                                         return PostTile(
                                           controller: controller,

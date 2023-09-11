@@ -238,7 +238,7 @@ Widget profileinfodisplay(BuildContext context, UserModel publicUser) {
         if (publicUser.productsandservices != null &&
             publicUser.productsandservices!.isNotEmpty &&
             publicUser.productsandservices!
-                .where((element) => element.isNotEmpty)
+                .where((String element) => element.isNotEmpty)
                 .toList()
                 .isNotEmpty)
           Column(
