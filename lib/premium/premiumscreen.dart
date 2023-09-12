@@ -13,6 +13,7 @@ import '../common/models/api_response_model.dart';
 import '../common/widgets/buttons/custom_button.dart';
 import '../features/marketplace/presentation/subscription_confirmation.dart';
 import '../features/profile/controller/profile_controller.dart';
+import '../navigation/routes.dart';
 import '../services/api_service.dart';
 
 class PremiumScreen extends StatefulWidget {
@@ -331,15 +332,16 @@ class _PremiumScreenState extends State<PremiumScreen> {
                             ),
                             const SizedBox(height: 7),
                             CustomButton(
-                              isProcessing: _isProcessing,
+                              // isProcessing: _isProcessing,
                               margin: const EdgeInsets.all(2.0),
-                              label: _currentIndex == 0
-                                  ? 'Subscribe at \$4.99'
-                                  : 'Subscribe at \$49.99',
-                              onPressed: () async {
-                                plans[_currentIndex];
-                                await makePayment();
-                              },
+                              label: 'Continue',
+                              onPressed: () =>
+                                  Get.toNamed(Routes.reviewpayment),
+
+                              // onPressed: () async {
+                              //   plans[_currentIndex];
+                              //   await makePayment();
+                              // },
                               buttonType: ButtonType.elevated,
                               child: Container(),
                             ),

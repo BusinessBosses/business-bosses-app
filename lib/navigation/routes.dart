@@ -52,4 +52,5 @@ class Routes {
       '/explorebusinessbossesscreen';
   static const String renewconfirmation = '/renewconfirmation';
   static const String subscriptionconfirmation = '/subscriptionconfirmation';
+  static const String reviewpayment = '/reviewpayment';
 }
