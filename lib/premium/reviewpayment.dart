@@ -3,10 +3,14 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
+import '../action/action.dart';
+import '../common/models/api_response_model.dart';
 import '../common/widgets/buttons/my_button.dart';
 import '../common/widgets/text_widget.dart';
 import '../navigation/routes.dart';
+import '../services/api_service.dart';
 import '../utils/theme/theme.dart';
 
 // ignore: public_member_api_docs
@@ -19,7 +23,38 @@ class ReviewPayment extends StatefulWidget {
 }
 
 class _ReviewPaymentState extends State<ReviewPayment> {
+  bool _isProcessing = false;
+
+  ///intialize the payment
+  Future<void> makePayment() async {
+    setState(() {
+      _isProcessing = true;
+    });
+    final ApiResponseModel res =
+        await ApiService.post(path: 'subscription', body: {
+      'price': argument['price'],
+      'plan': argument['plan'],
+    });
+
+    if (res.success) {
+      if (await canLaunchUrlString(res.data)) {
+        await launchUrlString(res.data, mode: LaunchMode.externalApplication);
+      }
+    } else {
+      // ignore: use_build_context_synchronously
+      showSnackBar(context, message: res.message);
+    }
+    setState(() {
+      _isProcessing = false;
+    });
+  }
+
+  var argument = Get.arguments;
   List<Map<String, dynamic>> options = <Map<String, dynamic>>[
+    <String, dynamic>{
+      'optionname': 'Card Payment',
+      'optionsvg': 'assets/svgs/cardlogo.svg'
+    },
     <String, dynamic>{
       'optionname': 'Google Pay',
       'optionsvg': 'assets/svgs/googlepaylogo.svg'
@@ -33,13 +68,9 @@ class _ReviewPaymentState extends State<ReviewPayment> {
       'optionname': 'PayPal',
       'optionsvg': 'assets/svgs/paypallogo.svg'
     },
-    <String, dynamic>{
-      'optionname': 'Card Payment',
-      'optionsvg': 'assets/svgs/cardlogo.svg'
-    },
   ];
 
-  late String initPlan = '';
+  late String initPlan = 'Card Payment';
 
   @override
   Widget build(BuildContext context) {
@@ -127,8 +158,10 @@ class _ReviewPaymentState extends State<ReviewPayment> {
                                         )),
                                     const Spacer(),
                                     Text(
-                                      'Monthly',
-                                      style: TextStyle(
+                                      argument.toString().contains('annually')
+                                          ? 'Annually'
+                                          : 'Monthly',
+                                      style: const TextStyle(
                                           fontSize: 15,
                                           fontWeight: FontWeight.bold),
                                     )
@@ -136,18 +169,20 @@ class _ReviewPaymentState extends State<ReviewPayment> {
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.only(top: 10.0),
-                                  child: const Row(
+                                  child: Row(
                                     children: [
-                                      Text(
+                                      const Text(
                                         'Total to pay:',
                                         style: TextStyle(
                                             fontSize: 18,
                                             fontWeight: FontWeight.w700),
                                       ),
-                                      Spacer(),
+                                      const Spacer(),
                                       Text(
-                                        '\$4.99',
-                                        style: TextStyle(
+                                        argument.toString().contains('annually')
+                                            ? '\$49.99'
+                                            : '\$4.99',
+                                        style: const TextStyle(
                                             fontSize: 23,
                                             fontWeight: FontWeight.w700),
                                       )
@@ -172,8 +207,10 @@ class _ReviewPaymentState extends State<ReviewPayment> {
                                 Row(
                                   children: [
                                     Text(
-                                      '55%',
-                                      style: TextStyle(fontSize: 12),
+                                      argument.toString().contains('annually')
+                                          ? '55%'
+                                          : '45%',
+                                      style: const TextStyle(fontSize: 12),
                                     ),
                                     const Text(
                                       ' of our users choose this plan',
@@ -265,8 +302,13 @@ class _ReviewPaymentState extends State<ReviewPayment> {
                       fontSize: 18,
                     ),
                     label: 'Pay',
-                    onPressed: () {
-                      Get.offAndToNamed(Routes.home);
+                    onPressed: () async {
+                      if (initPlan == 'Card Payment') {
+                        argument;
+                        await makePayment();
+                      } else if (initPlan == 'Google Pay') {
+                      } else if (initPlan == 'Apple Pay') {
+                      } else {}
                     },
                   ),
                 ],
@@ -281,13 +323,13 @@ class _ReviewPaymentState extends State<ReviewPayment> {
 
 ///Payment option card
 class PaymentOptionCard extends StatelessWidget {
-  /// CONSTRUCTOR
   const PaymentOptionCard({
     Key? key,
     required this.option,
     required this.activeoption,
     required this.onTap,
   }) : super(key: key);
+
   final Map<String, dynamic> option;
   final String activeoption;
   final Function(String) onTap;
@@ -296,7 +338,7 @@ class PaymentOptionCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        // print(activeoption);
+        onTap(option['optionname']); // Update the selected option
       },
       child: Container(
         margin: const EdgeInsets.symmetric(vertical: 5),
@@ -327,7 +369,9 @@ class PaymentOptionCard extends StatelessWidget {
                 Text(
                   '${option['optionname']}',
                   style: const TextStyle(
-                      fontSize: 15, fontWeight: FontWeight.w700),
+                    fontSize: 15,
+                    fontWeight: FontWeight.w700,
+                  ),
                   textAlign: TextAlign.left,
                 ),
                 option['optionname'] == activeoption
