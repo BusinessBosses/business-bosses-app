@@ -1,8 +1,10 @@
 import 'dart:io';
 
+import 'package:business_bosses_v2/premium/paymentconfig.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:pay/pay.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 import '../action/action.dart';
@@ -295,22 +297,49 @@ class _ReviewPaymentState extends State<ReviewPayment> {
                   const SizedBox(
                     height: 20,
                   ),
-                  MyButton(
-                    labelStyle: const TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w700,
-                      fontSize: 18,
-                    ),
-                    label: 'Pay',
-                    onPressed: () async {
-                      if (initPlan == 'Card Payment') {
+                  if (initPlan == 'Card Payment') ...[
+                    MyButton(
+                      labelStyle: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w700,
+                        fontSize: 18,
+                      ),
+                      label: 'Pay',
+                      onPressed: () async {
                         argument;
                         await makePayment();
-                      } else if (initPlan == 'Google Pay') {
-                      } else if (initPlan == 'Apple Pay') {
-                      } else {}
-                    },
-                  ),
+                      },
+                    )
+                  ] else if (initPlan == 'Google Pay')
+                    ...[]
+                  else if (initPlan == 'Apple Pay') ...[
+                    ApplePayButton(
+                      height: 45,
+                      width: 500,
+                      paymentConfiguration:
+                          PaymentConfiguration.fromJsonString(defaultApplePay),
+                      paymentItems: [
+                        PaymentItem(
+                          label: argument.toString().contains('annually')
+                              ? 'Premium Subscription (Annually)'
+                              : 'Premium Subscription (Monthly)',
+                          amount: argument.toString().contains('annually')
+                              ? '49.99'
+                              : '4.99',
+                          status: PaymentItemStatus.final_price,
+                        )
+                      ],
+                      style: ApplePayButtonStyle.black,
+                      type: ApplePayButtonType.buy,
+                      margin: const EdgeInsets.only(top: 15.0),
+                      onPaymentResult: ((result) =>
+                          debugPrint('paymentresult: $result')),
+                      loadingIndicator: const Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                    )
+                  ] else
+                    ...[]
                 ],
               ),
             ),
