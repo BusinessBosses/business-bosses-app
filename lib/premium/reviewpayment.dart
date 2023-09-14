@@ -72,7 +72,7 @@ class _ReviewPaymentState extends State<ReviewPayment> {
     },
   ];
 
-  late String initPlan = 'Card Payment';
+  late String initPlan = '';
 
   @override
   Widget build(BuildContext context) {
@@ -310,9 +310,26 @@ class _ReviewPaymentState extends State<ReviewPayment> {
                         await makePayment();
                       },
                     )
-                  ] else if (initPlan == 'Google Pay')
-                    ...[]
-                  else if (initPlan == 'Apple Pay') ...[
+                  ] else if (initPlan == 'Google Pay') ...[
+                    GooglePayButton(
+                      paymentConfiguration:
+                          PaymentConfiguration.fromJsonString(defaultGooglePay),
+                      paymentItems: [
+                        PaymentItem(
+                          label: 'Total',
+                          amount: '0.01',
+                          status: PaymentItemStatus.final_price,
+                        )
+                      ],
+                      type: GooglePayButtonType.pay,
+                      margin: const EdgeInsets.only(top: 15.0),
+                      onPaymentResult: ((result) =>
+                          debugPrint('paymentresult: $result')),
+                      loadingIndicator: const Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                    ),
+                  ] else if (initPlan == 'Apple Pay') ...[
                     ApplePayButton(
                       height: 45,
                       width: 500,
