@@ -7,14 +7,14 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
-import '../../utils/theme/theme.dart';
-import '../action/action.dart';
-import '../common/models/api_response_model.dart';
-import '../common/widgets/buttons/custom_button.dart';
-import '../features/marketplace/presentation/subscription_confirmation.dart';
-import '../features/profile/controller/profile_controller.dart';
-import '../navigation/routes.dart';
-import '../services/api_service.dart';
+import '../../../utils/theme/theme.dart';
+import '../../action/action.dart';
+import '../../common/models/api_response_model.dart';
+import '../../common/widgets/buttons/custom_button.dart';
+import '../marketplace/presentation/subscription_confirmation.dart';
+import '../profile/controller/profile_controller.dart';
+import '../../navigation/routes.dart';
+import '../../services/api_service.dart';
 
 class PremiumScreen extends StatefulWidget {
   static const String routeName = '/premiumScreen';

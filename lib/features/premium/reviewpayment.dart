@@ -1,19 +1,19 @@
 import 'dart:io';
 
-import 'package:business_bosses_v2/premium/paymentconfig.dart';
+import 'package:business_bosses_v2/features/premium/paymentconfig.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:pay/pay.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
-import '../action/action.dart';
-import '../common/models/api_response_model.dart';
-import '../common/widgets/buttons/my_button.dart';
-import '../common/widgets/text_widget.dart';
-import '../navigation/routes.dart';
-import '../services/api_service.dart';
-import '../utils/theme/theme.dart';
+import '../../action/action.dart';
+import '../../common/models/api_response_model.dart';
+import '../../common/widgets/buttons/my_button.dart';
+import '../../common/widgets/text_widget.dart';
+import '../../navigation/routes.dart';
+import '../../services/api_service.dart';
+import '../../utils/theme/theme.dart';
 
 // ignore: public_member_api_docs
 class ReviewPayment extends StatefulWidget {

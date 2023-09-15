@@ -130,7 +130,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
             _isUploading = false;
           });
           showSnackbar(
-              title: 'OOPS!!', message: 'Could not upload Image. Try again');
+              title: 'OOPS!', message: 'Could not upload image. Try again');
         }
       }
     } catch (e) {}
@@ -1321,7 +1321,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
         debugPrint('Image not selected');
       }
     } catch (exception) {
-      showSnackBar(context, message: exception.toString());
+      showSnackBar(context, message: 'exception.toString()');
     }
   }
 
@@ -1403,7 +1403,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
       }
       Get.toNamed(Routes.home);
     } else {
-      Get.snackbar('Error', response.message);
+      Get.snackbar('OOPS!', 'An eror occurred. Please check and try again');
     }
 
     // if (!_formKey.currentState!.validate()) {

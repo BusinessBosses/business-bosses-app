@@ -16,6 +16,7 @@ import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
+import '../../../../common/dialogs/snackbar.dart';
 import '../../../../common/widgets/buttons/custom_button.dart';
 import '../../../../common/widgets/buttons/icon_text_button.dart';
 import '../../../../common/widgets/text_widget.dart';
@@ -559,7 +560,10 @@ class _SignUpFormState extends State<SignUpForm> {
     if (canLunchLink) {
       await launchUrlString(url);
     } else {
-      Get.snackbar('An Error Occured', 'Try again later.');
+      showSnackbar(
+          title: 'OOPS!',
+          message: 'An error occurred, please try again!',
+          error: true);
     }
   }
 
