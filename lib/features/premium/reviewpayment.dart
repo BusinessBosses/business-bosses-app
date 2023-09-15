@@ -304,7 +304,7 @@ class _ReviewPaymentState extends State<ReviewPayment> {
                         fontWeight: FontWeight.w700,
                         fontSize: 18,
                       ),
-                      label: 'Pay',
+                      label: 'Pay now',
                       onPressed: () async {
                         argument;
                         await makePayment();
