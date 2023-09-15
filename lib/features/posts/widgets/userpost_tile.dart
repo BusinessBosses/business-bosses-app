@@ -9,11 +9,14 @@ import 'package:business_bosses_v2/functions/my_native_functions.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
 import 'package:detectable_text_field/widgets/detectable_text.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:url_launcher/url_launcher_string.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 import '../../../action/action.dart';
 import '../../../common/models/api_response_model.dart';
@@ -207,41 +210,72 @@ class _PostTileState extends State<PostTile> {
                       }
                     },
                     child: widget.post.user!.isSubscribed
-                        ? Padding(
-                            padding: const EdgeInsets.only(top: 0.0),
-                            child: Row(
-                              children: [
-                                Text(
-                                  widget.post.user!.name != null &&
-                                          widget.post.user!.name!.length <= 20
-                                      ? widget.post.user!.name!
-                                      : widget.post.user!.name != null
-                                          ? '${widget.post.user!.name!.substring(0, 20)}...'
-                                          : widget.post.user!.username,
-                                  style: Theme.of(context).textTheme.bodyLarge,
+                        ? profileController.myProfile.uid ==
+                                widget.post.user!.uid
+                            ? Padding(
+                                padding: const EdgeInsets.only(top: 0.0),
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      widget.post.user!.name != null &&
+                                              widget.post.user!.name!.length <=
+                                                  20
+                                          ? widget.post.user!.name!
+                                          : widget.post.user!.name != null
+                                              ? '${widget.post.user!.name!.substring(0, 20)}...'
+                                              : widget.post.user!.username,
+                                      style:
+                                          Theme.of(context).textTheme.bodyLarge,
+                                    ),
+                                    const SizedBox(width: 5),
+                                    SvgPicture.asset(
+                                      'assets/svgs/premiumbadge.svg',
+                                      height: 9,
+                                      color: primaryColorLT,
+                                    )
+                                  ],
                                 ),
-                                const SizedBox(width: 5),
-                                SvgPicture.asset(
-                                  'assets/svgs/premiumbadge.svg',
-                                  height: 9,
-                                  color: primaryColorLT,
-                                )
-                              ],
-                            ),
-                          )
+                              )
+                            : Padding(
+                                padding: const EdgeInsets.only(top: 0.0),
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      widget.post.user!.name != null &&
+                                              widget.post.user!.name!.length <=
+                                                  15
+                                          ? widget.post.user!.name!
+                                          : widget.post.user!.name != null
+                                              ? '${widget.post.user!.name!.substring(0, 12)}...'
+                                              : widget.post.user!.username,
+                                      style:
+                                          Theme.of(context).textTheme.bodyLarge,
+                                    ),
+                                    const SizedBox(width: 5),
+                                    SvgPicture.asset(
+                                      'assets/svgs/premiumbadge.svg',
+                                      height: 9,
+                                      color: primaryColorLT,
+                                    )
+                                  ],
+                                ),
+                              )
                         : Text(
                             widget.post.user!.name != null &&
                                     widget.post.user!.name!.length <= 20
                                 ? widget.post.user!.name!
                                 : widget.post.user!.name != null
-                                    ? '${widget.post.user!.name!.substring(0, 15)}...'
+                                    ? '${widget.post.user!.name!.substring(0, 12)}...'
                                     : widget.post.user!.username,
                             style: Theme.of(context).textTheme.bodyLarge,
                           ),
                   ),
                   trailing: SizedBox(
                     height: 30,
-                    width: 140,
+                    width:
+                        profileController.myProfile.uid != widget.post.user!.uid
+                            ? 140
+                            : 80,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
@@ -386,40 +420,45 @@ class _PostTileState extends State<PostTile> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       if (widget.post.promote! && widget.post.approved!)
-                        const TextWidget(
-                          text: 'Sponsored',
-                          fontWeight: FontWeight.w700,
-                          size: 10,
+                        const Column(
+                          children: [
+                            TextWidget(
+                              text: 'Sponsored',
+                              fontWeight: FontWeight.w700,
+                              size: 10,
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                          ],
                         ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          DetectableText(
-                            text: widget.post.title,
-                            detectionRegExp: detectionRegExp(hashtag: false)!,
-                            detectedStyle: bodyText2.copyWith(
-                              color: Colors.blue,
+                      if (widget.post.title.isNotEmpty)
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            DetectableText(
+                              text: widget.post.title,
+                              detectionRegExp: detectionRegExp(hashtag: false)!,
+                              detectedStyle: bodyText2.copyWith(
+                                color: Colors.blue,
+                              ),
+                              moreStyle: bodyText2.copyWith(
+                                color: Colors.redAccent,
+                              ),
+                              lessStyle: bodyText2.copyWith(
+                                color: Colors.redAccent,
+                              ),
+                              trimExpandedText: '  show less',
+                              basicStyle: bodyText2.copyWith(color: textColor),
+                              onTap: (String link) async {
+                                String url = MyNativeFunctions.completeURL(
+                                    link, MyUrl.url);
+                                await launchUrlString(url);
+                              },
                             ),
-                            moreStyle: bodyText2.copyWith(
-                              color: Colors.redAccent,
-                            ),
-                            lessStyle: bodyText2.copyWith(
-                              color: Colors.redAccent,
-                            ),
-                            trimExpandedText: '  show less',
-                            basicStyle: bodyText2.copyWith(color: textColor),
-                            onTap: (String link) async {
-                              String url = MyNativeFunctions.completeURL(
-                                  link, MyUrl.url);
-                              await launchUrlString(url);
-                            },
-                          ),
-                          const SizedBox(height: 16),
-                        ],
-                      ),
+                            const SizedBox(height: 10),
+                          ],
+                        ),
                       if (widget.post.images?.isNotEmpty ?? false)
                         PostImages(
                           post: widget.post,
