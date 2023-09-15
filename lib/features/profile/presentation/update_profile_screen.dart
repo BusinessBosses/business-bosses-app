@@ -1321,7 +1321,10 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
         debugPrint('Image not selected');
       }
     } catch (exception) {
-      showSnackBar(context, message: 'exception.toString()');
+      showSnackbar(
+          title: 'OOPS!',
+          message: 'An error occurred, please try again!',
+          error: true);
     }
   }
 
@@ -1403,7 +1406,10 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
       }
       Get.toNamed(Routes.home);
     } else {
-      Get.snackbar('OOPS!', 'An eror occurred. Please check and try again');
+      showSnackbar(
+          title: 'OOPS!',
+          message: 'An error occurred, please try again!',
+          error: true);
     }
 
     // if (!_formKey.currentState!.validate()) {
