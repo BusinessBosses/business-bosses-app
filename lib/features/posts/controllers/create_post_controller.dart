@@ -36,11 +36,28 @@ class CreatePostController extends GetxController {
 
   ///   VALIDATE CREATE POST DATA
   bool validateCreatePostData(Map<String, dynamic> data) {
-    if (data['title'].toString().isEmpty && imageFileList.isEmpty) {
+    final String title = data['title'].toString();
+
+    // Check if the title is empty
+    if (title.isEmpty) {
       return false;
-    } else {
-      return true;
     }
+
+    // Define a regular expression pattern to match invisible characters
+    final RegExp invisibleCharacterPattern = RegExp(r'[^\s\w]');
+
+    // Check if the title contains any of the specified Unicode characters
+    if (invisibleCharacterPattern.hasMatch(title)) {
+      return false;
+    }
+
+    // Check if imageFileList is empty
+    if (imageFileList.isEmpty) {
+      return false;
+    }
+
+    // If none of the above conditions are met, return true
+    return true;
   }
 
   /// UPLOAD FILE TO REMOTE SERVER
@@ -164,7 +181,8 @@ class CreatePostController extends GetxController {
   Future<dynamic> uploadUpdatingFile() async {
     /// RAW FILES
     final List<String> rawFiles = updatingImageFileList
-        .where((String element) => !element.contains('http') && element.isNotEmpty)
+        .where(
+            (String element) => !element.contains('http') && element.isNotEmpty)
         .toList();
 
     /// UPLOADED FILE URLS
@@ -217,7 +235,8 @@ class CreatePostController extends GetxController {
     update();
     if (validateCreatePostData(post!.toMap())) {
       final List<String> hasNewUpload = updatingImageFileList
-          .where((String element) => !element.contains('http') && element.isNotEmpty)
+          .where((String element) =>
+              !element.contains('http') && element.isNotEmpty)
           .toList();
       if (hasNewUpload.isEmpty) {
         final ApiResponseModel response = await ApiService.put(
