@@ -316,8 +316,12 @@ class _ReviewPaymentState extends State<ReviewPayment> {
                           PaymentConfiguration.fromJsonString(defaultGooglePay),
                       paymentItems: [
                         PaymentItem(
-                          label: 'Total',
-                          amount: '0.01',
+                          label: argument.toString().contains('annually')
+                              ? 'Premium Subscription (Annually)'
+                              : 'Premium Subscription (Monthly)',
+                          amount: argument.toString().contains('annually')
+                              ? '49.99'
+                              : '4.99',
                           status: PaymentItemStatus.final_price,
                         )
                       ],
@@ -330,29 +334,38 @@ class _ReviewPaymentState extends State<ReviewPayment> {
                       ),
                     ),
                   ] else if (initPlan == 'Apple Pay') ...[
-                    ApplePayButton(
-                      height: 45,
-                      width: 500,
-                      paymentConfiguration:
-                          PaymentConfiguration.fromJsonString(defaultApplePay),
-                      paymentItems: [
-                        PaymentItem(
-                          label: argument.toString().contains('annually')
-                              ? 'Premium Subscription (Annually)'
-                              : 'Premium Subscription (Monthly)',
-                          amount: argument.toString().contains('annually')
-                              ? '49.99'
-                              : '4.99',
-                          status: PaymentItemStatus.final_price,
-                        )
-                      ],
-                      style: ApplePayButtonStyle.black,
-                      type: ApplePayButtonType.buy,
-                      margin: const EdgeInsets.only(top: 15.0),
-                      onPaymentResult: ((result) =>
-                          debugPrint('paymentresult: $result')),
-                      loadingIndicator: const Center(
-                        child: CircularProgressIndicator(),
+                    Container(
+                      height: 55,
+                      decoration: BoxDecoration(
+                          color: Colors.black,
+                          borderRadius: BorderRadius.circular(10)),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: ApplePayButton(
+                          height: 40,
+                          width: MediaQuery.of(context).size.width,
+                          paymentConfiguration:
+                              PaymentConfiguration.fromJsonString(
+                                  defaultApplePay),
+                          paymentItems: [
+                            PaymentItem(
+                              label: argument.toString().contains('annually')
+                                  ? 'Premium Subscription (Annually)'
+                                  : 'Premium Subscription (Monthly)',
+                              amount: argument.toString().contains('annually')
+                                  ? '49.99'
+                                  : '4.99',
+                              status: PaymentItemStatus.final_price,
+                            )
+                          ],
+                          style: ApplePayButtonStyle.black,
+                          type: ApplePayButtonType.subscribe,
+                          onPaymentResult: ((result) =>
+                              debugPrint('paymentresult: $result')),
+                          loadingIndicator: const Center(
+                            child: CircularProgressIndicator(),
+                          ),
+                        ),
                       ),
                     )
                   ] else

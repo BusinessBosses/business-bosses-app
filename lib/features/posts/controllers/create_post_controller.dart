@@ -37,26 +37,20 @@ class CreatePostController extends GetxController {
   ///   VALIDATE CREATE POST DATA
   bool validateCreatePostData(Map<String, dynamic> data) {
     final String title = data['title'].toString();
-
-    // Check if the title is empty
     if (title.isEmpty) {
       return false;
     }
 
-    // Define a regular expression pattern to match invisible characters
     final RegExp invisibleCharacterPattern = RegExp(r'[^\s\w]');
 
-    // Check if the title contains any of the specified Unicode characters
     if (invisibleCharacterPattern.hasMatch(title)) {
       return false;
     }
 
-    // Check if imageFileList is empty
     if (imageFileList.isEmpty) {
       return false;
     }
 
-    // If none of the above conditions are met, return true
     return true;
   }
 
