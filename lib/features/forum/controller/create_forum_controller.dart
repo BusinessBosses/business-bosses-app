@@ -84,7 +84,7 @@ class CreateForumController extends GetxController {
   Future<dynamic> uploadUpdatingFile() async {
     /// RAW FILES
     final List<String> rawFiles = updatingImageFileList
-        .where((element) => !element.contains("http") && element.isNotEmpty)
+        .where((String element) => !element.contains('http') && element.isNotEmpty)
         .toList();
 
     /// UPLOADED FILE URLS
@@ -170,7 +170,7 @@ class CreateForumController extends GetxController {
       update();
 
       final List<String> hasNewUpload = updatingImageFileList
-          .where((element) => !element.contains("http") && element.isNotEmpty)
+          .where((String element) => !element.contains('http') && element.isNotEmpty)
           .toList();
       if (hasNewUpload.isEmpty) {
         final ApiResponseModel response = await ForumRepository.editForum(
@@ -210,7 +210,7 @@ class CreateForumController extends GetxController {
           showSnackbar(message: 'Error Uploading image');
         } else {
           final List<String> alreadyUploadedFileUrls = updatingImageFileList
-              .where((element) => element.contains("http"))
+              .where((String element) => element.contains('http'))
               .toList();
           //////stopped here
           final ApiResponseModel response = await ForumRepository.editForum({

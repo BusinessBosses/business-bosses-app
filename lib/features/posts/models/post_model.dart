@@ -99,11 +99,11 @@ class PostModel {
       title: map['title'] as String,
       images: map['images'] != null
           ? List<String>.from((map['images']))
-                  .where((element) => element.isNotEmpty)
+                  .where((String element) => element.isNotEmpty)
                   .isEmpty
               ? null
               : List<String>.from((map['images']))
-                  .where((element) => element.isNotEmpty)
+                  .where((String element) => element.isNotEmpty)
                   .toList()
           : null,
       timestamp: int.parse(map['timestamp'].toString()),

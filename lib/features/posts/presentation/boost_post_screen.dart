@@ -69,7 +69,7 @@ class _BoostPostState extends State<BoostPost> {
 
   void displaySheet() async {
     try {
-      await Stripe.instance.presentPaymentSheet().then((value) async {
+      await Stripe.instance.presentPaymentSheet().then((PaymentSheetPaymentOption? value) async {
         await updatePost('card');
 
         Navigator.of(context).push(MaterialPageRoute(

@@ -216,7 +216,7 @@ class HomeController extends GetxController {
             b['data'].timestamp - a['data'].timestamp);
 
     final List<Map<String, dynamic>> joinedSponsoredPosts = sponsoredPst
-      ..sort((a, b) => b['data'].timestamp - a['data'].timestamp);
+      ..sort((Map<String, dynamic> a, Map<String, dynamic> b) => b['data'].timestamp - a['data'].timestamp);
 
     mixedPosts.addAll(joinedPosts);
     sponsoredPosts.addAll(joinedSponsoredPosts);
@@ -578,7 +578,7 @@ class HomeController extends GetxController {
         element['isForum'] &&
         element['data'].forumId == forumId);
 
-    bossupForums.removeWhere((element) => element.forumId == forumId);
+    bossupForums.removeWhere((ForumModel element) => element.forumId == forumId);
     update();
   }
 
@@ -631,7 +631,7 @@ class HomeController extends GetxController {
             bossUp!.firstWhere((Map<String, dynamic> item) => item['id'] == 5);
 
         bossUpTitle = getTitle['companyName'];
-        bossUp?.removeWhere((item) => item['id'] == 5);
+        bossUp?.removeWhere((Map<String, dynamic> item) => item['id'] == 5);
       }
       if (profileController.myProfile.bio == null) {
         Get.offAndToNamed(Routes.updateProfile,

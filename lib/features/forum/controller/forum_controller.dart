@@ -35,7 +35,7 @@ class ForumController extends GetxController {
   }
 
   Future<void> deleteForum(String forumId) async {
-    forums.removeWhere((element) => element.forumId == forumId);
+    forums.removeWhere((ForumModel element) => element.forumId == forumId);
     update();
     await ForumRepository.deleteForum(forumId);
   }

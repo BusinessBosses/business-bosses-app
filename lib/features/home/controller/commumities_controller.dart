@@ -26,7 +26,7 @@ class CommunitiesController extends GetxController {
         .toList();
 
     filteredIndustries
-        .sort((a, b) => a.industry!.compareTo(b.industry!)); // Sort here
+        .sort((Industry a, Industry b) => a.industry!.compareTo(b.industry!)); // Sort here
 
     return filteredIndustries;
   }
@@ -134,7 +134,7 @@ class CommunitiesController extends GetxController {
     if (response.success) {
       industries = Industry.toIndustries(snapshot: response.data['rows']);
       industries
-          .sort((a, b) => a.industry!.compareTo(b.industry!)); // Sort here
+          .sort((Industry a, Industry b) => a.industry!.compareTo(b.industry!)); // Sort here
       _homeController.addIndustries(industries);
     } else {
       error(true);
