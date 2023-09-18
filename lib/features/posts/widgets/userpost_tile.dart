@@ -497,6 +497,19 @@ class _PostTileState extends State<PostTile> {
                       ),
                     ),
                     const SizedBox(width: 8.0),
+                    TextButton.icon(
+                      onPressed: () async {},
+                      icon: const Icon(Icons.remove_red_eye_outlined,
+                          color: Colors.black),
+                      label: Text(
+                        '${widget.post.views ?? 0}',
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                              fontWeight: FontWeight.w700,
+                              color: textColor.withOpacity(0.8),
+                            ),
+                      ),
+                    ),
+                    const SizedBox(width: 8.0),
                     GestureDetector(
                       onTap: () => _sharePost(),
                       child: SvgPicture.asset(

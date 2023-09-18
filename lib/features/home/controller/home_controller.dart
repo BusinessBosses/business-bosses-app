@@ -49,6 +49,7 @@ class HomeController extends GetxController {
   String bossUpTitle = 'Boss Up By';
   RxList<MarketModel> markets = RxList<MarketModel>(<MarketModel>[]);
   RxList<UserModel> marketMembers = RxList<UserModel>(<UserModel>[]);
+  Set<int> itemsWithIncrementedViews = {};
 
   void addIndustries(List<Industry> data) {
     industries = data;
@@ -590,6 +591,20 @@ class HomeController extends GetxController {
     if (postIndex != -1) {
       mixedPosts[postIndex]['data'] = post;
       update();
+    }
+  }
+
+  void updateViews(PostModel post) {
+    final int postIndex = mixedPosts.indexWhere(
+        (Map<String, dynamic> element) =>
+            element['shouldCount'] == null &&
+            !element['isForum'] &&
+            element['data'].postId == post.postId);
+    if (postIndex != -1) {
+      // Increment the view count of the post by 1
+      mixedPosts[postIndex]['data'].setViews(post.views! + 1);
+      update();
+      HomeRepository.updateViews(post.postId, post.views!);
     }
   }
 

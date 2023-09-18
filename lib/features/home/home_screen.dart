@@ -4,6 +4,7 @@ import 'package:business_bosses_v2/features/home/widgets/bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:visibility_detector/visibility_detector.dart';
 import '../../utils/theme/theme.dart';
 import '../chat/controllers/chat_controller.dart';
 import '../chat/models/my_message.dart';
@@ -199,6 +200,9 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                                   itemCount: controller.mixedPosts.length,
                                   itemBuilder:
                                       (BuildContext context, int index) {
+                                    final bool hasIncrementedView = controller
+                                        .itemsWithIncrementedViews
+                                        .contains(index);
                                     if (index == 0) {
                                       return const BossOfWeekProfileTile();
                                     } else {
@@ -222,18 +226,36 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                                           final promotedPosts =
                                               controller.sponsoredPosts[
                                                   sponsoredIndex]['data'];
-                                          return PostTile(
-                                            controller: controller,
-                                            post: promotedPosts,
-                                            onPageChange: (int page) {
-                                              if (widget.onPageChange != null) {
-                                                widget.onPageChange!(page);
+                                          return VisibilityDetector(
+                                            key: Key(index.toString()),
+                                            onVisibilityChanged:
+                                                (VisibilityInfo info) {
+                                              if (info.visibleFraction == 1.0 &&
+                                                  !hasIncrementedView) {
+                                                controller
+                                                    .updateViews(promotedPosts);
+                                                setState(() {
+                                                  controller
+                                                      .itemsWithIncrementedViews
+                                                      .add(
+                                                          index); // Set the flag to prevent further increments
+                                                });
                                               }
                                             },
+                                            child: PostTile(
+                                              controller: controller,
+                                              post: promotedPosts,
+                                              onPageChange: (int page) {
+                                                if (widget.onPageChange !=
+                                                    null) {
+                                                  widget.onPageChange!(page);
+                                                }
+                                              },
+                                            ),
                                           );
                                         } else {
                                           // Handle case where there are no more sponsored posts
-                                          return SizedBox(); // You can return an empty widget or something else
+                                          return const SizedBox(); // You can return an empty widget or something else
                                         }
                                       } else if (index % 3 == 0) {
                                         // Display Sponsored Post after every 3 non-sponsored posts
@@ -244,31 +266,64 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                                           final promotedPosts =
                                               controller.sponsoredPosts[
                                                   sponsoredIndex]['data'];
-                                          return PostTile(
-                                            controller: controller,
-                                            post: promotedPosts,
-                                            onPageChange: (int page) {
-                                              if (widget.onPageChange != null) {
-                                                widget.onPageChange!(page);
+                                          return VisibilityDetector(
+                                            key: Key(index.toString()),
+                                            onVisibilityChanged:
+                                                (VisibilityInfo info) {
+                                              if (info.visibleFraction == 1.0 &&
+                                                  !hasIncrementedView) {
+                                                controller
+                                                    .updateViews(promotedPosts);
+                                                setState(() {
+                                                  controller
+                                                      .itemsWithIncrementedViews
+                                                      .add(index);
+                                                });
                                               }
                                             },
+                                            child: PostTile(
+                                              controller: controller,
+                                              post: promotedPosts,
+                                              onPageChange: (int page) {
+                                                if (widget.onPageChange !=
+                                                    null) {
+                                                  widget.onPageChange!(page);
+                                                }
+                                              },
+                                            ),
                                           );
                                         } else {
                                           // Handle case where there are no more sponsored posts
-                                          return SizedBox(); // You can return an empty widget or something else
+                                          return const SizedBox(); // You can return an empty widget or something else
                                         }
                                       } else {
                                         // Handle regular non-promoted PostModel
                                         final nonPromotedPostModel =
                                             mixedPost['data'] as PostModel;
-                                        return PostTile(
-                                          controller: controller,
-                                          post: nonPromotedPostModel,
-                                          onPageChange: (int page) {
-                                            if (widget.onPageChange != null) {
-                                              widget.onPageChange!(page);
+                                        return VisibilityDetector(
+                                          key: Key(index.toString()),
+                                          onVisibilityChanged:
+                                              (VisibilityInfo info) {
+                                            if (info.visibleFraction == 1.0 &&
+                                                !hasIncrementedView) {
+                                              controller.updateViews(
+                                                  nonPromotedPostModel);
+                                              setState(() {
+                                                controller
+                                                    .itemsWithIncrementedViews
+                                                    .add(index);
+                                              });
                                             }
                                           },
+                                          child: PostTile(
+                                            controller: controller,
+                                            post: nonPromotedPostModel,
+                                            onPageChange: (int page) {
+                                              if (widget.onPageChange != null) {
+                                                widget.onPageChange!(page);
+                                              }
+                                            },
+                                          ),
                                         );
                                       }
                                     }
