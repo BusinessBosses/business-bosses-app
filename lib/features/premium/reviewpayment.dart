@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:business_bosses_v2/features/premium/paymentconfig.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:pay/pay.dart';
@@ -50,6 +51,17 @@ class _ReviewPaymentState extends State<ReviewPayment> {
       _isProcessing = false;
     });
   }
+
+  List<Map<String, dynamic>> applepayplans = <Map<String, dynamic>>[
+    <String, dynamic>{
+      'price': dotenv.env['TEST_MONTHLY_PRICE'],
+      'planid': '1',
+    },
+    <String, dynamic>{
+      'price': dotenv.env['TEST_YEARLY_PRICE'],
+      'planid': '2',
+    },
+  ];
 
   var argument = Get.arguments;
   List<Map<String, dynamic>> options = <Map<String, dynamic>>[
