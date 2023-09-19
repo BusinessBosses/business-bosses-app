@@ -104,7 +104,7 @@ packages:
       sha256: "4a07be6cb69c84d677a6c3096fcf960cc3285a8330b4603e0d463d15d9bd934c"
       url: "https://pub.dev"
     source: hosted
-    version: "1.17.2"
+    version: "1.17.1"
   connectivity:
     dependency: "direct main"
     description:
@@ -137,7 +137,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.1"
-    version: "1.17.1"
   convert:
     dependency: transitive
     description:
@@ -1371,7 +1370,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.4.0+2"
-  web:
   webview_flutter:
     dependency: "direct main"
     description:
