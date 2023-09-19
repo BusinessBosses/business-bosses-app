@@ -120,7 +120,7 @@ packages:
       sha256: f092b211a4319e98e5ff58223576de6c2803db36221657b46c82574721240687
       url: "https://pub.dev"
     source: hosted
-    version: "1.17.2"
+    version: "1.17.1"
   connectivity:
     dependency: "direct main"
     description:
@@ -154,9 +154,12 @@ packages:
     source: hosted
     version: "2.0.1"
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
     version: "1.17.1"
 >>>>>>> 3810275c9931055fba68d5dc7c13d5423782e79b
+=======
+>>>>>>> fecda7b3a482790bccefdc1449bde735db03adfc
   convert:
     dependency: transitive
     description:
@@ -1422,6 +1425,7 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.4.0+2"
+<<<<<<< HEAD
   watcher:
     dependency: transitive
     description:
@@ -1441,6 +1445,8 @@ packages:
     version: "0.1.4-beta"
 =======
 >>>>>>> 3810275c9931055fba68d5dc7c13d5423782e79b
+=======
+>>>>>>> fecda7b3a482790bccefdc1449bde735db03adfc
   webview_flutter:
     dependency: "direct main"
     description:
