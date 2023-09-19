@@ -649,6 +649,7 @@ class HomeController extends GetxController {
             bossUp!.firstWhere((Map<String, dynamic> item) => item['id'] == 5);
 
         bossUpTitle = getTitle['companyName'];
+        bossUpLink = getTitle['companyUrl'];
         bossUp?.removeWhere((Map<String, dynamic> item) => item['id'] == 5);
       }
       if (profileController.myProfile.bio == null) {
