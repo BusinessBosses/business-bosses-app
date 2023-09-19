@@ -11,6 +11,7 @@ import 'package:get/get.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 import '../../../utils/constants/constants.dart';
+import '../../home/repository/home_repository.dart';
 
 class BossUpController extends GetxController {
   late IO.Socket socket;
@@ -62,8 +63,8 @@ class BossUpController extends GetxController {
         }
       }
       // After categorizing ranked and non-ranked forums
-      nonRankedForums
-          .sort((ForumModel a, ForumModel b) => b.likes!.length.compareTo(a.likes!.length));
+      nonRankedForums.sort((ForumModel a, ForumModel b) =>
+          b.likes!.length.compareTo(a.likes!.length));
       // Combine ranked and non-ranked posts, with ranked posts at the beginning
       List<ForumModel> combinedForums = [...rankedForums, ...nonRankedForums];
 
@@ -84,6 +85,17 @@ class BossUpController extends GetxController {
       forums[index] = ForumModel.fromMap(data);
     }
     update();
+  }
+
+  void updateForumViews(ForumModel post) {
+    final int postIndex = forums
+        .indexWhere((ForumModel element) => element.forumId == post.forumId);
+    if (postIndex != -1) {
+      // Increment the view count of the post by 1
+      post.setViews(post.views! + 1);
+      update();
+      HomeRepository.updateForumViews(post.forumId, post.views!);
+    }
   }
 
   void deleteForum(String forumId) {

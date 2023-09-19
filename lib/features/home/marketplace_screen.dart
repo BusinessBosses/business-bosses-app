@@ -444,16 +444,18 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                                               ),
                                                             ),
                                                           ),
-                                                          const Expanded(
+                                                          Expanded(
                                                             child: Padding(
-                                                              padding: EdgeInsets
-                                                                  .only(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .only(
                                                                       right:
                                                                           35),
                                                               child: Text(
-                                                                '- Sell your products and services \n - Find Supplies',
+                                                                homeController
+                                                                    .marketDescription,
                                                                 style:
-                                                                    TextStyle(
+                                                                    const TextStyle(
                                                                   fontSize: 15,
                                                                   fontWeight:
                                                                       FontWeight
