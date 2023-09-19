@@ -10,19 +10,19 @@ class TimeFormat {
   static const num ONE_WEEK = 604800000;
   static const num ONE_MONTH = 1000 * 60 * 60 * 24 * 30;
 
-  static const String MANY_SECONDS_AGO = 's ago';
-  static const String MANY_MINUTES_AGO = 'm ago';
-  static const String MANY_HOURS_AGO = 'h ago';
+  static const String MANY_SECONDS_AGO = 'secs ago';
+  static const String MANY_MINUTES_AGO = 'mins ago';
+  static const String MANY_HOURS_AGO = 'hr ago';
   static const String MANY_DAYS_AGO = 'd ago';
-  static const String MANY_MONTHS_AGO = 'm ago';
-  static const String MANY_YEARS_AGO = 'y ago';
+  static const String MANY_MONTHS_AGO = 'mon ago';
+  static const String MANY_YEARS_AGO = 'yr ago';
 
-  static const String ONE_SECOND_AGO = 's ago';
-  static const String ONE_MINUTE_AGO = 'm ago';
-  static const String ONE_HOUR_AGO = 'h ago';
+  static const String ONE_SECOND_AGO = 'sec ago';
+  static const String ONE_MINUTE_AGO = 'min ago';
+  static const String ONE_HOUR_AGO = 'hr ago';
   static const String ONE_DAY_AGO = 'd ago';
-  static const String ONE_MONTH_AGO = 'm ago';
-  static const String ONE_YEAR_AGO = 'y ago';
+  static const String ONE_MONTH_AGO = 'mon ago';
+  static const String ONE_YEAR_AGO = 'yr ago';
 
   //Time conversion
   static String formatString(int? timestamp) {

@@ -42,8 +42,14 @@ class PostInteractionsWidget extends StatelessWidget {
                     icon:
                         post.likes?.contains(profileController.myProfile.uid) ==
                                 true
-                            ? SvgPicture.asset('assets/svgs/likefilled.svg')
-                            : SvgPicture.asset('assets/svgs/like.svg'),
+                            ? SvgPicture.asset(
+                                'assets/svgs/likefilled.svg',
+                                height: 15,
+                              )
+                            : SvgPicture.asset(
+                                'assets/svgs/like.svg',
+                                height: 15,
+                              ),
                     label: Text(
                       '${post.likes?.length ?? 0}',
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
@@ -62,7 +68,10 @@ class PostInteractionsWidget extends StatelessWidget {
                         ),
                       );
                     },
-                    icon: SvgPicture.asset('assets/svgs/comment.svg'),
+                    icon: SvgPicture.asset(
+                      'assets/svgs/comment.svg',
+                      height: 15,
+                    ),
                     label: Text(
                       '${post.comments?.length ?? 0}',
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
@@ -85,8 +94,14 @@ class PostInteractionsWidget extends StatelessWidget {
                     icon:
                         post.coins?.contains(profileController.myProfile.uid) ==
                                 true
-                            ? SvgPicture.asset('assets/svgs/coin.svg')
-                            : SvgPicture.asset('assets/svgs/coin.svg'),
+                            ? SvgPicture.asset(
+                                'assets/svgs/coin.svg',
+                                height: 20,
+                              )
+                            : SvgPicture.asset(
+                                'assets/svgs/coin.svg',
+                                height: 20,
+                              ),
                     label: Text(
                       '${post.coins?.length ?? 0}',
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
@@ -98,7 +113,7 @@ class PostInteractionsWidget extends StatelessWidget {
                   TextButton.icon(
                     onPressed: () async {},
                     icon: const Icon(Icons.remove_red_eye_outlined,
-                        color: Colors.black),
+                        size: 19, color: Colors.black),
                     label: Text(
                       '${post.views ?? 0}',
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
@@ -112,8 +127,8 @@ class PostInteractionsWidget extends StatelessWidget {
                     onTap: sharePost,
                     child: SvgPicture.asset(
                       'assets/svgs/share.svg',
-                      height: 18.0,
-                      width: 18.0,
+                      height: 15.0,
+                      width: 15.0,
                     ),
                   ),
                   const Spacer(),
