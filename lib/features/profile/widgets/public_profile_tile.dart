@@ -1,3 +1,5 @@
+// ignore_for_file: public_member_api_docs
+
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
@@ -5,7 +7,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../common/widgets/network_image_with_placeholder.dart';
 
-// ignore: public_member_api_docs
 class PublicProfileTile extends StatefulWidget {
   final UserModel myProfile;
 
@@ -23,10 +24,10 @@ class _PublicProfileTileState extends State<PublicProfileTile> {
     return SizedBox(
       width: double.infinity,
       child: Row(
-        children: [
+        children: <Widget>[
           Stack(
             clipBehavior: Clip.none,
-            children: [
+            children: <Widget>[
               SizedBox(
                 height: 120.0,
                 width: 120.0,
@@ -52,7 +53,7 @@ class _PublicProfileTileState extends State<PublicProfileTile> {
                       right: 0.0,
                       bottom: 0.0,
                       child: Column(
-                        children: [
+                        children: <Widget>[
                           Container(
                             height: 36,
                             width: 36,
@@ -93,77 +94,75 @@ class _PublicProfileTileState extends State<PublicProfileTile> {
             ],
           ),
           Expanded(
-            child: Container(
-              child: Column(
-                // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(height: 6.0),
-                  widget.myProfile.isSubscribed
-                      ? Row(
-                          children: [
-                            Text(
-                              widget.myProfile.name != null &&
-                                      widget.myProfile.name!.length <= 20
-                                  ? widget.myProfile.name!
-                                  : widget.myProfile.name != null
-                                      ? '${widget.myProfile.name!.substring(0, 20)}...'
-                                      : widget.myProfile.username,
-                              style: Theme.of(context).textTheme.bodyLarge,
+            child: Column(
+              // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                const SizedBox(height: 6.0),
+                widget.myProfile.isSubscribed
+                    ? Row(
+                        children: <Widget>[
+                          Text(
+                            widget.myProfile.name != null &&
+                                    widget.myProfile.name!.length <= 20
+                                ? widget.myProfile.name!
+                                : widget.myProfile.name != null
+                                    ? '${widget.myProfile.name!.substring(0, 20)}...'
+                                    : widget.myProfile.username,
+                            style: Theme.of(context).textTheme.bodyLarge,
+                          ),
+                          const SizedBox(width: 5),
+                          SvgPicture.asset(
+                            'assets/svgs/premiumbadge.svg',
+                            height: 9,
+                            // ignore: deprecated_member_use
+                            color: primaryColorLT,
+                          )
+                        ],
+                      )
+                    : Text(
+                        widget.myProfile.name != null &&
+                                widget.myProfile.name!.length <= 20
+                            ? widget.myProfile.name!
+                            : widget.myProfile.name != null
+                                ? '${widget.myProfile.name!.substring(0, 20)}...'
+                                : widget.myProfile.username,
+                        style: Theme.of(context).textTheme.bodyLarge,
+                      ),
+                Text(
+                  widget.myProfile.category ?? '',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: textColor.withOpacity(0.8)),
+                ),
+                widget.myProfile.companyName != null &&
+                        widget.myProfile.companyName != ''
+                    ? Text(
+                        widget.myProfile.companyName!,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.normal,
+                            color: textColor.withOpacity(
+                              0.8,
+                            )),
+                      )
+                    : Container(),
+                widget.myProfile.location != null &&
+                        widget.myProfile.location != ''
+                    ? Text(
+                        widget.myProfile.location ?? '',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                              color: textColor.withOpacity(0.6),
                             ),
-                            const SizedBox(width: 5),
-                            SvgPicture.asset(
-                              'assets/svgs/premiumbadge.svg',
-                              height: 9,
-                              color: primaryColorLT,
-                            )
-                          ],
-                        )
-                      : Text(
-                          widget.myProfile.name != null &&
-                                  widget.myProfile.name!.length <= 20
-                              ? widget.myProfile.name!
-                              : widget.myProfile.name != null
-                                  ? '${widget.myProfile.name!.substring(0, 20)}...'
-                                  : widget.myProfile.username,
-                          style: Theme.of(context).textTheme.bodyLarge,
-                        ),
-                  Text(
-                    widget.myProfile.category ?? '',
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: textColor.withOpacity(0.8)),
-                  ),
-                  widget.myProfile.companyName != null &&
-                          widget.myProfile.companyName != ''
-                      ? Text(
-                          widget.myProfile.companyName!,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.normal,
-                              color: textColor.withOpacity(
-                                0.8,
-                              )),
-                        )
-                      : Container(),
-                  widget.myProfile.location != null &&
-                          widget.myProfile.location != ''
-                      ? Text(
-                          widget.myProfile.location ?? '',
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style:
-                              Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                    color: textColor.withOpacity(0.6),
-                                  ),
-                        )
-                      : Container(),
-                ],
-              ),
+                      )
+                    : Container(),
+              ],
             ),
           )
         ],

@@ -1,3 +1,5 @@
+// ignore_for_file: public_member_api_docs
+
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -34,7 +36,7 @@ class UserProfileImageItem extends StatelessWidget {
       height: height,
       width: width,
       child: Stack(
-        children: [
+        children: <Widget>[
           isUploading
               ? Center(
                   child: SizedBox(
@@ -98,6 +100,7 @@ class UserProfileImageItem extends StatelessWidget {
         width: 50,
         child: SvgPicture.asset(
           'assets/svgs/person.svg',
+          // ignore: deprecated_member_use
           color: primaryColorLT.withOpacity(0.5),
         ),
       ),
