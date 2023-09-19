@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -433,30 +435,77 @@ class _BossUpSectionState extends State<BossUpSection> {
                                                 ),
                                               ),
                                               const SizedBox(width: 10),
-                                              Text(
-                                                '|',
-                                                style: TextStyle(
-                                                    fontSize: 20,
-                                                    color: textColor
-                                                        .withOpacity(0.5)),
-                                              ),
+                                              Platform.isIOS
+                                                  ? Padding(
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              left: 0.0,
+                                                              bottom: 4),
+                                                      child: Text(
+                                                        '|',
+                                                        style: TextStyle(
+                                                            fontSize: 20,
+                                                            color: textColor
+                                                                .withOpacity(
+                                                                    0.5)),
+                                                      ))
+                                                  : Text(
+                                                      '|',
+                                                      style: TextStyle(
+                                                          fontSize: 20,
+                                                          color: textColor
+                                                              .withOpacity(
+                                                                  0.5)),
+                                                    ),
                                               const SizedBox(width: 10),
-                                              Text(
-                                                hmeController.bossUp != null &&
-                                                        hmeController
-                                                            .bossUp!.isNotEmpty
-                                                    ? hmeController
-                                                                .bossUp!.last[
-                                                            'companyName'] ??
-                                                        ''
-                                                    : '',
-                                                style: const TextStyle(
-                                                  fontSize: 15,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                                overflow: TextOverflow.ellipsis,
-                                                softWrap: false,
-                                              ),
+                                              Platform.isIOS
+                                                  ? Padding(
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                        bottom: 2.0,
+                                                      ),
+                                                      child: Text(
+                                                        hmeController.bossUp !=
+                                                                    null &&
+                                                                hmeController
+                                                                    .bossUp!
+                                                                    .isNotEmpty
+                                                            ? hmeController
+                                                                        .bossUp!
+                                                                        .last[
+                                                                    'companyName'] ??
+                                                                ''
+                                                            : '',
+                                                        style: const TextStyle(
+                                                          fontSize: 15,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                        ),
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                        softWrap: false,
+                                                      ))
+                                                  : Text(
+                                                      hmeController.bossUp !=
+                                                                  null &&
+                                                              hmeController
+                                                                  .bossUp!
+                                                                  .isNotEmpty
+                                                          ? hmeController
+                                                                      .bossUp!
+                                                                      .last[
+                                                                  'companyName'] ??
+                                                              ''
+                                                          : '',
+                                                      style: const TextStyle(
+                                                        fontSize: 15,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                      ),
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                      softWrap: false,
+                                                    ),
                                               const Spacer(),
                                               Padding(
                                                 padding: const EdgeInsets.only(
