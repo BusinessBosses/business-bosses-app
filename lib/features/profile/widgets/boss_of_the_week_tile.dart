@@ -1,4 +1,3 @@
-import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:flutter/material.dart';
@@ -322,9 +321,6 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                                             homeController.bossUpLink))) {
                                           await launchUrl(Uri.parse(
                                               homeController.bossUpLink));
-                                        } else {
-                                          showSnackbar(
-                                              message: 'Could not launch URL');
                                         }
                                       },
                                       child: Text(
