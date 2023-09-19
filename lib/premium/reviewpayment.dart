@@ -6,6 +6,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:pay/pay.dart';
 import 'package:url_launcher/url_launcher_string.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 import '../action/action.dart';
 import '../common/models/api_response_model.dart';
@@ -51,16 +52,37 @@ class _ReviewPaymentState extends State<ReviewPayment> {
     });
   }
 
+  ///intialize the payment
+  Future<void> makePayPallPayment(String plan) async {
+    setState(() {
+      _isProcessing = true;
+    });
+    final ApiResponseModel res = await ApiService.get(
+      path: 'payment/plan/$plan',
+    );
+
+    if (res.success) {
+      if (await canLaunchUrlString(res.data)) {
+        await launchUrlString(res.data, mode: LaunchMode.externalApplication);
+      }
+    } else {
+      showSnackBar(context, message: res.message);
+    }
+    setState(() {
+      _isProcessing = false;
+    });
+  }
+
   var argument = Get.arguments;
   List<Map<String, dynamic>> options = <Map<String, dynamic>>[
     <String, dynamic>{
       'optionname': 'Card Payment',
       'optionsvg': 'assets/svgs/cardlogo.svg'
     },
-    <String, dynamic>{
-      'optionname': 'Google Pay',
-      'optionsvg': 'assets/svgs/googlepaylogo.svg'
-    },
+    // <String, dynamic>{
+    //   'optionname': 'Google Pay',
+    //   'optionsvg': 'assets/svgs/googlepaylogo.svg'
+    // },
     if (Platform.isIOS)
       <String, dynamic>{
         'optionname': 'Apple Pay',
@@ -73,7 +95,7 @@ class _ReviewPaymentState extends State<ReviewPayment> {
   ];
 
   late String initPlan = '';
-
+  late String plan = "";
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -317,7 +339,9 @@ class _ReviewPaymentState extends State<ReviewPayment> {
                       paymentItems: [
                         PaymentItem(
                           label: 'Total',
-                          amount: '0.01',
+                          amount: argument.toString().contains('annually')
+                              ? '49.99'
+                              : '4.99',
                           status: PaymentItemStatus.final_price,
                         )
                       ],
@@ -329,6 +353,14 @@ class _ReviewPaymentState extends State<ReviewPayment> {
                         child: CircularProgressIndicator(),
                       ),
                     ),
+                  ] else if (initPlan == "PayPal") ...[
+                    ElevatedButton(
+                      onPressed: () async {
+                        plan = argument["plan"];
+                        await makePayPallPayment(plan);
+                      },
+                      child: Text('Pay with PayPal'),
+                    )
                   ] else if (initPlan == 'Apple Pay') ...[
                     ApplePayButton(
                       height: 45,
