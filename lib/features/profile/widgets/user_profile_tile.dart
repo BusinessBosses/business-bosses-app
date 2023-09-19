@@ -21,6 +21,7 @@ class UserProfileTile extends StatefulWidget {
 class _UserProfileTileState extends State<UserProfileTile> {
   @override
   Widget build(BuildContext context) {
+    // ignore: unused_local_variable
     final ProfileController profileController = Get.find();
     // fetchData();
     // setState(() {});

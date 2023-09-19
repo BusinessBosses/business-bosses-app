@@ -1,6 +1,7 @@
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/features/forum/models/industry.dart';
+import 'package:business_bosses_v2/features/home/repository/home_repository.dart';
 import 'package:business_bosses_v2/features/posts/models/post_model.dart';
 import 'package:business_bosses_v2/features/profile/repository/profile_repository.dart';
 import 'package:get/get.dart';
@@ -63,6 +64,10 @@ class ProfileController extends GetxController {
   void updateProfile(Map<String, dynamic> newData) {
     myProfile = UserModel.fromMap(newData);
     update();
+  }
+
+  void updatePostViews(PostModel post, int views) {
+    HomeRepository.updateViews(post.postId, views);
   }
 
   void updateConnections(String uid) {

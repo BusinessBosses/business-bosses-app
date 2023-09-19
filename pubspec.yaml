@@ -29,6 +29,7 @@ environment:
 # versions available, run `flutter pub outdated`.
 dependencies:
   cached_network_image: ^3.2.3
+  connectivity: ^3.0.6
   country_list_pick: ^1.0.1+6
   country_picker: ^2.0.20
   crypto: ^3.0.3
@@ -71,6 +72,7 @@ dependencies:
   uni_links: ^0.5.1
   url_launcher: ^6.0.6
   uuid: ^3.0.7
+  visibility_detector: ^0.4.0+2
   yaml: ^3.1.0
   webview_flutter: ^2.0.12
   pay: ^1.1.2

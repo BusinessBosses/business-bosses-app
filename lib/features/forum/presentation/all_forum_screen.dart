@@ -10,8 +10,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:visibility_detector/visibility_detector.dart';
 
 import '../../../navigation/routes.dart';
+import '../../home/controller/home_controller.dart';
 import '../models/industry.dart';
 import '../../../utils/theme/theme.dart';
 import '../widgets/forum_item.dart';
@@ -34,6 +36,7 @@ class _AllForumScreenState extends State<AllForumScreen> {
   final ScrollController scrollController = ScrollController();
   late Industry industry;
   final ProfileController _myProfile = Get.find();
+  final HomeController hmeController = Get.find();
   // final List<ForumModel> forums = [];
 
   String formatCount(int count) {
@@ -87,7 +90,7 @@ class _AllForumScreenState extends State<AllForumScreen> {
     String formattedUserCount = formatCount(userCount);
     return GetBuilder<ForumController>(
       builder: (ForumController controller) {
-        int postCount = controller.totalForums.value ?? 0;
+        int postCount = controller.totalForums.value;
         String formattedpostCount = formatCount(postCount);
         return Scaffold(
             backgroundColor: backgroundcolorinterface,
@@ -455,13 +458,33 @@ class _AllForumScreenState extends State<AllForumScreen> {
 
                               //controller: differentController,
 
-                              itemBuilder: (BuildContext context, int i) =>
-                                  ForumItem(
-                                forum: controller.forums[i],
-                                key: ValueKey(controller.forums[i].forumId),
-                                controller: controller,
-                              ),
-                            ),
+                              itemBuilder: (BuildContext context, int i) {
+                                return VisibilityDetector(
+                                  key: Key(i.toString()),
+                                  onVisibilityChanged: (VisibilityInfo info) {
+                                    final bool hasIncrementedView =
+                                        hmeController.itemsWithIncrementedViews
+                                            .contains(
+                                                controller.forums[i].forumId);
+                                    if (info.visibleFraction == 1.0 &&
+                                        !hasIncrementedView) {
+                                      controller.updateForumViews(
+                                          controller.forums[i]);
+                                      setState(() {
+                                        hmeController.itemsWithIncrementedViews
+                                            .add(controller.forums[i]
+                                                .forumId); // Set the flag to prevent further increments
+                                      });
+                                    }
+                                  },
+                                  child: ForumItem(
+                                    forum: controller.forums[i],
+                                    key: ValueKey(controller.forums[i].forumId),
+                                    controller: controller,
+                                    isBossUp: true,
+                                  ),
+                                );
+                              }),
             ));
       },
     );
