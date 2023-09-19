@@ -14,6 +14,7 @@ class PostModel {
   final UserModel? user;
   final String? videoUrl;
   final bool isRanked;
+  int? views;
   final bool? promote;
   final dynamic promotionDuration;
   final String? plan;
@@ -29,6 +30,7 @@ class PostModel {
     this.user,
     this.videoUrl,
     required this.isRanked,
+    this.views = 0,
     this.promote,
     required this.promotionDuration,
     this.plan,
@@ -46,6 +48,7 @@ class PostModel {
     UserModel? user,
     String? videoUrl,
     bool? isRanked,
+    int? views,
     bool? promote,
     dynamic promotionDuration,
     String? plan,
@@ -62,6 +65,7 @@ class PostModel {
       user: user ?? this.user,
       videoUrl: videoUrl ?? this.videoUrl,
       isRanked: isRanked ?? this.isRanked,
+      views: views ?? this.views,
       promote: promote ?? this.promote,
       promotionDuration: promotionDuration ?? this.promotionDuration,
       plan: plan ?? this.plan,
@@ -81,6 +85,7 @@ class PostModel {
       'user': user?.toMap(),
       'videoUrl': videoUrl,
       'isRanked': isRanked,
+      'views': views,
       'promote': promote,
       'promotionDuration': promotionDuration,
       'plan': plan,
@@ -112,10 +117,15 @@ class PostModel {
           : null,
       videoUrl: map['videoUrl'] != null ? map['videoUrl'] as String : null,
       isRanked: map['isRanked'] as bool,
+      views: map['views'] != null ? map['views'] as int : null,
       promote: map['promote'] != null ? map['promote'] as bool : null,
       promotionDuration: map['promotionDuration'] as dynamic,
       plan: map['plan'] != null ? map['plan'] as String : null,
       approved: map['approved'] != null ? map['approved'] as bool : null,
     );
+  }
+
+  setViews(int newViews) {
+    views = newViews;
   }
 }

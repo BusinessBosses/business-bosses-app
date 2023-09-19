@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
+import 'package:visibility_detector/visibility_detector.dart';
 
 import '../../../common/widgets/popup/bossup_challenge_popup.dart';
 import '../../../common/widgets/safety_model.dart';
@@ -557,20 +558,42 @@ class _BossUpSectionState extends State<BossUpSection> {
                         : RefreshIndicator(
                             onRefresh: refreshData,
                             child: ListView.builder(
-                              itemCount: controller.forums.length,
+                                itemCount: controller.forums.length,
 
-                              // <-- this will disable scroll
+                                // <-- this will disable scroll
 
-                              //controller: differentController,
+                                //controller: differentController,
 
-                              itemBuilder: (BuildContext context, int i) =>
-                                  ForumItem(
-                                forum: controller.forums[i],
-                                key: ValueKey(controller.forums[i].forumId),
-                                controller: controller,
-                                isBossUp: true,
-                              ),
-                            ),
+                                itemBuilder: (BuildContext context, int i) {
+                                  return VisibilityDetector(
+                                    key: Key(i.toString()),
+                                    onVisibilityChanged: (VisibilityInfo info) {
+                                      final bool hasIncrementedView =
+                                          hmeController
+                                              .itemsWithIncrementedViews
+                                              .contains(
+                                                  controller.forums[i].forumId);
+                                      if (info.visibleFraction == 1.0 &&
+                                          !hasIncrementedView) {
+                                        controller.updateForumViews(
+                                            controller.forums[i]);
+                                        setState(() {
+                                          hmeController
+                                              .itemsWithIncrementedViews
+                                              .add(controller.forums[i]
+                                                  .forumId); // Set the flag to prevent further increments
+                                        });
+                                      }
+                                    },
+                                    child: ForumItem(
+                                      forum: controller.forums[i],
+                                      key: ValueKey(
+                                          controller.forums[i].forumId),
+                                      controller: controller,
+                                      isBossUp: true,
+                                    ),
+                                  );
+                                }),
                           ),
           ),
         );

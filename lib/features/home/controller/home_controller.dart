@@ -29,6 +29,7 @@ class HomeController extends GetxController {
   //     Get.put(CommunitiesController());
 
   RxBool error = RxBool(false);
+  RxBool noConnection = RxBool(false);
   List<Industry> industries = [];
   List<UserModel> bossupMembers = [];
 
@@ -47,8 +48,10 @@ class HomeController extends GetxController {
   ];
   List<String> blocked = [];
   String bossUpTitle = 'Boss Up By';
+  String bossUpLink = '';
   RxList<MarketModel> markets = RxList<MarketModel>(<MarketModel>[]);
   RxList<UserModel> marketMembers = RxList<UserModel>(<UserModel>[]);
+  Set<dynamic> itemsWithIncrementedViews = {};
 
   void addIndustries(List<Industry> data) {
     industries = data;
@@ -598,6 +601,34 @@ class HomeController extends GetxController {
     }
   }
 
+  void updateViews(PostModel post) {
+    final int postIndex = mixedPosts.indexWhere(
+        (Map<String, dynamic> element) =>
+            element['shouldCount'] == null &&
+            !element['isForum'] &&
+            element['data'].postId == post.postId);
+    if (postIndex != -1) {
+      // Increment the view count of the post by 1
+      mixedPosts[postIndex]['data'].setViews(post.views! + 1);
+      update();
+      HomeRepository.updateViews(post.postId, post.views!);
+    }
+  }
+
+  void updateForumViews(ForumModel post) {
+    final int postIndex = mixedPosts.indexWhere(
+        (Map<String, dynamic> element) =>
+            element['shouldCount'] == null &&
+            element['isForum'] &&
+            element['data'].forumId == post.forumId);
+    if (postIndex != -1) {
+      // Increment the view count of the post by 1
+      mixedPosts[postIndex]['data'].setViews(post.views! + 1);
+      update();
+      HomeRepository.updateForumViews(post.forumId, post.views!);
+    }
+  }
+
   /// LOAD POSTS FROM REMOTE SOURCE
   Future<void> loadData() async {
     loading(true);
@@ -621,6 +652,7 @@ class HomeController extends GetxController {
             bossUp!.firstWhere((Map<String, dynamic> item) => item['id'] == 5);
 
         bossUpTitle = getTitle['companyName'];
+        bossUpLink = getTitle['companyUrl'];
         bossUp?.removeWhere((Map<String, dynamic> item) => item['id'] == 5);
       }
       if (profileController.myProfile.bio == null) {
@@ -680,6 +712,7 @@ class HomeController extends GetxController {
             bossUp!.firstWhere((Map<String, dynamic> item) => item['id'] == 5);
 
         bossUpTitle = getTitle['companyName'];
+        bossUpLink = getTitle['companyUrl'];
       }
     } else {
       error(true);

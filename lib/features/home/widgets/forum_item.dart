@@ -2,12 +2,12 @@ import 'package:business_bosses_v2/features/forum/controller/bossup_controller.d
 import 'package:business_bosses_v2/features/forum/models/forum_model.dart';
 import 'package:business_bosses_v2/features/forum/widgets/bossup_like_comment.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
+import 'package:business_bosses_v2/utils/time_format.dart';
 import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
 import 'package:detectable_text_field/widgets/detectable_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:jiffy/jiffy.dart';
 import '../../../action/action.dart';
 import '../../../common/models/api_response_model.dart';
 import '../../../common/models/comment_model.dart';
@@ -765,6 +765,21 @@ class _ForumItemState extends State<ForumItem> {
                                   ],
                                 ),
                               ),
+                        TextButton.icon(
+                          onPressed: () async {},
+                          icon: const Icon(Icons.remove_red_eye_outlined,
+                              color: Colors.black),
+                          label: Text(
+                            '${widget.forum.views ?? 0}',
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.copyWith(
+                                  fontWeight: FontWeight.w700,
+                                  color: textColor.withOpacity(0.8),
+                                ),
+                          ),
+                        ),
                         const SizedBox(width: 8.0),
                         GestureDetector(
                           onTap: () => _sharePost(),
@@ -779,10 +794,7 @@ class _ForumItemState extends State<ForumItem> {
                         Padding(
                           padding: const EdgeInsets.only(right: 15),
                           child: Text(
-                            Jiffy.parseFromMillisecondsSinceEpoch(
-                                    widget.forum.timestamp!)
-                                .fromNow(),
-                            // TimeFormat.formatString(widget.forum.timestamp!),
+                            TimeFormat.formatString(widget.forum.timestamp!),
                             style: Theme.of(context)
                                 .textTheme
                                 .bodyMedium
