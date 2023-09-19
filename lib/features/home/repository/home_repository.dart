@@ -104,4 +104,11 @@ class HomeRepository {
         path: 'post/update-post/$id', body: {'views': views});
     return response;
   }
+
+  /// Update Views
+  static Future<ApiResponseModel> updateForumViews(String id, int views) async {
+    final ApiResponseModel response =
+        await ApiService.put(path: 'forum/update/$id', body: {'views': views});
+    return response;
+  }
 }

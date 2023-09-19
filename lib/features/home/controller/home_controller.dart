@@ -29,6 +29,7 @@ class HomeController extends GetxController {
   //     Get.put(CommunitiesController());
 
   RxBool error = RxBool(false);
+  RxBool noConnection = RxBool(false);
   List<Industry> industries = [];
   List<UserModel> bossupMembers = [];
 
@@ -49,7 +50,7 @@ class HomeController extends GetxController {
   String bossUpTitle = 'Boss Up By';
   RxList<MarketModel> markets = RxList<MarketModel>(<MarketModel>[]);
   RxList<UserModel> marketMembers = RxList<UserModel>(<UserModel>[]);
-  Set<int> itemsWithIncrementedViews = {};
+  Set<dynamic> itemsWithIncrementedViews = {};
 
   void addIndustries(List<Industry> data) {
     industries = data;
@@ -216,7 +217,8 @@ class HomeController extends GetxController {
             b['data'].timestamp - a['data'].timestamp);
 
     final List<Map<String, dynamic>> joinedSponsoredPosts = sponsoredPst
-      ..sort((Map<String, dynamic> a, Map<String, dynamic> b) => b['data'].timestamp - a['data'].timestamp);
+      ..sort((Map<String, dynamic> a, Map<String, dynamic> b) =>
+          b['data'].timestamp - a['data'].timestamp);
 
     mixedPosts.addAll(joinedPosts);
     sponsoredPosts.addAll(joinedSponsoredPosts);
@@ -578,7 +580,8 @@ class HomeController extends GetxController {
         element['isForum'] &&
         element['data'].forumId == forumId);
 
-    bossupForums.removeWhere((ForumModel element) => element.forumId == forumId);
+    bossupForums
+        .removeWhere((ForumModel element) => element.forumId == forumId);
     update();
   }
 
@@ -605,6 +608,20 @@ class HomeController extends GetxController {
       mixedPosts[postIndex]['data'].setViews(post.views! + 1);
       update();
       HomeRepository.updateViews(post.postId, post.views!);
+    }
+  }
+
+  void updateForumViews(ForumModel post) {
+    final int postIndex = mixedPosts.indexWhere(
+        (Map<String, dynamic> element) =>
+            element['shouldCount'] == null &&
+            element['isForum'] &&
+            element['data'].forumId == post.forumId);
+    if (postIndex != -1) {
+      // Increment the view count of the post by 1
+      mixedPosts[postIndex]['data'].setViews(post.views! + 1);
+      update();
+      HomeRepository.updateForumViews(post.forumId, post.views!);
     }
   }
 

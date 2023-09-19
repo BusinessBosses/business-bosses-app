@@ -12,7 +12,6 @@ import 'package:detectable_text_field/widgets/detectable_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:jiffy/jiffy.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../../action/action.dart';
@@ -25,6 +24,7 @@ import '../../../common/widgets/text_widget.dart';
 import '../../../common/widgets/user_avatar_with_badge.dart';
 import '../../../navigation/routes.dart';
 import '../../../utils/theme/theme.dart';
+import '../../../utils/time_format.dart';
 import '../presentation/boost_post_screen.dart';
 import '../presentation/create_post_screen.dart';
 
@@ -429,74 +429,85 @@ class _PostTileState extends State<PostTile> {
                 ),
                 Row(
                   children: [
-                    TextButton.icon(
-                      onPressed: () async {
-                        widget.controller.postLike(
-                            profileController.myProfile.uid,
-                            widget.post.postId,
-                            'post',
-                            widget.post.user!.uid);
-                      },
-                      icon: widget.post.likes
-                                  ?.contains(profileController.myProfile.uid) ==
-                              true
-                          ? SvgPicture.asset('assets/svgs/likefilled.svg')
-                          : SvgPicture.asset('assets/svgs/like.svg'),
-                      label: Text(
-                        '${widget.post.likes?.length ?? 0}',
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              fontWeight: FontWeight.w700,
-                              color: textColor.withOpacity(0.8),
-                            ),
+                    Container(
+                      padding: const EdgeInsets.only(right: 0.0),
+                      child: TextButton.icon(
+                        onPressed: () async {
+                          widget.controller.postLike(
+                              profileController.myProfile.uid,
+                              widget.post.postId,
+                              'post',
+                              widget.post.user!.uid);
+                        },
+                        icon: widget.post.likes?.contains(
+                                    profileController.myProfile.uid) ==
+                                true
+                            ? SvgPicture.asset('assets/svgs/likefilled.svg')
+                            : SvgPicture.asset('assets/svgs/like.svg'),
+                        label: Text(
+                          '${widget.post.likes?.length ?? 0}',
+                          style:
+                              Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                    fontWeight: FontWeight.w700,
+                                    color: textColor.withOpacity(0.8),
+                                  ),
+                        ),
                       ),
                     ),
-                    TextButton.icon(
-                      onPressed: () {
-                        showModalBottomSheet(
-                          context: context,
-                          builder: (BuildContext context) =>
-                              PostLikeCommentItem(
-                            post: widget.post,
-                            onComment: (CommentModel newComment) async {},
-                          ),
-                        );
-                      },
-                      icon: SvgPicture.asset('assets/svgs/comment.svg'),
-                      label: Text(
-                        '${widget.post.comments?.length ?? 0}',
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              fontWeight: FontWeight.w700,
-                              color: textColor.withOpacity(0.8),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 0.0),
+                      child: TextButton.icon(
+                        onPressed: () {
+                          showModalBottomSheet(
+                            context: context,
+                            builder: (BuildContext context) =>
+                                PostLikeCommentItem(
+                              post: widget.post,
+                              onComment: (CommentModel newComment) async {},
                             ),
+                          );
+                        },
+                        icon: SvgPicture.asset('assets/svgs/comment.svg'),
+                        label: Text(
+                          '${widget.post.comments?.length ?? 0}',
+                          style:
+                              Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                    fontWeight: FontWeight.w700,
+                                    color: textColor.withOpacity(0.8),
+                                  ),
+                        ),
                       ),
                     ),
                     // widget.post.user!.uid != profileController.myProfile.uid
-                    TextButton.icon(
-                      onPressed: () async {
-                        if (widget.post.user!.uid !=
-                            profileController.myProfile.uid) {
-                          homeController.postCoin(
-                              profileController.myProfile.uid,
-                              widget.post.postId,
-                              profileController,
-                              'post',
-                              widget.post.user!.uid);
-                        }
-                      },
-                      icon: widget.post.coins
-                                  ?.contains(profileController.myProfile.uid) ==
-                              true
-                          ? SvgPicture.asset('assets/svgs/coin.svg')
-                          : SvgPicture.asset('assets/svgs/coin.svg'),
-                      label: Text(
-                        '${widget.post.coins?.length ?? 0}',
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              fontWeight: FontWeight.w700,
-                              color: textColor.withOpacity(0.8),
-                            ),
+                    Container(
+                      padding: const EdgeInsets.only(right: 0.0),
+                      child: TextButton.icon(
+                        onPressed: () async {
+                          if (widget.post.user!.uid !=
+                              profileController.myProfile.uid) {
+                            homeController.postCoin(
+                                profileController.myProfile.uid,
+                                widget.post.postId,
+                                profileController,
+                                'post',
+                                widget.post.user!.uid);
+                          }
+                        },
+                        icon: widget.post.coins?.contains(
+                                    profileController.myProfile.uid) ==
+                                true
+                            ? SvgPicture.asset('assets/svgs/coin.svg')
+                            : SvgPicture.asset('assets/svgs/coin.svg'),
+                        label: Text(
+                          '${widget.post.coins?.length ?? 0}',
+                          style:
+                              Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                    fontWeight: FontWeight.w700,
+                                    color: textColor.withOpacity(0.8),
+                                  ),
+                        ),
                       ),
                     ),
-                    const SizedBox(width: 8.0),
                     TextButton.icon(
                       onPressed: () async {},
                       icon: const Icon(Icons.remove_red_eye_outlined,
@@ -522,10 +533,7 @@ class _PostTileState extends State<PostTile> {
                     Padding(
                       padding: const EdgeInsets.only(right: 15),
                       child: Text(
-                        Jiffy.parseFromMillisecondsSinceEpoch(
-                                widget.post.timestamp)
-                            .fromNow(),
-                        // TimeFormat.formatString(widget.post.timestamp),
+                        TimeFormat.formatString(widget.post.timestamp),
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                               color: textColor.withOpacity(0.4),
                             ),
