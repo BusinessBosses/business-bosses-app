@@ -48,6 +48,7 @@ class HomeController extends GetxController {
   ];
   List<String> blocked = [];
   String bossUpTitle = 'Boss Up By';
+  String bossUpLink = '';
   RxList<MarketModel> markets = RxList<MarketModel>(<MarketModel>[]);
   RxList<UserModel> marketMembers = RxList<UserModel>(<UserModel>[]);
   Set<dynamic> itemsWithIncrementedViews = {};
@@ -707,6 +708,7 @@ class HomeController extends GetxController {
             bossUp!.firstWhere((Map<String, dynamic> item) => item['id'] == 5);
 
         bossUpTitle = getTitle['companyName'];
+        bossUpLink = getTitle['companyUrl'];
       }
     } else {
       error(true);
