@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:business_bosses_v2/features/forum/models/industry.dart';
 import 'package:business_bosses_v2/features/home/widgets/bottom_bar.dart';
 import 'package:business_bosses_v2/features/home/widgets/sellingpopup.dart';
@@ -704,31 +706,51 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                                                         const SizedBox(
                                                                             width:
                                                                                 10),
-                                                                        Text(
-                                                                          '|',
-                                                                          style: TextStyle(
-                                                                              fontSize: 20,
-                                                                              color: textColor.withOpacity(0.5)),
-                                                                        ),
+                                                                        Platform.isIOS
+                                                                            ? Padding(
+                                                                                padding: const EdgeInsets.only(left: 0.0, bottom: 4),
+                                                                                child: Text(
+                                                                                  '|',
+                                                                                  style: TextStyle(
+                                                                                    fontSize: 20,
+                                                                                    color: textColor.withOpacity(0.5),
+                                                                                  ),
+                                                                                ),
+                                                                              )
+                                                                            : Text(
+                                                                                '|',
+                                                                                style: TextStyle(
+                                                                                  fontSize: 20,
+                                                                                  color: textColor.withOpacity(0.5),
+                                                                                ),
+                                                                              ),
                                                                         const SizedBox(
                                                                             width:
                                                                                 10),
-                                                                        Text(
-                                                                          hmeController.bossUp != null && hmeController.bossUp!.isNotEmpty
-                                                                              ? hmeController.bossUp!.last['companyName'] ?? ''
-                                                                              : '',
-                                                                          style:
-                                                                              const TextStyle(
-                                                                            fontSize:
-                                                                                15,
-                                                                            fontWeight:
-                                                                                FontWeight.bold,
-                                                                          ),
-                                                                          overflow:
-                                                                              TextOverflow.ellipsis,
-                                                                          softWrap:
-                                                                              false,
-                                                                        ),
+                                                                        Platform.isIOS
+                                                                            ? Padding(
+                                                                                padding: const EdgeInsets.only(
+                                                                                  bottom: 2.0,
+                                                                                ),
+                                                                                child: Text(
+                                                                                  hmeController.bossUp != null && hmeController.bossUp!.isNotEmpty ? hmeController.bossUp!.last['companyName'] ?? '' : '',
+                                                                                  style: const TextStyle(
+                                                                                    fontSize: 15,
+                                                                                    fontWeight: FontWeight.bold,
+                                                                                  ),
+                                                                                  overflow: TextOverflow.ellipsis,
+                                                                                  softWrap: false,
+                                                                                ),
+                                                                              )
+                                                                            : Text(
+                                                                                hmeController.bossUp != null && hmeController.bossUp!.isNotEmpty ? hmeController.bossUp!.last['companyName'] ?? '' : '',
+                                                                                style: const TextStyle(
+                                                                                  fontSize: 15,
+                                                                                  fontWeight: FontWeight.bold,
+                                                                                ),
+                                                                                overflow: TextOverflow.ellipsis,
+                                                                                softWrap: false,
+                                                                              ),
                                                                         const Spacer(),
                                                                         Padding(
                                                                           padding: const EdgeInsets
