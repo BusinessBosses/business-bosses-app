@@ -132,7 +132,7 @@ class PostDetailsScreen extends StatelessWidget {
                       height: 10,
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(left: 0, right: 0),
+                      padding: const EdgeInsets.only(left: 15, right: 15),
                       child: post.videoUrl != null && post.videoUrl!.isNotEmpty
                           ? AllImagesItem(
                               post.images!,
