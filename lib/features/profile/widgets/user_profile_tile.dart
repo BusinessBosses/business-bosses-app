@@ -21,6 +21,7 @@ class UserProfileTile extends StatefulWidget {
 class _UserProfileTileState extends State<UserProfileTile> {
   @override
   Widget build(BuildContext context) {
+    // ignore: unused_local_variable
     final ProfileController profileController = Get.find();
     // fetchData();
     // setState(() {});
@@ -192,7 +193,7 @@ class _UserProfileTileState extends State<UserProfileTile> {
                               top: 2.0,
                             ),
                             child: Transform.translate(
-                              offset: Offset(-15, 0),
+                              offset: const Offset(-15, 0),
                               child: Padding(
                                 padding: const EdgeInsets.only(top: 2.0),
                                 child: subscribetopremiumbutton(),

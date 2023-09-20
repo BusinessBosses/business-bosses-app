@@ -54,7 +54,7 @@ class _DataSelectionScreenState extends State<DataSelectionScreen> {
       _isLoading = true;
     });
     final ApiResponseModel response =
-        await ApiService.get(path: 'profession/all');
+        await ApiService.get(path: 'profession/all?size=100');
     if (response.success) {
       _categories = MyTitle.toCategoriesList(snapshot: response.data['rows']);
       setState(() {
@@ -73,7 +73,7 @@ class _DataSelectionScreenState extends State<DataSelectionScreen> {
       _isLoading = true;
     });
     final ApiResponseModel response =
-        await ApiService.get(path: 'industry/get');
+        await ApiService.get(path: 'industry/get?size=100');
     if (response.success) {
       _industries = Industry.toIndustries(snapshot: response.data['rows']);
       _industries

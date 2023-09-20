@@ -25,7 +25,7 @@ class BottomNavScreen extends StatefulWidget {
 class _BottomNavScreenState extends State<BottomNavScreen> {
   final FirebaseAnalytics _analytics = FirebaseAnalytics.instance;
   // final PostsController _postsController = Get.put(PostsController());
-  // final ProfileController _profileController = Get.put(ProfileController());
+  //final ProfileController _profileController = Get.find();
   // final ChatController _chatController = Get.put(ChatController());
   // final HomeController _homeController = Get.put(HomeController());
   // final MarketController _marketController = Get.put(MarketController());

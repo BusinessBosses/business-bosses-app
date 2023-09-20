@@ -19,6 +19,7 @@ class MarketController extends GetxController {
   RxInt paginationPage = RxInt(1);
   final int postsSize = 20;
   RxBool error = RxBool(false);
+  String marketDescription = '';
   RxBool loading = RxBool(false);
   RxBool loadingMore = RxBool(false);
   RxBool isJoined = RxBool(false);
@@ -219,7 +220,7 @@ class MarketController extends GetxController {
 
   /// COIN AND UNCOIN FUNCTION
   void coin(String userId, String postId, ProfileController profileController,
-      String type) {
+      String type, String receiverUid) {
     final int postIndex =
         markets.indexWhere((MarketModel element) => element.marketId == postId);
     if (postIndex != -1) {
@@ -237,6 +238,7 @@ class MarketController extends GetxController {
         'postId': postId,
         'userId': userId,
         'type': type,
+        'receiverUid': receiverUid,
       });
     }
     update();
@@ -259,8 +261,22 @@ class MarketController extends GetxController {
     update();
 
     final ApiResponseModel response = await HomeRepository.fetchMarket();
+    final ApiResponseModel description =
+        await HomeRepository.fetchMarketDescription();
     if (response.success) {
       processPostsToState(response.data['rows']);
+      if (description.success) {
+        // Find the "market" entry and extract its description
+        final List<dynamic> rows = description.data['rows'];
+        final Map<String, dynamic>? marketEntry = rows.firstWhere(
+          (dynamic entry) => entry['title'] == 'market',
+          orElse: () => null,
+        );
+
+        marketDescription = marketEntry?['description'];
+      } else {
+        marketDescription = '';
+      }
     } else {
       error(true);
     }

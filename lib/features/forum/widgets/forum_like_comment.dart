@@ -201,7 +201,7 @@ class _ForumLikeCommentItemState extends State<ForumLikeCommentItem> {
     final ApiResponseModel response =
         await ApiService.get(path: 'likes/post/$forumId');
     if (response.success) {
-      for (var i = 0; i < response.data['rows'].length; i++) {
+      for (int i = 0; i < response.data['rows'].length; i++) {
         _users.add(UserModel.fromMap(response.data['rows'][i]['user']));
       }
     }

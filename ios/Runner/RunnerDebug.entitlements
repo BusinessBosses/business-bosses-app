@@ -12,5 +12,9 @@
 	<array>
 		<string>applinks:businessbosses.page.link</string>
 	</array>
+	<key>com.apple.developer.in-app-payments</key>
+	<array>
+		<string>merchant.businessbosses</string>
+	</array>
 </dict>
 </plist>

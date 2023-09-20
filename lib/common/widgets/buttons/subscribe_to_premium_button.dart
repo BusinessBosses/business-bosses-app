@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../../../utils/theme/theme.dart';
@@ -6,7 +6,7 @@ import '../../../utils/theme/theme.dart';
 Widget subscribetopremiumbutton() {
   return Container(
     decoration: BoxDecoration(
-      color: Color(0xFFF4F4F4),
+      color: primaryColorLT,
       borderRadius: BorderRadius.circular(100.0),
     ),
     child: IntrinsicWidth(
@@ -20,6 +20,7 @@ Widget subscribetopremiumbutton() {
               style: TextStyle(
                 fontWeight: FontWeight.w700,
                 fontSize: 15,
+                color: Colors.white,
               ),
             ),
             const SizedBox(
@@ -27,7 +28,7 @@ Widget subscribetopremiumbutton() {
             ),
             SvgPicture.asset(
               'assets/svgs/nextbutton.svg',
-              color: primaryColorLT,
+              color: Colors.white,
             ),
           ],
         ),

@@ -37,7 +37,7 @@ class ReferalsScreen extends StatelessWidget {
                   ),
                   centerTitle: true,
                   title: const Text(
-                    'Referals',
+                    'Referrals',
                     textAlign: TextAlign.center,
                     style: TextStyle(fontSize: 20),
                   ),

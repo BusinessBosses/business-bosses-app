@@ -1,18 +1,15 @@
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/common/models/comment_model.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
-import 'package:business_bosses_v2/features/forum/controller/bossup_controller.dart';
 import 'package:business_bosses_v2/features/forum/models/forum_model.dart';
 import 'package:business_bosses_v2/features/forum/models/industry.dart';
 import 'package:business_bosses_v2/features/forum/repository/forum_repository.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
+import 'package:business_bosses_v2/features/home/repository/home_repository.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
-
-import '../../../common/dialogs/snackbar.dart';
-import '../../../services/api_service.dart';
 
 class ForumController extends GetxController {
   late IO.Socket socket;
@@ -39,7 +36,7 @@ class ForumController extends GetxController {
   }
 
   Future<void> deleteForum(String forumId) async {
-    forums.removeWhere((element) => element.forumId == forumId);
+    forums.removeWhere((ForumModel element) => element.forumId == forumId);
     update();
     await ForumRepository.deleteForum(forumId);
   }
@@ -93,6 +90,17 @@ class ForumController extends GetxController {
     loading(false);
 
     update();
+  }
+
+  void updateForumViews(ForumModel post) {
+    final int postIndex = forums
+        .indexWhere((ForumModel element) => element.forumId == post.forumId);
+    if (postIndex != -1) {
+      // Increment the view count of the post by 1
+      post.setViews(post.views! + 1);
+      update();
+      HomeRepository.updateForumViews(post.forumId, post.views!);
+    }
   }
 
   Future<void> fetchIndustryUsers(String industryId,
@@ -176,7 +184,7 @@ class ForumController extends GetxController {
 
   /// COIN AND UNCOIN FUNCTION
   void postCoin(String userId, String postId,
-      ProfileController profileController, String type) {
+      ProfileController profileController, String type, String receiverUid) {
     final int postIndex =
         forums.indexWhere((ForumModel element) => element.forumId == postId);
     if (postIndex != -1) {
@@ -194,6 +202,7 @@ class ForumController extends GetxController {
         'postId': postId,
         'userId': userId,
         'type': type,
+        'receiverUid': receiverUid,
       });
     }
     update();

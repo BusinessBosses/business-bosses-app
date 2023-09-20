@@ -30,8 +30,8 @@ class Constants {
   // static const String baseUrl = 'http://192.168.0.178:5000/api/v1';
 
   //stephen url
-  // static const String baseUrl = 'http://192.168.0.193:3000/api/v1';
-  // static const String socketUrl = 'http://192.168.0.193:3000';
+  // static const String baseUrl = 'http://192.168.0.187:5000/api/v1';
+  // static const String socketUrl = 'http://192.168.0.187:5000';
 
   // nodes
   static const String POSTS = 'posts';

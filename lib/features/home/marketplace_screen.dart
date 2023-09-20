@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:business_bosses_v2/features/forum/models/industry.dart';
 import 'package:business_bosses_v2/features/home/widgets/bottom_bar.dart';
 import 'package:business_bosses_v2/features/home/widgets/sellingpopup.dart';
@@ -49,10 +51,26 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
     super.initState();
   }
 
+  String formatCount(int count) {
+    if (count >= 1000) {
+      double countInK = count / 1000;
+      if (countInK >= 1000) {
+        return '${(countInK / 1000).toStringAsFixed(1)}M';
+      } else {
+        return '${countInK.toStringAsFixed(1)}K';
+      }
+    } else {
+      return count.toString();
+    }
+  }
+
   filterResults() {}
 
   @override
   Widget build(BuildContext context) {
+    int userCount = _marketController.users.length;
+    String formattedUserCount = formatCount(userCount);
+
     return GetBuilder<MarketController>(
         builder: (MarketController homeController) {
       return Scaffold(
@@ -75,6 +93,9 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                           child: StatefulBuilder(builder:
                               (BuildContext context, StateSetter setState) {
                             return AlertDialog(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(16.0),
+                              ),
                               title: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
@@ -206,33 +227,42 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                 ),
                               ),
                               actions: <Widget>[
-                                TextButton(
-                                  child: const Text('Reset'),
-                                  onPressed: () {
-                                    setState(() {
-                                      filterLocation = null;
-                                      filterCode = null;
-                                      filterCategory = null;
-                                      _selectedLocation = null;
-                                      _selectedCategory = null;
-                                      _marketController.updateFiltered();
-                                      _marketController.initMarket();
-                                      Navigator.of(context).pop();
-                                    });
-                                  },
-                                ),
-                                ElevatedButton(
-                                  child: const Text('Search'),
-                                  onPressed: () {
-                                    setState(() {
-                                      filterLocation = _selectedLocation;
-                                      filterCategory = _selectedCategory;
-                                      _marketController.filterMarket(
-                                          filterLocation, filterCategory);
-                                    });
-                                    Navigator.of(context).pop();
-                                  },
-                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      right: 25.0, bottom: 10),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      TextButton(
+                                        child: const Text('Reset'),
+                                        onPressed: () {
+                                          setState(() {
+                                            filterLocation = null;
+                                            filterCode = null;
+                                            filterCategory = null;
+                                            _selectedLocation = null;
+                                            _selectedCategory = null;
+                                            _marketController.updateFiltered();
+                                            _marketController.initMarket();
+                                            Navigator.of(context).pop();
+                                          });
+                                        },
+                                      ),
+                                      ElevatedButton(
+                                        child: const Text('Search'),
+                                        onPressed: () {
+                                          setState(() {
+                                            filterLocation = _selectedLocation;
+                                            filterCategory = _selectedCategory;
+                                            _marketController.filterMarket(
+                                                filterLocation, filterCategory);
+                                          });
+                                          Navigator.of(context).pop();
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                )
                               ],
                             );
                           }),
@@ -381,7 +411,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                                           Container(
                                                             margin:
                                                                 const EdgeInsets
-                                                                        .only(
+                                                                    .only(
                                                                     top: 25,
                                                                     right: 20,
                                                                     left: 35),
@@ -416,16 +446,18 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                                               ),
                                                             ),
                                                           ),
-                                                          const Expanded(
+                                                          Expanded(
                                                             child: Padding(
-                                                              padding: EdgeInsets
-                                                                  .only(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .only(
                                                                       right:
                                                                           35),
                                                               child: Text(
-                                                                '- Sell your products and services \n - Find Supplies',
+                                                                homeController
+                                                                    .marketDescription,
                                                                 style:
-                                                                    TextStyle(
+                                                                    const TextStyle(
                                                                   fontSize: 15,
                                                                   fontWeight:
                                                                       FontWeight
@@ -441,8 +473,8 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                                       Padding(
                                                         padding:
                                                             const EdgeInsets
-                                                                    .only(
-                                                                left: 35,
+                                                                .only(
+                                                                left: 32,
                                                                 top: 0,
                                                                 right: 20),
                                                         child: Row(
@@ -450,10 +482,13 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                                             Row(
                                                               children: [
                                                                 Padding(
-                                                                  padding: const EdgeInsets
+                                                                  padding:
+                                                                      const EdgeInsets
                                                                           .only(
-                                                                      right: 3,
-                                                                      top: 5),
+                                                                          right:
+                                                                              2,
+                                                                          top:
+                                                                              5),
                                                                   child:
                                                                       SvgPicture
                                                                           .asset(
@@ -474,7 +509,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                                                   child:
                                                                       Padding(
                                                                     padding: const EdgeInsets
-                                                                            .only(
+                                                                        .only(
                                                                         top:
                                                                             5.0),
                                                                     child:
@@ -483,7 +518,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                                                           TextSpan(
                                                                         children: [
                                                                           TextSpan(
-                                                                              text: 'Members: (${_marketController.users.length})',
+                                                                              text: 'Members ($formattedUserCount)',
                                                                               style: const TextStyle(
                                                                                 fontSize: 12,
                                                                                 fontWeight: FontWeight.w600,
@@ -500,11 +535,15 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                                             Row(
                                                               children: [
                                                                 Padding(
-                                                                  padding: const EdgeInsets
+                                                                  padding:
+                                                                      const EdgeInsets
                                                                           .only(
-                                                                      left: 8,
-                                                                      top: 5,
-                                                                      right: 3),
+                                                                          left:
+                                                                              8,
+                                                                          top:
+                                                                              5,
+                                                                          right:
+                                                                              3),
                                                                   child:
                                                                       SvgPicture
                                                                           .asset(
@@ -516,9 +555,17 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                                                 ),
                                                                 Obx(
                                                                   () {
+                                                                    int postCount =
+                                                                        _marketController
+                                                                            .markets
+                                                                            .length;
+                                                                    String
+                                                                        formattedpostCount =
+                                                                        formatCount(
+                                                                            postCount);
                                                                     return Padding(
                                                                       padding: const EdgeInsets
-                                                                              .only(
+                                                                          .only(
                                                                           top:
                                                                               5.0),
                                                                       child:
@@ -527,7 +574,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                                                             TextSpan(
                                                                           children: <InlineSpan>[
                                                                             TextSpan(
-                                                                              text: 'Listings: (${_marketController.markets.length})',
+                                                                              text: 'Listings ($formattedpostCount)',
                                                                               style: const TextStyle(
                                                                                 fontSize: 12,
                                                                                 color: textColor,
@@ -659,35 +706,56 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                                                         const SizedBox(
                                                                             width:
                                                                                 10),
-                                                                        Text(
-                                                                          '|',
-                                                                          style: TextStyle(
-                                                                              fontSize: 20,
-                                                                              color: textColor.withOpacity(0.5)),
-                                                                        ),
+                                                                        Platform.isIOS
+                                                                            ? Padding(
+                                                                                padding: const EdgeInsets.only(left: 0.0, bottom: 4),
+                                                                                child: Text(
+                                                                                  '|',
+                                                                                  style: TextStyle(
+                                                                                    fontSize: 20,
+                                                                                    color: textColor.withOpacity(0.5),
+                                                                                  ),
+                                                                                ),
+                                                                              )
+                                                                            : Text(
+                                                                                '|',
+                                                                                style: TextStyle(
+                                                                                  fontSize: 20,
+                                                                                  color: textColor.withOpacity(0.5),
+                                                                                ),
+                                                                              ),
                                                                         const SizedBox(
                                                                             width:
                                                                                 10),
-                                                                        Text(
-                                                                          hmeController.bossUp != null && hmeController.bossUp!.isNotEmpty
-                                                                              ? hmeController.bossUp!.last['companyName'] ?? ''
-                                                                              : '',
-                                                                          style:
-                                                                              const TextStyle(
-                                                                            fontSize:
-                                                                                15,
-                                                                            fontWeight:
-                                                                                FontWeight.bold,
-                                                                          ),
-                                                                          overflow:
-                                                                              TextOverflow.ellipsis,
-                                                                          softWrap:
-                                                                              false,
-                                                                        ),
+                                                                        Platform.isIOS
+                                                                            ? Padding(
+                                                                                padding: const EdgeInsets.only(
+                                                                                  bottom: 2.0,
+                                                                                ),
+                                                                                child: Text(
+                                                                                  hmeController.bossUp != null && hmeController.bossUp!.isNotEmpty ? hmeController.bossUp!.last['companyName'] ?? '' : '',
+                                                                                  style: const TextStyle(
+                                                                                    fontSize: 15,
+                                                                                    fontWeight: FontWeight.bold,
+                                                                                  ),
+                                                                                  overflow: TextOverflow.ellipsis,
+                                                                                  softWrap: false,
+                                                                                ),
+                                                                              )
+                                                                            : Text(
+                                                                                hmeController.bossUp != null && hmeController.bossUp!.isNotEmpty ? hmeController.bossUp!.last['companyName'] ?? '' : '',
+                                                                                style: const TextStyle(
+                                                                                  fontSize: 15,
+                                                                                  fontWeight: FontWeight.bold,
+                                                                                ),
+                                                                                overflow: TextOverflow.ellipsis,
+                                                                                softWrap: false,
+                                                                              ),
                                                                         const Spacer(),
                                                                         Padding(
-                                                                          padding:
-                                                                              const EdgeInsets.only(right: 10.0),
+                                                                          padding: const EdgeInsets
+                                                                              .only(
+                                                                              right: 10.0),
                                                                           child:
                                                                               SvgPicture.asset(
                                                                             'assets/svgs/nexticon.svg',
@@ -918,7 +986,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
         alignment: Alignment.center,
         child: SizedBox(
           height: 38,
-          width: 80,
+          width: 75,
           child: Obx(() => !_marketController.isJoined.value
               ? const MCustomButton(
                   child: Text(

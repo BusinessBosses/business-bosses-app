@@ -2,7 +2,6 @@ import 'package:business_bosses_v2/features/forum/controller/bossup_controller.d
 import 'package:business_bosses_v2/features/forum/controller/forum_controller.dart';
 import 'package:business_bosses_v2/features/forum/models/forum_model.dart';
 import 'package:business_bosses_v2/features/forum/widgets/bossup_like_comment.dart';
-import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/functions/my_native_functions.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
@@ -581,7 +580,7 @@ class _ForumItemState extends State<ForumItem> {
                                         widget.forum.user!.name!.length <= 15
                                     ? widget.forum.user!.name!
                                     : widget.forum.user?.name != null
-                                        ? '${widget.forum.user!.name!.substring(0, 15)}...'
+                                        ? '${widget.forum.user!.name!.substring(0, 12)}...'
                                         : '',
                                 style: Theme.of(context).textTheme.bodyLarge,
                               ),
@@ -641,7 +640,7 @@ class _ForumItemState extends State<ForumItem> {
                                 left: 15, right: 15, top: 10),
                             child: AllImagesItem(
                               widget.forum.images!
-                                  .where((element) => element.isNotEmpty)
+                                  .where((String element) => element.isNotEmpty)
                                   .toList(),
                             ),
                           ),
@@ -714,6 +713,7 @@ class _ForumItemState extends State<ForumItem> {
                                     widget.forum.forumId,
                                     profileController,
                                     'forum',
+                                    widget.forum.user!.uid,
                                   );
                                 },
                                 icon: widget.forum.coins?.contains(
@@ -751,6 +751,21 @@ class _ForumItemState extends State<ForumItem> {
                                   ],
                                 ),
                               ),
+                        TextButton.icon(
+                          onPressed: () async {},
+                          icon: const Icon(Icons.remove_red_eye_outlined,
+                              color: Colors.black),
+                          label: Text(
+                            '${widget.forum.views ?? 0}',
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.copyWith(
+                                  fontWeight: FontWeight.w700,
+                                  color: textColor.withOpacity(0.8),
+                                ),
+                          ),
+                        ),
                         const SizedBox(width: 8.0),
                         GestureDetector(
                           onTap: () => _sharePost(),

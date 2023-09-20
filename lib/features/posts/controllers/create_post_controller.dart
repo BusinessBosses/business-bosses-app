@@ -164,7 +164,7 @@ class CreatePostController extends GetxController {
   Future<dynamic> uploadUpdatingFile() async {
     /// RAW FILES
     final List<String> rawFiles = updatingImageFileList
-        .where((element) => !element.contains("http") && element.isNotEmpty)
+        .where((String element) => !element.contains('http') && element.isNotEmpty)
         .toList();
 
     /// UPLOADED FILE URLS
@@ -217,11 +217,11 @@ class CreatePostController extends GetxController {
     update();
     if (validateCreatePostData(post!.toMap())) {
       final List<String> hasNewUpload = updatingImageFileList
-          .where((element) => !element.contains("http") && element.isNotEmpty)
+          .where((String element) => !element.contains('http') && element.isNotEmpty)
           .toList();
       if (hasNewUpload.isEmpty) {
         final ApiResponseModel response = await ApiService.put(
-          path: 'post/update-post/${post?.postId}',
+          path: 'post/update-post/${post.postId}',
           body: <String, dynamic>{
             'title': title,
             'images': updatingImageFileList
@@ -232,7 +232,7 @@ class CreatePostController extends GetxController {
           final ProfileController profileController = Get.find();
           final HomeController homeController = Get.find();
           PostModel modelizedPost = PostModel.fromMap({
-            ...post!.toMap(),
+            ...post.toMap(),
             ...response.data,
           });
           homeController.updatePost(modelizedPost);
@@ -249,11 +249,11 @@ class CreatePostController extends GetxController {
           showSnackbar(message: 'Error Uploading image');
         } else {
           final List<String> alreadyUploadedFileUrls = updatingImageFileList
-              .where((element) => element.contains("http"))
+              .where((String element) => element.contains('http'))
               .toList();
 
           final ApiResponseModel response = await ApiService.put(
-            path: 'post/update-post/${post?.postId}',
+            path: 'post/update-post/${post.postId}',
             body: <String, dynamic>{
               'title': title,
               'images': [...alreadyUploadedFileUrls, ...uploadedFiles]
@@ -263,7 +263,7 @@ class CreatePostController extends GetxController {
             final ProfileController profileController = Get.find();
             final HomeController homeController = Get.find();
             PostModel modelizedPost = PostModel.fromMap({
-              ...post!.toMap(),
+              ...post.toMap(),
               ...response.data,
             });
             homeController.updatePost(modelizedPost);

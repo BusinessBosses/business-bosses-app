@@ -17,6 +17,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
+import '../../../navigation/routes.dart';
+
 class HomeController extends GetxController {
   late IO.Socket socket;
   // final PostsController _postsController = Get.find();
@@ -27,6 +29,7 @@ class HomeController extends GetxController {
   //     Get.put(CommunitiesController());
 
   RxBool error = RxBool(false);
+  RxBool noConnection = RxBool(false);
   List<Industry> industries = [];
   List<UserModel> bossupMembers = [];
 
@@ -38,12 +41,17 @@ class HomeController extends GetxController {
   List<Map<String, dynamic>>? bossUp = [];
   RxBool refreshing = RxBool(false);
   List<Map<String, dynamic>> mixedPosts = [
-    {'isForum': false, 'data': {}, 'shouldCount': false}
+    {'isForum': false, 'data': {}, 'shouldCount': false, 'isSponsored': false}
+  ];
+  List<Map<String, dynamic>> sponsoredPosts = [
+    {'isForum': false, 'data': {}, 'shouldCount': false, 'isSponsored': true}
   ];
   List<String> blocked = [];
   String bossUpTitle = 'Boss Up By';
+  String bossUpLink = '';
   RxList<MarketModel> markets = RxList<MarketModel>(<MarketModel>[]);
   RxList<UserModel> marketMembers = RxList<UserModel>(<UserModel>[]);
+  Set<dynamic> itemsWithIncrementedViews = {};
 
   void addIndustries(List<Industry> data) {
     industries = data;
@@ -85,6 +93,25 @@ class HomeController extends GetxController {
     return posts;
   }
 
+  RxList<PostModel> processPromotedPostsToState(dynamic post) {
+    RxList<PostModel> promotedPosts = RxList<PostModel>(<PostModel>[]);
+
+    // print(post.length);
+    final List psts = post;
+    for (int i = 0; i < psts.length; i++) {
+      promotedPosts.add(PostModel.fromMap({
+        ...psts[i],
+        'likes': psts[i]['likes']
+            .map((dynamic like) => like['userId'].toString())
+            .toList(),
+        'coins': psts[i]['coins']
+            .map((dynamic coin) => coin['userId'].toString())
+            .toList()
+      }));
+    }
+    return promotedPosts;
+  }
+
   /// PROCESS RAW API Forums, MODELIZE AND SAVE TO STATE
   RxList<ForumModel> processForumsToState(dynamic forum) {
     RxList<ForumModel> forums = RxList<ForumModel>(<ForumModel>[]);
@@ -104,28 +131,107 @@ class HomeController extends GetxController {
     return forums;
   }
 
-  void joinPostsAndForums(RxList<PostModel> posts, RxList<ForumModel> forums) {
+  // void joinPostsAndForums(RxList<PostModel> posts, RxList<ForumModel> forums) {
+  //   List<Map<String, dynamic>> frms = [];
+  //   List<Map<String, dynamic>> psts = [];
+  //   for (int i = 0; i < forums.length; i++) {
+  //     frms.add({'isForum': true, 'data': forums[i], 'isSponsored': false});
+  //   }
+  //   for (int i = 0; i < posts.length; i++) {
+  //     psts.add({'isForum': false, 'data': posts[i], 'isSponsored': false});
+  //   }
+
+  //   final List<Map<String, dynamic>> joinedPosts = [...frms, ...psts]..sort(
+  //       (Map<String, dynamic> a, Map<String, dynamic> b) =>
+  //           b['data'].timestamp - a['data'].timestamp);
+
+  //   mixedPosts.addAll(joinedPosts);
+  // }
+
+  // void processPostsAndForumsData(dynamic data) {
+  //   final RxList<PostModel> posts = processPostsToState(data['posts']['rows']);
+  //   final RxList<ForumModel> forums =
+  //       processForumsToState(data['forums']['rows']);
+  //   joinPostsAndForums(posts, forums);
+  //   update();
+  // }
+
+  // void joinPostsAndForums(RxList<PostModel> posts,
+  //     RxList<PostModel> sponsoredPosts, RxList<ForumModel> forums) {
+  //   List<Map<String, dynamic>> frms = [];
+  //   List<Map<String, dynamic>> psts = [];
+  //   List<Map<String, dynamic>> promotedPst = [];
+  //   for (int i = 0; i < forums.length; i++) {
+  //     frms.add({'isForum': true, 'data': forums[i], 'isPromotedPost': false});
+  //   }
+
+  //   for (int i = 0; i < posts.length; i++) {
+  //     psts.add({'isForum': false, 'data': posts[i], 'isPromotedPost': false});
+  //   }
+
+  //   for (int i = 0; i < sponsoredPosts.length; i++) {
+  //     promotedPst.add({
+  //       'isForum': false,
+  //       'data': sponsoredPosts[i],
+  //       'isPromotedPost': true
+  //     });
+  //   }
+
+  //   final List<Map<String, dynamic>> joinedPosts = [...frms, ...psts]..sort(
+  //       (Map<String, dynamic> a, Map<String, dynamic> b) =>
+  //           b['data'].timestamp - a['data'].timestamp);
+
+  //   final List<Map<String, dynamic>> joinedPromotedPosts = [...promotedPst]
+  //     ..sort((Map<String, dynamic> a, Map<String, dynamic> b) =>
+  //         b['data'].timestamp - a['data'].timestamp);
+
+  //   mixedPosts.addAll(joinedPosts);
+  // }
+
+  void joinPostsAndForums(RxList<PostModel> posts,
+      RxList<PostModel> promotedPosts, RxList<ForumModel> forums) {
     List<Map<String, dynamic>> frms = [];
     List<Map<String, dynamic>> psts = [];
+    List<Map<String, dynamic>> sponsoredPst = [];
+
+    // Convert forum and regular posts into map entries
     for (int i = 0; i < forums.length; i++) {
-      frms.add({'isForum': true, 'data': forums[i]});
+      frms.add({'isForum': true, 'data': forums[i], 'isSponsored': false});
     }
+
     for (int i = 0; i < posts.length; i++) {
-      psts.add({'isForum': false, 'data': posts[i]});
+      psts.add({'isForum': false, 'data': posts[i], 'isSponsored': false});
+    }
+
+    for (int i = 0; i < promotedPosts.length; i++) {
+      psts.add(
+          {'isForum': false, 'data': promotedPosts[i], 'isSponsored': true});
+    }
+
+    for (int i = 0; i < promotedPosts.length; i++) {
+      sponsoredPst.add(
+          {'isForum': false, 'data': promotedPosts[i], 'isSponsored': true});
     }
 
     final List<Map<String, dynamic>> joinedPosts = [...frms, ...psts]..sort(
         (Map<String, dynamic> a, Map<String, dynamic> b) =>
             b['data'].timestamp - a['data'].timestamp);
 
+    final List<Map<String, dynamic>> joinedSponsoredPosts = sponsoredPst
+      ..sort((Map<String, dynamic> a, Map<String, dynamic> b) =>
+          b['data'].timestamp - a['data'].timestamp);
+
     mixedPosts.addAll(joinedPosts);
+    sponsoredPosts.addAll(joinedSponsoredPosts);
   }
 
   void processPostsAndForumsData(dynamic data) {
     final RxList<PostModel> posts = processPostsToState(data['posts']['rows']);
+    final RxList<PostModel> promotedPosts =
+        processPromotedPostsToState(data['promotedPosts']['rows']);
     final RxList<ForumModel> forums =
         processForumsToState(data['forums']['rows']);
-    joinPostsAndForums(posts, forums);
+    joinPostsAndForums(posts, promotedPosts, forums);
     update();
   }
 
@@ -279,7 +385,8 @@ class HomeController extends GetxController {
         'bio': profileController.myProfile.bio
       }
     });
-    mixedPosts.insert(1, {'isForum': false, 'data': modelizedNewPost});
+    mixedPosts.insert(
+        1, {'isForum': false, 'data': modelizedNewPost, 'isSponsored': false});
 
     // posts.insert(0, modelizedNewPost);
 
@@ -430,12 +537,19 @@ class HomeController extends GetxController {
     }
   }
 
-  Future<void> fetchPosts() async {
-    loadingMore(true);
+  Future<void> fetchPosts({bool fromBackground = false}) async {
+    if (fromBackground) {
+      mixedPosts.removeRange(1, mixedPosts.length);
+      loading(true);
+    } else {
+      loadingMore(true);
+    }
     update();
     final ApiResponseModel response = await HomeRepository.fetchPosts(
-        paginationPage.value,
-        mixedPosts[mixedPosts.length - 1]['data'].timestamp);
+        fromBackground ? 0 : paginationPage.value,
+        fromBackground
+            ? DateTime.now().millisecondsSinceEpoch
+            : mixedPosts[mixedPosts.length - 1]['data'].timestamp);
     if (response.success) {
       paginationPage(paginationPage.value + 1);
       processPostsAndForumsData(response.data);
@@ -445,7 +559,11 @@ class HomeController extends GetxController {
       error(true);
     }
 
-    loadingMore(false);
+    if (fromBackground) {
+      loading(false);
+    } else {
+      loadingMore(false);
+    }
     update();
   }
 
@@ -463,7 +581,8 @@ class HomeController extends GetxController {
         element['isForum'] &&
         element['data'].forumId == forumId);
 
-    bossupForums.removeWhere((element) => element.forumId == forumId);
+    bossupForums
+        .removeWhere((ForumModel element) => element.forumId == forumId);
     update();
   }
 
@@ -476,6 +595,34 @@ class HomeController extends GetxController {
     if (postIndex != -1) {
       mixedPosts[postIndex]['data'] = post;
       update();
+    }
+  }
+
+  void updateViews(PostModel post) {
+    final int postIndex = mixedPosts.indexWhere(
+        (Map<String, dynamic> element) =>
+            element['shouldCount'] == null &&
+            !element['isForum'] &&
+            element['data'].postId == post.postId);
+    if (postIndex != -1) {
+      // Increment the view count of the post by 1
+      mixedPosts[postIndex]['data'].setViews(post.views! + 1);
+      update();
+      HomeRepository.updateViews(post.postId, post.views!);
+    }
+  }
+
+  void updateForumViews(ForumModel post) {
+    final int postIndex = mixedPosts.indexWhere(
+        (Map<String, dynamic> element) =>
+            element['shouldCount'] == null &&
+            element['isForum'] &&
+            element['data'].forumId == post.forumId);
+    if (postIndex != -1) {
+      // Increment the view count of the post by 1
+      mixedPosts[postIndex]['data'].setViews(post.views! + 1);
+      update();
+      HomeRepository.updateForumViews(post.forumId, post.views!);
     }
   }
 
@@ -494,8 +641,6 @@ class HomeController extends GetxController {
       _chatController.processDataToState(
           response.data['chats'], profileController.myProfile.uid);
       socket.emit('handshake', profileController.myProfile.uid);
-      // _marketController.initMarket();
-      // _marketController.initUsers();
       addCoinDaily();
       if (partner.data['count'] > 0) {
         bossUp?.addAll(partner.data['rows'].cast<Map<String, dynamic>>());
@@ -504,14 +649,24 @@ class HomeController extends GetxController {
             bossUp!.firstWhere((Map<String, dynamic> item) => item['id'] == 5);
 
         bossUpTitle = getTitle['companyName'];
+        bossUpLink = getTitle['companyUrl'];
+        bossUp?.removeWhere((Map<String, dynamic> item) => item['id'] == 5);
+      }
+      if (profileController.myProfile.bio == null) {
+        Get.offAndToNamed(Routes.updateProfile,
+            arguments: profileController.myProfile);
       }
     } else {
       error(true);
+      update();
       socket.disconnect();
       if (response.message == 'send a valid token') {
         showAccessTokenDialog();
       } else {
-        showSnackbar(title: 'OOPS!', message: response.message, error: true);
+        showSnackbar(
+            title: 'OOPS!',
+            message: 'Check your Internet Connection!',
+            error: true);
       }
     }
 
@@ -554,6 +709,7 @@ class HomeController extends GetxController {
             bossUp!.firstWhere((Map<String, dynamic> item) => item['id'] == 5);
 
         bossUpTitle = getTitle['companyName'];
+        bossUpLink = getTitle['companyUrl'];
       }
     } else {
       error(true);
@@ -575,7 +731,7 @@ class HomeController extends GetxController {
     });
 
     socket.on('handshake', (data) {
-      print(data);
+      // print(data);
     });
 
     socket.on('new-message', (data) {

@@ -95,6 +95,18 @@ class PostInteractionsWidget extends StatelessWidget {
                           ),
                     ),
                   ),
+                  TextButton.icon(
+                    onPressed: () async {},
+                    icon: const Icon(Icons.remove_red_eye_outlined,
+                        color: Colors.black),
+                    label: Text(
+                      '${post.views ?? 0}',
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            fontWeight: FontWeight.w700,
+                            color: textColor.withOpacity(0.8),
+                          ),
+                    ),
+                  ),
                   const SizedBox(width: 8.0),
                   GestureDetector(
                     onTap: sharePost,
@@ -105,6 +117,14 @@ class PostInteractionsWidget extends StatelessWidget {
                     ),
                   ),
                   const Spacer(),
+                ],
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
                   Padding(
                     padding: const EdgeInsets.only(right: 15),
                     child: Text(
@@ -113,12 +133,9 @@ class PostInteractionsWidget extends StatelessWidget {
                             color: textColor.withOpacity(0.4),
                           ),
                     ),
-                  )
+                  ),
                 ],
-              ),
-              const SizedBox(
-                height: 10,
-              ),
+              )
             ],
           ),
         );

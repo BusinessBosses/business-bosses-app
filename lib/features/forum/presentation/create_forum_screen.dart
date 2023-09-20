@@ -100,7 +100,7 @@ class _CreateForumScreenState extends State<CreateForumScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(height: 16.0),
+                  const SizedBox(height: 16.0),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
                     child: TextFormField(
@@ -119,7 +119,7 @@ class _CreateForumScreenState extends State<CreateForumScreen> {
                                   : 'Enter Opportunity Title'),
                     ),
                   ),
-                  SizedBox(height: 24.0),
+                  const SizedBox(height: 24.0),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
                     child: DetectableTextField(
@@ -143,12 +143,12 @@ class _CreateForumScreenState extends State<CreateForumScreen> {
                                   : 'Describe the Opportunity'),
                     ),
                   ),
-                  SizedBox(height: 12.0),
+                  const SizedBox(height: 12.0),
                   // if (!isUpdating)
                   GestureDetector(
                     onTap: () {
                       if (controller.imageFileList.length < 5) {
-                        controller.onPickImage(isUpdating: true);
+                        controller.onPickImage(isUpdating: isUpdating);
                       } else {
                         showSnackbar(
                             message: 'You can only upload up to 5 images.');
@@ -168,7 +168,7 @@ class _CreateForumScreenState extends State<CreateForumScreen> {
                                     ?.copyWith(color: hintColor),
                               ),
                             ),
-                            SizedBox(width: 16.0),
+                            const SizedBox(width: 16.0),
                             CircleAvatar(
                               radius: 26 / 1.38,
                               backgroundColor: backgroundColor,
@@ -182,7 +182,7 @@ class _CreateForumScreenState extends State<CreateForumScreen> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 8.0),
+                  const SizedBox(height: 8.0),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
                     child: Preview(
@@ -190,7 +190,7 @@ class _CreateForumScreenState extends State<CreateForumScreen> {
                       isUpdating: isUpdating,
                     ),
                   ),
-                  SizedBox(height: 24.0),
+                  const SizedBox(height: 24.0),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
                     child: MCustomButton(
@@ -215,7 +215,7 @@ class _CreateForumScreenState extends State<CreateForumScreen> {
                       isProcessing: controller.loading.value,
                     ),
                   ),
-                  SizedBox(height: 30),
+                  const SizedBox(height: 30),
                   Center(
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -244,7 +244,7 @@ class _CreateForumScreenState extends State<CreateForumScreen> {
                             'assets/svgs/report.svg',
                             height: 18,
                           ),
-                          SizedBox(width: 2),
+                          const SizedBox(width: 2),
                           Text(
                             textAlign: TextAlign.left,
                             overflow: TextOverflow.visible,

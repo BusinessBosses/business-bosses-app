@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/posts/widgets/likecommentandcointile.dart';
 import 'package:flutter/material.dart';
@@ -38,6 +40,7 @@ class PostDetailsScreen extends StatelessWidget {
     // String? postId;
     // int? postIndex;
     ProfileController profileController = Get.find();
+    // ignore: unused_local_variable
     HomeController controller = Get.find();
     return Scaffold(
         backgroundColor: Colors.white,
@@ -51,6 +54,7 @@ class PostDetailsScreen extends StatelessWidget {
           centerTitle: true,
           title: const Text('View Post'),
         ),
+        // ignore: unnecessary_null_comparison
         body: post == null
             ? const Center(
                 child: CircularProgressIndicator.adaptive(),

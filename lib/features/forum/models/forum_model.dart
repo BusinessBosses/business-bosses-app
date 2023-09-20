@@ -1,7 +1,4 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'dart:convert';
-
-import 'package:flutter/foundation.dart';
 
 import 'package:business_bosses_v2/common/models/comment_model.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
@@ -18,6 +15,7 @@ class ForumModel {
   final List<String>? coins;
   final List<CommentModel>? comments;
   final UserModel? user;
+  int? views = 0;
   final bool? isRanked;
   ForumModel({
     required this.forumId,
@@ -28,6 +26,7 @@ class ForumModel {
     this.images,
     this.timestamp,
     this.likes,
+    this.views = 0,
     this.coins,
     this.comments,
     this.user,
@@ -47,6 +46,7 @@ class ForumModel {
     List<CommentModel>? comments,
     UserModel? user,
     bool? isRanked,
+    int? views,
   }) {
     return ForumModel(
       forumId: forumId ?? this.forumId,
@@ -60,6 +60,7 @@ class ForumModel {
       coins: coins ?? this.coins,
       comments: comments ?? this.comments,
       user: user ?? this.user,
+      views: views ?? this.views,
       isRanked: isRanked ?? this.isRanked,
     );
   }
@@ -77,6 +78,7 @@ class ForumModel {
       'coins': coins,
       'comments': comments!.map((CommentModel x) => x.toMap()).toList(),
       'user': user!.toMap(),
+      'views': views,
       'isRanked': isRanked,
     };
   }
@@ -91,12 +93,12 @@ class ForumModel {
       industry: map['industry'] != null ? map['industry'] as String : null,
       images: map['images'] != null && map['images'] != ''
           ? List<String>.from((map['images']))
-                  .where((element) => element.isNotEmpty)
+                  .where((String element) => element.isNotEmpty)
                   .toList()
                   .isEmpty
               ? null
               : List<String>.from((map['images']))
-                  .where((element) => element.isNotEmpty)
+                  .where((String element) => element.isNotEmpty)
                   .toList()
           : null,
       timestamp: map['timestamp'] != null
@@ -110,7 +112,12 @@ class ForumModel {
       user: map['user'] != null
           ? UserModel.fromMap(map['user'] as Map<String, dynamic>)
           : null,
+      views: map['views'] != null ? map['views'] as int : 0,
       isRanked: map['isRanked'] ?? false,
     );
+  }
+
+  setViews(int newViews) {
+    views = newViews;
   }
 }

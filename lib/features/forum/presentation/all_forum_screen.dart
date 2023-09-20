@@ -10,8 +10,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:visibility_detector/visibility_detector.dart';
 
 import '../../../navigation/routes.dart';
+import '../../home/controller/home_controller.dart';
 import '../models/industry.dart';
 import '../../../utils/theme/theme.dart';
 import '../widgets/forum_item.dart';
@@ -34,7 +36,21 @@ class _AllForumScreenState extends State<AllForumScreen> {
   final ScrollController scrollController = ScrollController();
   late Industry industry;
   final ProfileController _myProfile = Get.find();
+  final HomeController hmeController = Get.find();
   // final List<ForumModel> forums = [];
+
+  String formatCount(int count) {
+    if (count >= 1000) {
+      double countInK = count / 1000;
+      if (countInK >= 1000) {
+        return '${(countInK / 1000).toStringAsFixed(1)}m';
+      } else {
+        return '${countInK.toStringAsFixed(1)}k';
+      }
+    } else {
+      return count.toString();
+    }
+  }
 
   void toggleJoinAndLeaveIndustry(ForumController controller) {
     final String myUid = _myProfile.myProfile.uid;
@@ -65,8 +81,17 @@ class _AllForumScreenState extends State<AllForumScreen> {
 
   @override
   Widget build(BuildContext context) {
+    int userCount = industry.joinedUsers
+            ?.where((String element) => element.isNotEmpty)
+            .toList()
+            .length ??
+        0;
+
+    String formattedUserCount = formatCount(userCount);
     return GetBuilder<ForumController>(
       builder: (ForumController controller) {
+        int postCount = controller.totalForums.value;
+        String formattedpostCount = formatCount(postCount);
         return Scaffold(
             backgroundColor: backgroundcolorinterface,
             key: scaffoldKey,
@@ -125,7 +150,12 @@ class _AllForumScreenState extends State<AllForumScreen> {
                                           const EdgeInsets.only(left: 20.0),
                                       child: Row(
                                         children: [
-                                          const Text('Info'),
+                                          const Text(
+                                            'Info',
+                                            style: TextStyle(
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.w700),
+                                          ),
                                           const SizedBox(
                                             width: 5,
                                           ),
@@ -260,7 +290,7 @@ class _AllForumScreenState extends State<AllForumScreen> {
                                         ),
                                         Padding(
                                           padding: const EdgeInsets.only(
-                                              left: 35, right: 20),
+                                              left: 32, right: 20),
                                           child: Row(
                                             children: [
                                               Row(
@@ -268,7 +298,7 @@ class _AllForumScreenState extends State<AllForumScreen> {
                                                   Padding(
                                                     padding:
                                                         const EdgeInsets.only(
-                                                            right: 3, top: 5),
+                                                            right: 2, top: 5),
                                                     child: SvgPicture.asset(
                                                       'assets/svgs/members.svg',
                                                       height: 15,
@@ -286,8 +316,8 @@ class _AllForumScreenState extends State<AllForumScreen> {
                                                             text: industry
                                                                         .joinedUsers ==
                                                                     null
-                                                                ? 'Members: 0'
-                                                                : 'Members: (${industry.joinedUsers?.where((String element) => element.isNotEmpty).toList().length ?? 0})',
+                                                                ? 'Members (0)'
+                                                                : 'Members ($formattedUserCount)',
                                                             style:
                                                                 const TextStyle(
                                                               fontSize: 12,
@@ -323,7 +353,9 @@ class _AllForumScreenState extends State<AllForumScreen> {
                                                   Padding(
                                                     padding:
                                                         const EdgeInsets.only(
-                                                            left: 8.0, top: 5),
+                                                            left: 8.0,
+                                                            top: 5,
+                                                            right: 2),
                                                     child: SvgPicture.asset(
                                                       'assets/svgs/topics.svg',
                                                       color: textColor,
@@ -342,8 +374,8 @@ class _AllForumScreenState extends State<AllForumScreen> {
                                                                         .categoryId!
                                                                         .toString() ==
                                                                     'd479f179-3f41-4d84-915d-33110cf5b4fb'
-                                                                ? ' Topics: (${controller.totalForums.value}) '
-                                                                : ' Opport.: (${controller.totalForums.value})',
+                                                                ? 'Topics ($formattedpostCount) '
+                                                                : 'Opport. ($formattedpostCount)',
                                                             style:
                                                                 const TextStyle(
                                                               fontSize: 12,
@@ -426,13 +458,33 @@ class _AllForumScreenState extends State<AllForumScreen> {
 
                               //controller: differentController,
 
-                              itemBuilder: (BuildContext context, int i) =>
-                                  ForumItem(
-                                forum: controller.forums[i],
-                                key: ValueKey(controller.forums[i].forumId),
-                                controller: controller,
-                              ),
-                            ),
+                              itemBuilder: (BuildContext context, int i) {
+                                return VisibilityDetector(
+                                  key: Key(i.toString()),
+                                  onVisibilityChanged: (VisibilityInfo info) {
+                                    final bool hasIncrementedView =
+                                        hmeController.itemsWithIncrementedViews
+                                            .contains(
+                                                controller.forums[i].forumId);
+                                    if (info.visibleFraction == 1.0 &&
+                                        !hasIncrementedView) {
+                                      controller.updateForumViews(
+                                          controller.forums[i]);
+                                      setState(() {
+                                        hmeController.itemsWithIncrementedViews
+                                            .add(controller.forums[i]
+                                                .forumId); // Set the flag to prevent further increments
+                                      });
+                                    }
+                                  },
+                                  child: ForumItem(
+                                    forum: controller.forums[i],
+                                    key: ValueKey(controller.forums[i].forumId),
+                                    controller: controller,
+                                    isBossUp: true,
+                                  ),
+                                );
+                              }),
             ));
       },
     );

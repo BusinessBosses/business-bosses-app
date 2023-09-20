@@ -1,14 +1,18 @@
+import 'package:business_bosses_v2/common/widgets/safety_model.dart';
 import 'package:business_bosses_v2/features/forum/controller/bossup_controller.dart';
 import 'package:business_bosses_v2/features/home/widgets/bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:visibility_detector/visibility_detector.dart';
 import '../../utils/theme/theme.dart';
 import '../chat/controllers/chat_controller.dart';
 import '../chat/models/my_message.dart';
+import '../forum/models/forum_model.dart';
 import '../home/controller/home_controller.dart';
 import '../home/widgets/home_appbar.dart';
 import '../marketplace/controllers/market_controller.dart';
+import '../posts/models/post_model.dart';
 import '../posts/widgets/userpost_tile.dart';
 import '../profile/controller/profile_controller.dart';
 import '../profile/widgets/boss_of_the_week_tile.dart';
@@ -23,16 +27,18 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
-  // final ProfileController _profileController = Get.find();
+class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
+  final ProfileController _profileController = Get.find();
   // int currentTimestamp = DateTime.now().millisecondsSinceEpoch;
   // final GetStorage sandBox = GetStorage();
   final ScrollController _scrollController = ScrollController();
   final MarketController marketController = Get.put(MarketController());
   final BossUpController bossUpController = Get.put(BossUpController());
+
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     final HomeController homeController = Get.find();
     _scrollController.addListener(() {
       if (_scrollController.position.pixels >=
@@ -44,9 +50,20 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    final HomeController homeController = Get.find();
+
+    if (state.index == 0) {
+      homeController.fetchPosts(fromBackground: true);
+    }
+    super.didChangeAppLifecycleState(state);
+  }
+
+  @override
   void dispose() {
-    super.dispose();
     _scrollController.dispose();
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
   }
 
   @override
@@ -110,54 +127,285 @@ class _HomeScreenState extends State<HomeScreen> {
               }),
             ),
             body: controller.loading.value
-                ? const Center(
-                    child: CircularProgressIndicator(),
+                ? Center(
+                    child: Padding(
+                      padding: const EdgeInsets.only(bottom: 50.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Stack(
+                            children: [
+                              Positioned.fill(
+                                child: Align(
+                                  alignment: Alignment.center,
+                                  child: Image.asset(
+                                    'assets/app/app_logo_2.png',
+                                    height: 40,
+                                    width: 40,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 45,
+                                height: 45,
+                                child: CircularProgressIndicator(),
+                              ),
+                            ],
+                          ),
+                          const Padding(
+                            padding: EdgeInsets.only(top: 20.0),
+                            child: Text(
+                              'Start, Grow and Promote Your Business Globally',
+                              style: TextStyle(fontSize: 16),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
                   )
-                : SizedBox(
-                    height: MediaQuery.of(context).size.height,
-                    width: MediaQuery.of(context).size.width,
-                    child: Stack(
-                      children: [
-                        Container(
-                          height: MediaQuery.of(context).size.height,
-                          width: MediaQuery.of(context).size.width,
-                          color: Colors.white,
-                          child: RefreshIndicator(
-                            onRefresh: refreshData,
-                            child: ListView.builder(
-                              controller: _scrollController,
-                              shrinkWrap: true,
-                              itemCount: controller.mixedPosts.length,
-                              itemBuilder: (BuildContext context, int index) {
-                                if (index == 0) {
-                                  return const BossOfWeekProfileTile();
-                                } else if (controller.mixedPosts[index]
-                                    ['isForum']) {
-                                  return ForumItem(
-                                    forum: controller.mixedPosts[index]['data'],
-                                    controller: controller,
-                                  );
-                                } else {
-                                  return PostTile(
-                                    controller: controller,
-                                    post: controller.mixedPosts[index]['data'],
-                                    onPageChange: (int page) {
-                                      if (widget.onPageChange != null) {
-                                        widget.onPageChange!(page);
-                                      }
-                                    },
-                                  );
-                                }
-                              },
+                : controller.noConnection.value
+                    ? SafetyModel(
+                        isLoading: false,
+                        title:
+                            'Error While Loading Data\nCheck your Internet Connection',
+                        subTitle: 'Try Reloading Again',
+                        clickableText: 'Refresh',
+                        onTap: () {
+                          controller.loadData();
+                          _profileController.fetchData();
+                          _profileController.loadBoss();
+                          marketController.initMarket();
+                          marketController.initUsers();
+                          bossUpController.fetchForums();
+                        },
+                        icon: const Icon(
+                          Icons.warning,
+                          size: 60,
+                        ),
+                      )
+                    : controller.error.value
+                        ? SafetyModel(
+                            isLoading: false,
+                            title: 'Error While Loading Data',
+                            subTitle: 'Try Reloading Again',
+                            clickableText: 'Refresh',
+                            onTap: () {
+                              controller.loadData();
+                              _profileController.fetchData();
+                              _profileController.loadBoss();
+                              marketController.initMarket();
+                              marketController.initUsers();
+                              bossUpController.fetchForums();
+                            },
+                            icon: const Icon(
+                              Icons.warning,
+                              size: 60,
+                            ),
+                          )
+                        : SizedBox(
+                            height: MediaQuery.of(context).size.height,
+                            width: MediaQuery.of(context).size.width,
+                            child: Stack(
+                              children: [
+                                Container(
+                                  height: MediaQuery.of(context).size.height,
+                                  width: MediaQuery.of(context).size.width,
+                                  color: Colors.white,
+                                  child: RefreshIndicator(
+                                    onRefresh: refreshData,
+                                    child: ListView.builder(
+                                      controller: _scrollController,
+                                      shrinkWrap: true,
+                                      itemCount: controller.mixedPosts.length,
+                                      itemBuilder:
+                                          (BuildContext context, int index) {
+                                        if (index == 0) {
+                                          return const BossOfWeekProfileTile();
+                                        } else {
+                                          final Map<String, dynamic> mixedPost =
+                                              controller.mixedPosts[index];
+
+                                          if (mixedPost['isForum']) {
+                                            // Handle ForumModel
+                                            final ForumModel forumModel =
+                                                mixedPost['data'] as ForumModel;
+                                            final bool hasIncrementedView =
+                                                controller
+                                                    .itemsWithIncrementedViews
+                                                    .contains(
+                                                        forumModel.forumId);
+                                            return VisibilityDetector(
+                                              key: Key(index.toString()),
+                                              onVisibilityChanged:
+                                                  (VisibilityInfo info) {
+                                                if (info.visibleFraction ==
+                                                        1.0 &&
+                                                    !hasIncrementedView) {
+                                                  controller.updateForumViews(
+                                                      forumModel);
+                                                  setState(() {
+                                                    controller
+                                                        .itemsWithIncrementedViews
+                                                        .add(forumModel
+                                                            .forumId); // Set the flag to prevent further increments
+                                                  });
+                                                }
+                                              },
+                                              child: ForumItem(
+                                                forum: forumModel,
+                                                controller: controller,
+                                              ),
+                                            );
+                                          } else if (mixedPost['isSponsored']) {
+                                            // Handle Sponsored PostModel
+                                            final int sponsoredIndex =
+                                                (index / 3).floor();
+                                            if (sponsoredIndex <
+                                                controller
+                                                    .sponsoredPosts.length) {
+                                              final promotedPosts =
+                                                  controller.sponsoredPosts[
+                                                          sponsoredIndex]
+                                                      ['data'] as PostModel;
+                                              final bool hasIncrementedView =
+                                                  controller
+                                                      .itemsWithIncrementedViews
+                                                      .contains(
+                                                          promotedPosts.postId);
+                                              return VisibilityDetector(
+                                                key: Key(index.toString()),
+                                                onVisibilityChanged:
+                                                    (VisibilityInfo info) {
+                                                  if (info.visibleFraction ==
+                                                          1.0 &&
+                                                      !hasIncrementedView) {
+                                                    controller.updateViews(
+                                                        promotedPosts);
+                                                    setState(() {
+                                                      controller
+                                                          .itemsWithIncrementedViews
+                                                          .add(promotedPosts
+                                                              .postId); // Set the flag to prevent further increments
+                                                    });
+                                                  }
+                                                },
+                                                child: PostTile(
+                                                  controller: controller,
+                                                  post: promotedPosts,
+                                                  onPageChange: (int page) {
+                                                    if (widget.onPageChange !=
+                                                        null) {
+                                                      widget
+                                                          .onPageChange!(page);
+                                                    }
+                                                  },
+                                                ),
+                                              );
+                                            } else {
+                                              // Handle case where there are no more sponsored posts
+                                              return const SizedBox(); // You can return an empty widget or something else
+                                            }
+                                          } else if (index % 3 == 0) {
+                                            // Display Sponsored Post after every 3 non-sponsored posts
+                                            final int sponsoredIndex =
+                                                (index / 3).floor();
+                                            if (sponsoredIndex <
+                                                controller
+                                                    .sponsoredPosts.length) {
+                                              final promotedPosts =
+                                                  controller.sponsoredPosts[
+                                                          sponsoredIndex]
+                                                      ['data'] as PostModel;
+                                              final bool hasIncrementedView =
+                                                  controller
+                                                      .itemsWithIncrementedViews
+                                                      .contains(
+                                                          promotedPosts.postId);
+                                              return VisibilityDetector(
+                                                key: Key(index.toString()),
+                                                onVisibilityChanged:
+                                                    (VisibilityInfo info) {
+                                                  if (info.visibleFraction ==
+                                                          1.0 &&
+                                                      !hasIncrementedView) {
+                                                    controller.updateViews(
+                                                        promotedPosts);
+                                                    setState(() {
+                                                      controller
+                                                          .itemsWithIncrementedViews
+                                                          .add(promotedPosts
+                                                              .postId);
+                                                    });
+                                                  }
+                                                },
+                                                child: PostTile(
+                                                  controller: controller,
+                                                  post: promotedPosts,
+                                                  onPageChange: (int page) {
+                                                    if (widget.onPageChange !=
+                                                        null) {
+                                                      widget
+                                                          .onPageChange!(page);
+                                                    }
+                                                  },
+                                                ),
+                                              );
+                                            } else {
+                                              // Handle case where there are no more sponsored posts
+                                              return const SizedBox(); // You can return an empty widget or something else
+                                            }
+                                          } else {
+                                            // Handle regular non-promoted PostModel
+                                            final PostModel
+                                                nonPromotedPostModel =
+                                                mixedPost['data'] as PostModel;
+                                            final bool hasIncrementedView =
+                                                controller
+                                                    .itemsWithIncrementedViews
+                                                    .contains(
+                                                        nonPromotedPostModel
+                                                            .postId);
+                                            return VisibilityDetector(
+                                              key: Key(index.toString()),
+                                              onVisibilityChanged:
+                                                  (VisibilityInfo info) {
+                                                if (info.visibleFraction ==
+                                                        1.0 &&
+                                                    !hasIncrementedView) {
+                                                  controller.updateViews(
+                                                      nonPromotedPostModel);
+                                                  setState(() {
+                                                    controller
+                                                        .itemsWithIncrementedViews
+                                                        .add(
+                                                            nonPromotedPostModel
+                                                                .postId);
+                                                  });
+                                                }
+                                              },
+                                              child: PostTile(
+                                                controller: controller,
+                                                post: nonPromotedPostModel,
+                                                onPageChange: (int page) {
+                                                  if (widget.onPageChange !=
+                                                      null) {
+                                                    widget.onPageChange!(page);
+                                                  }
+                                                },
+                                              ),
+                                            );
+                                          }
+                                        }
+                                      },
+                                    ),
+                                  ),
+                                ),
+                                const BottomBar(
+                                  activeIndex: 0,
+                                ),
+                              ],
                             ),
                           ),
-                        ),
-                        const BottomBar(
-                          activeIndex: 0,
-                        ),
-                      ],
-                    ),
-                  ),
           );
           // return Scaffold(
           // backgroundColor: backgroundcolorinterface,
