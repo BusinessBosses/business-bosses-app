@@ -1,20 +1,23 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:business_bosses_v2/features/premium/paymentconfig.dart';
+import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:pay/pay.dart';
 import 'package:url_launcher/url_launcher_string.dart';
-
 import '../../action/action.dart';
+import '../../common/dialogs/snackbar.dart';
 import '../../common/models/api_response_model.dart';
 import '../../common/widgets/buttons/my_button.dart';
 import '../../common/widgets/text_widget.dart';
 import '../../navigation/routes.dart';
 import '../../services/api_service.dart';
 import '../../utils/theme/theme.dart';
+import 'package:http/http.dart' as http;
 
 // ignore: public_member_api_docs
 class ReviewPayment extends StatefulWidget {
@@ -27,6 +30,7 @@ class ReviewPayment extends StatefulWidget {
 
 class _ReviewPaymentState extends State<ReviewPayment> {
   bool _isProcessing = false;
+  ProfileController profileController = Get.find();
 
   ///intialize the payment
   Future<void> makePayment() async {
@@ -85,6 +89,38 @@ class _ReviewPaymentState extends State<ReviewPayment> {
   ];
 
   late String initPlan = '';
+
+  Future<void> sendPaymentTokenToWebhook(String paymentToken) async {
+    final Map<String, dynamic> requestBody = {
+      'paymentToken': paymentToken,
+      'userid': profileController.myProfile.uid,
+    };
+
+    try {
+      final http.Response response = await http.post(
+        Uri.parse(
+            'https://orca-app-5dg8w.ondigitalocean.app/api/v1/payment/apple-checkout/webhook'),
+        body: jsonEncode(requestBody), // Convert to JSON string
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        showSnackbar(
+            title: 'Success',
+            message: 'Payment made successfully',
+            error: false);
+        Get.to(Routes.subscriptionconfirmation);
+      }
+    } catch (e) {
+      showSnackbar(
+          title: 'OOPS!',
+          message: 'An error occurred, please try again!',
+          error: true);
+      print(e);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -368,7 +404,7 @@ class _ReviewPaymentState extends State<ReviewPayment> {
                                 style: ApplePayButtonStyle.black,
                                 type: ApplePayButtonType.subscribe,
                                 onPaymentResult: ((result) =>
-                                    debugPrint('paymentresult: $result')),
+                                    sendPaymentTokenToWebhook('$result')),
                                 loadingIndicator: const Center(
                                   child: CircularProgressIndicator(),
                                 ),
