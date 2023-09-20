@@ -45,16 +45,27 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
     setState(() {
       isLoading = true;
     });
-    final Map<String, dynamic> res =
-        await ProfileController.loadData(publicUser.uid);
-    final UserModel modelizedUser =
-        UserModel.fromMap({...res['user'], 'interests': res['industries']});
-    publicUser = modelizedUser;
-    _posts = res['posts'];
+    try {
+      final Map<String, dynamic> res =
+          await ProfileController.loadData(publicUser.uid);
+      final UserModel modelizedUser =
+          UserModel.fromMap({...res['user'], 'interests': res['industries']});
+      publicUser = modelizedUser;
+      _posts = res['posts'];
 
-    setState(() {
-      isLoading = false;
-    });
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+        });
+      }
+    } catch (e) {
+      // Handle any errors here.
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+        });
+      }
+    }
   }
 
   Future<void> report(

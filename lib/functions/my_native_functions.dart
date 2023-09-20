@@ -98,6 +98,8 @@ class MyNativeFunctions {
         return 'https://$cUrl';
       } else if (cUrl.contains('http://')) {
         return cUrl;
+      } else if (cUrl.contains('https://')) {
+        return url;
       } else {
         return 'https://www.$cUrl';
       }

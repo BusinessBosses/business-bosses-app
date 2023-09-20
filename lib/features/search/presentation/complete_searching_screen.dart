@@ -98,37 +98,45 @@ class _CompleteSearchingScreenState extends State<CompleteSearchingScreen>
                   ),
               ],
             ),
-            body: Column(
-              children: [
-                Expanded(
-                  child: TabBarView(
-                    controller: _tabController,
-                    children: [
-                      FilterUsers(
-                        filterItems: controller.isUserSearch.value
-                            ? controller.searchedUsers
-                            : controller.recommendedConnections,
-                        isLoading: controller.loading.value ||
-                            controller.loadingSearch.value,
-                        onConnectionChange: controller.connectToUser,
-                        isSearch: controller.isUserSearch.value,
-                      ),
-                      FilterPosts(
-                        filterItems: controller.isPostSearch.value
-                            ? controller.searchedPosts
-                            : controller.recommendedPosts,
-                        isLoading: controller.loading.value ||
-                            controller.loadingSearch.value,
-                      ),
-                      // FilterForum(
-                      //   filterItems: controller.searchedForums,
-                      //   isLoading: controller.loading.value ||
-                      //       controller.loadingSearch.value,
-                      // ),
-                    ],
-                  ),
-                )
-              ],
+            body: GestureDetector(
+              onTap: () {
+                FocusScope.of(context).unfocus();
+              },
+              onVerticalDragDown: (_) {
+                FocusScope.of(context).unfocus();
+              },
+              child: Column(
+                children: [
+                  Expanded(
+                    child: TabBarView(
+                      controller: _tabController,
+                      children: [
+                        FilterUsers(
+                          filterItems: controller.isUserSearch.value
+                              ? controller.searchedUsers
+                              : controller.recommendedConnections,
+                          isLoading: controller.loading.value ||
+                              controller.loadingSearch.value,
+                          onConnectionChange: controller.connectToUser,
+                          isSearch: controller.isUserSearch.value,
+                        ),
+                        FilterPosts(
+                          filterItems: controller.isPostSearch.value
+                              ? controller.searchedPosts
+                              : controller.recommendedPosts,
+                          isLoading: controller.loading.value ||
+                              controller.loadingSearch.value,
+                        ),
+                        // FilterForum(
+                        //   filterItems: controller.searchedForums,
+                        //   isLoading: controller.loading.value ||
+                        //       controller.loadingSearch.value,
+                        // ),
+                      ],
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
         );

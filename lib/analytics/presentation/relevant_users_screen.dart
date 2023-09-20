@@ -28,11 +28,25 @@ class _RelevantUsersScreenState extends State<RelevantUsersScreen> {
   Widget build(BuildContext context) {
     return GetBuilder<CompleteSearchController>(
         builder: (CompleteSearchController controller) {
-      final List<UserModel> filteredConnections = controller
-          .recommendedConnections
-          .where((UserModel element) =>
-              element.photoUrl != null && element.photoUrl!.isNotEmpty)
-          .toList();
+      final List<UserModel> filteredConnections =
+          controller.recommendedConnections.toList();
+
+      filteredConnections.sort((a, b) {
+        if (a.photoUrl != null && a.photoUrl!.isNotEmpty) {
+          if (b.photoUrl != null && b.photoUrl!.isNotEmpty) {
+            return 0;
+          } else {
+            return -1;
+          }
+        } else {
+          if (b.photoUrl != null && b.photoUrl!.isNotEmpty) {
+            return 1;
+          } else {
+            return 0;
+          }
+        }
+      });
+
       return Scaffold(
         backgroundColor: backgroundcolorinterface,
         appBar: AppBar(

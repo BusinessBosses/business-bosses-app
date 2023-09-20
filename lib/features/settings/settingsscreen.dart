@@ -179,6 +179,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                               SvgPicture.asset(
                                                 'assets/svgs/goldcheckmark.svg',
                                                 height: 25,
+                                                color: primaryColorLT,
                                               ),
                                               const SizedBox(width: 15),
                                               const Expanded(

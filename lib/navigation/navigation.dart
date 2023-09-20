@@ -46,6 +46,7 @@ import 'package:business_bosses_v2/features/settings/invite_a_friendscreen.dart'
 import 'package:business_bosses_v2/features/settings/settingsscreen.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/premium/premiumscreen.dart';
+import 'package:business_bosses_v2/premium/reviewpayment.dart';
 import 'package:get/get.dart';
 
 import '../features/forum/presentation/create_bossup_screen.dart';
@@ -227,6 +228,10 @@ class Nav {
     GetPage(
       name: Routes.subscriptionconfirmation,
       page: () => const SubscriptionConfirmation(),
+    ),
+    GetPage(
+      name: Routes.reviewpayment,
+      page: () => ReviewPayment(),
     ),
   ];
 }
