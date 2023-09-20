@@ -5,6 +5,7 @@ import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../action/action.dart';
 import '../../../common/widgets/network_image_with_placeholder.dart';
@@ -291,64 +292,73 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                 ),
                 homeController.bossUp != null &&
                         homeController.bossUp!.isNotEmpty
-                    ? GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (BuildContext context) =>
-                                    const Bossuppartner()),
-                          );
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.only(right: 0, top: 5),
-                          child: Container(
-                              height: 40,
-                              decoration: BoxDecoration(
-                                color: const Color(0xFFFFFFFF),
-                                borderRadius: BorderRadius.circular(10),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.grey.withOpacity(0.3),
-                                    spreadRadius: 20,
-                                    blurRadius: 500,
-                                    offset: const Offset(0, 3),
-                                  ),
-                                ],
-                              ),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 10),
+                    ? Padding(
+                        padding: const EdgeInsets.only(right: 0, top: 5),
+                        child: Container(
+                            height: 40,
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFFFFFFF),
+                              borderRadius: BorderRadius.circular(10),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey.withOpacity(0.3),
+                                  spreadRadius: 20,
+                                  blurRadius: 500,
+                                  offset: const Offset(0, 3),
+                                ),
+                              ],
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 10),
+                                  child: GestureDetector(
+                                    onTap: () async {
+                                      if (await canLaunchUrl(Uri.parse(
+                                          homeController.bossUpLink))) {
+                                        await launchUrl(Uri.parse(
+                                            homeController.bossUpLink));
+                                      }
+                                    },
                                     child: Text(
                                       homeController.bossUpTitle.toString(),
                                       style: const TextStyle(fontSize: 11),
                                     ),
                                   ),
-                                  const SizedBox(width: 10),
-                                  Platform.isIOS
-                                      ? Padding(
-                                          padding: const EdgeInsets.only(
-                                              left: 0.0, bottom: 4),
-                                          child: Text(
-                                            '|',
-                                            style: TextStyle(
-                                              fontSize: 20,
-                                              color: textColor.withOpacity(0.5),
-                                            ),
-                                          ),
-                                        )
-                                      : Text(
+                                ),
+                                const SizedBox(width: 10),
+                                Platform.isIOS
+                                    ? Padding(
+                                        padding: const EdgeInsets.only(
+                                            left: 0.0, bottom: 4),
+                                        child: Text(
                                           '|',
                                           style: TextStyle(
                                             fontSize: 20,
                                             color: textColor.withOpacity(0.5),
                                           ),
                                         ),
-                                  const SizedBox(width: 10),
-                                  Platform.isIOS
+                                      )
+                                    : Text(
+                                        '|',
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                          color: textColor.withOpacity(0.5),
+                                        ),
+                                      ),
+                                const SizedBox(width: 10),
+                                GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (BuildContext context) =>
+                                              const Bossuppartner()),
+                                    );
+                                  },
+                                  child: Platform.isIOS
                                       ? Padding(
                                           padding: const EdgeInsets.only(
                                             bottom: 2.0,
@@ -384,8 +394,18 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                                           overflow: TextOverflow.ellipsis,
                                           softWrap: false,
                                         ),
-                                  const Spacer(),
-                                  Platform.isIOS
+                                ),
+                                const Spacer(),
+                                GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (BuildContext context) =>
+                                              const Bossuppartner()),
+                                    );
+                                  },
+                                  child: Platform.isIOS
                                       ? Padding(
                                           padding: const EdgeInsets.only(
                                               right: 10.0),
@@ -398,9 +418,9 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                                           'assets/svgs/nexticon.svg',
                                           color: textColor,
                                         ),
-                                ],
-                              )),
-                        ),
+                                ),
+                              ],
+                            )),
                       )
                     : const SizedBox(),
               ],
