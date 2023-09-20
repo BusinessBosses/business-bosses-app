@@ -109,12 +109,12 @@ class _ReviewPaymentState extends State<ReviewPayment> {
           children: [
             Padding(
               padding: const EdgeInsets.only(
-                left: 32.5,
-                top: 40,
+                left: 30,
+                top: 35,
               ),
               child: SvgPicture.asset(
                 'assets/svgs/dottedline.svg',
-                height: 370,
+                height: 300,
               ),
             ),
             Container(
@@ -122,266 +122,264 @@ class _ReviewPaymentState extends State<ReviewPayment> {
               color: backgroundcolorinterface,
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
+              padding: EdgeInsets.only(top: 40.0, left: 10),
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const SizedBox(
-                    height: 55,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const CircleAvatar(
-                        radius: 14,
-                        backgroundColor: Color(0xFFF01C29),
-                        child: CircleAvatar(
-                          radius: 6,
-                          backgroundColor: Colors.white,
-                        ),
+                  const Padding(
+                    padding: EdgeInsets.only(left: 8.0),
+                    child: CircleAvatar(
+                      radius: 14,
+                      backgroundColor: Color(0xFFF01C29),
+                      child: CircleAvatar(
+                        radius: 6,
+                        backgroundColor: Colors.white,
                       ),
-                      const SizedBox(
-                        width: 25,
-                      ),
-                      Expanded(
-                        child: Container(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 15, vertical: 15),
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                border: Border.all(
-                                    color: backgroundcolorinterface, width: 3),
-                                borderRadius: BorderRadius.circular(15)),
-                            child: Column(
-                              children: [
-                                Row(
-                                  children: [
-                                    Container(
-                                        decoration: BoxDecoration(
-                                            color: backgroundcolorinterface,
-                                            borderRadius:
-                                                BorderRadius.circular(5)),
-                                        child: const Padding(
-                                          padding: EdgeInsets.all(5.0),
-                                          child: Text(
-                                            'Selected Plan',
-                                            style: TextStyle(fontSize: 15),
-                                          ),
-                                        )),
-                                    const Spacer(),
-                                    Text(
-                                      argument.toString().contains('annually')
-                                          ? 'Annually'
-                                          : 'Monthly',
-                                      style: const TextStyle(
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.bold),
-                                    )
-                                  ],
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 10.0),
-                                  child: Row(
-                                    children: [
-                                      const Text(
-                                        'Total to pay:',
-                                        style: TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.w700),
-                                      ),
-                                      const Spacer(),
-                                      Text(
-                                        argument.toString().contains('annually')
-                                            ? '\$49.99'
-                                            : '\$4.99',
-                                        style: const TextStyle(
-                                            fontSize: 23,
-                                            fontWeight: FontWeight.w700),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                Row(
-                                  children: [
-                                    Image.asset(
-                                      'assets/images/planpicture.png',
-                                      height: 40,
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(
-                                  height: 5,
-                                ),
-                                Row(
-                                  children: [
-                                    Text(
-                                      argument.toString().contains('annually')
-                                          ? '55%'
-                                          : '45%',
-                                      style: const TextStyle(fontSize: 12),
-                                    ),
-                                    const Text(
-                                      ' of our users choose this plan',
-                                      style: TextStyle(fontSize: 12),
-                                    ),
-                                    const Spacer(),
-                                    GestureDetector(
-                                      onTap: () {
-                                        Navigator.pop(context);
-                                      },
-                                      child: const Text(
-                                        'Switch',
-                                        style: TextStyle(
-                                            decoration:
-                                                TextDecoration.underline,
-                                            color: primaryColorLT,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 15),
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ],
-                            )),
-                      )
-                    ],
+                    ),
                   ),
                   const SizedBox(
-                    height: 40,
+                    height: 10,
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const CircleAvatar(
-                        radius: 14,
-                        backgroundColor: Color(0xFFF01C29),
-                        child: CircleAvatar(
-                          radius: 6,
-                          backgroundColor: Colors.white,
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 25,
-                      ),
-                      Expanded(
+                  Padding(
+                    padding: const EdgeInsets.only(left: 10.0, right: 20),
+                    child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 15, vertical: 15),
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            border: Border.all(
+                                color: backgroundcolorinterface, width: 3),
+                            borderRadius: BorderRadius.circular(15)),
                         child: Column(
                           children: [
-                            const Row(
+                            Row(
                               children: [
-                                TextWidget(
-                                  text: 'Select a Payment Option',
-                                  size: 18,
-                                  fontWeight: FontWeight.w700,
+                                Container(
+                                    decoration: BoxDecoration(
+                                        color: backgroundcolorinterface,
+                                        borderRadius: BorderRadius.circular(5)),
+                                    child: const Padding(
+                                      padding: EdgeInsets.all(5.0),
+                                      child: Text(
+                                        'Selected Plan',
+                                        style: TextStyle(fontSize: 15),
+                                      ),
+                                    )),
+                                const Spacer(),
+                                Text(
+                                  argument.toString().contains('annually')
+                                      ? 'Annually'
+                                      : 'Monthly',
+                                  style: const TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold),
                                 )
                               ],
                             ),
-                            const SizedBox(
-                              height: 15,
-                            ),
-                            Column(
-                              children: options
-                                  .map(
-                                    (Map<String, dynamic> options) =>
-                                        PaymentOptionCard(
-                                      option: options,
-                                      activeoption: initPlan,
-                                      onTap: (String newoption) {
-                                        setState(() {
-                                          initPlan = newoption;
-                                        });
-                                      },
-                                    ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 10.0),
+                              child: Row(
+                                children: [
+                                  const Text(
+                                    'Total to pay:',
+                                    style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w700),
+                                  ),
+                                  const Spacer(),
+                                  Text(
+                                    argument.toString().contains('annually')
+                                        ? '\$49.99'
+                                        : '\$4.99',
+                                    style: const TextStyle(
+                                        fontSize: 23,
+                                        fontWeight: FontWeight.w700),
                                   )
-                                  .toList(),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Row(
+                              children: [
+                                Image.asset(
+                                  'assets/images/planpicture.png',
+                                  height: 40,
+                                  fit: BoxFit.cover,
+                                ),
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 5,
+                            ),
+                            Row(
+                              children: [
+                                Text(
+                                  argument.toString().contains('annually')
+                                      ? '55%'
+                                      : '45%',
+                                  style: const TextStyle(fontSize: 12),
+                                ),
+                                const Text(
+                                  ' of our users choose this plan',
+                                  style: TextStyle(fontSize: 12),
+                                ),
+                                const Spacer(),
+                                GestureDetector(
+                                  onTap: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: const Text(
+                                    'Switch',
+                                    style: TextStyle(
+                                        decoration: TextDecoration.underline,
+                                        color: primaryColorLT,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 15),
+                                  ),
+                                )
+                              ],
                             ),
                           ],
+                        )),
+                  ),
+                  const SizedBox(
+                    height: 35,
+                  ),
+                  const Row(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(left: 8.0),
+                        child: CircleAvatar(
+                          radius: 14,
+                          backgroundColor: Color(0xFFF01C29),
+                          child: CircleAvatar(
+                            radius: 6,
+                            backgroundColor: Colors.white,
+                          ),
                         ),
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      TextWidget(
+                        text: 'Select a Payment Option',
+                        size: 18,
+                        fontWeight: FontWeight.w700,
                       )
                     ],
                   ),
                   const SizedBox(
-                    height: 20,
+                    height: 10,
                   ),
-                  if (initPlan == 'Card Payment') ...[
-                    MyButton(
-                      labelStyle: const TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w700,
-                        fontSize: 18,
-                      ),
-                      label: 'Pay now',
-                      onPressed: () async {
-                        argument;
-                        await makePayment();
-                      },
-                    )
-                  ] else if (initPlan == 'Google Pay') ...[
-                    GooglePayButton(
-                      paymentConfiguration:
-                          PaymentConfiguration.fromJsonString(defaultGooglePay),
-                      paymentItems: [
-                        PaymentItem(
-                          label: argument.toString().contains('annually')
-                              ? 'Premium Subscription (Annually)'
-                              : 'Premium Subscription (Monthly)',
-                          amount: argument.toString().contains('annually')
-                              ? '49.99'
-                              : '4.99',
-                          status: PaymentItemStatus.final_price,
-                        )
-                      ],
-                      type: GooglePayButtonType.pay,
-                      margin: const EdgeInsets.only(top: 15.0),
-                      onPaymentResult: ((result) =>
-                          debugPrint('paymentresult: $result')),
-                      loadingIndicator: const Center(
-                        child: CircularProgressIndicator(),
-                      ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 10.0, right: 20),
+                    child: Column(
+                      children: options
+                          .map(
+                            (Map<String, dynamic> options) => PaymentOptionCard(
+                              option: options,
+                              activeoption: initPlan,
+                              onTap: (String newoption) {
+                                setState(() {
+                                  initPlan = newoption;
+                                });
+                              },
+                            ),
+                          )
+                          .toList(),
                     ),
-                  ] else if (initPlan == 'Apple Pay') ...[
-                    Container(
-                      height: 55,
-                      decoration: BoxDecoration(
-                          color: Colors.black,
-                          borderRadius: BorderRadius.circular(10)),
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: ApplePayButton(
-                          height: 40,
-                          width: MediaQuery.of(context).size.width,
-                          paymentConfiguration:
-                              PaymentConfiguration.fromJsonString(
-                                  defaultApplePay),
-                          paymentItems: [
-                            PaymentItem(
-                              label: argument.toString().contains('annually')
-                                  ? 'Premium Subscription (Annually)'
-                                  : 'Premium Subscription (Monthly)',
-                              amount: argument.toString().contains('annually')
-                                  ? '49.99'
-                                  : '4.99',
-                              status: PaymentItemStatus.final_price,
-                            )
-                          ],
-                          style: ApplePayButtonStyle.black,
-                          type: ApplePayButtonType.subscribe,
-                          onPaymentResult: ((result) =>
-                              debugPrint('paymentresult: $result')),
-                          loadingIndicator: const Center(
-                            child: CircularProgressIndicator(),
-                          ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 10, right: 20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(
+                          height: 20,
                         ),
-                      ),
-                    )
-                  ] else
-                    ...[]
+                        if (initPlan == 'Card Payment') ...[
+                          MyButton(
+                            labelStyle: const TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w700,
+                              fontSize: 18,
+                            ),
+                            label: 'Pay now',
+                            onPressed: () async {
+                              argument;
+                              await makePayment();
+                            },
+                          )
+                        ] else if (initPlan == 'Google Pay') ...[
+                          GooglePayButton(
+                            paymentConfiguration:
+                                PaymentConfiguration.fromJsonString(
+                                    defaultGooglePay),
+                            paymentItems: [
+                              PaymentItem(
+                                label: argument.toString().contains('annually')
+                                    ? 'Premium Subscription (Annually)'
+                                    : 'Premium Subscription (Monthly)',
+                                amount: argument.toString().contains('annually')
+                                    ? '49.99'
+                                    : '4.99',
+                                status: PaymentItemStatus.final_price,
+                              )
+                            ],
+                            type: GooglePayButtonType.pay,
+                            margin: const EdgeInsets.only(top: 15.0),
+                            onPaymentResult: ((result) =>
+                                debugPrint('paymentresult: $result')),
+                            loadingIndicator: const Center(
+                              child: CircularProgressIndicator(),
+                            ),
+                          ),
+                        ] else if (initPlan == 'Apple Pay') ...[
+                          Container(
+                            height: 55,
+                            decoration: BoxDecoration(
+                                color: Colors.black,
+                                borderRadius: BorderRadius.circular(10)),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: ApplePayButton(
+                                height: 40,
+                                width: MediaQuery.of(context).size.width,
+                                paymentConfiguration:
+                                    PaymentConfiguration.fromJsonString(
+                                        defaultApplePay),
+                                paymentItems: [
+                                  PaymentItem(
+                                    label:
+                                        argument.toString().contains('annually')
+                                            ? 'Premium Subscription (Annually)'
+                                            : 'Premium Subscription (Monthly)',
+                                    amount:
+                                        argument.toString().contains('annually')
+                                            ? '49.99'
+                                            : '4.99',
+                                    status: PaymentItemStatus.final_price,
+                                  )
+                                ],
+                                style: ApplePayButtonStyle.black,
+                                type: ApplePayButtonType.subscribe,
+                                onPaymentResult: ((result) =>
+                                    debugPrint('paymentresult: $result')),
+                                loadingIndicator: const Center(
+                                  child: CircularProgressIndicator(),
+                                ),
+                              ),
+                            ),
+                          )
+                        ] else
+                          ...[]
+                      ],
+                    ),
+                  ),
                 ],
               ),
             ),

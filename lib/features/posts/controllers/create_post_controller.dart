@@ -47,7 +47,7 @@ class CreatePostController extends GetxController {
       return false;
     }
 
-    if (imageFileList.isEmpty) {
+    if (title.isEmpty && imageFileList.isEmpty) {
       return false;
     }
 

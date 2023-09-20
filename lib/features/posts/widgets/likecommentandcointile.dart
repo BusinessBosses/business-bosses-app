@@ -28,7 +28,7 @@ class PostInteractionsWidget extends StatelessWidget {
     return GetBuilder<HomeController>(
       builder: (HomeController controller) {
         return Container(
-          padding: const EdgeInsets.only(left: 15, right: 15),
+          padding: const EdgeInsets.only(left: 0, right: 0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -132,32 +132,23 @@ class PostInteractionsWidget extends StatelessWidget {
                     ),
                   ),
                   const Spacer(),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(right: 15),
+                        child: Text(
+                          TimeFormat.formatString(post.timestamp),
+                          style:
+                              Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                    color: textColor.withOpacity(0.4),
+                                  ),
+                        ),
+                      ),
+                    ],
+                  )
                 ],
               ),
-              const SizedBox(
-                height: 10,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [],
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(right: 15),
-                    child: Text(
-                      TimeFormat.formatString(post.timestamp),
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: textColor.withOpacity(0.4),
-                          ),
-                    ),
-                  ),
-                ],
-              )
             ],
           ),
         );
