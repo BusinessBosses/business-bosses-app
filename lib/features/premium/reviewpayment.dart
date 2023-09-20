@@ -52,6 +52,27 @@ class _ReviewPaymentState extends State<ReviewPayment> {
     });
   }
 
+  ///intialize the payment
+  Future<void> makePayPallPayment(String plan) async {
+    setState(() {
+      _isProcessing = true;
+    });
+    final ApiResponseModel res = await ApiService.get(
+      path: 'payment/plan/$plan',
+    );
+
+    if (res.success) {
+      if (await canLaunchUrlString(res.data)) {
+        await launchUrlString(res.data, mode: LaunchMode.externalApplication);
+      }
+    } else {
+      showSnackBar(context, message: res.message);
+    }
+    setState(() {
+      _isProcessing = false;
+    });
+  }
+
   List<Map<String, dynamic>> applepayplans = <Map<String, dynamic>>[
     <String, dynamic>{
       'price': dotenv.env['TEST_MONTHLY_PRICE'],
@@ -85,6 +106,7 @@ class _ReviewPaymentState extends State<ReviewPayment> {
   ];
 
   late String initPlan = '';
+  late String plan = '';
 
   @override
   Widget build(BuildContext context) {
@@ -338,6 +360,14 @@ class _ReviewPaymentState extends State<ReviewPayment> {
                               child: CircularProgressIndicator(),
                             ),
                           ),
+                        ] else if (initPlan == 'PayPal') ...[
+                          ElevatedButton(
+                            onPressed: () async {
+                              plan = argument['plan'];
+                              await makePayPallPayment(plan);
+                            },
+                            child: Text('Pay with PayPal'),
+                          )
                         ] else if (initPlan == 'Apple Pay') ...[
                           Container(
                             height: 55,
