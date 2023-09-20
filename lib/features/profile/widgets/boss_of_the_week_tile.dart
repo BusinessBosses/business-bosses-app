@@ -322,9 +322,6 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                                             homeController.bossUpLink))) {
                                           await launchUrl(Uri.parse(
                                               homeController.bossUpLink));
-                                        } else {
-                                          showSnackbar(
-                                              message: 'Could not launch URL');
                                         }
                                       },
                                       child: Text(
