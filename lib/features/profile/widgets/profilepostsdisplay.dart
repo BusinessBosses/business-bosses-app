@@ -51,7 +51,7 @@ Widget profilepostsdisplay(
               return ispublicposts == false
                   ? PostGridItem(
                       post: posts[i],
-                      key: ValueKey(posts[i].postId),
+                      key: ValueKey<String>(posts[i].postId),
                       onTap: () {
                         if (hasIncrementedView == false) {
                           _homeController.itemsWithIncrementedViews
@@ -70,7 +70,7 @@ Widget profilepostsdisplay(
                   : PostGridItem(
                       hasMore: false,
                       post: posts[i],
-                      key: ValueKey(posts[i].postId),
+                      key: ValueKey<String>(posts[i].postId),
                       onTap: () {
                         if (hasIncrementedView == false) {
                           _homeController.itemsWithIncrementedViews

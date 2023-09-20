@@ -55,6 +55,7 @@ class TimeFormat {
       num days = toDays(delta);
       String daysLabel = days.toInt() == 1 ? ONE_DAY_AGO : MANY_DAYS_AGO;
       return '${(days <= 0 ? 1 : days).toInt()}$daysLabel';
+      return '${(days <= 0 ? 1 : days).toInt()}$daysLabel';
     }
     if (delta < 12 * 4 * ONE_WEEK) {
       num months = toMonths(delta);
