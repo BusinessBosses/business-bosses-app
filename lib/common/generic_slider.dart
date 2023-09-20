@@ -1,4 +1,5 @@
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
+import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper_plus/flutter_swiper_plus.dart';
 
@@ -96,8 +97,8 @@ class _GenericSliderState extends State<GenericSlider> {
                             horizontal: 4.0, vertical: 2),
                         decoration: BoxDecoration(
                             color: _activeIndex == i
-                                ? primaryColor
-                                : primaryColor.withOpacity(0.5),
+                                ? primaryColorLT
+                                : primaryColorLT.withOpacity(0.5),
                             borderRadius: BorderRadius.circular(10.0)),
                       );
                     }),
