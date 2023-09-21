@@ -94,10 +94,10 @@ class _ReviewPaymentState extends State<ReviewPayment> {
       'optionname': 'Card Payment',
       'optionsvg': 'assets/svgs/cardlogo.svg'
     },
-    <String, dynamic>{
-      'optionname': 'Google Pay',
-      'optionsvg': 'assets/svgs/googlepaylogo.svg'
-    },
+    // <String, dynamic>{
+    //   'optionname': 'Google Pay',
+    //   'optionsvg': 'assets/svgs/googlepaylogo.svg'
+    // },
     if (Platform.isIOS)
       <String, dynamic>{
         'optionname': 'Apple Pay',
@@ -384,30 +384,30 @@ class _ReviewPaymentState extends State<ReviewPayment> {
                               await makePayment();
                             },
                           )
-                        ] else if (initPlan == 'Google Pay') ...[
-                          GooglePayButton(
-                            paymentConfiguration:
-                                PaymentConfiguration.fromJsonString(
-                                    defaultGooglePay),
-                            paymentItems: [
-                              PaymentItem(
-                                label: argument.toString().contains('annually')
-                                    ? 'Premium Subscription (Annually)'
-                                    : 'Premium Subscription (Monthly)',
-                                amount: argument.toString().contains('annually')
-                                    ? '49.99'
-                                    : '4.99',
-                                status: PaymentItemStatus.final_price,
-                              )
-                            ],
-                            type: GooglePayButtonType.pay,
-                            margin: const EdgeInsets.only(top: 15.0),
-                            onPaymentResult: ((result) =>
-                                debugPrint('paymentresult: $result')),
-                            loadingIndicator: const Center(
-                              child: CircularProgressIndicator(),
-                            ),
-                          ),
+                          // ] else if (initPlan == 'Google Pay') ...[
+                          //   GooglePayButton(
+                          //     paymentConfiguration:
+                          //         PaymentConfiguration.fromJsonString(
+                          //             defaultGooglePay),
+                          //     paymentItems: [
+                          //       PaymentItem(
+                          //         label: argument.toString().contains('annually')
+                          //             ? 'Premium Subscription (Annually)'
+                          //             : 'Premium Subscription (Monthly)',
+                          //         amount: argument.toString().contains('annually')
+                          //             ? '49.99'
+                          //             : '4.99',
+                          //         status: PaymentItemStatus.final_price,
+                          //       )
+                          //     ],
+                          //     type: GooglePayButtonType.pay,
+                          //     margin: const EdgeInsets.only(top: 15.0),
+                          //     onPaymentResult: ((result) =>
+                          //         debugPrint('paymentresult: $result')),
+                          //     loadingIndicator: const Center(
+                          //       child: CircularProgressIndicator(),
+                          //     ),
+                          //   ),
                         ] else if (initPlan == 'PayPal') ...[
                           MyButton(
                             onPressed: () async {
@@ -450,8 +450,12 @@ class _ReviewPaymentState extends State<ReviewPayment> {
                                 ],
                                 style: ApplePayButtonStyle.black,
                                 type: ApplePayButtonType.subscribe,
-                                onPaymentResult: ((result) =>
-                                    sendPaymentTokenToWebhook('$result')),
+                                onPaymentResult: (value) {
+                                  print('success');
+                                },
+                                onError: (error) {
+                                  print('error');
+                                },
                                 loadingIndicator: const Center(
                                   child: CircularProgressIndicator(),
                                 ),
