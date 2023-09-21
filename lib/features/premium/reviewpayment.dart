@@ -414,6 +414,11 @@ class _ReviewPaymentState extends State<ReviewPayment> {
                               plan = argument['plan'];
                               await makePayPallPayment(plan);
                             },
+                            labelStyle: const TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w700,
+                              fontSize: 18,
+                            ),
                             label: 'Pay with PayPal',
                           )
                         ] else if (initPlan == 'Apple Pay') ...[
