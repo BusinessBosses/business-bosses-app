@@ -409,12 +409,12 @@ class _ReviewPaymentState extends State<ReviewPayment> {
                             ),
                           ),
                         ] else if (initPlan == 'PayPal') ...[
-                          ElevatedButton(
+                          MyButton(
                             onPressed: () async {
                               plan = argument['plan'];
                               await makePayPallPayment(plan);
                             },
-                            child: Text('Pay with PayPal'),
+                            label: 'Pay with PayPal',
                           )
                         ] else if (initPlan == 'Apple Pay') ...[
                           Container(
