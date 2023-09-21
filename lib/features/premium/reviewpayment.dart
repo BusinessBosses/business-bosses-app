@@ -163,16 +163,28 @@ class _ReviewPaymentState extends State<ReviewPayment> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Padding(
-                    padding: EdgeInsets.only(left: 8.0),
-                    child: CircleAvatar(
-                      radius: 14,
-                      backgroundColor: Color(0xFFF01C29),
-                      child: CircleAvatar(
-                        radius: 6,
-                        backgroundColor: Colors.white,
+                  const Row(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(left: 8.0),
+                        child: CircleAvatar(
+                          radius: 14,
+                          backgroundColor: Color(0xFFF01C29),
+                          child: CircleAvatar(
+                            radius: 6,
+                            backgroundColor: Colors.white,
+                          ),
+                        ),
                       ),
-                    ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      TextWidget(
+                        text: 'About Selected Plan',
+                        size: 18,
+                        fontWeight: FontWeight.w700,
+                      )
+                    ],
                   ),
                   const SizedBox(
                     height: 10,

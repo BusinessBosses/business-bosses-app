@@ -1,0 +1,79 @@
+{
+  "identifier" : "8650985C",
+  "nonRenewingSubscriptions" : [
+
+  ],
+  "products" : [
+
+  ],
+  "settings" : {
+    "_applicationInternalID" : "1569332982",
+    "_developerTeamID" : "AUK83G2M9D",
+    "_lastSynchronizedDate" : 716981006.76615703
+  },
+  "subscriptionGroups" : [
+    {
+      "id" : "21390455",
+      "localizations" : [
+
+      ],
+      "name" : "Premium Subscription",
+      "subscriptions" : [
+        {
+          "adHocOffers" : [
+
+          ],
+          "codeOffers" : [
+
+          ],
+          "displayPrice" : "49.99",
+          "familyShareable" : false,
+          "groupNumber" : 2,
+          "internalID" : "6467143175",
+          "introductoryOffer" : null,
+          "localizations" : [
+            {
+              "description" : "Enjoy a premium boss experience at $49.99/yr",
+              "displayName" : "Premium Subscription (Annual)",
+              "locale" : "en_US"
+            }
+          ],
+          "productID" : "1yr",
+          "recurringSubscriptionPeriod" : "P1Y",
+          "referenceName" : "Annual Subscription",
+          "subscriptionGroupID" : "21390455",
+          "type" : "RecurringSubscription"
+        },
+        {
+          "adHocOffers" : [
+
+          ],
+          "codeOffers" : [
+
+          ],
+          "displayPrice" : "4.99",
+          "familyShareable" : false,
+          "groupNumber" : 1,
+          "internalID" : "6467142927",
+          "introductoryOffer" : null,
+          "localizations" : [
+            {
+              "description" : "Enjoy a premium boss experience at $9.99/mon",
+              "displayName" : "Premium Subcription (Monthly)",
+              "locale" : "en_US"
+            }
+          ],
+          "productID" : "1mon",
+          "recurringSubscriptionPeriod" : "P1M",
+          "referenceName" : "Monthly Subscription",
+          "subscriptionGroupID" : "21390455",
+          "type" : "RecurringSubscription"
+        }
+      ]
+    }
+  ],
+  "version" : {
+    "major" : 2,
+    "minor" : 0
+  }
+}
