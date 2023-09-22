@@ -168,7 +168,7 @@ class CreateMarketController extends GetxController {
     } else {
       showSnackbar(
           message: 'Price or Description can\'t be empty',
-          title: 'OOPS!',
+          title: 'Oops!',
           error: true);
       return;
     }

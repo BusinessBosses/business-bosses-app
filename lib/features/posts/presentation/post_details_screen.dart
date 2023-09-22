@@ -141,28 +141,20 @@ class PostDetailsScreen extends StatelessWidget {
                               isVideo: true,
                               // i: postIndex!,
                             )
-                          : Padding(
-                              padding: const EdgeInsets.only(
-                                left: 0,
-                                right: 0,
-                                top: 0,
-                              ),
-                              child:
-                                  post.images != null && post.images!.isNotEmpty
-                                      ? Container(
-                                          height: 200,
-                                          decoration: const BoxDecoration(
-                                            color: Colors.black,
-                                            borderRadius: BorderRadius.all(
-                                              Radius.circular(15),
-                                            ),
-                                          ),
-                                          child: GenericSlider(
-                                            images: post.images!,
-                                          ),
-                                        )
-                                      : null,
-                            ),
+                          : post.images != null && post.images!.isNotEmpty
+                              ? Container(
+                                  height: 200,
+                                  decoration: const BoxDecoration(
+                                    color: Colors.black,
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(15),
+                                    ),
+                                  ),
+                                  child: GenericSlider(
+                                    images: post.images!,
+                                  ),
+                                )
+                              : null,
                     ),
                     PostInteractionsWidget(
                         post: post,
@@ -177,16 +169,16 @@ class PostDetailsScreen extends StatelessWidget {
                       height: 10,
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(right: 15),
+                      padding: const EdgeInsets.only(right: 0),
                       child: Align(
-                        alignment: Alignment.centerRight,
+                        alignment: Alignment.center,
                         child: Padding(
                             padding: const EdgeInsets.only(right: 0),
                             child: post.user!.uid ==
                                     profileController.myProfile.uid
                                 ? post.promote != null && post.promote == true
                                     ? Align(
-                                        alignment: Alignment.centerRight,
+                                        alignment: Alignment.center,
                                         child: GestureDetector(
                                           onTap: () {
                                             navigateTo(context,

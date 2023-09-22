@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:flutter/material.dart';
@@ -295,132 +293,97 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                     ? Padding(
                         padding: const EdgeInsets.only(right: 0, top: 5),
                         child: Container(
-                            height: 40,
-                            decoration: BoxDecoration(
-                              color: const Color(0xFFFFFFFF),
-                              borderRadius: BorderRadius.circular(10),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.grey.withOpacity(0.3),
-                                  spreadRadius: 20,
-                                  blurRadius: 500,
-                                  offset: const Offset(0, 3),
+                          height: 40,
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFFFFFFF),
+                            borderRadius: BorderRadius.circular(10),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.3),
+                                spreadRadius: 20,
+                                blurRadius: 500,
+                                offset: const Offset(0, 3),
+                              ),
+                            ],
+                          ),
+                          child: Row(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                  left: 10,
                                 ),
-                              ],
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 10),
-                                  child: GestureDetector(
-                                    onTap: () async {
-                                      if (await canLaunchUrl(Uri.parse(
-                                          homeController.bossUpLink))) {
-                                        await launchUrl(Uri.parse(
-                                            homeController.bossUpLink));
-                                      }
-                                    },
-                                    child: Text(
-                                      homeController.bossUpTitle.toString(),
-                                      style: const TextStyle(fontSize: 11),
+                                child: Center(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(2),
+                                    child: GestureDetector(
+                                      onTap: () async {
+                                        if (await canLaunchUrl(Uri.parse(
+                                            homeController.bossUpLink))) {
+                                          await launchUrl(Uri.parse(
+                                              homeController.bossUpLink));
+                                        }
+                                      },
+                                      child: Text(
+                                        homeController.bossUpTitle.toString(),
+                                        style: const TextStyle(fontSize: 11),
+                                      ),
                                     ),
                                   ),
                                 ),
-                                const SizedBox(width: 10),
-                                Platform.isIOS
-                                    ? Padding(
-                                        padding: const EdgeInsets.only(
-                                            left: 0.0, bottom: 4),
-                                        child: Text(
-                                          '|',
-                                          style: TextStyle(
-                                            fontSize: 20,
-                                            color: textColor.withOpacity(0.5),
-                                          ),
-                                        ),
-                                      )
-                                    : Text(
-                                        '|',
-                                        style: TextStyle(
-                                          fontSize: 20,
-                                          color: textColor.withOpacity(0.5),
-                                        ),
-                                      ),
-                                const SizedBox(width: 10),
-                                GestureDetector(
-                                  onTap: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (BuildContext context) =>
-                                              const Bossuppartner()),
-                                    );
-                                  },
-                                  child: Platform.isIOS
-                                      ? Padding(
-                                          padding: const EdgeInsets.only(
-                                            bottom: 2.0,
-                                          ),
-                                          child: Text(
-                                            homeController.bossUp != null &&
-                                                    homeController
-                                                        .bossUp!.isNotEmpty
-                                                ? homeController.bossUp!
-                                                        .last['companyName'] ??
-                                                    ''
-                                                : '',
-                                            style: const TextStyle(
-                                              fontSize: 15,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                            overflow: TextOverflow.ellipsis,
-                                            softWrap: false,
-                                          ),
-                                        )
-                                      : Text(
-                                          homeController.bossUp != null &&
-                                                  homeController
-                                                      .bossUp!.isNotEmpty
-                                              ? homeController.bossUp!
-                                                      .last['companyName'] ??
-                                                  ''
-                                              : '',
-                                          style: const TextStyle(
-                                            fontSize: 15,
-                                            // fontWeight: FontWeight.bold,
-                                          ),
-                                          overflow: TextOverflow.ellipsis,
-                                          softWrap: false,
-                                        ),
+                              ),
+                              const SizedBox(width: 10),
+                              Text(
+                                '|',
+                                style: TextStyle(
+                                    fontSize: 20,
+                                    color: textColor.withOpacity(0.5)),
+                              ),
+                              const SizedBox(width: 10),
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (BuildContext context) =>
+                                            const Bossuppartner()),
+                                  );
+                                },
+                                child: Text(
+                                  homeController.bossUp != null &&
+                                          homeController.bossUp!.isNotEmpty
+                                      ? homeController
+                                              .bossUp!.last['companyName'] ??
+                                          ''
+                                      : '',
+                                  style: const TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                  softWrap: false,
                                 ),
-                                const Spacer(),
-                                GestureDetector(
-                                  onTap: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (BuildContext context) =>
-                                              const Bossuppartner()),
-                                    );
-                                  },
-                                  child: Platform.isIOS
-                                      ? Padding(
-                                          padding: const EdgeInsets.only(
-                                              right: 10.0),
-                                          child: SvgPicture.asset(
-                                            'assets/svgs/nexticon.svg',
-                                            color: textColor,
-                                          ),
-                                        )
-                                      : SvgPicture.asset(
-                                          'assets/svgs/nexticon.svg',
-                                          color: textColor,
-                                        ),
+                              ),
+                              const Spacer(),
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (BuildContext context) =>
+                                            const Bossuppartner()),
+                                  );
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.only(right: 10.0),
+                                  child: SvgPicture.asset(
+                                    'assets/svgs/nexticon.svg',
+                                    color: textColor,
+                                  ),
                                 ),
-                              ],
-                            )),
+                              )
+                            ],
+                          ),
+                        ),
                       )
                     : const SizedBox(),
               ],

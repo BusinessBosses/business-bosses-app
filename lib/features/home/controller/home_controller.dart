@@ -554,7 +554,10 @@ class HomeController extends GetxController {
       paginationPage(paginationPage.value + 1);
       processPostsAndForumsData(response.data);
     } else {
-      showSnackbar(title: 'OOPS!', message: response.message, error: true);
+      showSnackbar(
+          title: 'OOPS!',
+          message: 'An error occurred, please try again!',
+          error: true);
 
       error(true);
     }
@@ -665,7 +668,7 @@ class HomeController extends GetxController {
       } else {
         showSnackbar(
             title: 'OOPS!',
-            message: 'Check your Internet Connection!',
+            message: 'An error occurred, please try again!',
             error: true);
       }
     }
@@ -713,7 +716,10 @@ class HomeController extends GetxController {
       }
     } else {
       error(true);
-      showSnackbar(title: 'OOPS!', message: response.message, error: true);
+      showSnackbar(
+          title: 'OOPS!',
+          message: 'An error occurred, please try again!',
+          error: true);
     }
 
     refreshing(false);

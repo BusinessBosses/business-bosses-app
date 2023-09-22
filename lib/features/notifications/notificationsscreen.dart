@@ -72,7 +72,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                           height: 80.0,
                           width: 80.0,
                         ),
-                        title: 'OOPS!! Something went Wrong',
+                        title: 'OOPS! Something went Wrong',
                         subTitle: 'Could not get notifications',
                         clickableText: 'Reload',
                         onTap: controller.loadNotifications,

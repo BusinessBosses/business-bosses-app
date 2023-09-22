@@ -13,9 +13,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:get/get_connect/http/src/utils/utils.dart';
+import 'package:jiffy/jiffy.dart';
 import 'package:url_launcher/url_launcher_string.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 
 import '../../../action/action.dart';
 import '../../../common/models/api_response_model.dart';
@@ -27,6 +26,7 @@ import '../../../common/widgets/text_widget.dart';
 import '../../../common/widgets/user_avatar_with_badge.dart';
 import '../../../navigation/routes.dart';
 import '../../../utils/theme/theme.dart';
+import '../../../utils/time_format.dart';
 import '../../../utils/time_format.dart';
 import '../presentation/boost_post_screen.dart';
 import '../presentation/create_post_screen.dart';
@@ -106,6 +106,19 @@ class _PostTileState extends State<PostTile> {
       });
       // connecteds.removeAt(checkConnected);
       await disconnect(widget.post.user!.uid);
+    }
+  }
+
+  String formatCount(int count) {
+    if (count >= 1000) {
+      double countInK = count / 1000;
+      if (countInK >= 1000) {
+        return '${(countInK / 1000).toStringAsFixed(1)}m';
+      } else {
+        return '${countInK.toStringAsFixed(1)}k';
+      }
+    } else {
+      return count.toString();
     }
   }
 
@@ -481,8 +494,14 @@ class _PostTileState extends State<PostTile> {
                         icon: widget.post.likes?.contains(
                                     profileController.myProfile.uid) ==
                                 true
-                            ? SvgPicture.asset('assets/svgs/likefilled.svg')
-                            : SvgPicture.asset('assets/svgs/like.svg'),
+                            ? SvgPicture.asset(
+                                'assets/svgs/likefilled.svg',
+                                height: 15,
+                              )
+                            : SvgPicture.asset(
+                                'assets/svgs/like.svg',
+                                height: 15,
+                              ),
                         label: Text(
                           '${widget.post.likes?.length ?? 0}',
                           style:
@@ -506,7 +525,8 @@ class _PostTileState extends State<PostTile> {
                             ),
                           );
                         },
-                        icon: SvgPicture.asset('assets/svgs/comment.svg'),
+                        icon: SvgPicture.asset('assets/svgs/comment.svg',
+                            height: 15),
                         label: Text(
                           '${widget.post.comments?.length ?? 0}',
                           style:
@@ -535,8 +555,14 @@ class _PostTileState extends State<PostTile> {
                         icon: widget.post.coins?.contains(
                                     profileController.myProfile.uid) ==
                                 true
-                            ? SvgPicture.asset('assets/svgs/coin.svg')
-                            : SvgPicture.asset('assets/svgs/coin.svg'),
+                            ? SvgPicture.asset(
+                                'assets/svgs/coin.svg',
+                                height: 20,
+                              )
+                            : SvgPicture.asset(
+                                'assets/svgs/coin.svg',
+                                height: 20,
+                              ),
                         label: Text(
                           '${widget.post.coins?.length ?? 0}',
                           style:
@@ -550,9 +576,9 @@ class _PostTileState extends State<PostTile> {
                     TextButton.icon(
                       onPressed: () async {},
                       icon: const Icon(Icons.remove_red_eye_outlined,
-                          color: Colors.black),
+                          size: 19, color: Colors.black),
                       label: Text(
-                        '${widget.post.views ?? 0}',
+                        '${formatCount(widget.post.views!) ?? 0}',
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                               fontWeight: FontWeight.w700,
                               color: textColor.withOpacity(0.8),
@@ -564,8 +590,8 @@ class _PostTileState extends State<PostTile> {
                       onTap: () => _sharePost(),
                       child: SvgPicture.asset(
                         'assets/svgs/share.svg',
-                        height: 18.0,
-                        width: 18.0,
+                        height: 15.0,
+                        width: 15.0,
                       ),
                     ),
                     const Spacer(),

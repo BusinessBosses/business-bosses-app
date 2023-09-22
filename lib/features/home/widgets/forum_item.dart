@@ -3,6 +3,7 @@ import 'package:business_bosses_v2/features/forum/models/forum_model.dart';
 import 'package:business_bosses_v2/features/forum/widgets/bossup_like_comment.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/utils/time_format.dart';
+import 'package:business_bosses_v2/utils/time_format.dart';
 import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
 import 'package:detectable_text_field/widgets/detectable_text.dart';
 import 'package:flutter/material.dart';
@@ -670,8 +671,14 @@ class _ForumItemState extends State<ForumItem> {
                           icon: widget.forum.likes?.contains(
                                       profileController.myProfile.uid) ==
                                   true
-                              ? SvgPicture.asset('assets/svgs/likefilled.svg')
-                              : SvgPicture.asset('assets/svgs/like.svg'),
+                              ? SvgPicture.asset(
+                                  'assets/svgs/likefilled.svg',
+                                  height: 15,
+                                )
+                              : SvgPicture.asset(
+                                  'assets/svgs/like.svg',
+                                  height: 15,
+                                ),
                           label: Text(
                             '${widget.forum.likes?.length ?? 0}',
                             style: Theme.of(context)
@@ -706,7 +713,10 @@ class _ForumItemState extends State<ForumItem> {
                                     ),
                                   );
                           },
-                          icon: SvgPicture.asset('assets/svgs/comment.svg'),
+                          icon: SvgPicture.asset(
+                            'assets/svgs/comment.svg',
+                            height: 15,
+                          ),
                           label: Text(
                             '${widget.forum.comments!.length}',
                             style: Theme.of(context)
@@ -733,8 +743,14 @@ class _ForumItemState extends State<ForumItem> {
                                 icon: widget.forum.coins?.contains(
                                             profileController.myProfile.uid) !=
                                         true
-                                    ? SvgPicture.asset('assets/svgs/coin.svg')
-                                    : SvgPicture.asset('assets/svgs/coin.svg'),
+                                    ? SvgPicture.asset(
+                                        'assets/svgs/coin.svg',
+                                        height: 20,
+                                      )
+                                    : SvgPicture.asset(
+                                        'assets/svgs/coin.svg',
+                                        height: 20,
+                                      ),
                                 label: Text(
                                   '${widget.forum.coins?.length ?? 0}',
                                   style: Theme.of(context)
@@ -768,7 +784,7 @@ class _ForumItemState extends State<ForumItem> {
                         TextButton.icon(
                           onPressed: () async {},
                           icon: const Icon(Icons.remove_red_eye_outlined,
-                              color: Colors.black),
+                              size: 19, color: Colors.black),
                           label: Text(
                             '${widget.forum.views ?? 0}',
                             style: Theme.of(context)
@@ -785,8 +801,8 @@ class _ForumItemState extends State<ForumItem> {
                           onTap: () => _sharePost(),
                           child: SvgPicture.asset(
                             'assets/svgs/share.svg',
-                            height: 18.0,
-                            width: 18.0,
+                            height: 15.0,
+                            width: 15.0,
                             color: textColor.withOpacity(1.0),
                           ),
                         ),
