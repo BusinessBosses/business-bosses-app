@@ -89,28 +89,28 @@ class _PremiumScreenState extends State<PremiumScreen> {
     }
   }
 
-  // ///intialize the payment
-  // Future<void> makePayment() async {
-  //   setState(() {
-  //     _isProcessing = true;
-  //   });
-  //   final ApiResponseModel res =
-  //       await ApiService.post(path: 'subscription', body: {
-  //     'price': plans[_currentIndex]['price'],
-  //     'plan': plans[_currentIndex]['plan'],
-  //   });
+  ///intialize the payment
+  Future<void> makePayment() async {
+    setState(() {
+      _isProcessing = true;
+    });
+    final ApiResponseModel res =
+        await ApiService.post(path: 'subscription', body: {
+      'price': plans[_currentIndex]['price'],
+      'plan': plans[_currentIndex]['plan'],
+    });
 
-  //   if (res.success) {
-  //     if (await canLaunchUrlString(res.data)) {
-  //       await launchUrlString(res.data, mode: LaunchMode.externalApplication);
-  //     }
-  //   } else {
-  //     showSnackBar(context, message: res.message);
-  //   }
-  //   setState(() {
-  //     _isProcessing = false;
-  //   });
-  // }
+    if (res.success) {
+      if (await canLaunchUrlString(res.data)) {
+        await launchUrlString(res.data, mode: LaunchMode.externalApplication);
+      }
+    } else {
+      showSnackBar(context, message: res.message);
+    }
+    setState(() {
+      _isProcessing = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -334,9 +334,14 @@ class _PremiumScreenState extends State<PremiumScreen> {
                             CustomButton(
                               // isProcessing: _isProcessing,
                               margin: const EdgeInsets.all(2.0),
-                              label: 'Continue',
-                              onPressed: () => Get.toNamed(Routes.reviewpayment,
-                                  arguments: plans[_currentIndex]),
+                              label: _currentIndex == 0
+                                  ? 'Subscribe at \$4.99'
+                                  : 'Subscribe at \$49.99',
+                              onPressed: () async {
+                                await makePayment();
+                              },
+                              // onPressed: () => Get.toNamed(Routes.reviewpayment,
+                              //     arguments: plans[_currentIndex]),
                               buttonType: ButtonType.elevated,
                               child: Container(),
                             ),
