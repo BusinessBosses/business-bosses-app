@@ -16,6 +16,7 @@ import '../../common/widgets/buttons/my_button.dart';
 import '../../common/widgets/text_widget.dart';
 import '../../navigation/routes.dart';
 import '../../services/api_service.dart';
+import '../../utils/constants/constants.dart';
 import '../../utils/theme/theme.dart';
 import 'package:http/http.dart' as http;
 
@@ -54,6 +55,30 @@ class _ReviewPaymentState extends State<ReviewPayment> {
     setState(() {
       _isProcessing = false;
     });
+  }
+
+  void sendPaymentData(Map data, String baseUrl) async {
+    Map<String, dynamic> paymentData = {
+      'price': argument['price'],
+      'plan': argument['plan'],
+      'token': data['token'],
+    };
+
+    String jsonString = jsonEncode(paymentData);
+
+    final response = await http.post(
+      Uri.parse('$baseUrl/subscription/payment'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonString,
+    );
+
+    if (response.statusCode == 200) {
+      print('Payment successful!');
+    } else {
+      print('Failed to send payment data. Status code: ${response.statusCode}');
+    }
   }
 
   ///intialize the payment
@@ -111,38 +136,6 @@ class _ReviewPaymentState extends State<ReviewPayment> {
 
   late String initPlan = '';
   late String plan = '';
-
-  Future<void> sendPaymentTokenToWebhook(String paymentToken) async {
-    final Map<String, dynamic> requestBody = {
-      'paymentToken': paymentToken,
-      'userid': profileController.myProfile.uid,
-    };
-
-    try {
-      final http.Response response = await http.post(
-        Uri.parse(
-            'https://orca-app-5dg8w.ondigitalocean.app/api/v1/payment/apple-checkout/webhook'),
-        body: jsonEncode(requestBody), // Convert to JSON string
-        headers: <String, String>{
-          'Content-Type': 'application/json',
-        },
-      );
-
-      if (response.statusCode == 200) {
-        showSnackbar(
-            title: 'Success',
-            message: 'Payment made successfully',
-            error: false);
-        Get.to(Routes.subscriptionconfirmation);
-      }
-    } catch (e) {
-      showSnackbar(
-          title: 'OOPS!',
-          message: 'An error occurred, please try again!',
-          error: true);
-      print(e);
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -450,11 +443,11 @@ class _ReviewPaymentState extends State<ReviewPayment> {
                                 ],
                                 style: ApplePayButtonStyle.black,
                                 type: ApplePayButtonType.subscribe,
-                                onPaymentResult: (value) {
-                                  print('success');
+                                onPaymentResult: (Map data) {
+                                  sendPaymentData(data, Constants.baseUrl);
                                 },
                                 onError: (error) {
-                                  print('error');
+                                  print(error);
                                 },
                                 loadingIndicator: const Center(
                                   child: CircularProgressIndicator(),
