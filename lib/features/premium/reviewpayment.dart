@@ -66,10 +66,11 @@ class _ReviewPaymentState extends State<ReviewPayment> {
 
     String jsonString = jsonEncode(paymentData);
 
-    final response = await http.post(
+    http.Response response = await http.post(
       Uri.parse('$baseUrl/subscription/payment'),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
+      headers: {
+        'Authorization': 'Bearer ${dotenv.env['STRIPE_SEC_KEY']}',
+        'Content-Type': 'application/x-www-form-urlencoded'
       },
       body: jsonString,
     );
