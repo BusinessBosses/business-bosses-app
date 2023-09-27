@@ -337,11 +337,11 @@ class _PremiumScreenState extends State<PremiumScreen> {
                               label: _currentIndex == 0
                                   ? 'Subscribe at \$4.99'
                                   : 'Subscribe at \$49.99',
-                              onPressed: () async {
-                                await makePayment();
-                              },
-                              // onPressed: () => Get.toNamed(Routes.reviewpayment,
-                              //     arguments: plans[_currentIndex]),
+                              // onPressed: () async {
+                              //   await makePayment();
+                              // },
+                              onPressed: () => Get.toNamed(Routes.reviewpayment,
+                                  arguments: plans[_currentIndex]),
                               buttonType: ButtonType.elevated,
                               child: Container(),
                             ),

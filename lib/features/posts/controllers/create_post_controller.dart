@@ -37,21 +37,17 @@ class CreatePostController extends GetxController {
   ///   VALIDATE CREATE POST DATA
   bool validateCreatePostData(Map<String, dynamic> data) {
     final String title = data['title'].toString();
-    if (title.isEmpty) {
-      return false;
-    }
 
     final RegExp invisibleCharacterPattern = RegExp(r'[^\s\w]');
 
     if (invisibleCharacterPattern.hasMatch(title)) {
       return false;
     }
-
     if (title.isEmpty && imageFileList.isEmpty) {
       return false;
+    } else {
+      return true;
     }
-
-    return true;
   }
 
   /// UPLOAD FILE TO REMOTE SERVER
