@@ -84,23 +84,27 @@ class _ReviewPaymentState extends State<ReviewPayment> {
 
   ///intialize the payment
   Future<void> makePayPallPayment(String plan) async {
-    setState(() {
-      _isProcessing = true;
-    });
-    final ApiResponseModel res = await ApiService.get(
-      path: 'payment/plan/$plan',
-    );
+    try {
+      setState(() {
+        _isProcessing = true;
+      });
+      final ApiResponseModel res = await ApiService.get(
+        path: 'payment/plan/$plan',
+      );
 
-    if (res.success) {
-      if (await canLaunchUrlString(res.data)) {
-        await launchUrlString(res.data, mode: LaunchMode.externalApplication);
+      if (res.success) {
+        if (await canLaunchUrlString(res.data)) {
+          await launchUrlString(res.data, mode: LaunchMode.externalApplication);
+        }
+      } else {
+        showSnackBar(context, message: res.message);
       }
-    } else {
-      showSnackBar(context, message: res.message);
+      setState(() {
+        _isProcessing = false;
+      });
+    } catch (e) {
+      print("Error occurred $e");
     }
-    setState(() {
-      _isProcessing = false;
-    });
   }
 
   List<Map<String, dynamic>> applepayplans = <Map<String, dynamic>>[
