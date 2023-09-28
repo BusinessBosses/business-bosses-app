@@ -238,9 +238,11 @@ class HomeController extends GetxController {
   /// LIKE AND UNLIKE FUNCTION
   void postLike(String userId, String postId, String type, String receiverUid) {
     if (type == 'post') {
+      //Non-sponsored posts
       final int postIndex = mixedPosts.indexWhere((Map<String, dynamic> post) =>
           post['shouldCount'] == null &&
           !post['isForum'] &&
+          !post['isSponsored'] &&
           post['data'].postId == postId);
       if (postIndex != -1) {
         final bool checkLiked =
@@ -251,6 +253,25 @@ class HomeController extends GetxController {
               .removeWhere((element) => element == userId);
         } else {
           mixedPosts[postIndex]['data'].likes!.add(userId);
+        }
+      }
+
+      //Sponsored posts
+      final int spIndex = sponsoredPosts.indexWhere(
+          (Map<String, dynamic> post) =>
+              post['shouldCount'] == null &&
+              !post['isForum'] &&
+              post['isSponsored'] &&
+              post['data'].postId == postId);
+      if (spIndex != -1) {
+        final bool checkLiked =
+            sponsoredPosts[spIndex]['data'].likes!.contains(userId);
+        if (checkLiked) {
+          sponsoredPosts[spIndex]['data']
+              .likes!
+              .removeWhere((element) => element == userId);
+        } else {
+          sponsoredPosts[spIndex]['data'].likes!.add(userId);
         }
       }
     } else {
@@ -292,19 +313,40 @@ class HomeController extends GetxController {
   /// COMMENT FUNCTION
   void comment(String postId, CommentModel comment, String type) {
     int postIndex;
+    int spIndex;
     if (type == 'post') {
+      //non-sponsored posts
       postIndex = mixedPosts.indexWhere((Map<String, dynamic> post) =>
           post['shouldCount'] == null &&
           !post['isForum'] &&
+          !post['isSponsored'] &&
+          post['data'].postId == postId);
+
+      //sponsored posts
+      spIndex = sponsoredPosts.indexWhere((Map<String, dynamic> post) =>
+          post['shouldCount'] == null &&
+          !post['isForum'] &&
+          post['isSponsored'] &&
           post['data'].postId == postId);
     } else {
+      //non-sponsored posts
       postIndex = mixedPosts.indexWhere((Map<String, dynamic> post) =>
           post['shouldCount'] == null &&
           post['isForum'] &&
+          !post['isSponsored'] &&
+          post['data'].forumId == postId);
+
+      //sponsored posts
+      spIndex = sponsoredPosts.indexWhere((Map<String, dynamic> post) =>
+          post['shouldCount'] == null &&
+          post['isForum'] &&
+          post['isSponsored'] &&
           post['data'].forumId == postId);
     }
     if (postIndex != -1) {
       mixedPosts[postIndex]['data'].comments!.add(comment);
+    } else if (spIndex != -1) {
+      sponsoredPosts[spIndex]['data'].comments!.add(comment);
     }
     update();
   }
@@ -313,9 +355,11 @@ class HomeController extends GetxController {
   void postCoin(String userId, String postId,
       ProfileController profileController, String type, String receiverUid) {
     if (type == 'post') {
+      //Non-sponsored Posts
       final int postIndex = mixedPosts.indexWhere((Map<String, dynamic> item) =>
           item['shouldCount'] == null &&
           !item['isForum'] &&
+          !item['isSponsored'] &&
           item['data'].postId == postId);
       if (postIndex != -1) {
         final bool checkIfCoined =
@@ -328,6 +372,27 @@ class HomeController extends GetxController {
         } else {
           profileController.updateCoinCount(-1);
           mixedPosts[postIndex]['data'].coins!.add(userId);
+        }
+      }
+
+      //sponsored posts
+      final int spIndex = sponsoredPosts.indexWhere(
+          (Map<String, dynamic> item) =>
+              item['shouldCount'] == null &&
+              !item['isForum'] &&
+              item['isSponsored'] &&
+              item['data'].postId == postId);
+      if (spIndex != -1) {
+        final bool checkIfCoined =
+            sponsoredPosts[spIndex]['data'].coins!.contains(userId);
+        if (checkIfCoined) {
+          profileController.updateCoinCount(1);
+          sponsoredPosts[spIndex]['data']
+              .coins!
+              .removeWhere((String element) => element == userId);
+        } else {
+          profileController.updateCoinCount(-1);
+          sponsoredPosts[spIndex]['data'].coins!.add(userId);
         }
       }
     } else {

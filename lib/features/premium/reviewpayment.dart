@@ -57,50 +57,49 @@ class _ReviewPaymentState extends State<ReviewPayment> {
     });
   }
 
-  void sendPaymentData(Map data, String baseUrl) async {
+  void sendPaymentData(Map data) async {
     Map<String, dynamic> paymentData = {
       'price': argument['price'],
       'plan': argument['plan'],
       'token': data['token'],
     };
 
-    String jsonString = jsonEncode(paymentData);
+    final ApiResponseModel response =
+        await ApiService.post(path: 'subscription/payment', body: paymentData);
 
-    http.Response response = await http.post(
-      Uri.parse('$baseUrl/subscription/payment'),
-      headers: {
-        'Authorization': 'Bearer ${dotenv.env['STRIPE_SEC_KEY']}',
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
-      body: jsonString,
-    );
-
-    if (response.statusCode == 200) {
-      print('Payment successful!');
+    if (response.success) {
+      Get.toNamed(Routes.subscriptionconfirmation);
     } else {
-      print('Failed to send payment data. Status code: ${response.statusCode}');
+      showSnackbar(
+          title: 'OOPS!',
+          message: 'An error occurred, please try again!',
+          error: true);
     }
   }
 
   ///intialize the payment
   Future<void> makePayPallPayment(String plan) async {
-    setState(() {
-      _isProcessing = true;
-    });
-    final ApiResponseModel res = await ApiService.get(
-      path: 'payment/plan/$plan',
-    );
+    try {
+      setState(() {
+        _isProcessing = true;
+      });
+      final ApiResponseModel res = await ApiService.get(
+        path: 'payment/plan/$plan',
+      );
 
-    if (res.success) {
-      if (await canLaunchUrlString(res.data)) {
-        await launchUrlString(res.data, mode: LaunchMode.externalApplication);
+      if (res.success) {
+        if (await canLaunchUrlString(res.data)) {
+          await launchUrlString(res.data, mode: LaunchMode.externalApplication);
+        }
+      } else {
+        showSnackBar(context, message: res.message);
       }
-    } else {
-      showSnackBar(context, message: res.message);
+      setState(() {
+        _isProcessing = false;
+      });
+    } catch (e) {
+      print("Error occurred $e");
     }
-    setState(() {
-      _isProcessing = false;
-    });
   }
 
   List<Map<String, dynamic>> applepayplans = <Map<String, dynamic>>[
@@ -445,7 +444,7 @@ class _ReviewPaymentState extends State<ReviewPayment> {
                                 style: ApplePayButtonStyle.black,
                                 type: ApplePayButtonType.subscribe,
                                 onPaymentResult: (Map data) {
-                                  sendPaymentData(data, Constants.baseUrl);
+                                  sendPaymentData(data);
                                 },
                                 onError: (error) {
                                   print(error);
