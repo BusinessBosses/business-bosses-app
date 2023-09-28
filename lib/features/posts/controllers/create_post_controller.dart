@@ -38,11 +38,11 @@ class CreatePostController extends GetxController {
   bool validateCreatePostData(Map<String, dynamic> data) {
     final String title = data['title'].toString();
 
-    final RegExp invisibleCharacterPattern = RegExp(r'[^\s\w]');
+    // final RegExp invisibleCharacterPattern = RegExp(r'[^\s\w#]');
 
-    if (invisibleCharacterPattern.hasMatch(title)) {
-      return false;
-    }
+    // if (invisibleCharacterPattern.hasMatch(title)) {
+    //   return false;
+    // }
     if (title.isEmpty && imageFileList.isEmpty) {
       return false;
     } else {
