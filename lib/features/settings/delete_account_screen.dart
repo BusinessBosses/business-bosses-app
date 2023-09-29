@@ -1,4 +1,3 @@
-
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -244,7 +243,7 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
       showSnackBar(context, message: 'Your account has been deactivated');
       _signOut();
     } else {
-      showSnackBar(context, message: 'Error While Deactivation Your Account');
+      showSnackBar(context, message: 'Error While Deactivating Your Account');
     }
 
     setState(() {
