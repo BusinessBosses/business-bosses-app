@@ -619,12 +619,12 @@ class HomeController extends GetxController {
       paginationPage(paginationPage.value + 1);
       processPostsAndForumsData(response.data);
     } else {
-      showSnackbar(
-          title: 'OOPS!',
-          message: 'An error occurred, please try again!',
-          error: true);
+      // showSnackbar(
+      //     title: 'OOPS!',
+      //     message: 'An error occurred, please try again!',
+      //     error: true);
 
-      error(true);
+      // error(true);
     }
 
     if (fromBackground) {
@@ -731,10 +731,10 @@ class HomeController extends GetxController {
       if (response.message == 'send a valid token') {
         showAccessTokenDialog();
       } else {
-        showSnackbar(
-            title: 'OOPS!',
-            message: 'An error occurred, please try again!',
-            error: true);
+        // showSnackbar(
+        //     title: 'OOPS!',
+        //     message: 'An error occurred, please try again!',
+        //     error: true);
       }
     }
 
@@ -781,10 +781,10 @@ class HomeController extends GetxController {
       }
     } else {
       error(true);
-      showSnackbar(
-          title: 'OOPS!',
-          message: 'An error occurred, please try again!',
-          error: true);
+      // showSnackbar(
+      //     title: 'OOPS!',
+      //     message: 'An error occurred, please try again!',
+      //     error: true);
     }
 
     refreshing(false);

@@ -9,6 +9,7 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
 import '../../../action/action.dart';
+import '../../../common/dialogs/snackbar.dart';
 import '../../../common/widgets/buttons/my_button.dart';
 import '../../../common/widgets/text_widget.dart';
 import '../../../utils/theme/theme.dart';
@@ -114,12 +115,12 @@ class _BoostPostState extends State<BoostPost> {
       http.Response res = await http.post(
           Uri.parse('https://api.stripe.com/v1/payment_intents'),
           body: body,
-          headers: <String, String>{
+          headers: {
             'Authorization': 'Bearer ${dotenv.env['STRIPE_SEC_KEY']}',
             'Content-Type': 'application/x-www-form-urlencoded'
           });
 
-      log(res.body);
+      // log(res.body);
 
       return jsonDecode(res.body);
     } catch (e) {
@@ -128,8 +129,10 @@ class _BoostPostState extends State<BoostPost> {
       });
       log('Here ->>>>>> $e');
 
-      // ignore: use_build_context_synchronously
-      showSnackBar(context, message: 'Opps!! Something went wrong. Try again');
+      showSnackbar(
+          title: 'OOPS!',
+          message: 'An error occurred, please try again!',
+          error: true);
     }
   }
 

@@ -13,6 +13,7 @@ import 'package:url_launcher/url_launcher_string.dart';
 import 'package:yaml/yaml.dart';
 
 import '../../action/action.dart';
+import '../../common/dialogs/snackbar.dart';
 import '../../common/models/api_response_model.dart';
 import '../../navigation/routes.dart';
 import '../../services/api_service.dart';
@@ -45,7 +46,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
         await launchUrlString(res.data, mode: LaunchMode.externalApplication);
       }
     } else {
-      showSnackBar(context, message: res.message);
+      showSnackbar(
+          title: 'OOPS!',
+          message: 'An error occurred, please try again!',
+          error: true);
     }
     // setState(() {
     //   _isProcessing = false;
@@ -296,7 +300,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                                       color: Colors.white,
                                                     ),
                                                   )
-                                                : const Text('Cancel Subscription'),
+                                                : const Text(
+                                                    'Cancel Subscription'),
                                           ),
                                           const SizedBox(
                                             width: 10,
@@ -417,7 +422,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
         throw 'Could not launch $mailUrl';
       }
     } catch (e) {
-      showSnackBar(context, message: '${Constants.STGW}, try again later');
+      showSnackbar(
+          title: 'OOPS!',
+          message: 'An error occurred, please try again!',
+          error: true);
     }
   }
 

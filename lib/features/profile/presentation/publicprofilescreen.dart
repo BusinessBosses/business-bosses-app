@@ -150,7 +150,7 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
           },
           icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
         ),
-        title: Text(publicUser.username),
+        title: Text('@${publicUser.username}'),
         actions: [
           publicUser.uid != _profileController.myProfile.uid
               ? Padding(
