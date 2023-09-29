@@ -10,6 +10,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 
 import '../../../action/action.dart';
+import '../../../common/dialogs/snackbar.dart';
 import '../../../common/widgets/buttons/my_button.dart';
 import '../../../common/widgets/text_widget.dart';
 import '../../../utils/theme/theme.dart';
@@ -129,7 +130,10 @@ class _BoostPostState extends State<BoostPost> {
       });
       log('Here ->>>>>> $e');
 
-      showSnackBar(context, message: 'Opps!! Something went wrong. Try again');
+        showSnackbar(
+          title: 'OOPS!',
+          message: 'An error occurred, please try again!',
+          error: true);
     }
   }
 

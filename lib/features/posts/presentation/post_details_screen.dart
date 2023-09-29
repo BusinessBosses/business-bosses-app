@@ -8,6 +8,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 import '../../../action/action.dart';
+import '../../../common/dialogs/snackbar.dart';
 import '../../../common/generic_slider.dart';
 import '../../../common/models/my_response.dart';
 import '../../../common/widgets/text_widget.dart';
@@ -270,7 +271,10 @@ class PostDetailsScreen extends StatelessWidget {
       BuildContext context, LinkableElement linkableElement) async {
     MyResponse res = await MyNativeFunctions.onUrlLaunch(linkableElement.url);
     if (!res.success) {
-      showSnackBar(context, message: res.message);
+      showSnackbar(
+          title: 'OOPS!',
+          message: 'An error occurred, please try again!',
+          error: true);
     }
   }
 

@@ -9,6 +9,7 @@ import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../../utils/theme/theme.dart';
 import '../../action/action.dart';
+import '../../common/dialogs/snackbar.dart';
 import '../../common/models/api_response_model.dart';
 import '../../common/widgets/buttons/custom_button.dart';
 import '../marketplace/presentation/subscription_confirmation.dart';
@@ -85,7 +86,11 @@ class _PremiumScreenState extends State<PremiumScreen> {
       });
       log('Here ->>>>>> $e');
 
-      showSnackBar(context, message: 'Opps!! Something went wrong. Try again');
+      showSnackbar(
+          title: 'OOPS!',
+          message: 'An error occurred, please try again!',
+          error: true);
+      ;
     }
   }
 
@@ -105,7 +110,10 @@ class _PremiumScreenState extends State<PremiumScreen> {
         await launchUrlString(res.data, mode: LaunchMode.externalApplication);
       }
     } else {
-      showSnackBar(context, message: res.message);
+      showSnackbar(
+          title: 'OOPS!',
+          message: 'An error occurred, please try again!',
+          error: true);
     }
     setState(() {
       _isProcessing = false;

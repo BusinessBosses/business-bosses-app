@@ -90,11 +90,17 @@ class ApiService {
       if (result['success']) {
         return result;
       } else {
-        showSnackbar(message: result['message'], title: 'Error Occured');
+        showSnackbar(
+            title: 'OOPS!',
+            message: 'An error occurred, please try again!',
+            error: true);
         return null;
       }
     } catch (e) {
-      showSnackbar(message: e.toString());
+      showSnackbar(
+          title: 'OOPS!',
+          message: 'An error occurred, please try again!',
+          error: true);
       return null;
     }
   }
@@ -210,7 +216,10 @@ class ApiService {
       log(response.body);
       return ApiResponseModel.fromMap(jsonDecode(response.body));
     } catch (e) {
-      showSnackbar(message: e.toString());
+      showSnackbar(
+          title: 'OOPS!',
+          message: 'An error occurred, please try again!',
+          error: true);
       return ApiResponseModel(success: false, message: e.toString(), data: {});
     }
   }
@@ -235,10 +244,10 @@ class ApiService {
 
       return ApiResponseModel.fromMap(jsonDecode(response.body));
     } catch (e) {
-      showSnackbar(
-          title: 'OOPS!',
-          message: 'An error occurred, please try again!',
-          error: true);
+      // showSnackbar(
+      //     title: 'OOPS!',
+      //     message: 'An error occurred, please try again!',
+      //     error: true);
       return ApiResponseModel(success: false, message: e.toString(), data: {});
     }
   }
@@ -264,10 +273,10 @@ class ApiService {
 
       return ApiResponseModel.fromMap(jsonDecode(response.body));
     } catch (e) {
-      showSnackbar(
-          title: 'OOPS!',
-          message: 'An error occurred, please try again!',
-          error: true);
+      // showSnackbar(
+      //     title: 'OOPS!',
+      //     message: 'An error occurred, please try again!',
+      //     error: true);
       return ApiResponseModel(success: false, message: e.toString(), data: {});
     }
   }

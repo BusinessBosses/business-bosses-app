@@ -6,6 +6,7 @@ import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:get/get.dart';
 
 import '../../../action/action.dart';
+import '../../../common/dialogs/snackbar.dart';
 import '../../../common/models/my_response.dart';
 import '../../../common/widgets/network_image_with_placeholder.dart';
 import '../../../common/widgets/popup/my_popup_menu_button.dart';
@@ -177,7 +178,10 @@ class PostGridItem extends StatelessWidget {
       BuildContext context, LinkableElement linkableElement) async {
     MyResponse res = await MyNativeFunctions.onUrlLaunch(linkableElement.url);
     if (!res.success) {
-      showSnackBar(context, message: res.message);
+      showSnackbar(
+          title: 'OOPS!',
+          message: 'An error occurred, please try again!',
+          error: true);
     }
   }
 
