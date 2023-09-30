@@ -129,7 +129,7 @@ class _BoostPostState extends State<BoostPost> {
       });
       log('Here ->>>>>> $e');
 
-        showSnackbar(
+      showSnackbar(
           title: 'OOPS!',
           message: 'An error occurred, please try again!',
           error: true);
@@ -175,9 +175,9 @@ class _BoostPostState extends State<BoostPost> {
           paymentSheetParameters: SetupPaymentSheetParameters(
             paymentIntentClientSecret: paymantIntent!['client_secret'],
             merchantDisplayName: 'Business Bosses',
-            applePay: const PaymentSheetApplePay(
-              merchantCountryCode: 'US',
-            ),
+            // applePay: const PaymentSheetApplePay(
+            //   merchantCountryCode: 'US',
+            // ),
           ),
         )
             .then((void value) {
