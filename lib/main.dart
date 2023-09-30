@@ -33,7 +33,7 @@ void main() async {
   Stripe.merchantIdentifier = 'merchant.businessbosses';
 
   Stripe.publishableKey =
-      'pk_test_51MAcspEGsMsi6baUQ14KJlYZVcpaKiRtC5wnN42Jq3vOl68JwSahkzoiUOrOh9zGyG9nDj1bML8jOlfwMDai51Rm00vWZoIAgE';
+      'pk_live_51MAcspEGsMsi6baUVnDR3Vlfh14vm73Oz9Z4LwYcvzOTdd6AvRRHrGCkpIoYmTfe2iSXm7ju2RQtO4UYJTvodFPR008RO7V1j3';
 
   FirebaseMessaging.instance.getToken().then((String? value) {
     // print(value);
