@@ -129,7 +129,7 @@ class _BoostPostState extends State<BoostPost> {
       });
       log('Here ->>>>>> $e');
 
-        showSnackbar(
+      showSnackbar(
           title: 'OOPS!',
           message: 'An error occurred, please try again!',
           error: true);
