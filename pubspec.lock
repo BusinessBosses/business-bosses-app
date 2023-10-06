@@ -41,6 +41,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.4.2"
+  asn1lib:
+    dependency: transitive
+    description:
+      name: asn1lib
+      sha256: "21afe4333076c02877d14f4a89df111e658a6d466cbfc802eb705eb91bd5adfd"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.5.0"
   async:
     dependency: transitive
     description:
@@ -209,6 +217,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.6"
+  dbus:
+    dependency: transitive
+    description:
+      name: dbus
+      sha256: "6f07cba3f7b3448d42d015bfd3d53fe12e5b36da2423f23838efc1d5fb31a263"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.7.8"
   detectable_text_field:
     dependency: "direct main"
     description:
@@ -233,6 +249,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "7.0.0"
+  encrypt:
+    dependency: transitive
+    description:
+      name: encrypt
+      sha256: "62d9aa4670cc2a8798bab89b39fc71b6dfbacf615de6cf5001fb39f7e4a996a2"
+      url: "https://pub.dev"
+    source: hosted
+    version: "5.0.3"
   facebook_app_events:
     dependency: "direct main"
     description:
@@ -269,10 +293,10 @@ packages:
     dependency: "direct main"
     description:
       name: file_picker
-      sha256: f9245fc33aeba9e0b938d7f3785f10b7a7230e05b8fc40f5a6a8342d7899e391
+      sha256: be325344c1f3070354a1d84a231a1ba75ea85d413774ec4bdf444c023342e030
       url: "https://pub.dev"
     source: hosted
-    version: "3.0.4"
+    version: "5.5.0"
   file_selector_linux:
     dependency: transitive
     description:
@@ -414,6 +438,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.3.1"
+  flutter_datetime_picker_plus:
+    dependency: "direct main"
+    description:
+      name: flutter_datetime_picker_plus
+      sha256: "3b2ebcd7b4d2c253171dc6ba78a850af7dcb68fd965b9133dd254ff662a9023b"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.1.0"
   flutter_dotenv:
     dependency: "direct main"
     description:
@@ -446,6 +478,19 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.3"
+  flutter_localizations:
+    dependency: transitive
+    description: flutter
+    source: sdk
+    version: "0.0.0"
+  flutter_logs:
+    dependency: transitive
+    description:
+      name: flutter_logs
+      sha256: "0fb84868b02e5880a1488f5282a4e193a1293280b85be7a56e58f29c0d1e6bea"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.1.11"
   flutter_native_splash:
     dependency: "direct dev"
     description:
@@ -534,6 +579,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "9.4.0"
+  flutter_styled_toast:
+    dependency: transitive
+    description:
+      name: flutter_styled_toast
+      sha256: e667f13a665820eb0fa8506547e47eacbcddf1948d6d3036cfd3b089bd4b0516
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.2.1"
   flutter_svg:
     dependency: "direct main"
     description:
@@ -848,6 +901,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.4"
+  native_device_orientation:
+    dependency: transitive
+    description:
+      name: native_device_orientation
+      sha256: "7d2fa1a1420b7b4ac3317760ffd063b86704679fb4f1796644581da4a6356ccc"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.4"
   octo_image:
     dependency: transitive
     description:
@@ -952,6 +1013,38 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.2.1"
+  pay:
+    dependency: "direct main"
+    description:
+      name: pay
+      sha256: d7525538a66af1982a0932d3969416e835a6aeafda59e280ed2d1f410b4aaa09
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.2"
+  pay_android:
+    dependency: transitive
+    description:
+      name: pay_android
+      sha256: "1018a21650109a829bfc35794aa548a087dde5170b14bcb5c603f8b723f985d2"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.11"
+  pay_ios:
+    dependency: transitive
+    description:
+      name: pay_ios
+      sha256: eb83e70282de8aed3ceca31ed045ee1d80bf4b50d331411a9d62ad0428a91808
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.9"
+  pay_platform_interface:
+    dependency: transitive
+    description:
+      name: pay_platform_interface
+      sha256: "12580f960066855d4821c4eaf2ef77093c0b20bce623db33104f76db16642e3b"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.3"
   petitparser:
     dependency: transitive
     description:
@@ -1181,6 +1274,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.11.0"
+  statemachine:
+    dependency: transitive
+    description:
+      name: statemachine
+      sha256: "42ce52468879383c60d4983526114d91282b8b0c36657bc7d58be88975a02982"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.3.1"
   stream_channel:
     dependency: transitive
     description:
@@ -1261,6 +1362,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.6.0"
+  timezone:
+    dependency: "direct main"
+    description:
+      name: timezone
+      sha256: "1cfd8ddc2d1cfd836bc93e67b9be88c3adaeca6f40a00ca999104c30693cdca0"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.9.2"
   typed_data:
     dependency: transitive
     description:
@@ -1437,6 +1546,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.4.0+2"
+  wakelock_plus:
+    dependency: transitive
+    description:
+      name: wakelock_plus
+      sha256: aac3f3258f01781ec9212df94eecef1eb9ba9350e106728def405baa096ba413
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.1"
+  wakelock_plus_platform_interface:
+    dependency: transitive
+    description:
+      name: wakelock_plus_platform_interface
+      sha256: "40fabed5da06caff0796dc638e1f07ee395fb18801fbff3255a2372db2d80385"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.0"
   watcher:
     dependency: transitive
     description:
@@ -1525,6 +1650,62 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.1.2"
+  zego_express_engine:
+    dependency: transitive
+    description:
+      name: zego_express_engine
+      sha256: "8a3f8b4d54404d1b9dddf56d438fa6a6eeee9ba7d6049d8bbb2eb7cf80511f88"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.9.0"
+  zego_plugin_adapter:
+    dependency: transitive
+    description:
+      name: zego_plugin_adapter
+      sha256: "05eb863ed4aa71be79e77cb6169fb26315959c59a33350fa070286d83e37697a"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.7.1"
+  zego_uikit:
+    dependency: transitive
+    description:
+      name: zego_uikit
+      sha256: aa27414e694b7da013fb3f9e328de1b9ed64c0829064bf755624dcc56d367224
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.13.0"
+  zego_uikit_prebuilt_live_audio_room:
+    dependency: "direct main"
+    description:
+      name: zego_uikit_prebuilt_live_audio_room
+      sha256: "0bffc4e6edf591dda90577612d8b80c12ad6e50847dc5b266c7fd83494ac3179"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.11.3"
+  zego_uikit_signaling_plugin:
+    dependency: transitive
+    description:
+      name: zego_uikit_signaling_plugin
+      sha256: "49974bdc0cebc83b908686b378c3b85c4a758c99a0e1e9277e6ffe285929b72b"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.5.2"
+  zego_zim:
+    dependency: transitive
+    description:
+      name: zego_zim
+      sha256: "7389d1b1a86853a0d583a78a2db815456c1ba572c0ddce581f5ede3e5ed60205"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.10.0+4"
+  zego_zpns:
+    dependency: transitive
+    description:
+      name: zego_zpns
+      sha256: "68befac959f12c495fb598e71494c3fbca179b4c2fedc1bc44b8ca42e13b9b78"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.4.0"
 sdks:
   dart: ">=3.1.0-185.0.dev <4.0.0"
   flutter: ">=3.10.0"
