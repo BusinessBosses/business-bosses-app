@@ -5,9 +5,12 @@ import 'dart:math';
 import 'package:business_bosses_v2/action/action.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/features/live_event/controller/live_event_controller.dart';
+import 'package:business_bosses_v2/features/live_event/models/events_model.dart';
 import 'package:business_bosses_v2/features/live_event/widgets/call_room.dart';
+import 'package:business_bosses_v2/features/live_event/widgets/event_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
@@ -26,25 +29,71 @@ class _LiveEventState extends State<LiveEvent> {
     super.initState();
   }
 
+  DateTime selectedDateTime = DateTime.now();
+
+  // void _showDateTimePicker() {
+  //   DatePicker.showDateTimePicker(
+  //     context,
+  //     showTitleActions: true,
+  //     onChanged: (DateTime date) {
+  //       setState(() {
+  //         selectedDateTime = date;
+  //       });
+  //     },
+  //     currentTime: selectedDateTime,
+  //   );
+  // }
+
   @override
   Widget build(BuildContext context) {
     return Builder(
       builder: (BuildContext context) {
         return Scaffold(
           appBar: AppBar(title: const Text('Live Event')),
-          body: Center(
-            child: Column(
-              children: <Widget>[
-                ElevatedButton(
-                  onPressed: () => startLive(context),
-                  child: const Text('Start Live'),
+          body: Column(
+            children: [
+              const SizedBox(
+                height: 10,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  ElevatedButton(
+                    onPressed: () => startLive(context),
+                    child: const Text('Create Event'),
+                  ),
+                  ElevatedButton(
+                    onPressed: () => joinLive(context),
+                    child: const Text('Join'),
+                  ),
+                  // ElevatedButton(
+                  //   onPressed: () => _showDateTimePicker(),
+                  //   child: const Text('Date'),
+                  // ),
+                ],
+              ),
+              const Text(
+                'Upcoming Events',
+                style: TextStyle(fontWeight: FontWeight.w500, fontSize: 21),
+                textAlign: TextAlign.left,
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Obx(
+                () => Expanded(
+                  child: ListView.builder(
+                    itemCount: liveEventController.events.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      EventModel event = liveEventController.events[index];
+                      return EventItem(
+                        event: event,
+                      );
+                    },
+                  ),
                 ),
-                ElevatedButton(
-                  onPressed: () => joinLive(context),
-                  child: const Text('Join Live'),
-                ),
-              ],
-            ),
+              )
+            ],
           ),
         );
       },

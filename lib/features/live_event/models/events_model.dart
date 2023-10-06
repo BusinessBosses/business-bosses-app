@@ -6,8 +6,8 @@ class EventModel {
   final int? id;
   final String? roomId;
   final String? title;
-  final DateTime startAt;
-  final DateTime endAt;
+  final DateTime? startAt;
+  final DateTime? endAt;
   final String? startTime;
   final bool? status;
   final UserModel? user;
@@ -62,10 +62,13 @@ class EventModel {
       id: map['id'] as int,
       title: map['title'] != null ? map['title'] as String : null,
       roomId: map['roomId'] as String,
-      startAt: map['startAt'] as DateTime,
-      endAt: map['endAT'] as DateTime,
+      startAt: map['startAt'] != null
+          ? DateTime.parse(map['startAt'] as String)
+          : null,
+      endAt:
+          map['endAt'] != null ? DateTime.parse(map['endAt'] as String) : null,
       startTime: map['startTime'] as String,
-      status: map['status'] as bool,
+      status: map['status'] != null ? map['status'] as bool : null,
       user: map['user'] != null
           ? UserModel.fromMap(map['user'] as Map<String, dynamic>)
           : null,

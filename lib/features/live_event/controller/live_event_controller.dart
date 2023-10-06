@@ -11,11 +11,10 @@ class LiveController extends GetxController {
     final ApiResponseModel response = await ApiService.get(path: 'event/all');
 
     if (response.success) {
-      var rows = response.data['rows'];
-      for (var row in rows) {
+      List<dynamic> rows = response.data['rows'];
+      for (dynamic row in rows) {
         events.add(EventModel.fromMap(row));
       }
-      print(events);
     }
   }
 
