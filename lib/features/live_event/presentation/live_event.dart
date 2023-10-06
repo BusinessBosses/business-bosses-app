@@ -10,9 +10,14 @@ import 'package:business_bosses_v2/features/live_event/widgets/call_room.dart';
 import 'package:business_bosses_v2/features/live_event/widgets/event_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
+import 'package:timezone/data/latest.dart' as tzdata;
+import 'package:timezone/timezone.dart' as tz;
+
+import 'create_event.dart';
 
 class LiveEvent extends StatefulWidget {
   const LiveEvent({super.key});
@@ -26,23 +31,28 @@ class _LiveEventState extends State<LiveEvent> {
 
   @override
   void initState() {
+    tzdata.initializeTimeZones(); // Initialize time zones
     super.initState();
   }
 
   DateTime selectedDateTime = DateTime.now();
 
-  // void _showDateTimePicker() {
-  //   DatePicker.showDateTimePicker(
-  //     context,
-  //     showTitleActions: true,
-  //     onChanged: (DateTime date) {
-  //       setState(() {
-  //         selectedDateTime = date;
-  //       });
-  //     },
-  //     currentTime: selectedDateTime,
-  //   );
-  // }
+  void _showDateTimePicker() {
+    DatePicker.showDateTimePicker(
+      context,
+      showTitleActions: true,
+      onChanged: (DateTime date) {
+        setState(() {
+          selectedDateTime = date;
+          tz.TZDateTime selectedDateTimeZ = tz.TZDateTime.now(tz.local);
+          final String formattedDateTime =
+              DateFormat('yyyy-MM-ddTHH:mm:ss.SSS').format(selectedDateTimeZ);
+          print(formattedDateTime);
+        });
+      },
+      currentTime: selectedDateTime,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,17 +69,19 @@ class _LiveEventState extends State<LiveEvent> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   ElevatedButton(
-                    onPressed: () => startLive(context),
+                    onPressed: () => Navigator.push(
+                      context,
+                      // ignore: always_specify_types
+                      MaterialPageRoute(
+                        builder: (BuildContext context) => CreateEvent(),
+                      ),
+                    ),
                     child: const Text('Create Event'),
                   ),
                   ElevatedButton(
-                    onPressed: () => joinLive(context),
+                    onPressed: () => joinLive(context, ''),
                     child: const Text('Join'),
                   ),
-                  // ElevatedButton(
-                  //   onPressed: () => _showDateTimePicker(),
-                  //   child: const Text('Date'),
-                  // ),
                 ],
               ),
               const Text(
@@ -100,13 +112,18 @@ class _LiveEventState extends State<LiveEvent> {
     );
   }
 
-  void jumpToLivePage(BuildContext context,
-      {required String roomID, required bool isHost}) {
+  void jumpToLivePage(
+    BuildContext context, {
+    required String roomID,
+    required bool isHost,
+    required String title,
+  }) {
     Navigator.push(
       context,
       // ignore: always_specify_types
       MaterialPageRoute(
         builder: (BuildContext context) => CallRoom(
+          title: title,
           roomID: roomID,
           isHost: isHost,
         ),
@@ -177,13 +194,7 @@ class _LiveEventState extends State<LiveEvent> {
               ),
               ElevatedButton(
                 child: const Text('Start'),
-                onPressed: () {
-                  jumpToLivePage(
-                    context,
-                    roomID: roomID,
-                    isHost: true,
-                  );
-                },
+                onPressed: () {},
               ),
               ElevatedButton(
                 child: const Text('Back'),
@@ -199,7 +210,7 @@ class _LiveEventState extends State<LiveEvent> {
     );
   }
 
-  void joinLive(BuildContext context) {
+  void joinLive(BuildContext context, String title) {
     final TextEditingController roomIDController = TextEditingController();
 
     showModalBottomSheet(
@@ -237,6 +248,7 @@ class _LiveEventState extends State<LiveEvent> {
                   final String enteredRoomID = roomIDController.text;
                   jumpToLivePage(
                     context,
+                    title: title,
                     roomID: enteredRoomID,
                     isHost: false,
                   );

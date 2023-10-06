@@ -78,7 +78,8 @@ dependencies:
   pay: ^1.1.2
   upgrader: ^8.1.0
   zego_uikit_prebuilt_live_audio_room: ^2.11.3
-  flutter_datetime_picker: ^1.5.1
+  flutter_datetime_picker_plus: ^2.1.0
+  timezone: ^0.9.2
 
 dev_dependencies:
   flutter_launcher_icons: ^0.13.1

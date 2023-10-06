@@ -9,17 +9,21 @@ import 'package:zego_uikit_prebuilt_live_audio_room/zego_uikit_prebuilt_live_aud
 class CallRoom extends StatelessWidget {
   final String roomID;
   final bool isHost;
+  final String title;
   final ProfileController profileController = Get.find();
 
-  CallRoom({Key? key, required this.roomID, this.isHost = false})
+  CallRoom(
+      {Key? key,
+      required this.roomID,
+      required this.title,
+      this.isHost = false})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title:
-            const Text('Live Event'), // Display the room title in the app bar
+        title: Text(title), // Display the room title in the app bar
       ),
       body: ZegoUIKitPrebuiltLiveAudioRoom(
         appID: ZegoDetails
