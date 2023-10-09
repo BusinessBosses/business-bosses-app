@@ -255,7 +255,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                                                           child: Container(
                                                             child:
                                                                 const TextScroll(
-                                                              'Live Events - Create or Start listening to live events from bosses.           ',
+                                                              '     Live Events - Create or Start listening to live events from bosses.           ',
                                                               mode:
                                                                   TextScrollMode
                                                                       .bouncing,
