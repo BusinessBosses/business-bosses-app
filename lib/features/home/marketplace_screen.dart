@@ -10,6 +10,7 @@ import 'package:country_list_pick/country_list_pick.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../common/models/user_model.dart';
 import '../../common/widgets/buttons/my_outlined_button.dart';
 import '../../common/widgets/safety_model.dart';
@@ -72,7 +73,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
     String formattedUserCount = formatCount(userCount);
 
     return GetBuilder<MarketController>(
-        builder: (MarketController homeController) {
+        builder: (MarketController marketController) {
       return Scaffold(
         backgroundColor: backgroundcolorinterface,
         appBar: AppBar(
@@ -454,7 +455,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                                                       right:
                                                                           35),
                                                               child: Text(
-                                                                homeController
+                                                                marketController
                                                                     .marketDescription,
                                                                 style:
                                                                     const TextStyle(
@@ -692,13 +693,21 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                                                                 10,
                                                                           ),
                                                                           child:
-                                                                              Center(
+                                                                              GestureDetector(
+                                                                            onTap:
+                                                                                () async {
+                                                                              if (await canLaunchUrl(Uri.parse(hmeController.bossUpLink))) {
+                                                                                await launchUrl(Uri.parse(hmeController.bossUpLink));
+                                                                              }
+                                                                            },
                                                                             child:
-                                                                                Padding(
-                                                                              padding: const EdgeInsets.all(2),
-                                                                              child: Text(
-                                                                                hmeController.bossUpTitle.toString(),
-                                                                                style: const TextStyle(fontSize: 11),
+                                                                                Center(
+                                                                              child: Padding(
+                                                                                padding: const EdgeInsets.all(2),
+                                                                                child: Text(
+                                                                                  hmeController.bossUpTitle.toString(),
+                                                                                  style: const TextStyle(fontSize: 11),
+                                                                                ),
                                                                               ),
                                                                             ),
                                                                           ),
