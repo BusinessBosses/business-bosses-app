@@ -1,9 +1,12 @@
+// ignore_for_file: public_member_api_docs, always_specify_types
+
 import 'package:business_bosses_v2/common/widgets/safety_model.dart';
 import 'package:business_bosses_v2/features/forum/controller/bossup_controller.dart';
 import 'package:business_bosses_v2/features/home/widgets/bottom_bar.dart';
 import 'package:business_bosses_v2/features/live_event/presentation/live_event.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:upgrader/upgrader.dart';
 import 'package:visibility_detector/visibility_detector.dart';
@@ -230,29 +233,68 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                                                 Container(
                                                   decoration:
                                                       const BoxDecoration(
-                                                    color: Colors.white,
+                                                    color: Colors.black,
                                                   ),
                                                   margin: const EdgeInsets.only(
                                                       bottom: 6),
-                                                  child: Center(
-                                                    child: ElevatedButton(
-                                                      onPressed: () =>
-                                                          Navigator.push(
-                                                        context,
-                                                        MaterialPageRoute(
-                                                          builder: (BuildContext
-                                                                  context) =>
-                                                              const LiveEvent(),
+                                                  child: Row(
+                                                    children: [
+                                                      SvgPicture.asset(
+                                                        'assets/svgs/live_event.svg',
+                                                        // ignore: deprecated_member_use
+                                                        color: Colors.white,
+                                                      ),
+                                                      const Expanded(
+                                                        child: Text(
+                                                          'Live Events - Create or Start listening to events',
+                                                          style: TextStyle(
+                                                            color: Colors.white,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                          ),
                                                         ),
                                                       ),
-                                                      child: const Text(
-                                                        'Live Event',
-                                                        style: TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.bold,
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .only(
+                                                                right: 15.0),
+                                                        child: ElevatedButton(
+                                                          style: ElevatedButton
+                                                              .styleFrom(
+                                                            foregroundColor:
+                                                                Colors.red,
+                                                            backgroundColor:
+                                                                Colors.white,
+                                                            shape:
+                                                                RoundedRectangleBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          10.0),
+                                                            ),
+                                                            elevation: 4.0,
+                                                          ),
+                                                          onPressed: () =>
+                                                              Navigator.push(
+                                                            context,
+                                                            MaterialPageRoute(
+                                                              builder: (BuildContext
+                                                                      context) =>
+                                                                  const LiveEvent(),
+                                                            ),
+                                                          ),
+                                                          child: const Text(
+                                                            'View Events',
+                                                            style: TextStyle(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                            ),
+                                                          ),
                                                         ),
                                                       ),
-                                                    ),
+                                                    ],
                                                   ),
                                                 ),
                                               ],

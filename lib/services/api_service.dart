@@ -187,6 +187,7 @@ class ApiService {
 
   ///LOGOUT
   Future<void> logout() async {
+    await get(path: 'auth/logout');
     final SharedPreferences prefs = await SharedPreferences.getInstance();
 
     await sandBox.remove(Constants.ACCESS_TOKEN);

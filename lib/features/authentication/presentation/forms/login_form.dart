@@ -8,6 +8,7 @@ import 'package:business_bosses_v2/common/widgets/text_widget.dart'
 import 'package:business_bosses_v2/features/authentication/controller/auth_controller.dart';
 import 'package:country_picker/country_picker.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -70,6 +71,12 @@ class _LoginFormState extends State<LoginForm> {
           await _googleSignIn.disconnect();
         } else {
           await logEvents('login', 'google');
+          FirebaseMessaging.instance.getToken().then((String? value) async {
+            Map<String, dynamic> data = <String, dynamic>{
+              'deviceToken': value,
+            };
+            await ApiService.post(path: 'users/add-device-token', body: data);
+          });
           if (user['data']['bio'] != null) {
             Get.offAndToNamed(Routes.home);
           } else {
@@ -217,6 +224,15 @@ class _LoginFormState extends State<LoginForm> {
                     Get.snackbar('Error', user['error']);
                   } else {
                     await logEvents('login', 'email');
+                    FirebaseMessaging.instance
+                        .getToken()
+                        .then((String? value) async {
+                      Map<String, dynamic> data = <String, dynamic>{
+                        'deviceToken': value,
+                      };
+                      await ApiService.post(
+                          path: 'users/add-device-token', body: data);
+                    });
                     if (user['data']['bio'] != null) {
                       Get.offAndToNamed(Routes.home);
                     } else {

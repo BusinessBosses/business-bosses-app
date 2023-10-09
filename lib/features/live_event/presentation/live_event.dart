@@ -28,6 +28,7 @@ class LiveEvent extends StatefulWidget {
 
 class _LiveEventState extends State<LiveEvent> {
   final LiveController liveEventController = Get.put(LiveController());
+  TextEditingController joinEvent = TextEditingController();
 
   @override
   void initState() {
@@ -60,52 +61,143 @@ class _LiveEventState extends State<LiveEvent> {
       builder: (BuildContext context) {
         return Scaffold(
           appBar: AppBar(title: const Text('Live Event')),
-          body: Column(
-            children: [
-              const SizedBox(
-                height: 10,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  ElevatedButton(
-                    onPressed: () => Navigator.push(
-                      context,
-                      // ignore: always_specify_types
-                      MaterialPageRoute(
-                        builder: (BuildContext context) => CreateEvent(),
+          body: Container(
+            color: Colors.white,
+            child: Column(
+              children: [
+                Stack(
+                  children: [
+                    Container(
+                      margin:
+                          const EdgeInsets.only(top: 10, right: 20, left: 20),
+                      height: 150,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(15.0),
+                        image: const DecorationImage(
+                          image: AssetImage(
+                              'assets/images/live_event.png'), // Replace with your image path
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ),
-                    child: const Text('Create Event'),
-                  ),
-                  ElevatedButton(
-                    onPressed: () => joinLive(context, ''),
-                    child: const Text('Join'),
-                  ),
-                ],
-              ),
-              const Text(
-                'Upcoming Events',
-                style: TextStyle(fontWeight: FontWeight.w500, fontSize: 21),
-                textAlign: TextAlign.left,
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              Obx(
-                () => Expanded(
-                  child: ListView.builder(
-                    itemCount: liveEventController.events.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      EventModel event = liveEventController.events[index];
-                      return EventItem(
-                        event: event,
-                      );
-                    },
+                    const Positioned(
+                      top: 50,
+                      right: 30,
+                      child: Text(
+                        'Share your thoughts with bosses\n We want to listen as it happens',
+                        textAlign: TextAlign.right,
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                        softWrap: true,
+                      ),
+                    ),
+                    Positioned(
+                      top: 100,
+                      right: 30,
+                      child: ElevatedButton(
+                        onPressed: () => Navigator.push(
+                          context,
+                          // ignore: always_specify_types
+                          MaterialPageRoute(
+                            builder: (BuildContext context) => CreateEvent(),
+                          ),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.white,
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 10),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(25.0),
+                          ),
+                        ),
+                        child: const Text(
+                          'Create Live Event',
+                          style: TextStyle(
+                            color: Colors.red,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                Container(
+                  margin: const EdgeInsets.only(top: 10, right: 20, left: 20),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Expanded(
+                        child: TextField(
+                          controller: joinEvent,
+                          decoration: const InputDecoration(
+                            hintText: 'Find Event By ID',
+                            filled: true,
+                            fillColor: Color.fromRGBO(
+                                244, 244, 244, 1), // Background color
+                            border: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Color.fromRGBO(
+                                    224, 224, 224, 1), // Border color
+                              ),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(16)),
+                            ),
+                            contentPadding: EdgeInsets.only(
+                              left: 10,
+                              right: 10,
+                              top: 0,
+                              bottom: 0,
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 10), // Adjust the width as needed
+                      ElevatedButton(
+                        onPressed: () => joinLive(context, ''),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Color.fromRGBO(242, 28, 41, 1),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 35, vertical: 15),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16.0),
+                          ),
+                        ),
+                        child: const Text(
+                          'Join',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-              )
-            ],
+                const Text(
+                  'Upcoming Events',
+                  style: TextStyle(fontWeight: FontWeight.w500, fontSize: 21),
+                  textAlign: TextAlign.left,
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Obx(
+                  () => Expanded(
+                    child: ListView.builder(
+                      itemCount: liveEventController.events.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        EventModel event = liveEventController.events[index];
+                        return EventItem(
+                          event: event,
+                        );
+                      },
+                    ),
+                  ),
+                )
+              ],
+            ),
           ),
         );
       },
