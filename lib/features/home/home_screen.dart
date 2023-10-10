@@ -232,7 +232,8 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                                                 Container(
                                                     decoration:
                                                         const BoxDecoration(
-                                                      color: Colors.black,
+                                                      color: Color.fromARGB(
+                                                          255, 26, 26, 26),
                                                     ),
                                                     margin:
                                                         const EdgeInsets.only(
