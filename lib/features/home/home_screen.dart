@@ -6,8 +6,9 @@ import 'package:business_bosses_v2/features/home/widgets/bottom_bar.dart';
 import 'package:business_bosses_v2/features/live_event/presentation/live_event.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:lottie/lottie.dart';
+import 'package:text_scroll/text_scroll.dart';
 import 'package:upgrader/upgrader.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 import '../../utils/theme/theme.dart';
@@ -231,72 +232,88 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                                               children: [
                                                 const BossOfWeekProfileTile(),
                                                 Container(
-                                                  decoration:
-                                                      const BoxDecoration(
-                                                    color: Colors.black,
-                                                  ),
-                                                  margin: const EdgeInsets.only(
-                                                      bottom: 6),
-                                                  child: Row(
-                                                    children: [
-                                                      SvgPicture.asset(
-                                                        'assets/svgs/live_event.svg',
-                                                        // ignore: deprecated_member_use
-                                                        color: Colors.white,
-                                                      ),
-                                                      const Expanded(
-                                                        child: Text(
-                                                          'Live Events - Create or Start listening to events',
-                                                          style: TextStyle(
-                                                            color: Colors.white,
-                                                            fontWeight:
-                                                                FontWeight.bold,
+                                                    decoration:
+                                                        const BoxDecoration(
+                                                      color: Colors.black,
+                                                    ),
+                                                    margin:
+                                                        const EdgeInsets.only(
+                                                            bottom: 6),
+                                                    child: Row(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .center, // Adjust alignment as needed
+                                                      children: [
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(15.0),
+                                                          child: Lottie.asset(
+                                                            'assets/anim/liveevent.json',
+                                                            height: 25,
                                                           ),
                                                         ),
-                                                      ),
-                                                      Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .only(
-                                                                right: 15.0),
-                                                        child: ElevatedButton(
-                                                          style: ElevatedButton
-                                                              .styleFrom(
-                                                            foregroundColor:
-                                                                Colors.red,
-                                                            backgroundColor:
-                                                                Colors.white,
-                                                            shape:
-                                                                RoundedRectangleBorder(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          10.0),
-                                                            ),
-                                                            elevation: 4.0,
-                                                          ),
-                                                          onPressed: () =>
-                                                              Navigator.push(
-                                                            context,
-                                                            MaterialPageRoute(
-                                                              builder: (BuildContext
-                                                                      context) =>
-                                                                  const LiveEvent(),
-                                                            ),
-                                                          ),
-                                                          child: const Text(
-                                                            'View Events',
-                                                            style: TextStyle(
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
+                                                        Expanded(
+                                                          child: Container(
+                                                            child:
+                                                                const TextScroll(
+                                                              '     Live Events - Create or Start listening to live events from bosses.           ',
+                                                              mode:
+                                                                  TextScrollMode
+                                                                      .bouncing,
+                                                              style: TextStyle(
+                                                                  color: Colors
+                                                                      .white,
+                                                                  fontSize: 15),
+                                                              velocity:
+                                                                  Velocity(
+                                                                pixelsPerSecond:
+                                                                    Offset(
+                                                                        30, 0),
+                                                              ),
                                                             ),
                                                           ),
                                                         ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
+                                                        Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .only(
+                                                                    right:
+                                                                        15.0),
+                                                            child:
+                                                                ElevatedButton(
+                                                              style:
+                                                                  ButtonStyle(
+                                                                backgroundColor:
+                                                                    MaterialStateProperty.all<
+                                                                            Color>(
+                                                                        Colors
+                                                                            .white),
+                                                              ),
+                                                              onPressed: () =>
+                                                                  Navigator
+                                                                      .push(
+                                                                context,
+                                                                MaterialPageRoute(
+                                                                  builder: (BuildContext
+                                                                          context) =>
+                                                                      LiveEvent(),
+                                                                ),
+                                                              ),
+                                                              child: const Text(
+                                                                'Live Events',
+                                                                style:
+                                                                    TextStyle(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                  color:
+                                                                      primaryColorLT,
+                                                                ),
+                                                              ),
+                                                            )),
+                                                      ],
+                                                    )),
                                               ],
                                             );
                                           } else {
