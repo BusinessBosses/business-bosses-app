@@ -690,18 +690,7 @@ class _MarketTileState extends State<MarketTile> {
                                             ),
                                       ),
                                     ),
-                                    const SizedBox(width: 30.0),
-                                    // GestureDetector(
-                                    //   onTap: () => _sharePost(),
-                                    //   child: SvgPicture.asset(
-                                    //     'assets/svgs/share.svg',
-                                    //     height: 15.0,
-                                    //     width: 15.0,
-                                    //   ),
-                                    // ),
-                                    // const SizedBox(
-                                    //   width: 30,
-                                    // ),
+                                    const SizedBox(width: 10.0),
                                     _post.userId ==
                                             profileController.myProfile.uid
                                         ? const SizedBox()
@@ -709,13 +698,8 @@ class _MarketTileState extends State<MarketTile> {
                                             child: Padding(
                                               padding: const EdgeInsets.only(
                                                   right: 15.0),
-                                              child: MCustomButton(
-                                                height: 40,
-                                                margin: const EdgeInsets.only(
-                                                    right: 0.0,
-                                                    bottom: 10,
-                                                    top: 10),
-                                                onPressed: () {
+                                              child: GestureDetector(
+                                                onTap: () {
                                                   Get.to(
                                                     () => ChatRoomScreen(
                                                       frommarketplace: true,
@@ -724,12 +708,30 @@ class _MarketTileState extends State<MarketTile> {
                                                     arguments: _post.user,
                                                   );
                                                 },
-                                                child: const Text(
-                                                  'Message Seller',
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.w700,
-                                                      fontSize: 15),
+                                                child: Container(
+                                                  decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              8),
+                                                      border: Border.all(
+                                                          width: 1.5,
+                                                          color:
+                                                              primaryColorLT)),
+                                                  child: const Center(
+                                                    child: Padding(
+                                                      padding:
+                                                          EdgeInsets.all(6.0),
+                                                      child: Text(
+                                                        'Message Seller',
+                                                        style: TextStyle(
+                                                          color: primaryColorLT,
+                                                          fontWeight:
+                                                              FontWeight.w700,
+                                                          fontSize: 12,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
                                                 ),
                                               ),
                                             ),
