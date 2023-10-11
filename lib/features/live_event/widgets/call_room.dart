@@ -30,7 +30,7 @@ class CallRoom extends StatelessWidget {
             .appID, // Fill in the appID that you get from ZEGOCLOUD Admin Console.
         appSign: ZegoDetails
             .appSign, // Fill in the appSign that you get from ZEGOCLOUD Admin Console.
-        userID: profileController.myProfile.uid,
+        userID: '222',
         userName: profileController.myProfile.name ??
             profileController.myProfile.username,
         roomID: roomID,

@@ -1,3 +1,5 @@
+// ignore_for_file: always_specify_types, unused_field, public_member_api_docs, constant_identifier_names, unused_element
+
 import 'package:business_bosses_v2/features/posts/models/post_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -500,7 +502,7 @@ class _MyRankingScreenState extends State<MyRankingScreen> {
   // List<Ranking> _calculateRanking(num timestamp) {
   //   List<Ranking> rankingList = [];
   //   for (UserModel user in _allUsers) {
-  //     // TODO: CONNECTS
+  //
   //     // List<MyConnect> _uConnects = user.connects.where((element) {
   //     //   bool isWithInTime =
   //     //       DateTime.now().millisecondsSinceEpoch - (element?.timestamp ?? 0) <=

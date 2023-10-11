@@ -776,7 +776,7 @@ class _ForumItemState extends State<ForumItem> {
                           icon: const Icon(Icons.remove_red_eye_outlined,
                               size: 19, color: Colors.black),
                           label: Text(
-                            '${formatCount(widget.forum.views!) ?? 0}',
+                            formatCount(widget.forum.views!),
                             style: Theme.of(context)
                                 .textTheme
                                 .bodyMedium

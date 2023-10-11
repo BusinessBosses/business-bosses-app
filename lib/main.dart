@@ -39,6 +39,8 @@ void main() async {
     // print(value);
   });
 
+  FirebaseMessaging.instance.requestPermission();
+
   /// BACKGROUND HANDLER
   FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) async {
     Navigator.pushNamed(

@@ -1,3 +1,5 @@
+// ignore_for_file: public_member_api_docs, always_specify_types
+
 import 'package:business_bosses_v2/common/widgets/safety_model.dart';
 import 'package:business_bosses_v2/features/forum/controller/bossup_controller.dart';
 import 'package:business_bosses_v2/features/home/widgets/bottom_bar.dart';
@@ -296,7 +298,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                                                                 MaterialPageRoute(
                                                                   builder: (BuildContext
                                                                           context) =>
-                                                                      const LiveEvent(),
+                                                                      LiveEvent(),
                                                                 ),
                                                               ),
                                                               child: const Text(

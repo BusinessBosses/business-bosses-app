@@ -8,6 +8,7 @@ import 'package:business_bosses_v2/features/live_event/controller/live_event_con
 import 'package:business_bosses_v2/features/live_event/models/events_model.dart';
 import 'package:business_bosses_v2/features/live_event/widgets/call_room.dart';
 import 'package:business_bosses_v2/features/live_event/widgets/event_item.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart';
@@ -28,6 +29,8 @@ class LiveEvent extends StatefulWidget {
 
 class _LiveEventState extends State<LiveEvent> {
   final LiveController liveEventController = Get.put(LiveController());
+  TextEditingController joinEvent = TextEditingController();
+  List<bool> _isSelected = <bool>[true, false];
 
   @override
   void initState() {
@@ -56,57 +59,234 @@ class _LiveEventState extends State<LiveEvent> {
 
   @override
   Widget build(BuildContext context) {
-    return Builder(
-      builder: (BuildContext context) {
-        return Scaffold(
-          appBar: AppBar(title: const Text('Live Event')),
-          body: Column(
-            children: [
-              const SizedBox(
-                height: 10,
+    return GetBuilder<LiveController>(
+      builder: (LiveController liveController) {
+        return Builder(
+          builder: (BuildContext context) {
+            return Scaffold(
+              appBar: AppBar(
+                title: const Text('Live Event'),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  ElevatedButton(
-                    onPressed: () => Navigator.push(
-                      context,
-                      // ignore: always_specify_types
-                      MaterialPageRoute(
-                        builder: (BuildContext context) => CreateEvent(),
+              body: liveEventController.loading.value
+                  ? const Center(child: CircularProgressIndicator())
+                  : Container(
+                      color: Colors.white,
+                      child: Column(
+                        children: <Widget>[
+                          Stack(
+                            children: [
+                              Container(
+                                margin: const EdgeInsets.only(
+                                    top: 10, right: 20, left: 20),
+                                height: 150,
+                                width: double.infinity,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(15.0),
+                                  image: const DecorationImage(
+                                    image: AssetImage(
+                                        'assets/images/live_event.png'), // Replace with your image path
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              ),
+                              const Positioned(
+                                top: 50,
+                                right: 30,
+                                child: Text(
+                                  'Share your thoughts with bosses\n We want to listen as it happens',
+                                  textAlign: TextAlign.right,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                  ),
+                                  softWrap: true,
+                                ),
+                              ),
+                              Positioned(
+                                top: 100,
+                                right: 30,
+                                child: ElevatedButton(
+                                  onPressed: () => Navigator.push(
+                                    context,
+                                    // ignore: always_specify_types
+                                    MaterialPageRoute(
+                                      builder: (BuildContext context) =>
+                                          CreateEvent(),
+                                    ),
+                                  ),
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.white,
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 20, vertical: 10),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(25.0),
+                                    ),
+                                  ),
+                                  child: const Text(
+                                    'Create Live Event',
+                                    style: TextStyle(
+                                      color: Colors.red,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Container(
+                            margin: const EdgeInsets.only(
+                                top: 10, right: 20, left: 20),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                Expanded(
+                                  child: TextField(
+                                    controller: joinEvent,
+                                    decoration: const InputDecoration(
+                                      hintText: 'Find Event By ID',
+                                      filled: true,
+                                      fillColor: Color.fromRGBO(
+                                          244, 244, 244, 1), // Background color
+                                      border: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Color.fromRGBO(
+                                              224, 224, 224, 1), // Border color
+                                        ),
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(16)),
+                                      ),
+                                      contentPadding: EdgeInsets.only(
+                                        left: 10,
+                                        right: 10,
+                                        top: 0,
+                                        bottom: 0,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(
+                                    width: 10), // Adjust the width as needed
+                                ElevatedButton(
+                                  onPressed: () => joinLive(context, ''),
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor:
+                                        const Color.fromRGBO(242, 28, 41, 1),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 35, vertical: 15),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(16.0),
+                                    ),
+                                  ),
+                                  child: const Text(
+                                    'Join',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: SizedBox(
+                              width: double.infinity,
+                              child: Center(
+                                child: ToggleButtons(
+                                  color: Colors.black,
+                                  selectedColor: Colors.black,
+                                  selectedBorderColor:
+                                      const Color.fromRGBO(217, 217, 217, 0.43),
+                                  focusColor:
+                                      const Color.fromRGBO(217, 217, 217, 0.43),
+                                  disabledColor:
+                                      const Color.fromRGBO(217, 217, 217, 0.43),
+                                  fillColor: Colors.white,
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(16)),
+                                  isSelected: _isSelected,
+                                  onPressed: (int index) {
+                                    setState(() {
+                                      for (int buttonIndex = 0;
+                                          buttonIndex < _isSelected.length;
+                                          buttonIndex++) {
+                                        if (buttonIndex == index) {
+                                          _isSelected[buttonIndex] = true;
+                                        } else {
+                                          _isSelected[buttonIndex] = false;
+                                        }
+                                      }
+                                    });
+                                  },
+                                  children: const <Widget>[
+                                    Padding(
+                                      padding:
+                                          EdgeInsets.symmetric(horizontal: 20),
+                                      child: Text('Upcoming'),
+                                    ),
+                                    Padding(
+                                      padding:
+                                          EdgeInsets.symmetric(horizontal: 20),
+                                      child: Text('Ongoing'),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                          // Display the content of the selected tab.
+                          Expanded(
+                            child: Column(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                    left: 21,
+                                    top: 22,
+                                    right: 21,
+                                    bottom: 6,
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                          top: 5,
+                                          bottom: 3,
+                                        ),
+                                        child: Text(
+                                          _isSelected[0]
+                                              ? 'Upcoming'
+                                              : 'Ongoing',
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(left: 8),
+                                        child: Text(
+                                          _isSelected[0] ? 'Today' : 'Now',
+                                          style: const TextStyle(
+                                            fontSize: 23,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                                _isSelected[0]
+                                    ? EventCall()
+                                    : EventCall(
+                                        ongoing: true,
+                                      ),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                    child: const Text('Create Event'),
-                  ),
-                  ElevatedButton(
-                    onPressed: () => joinLive(context, ''),
-                    child: const Text('Join'),
-                  ),
-                ],
-              ),
-              const Text(
-                'Upcoming Events',
-                style: TextStyle(fontWeight: FontWeight.w500, fontSize: 21),
-                textAlign: TextAlign.left,
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              Obx(
-                () => Expanded(
-                  child: ListView.builder(
-                    itemCount: liveEventController.events.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      EventModel event = liveEventController.events[index];
-                      return EventItem(
-                        event: event,
-                      );
-                    },
-                  ),
-                ),
-              )
-            ],
-          ),
+            );
+          },
         );
       },
     );
@@ -284,5 +464,82 @@ class _LiveEventState extends State<LiveEvent> {
   @override
   void dispose() {
     super.dispose();
+  }
+}
+
+class EventCall extends StatefulWidget {
+  EventCall({super.key, this.ongoing = false});
+  final bool ongoing;
+
+  @override
+  State<EventCall> createState() => _EventCallState();
+}
+
+class _EventCallState extends State<EventCall> {
+  final LiveController liveEventController = Get.put(LiveController());
+  @override
+  Widget build(BuildContext context) {
+    if (!widget.ongoing) {
+      return liveEventController.upcoming.isNotEmpty
+          ? Obx(
+              () => Expanded(
+                child: ListView.builder(
+                  itemCount: liveEventController.upcoming.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    EventModel event = liveEventController.upcoming[index];
+                    return EventItem(
+                      event: event,
+                    );
+                  },
+                ),
+              ),
+            )
+          : const Expanded(
+              child: Center(
+                child: Text('No Live Event is Upcoming'),
+              ),
+            );
+    } else {
+      return liveEventController.ongoing.isNotEmpty
+          ? Obx(
+              () => Expanded(
+                child: ListView.builder(
+                  itemCount: liveEventController.ongoing.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    EventModel event = liveEventController.ongoing[index];
+                    return EventItem(
+                      event: event,
+                    );
+                  },
+                ),
+              ),
+            )
+          : const Expanded(
+              child: Center(
+                child: Text('No Live Event is Ongoing'),
+              ),
+            );
+    }
+  }
+}
+
+class TabContent extends StatelessWidget {
+  final String title;
+  final Color color;
+
+  TabContent({required this.title, required this.color});
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: Container(
+        color: color,
+        alignment: Alignment.center,
+        child: Text(
+          title,
+          style: const TextStyle(fontSize: 24, color: Colors.white),
+        ),
+      ),
+    );
   }
 }
