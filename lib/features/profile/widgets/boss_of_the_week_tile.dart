@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:flutter/material.dart';
@@ -90,50 +92,98 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Align(
-                  alignment: Alignment.topLeft,
-                  child: Row(
-                    children: [
-                      CircleAvatar(
-                        radius: 48 / 3,
-                        backgroundColor: primaryColorLT.withOpacity(0.1),
-                        child: SvgPicture.asset(
-                          'assets/app/app_icon_only.svg',
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      const Text(
-                        'Boss of the week',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w900,
-                            fontSize: 25,
-                            color: Color(0xff333333)),
-                      ),
-                      const Spacer(),
-                      GestureDetector(
-                        onTap: () {
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) =>
-                                const BossUpChallangePopUpcopy(),
-                          );
-                        },
-                        child: Container(
-                          color: Colors.transparent,
-                          width: 50,
-                          height: 50,
-                          child: SvgPicture.asset(
-                            'assets/svgs/more.svg',
-                            height: 20,
-                            fit: BoxFit.none,
-                            alignment: Alignment.centerRight,
+                    alignment: Alignment.topLeft,
+                    child: Row(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(
+                            left: 10,
+                          ),
+                          child: GestureDetector(
+                            onTap: () async {
+                              if (await canLaunchUrl(
+                                  Uri.parse(homeController.bossUpLink))) {
+                                await launchUrl(
+                                    Uri.parse(homeController.bossUpLink));
+                              }
+                            },
+                            child: Center(
+                              child: Padding(
+                                padding: const EdgeInsets.all(2),
+                                child: Text(
+                                  homeController.bossUpTitle.toString(),
+                                  style: const TextStyle(fontSize: 13),
+                                ),
+                              ),
+                            ),
                           ),
                         ),
-                      )
-                    ],
-                  ),
-                ),
+                        const SizedBox(width: 10),
+                        Platform.isIOS
+                            ? Padding(
+                                padding:
+                                    const EdgeInsets.only(left: 0.0, bottom: 4),
+                                child: Text(
+                                  '|',
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    color: textColor.withOpacity(0.5),
+                                  ),
+                                ),
+                              )
+                            : Text(
+                                '|',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  color: textColor.withOpacity(0.5),
+                                ),
+                              ),
+                        const SizedBox(width: 10),
+                        Platform.isIOS
+                            ? Expanded(
+                                child: Text(
+                                  homeController.bossUp != null &&
+                                          homeController.bossUp!.isNotEmpty
+                                      ? homeController
+                                              .bossUp!.last['companyName'] ??
+                                          ''
+                                      : '',
+                                  style: const TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 1,
+                                ),
+                              )
+                            : Expanded(
+                                child: Text(
+                                  homeController.bossUp != null &&
+                                          homeController.bossUp!.isNotEmpty
+                                      ? homeController
+                                              .bossUp!.last['companyName'] ??
+                                          ''
+                                      : '',
+                                  style: const TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 1,
+                                ),
+                              ),
+                        const Spacer(),
+                        Padding(
+                          padding: const EdgeInsets.only(
+                            right: 10.0,
+                          ),
+                          child: SvgPicture.asset(
+                            'assets/svgs/nexticon.svg',
+                            color: textColor,
+                          ),
+                        )
+                      ],
+                    )),
                 Align(
                   child: GestureDetector(
                     onTap: () {
@@ -325,7 +375,7 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                                       },
                                       child: Text(
                                         homeController.bossUpTitle.toString(),
-                                        style: const TextStyle(fontSize: 11),
+                                        style: const TextStyle(fontSize: 13),
                                       ),
                                     ),
                                   ),

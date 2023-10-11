@@ -11,6 +11,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:visibility_detector/visibility_detector.dart';
 import '../../common/models/user_model.dart';
 import '../../common/widgets/buttons/my_outlined_button.dart';
 import '../../common/widgets/safety_model.dart';
@@ -662,119 +663,92 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                                                   ),
                                                                   child:
                                                                       Container(
-                                                                    decoration:
-                                                                        BoxDecoration(
-                                                                      color: const Color(
-                                                                          0xFFFFFFFF),
-                                                                      borderRadius:
-                                                                          BorderRadius.circular(
-                                                                              10),
-                                                                      // boxShadow: [
-                                                                      //   BoxShadow(
-                                                                      //     color: Colors
-                                                                      //         .white
-                                                                      //         .withOpacity(1),
-                                                                      //     spreadRadius:
-                                                                      //         20,
-                                                                      //     blurRadius:
-                                                                      //         500,
-                                                                      //     offset: const Offset(
-                                                                      //         0,
-                                                                      //         3),
-                                                                      //   ),
-                                                                      // ],
-                                                                    ),
-                                                                    child: Row(
-                                                                      children: [
-                                                                        Padding(
-                                                                          padding:
-                                                                              const EdgeInsets.only(
-                                                                            left:
-                                                                                10,
-                                                                          ),
-                                                                          child:
-                                                                              GestureDetector(
-                                                                            onTap:
-                                                                                () async {
-                                                                              if (await canLaunchUrl(Uri.parse(hmeController.bossUpLink))) {
-                                                                                await launchUrl(Uri.parse(hmeController.bossUpLink));
-                                                                              }
-                                                                            },
-                                                                            child:
-                                                                                Center(
-                                                                              child: Padding(
-                                                                                padding: const EdgeInsets.all(2),
-                                                                                child: Text(
-                                                                                  hmeController.bossUpTitle.toString(),
-                                                                                  style: const TextStyle(fontSize: 11),
-                                                                                ),
-                                                                              ),
-                                                                            ),
-                                                                          ),
-                                                                        ),
-                                                                        const SizedBox(
-                                                                            width:
-                                                                                10),
-                                                                        Platform.isIOS
-                                                                            ? Padding(
-                                                                                padding: const EdgeInsets.only(left: 0.0, bottom: 4),
-                                                                                child: Text(
-                                                                                  '|',
-                                                                                  style: TextStyle(
-                                                                                    fontSize: 20,
-                                                                                    color: textColor.withOpacity(0.5),
-                                                                                  ),
-                                                                                ),
-                                                                              )
-                                                                            : Text(
-                                                                                '|',
-                                                                                style: TextStyle(
-                                                                                  fontSize: 20,
-                                                                                  color: textColor.withOpacity(0.5),
-                                                                                ),
-                                                                              ),
-                                                                        const SizedBox(
-                                                                            width:
-                                                                                10),
-                                                                        Platform.isIOS
-                                                                            ? Padding(
-                                                                                padding: const EdgeInsets.only(
-                                                                                  bottom: 2.0,
-                                                                                ),
-                                                                                child: Text(
-                                                                                  hmeController.bossUp != null && hmeController.bossUp!.isNotEmpty ? hmeController.bossUp!.last['companyName'] ?? '' : '',
-                                                                                  style: const TextStyle(
-                                                                                    fontSize: 15,
-                                                                                    fontWeight: FontWeight.bold,
-                                                                                  ),
-                                                                                  overflow: TextOverflow.ellipsis,
-                                                                                  softWrap: false,
-                                                                                ),
-                                                                              )
-                                                                            : Text(
-                                                                                hmeController.bossUp != null && hmeController.bossUp!.isNotEmpty ? hmeController.bossUp!.last['companyName'] ?? '' : '',
-                                                                                style: const TextStyle(
-                                                                                  fontSize: 15,
-                                                                                  fontWeight: FontWeight.bold,
-                                                                                ),
-                                                                                overflow: TextOverflow.ellipsis,
-                                                                                softWrap: false,
-                                                                              ),
-                                                                        const Spacer(),
-                                                                        Padding(
-                                                                          padding: const EdgeInsets
-                                                                              .only(
-                                                                              right: 10.0),
-                                                                          child:
-                                                                              SvgPicture.asset(
-                                                                            'assets/svgs/nexticon.svg',
+                                                                          decoration:
+                                                                              BoxDecoration(
                                                                             color:
-                                                                                textColor,
+                                                                                const Color(0xFFFFFFFF),
+                                                                            borderRadius:
+                                                                                BorderRadius.circular(10),
                                                                           ),
-                                                                        )
-                                                                      ],
-                                                                    ),
-                                                                  ),
+                                                                          child:
+                                                                              Row(
+                                                                            children: [
+                                                                              Padding(
+                                                                                padding: const EdgeInsets.only(
+                                                                                  left: 10,
+                                                                                ),
+                                                                                child: GestureDetector(
+                                                                                  onTap: () async {
+                                                                                    if (await canLaunchUrl(Uri.parse(hmeController.bossUpLink))) {
+                                                                                      await launchUrl(Uri.parse(hmeController.bossUpLink));
+                                                                                    }
+                                                                                  },
+                                                                                  child: Center(
+                                                                                    child: Padding(
+                                                                                      padding: const EdgeInsets.all(2),
+                                                                                      child: Text(
+                                                                                        hmeController.bossUpTitle.toString(),
+                                                                                        style: const TextStyle(fontSize: 13),
+                                                                                      ),
+                                                                                    ),
+                                                                                  ),
+                                                                                ),
+                                                                              ),
+                                                                              const SizedBox(width: 10),
+                                                                              Platform.isIOS
+                                                                                  ? Padding(
+                                                                                      padding: const EdgeInsets.only(left: 0.0, bottom: 4),
+                                                                                      child: Text(
+                                                                                        '|',
+                                                                                        style: TextStyle(
+                                                                                          fontSize: 20,
+                                                                                          color: textColor.withOpacity(0.5),
+                                                                                        ),
+                                                                                      ),
+                                                                                    )
+                                                                                  : Text(
+                                                                                      '|',
+                                                                                      style: TextStyle(
+                                                                                        fontSize: 20,
+                                                                                        color: textColor.withOpacity(0.5),
+                                                                                      ),
+                                                                                    ),
+                                                                              const SizedBox(width: 10),
+                                                                              Platform.isIOS
+                                                                                  ? Expanded(
+                                                                                      child: Text(
+                                                                                        hmeController.bossUp != null && hmeController.bossUp!.isNotEmpty ? hmeController.bossUp!.last['companyName'] ?? '' : '',
+                                                                                        style: const TextStyle(
+                                                                                          fontSize: 15,
+                                                                                          fontWeight: FontWeight.bold,
+                                                                                        ),
+                                                                                        overflow: TextOverflow.ellipsis,
+                                                                                        maxLines: 1,
+                                                                                      ),
+                                                                                    )
+                                                                                  : Expanded(
+                                                                                      child: Text(
+                                                                                        hmeController.bossUp != null && hmeController.bossUp!.isNotEmpty ? hmeController.bossUp!.last['companyName'] ?? '' : '',
+                                                                                        style: const TextStyle(
+                                                                                          fontSize: 15,
+                                                                                          fontWeight: FontWeight.bold,
+                                                                                        ),
+                                                                                        overflow: TextOverflow.ellipsis,
+                                                                                        maxLines: 1,
+                                                                                      ),
+                                                                                    ),
+                                                                              const Spacer(),
+                                                                              Padding(
+                                                                                padding: const EdgeInsets.only(
+                                                                                  right: 10.0,
+                                                                                ),
+                                                                                child: SvgPicture.asset(
+                                                                                  'assets/svgs/nexticon.svg',
+                                                                                  color: textColor,
+                                                                                ),
+                                                                              )
+                                                                            ],
+                                                                          )),
                                                                 ),
                                                               ),
                                                             )
@@ -908,8 +882,48 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                                                 index]
                                                             : _marketController
                                                                 .markets[index];
-                                                    return MarketTile(
-                                                        post: market);
+                                                    return VisibilityDetector(
+                                                      key:
+                                                          Key(index.toString()),
+                                                      onVisibilityChanged:
+                                                          (VisibilityInfo
+                                                              info) {
+                                                        final bool
+                                                            hasIncrementedView =
+                                                            hmeController
+                                                                .itemsWithIncrementedViews
+                                                                .contains(_marketController
+                                                                    .markets[
+                                                                        index]
+                                                                    .marketId);
+                                                        if (info.visibleFraction ==
+                                                                1.0 &&
+                                                            !hasIncrementedView) {
+                                                          _marketController
+                                                              .updatemarketViews(
+                                                                  _marketController
+                                                                          .markets[
+                                                                      index]);
+                                                          setState(() {
+                                                            hmeController
+                                                                .itemsWithIncrementedViews
+                                                                .add(_marketController
+                                                                    .markets[
+                                                                        index]
+                                                                    .marketId); // Set the flag to prevent further increments
+                                                          });
+                                                        }
+                                                      },
+                                                      child: MarketTile(
+                                                        post: market,
+                                                        controller:
+                                                            marketController,
+                                                        key: ValueKey(
+                                                            _marketController
+                                                                .markets[index]
+                                                                .marketId),
+                                                      ),
+                                                    );
                                                   } else {
                                                     // Display a loading indicator at the end of the list
                                                     if (_marketController

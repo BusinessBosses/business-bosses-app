@@ -111,4 +111,12 @@ class HomeRepository {
         await ApiService.put(path: 'forum/update/$id', body: {'views': views});
     return response;
   }
+
+  /// Update Views
+  static Future<ApiResponseModel> updatemarketViews(
+      String id, int views) async {
+    final ApiResponseModel response = await ApiService.put(
+        path: 'markets/update/$id', body: {'views': views});
+    return response;
+  }
 }
