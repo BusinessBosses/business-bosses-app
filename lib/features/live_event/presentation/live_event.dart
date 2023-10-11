@@ -105,7 +105,7 @@ class _LiveEventState extends State<LiveEvent> {
                   ) {
                     return <Widget>[
                       SliverStickyHeader(
-                        sticky: false,
+                        sticky: true,
                         header: Column(
                           children: <Widget>[
                             Stack(
