@@ -23,16 +23,21 @@ class LiveController extends GetxController {
       for (dynamic row in rows) {
         events.add(EventModel.fromMap(row));
       }
+      events.sort((a, b) => a.startAt!.compareTo(b.startAt!));
+
       for (EventModel event in events) {
         DateTime startAt = event.startAt!;
         DateTime endAt = event.endAt!;
-
+        print(event.startAt!);
         if (startAt.isAtSameMomentAs(today)) {
           // Event starts today, it's an upcoming event
           upcoming.add(event);
         } else if (startAt.isBefore(now) && endAt.isAfter(now)) {
-          // Event is currently ongoing
+          // Event has already started, it's not upcoming
           ongoing.add(event);
+        } else {
+          // Event is in the future, it's an upcoming event
+          upcoming.add(event);
         }
       }
     }
@@ -43,16 +48,30 @@ class LiveController extends GetxController {
   void createEvent(Map<String, dynamic> data) async {
     final ApiResponseModel response =
         await ApiService.post(path: 'event', body: data);
+    print(response.success);
     if (response.success) {
       Map<String, dynamic> dataNew = {
         ...data,
         'id': response.data['id'],
       };
-      events.add(EventModel.fromMap(dataNew));
+
+      EventModel newEvent = EventModel.fromMap(dataNew);
+
+      // Find the index where the new event should be inserted based on startAt
+      int index = upcoming.indexWhere(
+          (EventModel event) => event.startAt!.isAfter(newEvent.startAt!));
+
+      if (index == -1) {
+        // If the index is -1, it means the new event should be placed at the end
+        events.add(newEvent);
+      } else {
+        // Insert the new event at the correct position
+        events.insert(index, newEvent);
+      }
     } else {
       showSnackbar(
           title: 'OOPS!',
-          message: 'An error occurred white adding event, please try again!',
+          message: 'An error occurred while adding an event, please try again!',
           error: true);
     }
     update();

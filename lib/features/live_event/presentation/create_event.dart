@@ -8,7 +8,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:timezone/timezone.dart' as tz;
 
 import '../../../common/widgets/buttons/custom_button.dart';
 import '../controller/live_event_controller.dart';
@@ -205,6 +204,11 @@ class _CreateEventState extends State<CreateEvent> {
                         message: 'End time cannot be before start time');
                     return;
                   }
+                  // if (endAt.isBefore(startAt.add(const Duration(hours: 2)))) {
+                  //   showSnackBar(context,
+                  //       message: 'Event duration cannot be more than 2 hours');
+                  //   return;
+                  // }
                   Map<String, dynamic> data = {
                     'title': titleController.text,
                     'roomId': eventID,
@@ -253,7 +257,7 @@ class _CreateEventState extends State<CreateEvent> {
   }
 
   String generateRandomRoomID() {
-    final random = Random();
+    final Random random = Random();
 
     // Generate three random letters for the "abc" part.
     final String randomABC = String.fromCharCodes(List.generate(3,
@@ -278,9 +282,6 @@ class _CreateEventState extends State<CreateEvent> {
       onConfirm: (DateTime date) {
         setState(() {
           selectedDateTime = date;
-          tz.TZDateTime selectedDateTimeZ = tz.TZDateTime.now(tz.local);
-          final String formattedDateTime =
-              DateFormat('yyyy-MM-ddTHH:mm:ss.SSS').format(selectedDateTimeZ);
           if (isStartTime) {
             setState(() {
               startAt = selectedDateTime;

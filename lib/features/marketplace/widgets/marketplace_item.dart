@@ -1,4 +1,3 @@
-import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/boost_market_screen.dart';
 import 'package:business_bosses_v2/features/marketplace/widgets/post_images_market.dart';
 import 'package:business_bosses_v2/features/posts/models/post_model.dart';
@@ -19,7 +18,6 @@ import '../../../../utils/theme/theme.dart';
 import '../../../common/models/api_response_model.dart';
 import '../../../common/models/comment_model.dart';
 import '../../../common/models/user_model.dart';
-import '../../../common/widgets/buttons/my_outlined_button.dart';
 import '../../chat/chat_room_screen.dart';
 import '../../profile/presentation/publicprofilescreen.dart';
 import '../../profile/widgets/premium_profile_tile.dart';
@@ -680,7 +678,7 @@ class _MarketTileState extends State<MarketTile> {
                                           size: 19,
                                           color: Colors.black),
                                       label: Text(
-                                        '${formatCount(_post.views!) ?? 0}',
+                                        formatCount(_post.views!),
                                         style: Theme.of(context)
                                             .textTheme
                                             .bodyMedium
