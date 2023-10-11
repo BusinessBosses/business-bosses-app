@@ -6,6 +6,7 @@ import 'package:business_bosses_v2/features/live_event/presentation/confirm_crea
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
@@ -41,17 +42,29 @@ class _CreateEventState extends State<CreateEvent> {
     final String formattedDate = dateFormat.format(startAt);
     // Here, you can define the content of your bottom sheet.
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text('Create Event'),
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
+        ),
+        centerTitle: true,
+        title: const Text(
+          'Create Event',
+          textAlign: TextAlign.center,
+          style: TextStyle(fontSize: 20),
+        ),
       ),
       body: SizedBox(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(15.0),
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
+                padding: const EdgeInsets.symmetric(horizontal: 15),
                 decoration: BoxDecoration(
                   color: const Color.fromRGBO(
                       244, 244, 244, 1), // Background color
@@ -73,7 +86,7 @@ class _CreateEventState extends State<CreateEvent> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(15.0),
               child: Container(
                 decoration: BoxDecoration(
                     border: Border.all(
@@ -82,102 +95,106 @@ class _CreateEventState extends State<CreateEvent> {
                     borderRadius: BorderRadius.circular(16)),
                 child: Column(
                   children: [
-                    Row(
-                      children: [
-                        Expanded(
-                          child: ListTile(
-                            title: Text(
-                              // ignore: unnecessary_null_comparison
-                              startAt == null
-                                  ? 'Select Start and Time'
-                                  : 'Starts at:',
-                            ),
-                            onTap: () => _selectDate(context, true),
-                          ),
-                        ),
-                        TextButton(
-                          onPressed: () => _selectDate(context, true),
-                          child: Container(
-                            padding: const EdgeInsets.all(9),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(16),
-                                color: const Color.fromRGBO(224, 224, 224, 1)),
-                            child: Text(
-                              formattedDate,
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.w700,
-                                  color: Colors.black),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 10.0, right: 10),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: ListTile(
+                              title: Text(
+                                // ignore: unnecessary_null_comparison
+                                startAt == null
+                                    ? 'Select Start and Time'
+                                    : 'Starts at:',
+                              ),
+                              onTap: () => _selectDate(context, true),
                             ),
                           ),
-                        ),
-                        const SizedBox(
-                          width: 5,
-                        ),
-                        TextButton(
-                          onPressed: () => _selectDate(context, true),
-                          child: Container(
-                            padding: const EdgeInsets.all(9),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(16),
-                                color: const Color.fromRGBO(224, 224, 224, 1)),
-                            child: Text(
-                              formatTime(startAt),
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.w700,
-                                  color: Colors.black),
+                          TextButton(
+                            onPressed: () => _selectDate(context, true),
+                            child: Container(
+                              padding: const EdgeInsets.all(9),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(12),
+                                  color:
+                                      const Color.fromRGBO(224, 224, 224, 1)),
+                              child: Text(
+                                formattedDate,
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.w700,
+                                    color: Colors.black),
+                              ),
                             ),
                           ),
-                        ),
-                      ],
+                          TextButton(
+                            onPressed: () => _selectDate(context, true),
+                            child: Container(
+                              padding: const EdgeInsets.all(9),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(12),
+                                  color:
+                                      const Color.fromRGBO(224, 224, 224, 1)),
+                              child: Text(
+                                formatTime(startAt),
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.w700,
+                                    color: Colors.black),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                     const Divider(),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: ListTile(
-                            title: Text(
-                              // ignore: unnecessary_null_comparison
-                              startAt == null
-                                  ? 'Select Start and Time'
-                                  : 'End at:',
-                            ),
-                            onTap: () => _selectDate(context, true),
-                          ),
-                        ),
-                        TextButton(
-                          onPressed: () => _selectDate(context, false),
-                          child: Container(
-                            padding: const EdgeInsets.all(9),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(16),
-                                color: const Color.fromRGBO(224, 224, 224, 1)),
-                            child: Text(
-                              formattedDate,
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.w700,
-                                  color: Colors.black),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 10.0),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: ListTile(
+                              title: Text(
+                                // ignore: unnecessary_null_comparison
+                                startAt == null
+                                    ? 'Select Start and Time'
+                                    : 'End at:',
+                              ),
+                              onTap: () => _selectDate(context, true),
                             ),
                           ),
-                        ),
-                        const SizedBox(
-                          width: 5,
-                        ),
-                        TextButton(
-                          onPressed: () => _selectDate(context, false),
-                          child: Container(
-                            padding: const EdgeInsets.all(9),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(16),
-                                color: const Color.fromRGBO(224, 224, 224, 1)),
-                            child: Text(
-                              formatTime(endAt),
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.w700,
-                                  color: Colors.black),
+                          TextButton(
+                            onPressed: () => _selectDate(context, false),
+                            child: Container(
+                              padding: const EdgeInsets.all(9),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(12),
+                                  color:
+                                      const Color.fromRGBO(224, 224, 224, 1)),
+                              child: Text(
+                                formattedDate,
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.w700,
+                                    color: Colors.black),
+                              ),
                             ),
                           ),
-                        ),
-                      ],
+                          TextButton(
+                            onPressed: () => _selectDate(context, false),
+                            child: Container(
+                              padding: const EdgeInsets.all(9),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(12),
+                                  color:
+                                      const Color.fromRGBO(224, 224, 224, 1)),
+                              child: Text(
+                                formatTime(endAt),
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.w700,
+                                    color: Colors.black),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                     const SizedBox(
                       height: 10,
