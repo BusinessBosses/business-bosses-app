@@ -737,7 +737,9 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                                                                         maxLines: 1,
                                                                                       ),
                                                                                     ),
-                                                                              const Spacer(),
+                                                                              const SizedBox(
+                                                                                width: 15,
+                                                                              ),
                                                                               Padding(
                                                                                 padding: const EdgeInsets.only(
                                                                                   right: 10.0,

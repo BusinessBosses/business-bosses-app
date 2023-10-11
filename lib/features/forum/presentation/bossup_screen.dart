@@ -526,7 +526,9 @@ class _BossUpSectionState extends State<BossUpSection> {
                                                           maxLines: 1,
                                                         ),
                                                       ),
-                                                const Spacer(),
+                                                const SizedBox(
+                                                  width: 15,
+                                                ),
                                                 Padding(
                                                   padding:
                                                       const EdgeInsets.only(

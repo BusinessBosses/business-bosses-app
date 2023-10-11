@@ -424,7 +424,9 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                                         maxLines: 1,
                                       ),
                                     ),
-                              const Spacer(),
+                              const SizedBox(
+                                width: 15,
+                              ),
                               GestureDetector(
                                 onTap: () {
                                   Navigator.push(
