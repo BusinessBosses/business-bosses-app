@@ -389,30 +389,41 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                                     color: textColor.withOpacity(0.5)),
                               ),
                               const SizedBox(width: 10),
-                              GestureDetector(
-                                onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (BuildContext context) =>
-                                            const Bossuppartner()),
-                                  );
-                                },
-                                child: Text(
-                                  homeController.bossUp != null &&
-                                          homeController.bossUp!.isNotEmpty
-                                      ? homeController
-                                              .bossUp!.last['companyName'] ??
-                                          ''
-                                      : '',
-                                  style: const TextStyle(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                  overflow: TextOverflow.ellipsis,
-                                  softWrap: false,
-                                ),
-                              ),
+                              Platform.isIOS
+                                  ? Expanded(
+                                      child: Text(
+                                        homeController.bossUp != null &&
+                                                homeController
+                                                    .bossUp!.isNotEmpty
+                                            ? homeController.bossUp!
+                                                    .last['companyName'] ??
+                                                ''
+                                            : '',
+                                        style: const TextStyle(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 1,
+                                      ),
+                                    )
+                                  : Expanded(
+                                      child: Text(
+                                        homeController.bossUp != null &&
+                                                homeController
+                                                    .bossUp!.isNotEmpty
+                                            ? homeController.bossUp!
+                                                    .last['companyName'] ??
+                                                ''
+                                            : '',
+                                        style: const TextStyle(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 1,
+                                      ),
+                                    ),
                               const Spacer(),
                               GestureDetector(
                                 onTap: () {
