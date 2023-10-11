@@ -17,6 +17,7 @@ class MarketModel {
   bool promote;
   bool approved;
   int? timestamp;
+  int? views;
   final List<String>? likes;
   final List<String>? coins;
   final List<CommentModel>? comments;
@@ -33,6 +34,7 @@ class MarketModel {
     this.promote = false,
     this.approved = false,
     this.likes,
+    this.views = 0,
     this.coins,
     this.comments,
   });
@@ -49,6 +51,7 @@ class MarketModel {
     bool? promote,
     bool? approved,
     int? timestamp,
+    int? views,
     List<String>? likes,
     List<String>? coins,
     List<CommentModel>? comments,
@@ -68,6 +71,7 @@ class MarketModel {
       likes: likes ?? this.likes,
       coins: coins ?? this.coins,
       comments: comments ?? this.comments,
+      views: views ?? this.views,
     );
   }
 
@@ -86,6 +90,7 @@ class MarketModel {
       'timestamp': timestamp,
       'likes': likes,
       'coins': coins,
+      'views': views,
       'comments': comments?.map((CommentModel x) => x.toMap()).toList(),
     };
   }
@@ -106,6 +111,7 @@ class MarketModel {
       userId: map['userId'] as String,
       promote: map['promote'] as bool,
       approved: map['approved'] as bool,
+      views: map['views'] != null ? map['views'] as int : 0,
       likes: map['likes'] != null ? List<String>.from((map['likes'])) : null,
       coins: map['coins'] != null ? List<String>.from((map['coins'])) : null,
       comments: map['comments'] != null
@@ -117,6 +123,10 @@ class MarketModel {
   }
 
   String toJson() => json.encode(toMap());
+
+  setViews(int newViews) {
+    views = newViews;
+  }
 
   factory MarketModel.fromJson(String source) =>
       MarketModel.fromMap(json.decode(source) as Map<String, dynamic>);

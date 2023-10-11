@@ -13,6 +13,7 @@ import '../models/market_model.dart';
 
 class MarketController extends GetxController {
   late IO.Socket socket;
+  List<MarketModel> allmarkets = [];
   RxList<MarketModel> markets = RxList<MarketModel>(<MarketModel>[]);
   RxList<MarketModel> searchResult = RxList<MarketModel>(<MarketModel>[]);
   RxList<UserModel> users = RxList<UserModel>(<UserModel>[]);
@@ -41,6 +42,17 @@ class MarketController extends GetxController {
       markets[index] = MarketModel.fromMap(data);
     }
     update();
+  }
+
+  void updatemarketViews(MarketModel post) {
+    final int postIndex = markets
+        .indexWhere((MarketModel element) => element.marketId == post.marketId);
+    if (postIndex != -1) {
+      // Increment the view count of the post by 1
+      post.setViews(post.views! + 1);
+      update();
+      HomeRepository.updatemarketViews(post.marketId, post.views!);
+    }
   }
 
   /// PROCESS RAW API DATA, MODELIZE AND SAVE TO STATE

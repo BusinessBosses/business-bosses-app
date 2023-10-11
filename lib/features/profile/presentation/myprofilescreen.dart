@@ -278,6 +278,8 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
 
                                                                 return MarketTile(
                                                                   post: market,
+                                                                  controller:
+                                                                      marketController,
                                                                 );
                                                               },
                                                             );
