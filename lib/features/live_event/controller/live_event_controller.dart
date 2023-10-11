@@ -28,14 +28,15 @@ class LiveController extends GetxController {
       for (EventModel event in events) {
         DateTime startAt = event.startAt!;
         DateTime endAt = event.endAt!;
-
+        print(event.startAt!);
         if (startAt.isAtSameMomentAs(today)) {
           // Event starts today, it's an upcoming event
           upcoming.add(event);
         } else if (startAt.isBefore(now) && endAt.isAfter(now)) {
-          // Event is currently ongoing
+          // Event has already started, it's not upcoming
           ongoing.add(event);
         } else {
+          // Event is in the future, it's an upcoming event
           upcoming.add(event);
         }
       }
@@ -47,6 +48,7 @@ class LiveController extends GetxController {
   void createEvent(Map<String, dynamic> data) async {
     final ApiResponseModel response =
         await ApiService.post(path: 'event', body: data);
+    print(response.success);
     if (response.success) {
       Map<String, dynamic> dataNew = {
         ...data,
