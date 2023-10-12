@@ -23,21 +23,19 @@ class LiveController extends GetxController {
       for (dynamic row in rows) {
         events.add(EventModel.fromMap(row));
       }
-      events.sort((a, b) => a.startAt!.compareTo(b.startAt!));
+      events.sort(
+          (EventModel a, EventModel b) => a.startAt!.compareTo(b.startAt!));
 
       for (EventModel event in events) {
         DateTime startAt = event.startAt!;
         DateTime endAt = event.endAt!;
-        print(event.startAt!);
-        if (startAt.isAtSameMomentAs(today)) {
+
+        if (startAt.isAtSameMomentAs(today) || startAt.isAfter(now)) {
           // Event starts today, it's an upcoming event
           upcoming.add(event);
         } else if (startAt.isBefore(now) && endAt.isAfter(now)) {
           // Event has already started, it's not upcoming
           ongoing.add(event);
-        } else {
-          // Event is in the future, it's an upcoming event
-          upcoming.add(event);
         }
       }
     }
@@ -70,16 +68,17 @@ class LiveController extends GetxController {
       }
     } else {
       showSnackbar(
-          title: 'OOPS!',
-          message: 'An error occurred while adding an event, please try again!',
-          error: true);
+        title: 'OOPS!',
+        message: 'An error occurred while adding an event, please try again!',
+        error: true,
+      );
     }
     update();
   }
 
   void deleteEvent(int id) async {
     events.removeWhere((EventModel event) => event.id == id);
-    await ApiService.delete(path: 'event/${id}');
+    await ApiService.delete(path: 'event/$id');
   }
 
   @override

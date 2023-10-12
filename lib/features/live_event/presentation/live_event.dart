@@ -522,24 +522,3 @@ class _EventCallState extends State<EventCall> {
     }
   }
 }
-
-class TabContent extends StatelessWidget {
-  final String title;
-  final Color color;
-
-  TabContent({required this.title, required this.color});
-
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      child: Container(
-        color: color,
-        alignment: Alignment.center,
-        child: Text(
-          title,
-          style: const TextStyle(fontSize: 24, color: Colors.white),
-        ),
-      ),
-    );
-  }
-}
