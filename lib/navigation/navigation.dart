@@ -229,9 +229,9 @@ class Nav {
       name: Routes.subscriptionconfirmation,
       page: () => const SubscriptionConfirmation(),
     ),
-    // GetPage(
-    //   name: Routes.reviewpayment,
-    //   page: () => ReviewPayment(),
-    // ),
+    GetPage(
+      name: Routes.reviewpayment,
+      page: () => ReviewPayment(),
+    ),
   ];
 }
