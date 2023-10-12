@@ -91,6 +91,8 @@
 	<true/>
 	<key>LSSupportsOpeningDocumentsInPlace</key>
 	<true/>
+    <key>NSMicrophoneUsageDescription</key>
+    <string>${PRODUCT_NAME} always microphone use</string>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsArbitraryLoads</key>
