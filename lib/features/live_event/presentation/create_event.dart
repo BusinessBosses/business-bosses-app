@@ -221,11 +221,17 @@ class _CreateEventState extends State<CreateEvent> {
                         message: 'End time cannot be before start time');
                     return;
                   }
-                  // if (endAt.isBefore(startAt.add(const Duration(hours: 2)))) {
-                  //   showSnackBar(context,
-                  //       message: 'Event duration cannot be more than 2 hours');
-                  //   return;
-                  // }
+                  if (startAt.isBefore(DateTime.now()) ||
+                      endAt.isBefore(DateTime.now())) {
+                    // Show an error message or handle it as per your app's requirements.
+                    showSnackBar(context,
+                        message: 'Start time cannot be in the past');
+                  }
+                  if (endAt.isAfter(startAt.add(const Duration(hours: 2)))) {
+                    showSnackBar(context,
+                        message: 'Event duration cannot be more than 2 hours');
+                    return;
+                  }
                   Map<String, dynamic> data = {
                     'title': titleController.text,
                     'roomId': eventID,

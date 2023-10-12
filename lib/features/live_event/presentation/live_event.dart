@@ -32,7 +32,6 @@ class LiveEvent extends StatefulWidget {
 class _LiveEventState extends State<LiveEvent> {
   final LiveController liveEventController = Get.put(LiveController());
   TextEditingController joinEvent = TextEditingController();
-  List<bool> _isSelected = <bool>[true, false];
   int _currentIndex = 0;
   final ScrollController scrollController = ScrollController();
 
