@@ -475,6 +475,10 @@ class _PostTileState extends State<PostTile> {
                       if (widget.post.images?.isNotEmpty ?? false)
                         PostImages(
                           post: widget.post,
+                          isVideo: widget.post.videoUrl != null &&
+                                  widget.post.videoUrl != ''
+                              ? true
+                              : false,
                         ),
                     ],
                   ),

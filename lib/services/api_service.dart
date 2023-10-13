@@ -21,6 +21,14 @@ import '../navigation/routes.dart';
 final GetStorage sandBox = GetStorage();
 
 /// API CALLS
+
+class MediaUploadResult {
+  final String videoUrl;
+  final String thumbnailUrl;
+
+  MediaUploadResult(this.videoUrl, this.thumbnailUrl);
+}
+
 class ApiService {
   /// LOGIN POINT
   Future<dynamic> login(String email, String password) async {
@@ -102,6 +110,66 @@ class ApiService {
           message: 'An error occurred, please try again!',
           error: true);
       return null;
+    }
+  }
+
+// //upload media files
+//   static Future<Map<String, dynamic>> uploadMediaFiles(
+//       File video, File thumbnail) async {
+//     String uploadUrl =
+//         'http://44.210.87.234/upload_media.php'; // Replace with the actual URL for media upload
+//     http.MultipartRequest request =
+//         http.MultipartRequest('POST', Uri.parse(uploadUrl));
+
+//     request.files.add(await http.MultipartFile.fromPath('video', video.path));
+//     request.files
+//         .add(await http.MultipartFile.fromPath('thumbnail', thumbnail.path));
+
+//     try {
+//       final http.StreamedResponse streamedResponse = await request.send();
+
+//       Map<String, dynamic> result =
+//           json.decode(await streamedResponse.stream.bytesToString());
+
+//       if (result['success']) {
+//         return result;
+//       } else {
+//         throw Exception('An error occurred during media upload.');
+//       }
+//     } catch (e) {
+//       throw Exception('An error occurred during media upload.');
+//     }
+//   }
+
+  static Future<MediaUploadResult> uploadMediaFiles(
+      File video, File thumbnail) async {
+    String uploadUrl = 'http://44.210.87.234/upload.php';
+    http.MultipartRequest request =
+        http.MultipartRequest('POST', Uri.parse(uploadUrl));
+
+    request.files.add(await http.MultipartFile.fromPath('file', video.path));
+    // request.files
+    //     .add(await http.MultipartFile.fromPath('thumbnail', thumbnail.path));
+
+    print("kfkjdkfjkdajfk $request");
+
+    try {
+      final http.StreamedResponse streamedResponse = await request.send();
+
+      Map<String, dynamic> result =
+          json.decode(await streamedResponse.stream.bytesToString());
+
+      if (result['success']) {
+        print("this is ther result of the upload");
+        final String videoUrl = result['videoUrl'];
+        final String thumbnailUrl = result['thumbnailUrl'];
+        return MediaUploadResult(videoUrl, thumbnailUrl);
+      } else {
+        throw Exception('An error occurred during media upload.');
+      }
+    } catch (e) {
+      print(e);
+      throw Exception('An error occurred during media upload.');
     }
   }
 

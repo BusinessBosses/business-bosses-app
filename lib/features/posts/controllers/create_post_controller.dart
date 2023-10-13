@@ -9,7 +9,9 @@ import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:video_thumbnail/video_thumbnail.dart';
 
+import '../../../common/widgets/gallery_screen.dart';
 import '../../profile/controller/profile_controller.dart';
 import '../models/post_model.dart';
 import '../presentation/boost_post_screen.dart';
@@ -24,6 +26,18 @@ class CreatePostController extends GetxController {
   /// SELECTED IMAGES
   RxList<XFile> imageFileList = RxList<XFile>(<XFile>[]);
   RxList<String> updatingImageFileList = RxList<String>(<String>[]);
+
+  ///my asserts
+  List<MyAssetEntity> myAssetsEntities = [];
+
+  /// file processing
+  List<bool> fileProcessing = [];
+
+  ///seleted video
+  File? selectedVid;
+
+  ///video thumbnail
+  File? vidThumbnail;
 
   /// PROMOTE STATE
   RxBool shouldPromote = false.obs;
@@ -52,39 +66,65 @@ class CreatePostController extends GetxController {
   }
 
   /// UPLOAD FILE TO REMOTE SERVER
-  Future<dynamic> uploadFile() async {
+  Future<Map<String, dynamic>?> uploadFile() async {
     /// UPLOADED FILE URLS
     List<String> fileUrls = <String>[];
+    Map<String, dynamic> mediaUrls = {};
+    print("===============>>>>>>>><<<<<<<<<<<<<<<< seleted vide$selectedVid");
+    if (selectedVid != null) {
+      MediaUploadResult result =
+          await ApiService.uploadMediaFiles(selectedVid!, vidThumbnail!);
+      String videoUrl = result.videoUrl;
+      String thumbnailUrl = result.thumbnailUrl;
 
-    /// FILED SELECTED FILES
-    List<File> resourceFile = <File>[];
-
-    for (int i = 0; i < imageFileList.length; i++) {
-      File file = File(imageFileList[i].path);
-      resourceFile.add(file);
-    }
-
-    for (int i = 0; i < imageFileList.length; i++) {
-      final int bytes = resourceFile[i].readAsBytesSync().lengthInBytes;
-      final double kb = bytes / 1024;
-      final double mb = kb / 1024;
-
-      if (mb >= 5) {
-        showSnackbar(message: 'Image size should be maximum 10 MB.');
-        loading(false);
+      if (videoUrl == null) {
+        showSnackbar(message: 'Error Uploading video');
         return null;
       } else {
-        final dynamic res = await ApiService.uploadFile(resourceFile[i]);
+        print(
+            "===============>>>>>>>><<<<<<<<<<<<<<<< thumbnail $thumbnailUrl");
+        print("===============>>>>>>>><<<<<<<<<<<<<<<< videoUrl $videoUrl");
 
-        if (res == null) {
+        return mediaUrls = {'images': thumbnailUrl, 'videoUrl': videoUrl};
+      }
+    } else {
+      /// FILED SELECTED FILES
+      List<File> resourceFile = <File>[];
+
+      for (int i = 0; i < imageFileList.length; i++) {
+        File file = File(imageFileList[i].path);
+        resourceFile.add(file);
+      }
+
+      for (int i = 0; i < imageFileList.length; i++) {
+        final int bytes = resourceFile[i].readAsBytesSync().lengthInBytes;
+        final double kb = bytes / 1024;
+        final double mb = kb / 1024;
+
+        if (mb >= 5) {
+          showSnackbar(message: 'Image size should be maximum 10 MB.');
+          loading(false);
           return null;
         } else {
-          fileUrls.add(res['fileUrl']);
+          final dynamic res = await ApiService.uploadFile(resourceFile[i]);
+
+          if (res == null) {
+            return null;
+          } else {
+            fileUrls.add(res['fileUrl']);
+          }
         }
       }
     }
 
-    return fileUrls;
+    // return fileUrls;
+    if (fileUrls.isNotEmpty) {
+      return {'fileUrls': fileUrls};
+    } else if (mediaUrls.isNotEmpty) {
+      return mediaUrls;
+    }
+
+    return null;
   }
 
   /// CREATE POST CONTROLLER (REGISTER NEW POST TO REMOTE DATA SOURCE)
@@ -93,7 +133,9 @@ class CreatePostController extends GetxController {
     if (validateCreatePostData(body)) {
       loading(true);
       update();
-      if (imageFileList.isEmpty) {
+      print("seletesdkfjkajdfkajfkjadkfjakfjksa");
+      if (imageFileList.isEmpty && selectedVid == null) {
+        print("==========>>>>>>>>>imagfile is empty");
         final ApiResponseModel response = await PostRepository.createPost(body);
 
         if (response.success) {
@@ -110,12 +152,46 @@ class CreatePostController extends GetxController {
           }
           Get.snackbar('Success', 'Post created successfully');
         }
-      } else {
+      } else if (selectedVid == null) {
         if (await uploadFile() == null) {
           showSnackbar(message: 'Error Uploading image');
         } else {
+          final files = await uploadFile();
+          print("============this is the videos stuffs $files");
+          final thumbnail = files?['images'];
+          final videoUrl = files?['videoUrl'];
+          final ApiResponseModel response =
+              await PostRepository.createPost(<String, dynamic>{
+            ...body,
+            'images': thumbnail,
+            'videoUrl': videoUrl
+          });
+
+          if (response.success) {
+            imageFileList.clear();
+            _homeController.addNewPost(response.data, profileController);
+            profileController.addNewPost(response.data);
+
+            if (shouldPromote.value == true) {
+              Get.to(() => BoostPost(
+                    postId: response.data['postId'],
+                    postTitle: response.data['title'],
+                  ));
+            } else {
+              Get.back();
+            }
+            Get.snackbar('Success', 'Post created successfully');
+          }
+        }
+      } else {
+        print("=======>>>>>there was an uploaded file");
+        if (await uploadFile() == null) {
+          showSnackbar(message: 'Error Uploading video');
+        } else {
+          final file = await uploadFile();
+          print("==============this is the file $file");
           final ApiResponseModel response = await PostRepository.createPost(
-              <String, dynamic>{...body, 'images': await uploadFile()});
+              <String, dynamic>{...body, 'images': file?['fileUrls']});
 
           if (response.success) {
             imageFileList.clear();
@@ -316,22 +392,46 @@ class CreatePostController extends GetxController {
   }
 
   /// PICK IMAGE FROM DEVICE GALLERY
-  Future<void> onPickImage({bool isUpdating = false}) async {
+  Future<void> onPickImage(GalleryType type, {bool isUpdating = false}) async {
     // print(" $updatingImageFileList $isUpdating");
-    try {
-      final List<XFile> pickedFileList = await _picker.pickMultiImage();
-      if (isUpdating) {
-        final List<String> paths =
-            pickedFileList.map((XFile e) => e.path).toList();
-        updatingImageFileList =
-            RxList<String>(<String>[...paths, ...updatingImageFileList]);
-      } else {
-        imageFileList =
-            RxList<XFile>(<XFile>[...pickedFileList, ...imageFileList]);
+    if (type == GalleryType.videos) {
+      final video = await _picker.pickVideo(source: ImageSource.gallery);
+      if (video != null) {
+        try {
+          final uint8list = await VideoThumbnail.thumbnailFile(
+            video: File(video.path).path,
+            imageFormat: ImageFormat.PNG,
+            maxWidth:
+                128, // specify the width of the thumbnail, let the height auto-scaled to keep the source aspect ratio
+            quality: 10,
+          );
+
+          selectedVid = File(video.path);
+          vidThumbnail = File(uint8list!);
+          print("++++++>>>>>>>>>>>>>>>this is the video $selectedVid");
+          print("++++++>>>>>>>>>>>>>>>this is the video $vidThumbnail");
+
+          update();
+        } catch (e) {
+          //handle error
+        }
       }
-      update();
-    } catch (e) {
-      // handle error
+    } else {
+      try {
+        final List<XFile> pickedFileList = await _picker.pickMultiImage();
+        if (isUpdating) {
+          final List<String> paths =
+              pickedFileList.map((XFile e) => e.path).toList();
+          updatingImageFileList =
+              RxList<String>(<String>[...paths, ...updatingImageFileList]);
+        } else {
+          imageFileList =
+              RxList<XFile>(<XFile>[...pickedFileList, ...imageFileList]);
+        }
+        update();
+      } catch (e) {
+        // handle error
+      }
     }
   }
 

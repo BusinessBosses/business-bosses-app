@@ -1,4 +1,5 @@
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
+import 'package:business_bosses_v2/features/posts/widgets/video_screen.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 
@@ -7,7 +8,9 @@ import 'images_viewer_screen.dart';
 
 class PostImages extends StatelessWidget {
   final PostModel post;
-  const PostImages({Key? key, required this.post}) : super(key: key);
+  final isVideo;
+  const PostImages({Key? key, required this.post, this.isVideo: false})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -17,14 +20,24 @@ class PostImages extends StatelessWidget {
           children: [
             GestureDetector(
               onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (BuildContext context) => ImagesViewerScreen(
-                      urls: post.images,
-                      text: post.title,
+                if (isVideo) {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => VideoScreen(
+                        post: post,
+                      ),
                     ),
-                  ),
-                );
+                  );
+                } else {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (BuildContext context) => ImagesViewerScreen(
+                        urls: post.images,
+                        text: post.title,
+                      ),
+                    ),
+                  );
+                }
               },
               child: Padding(
                 padding: const EdgeInsets.only(left: 0, right: 0),
