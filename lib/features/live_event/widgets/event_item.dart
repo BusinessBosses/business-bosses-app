@@ -33,178 +33,174 @@ class EventItem extends StatelessWidget {
     final String formattedDate = dateFormat.format(event.startAt!);
     return Padding(
       padding: const EdgeInsets.only(left: 20),
-      child: Expanded(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            CustomIconButton(
-              onTap: () {},
-              height: 42,
-              width: 42,
-              margin: const EdgeInsets.symmetric(vertical: 44),
-              padding: const EdgeInsets.all(10),
-              child: SvgPicture.asset(
-                'assets/svgs/share.svg',
-                height: 15.0,
-                width: 15.0,
-                color: textColor.withOpacity(1.0),
-              ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          CustomIconButton(
+            onTap: () {},
+            height: 42,
+            width: 42,
+            margin: const EdgeInsets.symmetric(vertical: 44),
+            padding: const EdgeInsets.all(10),
+            child: SvgPicture.asset(
+              'assets/svgs/share.svg',
+              height: 15.0,
+              width: 15.0,
+              color: textColor.withOpacity(1.0),
             ),
-            Expanded(
-              child: Container(
-                margin: const EdgeInsets.only(left: 17, bottom: 16, right: 30),
-                padding: const EdgeInsets.all(16),
-                decoration: const BoxDecoration(
-                  color: Color.fromRGBO(244, 244, 244, 1),
-                  borderRadius: BorderRadius.all(Radius.circular(16)),
-                ),
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Align(
-                          alignment: Alignment.topLeft,
-                          child: Text(
-                            'ID: ${event.roomId!}',
-                            textAlign: TextAlign.left,
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 12,
-                            ),
-                          ),
-                        ),
-                        if (event.user?.uid == profileController.myProfile.uid)
-                          _buildPopupMenuButton(context),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    Align(
-                      alignment: Alignment.topLeft,
-                      child: Text(
-                        event.title!,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.w700,
-                          fontSize: 14,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    Row(
-                      children: [
-                        const Text('Host:'),
-                        const SizedBox(
-                          width: 4,
-                        ),
-                        NetworkImageWithPlaceHolder(
-                          imageUrl: event.user?.photoUrl,
-                          height: 16,
-                          width: 16,
-                        ),
-                        const SizedBox(
-                          width: 4,
-                        ),
-                        Text(
-                          event.user?.name ?? event.user!.username,
+          ),
+          Expanded(
+            child: Container(
+              margin: const EdgeInsets.only(left: 17, bottom: 16, right: 30),
+              padding: const EdgeInsets.all(16),
+              decoration: const BoxDecoration(
+                color: Color.fromRGBO(244, 244, 244, 1),
+                borderRadius: BorderRadius.all(Radius.circular(16)),
+              ),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Align(
+                        alignment: Alignment.topLeft,
+                        child: Text(
+                          'ID: ${event.roomId!}',
+                          textAlign: TextAlign.left,
                           style: const TextStyle(
-                            fontWeight: FontWeight.w200,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 12,
                           ),
                         ),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Align(
-                      alignment: Alignment.topLeft,
-                      child: Expanded(
-                        child: Row(
-                          children: [
-                            Container(
-                              padding: const EdgeInsets.all(8),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(12),
-                                color: const Color.fromRGBO(224, 224, 224, 1),
-                              ),
-                              child: Row(
-                                children: <Widget>[
-                                  const Icon(
-                                    Icons.calendar_month,
-                                    size: 10,
-                                  ),
-                                  const SizedBox(
-                                    width: 6,
-                                  ),
-                                  Text(
-                                    formattedDate.toString(),
-                                    style: const TextStyle(
-                                      fontSize: 11,
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    width: 2,
-                                  ),
-                                  Text(
-                                    '${formatTime(event.startAt!)} - ${formatTime(event.endAt!)}',
-                                    style: const TextStyle(
-                                      fontSize: 11,
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            const SizedBox(
-                              width: 5,
-                            ),
-                            ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.white,
-                                foregroundColor: Colors.red,
-                                minimumSize: const Size(55, 32),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(
-                                      12), // Set the border radius
-                                ),
-                              ),
-                              onPressed: () {
-                                if (event.user?.uid ==
-                                    profileController.myProfile.uid) {
-                                  jumpToLivePage(
-                                    context,
-                                    title: event.title!,
-                                    roomID: event.roomId!,
-                                    isHost: true,
-                                  );
-                                } else {
-                                  jumpToLivePage(
-                                    context,
-                                    title: event.title!,
-                                    roomID: event.roomId!,
-                                    isHost: false,
-                                  );
-                                }
-                              },
-                              child: const Text(
-                                'Join',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            )
-                          ],
-                        ),
+                      ),
+                      if (event.user?.uid == profileController.myProfile.uid)
+                        _buildPopupMenuButton(context),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  Align(
+                    alignment: Alignment.topLeft,
+                    child: Text(
+                      event.title!,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w700,
+                        fontSize: 14,
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                  const SizedBox(height: 10),
+                  Row(
+                    children: [
+                      const Text('Host:'),
+                      const SizedBox(
+                        width: 4,
+                      ),
+                      NetworkImageWithPlaceHolder(
+                        imageUrl: event.user?.photoUrl,
+                        height: 16,
+                        width: 16,
+                      ),
+                      const SizedBox(
+                        width: 4,
+                      ),
+                      Text(
+                        event.user?.name ?? event.user!.username,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.w200,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Align(
+                    alignment: Alignment.topLeft,
+                    child: Row(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12),
+                            color: const Color.fromRGBO(224, 224, 224, 1),
+                          ),
+                          child: Row(
+                            children: <Widget>[
+                              const Icon(
+                                Icons.calendar_month,
+                                size: 10,
+                              ),
+                              const SizedBox(
+                                width: 6,
+                              ),
+                              Text(
+                                formattedDate.toString(),
+                                style: const TextStyle(
+                                  fontSize: 11,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 2,
+                              ),
+                              Text(
+                                '${formatTime(event.startAt!)} - ${formatTime(event.endAt!)}',
+                                style: const TextStyle(
+                                  fontSize: 11,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 5,
+                        ),
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.white,
+                            foregroundColor: Colors.red,
+                            minimumSize: const Size(55, 32),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(
+                                  12), // Set the border radius
+                            ),
+                          ),
+                          onPressed: () {
+                            if (event.user?.uid ==
+                                profileController.myProfile.uid) {
+                              jumpToLivePage(
+                                context,
+                                title: event.title!,
+                                roomID: event.roomId!,
+                                isHost: true,
+                              );
+                            } else {
+                              jumpToLivePage(
+                                context,
+                                title: event.title!,
+                                roomID: event.roomId!,
+                                isHost: false,
+                              );
+                            }
+                          },
+                          child: const Text(
+                            'Join',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                ],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
