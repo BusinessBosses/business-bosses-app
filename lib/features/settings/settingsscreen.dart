@@ -1,3 +1,5 @@
+// ignore_for_file: public_member_api_docs, library_private_types_in_public_api, always_specify_types, deprecated_member_use
+
 import 'dart:convert';
 
 import 'package:business_bosses_v2/common/widgets/buttons/my_outlined_button.dart';
@@ -12,12 +14,10 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:yaml/yaml.dart';
 
-import '../../action/action.dart';
 import '../../common/dialogs/snackbar.dart';
 import '../../common/models/api_response_model.dart';
 import '../../navigation/routes.dart';
 import '../../services/api_service.dart';
-import '../../utils/constants/constants.dart';
 import '../posts/widgets/settings_item.dart';
 
 class SettingsScreen extends StatefulWidget {

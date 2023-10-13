@@ -552,6 +552,8 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
 
                                                           return MarketTile(
                                                             post: market,
+                                                            controller:
+                                                                _marketController,
                                                           );
                                                         },
                                                       );

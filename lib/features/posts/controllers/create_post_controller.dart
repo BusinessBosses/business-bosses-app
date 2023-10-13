@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
@@ -6,6 +7,7 @@ import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/posts/repository/post_repository.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -52,12 +54,6 @@ class CreatePostController extends GetxController {
   bool validateCreatePostData(Map<String, dynamic> data) {
     final String title = data['title'].toString();
 
-    // final RegExp invisibleCharacterPattern =
-    //     RegExp(r'[\p{Z}\p{C}]', unicode: true);
-
-    // if (invisibleCharacterPattern.hasMatch(title)) {
-    //   return false;
-    // }
     if (title.isEmpty && imageFileList.isEmpty) {
       return false;
     } else {
@@ -214,7 +210,9 @@ class CreatePostController extends GetxController {
       update();
     } else {
       showSnackbar(
-          message: 'Post can\'t be empty', title: 'OOPS!', error: true);
+          message: 'Post can\'t be empty or contain unwanted characters',
+          title: 'OOPS!',
+          error: true);
       return;
     }
   }

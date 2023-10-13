@@ -13,7 +13,6 @@
 		97C146FC1CF9000F007C117D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FA1CF9000F007C117D /* Main.storyboard */; };
 		97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FD1CF9000F007C117D /* Assets.xcassets */; };
 		97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */; };
-		A2805AD92ABC4395009764A9 /* StoreKitTestCertificate.cer in Resources */ = {isa = PBXBuildFile; fileRef = A2805AD82ABC4395009764A9 /* StoreKitTestCertificate.cer */; };
 		A28765D62A8D29EB00B00E4B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A28765D52A8D29EB00B00E4B /* GoogleService-Info.plist */; };
 		A2FEE9C02A06963300F08A5F /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A2FEE9BF2A06963300F08A5F /* Pods_Runner.framework */; };
 /* End PBXBuildFile section */
@@ -51,8 +50,6 @@
 		97C147021CF9000F007C117D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A24A8C992A066EF4001F1211 /* RunnerDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = RunnerDebug.entitlements; sourceTree = "<group>"; };
 		A24A8C9A2A066EFB001F1211 /* RunnerRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = RunnerRelease.entitlements; sourceTree = "<group>"; };
-		A2805AD72ABC4303009764A9 /* Testingpayment.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = Testingpayment.storekit; sourceTree = "<group>"; };
-		A2805AD82ABC4395009764A9 /* StoreKitTestCertificate.cer */ = {isa = PBXFileReference; lastKnownFileType = file; path = StoreKitTestCertificate.cer; sourceTree = "<group>"; };
 		A28765D52A8D29EB00B00E4B /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "Runner/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		A2B471942A05554C00F62044 /* RunnerProfile.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = RunnerProfile.entitlements; sourceTree = "<group>"; };
 		A2FEE9BF2A06963300F08A5F /* Pods_Runner.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Pods_Runner.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -103,8 +100,6 @@
 		97C146E51CF9000F007C117D = {
 			isa = PBXGroup;
 			children = (
-				A2805AD72ABC4303009764A9 /* Testingpayment.storekit */,
-				A2805AD82ABC4395009764A9 /* StoreKitTestCertificate.cer */,
 				A28765D52A8D29EB00B00E4B /* GoogleService-Info.plist */,
 				9740EEB11CF90186004384FC /* Flutter */,
 				97C146F01CF9000F007C117D /* Runner */,
@@ -212,7 +207,6 @@
 				A28765D62A8D29EB00B00E4B /* GoogleService-Info.plist in Resources */,
 				97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */,
 				97C146FC1CF9000F007C117D /* Main.storyboard in Resources */,
-				A2805AD92ABC4395009764A9 /* StoreKitTestCertificate.cer in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -28,8 +28,8 @@ void main() async {
   await Firebase.initializeApp();
   await initUniLinks();
   AnalyticsServices();
-  // Stripe.publishableKey =
-  //     'pk_live_51MAcspEGsMsi6baUVnDR3Vlfh14vm73Oz9Z4LwYcvzOTdd6AvRRHrGCkpIoYmTfe2iSXm7ju2RQtO4UYJTvodFPR008RO7V1j3';
+  Stripe.publishableKey =
+      'pk_live_51MAcspEGsMsi6baUVnDR3Vlfh14vm73Oz9Z4LwYcvzOTdd6AvRRHrGCkpIoYmTfe2iSXm7ju2RQtO4UYJTvodFPR008RO7V1j3';
   Stripe.merchantIdentifier = 'merchant.businessbosses';
 
   Stripe.publishableKey =
@@ -38,6 +38,8 @@ void main() async {
   FirebaseMessaging.instance.getToken().then((String? value) {
     // print(value);
   });
+
+  FirebaseMessaging.instance.requestPermission();
 
   /// BACKGROUND HANDLER
   FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) async {

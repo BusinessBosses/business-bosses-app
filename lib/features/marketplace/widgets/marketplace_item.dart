@@ -18,7 +18,6 @@ import '../../../../utils/theme/theme.dart';
 import '../../../common/models/api_response_model.dart';
 import '../../../common/models/comment_model.dart';
 import '../../../common/models/user_model.dart';
-import '../../../common/widgets/buttons/my_outlined_button.dart';
 import '../../chat/chat_room_screen.dart';
 import '../../profile/presentation/publicprofilescreen.dart';
 import '../../profile/widgets/premium_profile_tile.dart';
@@ -31,10 +30,15 @@ import 'post_like_comment.dart';
 /// import 'rep';
 class MarketTile extends StatefulWidget {
   final MarketModel post;
+  final dynamic controller;
   final Function(int)? onPageChange;
 
   ///
-  const MarketTile({Key? key, required this.post, this.onPageChange})
+  const MarketTile(
+      {Key? key,
+      required this.post,
+      required this.controller,
+      this.onPageChange})
       : super(key: key);
 
   @override
@@ -79,6 +83,19 @@ class _MarketTileState extends State<MarketTile> {
     // TODO: implement didUpdateWidget
     super.didUpdateWidget(oldWidget);
     _post = widget.post;
+  }
+
+  String formatCount(int count) {
+    if (count >= 1000) {
+      double countInK = count / 1000;
+      if (countInK >= 1000) {
+        return '${(countInK / 1000).toStringAsFixed(1)}m';
+      } else {
+        return '${countInK.toStringAsFixed(1)}k';
+      }
+    } else {
+      return count.toString();
+    }
   }
 
   @override
@@ -550,9 +567,13 @@ class _MarketTileState extends State<MarketTile> {
                                                       .myProfile.uid) ==
                                               true
                                           ? SvgPicture.asset(
-                                              'assets/svgs/likefilled.svg')
+                                              'assets/svgs/likefilled.svg',
+                                              height: 15,
+                                            )
                                           : SvgPicture.asset(
-                                              'assets/svgs/like.svg'),
+                                              'assets/svgs/like.svg',
+                                              height: 15,
+                                            ),
                                       label: Text(
                                         '${_post.likes?.length ?? 0}',
                                         style: Theme.of(context)
@@ -577,7 +598,9 @@ class _MarketTileState extends State<MarketTile> {
                                         );
                                       },
                                       icon: SvgPicture.asset(
-                                          'assets/svgs/comment.svg'),
+                                        'assets/svgs/comment.svg',
+                                        height: 15,
+                                      ),
                                       label: Text(
                                         '${_post.comments?.length ?? 0}',
                                         style: Theme.of(context)
@@ -606,9 +629,13 @@ class _MarketTileState extends State<MarketTile> {
                                                             .myProfile.uid) ==
                                                     true
                                                 ? SvgPicture.asset(
-                                                    'assets/svgs/coin.svg')
+                                                    'assets/svgs/coin.svg',
+                                                    height: 20,
+                                                  )
                                                 : SvgPicture.asset(
-                                                    'assets/svgs/coin.svg'),
+                                                    'assets/svgs/coin.svg',
+                                                    height: 20,
+                                                  ),
                                             label: Text(
                                               '${_post.coins?.length ?? 0}',
                                               style: Theme.of(context)
@@ -644,18 +671,24 @@ class _MarketTileState extends State<MarketTile> {
                                               ],
                                             ),
                                           ),
-                                    const SizedBox(width: 8.0),
-                                    GestureDetector(
-                                      onTap: () => _sharePost(),
-                                      child: SvgPicture.asset(
-                                        'assets/svgs/share.svg',
-                                        height: 18.0,
-                                        width: 18.0,
+                                    TextButton.icon(
+                                      onPressed: () async {},
+                                      icon: const Icon(
+                                          Icons.remove_red_eye_outlined,
+                                          size: 19,
+                                          color: Colors.black),
+                                      label: Text(
+                                        formatCount(_post.views!),
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium
+                                            ?.copyWith(
+                                              fontWeight: FontWeight.w700,
+                                              color: textColor.withOpacity(0.8),
+                                            ),
                                       ),
                                     ),
-                                    const SizedBox(
-                                      width: 30,
-                                    ),
+                                    const SizedBox(width: 10.0),
                                     _post.userId ==
                                             profileController.myProfile.uid
                                         ? const SizedBox()
@@ -663,13 +696,8 @@ class _MarketTileState extends State<MarketTile> {
                                             child: Padding(
                                               padding: const EdgeInsets.only(
                                                   right: 15.0),
-                                              child: MCustomButton(
-                                                height: 40,
-                                                margin: const EdgeInsets.only(
-                                                    right: 0.0,
-                                                    bottom: 10,
-                                                    top: 10),
-                                                onPressed: () {
+                                              child: GestureDetector(
+                                                onTap: () {
                                                   Get.to(
                                                     () => ChatRoomScreen(
                                                       frommarketplace: true,
@@ -678,12 +706,30 @@ class _MarketTileState extends State<MarketTile> {
                                                     arguments: _post.user,
                                                   );
                                                 },
-                                                child: const Text(
-                                                  'Message Seller',
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.w700,
-                                                      fontSize: 15),
+                                                child: Container(
+                                                  decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              8),
+                                                      border: Border.all(
+                                                          width: 1.5,
+                                                          color:
+                                                              primaryColorLT)),
+                                                  child: const Center(
+                                                    child: Padding(
+                                                      padding:
+                                                          EdgeInsets.all(6.0),
+                                                      child: Text(
+                                                        'Message Seller',
+                                                        style: TextStyle(
+                                                          color: primaryColorLT,
+                                                          fontWeight:
+                                                              FontWeight.w700,
+                                                          fontSize: 12,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
                                                 ),
                                               ),
                                             ),
@@ -874,6 +920,14 @@ class _MarketTileState extends State<MarketTile> {
               title: const TextWidget(
                 text: 'Report this post',
                 color: Colors.red,
+              ),
+            ),
+            ListTile(
+              onTap: () => _sharePost(),
+              contentPadding: EdgeInsets.zero,
+              title: const TextWidget(
+                text: 'Share this post',
+                color: Colors.blue,
               ),
             ),
             ListTile(

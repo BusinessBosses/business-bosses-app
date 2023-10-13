@@ -175,9 +175,9 @@ class _BoostPostState extends State<BoostPost> {
           paymentSheetParameters: SetupPaymentSheetParameters(
             paymentIntentClientSecret: paymantIntent!['client_secret'],
             merchantDisplayName: 'Business Bosses',
-            applePay: const PaymentSheetApplePay(
-              merchantCountryCode: 'US',
-            ),
+            // applePay: const PaymentSheetApplePay(
+            //   merchantCountryCode: 'US',
+            // ),
           ),
         )
             .then((void value) {

@@ -1,13 +1,10 @@
-import 'dart:convert';
 import 'dart:io';
-
 import 'package:business_bosses_v2/features/premium/paymentconfig.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:pay/pay.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import '../../action/action.dart';
 import '../../common/dialogs/snackbar.dart';
@@ -16,9 +13,7 @@ import '../../common/widgets/buttons/my_button.dart';
 import '../../common/widgets/text_widget.dart';
 import '../../navigation/routes.dart';
 import '../../services/api_service.dart';
-import '../../utils/constants/constants.dart';
 import '../../utils/theme/theme.dart';
-import 'package:http/http.dart' as http;
 
 // ignore: public_member_api_docs
 class ReviewPayment extends StatefulWidget {
@@ -92,14 +87,13 @@ class _ReviewPaymentState extends State<ReviewPayment> {
           await launchUrlString(res.data, mode: LaunchMode.externalApplication);
         }
       } else {
+        // ignore: use_build_context_synchronously
         showSnackBar(context, message: res.message);
       }
       setState(() {
         _isProcessing = false;
       });
-    } catch (e) {
-      print("Error occurred $e");
-    }
+    } catch (e) {}
   }
 
   List<Map<String, dynamic>> applepayplans = <Map<String, dynamic>>[
@@ -119,18 +113,9 @@ class _ReviewPaymentState extends State<ReviewPayment> {
       'optionname': 'Card Payment',
       'optionsvg': 'assets/svgs/cardlogo.svg'
     },
-    // <String, dynamic>{
-    //   'optionname': 'Google Pay',
-    //   'optionsvg': 'assets/svgs/googlepaylogo.svg'
-    // },
-    if (Platform.isIOS)
-      <String, dynamic>{
-        'optionname': 'Apple Pay',
-        'optionsvg': 'assets/svgs/applepaylogo.svg'
-      },
     <String, dynamic>{
-      'optionname': 'PayPal',
-      'optionsvg': 'assets/svgs/paypallogo.svg'
+      'optionname': 'PayStack',
+      'optionsvg': 'assets/svgs/paystack.svg'
     },
   ];
 
@@ -284,7 +269,9 @@ class _ReviewPaymentState extends State<ReviewPayment> {
                                   argument.toString().contains('annually')
                                       ? '55%'
                                       : '45%',
-                                  style: const TextStyle(fontSize: 12),
+                                  style: const TextStyle(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w700),
                                 ),
                                 const Text(
                                   ' of our users choose this plan',
@@ -401,59 +388,17 @@ class _ReviewPaymentState extends State<ReviewPayment> {
                           //       child: CircularProgressIndicator(),
                           //     ),
                           //   ),
-                        ] else if (initPlan == 'PayPal') ...[
+                        ] else if (initPlan == 'PayStack') ...[
                           MyButton(
                             onPressed: () async {
                               plan = argument['plan'];
-                              await makePayPallPayment(plan);
                             },
                             labelStyle: const TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.w700,
                               fontSize: 18,
                             ),
-                            label: 'Pay with PayPal',
-                          )
-                        ] else if (initPlan == 'Apple Pay') ...[
-                          Container(
-                            height: 55,
-                            decoration: BoxDecoration(
-                                color: Colors.black,
-                                borderRadius: BorderRadius.circular(10)),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: ApplePayButton(
-                                height: 40,
-                                width: MediaQuery.of(context).size.width,
-                                paymentConfiguration:
-                                    PaymentConfiguration.fromJsonString(
-                                        defaultApplePay),
-                                paymentItems: [
-                                  PaymentItem(
-                                    label:
-                                        argument.toString().contains('annually')
-                                            ? 'Premium Subscription (Annually)'
-                                            : 'Premium Subscription (Monthly)',
-                                    amount:
-                                        argument.toString().contains('annually')
-                                            ? '49.99'
-                                            : '4.99',
-                                    status: PaymentItemStatus.final_price,
-                                  )
-                                ],
-                                style: ApplePayButtonStyle.black,
-                                type: ApplePayButtonType.subscribe,
-                                onPaymentResult: (Map data) {
-                                  sendPaymentData(data);
-                                },
-                                onError: (error) {
-                                  print(error);
-                                },
-                                loadingIndicator: const Center(
-                                  child: CircularProgressIndicator(),
-                                ),
-                              ),
-                            ),
+                            label: 'Pay now',
                           )
                         ] else
                           ...[]
