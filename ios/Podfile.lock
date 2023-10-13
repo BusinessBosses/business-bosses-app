@@ -274,12 +274,12 @@ PODS:
   - zego_zim (2.10.0):
     - Flutter
     - ZIM (= 2.10.0)
-  - zego_zpns (2.4.0):
+  - zego_zpns (2.5.0):
     - Flutter
-    - ZPNs (= 2.4.0)
+    - ZPNs (= 2.5.0)
   - ZIM (2.10.0)
   - ZIPFoundation (0.9.16)
-  - ZPNs (2.4.0)
+  - ZPNs (2.5.0)
 
 DEPENDENCIES:
   - connectivity (from `.symlinks/plugins/connectivity/ios`)
@@ -487,10 +487,10 @@ SPEC CHECKSUMS:
   zego_express_engine: f2abe70e6484d4d199e516d4c2d72127f64b1edd
   zego_uikit_signaling_plugin: 7fdfcd9f796b591c9cb8770609f4fa85178aa40e
   zego_zim: c344b303b00434e70f7a25a756d42be6082c507f
-  zego_zpns: 45f07ef9b5b3e34bd61544290f8f49c1ae007db2
+  zego_zpns: 703c48f93ee481ac849fd83a497f72aaa1902a85
   ZIM: b0f5fdf211b723819043019373f9003d5e98420d
   ZIPFoundation: d170fa8e270b2a32bef9dcdcabff5b8f1a5deced
-  ZPNs: 2ef89a571260ca9ffe4fc3394413ff19b8e372be
+  ZPNs: 3f73f4ee16eef87db96986d85b2c1b4e2286f4ee
 
 PODFILE CHECKSUM: f70a285fd8b33776a553c75657fa301fe0b21452
 

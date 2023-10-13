@@ -1,18 +1,14 @@
-// ignore_for_file: public_member_api_docs
-
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/features/live_event/controller/live_event_controller.dart';
 import 'package:business_bosses_v2/features/live_event/models/events_model.dart';
+import 'package:business_bosses_v2/features/live_event/presentation/create_event.dart';
+import 'package:business_bosses_v2/features/live_event/widgets/call_room.dart';
+import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
+import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-
-import '../../../utils/theme/theme.dart';
-import '../../profile/controller/profile_controller.dart';
-import '../presentation/create_event.dart';
-import 'call_room.dart';
-import 'custom_icon_button.dart';
 
 class EventItem extends StatelessWidget {
   final EventModel event;
@@ -20,183 +16,206 @@ class EventItem extends StatelessWidget {
   final LiveController liveController = Get.find();
 
   EventItem({
-    super.key,
+    Key? key,
     required this.event,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    // Define a custom date format
     final DateFormat dateFormat = DateFormat('d MMM, y');
-
-    // Format the date
     final String formattedDate = dateFormat.format(event.startAt!);
+
     return Padding(
-      padding: const EdgeInsets.only(left: 20),
+      padding: const EdgeInsets.only(left: 15),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          CustomIconButton(
+          GestureDetector(
             onTap: () {},
-            height: 42,
-            width: 42,
-            margin: const EdgeInsets.symmetric(vertical: 44),
-            padding: const EdgeInsets.all(10),
-            child: SvgPicture.asset(
-              'assets/svgs/share.svg',
-              height: 15.0,
-              width: 15.0,
-              color: textColor.withOpacity(1.0),
+            child: Container(
+              decoration: const BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(50)),
+                color: backgroundcolorinterface,
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: SvgPicture.asset(
+                  'assets/svgs/share.svg',
+                  height: 15.0,
+                  width: 15.0,
+                  color: textColor.withOpacity(1.0),
+                ),
+              ),
             ),
           ),
           Expanded(
             child: Container(
-              margin: const EdgeInsets.only(left: 17, bottom: 16, right: 30),
-              padding: const EdgeInsets.all(16),
-              decoration: const BoxDecoration(
-                color: Color.fromRGBO(244, 244, 244, 1),
-                borderRadius: BorderRadius.all(Radius.circular(16)),
+              margin: const EdgeInsets.only(
+                left: 15,
+                bottom: 10,
+                top: 10,
+                right: 15,
               ),
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Align(
-                        alignment: Alignment.topLeft,
-                        child: Text(
-                          'ID: ${event.roomId!}',
-                          textAlign: TextAlign.left,
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 12,
-                          ),
-                        ),
-                      ),
-                      if (event.user?.uid == profileController.myProfile.uid)
-                        _buildPopupMenuButton(context),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 5,
-                  ),
-                  Align(
-                    alignment: Alignment.topLeft,
-                    child: Text(
-                      event.title!,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.w700,
-                        fontSize: 14,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  Row(
-                    children: [
-                      const Text('Host:'),
-                      const SizedBox(
-                        width: 4,
-                      ),
-                      NetworkImageWithPlaceHolder(
-                        imageUrl: event.user?.photoUrl,
-                        height: 16,
-                        width: 16,
-                      ),
-                      const SizedBox(
-                        width: 4,
-                      ),
-                      Text(
-                        event.user?.name ?? event.user!.username,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.w200,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Align(
-                    alignment: Alignment.topLeft,
-                    child: Row(
+              decoration: const BoxDecoration(
+                color: backgroundColor,
+                borderRadius: BorderRadius.all(Radius.circular(15)),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.only(left: 15.0),
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Container(
-                          padding: const EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(12),
-                            color: const Color.fromRGBO(224, 224, 224, 1),
+                        Padding(
+                          padding: EdgeInsets.only(
+                            top: event.user?.uid ==
+                                    profileController.myProfile.uid
+                                ? 0.0
+                                : 15,
+                            bottom: event.user?.uid ==
+                                    profileController.myProfile.uid
+                                ? 0.0
+                                : 15,
                           ),
-                          child: Row(
-                            children: <Widget>[
-                              const Icon(
-                                Icons.calendar_month,
-                                size: 10,
+                          child: Align(
+                            alignment: Alignment.topLeft,
+                            child: Text(
+                              'ID: ${event.roomId!}',
+                              textAlign: TextAlign.left,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 13,
                               ),
-                              const SizedBox(
-                                width: 6,
-                              ),
-                              Text(
-                                formattedDate.toString(),
-                                style: const TextStyle(
-                                  fontSize: 11,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              ),
-                              const SizedBox(
-                                width: 2,
-                              ),
-                              Text(
-                                '${formatTime(event.startAt!)} - ${formatTime(event.endAt!)}',
-                                style: const TextStyle(
-                                  fontSize: 11,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(
-                          width: 5,
-                        ),
-                        ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.white,
-                            foregroundColor: Colors.red,
-                            minimumSize: const Size(55, 32),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(
-                                  12), // Set the border radius
                             ),
                           ),
-                          onPressed: () {
-                            if (event.user?.uid ==
-                                profileController.myProfile.uid) {
-                              jumpToLivePage(
-                                context,
-                                title: event.title!,
-                                roomID: event.roomId!,
-                                isHost: true,
-                              );
-                            } else {
-                              jumpToLivePage(
-                                context,
-                                title: event.title!,
-                                roomID: event.roomId!,
-                                isHost: false,
-                              );
-                            }
-                          },
-                          child: const Text(
-                            'Join',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w500,
+                        ),
+                        if (event.user?.uid == profileController.myProfile.uid)
+                          _buildPopupMenuButton(context),
+                      ],
+                    ),
+                    Align(
+                      alignment: Alignment.topLeft,
+                      child: Text(
+                        event.title! ?? '',
+                        style: const TextStyle(
+                          fontWeight: FontWeight.w700,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    Row(
+                      children: [
+                        const Text('Host:'),
+                        const SizedBox(
+                          width: 4,
+                        ),
+                        NetworkImageWithPlaceHolder(
+                          imageUrl: event.user?.photoUrl,
+                          height: 16,
+                          width: 16,
+                        ),
+                        const SizedBox(
+                          width: 4,
+                        ),
+                        Text(
+                          event.user?.name ?? event.user!.username,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      children: [
+                        Align(
+                          alignment: Alignment.topLeft,
+                          child: Container(
+                            padding: const EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8),
+                              color: const Color.fromRGBO(224, 224, 224, 1),
+                            ),
+                            child: Row(
+                              children: <Widget>[
+                                const Icon(
+                                  Icons.calendar_month,
+                                  size: 10,
+                                ),
+                                const SizedBox(
+                                  width: 6,
+                                ),
+                                Text(
+                                  formattedDate.toString(),
+                                  style: const TextStyle(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                                const SizedBox(
+                                  width: 2,
+                                ),
+                                Text(
+                                  '${formatTime(event.startAt!)} - ${formatTime(event.endAt!)}',
+                                  style: const TextStyle(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        const Spacer(),
+                        Padding(
+                          padding: const EdgeInsets.only(right: 15.0),
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.white,
+                              foregroundColor: Colors.red,
+                              minimumSize: const Size(55, 32),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(
+                                    12), // Set the border radius
+                              ),
+                            ),
+                            onPressed: () {
+                              if (event.user?.uid ==
+                                  profileController.myProfile.uid) {
+                                jumpToLivePage(
+                                  context,
+                                  title: event.title!,
+                                  roomID: event.roomId!,
+                                  isHost: true,
+                                );
+                              } else {
+                                jumpToLivePage(
+                                  context,
+                                  title: event.title!,
+                                  roomID: event.roomId!,
+                                  isHost: false,
+                                );
+                              }
+                            },
+                            child: const Text(
+                              'Join',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w500,
+                              ),
                             ),
                           ),
                         )
                       ],
                     ),
-                  ),
-                ],
+                    const SizedBox(
+                      height: 8,
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -215,7 +234,7 @@ class EventItem extends StatelessWidget {
       icon: const Icon(
         Icons.more_horiz,
         color: Colors.black54,
-        size: 14,
+        size: 16,
       ),
       itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
         if (event.user?.uid == profileController.myProfile.uid)
@@ -231,11 +250,8 @@ class EventItem extends StatelessWidget {
       ],
       onSelected: (String value) {
         if (value == 'edit') {
-          // Handle edit action here
-          // You can navigate to an edit screen or perform any other action
           Navigator.push(
             context,
-            // ignore: always_specify_types
             MaterialPageRoute(
               builder: (BuildContext context) => CreateEvent(
                 event: event,
@@ -243,8 +259,6 @@ class EventItem extends StatelessWidget {
             ),
           );
         } else if (value == 'delete') {
-          // Handle delete action here
-          // You can show a confirmation dialog and delete the event if confirmed
           _showDeleteConfirmationDialog(context, event.id!);
         }
       },
@@ -261,16 +275,14 @@ class EventItem extends StatelessWidget {
           actions: <Widget>[
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
+                Navigator.of(context).pop();
               },
               child: const Text('Cancel'),
             ),
             TextButton(
               onPressed: () {
-                // Perform the delete action here
-                // You can delete the event and update your data
                 liveController.deleteEvent(id);
-                Navigator.of(context).pop(); // Close the dialog
+                Navigator.of(context).pop();
               },
               child: const Text('Delete'),
             ),
@@ -284,7 +296,6 @@ class EventItem extends StatelessWidget {
       {required String roomID, required bool isHost, required String title}) {
     Navigator.push(
       context,
-      // ignore: always_specify_types
       MaterialPageRoute(
         builder: (BuildContext context) => CallRoom(
           roomID: roomID,

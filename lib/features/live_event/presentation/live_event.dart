@@ -64,13 +64,13 @@ class _LiveEventState extends State<LiveEvent> {
     0: const Padding(
       padding: EdgeInsets.all(8),
       child: Text(
-        'Upcoming',
+        'Ongoing',
         style: TextStyle(fontWeight: FontWeight.bold),
       ),
     ),
     1: const Padding(
       padding: EdgeInsets.all(8),
-      child: Text('Ongoing', style: TextStyle(fontWeight: FontWeight.bold)),
+      child: Text('Upcoming', style: TextStyle(fontWeight: FontWeight.bold)),
     )
   };
 
@@ -79,220 +79,221 @@ class _LiveEventState extends State<LiveEvent> {
     return GetBuilder<LiveController>(
       builder: (LiveController liveController) {
         return Scaffold(
-          backgroundColor: Colors.white,
-          appBar: AppBar(
-            leading: IconButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
+            backgroundColor: Colors.white,
+            appBar: AppBar(
+              leading: IconButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
+              ),
+              centerTitle: true,
+              title: const Text(
+                'Live Events',
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 20),
+              ),
             ),
-            centerTitle: true,
-            title: const Text(
-              'Live Events',
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 20),
-            ),
-          ),
-          body: liveController.loading.value
-              ? const Center(child: CircularProgressIndicator())
-              : NestedScrollView(
-                  controller: scrollController,
-                  headerSliverBuilder: (
-                    BuildContext context,
-                    bool innerBoxIsScrolled,
-                  ) {
-                    return <Widget>[
-                      SliverStickyHeader(
-                        sticky: true,
-                        header: Column(
-                          children: <Widget>[
-                            Stack(
-                              children: [
-                                Container(
-                                  margin: const EdgeInsets.only(
-                                    top: 10,
-                                    right: 15,
-                                    left: 15,
-                                  ),
-                                  height: 150,
-                                  width: double.infinity,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(15.0),
-                                    image: const DecorationImage(
-                                      image: AssetImage(
-                                          'assets/images/live_event.png'),
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
-                                ),
-                                const Positioned(
-                                  top: 50,
-                                  right: 35,
-                                  child: Text(
-                                    'Share your thoughts with bosses\n We want to listen as it happens',
-                                    textAlign: TextAlign.right,
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
-                                    ),
-                                    softWrap: true,
-                                  ),
-                                ),
-                                Positioned(
-                                  bottom: 10,
-                                  right: 35,
-                                  child: ElevatedButton(
-                                    onPressed: () => Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (BuildContext context) =>
-                                            CreateEvent(),
-                                      ),
-                                    ),
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: Colors.white,
-                                      padding: const EdgeInsets.symmetric(
-                                        horizontal: 20,
-                                        vertical: 10,
-                                      ),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(25.0),
-                                      ),
-                                    ),
-                                    child: const Text(
-                                      'Create Live Event',
-                                      style: TextStyle(
-                                        color: Colors.red,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Container(
-                              margin: const EdgeInsets.only(
-                                top: 10,
-                                right: 15,
-                                left: 15,
-                              ),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: <Widget>[
-                                  Expanded(
-                                    child: TextField(
-                                      controller: joinEvent,
-                                      decoration: const InputDecoration(
-                                        hintText: 'Find Event By ID',
-                                        filled: true,
-                                        fillColor: backgroundColor,
-                                        border: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color.fromRGBO(
-                                                224, 224, 224, 1),
-                                          ),
-                                          borderRadius: BorderRadius.all(
-                                            Radius.circular(12),
-                                          ),
-                                        ),
-                                        contentPadding: EdgeInsets.only(
-                                          left: 10,
-                                          right: 10,
-                                          top: 0,
-                                          bottom: 0,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(width: 10),
-                                  ElevatedButton(
-                                    onPressed: () => joinLive(context, ''),
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor:
-                                          const Color.fromRGBO(242, 28, 41, 1),
-                                      padding: const EdgeInsets.symmetric(
-                                        horizontal: 35,
-                                        vertical: 15,
-                                      ),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(16.0),
-                                      ),
-                                    ),
-                                    child: const Text(
-                                      'Join',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            const SizedBox(height: 10),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 20.0),
-                              child: Align(
-                                alignment: Alignment.topCenter,
-                                child: CupertinoSlidingSegmentedControl<int>(
-                                  padding: const EdgeInsets.all(5),
-                                  children: _segments,
-                                  onValueChanged: (int? value) {
-                                    setState(() {
-                                      _currentIndex = value!;
-                                    });
-                                  },
-                                  groupValue: _currentIndex,
-                                ),
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(
-                                left: 15,
-                                top: 20,
-                                right: 15,
-                                bottom: 10,
-                              ),
-                              child: Row(
+            body: liveController.loading.value
+                ? const Center(child: CircularProgressIndicator())
+                : NestedScrollView(
+                    controller: scrollController,
+                    headerSliverBuilder: (
+                      BuildContext context,
+                      bool innerBoxIsScrolled,
+                    ) {
+                      return <Widget>[
+                        SliverStickyHeader(
+                          sticky: true,
+                          header: Column(
+                            children: <Widget>[
+                              Stack(
                                 children: [
-                                  Padding(
-                                    padding: const EdgeInsets.only(
-                                      top: 5,
-                                      bottom: 3,
+                                  Container(
+                                    margin: const EdgeInsets.only(
+                                      top: 10,
+                                      right: 15,
+                                      left: 15,
                                     ),
-                                    child: Text(
-                                      _currentIndex == 0
-                                          ? 'Upcoming'
-                                          : 'Ongoing',
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 8),
-                                    child: Text(
-                                      _currentIndex == 0 ? 'Events' : 'Now',
-                                      style: const TextStyle(
-                                        fontSize: 23,
-                                        fontWeight: FontWeight.bold,
+                                    height: 150,
+                                    width: double.infinity,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(15.0),
+                                      image: const DecorationImage(
+                                        image: AssetImage(
+                                            'assets/images/live_event.png'),
+                                        fit: BoxFit.cover,
                                       ),
                                     ),
-                                  )
+                                  ),
+                                  const Positioned(
+                                    top: 50,
+                                    right: 35,
+                                    child: Text(
+                                      'Share your thoughts with bosses\n We want to listen as it happens',
+                                      textAlign: TextAlign.right,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white,
+                                      ),
+                                      softWrap: true,
+                                    ),
+                                  ),
+                                  Positioned(
+                                    bottom: 10,
+                                    right: 35,
+                                    child: ElevatedButton(
+                                      onPressed: () => Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (BuildContext context) =>
+                                              CreateEvent(),
+                                        ),
+                                      ),
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: Colors.white,
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 20,
+                                          vertical: 10,
+                                        ),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(25.0),
+                                        ),
+                                      ),
+                                      child: const Text(
+                                        'Create Live Event',
+                                        style: TextStyle(
+                                          color: Colors.red,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
                                 ],
                               ),
-                            ),
-                          ],
+                              Container(
+                                margin: const EdgeInsets.only(
+                                  top: 10,
+                                  right: 15,
+                                  left: 15,
+                                ),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: <Widget>[
+                                    Expanded(
+                                      child: TextField(
+                                        controller: joinEvent,
+                                        decoration: const InputDecoration(
+                                          hintText: 'Find Event By ID',
+                                          filled: true,
+                                          fillColor: backgroundColor,
+                                          border: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: Color.fromRGBO(
+                                                  224, 224, 224, 1),
+                                            ),
+                                            borderRadius: BorderRadius.all(
+                                              Radius.circular(12),
+                                            ),
+                                          ),
+                                          contentPadding: EdgeInsets.only(
+                                            left: 10,
+                                            right: 10,
+                                            top: 0,
+                                            bottom: 0,
+                                          ),
+                                        ),
+                                        enableSuggestions:
+                                            true, // Enable pasting
+                                      ),
+                                    ),
+                                    const SizedBox(width: 10),
+                                    ElevatedButton(
+                                      onPressed: () => joinLive(context, ''),
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: const Color.fromRGBO(
+                                            242, 28, 41, 1),
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 35,
+                                          vertical: 15,
+                                        ),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(16.0),
+                                        ),
+                                      ),
+                                      child: const Text(
+                                        'Search',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(height: 10),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 20.0),
+                                child: Align(
+                                  alignment: Alignment.topCenter,
+                                  child: CupertinoSlidingSegmentedControl<int>(
+                                    padding: const EdgeInsets.all(5),
+                                    children: _segments,
+                                    onValueChanged: (int? value) {
+                                      setState(() {
+                                        _currentIndex = value!;
+                                      });
+                                    },
+                                    groupValue: _currentIndex,
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                  left: 15,
+                                  top: 20,
+                                  right: 15,
+                                  bottom: 10,
+                                ),
+                                child: Row(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                        top: 5,
+                                        bottom: 3,
+                                      ),
+                                      child: Text(
+                                        _currentIndex == 0
+                                            ? 'Ongoing'
+                                            : 'Upcoming',
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(left: 8),
+                                      child: Text(
+                                        _currentIndex == 0 ? 'Now' : 'Events',
+                                        style: const TextStyle(
+                                          fontSize: 23,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                    ];
-                  },
-                  body: _currentIndex == 0
-                      ? EventCall()
-                      : EventCall(
-                          ongoing: true,
-                        )),
-        );
+                      ];
+                    },
+                    body: _currentIndex == 0
+                        ? EventCall(
+                            ongoing: true,
+                          )
+                        : EventCall()));
       },
     );
   }
