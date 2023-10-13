@@ -1,4 +1,5 @@
 import 'package:business_bosses_v2/features/posts/models/post_model.dart';
+import 'package:business_bosses_v2/features/posts/widgets/video_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../../../common/widgets/network_image_with_placeholder.dart';
@@ -29,32 +30,24 @@ class AllImagesItem extends StatelessWidget {
           children: [
             GestureDetector(
               onTap: () {
-                // if (isVideo) {
-                //   Navigator.of(context).push(
-                //     MaterialPageRoute(
-                //       builder: (context) => VideoScreen(
-                //         onComment: (Post latestPost) {
-                //           allPostsForumProv.customPosts[i].comments =
-                //               latestPost.comments;
-                //         },
-                //         onLikeTap: (Post latestPost) {
-                //           allPostsForumProv.customPosts[i].likes =
-                //               latestPost.likes;
-                //         },
-                //         post: post,
-                //       ),
-                //     ),
-                //   );
-                // } else {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (BuildContext context) => ImagesViewerScreen(
-                      urls: fileUrls,
-                      text: text,
+                if (isVideo) {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => VideoScreen(
+                        post: post!,
+                      ),
                     ),
-                  ),
-                );
-                // }
+                  );
+                } else {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (BuildContext context) => ImagesViewerScreen(
+                        urls: fileUrls,
+                        text: text,
+                      ),
+                    ),
+                  );
+                }
               },
               child: Padding(
                 padding: const EdgeInsets.only(left: 0, right: 0),
@@ -68,37 +61,29 @@ class AllImagesItem extends StatelessWidget {
                 ),
               ),
             ),
-            // if (isVideo)
-            //   Positioned(
-            //     top: 0,
-            //     bottom: 0,
-            //     right: 0,
-            //     left: 0,
-            //     child: GestureDetector(
-            //       onTap: () {
-            //         Navigator.of(context).push(
-            //           MaterialPageRoute(
-            //             builder: (context) => VideoScreen(
-            //               // onComment: (latestPost) {
-            //               //   allPostsForumProv.customPosts[i].comments =
-            //               //       latestPost.comments;
-            //               // },
-            //               // onLikeTap: (latestPost) {
-            //               //   allPostsForumProv.customPosts[i].likes =
-            //               //       latestPost.likes;
-            //               // },
-            //               post: post,
-            //             ),
-            //           ),
-            //         );
-            //       },
-            //       child: Icon(
-            //         Icons.play_circle_outlined,
-            //         color: Colors.white.withOpacity(.8),
-            //         size: 48,
-            //       ),
-            //     ),
-            //   )
+            if (isVideo)
+              Positioned(
+                top: 0,
+                bottom: 0,
+                right: 0,
+                left: 0,
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => VideoScreen(
+                          post: post!,
+                        ),
+                      ),
+                    );
+                  },
+                  child: Icon(
+                    Icons.play_circle_outlined,
+                    color: Colors.white.withOpacity(.8),
+                    size: 48,
+                  ),
+                ),
+              )
           ],
         ),
         // SizedBox(height: 4.0),
