@@ -1,4 +1,5 @@
-import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
+// ignore_for_file: library_prefixes, public_member_api_docs, always_specify_types, always_declare_return_types, avoid_print
+
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/common/models/comment_model.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
@@ -12,6 +13,7 @@ import 'package:business_bosses_v2/features/posts/models/post_model.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:business_bosses_v2/utils/constants/constants.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -720,6 +722,12 @@ class HomeController extends GetxController {
         bossUpLink = getTitle['companyUrl'];
         bossUp?.removeWhere((Map<String, dynamic> item) => item['id'] == 5);
       }
+      FirebaseMessaging.instance.getToken().then((String? value) {
+        Map<String, dynamic> data = <String, dynamic>{
+          'deviceToken': value,
+        };
+        ApiService.post(path: 'users/add-device-token', body: data);
+      });
       if (profileController.myProfile.bio == null) {
         Get.offAndToNamed(Routes.updateProfile,
             arguments: profileController.myProfile);
@@ -829,7 +837,6 @@ class HomeController extends GetxController {
 
   @override
   void onInit() {
-    // TODO: implement onInit
     profileController = Get.put(ProfileController());
     _chatController = Get.put(ChatController());
     initSocket();
@@ -839,7 +846,6 @@ class HomeController extends GetxController {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     socket.disconnect();
     socket.dispose();
     super.dispose();

@@ -1,3 +1,5 @@
+// ignore_for_file: unused_local_variable, public_member_api_docs, non_constant_identifier_names, always_specify_types
+
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/common/widgets/safety_model.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
@@ -28,9 +30,9 @@ class _ProfileAnalyseScreenState extends State<ProfileAnalyseScreen> {
   late TooltipBehavior _tooltipBehavior;
   bool loading = false;
   bool error = false;
-  final List<MyConnect> _myConnections = [];
-  final List<MyConnect> _myConnecteds = [];
-  final List<MyConnect> _disconnections = [];
+  final List<MyConnect> _myConnections = <MyConnect>[];
+  final List<MyConnect> _myConnecteds = <MyConnect>[];
+  final List<MyConnect> _disconnections = <MyConnect>[];
   @override
   void didChangeDependencies() {
     if (!_isInit) {
@@ -81,7 +83,6 @@ class _ProfileAnalyseScreenState extends State<ProfileAnalyseScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     loadRawConnections();
   }
@@ -119,7 +120,7 @@ class _ProfileAnalyseScreenState extends State<ProfileAnalyseScreen> {
                 )
               : SingleChildScrollView(
                   child: Column(
-                  children: [
+                  children: <Widget>[
                     const SizedBox(
                       width: double.infinity,
                       height: 20,
@@ -133,7 +134,7 @@ class _ProfileAnalyseScreenState extends State<ProfileAnalyseScreen> {
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
+                        children: <Widget>[
                           Container(
                             alignment: Alignment.center,
                             child: Text(
@@ -153,7 +154,7 @@ class _ProfileAnalyseScreenState extends State<ProfileAnalyseScreen> {
                             ),
                           ),
                           Row(
-                            children: [
+                            children: <Widget>[
                               Expanded(
                                 child: CustomChildButton(
                                   value: _connections(_myConnections,
@@ -192,7 +193,7 @@ class _ProfileAnalyseScreenState extends State<ProfileAnalyseScreen> {
                             ),
                           ),
                           Row(
-                            children: [
+                            children: <Widget>[
                               Expanded(
                                 child: CustomChildButton(
                                   value: _connections(_myConnections,
@@ -448,7 +449,7 @@ class SalesData {
   SalesData({required this.name, required this.value});
 
   Map<String, dynamic> toMap() {
-    return {
+    return <String, dynamic>{
       'name': name,
       'value': value,
     };
