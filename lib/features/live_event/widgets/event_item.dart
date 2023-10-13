@@ -97,7 +97,7 @@ class EventItem extends StatelessWidget {
                     Align(
                       alignment: Alignment.topLeft,
                       child: Text(
-                        event.title! ?? '',
+                        event.title!,
                         style: const TextStyle(
                           fontWeight: FontWeight.w700,
                           fontSize: 16,
