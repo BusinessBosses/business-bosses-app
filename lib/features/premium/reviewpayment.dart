@@ -1,5 +1,3 @@
-import 'dart:io';
-import 'package:business_bosses_v2/features/premium/paymentconfig.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -34,7 +32,7 @@ class _ReviewPaymentState extends State<ReviewPayment> {
       _isProcessing = true;
     });
     final ApiResponseModel res =
-        await ApiService.post(path: 'subscription', body: {
+        await ApiService.post(path: 'subscription', body: <String, dynamic>{
       'price': argument['price'],
       'plan': argument['plan'],
     });
@@ -53,7 +51,7 @@ class _ReviewPaymentState extends State<ReviewPayment> {
   }
 
   void sendPaymentData(Map data) async {
-    Map<String, dynamic> paymentData = {
+    Map<String, dynamic> paymentData = <String, dynamic>{
       'price': argument['price'],
       'plan': argument['plan'],
       'token': data['token'],
@@ -142,7 +140,7 @@ class _ReviewPaymentState extends State<ReviewPayment> {
       ),
       body: SingleChildScrollView(
         child: Stack(
-          children: [
+          children: <Widget>[
             Padding(
               padding: const EdgeInsets.only(
                 left: 30,
@@ -158,13 +156,13 @@ class _ReviewPaymentState extends State<ReviewPayment> {
               color: backgroundcolorinterface,
             ),
             Padding(
-              padding: EdgeInsets.only(top: 40.0, left: 10),
+              padding: const EdgeInsets.only(top: 40.0, left: 10),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
+                children: <Widget>[
                   const Row(
-                    children: [
+                    children: <Widget>[
                       Padding(
                         padding: EdgeInsets.only(left: 8.0),
                         child: CircleAvatar(
@@ -201,9 +199,9 @@ class _ReviewPaymentState extends State<ReviewPayment> {
                                 color: backgroundcolorinterface, width: 3),
                             borderRadius: BorderRadius.circular(15)),
                         child: Column(
-                          children: [
+                          children: <Widget>[
                             Row(
-                              children: [
+                              children: <Widget>[
                                 Container(
                                     decoration: BoxDecoration(
                                         color: backgroundcolorinterface,
@@ -229,7 +227,7 @@ class _ReviewPaymentState extends State<ReviewPayment> {
                             Padding(
                               padding: const EdgeInsets.only(top: 10.0),
                               child: Row(
-                                children: [
+                                children: <Widget>[
                                   const Text(
                                     'Total to pay:',
                                     style: TextStyle(
@@ -252,7 +250,7 @@ class _ReviewPaymentState extends State<ReviewPayment> {
                               height: 10,
                             ),
                             Row(
-                              children: [
+                              children: <Widget>[
                                 Image.asset(
                                   'assets/images/planpicture.png',
                                   height: 40,
@@ -264,7 +262,7 @@ class _ReviewPaymentState extends State<ReviewPayment> {
                               height: 5,
                             ),
                             Row(
-                              children: [
+                              children: <Widget>[
                                 Text(
                                   argument.toString().contains('annually')
                                       ? '55%'
@@ -300,7 +298,7 @@ class _ReviewPaymentState extends State<ReviewPayment> {
                     height: 35,
                   ),
                   const Row(
-                    children: [
+                    children: <Widget>[
                       Padding(
                         padding: EdgeInsets.only(left: 8.0),
                         child: CircleAvatar(
@@ -347,11 +345,11 @@ class _ReviewPaymentState extends State<ReviewPayment> {
                     padding: const EdgeInsets.only(left: 10, right: 20),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
+                      children: <Widget>[
                         const SizedBox(
                           height: 20,
                         ),
-                        if (initPlan == 'Card Payment') ...[
+                        if (initPlan == 'Card Payment') ...<Widget>[
                           MyButton(
                             labelStyle: const TextStyle(
                               color: Colors.white,
@@ -388,7 +386,7 @@ class _ReviewPaymentState extends State<ReviewPayment> {
                           //       child: CircularProgressIndicator(),
                           //     ),
                           //   ),
-                        ] else if (initPlan == 'PayStack') ...[
+                        ] else if (initPlan == 'PayStack') ...<Widget>[
                           MyButton(
                             onPressed: () async {
                               plan = argument['plan'];
@@ -401,7 +399,7 @@ class _ReviewPaymentState extends State<ReviewPayment> {
                             label: 'Pay now',
                           )
                         ] else
-                          ...[]
+                          ...<Widget>[]
                       ],
                     ),
                   ),
@@ -448,11 +446,11 @@ class PaymentOptionCard extends StatelessWidget {
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+          children: <Widget>[
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Container(
+              children: <Widget>[
+                SizedBox(
                   width: 30,
                   child: SvgPicture.asset(
                     '${option['optionsvg']}',

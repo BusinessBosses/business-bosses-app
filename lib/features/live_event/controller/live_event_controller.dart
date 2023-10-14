@@ -1,3 +1,5 @@
+// ignore_for_file: public_member_api_docs
+
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:get/get.dart';
@@ -46,9 +48,8 @@ class LiveController extends GetxController {
   void createEvent(Map<String, dynamic> data) async {
     final ApiResponseModel response =
         await ApiService.post(path: 'event', body: data);
-    print(response.success);
     if (response.success) {
-      Map<String, dynamic> dataNew = {
+      Map<String, dynamic> dataNew = <String, dynamic>{
         ...data,
         'id': response.data['id'],
       };
@@ -56,7 +57,7 @@ class LiveController extends GetxController {
       EventModel newEvent = EventModel.fromMap(dataNew);
 
       // Find the index where the new event should be inserted based on startAt
-      int index = upcoming.indexWhere(
+      int index = events.indexWhere(
           (EventModel event) => event.startAt!.isAfter(newEvent.startAt!));
 
       if (index == -1) {
@@ -65,6 +66,18 @@ class LiveController extends GetxController {
       } else {
         // Insert the new event at the correct position
         events.insert(index, newEvent);
+      }
+
+      DateTime now = DateTime.now();
+      DateTime today = DateTime(now.year, now.month, now.day);
+      if (newEvent.startAt!.isAtSameMomentAs(today) ||
+          newEvent.startAt!.isAfter(now)) {
+        // Event starts today, it's an upcoming event
+        upcoming.add(newEvent);
+      } else if (newEvent.startAt!.isBefore(now) &&
+          newEvent.endAt!.isAfter(now)) {
+        // Event has already started, it's not upcoming
+        ongoing.add(newEvent);
       }
     } else {
       showSnackbar(
@@ -78,6 +91,21 @@ class LiveController extends GetxController {
 
   void deleteEvent(int id) async {
     events.removeWhere((EventModel event) => event.id == id);
+    int existingEventIndex =
+        upcoming.indexWhere((EventModel event) => event.id == id);
+
+    if (existingEventIndex != -1) {
+      // If the event exists in 'upcoming', remove it
+      upcoming.removeAt(existingEventIndex);
+    }
+
+    existingEventIndex =
+        ongoing.indexWhere((EventModel event) => event.id == id);
+
+    if (existingEventIndex != -1) {
+      // If the event exists in 'upcoming', remove it
+      ongoing.removeAt(existingEventIndex);
+    }
     await ApiService.delete(path: 'event/$id');
   }
 
@@ -85,10 +113,5 @@ class LiveController extends GetxController {
   void onInit() {
     initEvents();
     super.onInit();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
   }
 }

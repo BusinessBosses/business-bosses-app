@@ -26,7 +26,7 @@ class NotificationItem extends StatelessWidget {
         padding: const EdgeInsets.all(16.0),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+          children: <Widget>[
             CircleAvatar(
                 radius: 48 / 2,
                 backgroundColor: primaryColorLT.withOpacity(0.1),
@@ -43,9 +43,9 @@ class NotificationItem extends StatelessWidget {
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
+                children: <Widget>[
                   Row(
-                    children: [
+                    children: <Widget>[
                       Expanded(
                         child: Text(
                           myNotification.title,

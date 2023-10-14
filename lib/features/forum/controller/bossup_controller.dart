@@ -17,8 +17,8 @@ class BossUpController extends GetxController {
   late IO.Socket socket;
   final HomeController _homeController = Get.find();
   final ProfileController _profileController = Get.find();
-  List<ForumModel> forums = [];
-  List<UserModel> members = [];
+  List<ForumModel> forums = <ForumModel>[];
+  List<UserModel> members = <UserModel>[];
   RxInt totalForums = RxInt(0);
   RxInt page = RxInt(0);
   RxInt membersPage = RxInt(0);
@@ -40,12 +40,12 @@ class BossUpController extends GetxController {
       page(page.value + 1);
 
       // Separate lists for ranked and non-ranked posts
-      List<ForumModel> rankedForums = [];
-      List<ForumModel> nonRankedForums = [];
+      List<ForumModel> rankedForums = <ForumModel>[];
+      List<ForumModel> nonRankedForums = <ForumModel>[];
 
       for (int i = 0; i < response.data['rows'].length; i++) {
         if (response.data['rows'][i]['user'] != null) {
-          ForumModel forum = ForumModel.fromMap({
+          ForumModel forum = ForumModel.fromMap(<String, dynamic>{
             ...response.data['rows'][i],
             'likes': response.data['rows'][i]['likes']
                 .map((dynamic like) => like['userId'].toString())
@@ -66,7 +66,10 @@ class BossUpController extends GetxController {
       nonRankedForums.sort((ForumModel a, ForumModel b) =>
           b.likes!.length.compareTo(a.likes!.length));
       // Combine ranked and non-ranked posts, with ranked posts at the beginning
-      List<ForumModel> combinedForums = [...rankedForums, ...nonRankedForums];
+      List<ForumModel> combinedForums = <ForumModel>[
+        ...rankedForums,
+        ...nonRankedForums
+      ];
 
       // Clear the existing list before adding new forums
       forums.addAll(combinedForums); // Add the combined list of forums
@@ -154,14 +157,14 @@ class BossUpController extends GetxController {
     }
     update();
     if (_profileController.myProfile.uid != receiverUid) {
-      socket.emit('like', {
+      socket.emit('like', <String, String>{
         'postId': postId,
         'userId': userId,
         'type': type,
         'receiverUid': receiverUid,
       });
     } else {
-      socket.emit('like', {
+      socket.emit('like', <String, String>{
         'postId': postId,
         'userId': userId,
         'type': type,
@@ -170,7 +173,7 @@ class BossUpController extends GetxController {
   }
 
   void joinAndLeaveIndustry(String userId, Industry industry) {
-    socket.emit('join-leave-industry', {
+    socket.emit('join-leave-industry', <String, String?>{
       'industryId': industry.industryId,
       'userId': userId,
     });
@@ -203,7 +206,7 @@ class BossUpController extends GetxController {
         profileController.updateCoinCount(-1);
         forums[postIndex].coins!.add(userId);
       }
-      socket.emit('coin', {
+      socket.emit('coin', <String, String>{
         'postId': postId,
         'userId': userId,
         'type': type,
@@ -215,7 +218,7 @@ class BossUpController extends GetxController {
 
   /// ADD NEW POST TO STATE
   void addNewForum(Map<String, dynamic> newPost) async {
-    ForumModel modelizedNewPost = ForumModel.fromMap({
+    ForumModel modelizedNewPost = ForumModel.fromMap(<String, dynamic>{
       ...newPost,
       'coins': <String>[],
       'likes': <String>[],

@@ -36,7 +36,7 @@ class FieldContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
+      children: <Widget>[
         SizedBox(height: topSpace),
         Container(
           padding: padding,

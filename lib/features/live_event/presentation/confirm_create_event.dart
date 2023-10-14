@@ -1,8 +1,10 @@
+// ignore_for_file: public_member_api_docs
+
 import 'package:business_bosses_v2/common/widgets/buttons/custom_button.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 import '../../../action/action.dart';
@@ -24,7 +26,7 @@ class _ConfirmCreateEventState extends State<ConfirmCreateEvent> {
         title: const Text('Event Created'),
       ),
       body: Column(
-        children: [
+        children: <Widget>[
           const SizedBox(
             child: Text(
               '\n\nYour Live Event Will Be Hosted With The following ID \n',
@@ -66,6 +68,7 @@ class _ConfirmCreateEventState extends State<ConfirmCreateEvent> {
                   'assets/svgs/share.svg',
                   height: 15.0,
                   width: 15.0,
+                  // ignore: deprecated_member_use
                   color: Colors.black,
                 ),
               ),
@@ -76,9 +79,9 @@ class _ConfirmCreateEventState extends State<ConfirmCreateEvent> {
             child: CustomButton(
               buttonType: ButtonType.elevated,
               onPressed: () {
-                Get.offAndToNamed(Routes.home);
+                Get.offNamed(Routes.liveEvents);
               },
-              child: const Text('Go To Home'),
+              child: const Text('Go Back'),
             ),
           ),
         ],

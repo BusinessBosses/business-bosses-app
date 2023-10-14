@@ -72,7 +72,7 @@ class AuthController extends GetxController {
       subject,
       content: <Content>[content],
       templateId: dotenv.env['SENDGRID_TEMPLATE_ID'],
-      customArgs: {'username': userName, 'otp': code.toString()},
+      customArgs: <String, String>{'username': userName, 'otp': code.toString()},
     );
     mailer.send(email).then((Result<void> result) {
       if (result.isError) {
@@ -119,7 +119,7 @@ class AuthController extends GetxController {
       subject,
       content: <Content>[content],
       templateId: dotenv.env['SENDGRID_FORGOT_TEMPLATE_ID'],
-      customArgs: {'username': username, 'otp': code.toString()},
+      customArgs: <String, String>{'username': username, 'otp': code.toString()},
     );
     mailer.send(email).then((Result<void> result) {
       if (result.isError) {

@@ -12,13 +12,10 @@ import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 import 'package:timezone/data/latest.dart' as tzdata;
-import 'package:timezone/timezone.dart' as tz;
 
 import 'create_event.dart';
 
@@ -43,24 +40,7 @@ class _LiveEventState extends State<LiveEvent> {
 
   DateTime selectedDateTime = DateTime.now();
 
-  void _showDateTimePicker() {
-    DatePicker.showDateTimePicker(
-      context,
-      showTitleActions: true,
-      onChanged: (DateTime date) {
-        setState(() {
-          selectedDateTime = date;
-          tz.TZDateTime selectedDateTimeZ = tz.TZDateTime.now(tz.local);
-          final String formattedDateTime =
-              DateFormat('yyyy-MM-ddTHH:mm:ss.SSS').format(selectedDateTimeZ);
-          print(formattedDateTime);
-        });
-      },
-      currentTime: selectedDateTime,
-    );
-  }
-
-  final Map<int, Widget> _segments = {
+  final Map<int, Widget> _segments = <int, Widget>{
     0: const Padding(
       padding: EdgeInsets.all(8),
       child: Text(
@@ -108,7 +88,7 @@ class _LiveEventState extends State<LiveEvent> {
                           header: Column(
                             children: <Widget>[
                               Stack(
-                                children: [
+                                children: <Widget>[
                                   Container(
                                     margin: const EdgeInsets.only(
                                       top: 10,
@@ -145,9 +125,10 @@ class _LiveEventState extends State<LiveEvent> {
                                     child: ElevatedButton(
                                       onPressed: () => Navigator.push(
                                         context,
+                                        // ignore: always_specify_types
                                         MaterialPageRoute(
                                           builder: (BuildContext context) =>
-                                              CreateEvent(),
+                                              const CreateEvent(),
                                         ),
                                       ),
                                       style: ElevatedButton.styleFrom(
@@ -259,7 +240,7 @@ class _LiveEventState extends State<LiveEvent> {
                                   bottom: 10,
                                 ),
                                 child: Row(
-                                  children: [
+                                  children: <Widget>[
                                     Padding(
                                       padding: const EdgeInsets.only(
                                         top: 5,
@@ -290,10 +271,10 @@ class _LiveEventState extends State<LiveEvent> {
                       ];
                     },
                     body: _currentIndex == 0
-                        ? EventCall(
+                        ? const EventCall(
                             ongoing: true,
                           )
-                        : EventCall()));
+                        : const EventCall()));
       },
     );
   }
@@ -373,6 +354,7 @@ class _LiveEventState extends State<LiveEvent> {
                       'assets/svgs/share.svg',
                       height: 15.0,
                       width: 15.0,
+                      // ignore: deprecated_member_use
                       color: Colors.black,
                     ),
                   ),
@@ -455,9 +437,10 @@ class _LiveEventState extends State<LiveEvent> {
   }
 
   String generateRandomRoomID() {
-    final random = Random();
+    final Random random = Random();
 
     // Generate three random letters for the "abc" part.
+    // ignore: always_specify_types
     final String randomABC = String.fromCharCodes(List.generate(3,
         (_) => random.nextInt(26) + 97)); // ASCII values for lowercase letters.
 
@@ -474,7 +457,7 @@ class _LiveEventState extends State<LiveEvent> {
 }
 
 class EventCall extends StatefulWidget {
-  EventCall({super.key, this.ongoing = false});
+  const EventCall({super.key, this.ongoing = false});
   final bool ongoing;
 
   @override

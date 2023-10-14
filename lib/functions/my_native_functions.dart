@@ -59,7 +59,7 @@ class MyNativeFunctions {
   }
 
   static List<File> toImageFile(FilePickerResult result) {
-    List<File> files = [];
+    List<File> files = <File>[];
     if (result != null) {
       List<PlatformFile> platformFiles = result.files;
       for (PlatformFile plf in platformFiles) {
@@ -67,7 +67,7 @@ class MyNativeFunctions {
       }
       return files;
     } else {
-      return [];
+      return <File>[];
     }
   }
 

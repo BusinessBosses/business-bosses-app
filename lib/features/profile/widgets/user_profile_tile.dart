@@ -28,10 +28,10 @@ class _UserProfileTileState extends State<UserProfileTile> {
     return SizedBox(
       width: double.infinity,
       child: Row(
-        children: [
+        children: <Widget>[
           Stack(
             clipBehavior: Clip.none,
-            children: [
+            children: <Widget>[
               SizedBox(
                 height: 120.0,
                 width: 120.0,
@@ -54,7 +54,7 @@ class _UserProfileTileState extends State<UserProfileTile> {
               ),
               if (widget.myProfile.isRanked ?? false)
                 Column(
-                  children: [
+                  children: <Widget>[
                     Container(
                       height: 36,
                       width: 36,
@@ -62,7 +62,7 @@ class _UserProfileTileState extends State<UserProfileTile> {
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(30.0),
-                        boxShadow: const [
+                        boxShadow: const <BoxShadow>[
                           BoxShadow(
                             color: Colors.black,
                             blurRadius: 5000000.0, // soften the shadow
@@ -94,14 +94,14 @@ class _UserProfileTileState extends State<UserProfileTile> {
               child: Column(
                 // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
+                children: <Widget>[
                   const SizedBox(height: 6.0),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
+                    children: <Widget>[
                       widget.myProfile.isSubscribed
                           ? Row(
-                              children: [
+                              children: <Widget>[
                                 Text(
                                   widget.myProfile.name != null &&
                                           widget.myProfile.name!.length <= 20
@@ -180,7 +180,7 @@ class _UserProfileTileState extends State<UserProfileTile> {
                       },
                       child: Container(
                           decoration: BoxDecoration(
-                            boxShadow: [
+                            boxShadow: <BoxShadow>[
                               BoxShadow(
                                 color: Colors.black.withOpacity(0.09),
                                 blurRadius: 500.0,

@@ -37,7 +37,7 @@ class _GenericSliderState extends State<GenericSlider> {
         height: widget.height,
         width: widget.width,
         child: Stack(
-          children: [
+          children: <Widget>[
             Swiper(
                 onIndexChanged: (int i) {
                   setState(() {
@@ -60,7 +60,7 @@ class _GenericSliderState extends State<GenericSlider> {
                       );
                     },
                     child: Stack(
-                      children: [
+                      children: <Widget>[
                         Container(
                           height: widget.width,
                           width: widget.height,

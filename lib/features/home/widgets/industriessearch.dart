@@ -12,7 +12,7 @@ class MySearchIndustries extends StatelessWidget {
 
   const MySearchIndustries({
     Key? key,
-    this.searchIndustries = const [],
+    this.searchIndustries = const <Industry>[],
     this.isLoading = false,
   }) : super(key: key);
 

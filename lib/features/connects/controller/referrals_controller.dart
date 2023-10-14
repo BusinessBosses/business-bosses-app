@@ -7,11 +7,12 @@ import 'package:get/get.dart';
 
 class ReferralsController extends GetxController {
   bool loading = true;
-  final List<UserModel> searchedUsers = [];
-  final List<UserModel> referrals = [];
+  final List<UserModel> searchedUsers = <UserModel>[];
+  final List<UserModel> referrals = <UserModel>[];
   final TextEditingController searchController = TextEditingController();
   final ProfileController _profileController = Get.find();
-  late List<String> connecteds = _profileController.myProfile.connecteds ?? [];
+  late List<String> connecteds =
+      _profileController.myProfile.connecteds ?? <String>[];
 
   bool isSearching = false;
   bool loadingSearch = false;
@@ -53,12 +54,14 @@ class ReferralsController extends GetxController {
 
   Future<void> connect(String userId) async {
     final ApiResponseModel res = await ApiService.post(
-        path: '/connection/connect', body: {'connectedId': userId});
+        path: '/connection/connect',
+        body: <String, dynamic>{'connectedId': userId});
   }
 
   Future<void> disconnect(String userId) async {
     final ApiResponseModel res = await ApiService.post(
-        path: '/connection/disconnect', body: {'connectedId': userId});
+        path: '/connection/disconnect',
+        body: <String, dynamic>{'connectedId': userId});
   }
 
   void connectToUser(UserModel user) async {

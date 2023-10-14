@@ -45,13 +45,13 @@ class PhoneNumberInput extends StatelessWidget {
       );
     }
 
-    return Row(children: [
+    return Row(children: <Widget>[
       TextButton(
         onPressed: () => pickCountry(),
         child: Container(
           decoration: const BoxDecoration(color: Colors.white),
           child: Row(
-            children: [
+            children: <Widget>[
               Text(
                 countryCode,
                 style: const TextStyle(

@@ -100,7 +100,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                             : Column(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
+                                children: <Widget>[
                                   const SizedBox(
                                     height: 10,
                                   ),
@@ -130,7 +130,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                         return Column(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
-                                          children: [
+                                          children: <Widget>[
                                             if (i == 0 ||
                                                 formattedDate !=
                                                     TimeFormat.toDayFormat(

@@ -22,7 +22,7 @@ class CustomTileInterest extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       // ignore: prefer_const_literals_to_create_immutables
-      children: [
+      children: <Widget>[
         const SizedBox(
           width: double.infinity,
           height: 1,

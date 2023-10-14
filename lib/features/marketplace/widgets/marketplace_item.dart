@@ -53,22 +53,24 @@ class _MarketTileState extends State<MarketTile> {
 
   Future<void> connect(String userId) async {
     // ignore: unused_local_variable
-    final ApiResponseModel res =
-        await ApiService.post(path: '/connection/connect', body: {
-      'userId': profileController.myProfile.uid,
-      'connectedId': userId,
-      'timestamp': DateTime.now().millisecondsSinceEpoch
-    });
+    final ApiResponseModel res = await ApiService.post(
+        path: '/connection/connect',
+        body: <String, dynamic>{
+          'userId': profileController.myProfile.uid,
+          'connectedId': userId,
+          'timestamp': DateTime.now().millisecondsSinceEpoch
+        });
   }
 
   Future<void> disconnect(String userId) async {
     // ignore: unused_local_variable
-    final ApiResponseModel res =
-        await ApiService.post(path: '/connection/disconnect', body: {
-      'userId': profileController.myProfile.uid,
-      'connectedId': userId,
-      'timestamp': DateTime.now().millisecondsSinceEpoch
-    });
+    final ApiResponseModel res = await ApiService.post(
+        path: '/connection/disconnect',
+        body: <String, dynamic>{
+          'userId': profileController.myProfile.uid,
+          'connectedId': userId,
+          'timestamp': DateTime.now().millisecondsSinceEpoch
+        });
   }
 
   @override
@@ -165,7 +167,7 @@ class _MarketTileState extends State<MarketTile> {
                       borderRadius: BorderRadius.circular(0)),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
+                    children: <Widget>[
                       ListTile(
                         contentPadding:
                             const EdgeInsets.only(left: 15, right: 0),
@@ -206,7 +208,7 @@ class _MarketTileState extends State<MarketTile> {
                               ? Padding(
                                   padding: const EdgeInsets.only(top: 0.0),
                                   child: Row(
-                                    children: [
+                                    children: <Widget>[
                                       Text(
                                         _post.user!.name != null &&
                                                 _post.user!.name!.length <= 20
@@ -242,7 +244,7 @@ class _MarketTileState extends State<MarketTile> {
                           width: 140,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
+                            children: <Widget>[
                               _post.user!.isSubscribed &&
                                       _post.user!.uid !=
                                           profileController.myProfile.uid
@@ -373,7 +375,7 @@ class _MarketTileState extends State<MarketTile> {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
+                          children: <Widget>[
                             if (_post.promote && _post.approved)
                               const Padding(
                                 padding: EdgeInsets.symmetric(
@@ -389,7 +391,7 @@ class _MarketTileState extends State<MarketTile> {
                             ),
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
+                              children: <Widget>[
                                 Padding(
                                   padding: const EdgeInsets.only(
                                       left: 15.0, right: 15),
@@ -453,11 +455,11 @@ class _MarketTileState extends State<MarketTile> {
                                   padding: const EdgeInsets.only(
                                       left: 15.0, right: 15),
                                   child: Row(
-                                    children: [
+                                    children: <Widget>[
                                       _post.location != null &&
                                               _post.category != null
                                           ? Row(
-                                              children: [
+                                              children: <Widget>[
                                                 SvgPicture.asset(
                                                     'assets/svgs/location.svg'),
                                                 const SizedBox(
@@ -511,7 +513,7 @@ class _MarketTileState extends State<MarketTile> {
                                   padding:
                                       const EdgeInsets.only(left: 13.0, top: 3),
                                   child: Row(
-                                    children: [
+                                    children: <Widget>[
                                       const Icon(
                                         Icons.star,
                                         color: Color.fromRGBO(255, 202, 40, 1),
@@ -553,7 +555,7 @@ class _MarketTileState extends State<MarketTile> {
                                   child: PostImagesMarket(post: _post),
                                 ),
                                 Row(
-                                  children: [
+                                  children: <Widget>[
                                     TextButton.icon(
                                       onPressed: () async {
                                         _marketController.like(
@@ -652,7 +654,7 @@ class _MarketTileState extends State<MarketTile> {
                                             padding: const EdgeInsets.only(
                                                 left: 8.0, right: 10.0),
                                             child: Row(
-                                              children: [
+                                              children: <Widget>[
                                                 SvgPicture.asset(
                                                     'assets/svgs/coin.svg'),
                                                 const SizedBox(width: 5),
@@ -793,7 +795,7 @@ class _MarketTileState extends State<MarketTile> {
       builder: (BuildContext context) => AlertDialog(
         content: Column(
           mainAxisSize: MainAxisSize.min,
-          children: [
+          children: <Widget>[
             ListTile(
               onTap: () {
                 navigateTo(context);
@@ -812,7 +814,7 @@ class _MarketTileState extends State<MarketTile> {
                       centralize: true,
                       color: Colors.black.withOpacity(.6),
                     ),
-                    actions: [
+                    actions: <Widget>[
                       TextButton(
                         onPressed: () => navigateTo(context),
                         child: const TextWidget(
@@ -874,7 +876,7 @@ class _MarketTileState extends State<MarketTile> {
                       centralize: true,
                       color: Colors.black.withOpacity(.6),
                     ),
-                    actions: [
+                    actions: <Widget>[
                       TextButton(
                         onPressed: () => navigateTo(context),
                         child: const TextWidget(
@@ -962,7 +964,7 @@ class _MarketTileState extends State<MarketTile> {
       // connecteds.add(user);
       profileController.updateConnections(_post.user!.uid);
       setState(() {
-        UserModel.fromMap({
+        UserModel.fromMap(<dynamic, dynamic>{
           ..._post.user!.toMap(),
           'connectionCount': _post.user!.connectionCount == null
               ? 1
@@ -974,7 +976,7 @@ class _MarketTileState extends State<MarketTile> {
       profileController.updateConnections(_post.user!.uid);
 
       setState(() {
-        UserModel.fromMap({
+        UserModel.fromMap(<dynamic, dynamic>{
           ..._post.user!.toMap(),
           'connectionCount': _post.user!.connectionCount == null
               ? null

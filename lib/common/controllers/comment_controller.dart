@@ -6,7 +6,7 @@ import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class CommentController extends GetxController {
   late IO.Socket socket;
-  List<CommentModel> comments = [];
+  List<CommentModel> comments = <CommentModel>[];
   RxBool loading = RxBool(false);
   RxBool error = RxBool(false);
 
@@ -19,7 +19,7 @@ class CommentController extends GetxController {
     response = await HomeRepository.fetchComments(postId);
     if (response.success) {
       for (int i = 0; i < response.data['rows'].length; i++) {
-        comments.add(CommentModel.fromMap({
+        comments.add(CommentModel.fromMap(<String, dynamic>{
           ...response.data['rows'][i],
         }));
       }

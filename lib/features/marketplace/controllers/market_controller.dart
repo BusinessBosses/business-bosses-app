@@ -13,7 +13,7 @@ import '../models/market_model.dart';
 
 class MarketController extends GetxController {
   late IO.Socket socket;
-  List<MarketModel> allmarkets = [];
+  List<MarketModel> allmarkets = <MarketModel>[];
   RxList<MarketModel> markets = RxList<MarketModel>(<MarketModel>[]);
   RxList<MarketModel> searchResult = RxList<MarketModel>(<MarketModel>[]);
   RxList<UserModel> users = RxList<UserModel>(<UserModel>[]);
@@ -62,7 +62,7 @@ class MarketController extends GetxController {
       searchResult.clear();
       final List psts = post;
       for (int i = 0; i < psts.length; i++) {
-        searchResult.add(MarketModel.fromMap({
+        searchResult.add(MarketModel.fromMap(<String, dynamic>{
           ...psts[i],
           'likes': psts[i]['likes']
               .map((dynamic like) => like['userId'].toString())
@@ -78,7 +78,7 @@ class MarketController extends GetxController {
       final List psts = post;
       markets.clear();
       for (int i = 0; i < psts.length; i++) {
-        markets.add(MarketModel.fromMap({
+        markets.add(MarketModel.fromMap(<String, dynamic>{
           ...psts[i],
           'likes': psts[i]['likes']
               .map((dynamic like) => like['userId'].toString())
@@ -100,7 +100,7 @@ class MarketController extends GetxController {
   void processMorePostsToState(dynamic post) {
     final List psts = post;
     for (int i = 0; i < psts.length; i++) {
-      markets.add(MarketModel.fromMap({
+      markets.add(MarketModel.fromMap(<String, dynamic>{
         ...psts[i],
         'likes': psts[i]['likes']
             .map((dynamic like) => like['userId'].toString())
@@ -119,7 +119,7 @@ class MarketController extends GetxController {
     for (int i = 0; i < psts.length; i++) {
       users.add(
         UserModel.fromMap(
-          {
+          <dynamic, dynamic>{
             ...psts[i]['user'],
           },
         ),
@@ -131,7 +131,7 @@ class MarketController extends GetxController {
   /// ADD NEW POST TO STATE
   void addNewPost(
       Map<String, dynamic> newPost, ProfileController profileController) async {
-    MarketModel modelizedNewPost = MarketModel.fromMap({
+    MarketModel modelizedNewPost = MarketModel.fromMap(<String, dynamic>{
       ...newPost,
       'userId': profileController.myProfile.uid,
       'promote': false,
@@ -150,7 +150,7 @@ class MarketController extends GetxController {
     final int postIndex = markets.indexWhere(
         (MarketModel element) => element.marketId == updatedPost['marketId']);
     if (postIndex != -1) {
-      MarketModel modelizedUpdatedPost = MarketModel.fromMap({
+      MarketModel modelizedUpdatedPost = MarketModel.fromMap(<String, dynamic>{
         ...updatedPost,
       });
 
@@ -215,14 +215,14 @@ class MarketController extends GetxController {
     }
     update();
     if (_profileController.myProfile.uid != receiverUid) {
-      socket.emit('like', {
+      socket.emit('like', <String, String>{
         'postId': postId,
         'userId': userId,
         'type': type,
         'receiverUid': receiverUid,
       });
     } else {
-      socket.emit('like', {
+      socket.emit('like', <String, String>{
         'postId': postId,
         'userId': userId,
         'type': type,
@@ -246,7 +246,7 @@ class MarketController extends GetxController {
         profileController.updateCoinCount(-1);
         markets[postIndex].coins!.add(userId);
       }
-      socket.emit('coin', {
+      socket.emit('coin', <String, String>{
         'postId': postId,
         'userId': userId,
         'type': type,

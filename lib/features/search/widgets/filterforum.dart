@@ -12,7 +12,7 @@ class FilterForum extends StatefulWidget {
   // ignore: public_member_api_docs
   const FilterForum({
     Key? key,
-    this.filterItems = const [],
+    this.filterItems = const <ForumModel>[],
     this.isLoading = false,
   }) : super(key: key);
 

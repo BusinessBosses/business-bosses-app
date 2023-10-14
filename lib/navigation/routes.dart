@@ -53,4 +53,5 @@ class Routes {
   static const String renewconfirmation = '/renewconfirmation';
   static const String subscriptionconfirmation = '/subscriptionconfirmation';
   static const String reviewpayment = '/reviewpayment';
+  static const String liveEvents = '/liveEvents';
 }

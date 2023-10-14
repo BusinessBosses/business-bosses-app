@@ -1,12 +1,12 @@
 import 'for_data_picker.dart';
 
 class AnalyserData {
-  static List<ForDataPicker> industries = [
+  static List<ForDataPicker> industries = <ForDataPicker>[
     ForDataPicker(value: 'Medical'),
     ForDataPicker(value: 'Education'),
     ForDataPicker(value: 'Software Engineering'),
   ];
-  static List<ForDataPicker> education = [
+  static List<ForDataPicker> education = <ForDataPicker>[
     ForDataPicker(value: 'Teaching'),
     ForDataPicker(value: 'Education Administrator'),
     ForDataPicker(value: 'School Counseling'),
@@ -22,7 +22,7 @@ class AnalyserData {
     ForDataPicker(value: 'Schools Counselor'),
   ];
 
-  static List<ForDataPicker> medical = [
+  static List<ForDataPicker> medical = <ForDataPicker>[
     ForDataPicker(value: 'Athletic trainer'),
     ForDataPicker(value: 'Audiologist'),
     ForDataPicker(value: 'Cardiac sonographer'),
@@ -46,7 +46,7 @@ class AnalyserData {
     ForDataPicker(value: 'Pharmacist'),
   ];
 
-  static List<ForDataPicker> softwareEngineering = [
+  static List<ForDataPicker> softwareEngineering = <ForDataPicker>[
     ForDataPicker(value: 'Applications developer'),
     ForDataPicker(value: 'Cyber security analyst'),
     ForDataPicker(value: 'Game developer'),
@@ -66,7 +66,7 @@ class AnalyserData {
     ForDataPicker(value: 'Systems analyst'),
   ];
 
-  static List<ForDataPicker> professions = [
+  static List<ForDataPicker> professions = <ForDataPicker>[
     ForDataPicker(
       value: 'Marketing & advertising',
     ),

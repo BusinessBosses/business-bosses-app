@@ -71,7 +71,7 @@ class _CreateBossUpScreenState extends State<CreateBossUpScreen> {
                   const Text('Introduce Your Business'),
               automaticallyImplyLeading:
                   false, // Used for removing back buttoon.
-              actions: [
+              actions: <Widget>[
                 IconButton(
                   icon: const Icon(Icons.close),
                   onPressed: () {
@@ -93,7 +93,7 @@ class _CreateBossUpScreenState extends State<CreateBossUpScreen> {
                   const EdgeInsets.only(top: 16.0, left: 16.0, right: 16.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
+                children: <Widget>[
                   TextFormField(
                     // controller: _titleController,
                     initialValue: forum.title,
@@ -143,7 +143,7 @@ class _CreateBossUpScreenState extends State<CreateBossUpScreen> {
                     },
                     child: FieldContainer(
                       child: Row(
-                        children: [
+                        children: <Widget>[
                           SvgPicture.asset('assets/svgs/file.svg'),
                           const SizedBox(width: 16.0),
                           Expanded(
@@ -173,7 +173,7 @@ class _CreateBossUpScreenState extends State<CreateBossUpScreen> {
                   const SizedBox(height: 24.0),
                   MCustomButton(
                     onPressed: () async {
-                      controller.createForum({
+                      controller.createForum(<String, dynamic>{
                         'title': title.trim(),
                         'description': description.trim(),
                         'timestamp': DateTime.now().millisecondsSinceEpoch,
@@ -186,12 +186,12 @@ class _CreateBossUpScreenState extends State<CreateBossUpScreen> {
                         };
                         await ApiService.put(
                           path: 'users/${_profileController.myProfile.uid}',
-                          body: {
+                          body: <String, dynamic>{
                             'bossOfTheWeekTimeStamp':
                                 DateTime.now().millisecondsSinceEpoch,
                           },
                         );
-                        _profileController.updateProfile({
+                        _profileController.updateProfile(<String, dynamic>{
                           ..._profileController.myProfile.toMap(),
                           ...updateData
                         });
@@ -207,7 +207,7 @@ class _CreateBossUpScreenState extends State<CreateBossUpScreen> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
+                      children: <Widget>[
                         SvgPicture.asset(
                           'assets/svgs/report.svg',
                           color: primaryColorLT,

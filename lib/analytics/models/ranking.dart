@@ -14,7 +14,7 @@ class Ranking {
   });
 
   Map<String, dynamic> toMap() {
-    return {
+    return <String, dynamic>{
       'uid': uid,
       'point': point,
       'timestamp': timestamp,

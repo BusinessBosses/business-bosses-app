@@ -8,11 +8,11 @@ import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:get/get.dart';
 
 class CompleteSearchController extends GetxController {
-  List<UserModel> recommendedConnections = [];
-  List<UserModel> searchedUsers = [];
-  List<PostModel> searchedPosts = [];
-  List<PostModel> recommendedPosts = [];
-  List<ForumModel> searchedForums = [];
+  List<UserModel> recommendedConnections = <UserModel>[];
+  List<UserModel> searchedUsers = <UserModel>[];
+  List<PostModel> searchedPosts = <PostModel>[];
+  List<PostModel> recommendedPosts = <PostModel>[];
+  List<ForumModel> searchedForums = <ForumModel>[];
   RxInt page = RxInt(0);
   RxBool loadingSearch = RxBool(false);
   RxBool isUserSearch = RxBool(false);
@@ -20,7 +20,8 @@ class CompleteSearchController extends GetxController {
   RxBool loading = RxBool(true);
   RxBool error = RxBool(false);
   final ProfileController _profileController = Get.find();
-  late List<String> connecteds = _profileController.myProfile.connecteds ?? [];
+  late List<String> connecteds =
+      _profileController.myProfile.connecteds ?? <String>[];
 
   void clearUserSearch() {
     isUserSearch(false);
@@ -48,7 +49,7 @@ class CompleteSearchController extends GetxController {
         final mapData = response.data['posts']['rows'][i];
         // final PostModel modelizedData = PostModel.fromMap(mapData);
 
-        searchedPosts.add(PostModel.fromMap({
+        searchedPosts.add(PostModel.fromMap(<String, dynamic>{
           ...mapData,
           'likes': mapData['likes']
               .map((dynamic like) => like['userId'].toString())
@@ -135,7 +136,7 @@ class CompleteSearchController extends GetxController {
 
       for (int i = 0; i < response.data['recommendedPosts'].length; i++) {
         final Map<String, dynamic> post = response.data['recommendedPosts'][i];
-        recommendedPosts.add(PostModel.fromMap({
+        recommendedPosts.add(PostModel.fromMap(<String, dynamic>{
           ...post,
           'likes': post['likes']
               .map((dynamic like) => like['userId'].toString())
@@ -154,7 +155,7 @@ class CompleteSearchController extends GetxController {
   }
 
   Future<void> connect(String userId) async {
-    await ApiService.post(path: '/connection/connect', body: {
+    await ApiService.post(path: '/connection/connect', body: <String, dynamic>{
       'userId': _profileController.myProfile.uid,
       'connectedId': userId,
       'timestamp': DateTime.now().millisecondsSinceEpoch
@@ -162,11 +163,13 @@ class CompleteSearchController extends GetxController {
   }
 
   Future<void> disconnect(String userId) async {
-    await ApiService.post(path: '/connection/disconnect', body: {
-      'userId': _profileController.myProfile.uid,
-      'connectedId': userId,
-      'timestamp': DateTime.now().millisecondsSinceEpoch
-    });
+    await ApiService.post(
+        path: '/connection/disconnect',
+        body: <String, dynamic>{
+          'userId': _profileController.myProfile.uid,
+          'connectedId': userId,
+          'timestamp': DateTime.now().millisecondsSinceEpoch
+        });
   }
 
   void connectToUser(UserModel user) async {

@@ -61,17 +61,17 @@ class _ProductsandServicessExpansionTileState
           ],
         ),
       ),
-      children: [
+      children: <Widget>[
         Padding(
             padding: const EdgeInsets.all(0),
             child:
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
               Padding(
                 padding: const EdgeInsets.only(left: 20, right: 20),
                 child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
+                    children: <Widget>[
                       Text(
                         'You can add up to 7 products and services',
                         style: TextStyle(color: subtextColor),
@@ -100,7 +100,7 @@ class _ProductsandServicessExpansionTileState
                   return Padding(
                       padding: const EdgeInsets.only(left: 20, right: 20),
                       child: Column(
-                        children: [
+                        children: <Widget>[
                           SizedBox(
                             width: double.infinity,
                             height: 1.5,

@@ -30,7 +30,7 @@ class SubscriptionConfirmation extends StatelessWidget {
         ),
         body: SingleChildScrollView(
           child: Stack(
-            children: [
+            children: <Widget>[
               Padding(
                 padding: const EdgeInsets.only(
                   left: 32.5,
@@ -45,14 +45,14 @@ class SubscriptionConfirmation extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 21),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
+                  children: <Widget>[
                     const SizedBox(
                       height: 25,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
+                      children: <Widget>[
                         const CircleAvatar(
                           radius: 14,
                           backgroundColor: Color(0xFFF01C29),
@@ -75,7 +75,7 @@ class SubscriptionConfirmation extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(9.3)),
                             child: const Column(
                               mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
+                              children: <Widget>[
                                 TextWidget(
                                   text:
                                       'Congratulations on becoming a valued subscriber! Welcome to our premium membership program. 🎉',
@@ -96,7 +96,7 @@ class SubscriptionConfirmation extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
+                      children: <Widget>[
                         const CircleAvatar(
                           radius: 14,
                           backgroundColor: Color(0xFFF01C29),
@@ -110,9 +110,9 @@ class SubscriptionConfirmation extends StatelessWidget {
                         ),
                         Expanded(
                           child: Column(
-                            children: [
+                            children: <Widget>[
                               const Row(
-                                children: [
+                                children: <Widget>[
                                   TextWidget(
                                     text: 'Payment Confirmed',
                                     size: 18,
@@ -121,12 +121,12 @@ class SubscriptionConfirmation extends StatelessWidget {
                                 ],
                               ),
                               Column(
-                                children: [
+                                children: <Widget>[
                                   Stack(
-                                    children: [
+                                    children: <Widget>[
                                       Container(
                                         decoration: BoxDecoration(
-                                          boxShadow: [
+                                          boxShadow: <BoxShadow>[
                                             BoxShadow(
                                               color: Colors.black
                                                   .withOpacity(0.03),
@@ -150,7 +150,7 @@ class SubscriptionConfirmation extends StatelessWidget {
                                               MainAxisAlignment.start,
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
-                                          children: [
+                                          children: <Widget>[
                                             const Text(
                                               'Whats included:',
                                               style: TextStyle(
@@ -159,7 +159,7 @@ class SubscriptionConfirmation extends StatelessWidget {
                                             ),
                                             const SizedBox(height: 30),
                                             Row(
-                                              children: [
+                                              children: <Widget>[
                                                 SvgPicture.asset(
                                                   'assets/svgs/goldcheckmark.svg',
                                                   height: 25,
@@ -177,7 +177,7 @@ class SubscriptionConfirmation extends StatelessWidget {
                                             ),
                                             const SizedBox(height: 10),
                                             Row(
-                                              children: [
+                                              children: <Widget>[
                                                 SvgPicture.asset(
                                                     'assets/svgs/coin.svg',
                                                     height: 30),
@@ -193,7 +193,7 @@ class SubscriptionConfirmation extends StatelessWidget {
                                             ),
                                             const SizedBox(height: 10),
                                             Row(
-                                              children: [
+                                              children: <Widget>[
                                                 SvgPicture.asset(
                                                     'assets/svgs/rocket.svg',
                                                     height: 25),
@@ -209,7 +209,7 @@ class SubscriptionConfirmation extends StatelessWidget {
                                             ),
                                             const SizedBox(height: 15),
                                             Row(
-                                              children: [
+                                              children: <Widget>[
                                                 SvgPicture.asset(
                                                     'assets/svgs/moreconnections.svg',
                                                     height: 20),
@@ -225,7 +225,7 @@ class SubscriptionConfirmation extends StatelessWidget {
                                             ),
                                             const SizedBox(height: 15),
                                             Row(
-                                              children: [
+                                              children: <Widget>[
                                                 SvgPicture.asset(
                                                     'assets/svgs/rankingicon.svg',
                                                     height: 23),

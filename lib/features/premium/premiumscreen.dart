@@ -8,7 +8,6 @@ import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../../utils/theme/theme.dart';
-import '../../action/action.dart';
 import '../../common/dialogs/snackbar.dart';
 import '../../common/models/api_response_model.dart';
 import '../../common/widgets/buttons/custom_button.dart';
@@ -30,7 +29,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
   int _currentIndex = 0;
   String paymentMethodId = '';
   final ProfileController _profileController = Get.find();
-  final Map<int, Widget> _segments = {
+  final Map<int, Widget> _segments = <int, Widget>{
     0: const Padding(
       padding: EdgeInsets.all(8),
       child: Text(
@@ -64,7 +63,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
 
   /// send the data to the backend
   Future<void> addSubscription() async {
-    ApiService.post(path: 'subscription', body: {
+    ApiService.post(path: 'subscription', body: <String, dynamic>{
       'price': plans[_currentIndex]['price'],
       'plan': plans[_currentIndex]['plan'],
     });
@@ -90,7 +89,6 @@ class _PremiumScreenState extends State<PremiumScreen> {
           title: 'OOPS!',
           message: 'An error occurred, please try again!',
           error: true);
-      ;
     }
   }
 
@@ -100,7 +98,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
       _isProcessing = true;
     });
     final ApiResponseModel res =
-        await ApiService.post(path: 'subscription', body: {
+        await ApiService.post(path: 'subscription', body: <String, dynamic>{
       'price': plans[_currentIndex]['price'],
       'plan': plans[_currentIndex]['plan'],
     });
@@ -142,7 +140,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+          children: <Widget>[
             Container(
               height: 20,
               color: backgroundcolorinterface,
@@ -153,21 +151,21 @@ class _PremiumScreenState extends State<PremiumScreen> {
               //     20, // Adjust the height as needed
               child: Stack(
                 alignment: Alignment.topCenter,
-                children: [
+                children: <Widget>[
                   SvgPicture.asset(
                     'assets/svgs/premiumback.svg',
                     width: MediaQuery.of(context).size.width,
                     fit: BoxFit.fitWidth,
                   ),
                   Column(
-                    children: [
+                    children: <Widget>[
                       Padding(
                         padding: const EdgeInsets.only(
                             left: 50.0, right: 50, top: 50),
                         child: RichText(
                           textAlign: TextAlign.center,
                           text: TextSpan(
-                            children: [
+                            children: <InlineSpan>[
                               const TextSpan(
                                 text:
                                     'Upgrade to a premium boss experience at only, ',
@@ -209,15 +207,15 @@ class _PremiumScreenState extends State<PremiumScreen> {
                       Padding(
                         padding: const EdgeInsets.only(left: 20.0, right: 20),
                         child: Column(
-                          children: [
+                          children: <Widget>[
                             Container(
                               child: Column(
-                                children: [
+                                children: <Widget>[
                                   Stack(
-                                    children: [
+                                    children: <Widget>[
                                       Container(
                                         decoration: BoxDecoration(
-                                          boxShadow: [
+                                          boxShadow: <BoxShadow>[
                                             BoxShadow(
                                               color: Colors.black
                                                   .withOpacity(0.09),
@@ -241,7 +239,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
                                               MainAxisAlignment.start,
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
-                                          children: [
+                                          children: <Widget>[
                                             const Text(
                                               'Whats included:',
                                               style: TextStyle(
@@ -250,7 +248,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
                                             ),
                                             const SizedBox(height: 30),
                                             Row(
-                                              children: [
+                                              children: <Widget>[
                                                 SvgPicture.asset(
                                                   'assets/svgs/goldcheckmark.svg',
                                                   height: 25,
@@ -268,7 +266,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
                                             ),
                                             const SizedBox(height: 10),
                                             Row(
-                                              children: [
+                                              children: <Widget>[
                                                 SvgPicture.asset(
                                                     'assets/svgs/coin.svg',
                                                     height: 30),
@@ -284,7 +282,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
                                             ),
                                             const SizedBox(height: 10),
                                             Row(
-                                              children: [
+                                              children: <Widget>[
                                                 SvgPicture.asset(
                                                     'assets/svgs/rocket.svg',
                                                     height: 25),
@@ -300,7 +298,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
                                             ),
                                             const SizedBox(height: 15),
                                             Row(
-                                              children: [
+                                              children: <Widget>[
                                                 SvgPicture.asset(
                                                     'assets/svgs/moreconnections.svg',
                                                     height: 20),
@@ -316,7 +314,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
                                             ),
                                             const SizedBox(height: 15),
                                             Row(
-                                              children: [
+                                              children: <Widget>[
                                                 SvgPicture.asset(
                                                     'assets/svgs/rankingicon.svg',
                                                     height: 23),

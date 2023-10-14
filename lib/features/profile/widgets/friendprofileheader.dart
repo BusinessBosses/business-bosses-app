@@ -10,20 +10,20 @@ Widget FriendProfileHeader(UserModel publicUser) {
     padding: const EdgeInsets.symmetric(horizontal: 16.0),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
+      children: <Widget>[
         PublicProfileTile(
           myProfile: publicUser,
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
+          children: <Widget>[
             Expanded(
               child: CustomChildButton(
                 value: publicUser.connectionCount ?? 0,
                 caption: 'Connections',
                 onPressed: () {
                   Get.toNamed(Routes.allconnectionsscreen,
-                      arguments: {'uid': publicUser.uid, 'pageIndex': 0});
+                      arguments: <String, Object>{'uid': publicUser.uid, 'pageIndex': 0});
                 },
               ),
             ),
@@ -33,7 +33,7 @@ Widget FriendProfileHeader(UserModel publicUser) {
               caption: 'Connected',
               onPressed: () {
                 Get.toNamed(Routes.allconnectionsscreen,
-                    arguments: {'uid': publicUser.uid, 'pageIndex': 1});
+                    arguments: <String, Object>{'uid': publicUser.uid, 'pageIndex': 1});
               },
             )),
             Expanded(

@@ -32,7 +32,7 @@ class FilterPosts extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
+              children: <Widget>[
                 Container(
                   child: const Padding(
                     padding: EdgeInsets.only(

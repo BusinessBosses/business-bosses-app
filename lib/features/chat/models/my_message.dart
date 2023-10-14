@@ -83,7 +83,7 @@ class MessageModel {
       isRawImage: map['isRawImage'] != null ? map['isRawImage'] as bool : null,
       deleted: map['deleted'] != null
           ? List<String>.from((map['deleted'] as List<String>))
-          : [],
+          : <String>[],
       senderUid: map['senderUid'] as String,
       receiverUid: map['receiverUid'] as String,
       seen: map['seen'] as bool,

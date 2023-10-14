@@ -20,7 +20,7 @@ class OpportunitiesPopup extends StatelessWidget {
         padding: const EdgeInsets.all(15),
         child: Column(
           mainAxisSize: MainAxisSize.min,
-          children: [
+          children: <Widget>[
             const SizedBox(
               height: 20,
             ),
@@ -64,7 +64,7 @@ class OpportunitiesPopup extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
+                children: <Widget>[
                   SvgPicture.asset(
                     'assets/svgs/report.svg',
                     color: primaryColorLT,

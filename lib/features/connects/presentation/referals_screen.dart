@@ -41,7 +41,7 @@ class ReferalsScreen extends StatelessWidget {
                     textAlign: TextAlign.center,
                     style: TextStyle(fontSize: 20),
                   ),
-                  actions: [
+                  actions: <Widget>[
                     IconButton(
                       onPressed: () {
                         controller.toggleSearchState();
@@ -51,11 +51,11 @@ class ReferalsScreen extends StatelessWidget {
                   ],
                 ),
           body: Stack(
-            children: [
+            children: <Widget>[
               controller.loading
                   ? const Center(child: CircularProgressIndicator.adaptive())
                   : Column(
-                      children: [
+                      children: <Widget>[
                         Expanded(
                           child: controller.referrals.isEmpty
                               ? getSafetyModel(

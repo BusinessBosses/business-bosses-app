@@ -17,7 +17,7 @@ class CustomChildButton extends StatelessWidget {
       onPressed: onPressed as void Function(),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
+        children: <Widget>[
           Text('$value',
               style: Theme.of(context)
                   .textTheme

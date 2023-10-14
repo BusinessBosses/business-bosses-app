@@ -1,3 +1,5 @@
+// ignore_for_file: public_member_api_docs
+
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/features/live_event/controller/live_event_controller.dart';
 import 'package:business_bosses_v2/features/live_event/models/events_model.dart';
@@ -29,7 +31,7 @@ class EventItem extends StatelessWidget {
       padding: const EdgeInsets.only(left: 15),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: [
+        children: <Widget>[
           GestureDetector(
             onTap: () {},
             child: Container(
@@ -43,6 +45,7 @@ class EventItem extends StatelessWidget {
                   'assets/svgs/share.svg',
                   height: 15.0,
                   width: 15.0,
+                  // ignore: deprecated_member_use
                   color: textColor.withOpacity(1.0),
                 ),
               ),
@@ -63,10 +66,10 @@ class EventItem extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.only(left: 15.0),
                 child: Column(
-                  children: [
+                  children: <Widget>[
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
+                      children: <Widget>[
                         Padding(
                           padding: EdgeInsets.only(
                             top: event.user?.uid ==
@@ -106,7 +109,7 @@ class EventItem extends StatelessWidget {
                     ),
                     const SizedBox(height: 10),
                     Row(
-                      children: [
+                      children: <Widget>[
                         const Text('Host:'),
                         const SizedBox(
                           width: 4,
@@ -131,7 +134,7 @@ class EventItem extends StatelessWidget {
                       height: 10,
                     ),
                     Row(
-                      children: [
+                      children: <Widget>[
                         Align(
                           alignment: Alignment.topLeft,
                           child: Container(
@@ -252,6 +255,7 @@ class EventItem extends StatelessWidget {
         if (value == 'edit') {
           Navigator.push(
             context,
+            // ignore: always_specify_types
             MaterialPageRoute(
               builder: (BuildContext context) => CreateEvent(
                 event: event,
@@ -296,6 +300,7 @@ class EventItem extends StatelessWidget {
       {required String roomID, required bool isHost, required String title}) {
     Navigator.push(
       context,
+      // ignore: always_specify_types
       MaterialPageRoute(
         builder: (BuildContext context) => CallRoom(
           roomID: roomID,

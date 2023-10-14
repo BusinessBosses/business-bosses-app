@@ -55,27 +55,29 @@ class ForumItem extends StatefulWidget {
 }
 
 class _ForumItemState extends State<ForumItem> {
-  List<String> blocked = [];
+  List<String> blocked = <String>[];
   final ProfileController profileController = Get.find();
 
   Future<void> connect(String userId) async {
     // ignore: unused_local_variable
-    final ApiResponseModel res =
-        await ApiService.post(path: '/connection/connect', body: {
-      'userId': profileController.myProfile.uid,
-      'connectedId': userId,
-      'timestamp': DateTime.now().millisecondsSinceEpoch
-    });
+    final ApiResponseModel res = await ApiService.post(
+        path: '/connection/connect',
+        body: <String, dynamic>{
+          'userId': profileController.myProfile.uid,
+          'connectedId': userId,
+          'timestamp': DateTime.now().millisecondsSinceEpoch
+        });
   }
 
   Future<void> disconnect(String userId) async {
     // ignore: unused_local_variable
-    final ApiResponseModel res =
-        await ApiService.post(path: '/connection/disconnect', body: {
-      'userId': profileController.myProfile.uid,
-      'connectedId': userId,
-      'timestamp': DateTime.now().millisecondsSinceEpoch
-    });
+    final ApiResponseModel res = await ApiService.post(
+        path: '/connection/disconnect',
+        body: <String, dynamic>{
+          'userId': profileController.myProfile.uid,
+          'connectedId': userId,
+          'timestamp': DateTime.now().millisecondsSinceEpoch
+        });
   }
 
   void connectToUser() async {
@@ -86,7 +88,7 @@ class _ForumItemState extends State<ForumItem> {
     if (checkConnected == -1) {
       profileController.updateConnections(widget.forum.user!.uid);
       setState(() {
-        UserModel.fromMap({
+        UserModel.fromMap(<dynamic, dynamic>{
           ...widget.forum.user!.toMap(),
           'connectionCount': widget.forum.user!.connectionCount == null
               ? 1
@@ -97,7 +99,7 @@ class _ForumItemState extends State<ForumItem> {
     } else {
       profileController.updateConnections(widget.forum.user!.uid);
       setState(() {
-        UserModel.fromMap({
+        UserModel.fromMap(<dynamic, dynamic>{
           ...widget.forum.user!.toMap(),
           'connectionCount': widget.forum.user!.connectionCount == null
               ? null
@@ -158,7 +160,7 @@ class _ForumItemState extends State<ForumItem> {
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
+                  children: <Widget>[
                     ListTile(
                       contentPadding:
                           const EdgeInsets.only(left: 15.0, right: 0),
@@ -169,7 +171,7 @@ class _ForumItemState extends State<ForumItem> {
                               width: 140,
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
+                                children: <Widget>[
                                   widget.forum.user!.isSubscribed &&
                                           widget.forum.user!.uid !=
                                               profileController.myProfile.uid
@@ -192,7 +194,7 @@ class _ForumItemState extends State<ForumItem> {
                                                 AlertDialog(
                                               content: Column(
                                                 mainAxisSize: MainAxisSize.min,
-                                                children: [
+                                                children: <Widget>[
                                                   ListTile(
                                                     onTap: () {
                                                       // Navigator.pop(context);
@@ -218,7 +220,7 @@ class _ForumItemState extends State<ForumItem> {
                                                                 .withOpacity(
                                                                     .6),
                                                           ),
-                                                          actions: [
+                                                          actions: <Widget>[
                                                             TextButton(
                                                               onPressed: () =>
                                                                   Navigator.pop(
@@ -292,7 +294,7 @@ class _ForumItemState extends State<ForumItem> {
                                                                   ?.isSubscribed ==
                                                               true
                                                           ? Row(
-                                                              children: [
+                                                              children: <Widget>[
                                                                 TextWidget(
                                                                   text:
                                                                       'Block @${widget.forum.user?.name}',
@@ -344,7 +346,7 @@ class _ForumItemState extends State<ForumItem> {
                                                                 .withOpacity(
                                                                     .6),
                                                           ),
-                                                          actions: [
+                                                          actions: <Widget>[
                                                             TextButton(
                                                               onPressed: () =>
                                                                   Navigator.pop(
@@ -438,7 +440,7 @@ class _ForumItemState extends State<ForumItem> {
                               // width: leadingWidth(widget.forum),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
+                                children: <Widget>[
                                   const SizedBox(height: 0.0, width: 0.0),
                                   widget.forum.user!.uid ==
                                           profileController.myProfile.uid
@@ -449,7 +451,7 @@ class _ForumItemState extends State<ForumItem> {
                                           onSelected: (String val) {
                                             if (val == 'Edit') {
                                               Get.toNamed(Routes.createForum,
-                                                  arguments: {
+                                                  arguments: <String, Object>{
                                                     'isUpdating': true,
                                                     'forum': widget.forum,
                                                     'isBossUp': widget.isBossUp,
@@ -492,7 +494,7 @@ class _ForumItemState extends State<ForumItem> {
                               width: 55,
                               child: Stack(
                                 clipBehavior: Clip.none,
-                                children: [
+                                children: <Widget>[
                                   Center(
                                     child: UserAvatarWithBadge(
                                       user: widget.forum.user,
@@ -511,7 +513,7 @@ class _ForumItemState extends State<ForumItem> {
                                       child: Column(
                                         mainAxisAlignment:
                                             MainAxisAlignment.end,
-                                        children: [
+                                        children: <Widget>[
                                           Container(
                                             height: 90 / 3.4,
                                             width: 90 / 3.4,
@@ -521,7 +523,7 @@ class _ForumItemState extends State<ForumItem> {
                                               borderRadius:
                                                   BorderRadius.circular(30.0),
                                               // ignore: prefer_const_literals_to_create_immutables
-                                              boxShadow: [
+                                              boxShadow: <BoxShadow>[
                                                 const BoxShadow(
                                                   color: Colors.black,
                                                   blurRadius:
@@ -567,7 +569,7 @@ class _ForumItemState extends State<ForumItem> {
                             ? Padding(
                                 padding: const EdgeInsets.only(top: 0.0),
                                 child: Row(
-                                  children: [
+                                  children: <Widget>[
                                     Text(
                                       widget.forum.user?.name != null &&
                                               widget.forum.user!.name!.length <=
@@ -658,7 +660,7 @@ class _ForumItemState extends State<ForumItem> {
                             ),
                           ),
                     Row(
-                      children: [
+                      children: <Widget>[
                         TextButton.icon(
                           onPressed: () async {
                             widget.controller.postLike(
@@ -755,7 +757,7 @@ class _ForumItemState extends State<ForumItem> {
                                 padding: const EdgeInsets.only(
                                     left: 8.0, right: 10.0),
                                 child: Row(
-                                  children: [
+                                  children: <Widget>[
                                     SvgPicture.asset('assets/svgs/coin.svg'),
                                     const SizedBox(width: 5),
                                     Text(
@@ -837,7 +839,7 @@ class _ForumItemState extends State<ForumItem> {
         return AlertDialog(
           title: const TextWidget(
               text: 'Are you sure you want to delete this forum?'),
-          actions: [
+          actions: <Widget>[
             TextButton(
                 onPressed: () {
                   Navigator.of(context).pop();

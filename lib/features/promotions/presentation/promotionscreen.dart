@@ -44,7 +44,7 @@ class _PromotionScreenState extends State<PromotionScreen> {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
+          children: <Widget>[
             Container(
                 padding:
                     const EdgeInsets.only(left: 8, right: 8, top: 5, bottom: 5),
@@ -54,7 +54,7 @@ class _PromotionScreenState extends State<PromotionScreen> {
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
+                  children: <Widget>[
                     const Text(
                       'My Coin Balance',
                       style:
@@ -89,7 +89,7 @@ class _PromotionScreenState extends State<PromotionScreen> {
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(0.0),
         child: Column(
-          children: [
+          children: <Widget>[
             const SizedBox(
               height: 20,
             ),
@@ -112,7 +112,7 @@ class _PromotionScreenState extends State<PromotionScreen> {
                   color: Colors.white,
                 ),
                 child: Column(
-                  children: [Image.asset('assets/images/invitepicture.png')],
+                  children: <Widget>[Image.asset('assets/images/invitepicture.png')],
                 )),
             Container(
                 width: MediaQuery.of(context).size.width,
@@ -120,7 +120,7 @@ class _PromotionScreenState extends State<PromotionScreen> {
                   color: Colors.white,
                 ),
                 child: Column(
-                  children: [
+                  children: <Widget>[
                     const Text(
                       'Earn Coins!',
                       style:
@@ -137,7 +137,7 @@ class _PromotionScreenState extends State<PromotionScreen> {
                       padding: const EdgeInsets.only(left: 20, right: 20),
                       child: Wrap(
                         alignment: WrapAlignment.center,
-                        children: [
+                        children: <Widget>[
                           const Text(
                             'to join Business Bosses and get 20',
                             style: TextStyle(
@@ -172,13 +172,13 @@ class _PromotionScreenState extends State<PromotionScreen> {
                         Get.toNamed(Routes.premiumscreen);
                       },
                       child: Column(
-                        children: [
+                        children: <Widget>[
                           const SizedBox(
                             height: 10,
                           ),
                           Container(
                               decoration: BoxDecoration(
-                                boxShadow: [
+                                boxShadow: <BoxShadow>[
                                   BoxShadow(
                                     color: Colors.black.withOpacity(0.09),
                                     blurRadius: 500.0,
@@ -200,7 +200,7 @@ class _PromotionScreenState extends State<PromotionScreen> {
                                           child: Row(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.center,
-                                            children: [
+                                            children: <Widget>[
                                               const Text(
                                                 'Subscribe to Premium',
                                                 style: TextStyle(
@@ -251,10 +251,10 @@ class _PromotionScreenState extends State<PromotionScreen> {
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
+                  children: <Widget>[
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
+                      children: <Widget>[
                         Text(
                           'Invite Id:',
                           textAlign: TextAlign.center,
@@ -302,7 +302,7 @@ class _PromotionScreenState extends State<PromotionScreen> {
                       },
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
-                        children: [
+                        children: <Widget>[
                           _referralId == null
                               ? const Text(
                                   'Create InviteId',
@@ -344,7 +344,7 @@ class _PromotionScreenState extends State<PromotionScreen> {
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
+                  children: <Widget>[
                     Text(
                       'Accepted Invitation:',
                       textAlign: TextAlign.center,

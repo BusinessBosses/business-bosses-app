@@ -19,7 +19,7 @@ class BossUpChallangePopUpcopy extends StatelessWidget {
         padding: const EdgeInsets.all(15),
         child: Column(
           mainAxisSize: MainAxisSize.min,
-          children: [
+          children: <Widget>[
             const SizedBox(
               height: 20,
             ),
@@ -70,7 +70,7 @@ class BossUpChallangePopUpcopy extends StatelessWidget {
             ),
             const Row(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
+              children: <Widget>[
                 Text('●  ', style: bodyText2),
                 Expanded(
                   child: Text(

@@ -11,8 +11,8 @@ class TabsPagesFilterItem extends StatefulWidget {
 
   const TabsPagesFilterItem({
     Key? key,
-    this.allTab = const [],
-    this.selectedTabs = const [],
+    this.allTab = const <MySearchTab>[],
+    this.selectedTabs = const <MySearchTab>[],
     this.onFilterChange,
   }) : super(key: key);
 
@@ -21,7 +21,7 @@ class TabsPagesFilterItem extends StatefulWidget {
 }
 
 class _TabsPagesFilterItemState extends State<TabsPagesFilterItem> {
-  List<MySearchTab> _selectedTabs = [];
+  List<MySearchTab> _selectedTabs = <MySearchTab>[];
   bool _isInit = false;
 
   @override
@@ -44,7 +44,7 @@ class _TabsPagesFilterItemState extends State<TabsPagesFilterItem> {
         title: const Text('Filter'),
       ),
       body: Column(
-        children: [
+        children: <Widget>[
           Expanded(
             child: ListView.builder(
               itemCount: widget.allTab!.length,
@@ -83,7 +83,7 @@ class _TabsPagesFilterItemState extends State<TabsPagesFilterItem> {
             padding: const EdgeInsets.all(8.0),
             color: Colors.white,
             child: Row(
-              children: [
+              children: <Widget>[
                 Expanded(
                   child: MCustomButton(
                     onPressed: () => navigateTo(context),
