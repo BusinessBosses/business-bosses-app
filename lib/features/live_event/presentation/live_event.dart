@@ -321,6 +321,14 @@ class _LiveEventState extends State<LiveEvent> {
         if (event != null) {
           final DateFormat dateFormat = DateFormat('d MMM, y');
           final String formattedDate = dateFormat.format(event.startAt!);
+          final DateFormat timeFormat = DateFormat('h:mm a');
+
+// Convert the event start and end times to the local time zone
+          final DateTime localStartTime = event.startAt!.toLocal();
+          final DateTime localEndTime = event.endAt!.toLocal();
+          final String formattedStartTime = timeFormat.format(localStartTime);
+          final String formattedEndTime = timeFormat.format(localEndTime);
+          final DateTime now = DateTime.now();
           return SizedBox(
             height: halfScreenHeight,
             child: Padding(
@@ -347,7 +355,7 @@ class _LiveEventState extends State<LiveEvent> {
                     width: 2,
                   ),
                   Text(
-                    'Time: ${formatTime(event.startAt!)} - ${formatTime(event.endAt!)}',
+                    'Time: $formattedStartTime - $formattedEndTime',
                     style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w700,
@@ -382,27 +390,29 @@ class _LiveEventState extends State<LiveEvent> {
                     ],
                   ),
                   const Spacer(),
-                  ElevatedButton(
-                    child: const Text('Join'),
-                    onPressed: () {
-                      final String enteredRoomID = event.roomId!;
-                      if (profileController.myProfile.uid != event.user?.uid) {
-                        jumpToLivePage(
-                          context,
-                          title: event.title!,
-                          roomID: enteredRoomID,
-                          isHost: false,
-                        );
-                      } else {
-                        jumpToLivePage(
-                          context,
-                          title: event.title!,
-                          roomID: enteredRoomID,
-                          isHost: true,
-                        );
-                      }
-                    },
-                  ),
+                  if (event.startAt!.isBefore(now) && event.endAt!.isAfter(now))
+                    ElevatedButton(
+                      child: const Text('Join'),
+                      onPressed: () {
+                        final String enteredRoomID = event.roomId!;
+                        if (profileController.myProfile.uid !=
+                            event.user?.uid) {
+                          jumpToLivePage(
+                            context,
+                            title: event.title!,
+                            roomID: enteredRoomID,
+                            isHost: false,
+                          );
+                        } else {
+                          jumpToLivePage(
+                            context,
+                            title: event.title!,
+                            roomID: enteredRoomID,
+                            isHost: true,
+                          );
+                        }
+                      },
+                    ),
                   ElevatedButton(
                     child: const Text('Back'),
                     onPressed: () {
