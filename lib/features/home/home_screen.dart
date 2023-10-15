@@ -411,10 +411,9 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                                               if (sponsoredIndex <
                                                   controller
                                                       .sponsoredPosts.length) {
-                                                final promotedPosts =
+                                                final PostModel promotedPosts =
                                                     controller.sponsoredPosts[
-                                                            sponsoredIndex]
-                                                        ['data'] as PostModel;
+                                                        sponsoredIndex]['data'];
                                                 final bool hasIncrementedView =
                                                     controller
                                                         .itemsWithIncrementedViews
