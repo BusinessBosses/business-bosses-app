@@ -45,6 +45,20 @@ class LiveController extends GetxController {
     update();
   }
 
+  EventModel? getEventById(String eventId) {
+    EventModel? foundEvent;
+
+    try {
+      foundEvent =
+          events.firstWhere((EventModel event) => event.roomId == eventId);
+    } catch (e) {
+      // Handle the case where no matching event is found, e.g., set foundEvent to null.
+      foundEvent = null;
+    }
+
+    return foundEvent;
+  }
+
   void createEvent(Map<String, dynamic> data) async {
     final ApiResponseModel response =
         await ApiService.post(path: 'event', body: data);
@@ -113,5 +127,11 @@ class LiveController extends GetxController {
   void onInit() {
     initEvents();
     super.onInit();
+  }
+
+  @override
+  void onClose() {
+    // Dispose of resources here
+    super.onClose();
   }
 }

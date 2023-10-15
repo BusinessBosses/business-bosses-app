@@ -493,7 +493,7 @@ class HomeController extends GetxController {
           ),
           content: const TextWidget(
             text:
-                'We\'ve upgraded the Business Bosses app with new features and functionality to provide you with an enhanced Boss experience.',
+                'Your Session Has Expired. Login Again To Continue Using Business Bosses!',
           ),
           actions: [
             TextButton(
@@ -502,7 +502,7 @@ class HomeController extends GetxController {
                 Navigator.of(context).pop(context);
               },
               child: const TextWidget(
-                text: 'Reset your password & Sign in',
+                text: 'Login',
                 color: primaryColorLT,
               ),
             )

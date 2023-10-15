@@ -2,21 +2,23 @@
 
 import 'dart:math';
 
-import 'package:business_bosses_v2/action/action.dart';
-import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
+import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/features/live_event/controller/live_event_controller.dart';
 import 'package:business_bosses_v2/features/live_event/models/events_model.dart';
 import 'package:business_bosses_v2/features/live_event/widgets/call_room.dart';
 import 'package:business_bosses_v2/features/live_event/widgets/event_item.dart';
+import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
+import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:timezone/data/latest.dart' as tzdata;
 
+import '../../../action/action.dart';
 import 'create_event.dart';
 
 class LiveEvent extends StatefulWidget {
@@ -31,6 +33,7 @@ class _LiveEventState extends State<LiveEvent> {
   TextEditingController joinEvent = TextEditingController();
   int _currentIndex = 0;
   final ScrollController scrollController = ScrollController();
+  final ProfileController profileController = Get.find();
 
   @override
   void initState() {
@@ -63,7 +66,7 @@ class _LiveEventState extends State<LiveEvent> {
             appBar: AppBar(
               leading: IconButton(
                 onPressed: () {
-                  Navigator.pop(context);
+                  Get.offNamed(Routes.home);
                 },
                 icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
               ),
@@ -192,7 +195,16 @@ class _LiveEventState extends State<LiveEvent> {
                                     ),
                                     const SizedBox(width: 10),
                                     ElevatedButton(
-                                      onPressed: () => joinLive(context, ''),
+                                      onPressed: () {
+                                        if (joinEvent.text.isEmpty) {
+                                          showSnackBar(
+                                            context,
+                                            message: 'Please enter a title',
+                                          );
+                                          return;
+                                        }
+                                        joinLive(context, joinEvent.text);
+                                      },
                                       style: ElevatedButton.styleFrom(
                                         backgroundColor: const Color.fromRGBO(
                                             242, 28, 41, 1),
@@ -298,140 +310,139 @@ class _LiveEventState extends State<LiveEvent> {
     );
   }
 
-  void startLive(BuildContext context) {
+  void joinLive(BuildContext context, String id) {
+    final EventModel? event = liveEventController.getEventById(id);
+
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
-        // Calculate the height of the bottom sheet
         final double screenHeight = MediaQuery.of(context).size.height;
         final double halfScreenHeight = screenHeight / 3;
-        final String roomID = generateRandomRoomID();
-        // Here, you can define the content of your bottom sheet.
-        return SizedBox(
-          // Add your bottom sheet content here.
-          height: halfScreenHeight,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              const SizedBox(
-                child: Text(
-                  '\n\nYour Live Event Will Be Hosted With The following ID \n',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              SizedBox(
-                child: Text(
-                  roomID,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20,
-                  ),
-                ),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+        if (event != null) {
+          final DateFormat dateFormat = DateFormat('d MMM, y');
+          final String formattedDate = dateFormat.format(event.startAt!);
+          return SizedBox(
+            height: halfScreenHeight,
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
-                  IconButton(
-                    icon: const Icon(Icons.copy),
+                  Text(
+                    'Title: ${event.title!}',
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
+                  ),
+                  Text(
+                    'Date: ${formattedDate.toString()}',
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 2,
+                  ),
+                  Text(
+                    'Time: ${formatTime(event.startAt!)} - ${formatTime(event.endAt!)}',
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      const Text(
+                        'Host:',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 4,
+                      ),
+                      NetworkImageWithPlaceHolder(
+                        imageUrl: event.user?.photoUrl,
+                        height: 16,
+                        width: 16,
+                      ),
+                      const SizedBox(
+                        width: 4,
+                      ),
+                      Text(event.user?.name ?? event.user!.username,
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w700,
+                          )),
+                    ],
+                  ),
+                  const Spacer(),
+                  ElevatedButton(
+                    child: const Text('Join'),
                     onPressed: () {
-                      // Copy the generated room ID to the clipboard
-                      final String generatedRoomID = roomID;
-                      Clipboard.setData(ClipboardData(text: generatedRoomID));
-                      showSnackbar(message: 'Room ID copied to clipboard');
+                      final String enteredRoomID = event.roomId!;
+                      if (profileController.myProfile.uid != event.user?.uid) {
+                        jumpToLivePage(
+                          context,
+                          title: event.title!,
+                          roomID: enteredRoomID,
+                          isHost: false,
+                        );
+                      } else {
+                        jumpToLivePage(
+                          context,
+                          title: event.title!,
+                          roomID: enteredRoomID,
+                          isHost: true,
+                        );
+                      }
                     },
                   ),
-                  GestureDetector(
-                    onTap: () {
-                      String message =
-                          'Join My Event On The Business Bosses App With Room ID: $roomID';
-                      socialShare(message);
+                  ElevatedButton(
+                    child: const Text('Back'),
+                    onPressed: () {
+                      // Handle Option 2 action here.
+                      Navigator.pop(context); // Close the bottom sheet.
                     },
-                    child: SvgPicture.asset(
-                      'assets/svgs/share.svg',
-                      height: 15.0,
-                      width: 15.0,
-                      // ignore: deprecated_member_use
-                      color: Colors.black,
-                    ),
                   ),
                 ],
               ),
-              ElevatedButton(
-                child: const Text('Start'),
-                onPressed: () {},
-              ),
-              ElevatedButton(
-                child: const Text('Back'),
-                onPressed: () {
-                  // Handle Option 2 action here.
-                  Navigator.pop(context); // Close the bottom sheet.
-                },
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
-  void joinLive(BuildContext context, String title) {
-    final TextEditingController roomIDController = TextEditingController();
-
-    showModalBottomSheet(
-      context: context,
-      builder: (BuildContext context) {
-        final double screenHeight = MediaQuery.of(context).size.height;
-        final double halfScreenHeight = screenHeight / 3;
-
-        return SizedBox(
-          height: halfScreenHeight,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              const SizedBox(
-                child: Text(
-                  '\n\nEnter the Room ID for Your Live Event:',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
+            ),
+          );
+        } else {
+          return SizedBox(
+            height: halfScreenHeight,
+            child: Padding(
+              padding: const EdgeInsets.all(25.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Center(
+                    child: Text(
+                      'Event does not exist with the ID: $id',
+                      style: const TextStyle(
+                          fontSize: 17, fontWeight: FontWeight.w600),
+                      textAlign: TextAlign.center,
+                    ),
                   ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: TextField(
-                  controller: roomIDController,
-                  decoration: const InputDecoration(
-                    labelText: 'Room ID',
+                  const Spacer(),
+                  ElevatedButton(
+                    child: const Text('Back'),
+                    onPressed: () {
+                      // Handle Option 2 action here.
+                      Navigator.pop(context); // Close the bottom sheet.
+                    },
                   ),
-                ),
+                ],
               ),
-              ElevatedButton(
-                child: const Text('Join'),
-                onPressed: () {
-                  final String enteredRoomID = roomIDController.text;
-                  jumpToLivePage(
-                    context,
-                    title: title,
-                    roomID: enteredRoomID,
-                    isHost: false,
-                  );
-                },
-              ),
-              ElevatedButton(
-                child: const Text('Back'),
-                onPressed: () {
-                  // Handle Option 2 action here.
-                  Navigator.pop(context); // Close the bottom sheet.
-                },
-              ),
-            ],
-          ),
-        );
+            ),
+          );
+        }
       },
     );
   }
@@ -453,6 +464,11 @@ class _LiveEventState extends State<LiveEvent> {
   @override
   void dispose() {
     super.dispose();
+  }
+
+  String formatTime(DateTime dateTime) {
+    final String formattedTime = DateFormat('h:mm a').format(dateTime);
+    return formattedTime;
   }
 }
 
@@ -478,6 +494,7 @@ class _EventCallState extends State<EventCall> {
                   EventModel event = liveEventController.upcoming[index];
                   return EventItem(
                     event: event,
+                    ongoing: false,
                   );
                 },
               ),
@@ -494,6 +511,7 @@ class _EventCallState extends State<EventCall> {
                   EventModel event = liveEventController.ongoing[index];
                   return EventItem(
                     event: event,
+                    ongoing: true,
                   );
                 },
               ),

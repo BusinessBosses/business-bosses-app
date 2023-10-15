@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs
 
 import 'package:business_bosses_v2/common/widgets/buttons/custom_button.dart';
+import 'package:business_bosses_v2/features/live_event/controller/live_event_controller.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -19,6 +20,7 @@ class ConfirmCreateEvent extends StatefulWidget {
 }
 
 class _ConfirmCreateEventState extends State<ConfirmCreateEvent> {
+  final LiveController liveController = Get.find();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -79,7 +81,8 @@ class _ConfirmCreateEventState extends State<ConfirmCreateEvent> {
             child: CustomButton(
               buttonType: ButtonType.elevated,
               onPressed: () {
-                Get.offNamed(Routes.liveEvents);
+                liveController.initEvents();
+                Get.toNamed(Routes.liveEvents);
               },
               child: const Text('Go Back'),
             ),

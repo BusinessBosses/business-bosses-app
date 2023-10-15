@@ -14,18 +14,28 @@ import 'package:intl/intl.dart';
 
 class EventItem extends StatelessWidget {
   final EventModel event;
+  final bool ongoing;
   final ProfileController profileController = Get.find();
   final LiveController liveController = Get.find();
 
   EventItem({
     Key? key,
     required this.event,
+    this.ongoing = false,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final DateFormat dateFormat = DateFormat('d MMM, y');
-    final String formattedDate = dateFormat.format(event.startAt!);
+    final DateFormat timeFormat = DateFormat('h:mm a');
+
+// Convert the event start and end times to the local time zone
+    final DateTime localStartTime = event.startAt!.toLocal();
+    final DateTime localEndTime = event.endAt!.toLocal();
+
+    final String formattedDate = dateFormat.format(localStartTime);
+    final String formattedStartTime = timeFormat.format(localStartTime);
+    final String formattedEndTime = timeFormat.format(localEndTime);
 
     return Padding(
       padding: const EdgeInsets.only(left: 15),
@@ -163,7 +173,7 @@ class EventItem extends StatelessWidget {
                                   width: 2,
                                 ),
                                 Text(
-                                  '${formatTime(event.startAt!)} - ${formatTime(event.endAt!)}',
+                                  '$formattedStartTime - $formattedEndTime',
                                   style: const TextStyle(
                                     fontSize: 12,
                                     fontWeight: FontWeight.w700,
@@ -174,44 +184,45 @@ class EventItem extends StatelessWidget {
                           ),
                         ),
                         const Spacer(),
-                        Padding(
-                          padding: const EdgeInsets.only(right: 15.0),
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.white,
-                              foregroundColor: Colors.red,
-                              minimumSize: const Size(55, 32),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(
-                                    12), // Set the border radius
+                        if (ongoing)
+                          Padding(
+                            padding: const EdgeInsets.only(right: 15.0),
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.white,
+                                foregroundColor: Colors.red,
+                                minimumSize: const Size(55, 32),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(
+                                      12), // Set the border radius
+                                ),
+                              ),
+                              onPressed: () {
+                                if (event.user?.uid ==
+                                    profileController.myProfile.uid) {
+                                  jumpToLivePage(
+                                    context,
+                                    title: event.title!,
+                                    roomID: event.roomId!,
+                                    isHost: true,
+                                  );
+                                } else {
+                                  jumpToLivePage(
+                                    context,
+                                    title: event.title!,
+                                    roomID: event.roomId!,
+                                    isHost: false,
+                                  );
+                                }
+                              },
+                              child: const Text(
+                                'Join',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w500,
+                                ),
                               ),
                             ),
-                            onPressed: () {
-                              if (event.user?.uid ==
-                                  profileController.myProfile.uid) {
-                                jumpToLivePage(
-                                  context,
-                                  title: event.title!,
-                                  roomID: event.roomId!,
-                                  isHost: true,
-                                );
-                              } else {
-                                jumpToLivePage(
-                                  context,
-                                  title: event.title!,
-                                  roomID: event.roomId!,
-                                  isHost: false,
-                                );
-                              }
-                            },
-                            child: const Text(
-                              'Join',
-                              style: TextStyle(
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ),
-                        )
+                          )
                       ],
                     ),
                     const SizedBox(

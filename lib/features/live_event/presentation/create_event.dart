@@ -209,6 +209,17 @@ class _CreateEventState extends State<CreateEvent> {
               child: CustomButton(
                 buttonType: ButtonType.elevated,
                 onPressed: () async {
+                  final DateTime endAtt = endAt.toUtc();
+                  final DateFormat dateFormat =
+                      DateFormat('yyyy-MM-dd HH:mm:ss.SSSSSS');
+
+                  // Format the UTC DateTime to the desired string format
+                  String formattedEndDateTime = dateFormat.format(endAtt);
+                  final DateTime startAtt = startAt.toUtc();
+
+                  // Format the UTC DateTime to the desired string format
+                  String formattedStartDateTime = dateFormat.format(startAtt);
+                  print(formattedEndDateTime);
                   if (titleController.text.isEmpty) {
                     showSnackBar(
                       context,
@@ -227,6 +238,7 @@ class _CreateEventState extends State<CreateEvent> {
                     // Show an error message or handle it as per your app's requirements.
                     showSnackBar(context,
                         message: 'Start time cannot be in the past');
+                    return;
                   }
                   if (endAt.isAfter(startAt.add(const Duration(hours: 2)))) {
                     showSnackBar(context,
@@ -236,22 +248,12 @@ class _CreateEventState extends State<CreateEvent> {
                   Map<String, dynamic> data = <String, dynamic>{
                     'title': titleController.text,
                     'roomId': eventID,
-                    'startAt': startAt.toString(),
-                    'endAt': endAt.toString(),
+                    'startAt': formattedStartDateTime,
+                    'endAt': formattedEndDateTime,
                     'startTime': '00:00:00'
                   };
                   liveEventController.createEvent(data);
-                  Navigator.of(context).pushAndRemoveUntil(
-                    // ignore: always_specify_types
-                    MaterialPageRoute(
-                      builder: (BuildContext context) => ConfirmCreateEvent(
-                        roomID: roomID,
-                      ),
-                    ),
-                    // ignore: always_specify_types
-                    (Route route) =>
-                        false, // Removes all previous routes from the stack
-                  );
+                  Get.off(() => ConfirmCreateEvent(roomID: roomID));
                 },
                 child: const Text('Create Event'),
               ),
