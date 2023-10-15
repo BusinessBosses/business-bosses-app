@@ -25,15 +25,15 @@ class AllImagesItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: [
+      children: <Widget>[
         Stack(
-          children: [
+          children: <Widget>[
             GestureDetector(
               onTap: () {
                 if (isVideo) {
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (context) => VideoScreen(
+                      builder: (BuildContext context) => VideoScreen(
                         post: post!,
                       ),
                     ),
@@ -71,7 +71,7 @@ class AllImagesItem extends StatelessWidget {
                   onTap: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (context) => VideoScreen(
+                        builder: (BuildContext context) => VideoScreen(
                           post: post!,
                         ),
                       ),
@@ -93,8 +93,8 @@ class AllImagesItem extends StatelessWidget {
                 width: double.infinity,
                 height: 72.0,
                 child: Row(
-                  children: [
-                    ...[2, 3, 4, 5]
+                  children: <Widget>[
+                    ...<int>[2, 3, 4, 5]
                         .map(
                           (int i) => Expanded(
                             flex: 1,
@@ -113,7 +113,7 @@ class AllImagesItem extends StatelessWidget {
                                       );
                                     },
                                     child: Stack(
-                                      children: [
+                                      children: <Widget>[
                                         Container(
                                           padding: const EdgeInsets.only(
                                               top: 10.0, right: 10),

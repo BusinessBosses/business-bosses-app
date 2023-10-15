@@ -38,7 +38,7 @@ class _CommentItemState extends State<CommentItem> {
             padding: const EdgeInsets.all(8.0),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
+              children: <Widget>[
                 MyContainer(
                   width: MediaQuery.of(context).size.width * 0.7,
                   padding: const EdgeInsets.only(
@@ -67,7 +67,7 @@ class _CommentItemState extends State<CommentItem> {
                         ),
                         title: widget.comment.user!.isSubscribed == true
                             ? Row(
-                                children: [
+                                children: <Widget>[
                                   Text(
                                     widget.comment.user?.name ??
                                         widget.comment.user!.username,

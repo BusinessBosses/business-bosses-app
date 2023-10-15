@@ -58,7 +58,7 @@ class _AnalyserScreenState extends State<AnalyserScreen> {
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
+        children: <Widget>[
           const SizedBox(
             width: double.infinity,
             height: 20,
@@ -72,9 +72,9 @@ class _AnalyserScreenState extends State<AnalyserScreen> {
               left: 20,
             ),
             child:
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
               Row(
-                children: [
+                children: <Widget>[
                   const Text(
                     'Hi',
                     style: TextStyle(
@@ -90,13 +90,13 @@ class _AnalyserScreenState extends State<AnalyserScreen> {
                         Get.toNamed(Routes.premiumscreen);
                       },
                       child: Column(
-                        children: [
+                        children: <Widget>[
                           const SizedBox(
                             height: 10,
                           ),
                           Container(
                               decoration: BoxDecoration(
-                                boxShadow: [
+                                boxShadow: <BoxShadow>[
                                   BoxShadow(
                                     color: Colors.black.withOpacity(0.09),
                                     blurRadius: 500.0,

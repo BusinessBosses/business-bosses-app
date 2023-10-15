@@ -13,7 +13,7 @@ class AchievementsExpansionTile extends StatefulWidget {
 
 class _AchievementsExpansionTileState extends State<AchievementsExpansionTile> {
   TextEditingController achievementController = TextEditingController();
-  final List<String> achievements = [];
+  final List<String> achievements = <String>[];
   String? _achievements;
 
   void addItemToList() {
@@ -48,18 +48,18 @@ class _AchievementsExpansionTileState extends State<AchievementsExpansionTile> {
             ],
           ),
         ),
-        children: [
+        children: <Widget>[
           Padding(
               padding: const EdgeInsets.all(0),
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
+                  children: <Widget>[
                     Padding(
                       padding: const EdgeInsets.only(left: 20, right: 20),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
+                        children: <Widget>[
                           Text(
                             'You can add up to 3 Achievements',
                             style: TextStyle(color: subtextColor),
@@ -88,7 +88,7 @@ class _AchievementsExpansionTileState extends State<AchievementsExpansionTile> {
                           return Padding(
                               padding:
                                   const EdgeInsets.only(left: 20, right: 20),
-                              child: Column(children: [
+                              child: Column(children: <Widget>[
                                 SizedBox(
                                   width: double.infinity,
                                   height: 1.5,

@@ -7,10 +7,10 @@ import 'package:get/get.dart';
 
 class ConnectionController extends GetxController {
   bool loading = true;
-  final List<UserModel> suggestedUsers = [];
-  final List<UserModel> searchedUsers = [];
-  final List<UserModel> connections = [];
-  final List<UserModel> connecteds = [];
+  final List<UserModel> suggestedUsers = <UserModel>[];
+  final List<UserModel> searchedUsers = <UserModel>[];
+  final List<UserModel> connections = <UserModel>[];
+  final List<UserModel> connecteds = <UserModel>[];
   final TextEditingController searchController = TextEditingController();
   final ProfileController _profileController = Get.find();
 
@@ -71,7 +71,7 @@ class ConnectionController extends GetxController {
   Future<void> connect(String userId) async {
     final ApiResponseModel res = await ApiService.post(
         path: '/connection/connect',
-        body: {
+        body: <String, dynamic>{
           'connectedId': userId,
           'timestamp': DateTime.now().millisecondsSinceEpoch
         });
@@ -80,7 +80,7 @@ class ConnectionController extends GetxController {
   Future<void> disconnect(String userId) async {
     final ApiResponseModel res = await ApiService.post(
         path: '/connection/disconnect',
-        body: {
+        body: <String, dynamic>{
           'connectedId': userId,
           'timestamp': DateTime.now().millisecondsSinceEpoch
         });

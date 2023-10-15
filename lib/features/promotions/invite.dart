@@ -26,7 +26,7 @@ class Invite {
 
   Map<dynamic, dynamic> toSetMap() {
     // ignore: unnecessary_cast
-    return {
+    return <String, Object?>{
       'uid': uid,
       'timestamp': DateTime.now().millisecondsSinceEpoch,
     } as Map<dynamic, dynamic>;
@@ -36,7 +36,7 @@ class Invite {
     @required var data,
   }) {
     Map values = data as Map;
-    List<Invite> invites = [];
+    List<Invite> invites = <Invite>[];
     values.forEach((key, data) {
       final Invite invite = Invite.toObject(data);
       invites.add(invite);

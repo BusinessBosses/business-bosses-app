@@ -9,11 +9,9 @@ import 'package:business_bosses_v2/functions/my_native_functions.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
 import 'package:detectable_text_field/widgets/detectable_text.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:jiffy/jiffy.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../../action/action.dart';
@@ -26,7 +24,6 @@ import '../../../common/widgets/text_widget.dart';
 import '../../../common/widgets/user_avatar_with_badge.dart';
 import '../../../navigation/routes.dart';
 import '../../../utils/theme/theme.dart';
-import '../../../utils/time_format.dart';
 import '../../../utils/time_format.dart';
 import '../presentation/boost_post_screen.dart';
 import '../presentation/create_post_screen.dart';
@@ -56,22 +53,24 @@ class _PostTileState extends State<PostTile> {
 
   Future<void> connect(String userId) async {
     // ignore: unused_local_variable
-    final ApiResponseModel res =
-        await ApiService.post(path: '/connection/connect', body: {
-      'userId': profileController.myProfile.uid,
-      'connectedId': userId,
-      'timestamp': DateTime.now().millisecondsSinceEpoch
-    });
+    final ApiResponseModel res = await ApiService.post(
+        path: '/connection/connect',
+        body: <String, dynamic>{
+          'userId': profileController.myProfile.uid,
+          'connectedId': userId,
+          'timestamp': DateTime.now().millisecondsSinceEpoch
+        });
   }
 
   Future<void> disconnect(String userId) async {
     // ignore: unused_local_variable
-    final ApiResponseModel res =
-        await ApiService.post(path: '/connection/disconnect', body: {
-      'userId': profileController.myProfile.uid,
-      'connectedId': userId,
-      'timestamp': DateTime.now().millisecondsSinceEpoch
-    });
+    final ApiResponseModel res = await ApiService.post(
+        path: '/connection/disconnect',
+        body: <String, dynamic>{
+          'userId': profileController.myProfile.uid,
+          'connectedId': userId,
+          'timestamp': DateTime.now().millisecondsSinceEpoch
+        });
   }
 
   void connectToUser() async {
@@ -85,7 +84,7 @@ class _PostTileState extends State<PostTile> {
       // connecteds.add(user);
       profileController.updateConnections(widget.post.user!.uid);
       setState(() {
-        UserModel.fromMap({
+        UserModel.fromMap(<dynamic, dynamic>{
           ...widget.post.user!.toMap(),
           'connectionCount': widget.post.user!.connectionCount == null
               ? 1
@@ -97,7 +96,7 @@ class _PostTileState extends State<PostTile> {
       profileController.updateConnections(widget.post.user!.uid);
 
       setState(() {
-        UserModel.fromMap({
+        UserModel.fromMap(<dynamic, dynamic>{
           ...widget.post.user!.toMap(),
           'connectionCount': widget.post.user!.connectionCount == null
               ? null
@@ -186,7 +185,7 @@ class _PostTileState extends State<PostTile> {
             decoration: const BoxDecoration(color: Colors.white),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
+              children: <Widget>[
                 ListTile(
                   contentPadding: const EdgeInsets.only(left: 15, right: 0),
                   leading: GestureDetector(
@@ -228,7 +227,7 @@ class _PostTileState extends State<PostTile> {
                             ? Padding(
                                 padding: const EdgeInsets.only(top: 0.0),
                                 child: Row(
-                                  children: [
+                                  children: <Widget>[
                                     Text(
                                       widget.post.user!.name != null &&
                                               widget.post.user!.name!.length <=
@@ -252,7 +251,7 @@ class _PostTileState extends State<PostTile> {
                             : Padding(
                                 padding: const EdgeInsets.only(top: 0.0),
                                 child: Row(
-                                  children: [
+                                  children: <Widget>[
                                     Text(
                                       widget.post.user!.name != null &&
                                               widget.post.user!.name!.length <=
@@ -291,7 +290,7 @@ class _PostTileState extends State<PostTile> {
                             : 80,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
+                      children: <Widget>[
                         widget.post.user!.isSubscribed &&
                                 widget.post.user!.uid !=
                                     profileController.myProfile.uid
@@ -431,10 +430,10 @@ class _PostTileState extends State<PostTile> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
+                    children: <Widget>[
                       if (widget.post.promote! && widget.post.approved!)
                         const Column(
-                          children: [
+                          children: <Widget>[
                             TextWidget(
                               text: 'Sponsored',
                               fontWeight: FontWeight.w700,
@@ -448,7 +447,7 @@ class _PostTileState extends State<PostTile> {
                       if (widget.post.title.isNotEmpty)
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
+                          children: <Widget>[
                             DetectableText(
                               text: widget.post.title,
                               detectionRegExp: detectionRegExp(hashtag: false)!,
@@ -484,7 +483,7 @@ class _PostTileState extends State<PostTile> {
                   ),
                 ),
                 Row(
-                  children: [
+                  children: <Widget>[
                     Container(
                       padding: const EdgeInsets.only(right: 0.0),
                       child: TextButton.icon(
@@ -638,7 +637,7 @@ class _PostTileState extends State<PostTile> {
       builder: (BuildContext context) => AlertDialog(
         content: Column(
           mainAxisSize: MainAxisSize.min,
-          children: [
+          children: <Widget>[
             ListTile(
               onTap: () {
                 navigateTo(context);
@@ -657,7 +656,7 @@ class _PostTileState extends State<PostTile> {
                       centralize: true,
                       color: Colors.black.withOpacity(.6),
                     ),
-                    actions: [
+                    actions: <Widget>[
                       TextButton(
                         onPressed: () => navigateTo(context),
                         child: const TextWidget(
@@ -721,7 +720,7 @@ class _PostTileState extends State<PostTile> {
                       centralize: true,
                       color: Colors.black.withOpacity(.6),
                     ),
-                    actions: [
+                    actions: <Widget>[
                       TextButton(
                         onPressed: () => navigateTo(context),
                         child: const TextWidget(

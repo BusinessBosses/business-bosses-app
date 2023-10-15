@@ -46,7 +46,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
   late UserModel args;
   bool showColumn = true;
   // bool showEmoji = false;
-  final List<PopupMenuEntry<String>> _popupItemForumMore = [
+  final List<PopupMenuEntry<String>> _popupItemForumMore = <PopupMenuEntry<String>>[
     const PopupMenuItem<String>(
       value: 'Delete Chat',
       child: Text(
@@ -108,7 +108,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                       icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
                     ),
               title: Column(
-                children: [
+                children: <Widget>[
                   ListTile(
                     onTap: () {
                       Get.toNamed(Routes.publicProfile, arguments: args);
@@ -151,7 +151,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                       ? Padding(
                           padding: const EdgeInsets.only(left: 5.0),
                           child: Row(
-                            children: [
+                            children: <Widget>[
                               const Icon(
                                 Icons.star,
                                 color: Color.fromRGBO(255, 202, 40, 1),
@@ -166,7 +166,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                                 width: 10,
                               ),
                               Stack(
-                                children: [
+                                children: <Widget>[
                                   Container(
                                     decoration: BoxDecoration(
                                         color: backgroundcolorinterface,
@@ -175,7 +175,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                                     child: Padding(
                                       padding: const EdgeInsets.all(8.0),
                                       child: Row(
-                                        children: [
+                                        children: <Widget>[
                                           GestureDetector(
                                             onTap: () {
                                               Get.to(() => SellerReviewScreen(
@@ -216,7 +216,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
             body: SizedBox(
               width: double.infinity,
               child: Stack(
-                children: [
+                children: <Widget>[
                   Container(
                     child: controller
                             .extractConversations(
@@ -229,7 +229,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                                 height: double.infinity,
                                 child: SingleChildScrollView(
                                   child: Column(
-                                    children: [
+                                    children: <Widget>[
                                       Padding(
                                         padding: const EdgeInsets.only(
                                             top: 20.0, right: 20, left: 20),
@@ -237,7 +237,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                                           borderRadius: const BorderRadius.all(
                                               Radius.circular(10)),
                                           child: Stack(
-                                            children: [
+                                            children: <Widget>[
                                               widget.market!.images != null
                                                   ? Image.network(
                                                       widget.market
@@ -265,7 +265,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                                                                 .start,
                                                         mainAxisSize:
                                                             MainAxisSize.min,
-                                                        children: [
+                                                        children: <Widget>[
                                                           Text(
                                                             '${widget.market?.price}',
                                                             style:
@@ -312,7 +312,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                                                                           ?.category !=
                                                                       null
                                                               ? Row(
-                                                                  children: [
+                                                                  children: <Widget>[
                                                                     SvgPicture
                                                                         .asset(
                                                                             'assets/svgs/location.svg'),
@@ -410,10 +410,10 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                                 subTitle:
                                     'No message sent to ${args.username} yet',
                               )
-                        : Stack(children: [
+                        : Stack(children: <Widget>[
                             showColumn
                                 ? Column(
-                                    children: [
+                                    children: <Widget>[
                                       Padding(
                                         padding: const EdgeInsets.only(
                                             top: 20.0, right: 20, left: 20),
@@ -421,7 +421,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                                           borderRadius: const BorderRadius.all(
                                               Radius.circular(10)),
                                           child: Stack(
-                                            children: [
+                                            children: <Widget>[
                                               if (widget.market?.images != null)
                                                 Image.network(
                                                   widget.market?.images?[0],
@@ -446,7 +446,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                                                                 .start,
                                                         mainAxisSize:
                                                             MainAxisSize.min,
-                                                        children: [
+                                                        children: <Widget>[
                                                           Text(
                                                             '${widget.market?.price}',
                                                             style:
@@ -493,7 +493,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                                                                           ?.category !=
                                                                       null
                                                               ? Row(
-                                                                  children: [
+                                                                  children: <Widget>[
                                                                     SvgPicture
                                                                         .asset(
                                                                             'assets/svgs/location.svg'),
@@ -576,7 +576,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                                         _profileController.myProfile.uid)[i];
                                 // final reversedIndex = _messages.length - 1 - i;
                                 return Column(
-                                  children: [
+                                  children: <Widget>[
                                     InkWell(
                                       onLongPress: () {
                                         FocusScopeNode currentFocus =
@@ -591,7 +591,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                                               AlertDialog(
                                             content: Column(
                                               mainAxisSize: MainAxisSize.min,
-                                              children: [
+                                              children: <Widget>[
                                                 ListTile(
                                                   onTap: () async {
                                                     navigateTo(context);
@@ -623,7 +623,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                                                           title: const TextWidget(
                                                               text:
                                                                   'Delete this Message'),
-                                                          actions: [
+                                                          actions: <Widget>[
                                                             TextButton(
                                                                 onPressed: () {
                                                                   Navigator.of(
@@ -797,7 +797,7 @@ class SendMessageBox extends StatelessWidget {
     String? previousScreen = Get.previousRoute;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
+      children: <Widget>[
         Container(
           width: double.infinity,
           height: 70.0,
@@ -811,9 +811,9 @@ class SendMessageBox extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 5.0),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
+              children: <Widget>[
                 Stack(
-                  children: [
+                  children: <Widget>[
                     IconButton(
                       onPressed: onPickImage,
                       icon: const Icon(Icons.insert_photo),
@@ -857,7 +857,7 @@ Future optionsDialog(BuildContext context, Function() ontap) {
                 fontWeight: FontWeight.w300,
                 fontSize: MediaQuery.of(context).size.height / 42),
           ),
-          actions: [
+          actions: <Widget>[
             but(context, 'Cancel', true, () {
               Navigator.pop(context);
             }),

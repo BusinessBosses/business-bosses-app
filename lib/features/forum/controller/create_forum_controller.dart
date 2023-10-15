@@ -176,7 +176,7 @@ class CreateForumController extends GetxController {
           .toList();
       if (hasNewUpload.isEmpty) {
         final ApiResponseModel response = await ForumRepository.editForum(
-            {...body, 'images': updatingImageFileList});
+            <String, dynamic>{...body, 'images': updatingImageFileList});
 
         if (response.success) {
           updatingImageFileList.clear();
@@ -215,9 +215,10 @@ class CreateForumController extends GetxController {
               .where((String element) => element.contains('http'))
               .toList();
           //////stopped here
-          final ApiResponseModel response = await ForumRepository.editForum({
+          final ApiResponseModel response =
+              await ForumRepository.editForum(<String, dynamic>{
             ...body,
-            'images': [...alreadyUploadedFileUrls, ...uploadedFiles]
+            'images': <String>[...alreadyUploadedFileUrls, ...uploadedFiles]
           });
 
           if (response.success) {

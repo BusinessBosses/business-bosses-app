@@ -36,7 +36,7 @@ class Industry {
       timestamp: int.parse(map['timestamp'].toString()),
       categoryId: map['categoryId'] as String,
       joinedUsers: map['joinedUsers'] == null
-          ? []
+          ? <String>[]
           : List<String>.from(map['joinedUsers']),
     );
   }
@@ -57,7 +57,7 @@ class Industry {
   static List<Industry> toIndustries({
     required List snapshot,
   }) {
-    List<Industry> industries = [];
+    List<Industry> industries = <Industry>[];
     for (int i = 0; i < snapshot.length; i++) {
       final Industry industry = Industry.toObject(snapshot[i]);
       industries.add(industry);
@@ -70,8 +70,8 @@ class Industry {
   }
 
   static List<Industry> toJustSortIndustryList(List<dynamic> responseData) {
-    if (responseData == null) return [];
-    List<Industry> items = [];
+    if (responseData == null) return <Industry>[];
+    List<Industry> items = <Industry>[];
     for (final postJson in responseData) {
       Industry pt = Industry.toObject(postJson);
       items.add(pt);

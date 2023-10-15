@@ -31,9 +31,9 @@ class PostInteractionsWidget extends StatelessWidget {
           padding: const EdgeInsets.only(left: 0, right: 0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+            children: <Widget>[
               Row(
-                children: [
+                children: <Widget>[
                   TextButton.icon(
                     onPressed: () async {
                       controller.postLike(profileController.myProfile.uid,
@@ -134,7 +134,7 @@ class PostInteractionsWidget extends StatelessWidget {
                   const Spacer(),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
+                    children: <Widget>[
                       Padding(
                         padding: const EdgeInsets.only(right: 15),
                         child: Text(

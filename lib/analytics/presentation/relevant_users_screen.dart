@@ -31,7 +31,7 @@ class _RelevantUsersScreenState extends State<RelevantUsersScreen> {
       final List<UserModel> filteredConnections =
           controller.recommendedConnections.toList();
 
-      filteredConnections.sort((a, b) {
+      filteredConnections.sort((UserModel a, UserModel b) {
         if (a.photoUrl != null && a.photoUrl!.isNotEmpty) {
           if (b.photoUrl != null && b.photoUrl!.isNotEmpty) {
             return 0;

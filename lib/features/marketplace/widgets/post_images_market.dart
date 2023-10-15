@@ -16,9 +16,9 @@ class PostImagesMarket extends StatelessWidget {
             post.images?[0] == ''
         ? const SizedBox()
         : Column(
-            children: [
+            children: <Widget>[
               Stack(
-                children: [
+                children: <Widget>[
                   GestureDetector(
                     onTap: () {
                       Navigator.of(context).push(
@@ -51,8 +51,8 @@ class PostImagesMarket extends StatelessWidget {
                       width: double.infinity,
                       height: 72.0,
                       child: Row(
-                        children: [
-                          ...[2, 3, 4, 5]
+                        children: <Widget>[
+                          ...<int>[2, 3, 4, 5]
                               .map(
                                 (int i) => Expanded(
                                   flex: 1,
@@ -72,7 +72,7 @@ class PostImagesMarket extends StatelessWidget {
                                             );
                                           },
                                           child: Stack(
-                                            children: [
+                                            children: <Widget>[
                                               Container(
                                                 padding: const EdgeInsets.only(
                                                     top: 10.0, right: 10),

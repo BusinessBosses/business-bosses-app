@@ -46,7 +46,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
               absorbing: _isProcessing,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
+                children: <Widget>[
                   Container(
                     padding: const EdgeInsets.all(16.0),
                     width: double.infinity,

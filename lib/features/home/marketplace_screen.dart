@@ -80,7 +80,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
         appBar: AppBar(
             automaticallyImplyLeading: false,
             title: const Text('Marketplace'),
-            actions: [
+            actions: <Widget>[
               IconButton(
                   icon: _isSearching
                       ? const Icon(Icons.close)
@@ -101,7 +101,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                               title: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
-                                children: [
+                                children: <Widget>[
                                   const Text('Filter'),
                                   IconButton(
                                     icon: const Icon(Icons.close),
@@ -234,7 +234,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                       right: 25.0, bottom: 10),
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
+                                    children: <Widget>[
                                       TextButton(
                                         child: const Text('Reset'),
                                         onPressed: () {
@@ -279,7 +279,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                 height: MediaQuery.of(context).size.height,
                 width: MediaQuery.of(context).size.width,
                 child: Stack(
-                  children: [
+                  children: <Widget>[
                     Padding(
                       padding: const EdgeInsets.only(bottom: 30.0),
                       child: Container(
@@ -293,12 +293,12 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                               SliverStickyHeader(
                                 sticky: false,
                                 header: Column(
-                                  children: [
+                                  children: <Widget>[
                                     Container(
                                       width: double.infinity,
                                       color: backgroundcolorinterface,
                                       child: Stack(
-                                        children: [
+                                        children: <Widget>[
                                           Padding(
                                             padding: const EdgeInsets.only(
                                                 left: 20, top: 25),
@@ -312,7 +312,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                                 );
                                               }),
                                               child: Row(
-                                                children: [
+                                                children: <Widget>[
                                                   const Text(
                                                     'Guidelines ',
                                                     style: TextStyle(
@@ -328,7 +328,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                               ),
                                             ),
                                           ),
-                                          Column(children: [
+                                          Column(children: <Widget>[
                                             const SizedBox(
                                               height: 10,
                                             ),
@@ -376,7 +376,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                             ),
                                             Container(
                                               decoration: BoxDecoration(
-                                                boxShadow: [
+                                                boxShadow: <BoxShadow>[
                                                   BoxShadow(
                                                     color: Colors.black
                                                         .withOpacity(0.09),
@@ -407,7 +407,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                                     ),
                                                   ),
                                                   Column(
-                                                    children: [
+                                                    children: <Widget>[
                                                       Row(
                                                         children: <Widget>[
                                                           Container(
@@ -482,7 +482,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                                         child: Row(
                                                           children: <Widget>[
                                                             Row(
-                                                              children: [
+                                                              children: <Widget>[
                                                                 Padding(
                                                                   padding:
                                                                       const EdgeInsets
@@ -518,7 +518,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                                                         RichText(
                                                                       text:
                                                                           TextSpan(
-                                                                        children: [
+                                                                        children: <InlineSpan>[
                                                                           TextSpan(
                                                                               text: 'Members ($formattedUserCount)',
                                                                               style: const TextStyle(
@@ -535,7 +535,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                                               ],
                                                             ),
                                                             Row(
-                                                              children: [
+                                                              children: <Widget>[
                                                                 Padding(
                                                                   padding:
                                                                       const EdgeInsets
@@ -602,7 +602,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                                                   mainAxisAlignment:
                                                                       MainAxisAlignment
                                                                           .end,
-                                                                  children: [
+                                                                  children: <Widget>[
                                                                     joinedButton(),
                                                                   ],
                                                                 ))
@@ -672,7 +672,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                                                           ),
                                                                           child:
                                                                               Row(
-                                                                            children: [
+                                                                            children: <Widget>[
                                                                               Padding(
                                                                                 padding: const EdgeInsets.only(
                                                                                   left: 10,

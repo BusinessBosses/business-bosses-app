@@ -1,3 +1,5 @@
+// ignore_for_file: public_member_api_docs
+
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/features/live_event/controller/live_event_controller.dart';
 import 'package:business_bosses_v2/features/live_event/models/events_model.dart';
@@ -12,24 +14,34 @@ import 'package:intl/intl.dart';
 
 class EventItem extends StatelessWidget {
   final EventModel event;
+  final bool ongoing;
   final ProfileController profileController = Get.find();
   final LiveController liveController = Get.find();
 
   EventItem({
     Key? key,
     required this.event,
+    this.ongoing = false,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final DateFormat dateFormat = DateFormat('d MMM, y');
-    final String formattedDate = dateFormat.format(event.startAt!);
+    final DateFormat timeFormat = DateFormat('h:mm a');
+
+// Convert the event start and end times to the local time zone
+    final DateTime localStartTime = event.startAt!.toLocal();
+    final DateTime localEndTime = event.endAt!.toLocal();
+
+    final String formattedDate = dateFormat.format(localStartTime);
+    final String formattedStartTime = timeFormat.format(localStartTime);
+    final String formattedEndTime = timeFormat.format(localEndTime);
 
     return Padding(
       padding: const EdgeInsets.only(left: 15),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: [
+        children: <Widget>[
           GestureDetector(
             onTap: () {},
             child: Container(
@@ -43,6 +55,7 @@ class EventItem extends StatelessWidget {
                   'assets/svgs/share.svg',
                   height: 15.0,
                   width: 15.0,
+                  // ignore: deprecated_member_use
                   color: textColor.withOpacity(1.0),
                 ),
               ),
@@ -63,10 +76,10 @@ class EventItem extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.only(left: 15.0),
                 child: Column(
-                  children: [
+                  children: <Widget>[
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
+                      children: <Widget>[
                         Padding(
                           padding: EdgeInsets.only(
                             top: event.user?.uid ==
@@ -106,7 +119,7 @@ class EventItem extends StatelessWidget {
                     ),
                     const SizedBox(height: 10),
                     Row(
-                      children: [
+                      children: <Widget>[
                         const Text('Host:'),
                         const SizedBox(
                           width: 4,
@@ -131,7 +144,7 @@ class EventItem extends StatelessWidget {
                       height: 10,
                     ),
                     Row(
-                      children: [
+                      children: <Widget>[
                         Align(
                           alignment: Alignment.topLeft,
                           child: Container(
@@ -160,7 +173,7 @@ class EventItem extends StatelessWidget {
                                   width: 2,
                                 ),
                                 Text(
-                                  '${formatTime(event.startAt!)} - ${formatTime(event.endAt!)}',
+                                  '$formattedStartTime - $formattedEndTime',
                                   style: const TextStyle(
                                     fontSize: 12,
                                     fontWeight: FontWeight.w700,
@@ -171,44 +184,45 @@ class EventItem extends StatelessWidget {
                           ),
                         ),
                         const Spacer(),
-                        Padding(
-                          padding: const EdgeInsets.only(right: 15.0),
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.white,
-                              foregroundColor: Colors.red,
-                              minimumSize: const Size(55, 32),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(
-                                    12), // Set the border radius
+                        if (ongoing)
+                          Padding(
+                            padding: const EdgeInsets.only(right: 15.0),
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.white,
+                                foregroundColor: Colors.red,
+                                minimumSize: const Size(55, 32),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(
+                                      12), // Set the border radius
+                                ),
+                              ),
+                              onPressed: () {
+                                if (event.user?.uid ==
+                                    profileController.myProfile.uid) {
+                                  jumpToLivePage(
+                                    context,
+                                    title: event.title!,
+                                    roomID: event.roomId!,
+                                    isHost: true,
+                                  );
+                                } else {
+                                  jumpToLivePage(
+                                    context,
+                                    title: event.title!,
+                                    roomID: event.roomId!,
+                                    isHost: false,
+                                  );
+                                }
+                              },
+                              child: const Text(
+                                'Join',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w500,
+                                ),
                               ),
                             ),
-                            onPressed: () {
-                              if (event.user?.uid ==
-                                  profileController.myProfile.uid) {
-                                jumpToLivePage(
-                                  context,
-                                  title: event.title!,
-                                  roomID: event.roomId!,
-                                  isHost: true,
-                                );
-                              } else {
-                                jumpToLivePage(
-                                  context,
-                                  title: event.title!,
-                                  roomID: event.roomId!,
-                                  isHost: false,
-                                );
-                              }
-                            },
-                            child: const Text(
-                              'Join',
-                              style: TextStyle(
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ),
-                        )
+                          )
                       ],
                     ),
                     const SizedBox(
@@ -252,6 +266,7 @@ class EventItem extends StatelessWidget {
         if (value == 'edit') {
           Navigator.push(
             context,
+            // ignore: always_specify_types
             MaterialPageRoute(
               builder: (BuildContext context) => CreateEvent(
                 event: event,
@@ -296,6 +311,7 @@ class EventItem extends StatelessWidget {
       {required String roomID, required bool isHost, required String title}) {
     Navigator.push(
       context,
+      // ignore: always_specify_types
       MaterialPageRoute(
         builder: (BuildContext context) => CallRoom(
           roomID: roomID,

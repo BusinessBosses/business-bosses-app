@@ -19,10 +19,10 @@ class ReferralsDetailsScreen extends StatefulWidget {
 class _ReferralsDetailsScreenState extends State<ReferralsDetailsScreen> {
   final ScrollController _controller = ScrollController();
 
-  List<MyRefers> _referrals = [];
-  List<String> _userUids = [];
+  List<MyRefers> _referrals = <MyRefers>[];
+  List<String> _userUids = <String>[];
 
-  final List<MyUser> _users = [];
+  final List<MyUser> _users = <MyUser>[];
 
   final int _loadedItemsCount = 0;
 
@@ -61,14 +61,14 @@ class _ReferralsDetailsScreenState extends State<ReferralsDetailsScreen> {
       body: _users.isEmpty
           ? const SafetyModel(isLoading: true)
           : Stack(
-              children: [
+              children: <Widget>[
                 ListView.builder(
                   padding: const EdgeInsets.only(bottom: 48.0),
                   controller: _controller,
                   itemCount: _users.length,
                   itemBuilder: (BuildContext context, int i) {
                     return Column(
-                      children: [
+                      children: <Widget>[
                         ListTile(
                           onTap: () async {
                             var result = await navigateTo(

@@ -35,7 +35,7 @@ class Comment {
 
   Map<String, dynamic> toMapToComment() {
     // ignore: unnecessary_cast
-    return {
+    return <String, Object?>{
       'commentId': commentId,
       'uid': uid,
       // 'userName': this.userName,
@@ -48,7 +48,7 @@ class Comment {
 
   Map<String, dynamic> toMap() {
     // ignore: unnecessary_cast
-    return {
+    return <String, Object?>{
       'commentId': commentId,
       'uid': uid,
       // 'userName': this.userName,
@@ -60,7 +60,7 @@ class Comment {
   }
 
   static List<Comment> toCommentList(Map map) {
-    List<Comment> comments = [];
+    List<Comment> comments = <Comment>[];
     map.forEach((key, data) {
       final Comment comment = Comment.toObject(data);
       comments.add(comment);
@@ -69,7 +69,7 @@ class Comment {
   }
 
   static Map toMapList(List<Comment> items) {
-    Map map = {};
+    Map map = <dynamic, dynamic>{};
     for (Comment element in items) {
       map[element.commentId] = element.toMap();
     }

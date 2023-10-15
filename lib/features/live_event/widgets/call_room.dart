@@ -30,14 +30,25 @@ class CallRoom extends StatelessWidget {
             .appID, // Fill in the appID that you get from ZEGOCLOUD Admin Console.
         appSign: ZegoDetails
             .appSign, // Fill in the appSign that you get from ZEGOCLOUD Admin Console.
-        userID: '222',
+        userID: profileController.myProfile.uid,
         userName: profileController.myProfile.name ??
             profileController.myProfile.username,
         roomID: roomID,
         config: isHost
             ? ZegoUIKitPrebuiltLiveAudioRoomConfig.host()
             : ZegoUIKitPrebuiltLiveAudioRoomConfig.audience()
-          ..innerText.memberListTitle = 'Members',
+          ..innerText.memberListTitle = 'Members'
+          ..hostSeatIndexes = [0]
+          ..layoutConfig.rowConfigs = [
+            ZegoLiveAudioRoomLayoutRowConfig(
+                count: 1, alignment: ZegoLiveAudioRoomLayoutAlignment.center),
+            ZegoLiveAudioRoomLayoutRowConfig(
+                count: 4,
+                alignment: ZegoLiveAudioRoomLayoutAlignment.spaceAround),
+            ZegoLiveAudioRoomLayoutRowConfig(
+                count: 4,
+                alignment: ZegoLiveAudioRoomLayoutAlignment.spaceAround),
+          ],
       ),
     );
   }

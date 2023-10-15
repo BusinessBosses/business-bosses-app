@@ -1,3 +1,5 @@
+// ignore_for_file: public_member_api_docs
+
 class ZegoDetails {
   static int appID = 339519417;
   static String appSign =

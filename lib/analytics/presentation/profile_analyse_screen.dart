@@ -239,7 +239,7 @@ class _ProfileAnalyseScreenState extends State<ProfileAnalyseScreen> {
                                 text: 'Monthly Profile Analysis',
                               ),
                               // Enable legend
-                              legend: Legend(
+                              legend: const Legend(
                                   isVisible: true,
                                   position: LegendPosition.bottom),
                               // Enable tooltip

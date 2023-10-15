@@ -79,7 +79,7 @@ class _CreateForumScreenState extends State<CreateForumScreen> {
                         : 'Share Opportunities',
               ),
               automaticallyImplyLeading: false,
-              actions: [
+              actions: <Widget>[
                 IconButton(
                   icon: const Icon(Icons.close),
                   onPressed: () {
@@ -99,7 +99,7 @@ class _CreateForumScreenState extends State<CreateForumScreen> {
             body: SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
+                children: <Widget>[
                   const SizedBox(height: 16.0),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -158,7 +158,7 @@ class _CreateForumScreenState extends State<CreateForumScreen> {
                       padding: const EdgeInsets.symmetric(horizontal: 16.0),
                       child: FieldContainer(
                         child: Row(
-                          children: [
+                          children: <Widget>[
                             Expanded(
                               child: Text(
                                 'Add Attachment',
@@ -196,14 +196,14 @@ class _CreateForumScreenState extends State<CreateForumScreen> {
                     child: MCustomButton(
                       onPressed: () {
                         if (isUpdating) {
-                          controller.editForum({
+                          controller.editForum(<String, dynamic>{
                             ...forum.toMap(),
                             'title': title.trim(),
                             'description': description.trim(),
                             'industryId': industryId,
                           }, isBossup: isbossup);
                         } else {
-                          controller.createForum({
+                          controller.createForum(<String, dynamic>{
                             'title': title.trim(),
                             'description': description.trim(),
                             'timestamp': DateTime.now().millisecondsSinceEpoch,
@@ -239,7 +239,7 @@ class _CreateForumScreenState extends State<CreateForumScreen> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
+                        children: <Widget>[
                           SvgPicture.asset(
                             'assets/svgs/report.svg',
                             height: 18,

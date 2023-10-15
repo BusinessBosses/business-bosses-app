@@ -5,7 +5,7 @@ import 'package:flutter/cupertino.dart';
 import '../../posts/models/post_model.dart';
 
 class MyPosts with ChangeNotifier {
-  List<PostModel> _items = [];
+  List<PostModel> _items = <PostModel>[];
 
   void initializerPost(List<PostModel> posts) {
     _items = posts;
@@ -13,7 +13,7 @@ class MyPosts with ChangeNotifier {
   }
 
   List<PostModel> get posts {
-    return [..._items];
+    return <PostModel>[..._items];
   }
 
   void updatePost(PostModel post) {
@@ -34,7 +34,7 @@ class MyPosts with ChangeNotifier {
 
   // ============ POST GALLERY ============
 
-  List<PostGallery> _postGalleryItems = [];
+  List<PostGallery> _postGalleryItems = <PostGallery>[];
 
   void initializerPostGallery(List<PostGallery> postGallery) {
     _postGalleryItems = postGallery;
@@ -65,7 +65,7 @@ class MyPosts with ChangeNotifier {
     // if (_items.length <= _loadedNumberOfPostOnce) {
     //   totalDisplayed = _items.length;
     // notifyListeners();
-    return [..._postGalleryItems];
+    return <PostGallery>[..._postGalleryItems];
     // } else {
     //   displayNextPost();
     //   return [..._postGalleryItem];

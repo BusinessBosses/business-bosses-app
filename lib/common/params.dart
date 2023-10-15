@@ -13,7 +13,7 @@ class Params {
 
   // ignore: public_member_api_docs
   Map<String, dynamic> toMap() {
-    return {
+    return <String, dynamic>{
       'arg1': arg1,
       'arg2': arg2,
     };

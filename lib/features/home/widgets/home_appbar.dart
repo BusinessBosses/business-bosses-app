@@ -61,16 +61,16 @@ class Homeappbar extends StatelessWidget {
           width: 55,
           height: 20,
           child: Row(
-            children: [
+            children: <Widget>[
               const SizedBox(
                 width: 15,
               ),
               Stack(
                 clipBehavior: Clip.none,
-                children: [
+                children: <Widget>[
                   Container(
                     decoration: const BoxDecoration(
-                      boxShadow: [
+                      boxShadow: <BoxShadow>[
                         BoxShadow(
                             color: Color.fromRGBO(0, 0, 0, 0.08),
                             spreadRadius: 0.05,
@@ -98,11 +98,11 @@ class Homeappbar extends StatelessWidget {
           ),
         ),
       ),
-      actions: [
+      actions: <Widget>[
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
+          children: <Widget>[
             Container(
               decoration: BoxDecoration(
                 color: backgroundcolorinterface, // ash background color
@@ -110,7 +110,7 @@ class Homeappbar extends StatelessWidget {
               ),
               child: GestureDetector(
                 child: Wrap(
-                  children: [
+                  children: <Widget>[
                     Padding(
                       padding: const EdgeInsets.only(
                           left: 8, top: 5, right: 8, bottom: 5),
@@ -121,7 +121,7 @@ class Homeappbar extends StatelessWidget {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
+                          children: <Widget>[
                             SvgPicture.asset(
                               'assets/svgs/coin.svg',
                               height: 22,
@@ -154,7 +154,7 @@ class Homeappbar extends StatelessWidget {
                 height: 55,
                 child: Container(
                   decoration: const BoxDecoration(
-                    boxShadow: [
+                    boxShadow: <BoxShadow>[
                       BoxShadow(
                         color: Color.fromRGBO(0, 0, 0, 0.08),
                         spreadRadius: 0.05,
@@ -165,7 +165,7 @@ class Homeappbar extends StatelessWidget {
                   ),
                   // ignore: missing_required_param
                   child: Stack(
-                    children: [
+                    children: <Widget>[
                       IconButton(
                         padding: const EdgeInsets.only(right: 10, top: 10),
                         icon: SvgPicture.asset(

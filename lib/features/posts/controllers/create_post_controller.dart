@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
@@ -7,7 +6,6 @@ import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/posts/repository/post_repository.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -30,10 +28,10 @@ class CreatePostController extends GetxController {
   RxList<String> updatingImageFileList = RxList<String>(<String>[]);
 
   ///my asserts
-  List<MyAssetEntity> myAssetsEntities = [];
+  List<MyAssetEntity> myAssetsEntities = <MyAssetEntity>[];
 
   /// file processing
-  List<bool> fileProcessing = [];
+  List<bool> fileProcessing = <bool>[];
 
   ///seleted video
   File? selectedVid;
@@ -65,8 +63,8 @@ class CreatePostController extends GetxController {
   Future<Map<String, dynamic>?> uploadFile() async {
     /// UPLOADED FILE URLS
     List<String> fileUrls = <String>[];
-    Map<String, dynamic> mediaUrls = {};
-    print("===============>>>>>>>><<<<<<<<<<<<<<<< seleted vide$selectedVid");
+    Map<String, dynamic> mediaUrls = <String, dynamic>{};
+    print('===============>>>>>>>><<<<<<<<<<<<<<<< seleted vide$selectedVid');
     if (selectedVid != null) {
       MediaUploadResult result =
           await ApiService.uploadMediaFiles(selectedVid!, vidThumbnail!);
@@ -78,10 +76,13 @@ class CreatePostController extends GetxController {
         return null;
       } else {
         print(
-            "===============>>>>>>>><<<<<<<<<<<<<<<< thumbnail $thumbnailUrl");
-        print("===============>>>>>>>><<<<<<<<<<<<<<<< videoUrl $videoUrl");
+            '===============>>>>>>>><<<<<<<<<<<<<<<< thumbnail $thumbnailUrl');
+        print('===============>>>>>>>><<<<<<<<<<<<<<<< videoUrl $videoUrl');
 
-        return mediaUrls = {'images': thumbnailUrl, 'videoUrl': videoUrl};
+        return mediaUrls = <String, dynamic>{
+          'images': thumbnailUrl,
+          'videoUrl': videoUrl
+        };
       }
     } else {
       /// FILED SELECTED FILES
@@ -115,7 +116,7 @@ class CreatePostController extends GetxController {
 
     // return fileUrls;
     if (fileUrls.isNotEmpty) {
-      return {'fileUrls': fileUrls};
+      return <String, dynamic>{'fileUrls': fileUrls};
     } else if (mediaUrls.isNotEmpty) {
       return mediaUrls;
     }
@@ -129,9 +130,9 @@ class CreatePostController extends GetxController {
     if (validateCreatePostData(body)) {
       loading(true);
       update();
-      print("seletesdkfjkajdfkajfkjadkfjakfjksa");
+      print('seletesdkfjkajdfkajfkjadkfjakfjksa');
       if (imageFileList.isEmpty && selectedVid == null) {
-        print("==========>>>>>>>>>imagfile is empty");
+        print('==========>>>>>>>>>imagfile is empty');
         final ApiResponseModel response = await PostRepository.createPost(body);
 
         if (response.success) {
@@ -152,8 +153,8 @@ class CreatePostController extends GetxController {
         if (await uploadFile() == null) {
           showSnackbar(message: 'Error Uploading image');
         } else {
-          final files = await uploadFile();
-          print("============this is the videos stuffs $files");
+          final Map<String, dynamic>? files = await uploadFile();
+          print('============this is the videos stuffs $files');
           final thumbnail = files?['images'];
           final videoUrl = files?['videoUrl'];
           final ApiResponseModel response =
@@ -180,12 +181,12 @@ class CreatePostController extends GetxController {
           }
         }
       } else {
-        print("=======>>>>>there was an uploaded file");
+        print('=======>>>>>there was an uploaded file');
         if (await uploadFile() == null) {
           showSnackbar(message: 'Error Uploading video');
         } else {
-          final file = await uploadFile();
-          print("==============this is the file $file");
+          final Map<String, dynamic>? file = await uploadFile();
+          print('==============this is the file $file');
           final ApiResponseModel response = await PostRepository.createPost(
               <String, dynamic>{...body, 'images': file?['fileUrls']});
 
@@ -315,7 +316,7 @@ class CreatePostController extends GetxController {
         if (response.success) {
           final ProfileController profileController = Get.find();
           final HomeController homeController = Get.find();
-          PostModel modelizedPost = PostModel.fromMap({
+          PostModel modelizedPost = PostModel.fromMap(<String, dynamic>{
             ...post.toMap(),
             ...response.data,
           });
@@ -340,13 +341,13 @@ class CreatePostController extends GetxController {
             path: 'post/update-post/${post.postId}',
             body: <String, dynamic>{
               'title': title,
-              'images': [...alreadyUploadedFileUrls, ...uploadedFiles]
+              'images': <String>[...alreadyUploadedFileUrls, ...uploadedFiles]
             },
           );
           if (response.success) {
             final ProfileController profileController = Get.find();
             final HomeController homeController = Get.find();
-            PostModel modelizedPost = PostModel.fromMap({
+            PostModel modelizedPost = PostModel.fromMap(<String, dynamic>{
               ...post.toMap(),
               ...response.data,
             });
@@ -393,10 +394,10 @@ class CreatePostController extends GetxController {
   Future<void> onPickImage(GalleryType type, {bool isUpdating = false}) async {
     // print(" $updatingImageFileList $isUpdating");
     if (type == GalleryType.videos) {
-      final video = await _picker.pickVideo(source: ImageSource.gallery);
+      final XFile? video = await _picker.pickVideo(source: ImageSource.gallery);
       if (video != null) {
         try {
-          final uint8list = await VideoThumbnail.thumbnailFile(
+          final String? uint8list = await VideoThumbnail.thumbnailFile(
             video: File(video.path).path,
             imageFormat: ImageFormat.PNG,
             maxWidth:
@@ -406,8 +407,8 @@ class CreatePostController extends GetxController {
 
           selectedVid = File(video.path);
           vidThumbnail = File(uint8list!);
-          print("++++++>>>>>>>>>>>>>>>this is the video $selectedVid");
-          print("++++++>>>>>>>>>>>>>>>this is the video $vidThumbnail");
+          print('++++++>>>>>>>>>>>>>>>this is the video $selectedVid');
+          print('++++++>>>>>>>>>>>>>>>this is the video $vidThumbnail');
 
           update();
         } catch (e) {

@@ -29,7 +29,7 @@ class CreatePostUserTile extends StatelessWidget {
               ? Padding(
                   padding: const EdgeInsets.only(top: 0.0),
                   child: Row(
-                    children: [
+                    children: <Widget>[
                       Text(
                         user!.name ?? user!.username ?? '',
                         maxLines: 2,

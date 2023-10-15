@@ -13,7 +13,7 @@ class BottomBar extends StatelessWidget {
       child: Container(
         height: 103.0,
         decoration: BoxDecoration(
-          boxShadow: [
+          boxShadow: <BoxShadow>[
             BoxShadow(
               color: Colors.black.withOpacity(0.08),
               spreadRadius: 10,
@@ -25,7 +25,7 @@ class BottomBar extends StatelessWidget {
         child: Stack(
           children: <Widget>[
             Column(
-              children: [
+              children: <Widget>[
                 Container(
                   height: 20.0,
                   color: Colors.transparent,
@@ -35,7 +35,7 @@ class BottomBar extends StatelessWidget {
                   padding: const EdgeInsets.only(bottom: 20),
                   color: Colors.white,
                   child: Row(
-                    children: [
+                    children: <Widget>[
                       Expanded(
                         flex: 10,
                         child: BottomTabButton(

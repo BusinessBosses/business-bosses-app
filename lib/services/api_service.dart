@@ -34,13 +34,13 @@ class ApiService {
   Future<dynamic> login(String email, String password) async {
     /// Obtain shared preferences.
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    Map<String, dynamic> data = {
+    Map<String, dynamic> data = <String, dynamic>{
       'email': email,
       'password': password,
     };
     final http.Response response = await http.post(
       Uri.parse('${Constants.baseUrl}/auth/sign-in'),
-      headers: {'Content-Type': 'application/json'},
+      headers: <String, String>{'Content-Type': 'application/json'},
       body: jsonEncode(data),
     );
     if (response.statusCode == 200) {
@@ -61,13 +61,13 @@ class ApiService {
   Future<dynamic> googleLogin(String email, String token) async {
     /// Obtain shared preferences.
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    Map<String, dynamic> data = {
+    Map<String, dynamic> data = <String, dynamic>{
       'email': email,
       'token': token,
     };
     final http.Response response = await http.post(
       Uri.parse('${Constants.baseUrl}/auth/google-sign-in'),
-      headers: {'Content-Type': 'application/json'},
+      headers: <String, String>{'Content-Type': 'application/json'},
       body: jsonEncode(data),
     );
     if (response.statusCode == 200) {
@@ -151,7 +151,7 @@ class ApiService {
     // request.files
     //     .add(await http.MultipartFile.fromPath('thumbnail', thumbnail.path));
 
-    print("kfkjdkfjkdajfk $request");
+    print('kfkjdkfjkdajfk $request');
 
     try {
       final http.StreamedResponse streamedResponse = await request.send();
@@ -160,7 +160,7 @@ class ApiService {
           json.decode(await streamedResponse.stream.bytesToString());
 
       if (result['success']) {
-        print("this is ther result of the upload");
+        print('this is ther result of the upload');
         final String videoUrl = result['videoUrl'];
         final String thumbnailUrl = result['thumbnailUrl'];
         return MediaUploadResult(videoUrl, thumbnailUrl);
@@ -178,7 +178,7 @@ class ApiService {
       String email, String password, String username, String? inviteId) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    Map<String, dynamic> data = {
+    Map<String, dynamic> data = <String, dynamic>{
       'username': username,
       'email': email,
       'password': password,
@@ -186,7 +186,7 @@ class ApiService {
     };
     final http.Response response = await http.post(
       Uri.parse('${Constants.baseUrl}/auth/sign-up'),
-      headers: {'Content-Type': 'application/json'},
+      headers: <String, String>{'Content-Type': 'application/json'},
       body: jsonEncode(data),
     );
     if (response.statusCode == 201) {
@@ -204,13 +204,13 @@ class ApiService {
 
   /// CHANGE PASSWORD
   Future<dynamic> changePassword(String email, String password) async {
-    Map<String, dynamic> data = {
+    Map<String, dynamic> data = <String, dynamic>{
       'email': email,
       'newPassword': password,
     };
     final http.Response response = await http.post(
       Uri.parse('${Constants.baseUrl}/auth/reset-password'),
-      headers: {'Content-Type': 'application/json'},
+      headers: <String, String>{'Content-Type': 'application/json'},
       body: jsonEncode(data),
     );
     if (response.statusCode == 200) {
@@ -228,13 +228,13 @@ class ApiService {
 
   /// VERIFY USERNAME OR EMAIL DURING SIGNUP
   Future<bool?> verifyUnique(String username, String email) async {
-    Map<String, dynamic> data = {
+    Map<String, dynamic> data = <String, dynamic>{
       'username': username,
       'email': email,
     };
     final http.Response response = await http.post(
       Uri.parse('${Constants.baseUrl}/auth/email-exist'),
-      headers: {'Content-Type': 'application/json'},
+      headers: <String, String>{'Content-Type': 'application/json'},
       body: jsonEncode(data),
     );
     if (response.statusCode == 200) {
@@ -289,7 +289,8 @@ class ApiService {
           title: 'OOPS!',
           message: 'An error occurred, please try again!',
           error: true);
-      return ApiResponseModel(success: false, message: e.toString(), data: {});
+      return ApiResponseModel(
+          success: false, message: e.toString(), data: <dynamic, dynamic>{});
     }
   }
 
@@ -317,7 +318,8 @@ class ApiService {
       //     title: 'OOPS!',
       //     message: 'An error occurred, please try again!',
       //     error: true);
-      return ApiResponseModel(success: false, message: e.toString(), data: {});
+      return ApiResponseModel(
+          success: false, message: e.toString(), data: <dynamic, dynamic>{});
     }
   }
 
@@ -346,7 +348,8 @@ class ApiService {
       //     title: 'OOPS!',
       //     message: 'An error occurred, please try again!',
       //     error: true);
-      return ApiResponseModel(success: false, message: e.toString(), data: {});
+      return ApiResponseModel(
+          success: false, message: e.toString(), data: <dynamic, dynamic>{});
     }
   }
 
@@ -371,7 +374,8 @@ class ApiService {
           title: 'OOPS!',
           message: 'An error occurred, please try again!',
           error: true);
-      return ApiResponseModel(success: false, message: e.toString(), data: {});
+      return ApiResponseModel(
+          success: false, message: e.toString(), data: <dynamic, dynamic>{});
     }
   }
 }
@@ -379,14 +383,14 @@ class ApiService {
 /// Add Subscription
 Future<dynamic> addSubscription(
     String plan, String price, bool isSubscribed) async {
-  Map<String, dynamic> data = {
+  Map<String, dynamic> data = <String, dynamic>{
     'plan': plan,
     'price': price,
     'isSubscribed': isSubscribed
   };
   final http.Response response = await http.post(
     Uri.parse('${Constants.baseUrl}/subscription'),
-    headers: {'Content-Type': 'application/json'},
+    headers: <String, String>{'Content-Type': 'application/json'},
     body: jsonEncode(data),
   );
   if (response.statusCode == 200) {

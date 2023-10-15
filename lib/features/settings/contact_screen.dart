@@ -25,7 +25,7 @@ class _ContactScreenState extends State<ContactScreen> {
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
-          children: [
+          children: <Widget>[
             TextFormField(
               maxLines: 5, // Allows multiple lines of input
               decoration: const InputDecoration(

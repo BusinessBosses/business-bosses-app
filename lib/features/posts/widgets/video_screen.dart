@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/posts/models/post_model.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -48,7 +47,7 @@ class _VideoScreenState extends State<VideoScreen> {
       _start = 3;
       showActions = false;
     });
-    const oneSec = Duration(seconds: 1);
+    const Duration oneSec = Duration(seconds: 1);
     _timer = Timer.periodic(
       oneSec,
       (Timer timer) {
@@ -97,7 +96,7 @@ class _VideoScreenState extends State<VideoScreen> {
         fullScreenByDefault: true,
         allowedScreenSleep: false,
         autoInitialize: true,
-        hideControlsTimer: Duration(seconds: 3));
+        hideControlsTimer: const Duration(seconds: 3));
   }
 
   Future<void> _onDetectableTextTap(String val) async {
@@ -145,7 +144,7 @@ class _VideoScreenState extends State<VideoScreen> {
   @override
   void initState() {
     super.initState();
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: [
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: <SystemUiOverlay>[
       SystemUiOverlay.bottom,
     ]);
     _post = widget.post;
@@ -159,7 +158,7 @@ class _VideoScreenState extends State<VideoScreen> {
     _timer.cancel();
     SystemChrome.setEnabledSystemUIMode(
       SystemUiMode.manual,
-      overlays: [SystemUiOverlay.bottom, SystemUiOverlay.top],
+      overlays: <SystemUiOverlay>[SystemUiOverlay.bottom, SystemUiOverlay.top],
     );
     SystemChrome.setSystemUIOverlayStyle(
       const SystemUiOverlayStyle(
@@ -175,7 +174,7 @@ class _VideoScreenState extends State<VideoScreen> {
     return Scaffold(
       backgroundColor: Colors.black,
       body: Stack(
-        children: [
+        children: <Widget>[
           if (videoPlayerController.value.isInitialized)
             SizedBox.expand(
               child: FittedBox(
@@ -202,7 +201,7 @@ class _VideoScreenState extends State<VideoScreen> {
             top: 10,
             left: 10,
             child: Column(
-              children: [
+              children: <Widget>[
                 InkWell(
                   onTap: () {
                     Navigator.of(context).pop();
@@ -230,7 +229,7 @@ class _VideoScreenState extends State<VideoScreen> {
                 color: const Color(0XFF000000).withOpacity(.3),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
+                  children: <Widget>[
                     // SizedBox(
                     //   width: MediaQuery.of(context).size.width,
                     //   child: MyPostItemText(
@@ -243,9 +242,9 @@ class _VideoScreenState extends State<VideoScreen> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       // crossAxisAlignment: CrossAxisAlignment.,
-                      children: [
+                      children: <Widget>[
                         Row(
-                          children: [
+                          children: <Widget>[
                             TextButton.icon(
                               onPressed: onLikeTap,
                               icon: widget.post.likes?.contains(

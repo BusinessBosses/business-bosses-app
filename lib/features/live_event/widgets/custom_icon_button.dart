@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class CustomIconButton extends StatelessWidget {
-  CustomIconButton({
+  const CustomIconButton({
     Key? key,
     this.alignment,
     this.margin,
@@ -52,7 +52,7 @@ class CustomIconButton extends StatelessWidget {
               padding: padding ?? EdgeInsets.zero,
               decoration: decoration ??
                   BoxDecoration(
-                    color: Color.fromRGBO(242, 242, 242, 1),
+                    color: const Color.fromRGBO(242, 242, 242, 1),
                     borderRadius: BorderRadius.circular(21),
                   ),
               child: child,

@@ -64,7 +64,7 @@ class PostDetailsScreen extends StatelessWidget {
                 child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
+                    children: <Widget>[
                     const SizedBox(
                       width: double.infinity,
                       height: 20,
@@ -202,7 +202,7 @@ class PostDetailsScreen extends StatelessWidget {
                                             child: const Row(
                                               mainAxisAlignment:
                                                   MainAxisAlignment.center,
-                                              children: [
+                                              children: <Widget>[
                                                 TextWidget(
                                                   text: 'View Analytics',
                                                   color: Colors.white,

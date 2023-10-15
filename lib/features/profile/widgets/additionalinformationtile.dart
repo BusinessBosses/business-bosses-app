@@ -57,17 +57,17 @@ class _AdditionalInfoTileState extends State<AdditionalInfoTile> {
           ],
         ),
       ),
-      children: [
+      children: <Widget>[
         Padding(
             padding: const EdgeInsets.all(0),
             child:
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
               Padding(
                 padding: const EdgeInsets.only(left: 20, right: 20),
                 child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
+                    children: <Widget>[
                       const SizedBox(
                         height: 20,
                       ),
@@ -115,7 +115,7 @@ class _AdditionalInfoTileState extends State<AdditionalInfoTile> {
                       ),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
+                        children: <Widget>[
                           const Text('Industry',
                               style: TextStyle(
                                   fontSize: 14,

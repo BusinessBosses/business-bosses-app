@@ -35,7 +35,7 @@ class SafetyModel extends StatelessWidget {
         child: Column(
           mainAxisAlignment: mainAxisAlignment,
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+          children: <Widget>[
             NotificationListener<OverscrollIndicatorNotification>(
               onNotification: (OverscrollIndicatorNotification overscroll) {
                 overscroll.disallowIndicator();
@@ -44,7 +44,7 @@ class SafetyModel extends StatelessWidget {
               child: SingleChildScrollView(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
+                  children: <Widget>[
                     isLoading
                         ? const SizedBox(
                             height: 24.0,
@@ -53,7 +53,7 @@ class SafetyModel extends StatelessWidget {
                           )
                         : Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
+                            children: <Widget>[
                               icon,
                               const SizedBox(height: 16.0),
                               Text(

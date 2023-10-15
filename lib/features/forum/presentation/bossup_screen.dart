@@ -56,7 +56,7 @@ class _BossUpSectionState extends State<BossUpSection> {
           .removeWhere((String element) => element == myUid);
     } else {
       if (widget.industry.joinedUsers == null) {
-        widget.industry.joinedUsers = [myUid];
+        widget.industry.joinedUsers = <String>[myUid];
       } else {
         widget.industry.joinedUsers!.add(myUid);
       }
@@ -92,11 +92,11 @@ class _BossUpSectionState extends State<BossUpSection> {
               SliverStickyHeader(
                 sticky: false,
                 header: Column(
-                  children: [
+                  children: <Widget>[
                     Container(
                       width: double.infinity,
                       color: backgroundcolorinterface,
-                      child: Stack(children: [
+                      child: Stack(children: <Widget>[
                         Padding(
                             padding: const EdgeInsets.only(left: 20, top: 25),
                             child: GestureDetector(
@@ -108,7 +108,7 @@ class _BossUpSectionState extends State<BossUpSection> {
                                 );
                               }),
                               child: Row(
-                                children: [
+                                children: <Widget>[
                                   const Text(
                                     'About ',
                                     style: TextStyle(
@@ -123,7 +123,7 @@ class _BossUpSectionState extends State<BossUpSection> {
                               ),
                             )),
                         Column(
-                          children: [
+                          children: <Widget>[
                             const SizedBox(
                               height: 10,
                             ),
@@ -151,7 +151,7 @@ class _BossUpSectionState extends State<BossUpSection> {
                                             .showSnackBar(snackBar);
                                       } else {
                                         Get.toNamed(Routes.createBossUp,
-                                            arguments: {
+                                            arguments: <String, Object?>{
                                               'isBossUp': true,
                                               'industryId':
                                                   widget.industry.industryId
@@ -160,7 +160,7 @@ class _BossUpSectionState extends State<BossUpSection> {
                                     },
                                     child: Row(
                                       mainAxisSize: MainAxisSize.min,
-                                      children: [
+                                      children: <Widget>[
                                         const Text(
                                           'Enter Challenge',
                                           style: TextStyle(
@@ -179,7 +179,7 @@ class _BossUpSectionState extends State<BossUpSection> {
                                 )),
                             Container(
                               decoration: BoxDecoration(
-                                boxShadow: [
+                                boxShadow: <BoxShadow>[
                                   BoxShadow(
                                     color: Colors.black.withOpacity(0.09),
                                     blurRadius: 100.0, // soften the shadow
@@ -188,7 +188,7 @@ class _BossUpSectionState extends State<BossUpSection> {
                                 ],
                               ),
                               child: Stack(
-                                children: [
+                                children: <Widget>[
                                   Container(
                                     margin: const EdgeInsets.only(
                                         top: 10, right: 20, left: 20),
@@ -201,9 +201,9 @@ class _BossUpSectionState extends State<BossUpSection> {
                                     ),
                                   ),
                                   Column(
-                                    children: [
+                                    children: <Widget>[
                                       Row(
-                                        children: [
+                                        children: <Widget>[
                                           Container(
                                             margin: const EdgeInsets.only(
                                                 top: 25, right: 20, left: 35),
@@ -258,9 +258,9 @@ class _BossUpSectionState extends State<BossUpSection> {
                                         padding: const EdgeInsets.only(
                                             left: 32, right: 20.0),
                                         child: Row(
-                                          children: [
+                                          children: <Widget>[
                                             Row(
-                                              children: [
+                                              children: <Widget>[
                                                 Padding(
                                                   padding:
                                                       const EdgeInsets.only(
@@ -277,7 +277,7 @@ class _BossUpSectionState extends State<BossUpSection> {
                                                           top: 5.0),
                                                   child: RichText(
                                                     text: TextSpan(
-                                                      children: [
+                                                      children: <InlineSpan>[
                                                         TextSpan(
                                                           text: widget.industry
                                                                       .joinedUsers ==
@@ -314,7 +314,7 @@ class _BossUpSectionState extends State<BossUpSection> {
                                               ],
                                             ),
                                             Row(
-                                              children: [
+                                              children: <Widget>[
                                                 Padding(
                                                   padding:
                                                       const EdgeInsets.only(
@@ -333,7 +333,7 @@ class _BossUpSectionState extends State<BossUpSection> {
                                                           top: 5.0),
                                                   child: RichText(
                                                     text: TextSpan(
-                                                      children: [
+                                                      children: <InlineSpan>[
                                                         TextSpan(
                                                           text:
                                                               'Entries ($formattedpostCount) ',
@@ -417,7 +417,7 @@ class _BossUpSectionState extends State<BossUpSection> {
                                               // ],
                                             ),
                                             child: Row(
-                                              children: [
+                                              children: <Widget>[
                                                 Padding(
                                                   padding:
                                                       const EdgeInsets.only(

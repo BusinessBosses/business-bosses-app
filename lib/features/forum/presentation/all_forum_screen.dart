@@ -59,7 +59,7 @@ class _AllForumScreenState extends State<AllForumScreen> {
       industry.joinedUsers!.removeWhere((String element) => element == myUid);
     } else {
       if (industry.joinedUsers == null) {
-        industry.joinedUsers = [myUid];
+        industry.joinedUsers = <String>[myUid];
       } else {
         industry.joinedUsers!.add(myUid);
       }
@@ -119,19 +119,19 @@ class _AllForumScreenState extends State<AllForumScreen> {
                   SliverStickyHeader(
                     sticky: false,
                     header: Column(
-                      children: [
+                      children: <Widget>[
                         Container(
                           width: double.infinity,
                           color: Colors.transparent,
                           child: Column(
-                            children: [
+                            children: <Widget>[
                               const SizedBox(
                                 height: 10,
                               ),
                               Row(
-                                children: [
+                                children: <Widget>[
                                   GestureDetector(
-                                    onTap: () => {
+                                    onTap: () => <Future>{
                                       industry.categoryId!.toString() ==
                                               Constants.LEARNINGID
                                           ? showDialog(
@@ -149,7 +149,7 @@ class _AllForumScreenState extends State<AllForumScreen> {
                                       padding:
                                           const EdgeInsets.only(left: 20.0),
                                       child: Row(
-                                        children: [
+                                        children: <Widget>[
                                           const Text(
                                             'Info',
                                             style: TextStyle(
@@ -178,7 +178,7 @@ class _AllForumScreenState extends State<AllForumScreen> {
                                               minimumSize: const Size(150, 45)),
                                           onPressed: () {
                                             Get.toNamed(Routes.createForum,
-                                                arguments: {
+                                                arguments: <String, Object?>{
                                                   'isBossUp': false,
                                                   'industryId':
                                                       industry.industryId,
@@ -188,7 +188,7 @@ class _AllForumScreenState extends State<AllForumScreen> {
                                           },
                                           child: Row(
                                             mainAxisSize: MainAxisSize.min,
-                                            children: [
+                                            children: <Widget>[
                                               Text(
                                                 industry.categoryId!
                                                             .toString() ==
@@ -214,7 +214,7 @@ class _AllForumScreenState extends State<AllForumScreen> {
                               ),
                               Container(
                                 decoration: BoxDecoration(
-                                  boxShadow: [
+                                  boxShadow: <BoxShadow>[
                                     BoxShadow(
                                       color: Colors.black.withOpacity(0.09),
                                       blurRadius: 100.0, // soften the shadow
@@ -223,7 +223,7 @@ class _AllForumScreenState extends State<AllForumScreen> {
                                   ],
                                 ),
                                 child: Stack(
-                                  children: [
+                                  children: <Widget>[
                                     Container(
                                       margin: const EdgeInsets.only(
                                           top: 10, right: 20, left: 20),
@@ -237,9 +237,9 @@ class _AllForumScreenState extends State<AllForumScreen> {
                                       ),
                                     ),
                                     Column(
-                                      children: [
+                                      children: <Widget>[
                                         Row(
-                                          children: [
+                                          children: <Widget>[
                                             Container(
                                               margin: const EdgeInsets.only(
                                                   top: 25, right: 20, left: 35),
@@ -264,7 +264,7 @@ class _AllForumScreenState extends State<AllForumScreen> {
                                                         (BuildContext context,
                                                                 // ignore: always_specify_types
                                                                 String photo,
-                                                                error) =>
+                                                                Object error) =>
                                                             const Icon(
                                                                 Icons.error),
                                                   ),
@@ -292,9 +292,9 @@ class _AllForumScreenState extends State<AllForumScreen> {
                                           padding: const EdgeInsets.only(
                                               left: 32, right: 20),
                                           child: Row(
-                                            children: [
+                                            children: <Widget>[
                                               Row(
-                                                children: [
+                                                children: <Widget>[
                                                   Padding(
                                                     padding:
                                                         const EdgeInsets.only(
@@ -311,7 +311,7 @@ class _AllForumScreenState extends State<AllForumScreen> {
                                                             top: 5.0),
                                                     child: RichText(
                                                       text: TextSpan(
-                                                        children: [
+                                                        children: <InlineSpan>[
                                                           TextSpan(
                                                             text: industry
                                                                         .joinedUsers ==
@@ -349,7 +349,7 @@ class _AllForumScreenState extends State<AllForumScreen> {
                                                 ],
                                               ),
                                               Row(
-                                                children: [
+                                                children: <Widget>[
                                                   Padding(
                                                     padding:
                                                         const EdgeInsets.only(
@@ -368,7 +368,7 @@ class _AllForumScreenState extends State<AllForumScreen> {
                                                             top: 5.0),
                                                     child: RichText(
                                                       text: TextSpan(
-                                                        children: [
+                                                        children: <InlineSpan>[
                                                           TextSpan(
                                                             text: industry
                                                                         .categoryId!

@@ -48,11 +48,11 @@ class _PostLikeCommentItemState extends State<PostLikeCommentItem> {
       length: 2,
       child: Scaffold(
         body: Column(
-          children: [
+          children: <Widget>[
             Material(
               color: Colors.grey.withOpacity(0.1),
               child: TabBar(
-                tabs: [
+                tabs: <Widget>[
                   Tab(
                     child: Text(
                       'Comments',
@@ -103,10 +103,12 @@ class _PostLikeCommentItemState extends State<PostLikeCommentItem> {
                         onCommentSend: (CommentModel comment) {
                           widget.onComment(comment);
 
-                          ApiService.post(path: 'comments', body: {
-                            ...comment.toMap(),
-                            'receiverUid': widget.post.userId
-                          });
+                          ApiService.post(
+                              path: 'comments',
+                              body: <String, dynamic>{
+                                ...comment.toMap(),
+                                'receiverUid': widget.post.userId
+                              });
                           setState(() {
                             _commentController.comments.add(comment);
                           });
@@ -143,7 +145,7 @@ class _PostLikeCommentItemState extends State<PostLikeCommentItem> {
                               ),
                               title: _users[i].isSubscribed == true
                                   ? Row(
-                                      children: [
+                                      children: <Widget>[
                                         Text('${_users[i].name}'),
                                         const SizedBox(width: 5),
                                         SvgPicture.asset(
@@ -177,7 +179,7 @@ class _PostLikeCommentItemState extends State<PostLikeCommentItem> {
     });
   }
 
-  final List<UserModel> _users = [];
+  final List<UserModel> _users = <UserModel>[];
 
   Future<void> _loadLikesWithDetails(String postId) async {
     final ApiResponseModel response =

@@ -4,13 +4,13 @@ import 'models/last_message.dart';
 
 // ignore: public_member_api_docs
 class AppChats with ChangeNotifier {
-  List<LastMessage> _myChats = [];
+  List<LastMessage> _myChats = <LastMessage>[];
 
   List<LastMessage> get myChats {
     _myChats.sort((LastMessage a, LastMessage b) {
       return b.timestamp!.compareTo(a.timestamp as num);
     });
-    return [..._myChats];
+    return <LastMessage>[..._myChats];
   }
 
   read(String uid) {
