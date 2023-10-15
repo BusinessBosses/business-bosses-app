@@ -94,6 +94,31 @@ class _ReviewPaymentState extends State<ReviewPayment> {
     } catch (e) {}
   }
 
+  ///intialize the payment
+  Future<void> makePaystackPayment(String plan) async {
+    try {
+      setState(() {
+        _isProcessing = true;
+      });
+      final ApiResponseModel res =
+          await ApiService.post(path: 'paystack', body: {
+        'plan': argument['plan'],
+      });
+
+      if (res.success) {
+        if (await canLaunchUrlString(res.data)) {
+          await launchUrlString(res.data, mode: LaunchMode.externalApplication);
+        }
+      } else {
+        // ignore: use_build_context_synchronously
+        showSnackBar(context, message: res.message);
+      }
+      setState(() {
+        _isProcessing = false;
+      });
+    } catch (e) {}
+  }
+
   List<Map<String, dynamic>> applepayplans = <Map<String, dynamic>>[
     <String, dynamic>{
       'price': dotenv.env['TEST_MONTHLY_PRICE'],
@@ -390,6 +415,8 @@ class _ReviewPaymentState extends State<ReviewPayment> {
                           MyButton(
                             onPressed: () async {
                               plan = argument['plan'];
+                              _isProcessing = true;
+                              await makePaystackPayment(plan);
                             },
                             labelStyle: const TextStyle(
                               color: Colors.white,
