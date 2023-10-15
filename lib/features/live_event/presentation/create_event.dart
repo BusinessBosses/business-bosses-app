@@ -1,16 +1,15 @@
+// ignore_for_file: public_member_api_docs
+
 import 'dart:math';
 
 import 'package:business_bosses_v2/action/action.dart';
 import 'package:business_bosses_v2/features/live_event/models/events_model.dart';
 import 'package:business_bosses_v2/features/live_event/presentation/confirm_create_event.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:timezone/data/latest.dart' as tzdata;
-import 'package:timezone/timezone.dart' as tz;
 
 import '../../../common/widgets/buttons/custom_button.dart';
 import '../controller/live_event_controller.dart';
@@ -18,7 +17,7 @@ import '../widgets/call_room.dart';
 
 class CreateEvent extends StatefulWidget {
   final EventModel? event;
-  CreateEvent({super.key, this.event});
+  const CreateEvent({super.key, this.event});
 
   @override
   State<CreateEvent> createState() => _CreateEventState();
@@ -96,11 +95,11 @@ class _CreateEventState extends State<CreateEvent> {
                     ),
                     borderRadius: BorderRadius.circular(16)),
                 child: Column(
-                  children: [
+                  children: <Widget>[
                     Padding(
                       padding: const EdgeInsets.only(top: 10.0, right: 10),
                       child: Row(
-                        children: [
+                        children: <Widget>[
                           Expanded(
                             child: ListTile(
                               title: Text(
@@ -151,7 +150,7 @@ class _CreateEventState extends State<CreateEvent> {
                     Padding(
                       padding: const EdgeInsets.only(right: 10.0),
                       child: Row(
-                        children: [
+                        children: <Widget>[
                           Expanded(
                             child: ListTile(
                               title: Text(
@@ -210,6 +209,17 @@ class _CreateEventState extends State<CreateEvent> {
               child: CustomButton(
                 buttonType: ButtonType.elevated,
                 onPressed: () async {
+                  final DateTime endAtt = endAt.toUtc();
+                  final DateFormat dateFormat =
+                      DateFormat('yyyy-MM-dd HH:mm:ss.SSSSSS');
+
+                  // Format the UTC DateTime to the desired string format
+                  String formattedEndDateTime = dateFormat.format(endAtt);
+                  final DateTime startAtt = startAt.toUtc();
+
+                  // Format the UTC DateTime to the desired string format
+                  String formattedStartDateTime = dateFormat.format(startAtt);
+                  print(formattedEndDateTime);
                   if (titleController.text.isEmpty) {
                     showSnackBar(
                       context,
@@ -228,29 +238,22 @@ class _CreateEventState extends State<CreateEvent> {
                     // Show an error message or handle it as per your app's requirements.
                     showSnackBar(context,
                         message: 'Start time cannot be in the past');
+                    return;
                   }
                   if (endAt.isAfter(startAt.add(const Duration(hours: 2)))) {
                     showSnackBar(context,
                         message: 'Event duration cannot be more than 2 hours');
                     return;
                   }
-                  Map<String, dynamic> data = {
+                  Map<String, dynamic> data = <String, dynamic>{
                     'title': titleController.text,
                     'roomId': eventID,
-                    'startAt': startAt.toString(),
-                    'endAt': endAt.toString(),
+                    'startAt': formattedStartDateTime,
+                    'endAt': formattedEndDateTime,
                     'startTime': '00:00:00'
                   };
                   liveEventController.createEvent(data);
-                  Navigator.of(context).pushAndRemoveUntil(
-                    MaterialPageRoute(
-                      builder: (BuildContext context) => ConfirmCreateEvent(
-                        roomID: roomID,
-                      ),
-                    ),
-                    (route) =>
-                        false, // Removes all previous routes from the stack
-                  );
+                  Get.off(() => ConfirmCreateEvent(roomID: roomID));
                 },
                 child: const Text('Create Event'),
               ),
@@ -285,6 +288,7 @@ class _CreateEventState extends State<CreateEvent> {
     final Random random = Random();
 
     // Generate three random letters for the "abc" part.
+    // ignore: always_specify_types
     final String randomABC = String.fromCharCodes(List.generate(3,
         (_) => random.nextInt(26) + 97)); // ASCII values for lowercase letters.
 

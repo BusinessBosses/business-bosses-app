@@ -13,7 +13,7 @@ Future optionsDialog(BuildContext context, Function() ontap) {
                 fontWeight: FontWeight.w300,
                 fontSize: MediaQuery.of(context).size.height / 55),
           ),
-          actions: [
+          actions: <Widget>[
             but(context, 'Cancel', true, () {
               Navigator.pop(context);
             }),

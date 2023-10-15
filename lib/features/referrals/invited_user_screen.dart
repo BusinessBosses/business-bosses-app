@@ -19,8 +19,8 @@ class InvitedUsersScreen extends StatefulWidget {
 class _InvitedUsersScreenState extends State<InvitedUsersScreen> {
   final ScrollController _controller = ScrollController();
 
-  final List<MyUser> _users = [];
-  List<Invite> invitedUsers = [];
+  final List<MyUser> _users = <MyUser>[];
+  List<Invite> invitedUsers = <Invite>[];
 
   final int _loadedItems = 0;
 
@@ -61,14 +61,14 @@ class _InvitedUsersScreenState extends State<InvitedUsersScreen> {
       body: _users.isEmpty
           ? const SafetyModel(isLoading: true)
           : Stack(
-              children: [
+              children: <Widget>[
                 ListView.builder(
                   padding: const EdgeInsets.only(bottom: 48.0),
                   controller: _controller,
                   itemCount: _users.length,
                   itemBuilder: (BuildContext context, int i) {
                     return Column(
-                      children: [
+                      children: <Widget>[
                         ListTile(
                           onTap: () async {
                             var result = await navigateTo(

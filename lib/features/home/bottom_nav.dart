@@ -31,7 +31,7 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
   // final MarketController _marketController = Get.put(MarketController());
   // final BossUpController _bossUpController = Get.put(BossUpController());
   int _activeIndex = 0;
-  final List<String> screens = [
+  final List<String> screens = <String>[
     Routes.home,
     Routes.allCommunitiesScreen,
     Routes.marketPlace,
@@ -139,7 +139,7 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
               child: Container(
                 height: 103.0,
                 decoration: BoxDecoration(
-                  boxShadow: [
+                  boxShadow: <BoxShadow>[
                     BoxShadow(
                       color: Colors.black.withOpacity(0.08),
                       spreadRadius: 10,
@@ -151,7 +151,7 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
                 child: Stack(
                   children: <Widget>[
                     Column(
-                      children: [
+                      children: <Widget>[
                         Container(
                           height: 20.0,
                           color: Colors.transparent,
@@ -161,7 +161,7 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
                           padding: const EdgeInsets.only(bottom: 20),
                           color: Colors.white,
                           child: Row(
-                            children: [
+                            children: <Widget>[
                               Expanded(
                                 flex: 10,
                                 child: BottomTabButton(
@@ -294,12 +294,12 @@ class BottomTabButton extends StatelessWidget {
         height: double.infinity,
         color: Colors.white,
         child: Stack(
-          children: [
+          children: <Widget>[
             Center(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: [
+                children: <Widget>[
                   SizedBox(
                     height: 30.0,
                     child: SvgPicture.asset(
@@ -331,12 +331,12 @@ class BottomTabButton extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
+                  children: <Widget>[
                     SizedBox(
                       width: 25,
                       height: 25,
                       child: Stack(
-                        children: [
+                        children: <Widget>[
                           Positioned(
                             right: 10,
                             child: SvgPicture.asset(

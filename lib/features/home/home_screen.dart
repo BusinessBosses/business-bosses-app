@@ -3,7 +3,7 @@
 import 'package:business_bosses_v2/common/widgets/safety_model.dart';
 import 'package:business_bosses_v2/features/forum/controller/bossup_controller.dart';
 import 'package:business_bosses_v2/features/home/widgets/bottom_bar.dart';
-import 'package:business_bosses_v2/features/live_event/presentation/live_event.dart';
+import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -291,16 +291,9 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                                                                         Colors
                                                                             .white),
                                                               ),
-                                                              onPressed: () =>
-                                                                  Navigator
-                                                                      .push(
-                                                                context,
-                                                                MaterialPageRoute(
-                                                                  builder: (BuildContext
-                                                                          context) =>
-                                                                      LiveEvent(),
-                                                                ),
-                                                              ),
+                                                              onPressed: () => Get
+                                                                  .toNamed(Routes
+                                                                      .liveEvents),
                                                               child: const Text(
                                                                 'Live Events',
                                                                 style:
@@ -411,10 +404,9 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                                               if (sponsoredIndex <
                                                   controller
                                                       .sponsoredPosts.length) {
-                                                final promotedPosts =
+                                                final PostModel promotedPosts =
                                                     controller.sponsoredPosts[
-                                                            sponsoredIndex]
-                                                        ['data'] as PostModel;
+                                                        sponsoredIndex]['data'];
                                                 final bool hasIncrementedView =
                                                     controller
                                                         .itemsWithIncrementedViews

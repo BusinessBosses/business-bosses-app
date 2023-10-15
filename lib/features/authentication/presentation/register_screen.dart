@@ -26,13 +26,13 @@ class RegisterScreen extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 20.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
+              children: <Widget>[
                 const SizedBox(height: 69.0),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
+                  children: <Widget>[
                     Column(
-                      children: [
+                      children: <Widget>[
                         GestureDetector(
                           onTap: () {
                             Get.toNamed(Routes.login);

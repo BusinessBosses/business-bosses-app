@@ -9,7 +9,7 @@ class NotificationController extends GetxController {
   RxBool error = RxBool(false);
   final ProfileController _profileController = Get.find();
   RxBool loading = RxBool(false);
-  final List<MyNotification> notifications = [];
+  final List<MyNotification> notifications = <MyNotification>[];
   final RxInt _page = RxInt(0);
   Quote quote = Quote(
     id: 1,
@@ -35,8 +35,10 @@ class NotificationController extends GetxController {
 
         _page(_page.value + 1);
       }
-      _profileController.updateProfile(
-          {..._profileController.myProfile.toMap(), 'unReadCount': 0});
+      _profileController.updateProfile(<String, dynamic>{
+        ..._profileController.myProfile.toMap(),
+        'unReadCount': 0
+      });
     } else {
       error(true);
     }

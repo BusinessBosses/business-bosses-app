@@ -90,7 +90,7 @@ class _CompleteSearchingScreenState extends State<CompleteSearchingScreen>
                   // ),
                 ],
               ),
-              actions: [
+              actions: <Widget>[
                 if (_hasFilter)
                   IconButton(
                     icon: SvgPicture.asset('assets/svgs/filter.svg'),
@@ -106,11 +106,11 @@ class _CompleteSearchingScreenState extends State<CompleteSearchingScreen>
                 FocusScope.of(context).unfocus();
               },
               child: Column(
-                children: [
+                children: <Widget>[
                   Expanded(
                     child: TabBarView(
                       controller: _tabController,
-                      children: [
+                      children: <Widget>[
                         FilterUsers(
                           filterItems: controller.isUserSearch.value
                               ? controller.searchedUsers

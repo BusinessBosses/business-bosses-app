@@ -41,17 +41,17 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
         ),
       ),
       body: Stack(
-        children: [
+        children: <Widget>[
           Positioned.fill(
             child: Container(
               padding: EdgeInsets.all(SizeConfig.safeBlockVertical * 1),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
+                children: <Widget>[
                   const SizedBox(height: 5.0),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
+                    children: <Widget>[
                       Image.asset('assets/app/app_logo.png',
                           height: 140.0, width: 140.0),
                     ],
@@ -117,7 +117,7 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
                   Padding(
                       padding: const EdgeInsets.only(bottom: 10.0),
                       child: Column(
-                        children: [
+                        children: <Widget>[
                           Container(
                             height: 0.3,
                             width: SizeConfig.screenWidth,

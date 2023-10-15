@@ -36,7 +36,7 @@ class Preview extends StatelessWidget {
         ),
         itemBuilder: (BuildContext context, int i) {
           return Stack(
-            children: [
+            children: <Widget>[
               if (isUpdating)
                 ImageItem(
                   file: controller.updatingImageFileList[i].contains('http')

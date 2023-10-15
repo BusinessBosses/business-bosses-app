@@ -116,12 +116,12 @@ class _LoginFormState extends State<LoginForm> {
         key: _formKey,
         autovalidateMode: _autoValidateMode,
         child: Column(
-          children: [
+          children: <Widget>[
             const SizedBox(height: 25.0),
 
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
+              children: <Widget>[
                 TextWidget(
                   text: isEmailAuth ? 'Email' : 'Phone',
                   size: 0,
@@ -164,7 +164,7 @@ class _LoginFormState extends State<LoginForm> {
             const SizedBox(height: 25.0),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
+              children: <Widget>[
                 TextFormField(
                   onChanged: (String val) {
                     _password = val;
@@ -253,12 +253,12 @@ class _LoginFormState extends State<LoginForm> {
 
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: [
+              children: <Widget>[
                 Expanded(child: Container(color: hintColor, height: 0.8)),
                 const SizedBox(width: 16.0),
                 RichText(
                   text: const TextSpan(
-                    children: [
+                    children: <InlineSpan>[
                       TextSpan(
                         text: 'Or',
                         style: TextStyle(

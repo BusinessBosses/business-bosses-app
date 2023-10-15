@@ -41,7 +41,7 @@ class _ConnectionGridTileState extends State<ConnectionGridTile> {
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(radius), color: Colors.white),
         child: Column(
-          children: [
+          children: <Widget>[
             UserAvatarWithBadge(
               user: widget.user,
               height: 64.0,
@@ -54,7 +54,7 @@ class _ConnectionGridTileState extends State<ConnectionGridTile> {
                 ? Padding(
                     padding: const EdgeInsets.only(top: 0.0),
                     child: Row(
-                      children: [
+                      children: <Widget>[
                         Text(
                           widget.user.name ?? widget.user.username ?? '',
                           maxLines: 2,

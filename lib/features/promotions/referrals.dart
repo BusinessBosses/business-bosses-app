@@ -9,7 +9,7 @@ class Referrals {
   MyUser? user;
 
   Referrals(
-      {this.code, this.uid, this.timestamp, this.usedBy = const [], this.user});
+      {this.code, this.uid, this.timestamp, this.usedBy = const <Invite>[], this.user});
 
   factory Referrals.toObject(Map<dynamic, dynamic> map) {
     return Referrals(
@@ -17,7 +17,7 @@ class Referrals {
       uid: map['uid'] as String,
       timestamp: map['timestamp'] as int,
       usedBy:
-          map['usedBy'] == null ? [] : Invite.toInviteList(data: map['usedBy']),
+          map['usedBy'] == null ? <Invite>[] : Invite.toInviteList(data: map['usedBy']),
     );
   }
 
@@ -34,7 +34,7 @@ class Referrals {
 
   Map<dynamic, dynamic> toSetFirstTimeMap() {
     // ignore: unnecessary_cast
-    return {
+    return <String, Object?>{
       'code': code,
       'uid': uid,
       'timestamp': DateTime.now().millisecondsSinceEpoch,

@@ -57,11 +57,11 @@ class _ForumLikeCommentItemState extends State<ForumLikeCommentItem> {
       length: 2,
       child: Scaffold(
         body: Column(
-          children: [
+          children: <Widget>[
             Material(
               color: Colors.grey.withOpacity(0.1),
               child: TabBar(
-                tabs: [
+                tabs: <Widget>[
                   Tab(
                     child: Text(
                       'Comments',
@@ -111,10 +111,12 @@ class _ForumLikeCommentItemState extends State<ForumLikeCommentItem> {
                       WriteAComment(
                         onCommentSend: (CommentModel comment) {
                           widget.onComment(comment);
-                          ApiService.post(path: 'comments', body: {
-                            ...comment.toMap(),
-                            'receiverUid': widget.forum.user?.uid
-                          });
+                          ApiService.post(
+                              path: 'comments',
+                              body: <String, dynamic>{
+                                ...comment.toMap(),
+                                'receiverUid': widget.forum.user?.uid
+                              });
                           setState(() {
                             _commentController.comments.add(comment);
                           });
@@ -159,7 +161,7 @@ class _ForumLikeCommentItemState extends State<ForumLikeCommentItem> {
                               ),
                               title: _users[i].isSubscribed == true
                                   ? Row(
-                                      children: [
+                                      children: <Widget>[
                                         Text('${_users[i].name}'),
                                         const SizedBox(width: 5),
                                         SvgPicture.asset(
@@ -195,7 +197,7 @@ class _ForumLikeCommentItemState extends State<ForumLikeCommentItem> {
     }
   }
 
-  final List<UserModel> _users = [];
+  final List<UserModel> _users = <UserModel>[];
 
   Future<void> _loadLikesWithDetails(String forumId) async {
     final ApiResponseModel response =

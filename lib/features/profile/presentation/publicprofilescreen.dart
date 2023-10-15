@@ -34,7 +34,7 @@ class PublicProfileScreen extends StatefulWidget {
 class _PublicProfileScreenState extends State<PublicProfileScreen> {
   final ProfileController _profileController = Get.find();
   final MarketController _marketController = Get.put(MarketController());
-  List<PostModel> _posts = [];
+  List<PostModel> _posts = <PostModel>[];
   late UserModel publicUser;
   bool isLoading = true;
   bool blocked = false;
@@ -48,8 +48,8 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
     try {
       final Map<String, dynamic> res =
           await ProfileController.loadData(publicUser.uid);
-      final UserModel modelizedUser =
-          UserModel.fromMap({...res['user'], 'interests': res['industries']});
+      final UserModel modelizedUser = UserModel.fromMap(
+          <dynamic, dynamic>{...res['user'], 'interests': res['industries']});
       publicUser = modelizedUser;
       _posts = res['posts'];
 
@@ -73,22 +73,24 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
 
   Future<void> connect(String userId) async {
     // ignore: unused_local_variable
-    final ApiResponseModel res =
-        await ApiService.post(path: '/connection/connect', body: {
-      'userId': _profileController.myProfile.uid,
-      'connectedId': userId,
-      'timestamp': DateTime.now().millisecondsSinceEpoch
-    });
+    final ApiResponseModel res = await ApiService.post(
+        path: '/connection/connect',
+        body: <String, dynamic>{
+          'userId': _profileController.myProfile.uid,
+          'connectedId': userId,
+          'timestamp': DateTime.now().millisecondsSinceEpoch
+        });
   }
 
   Future<void> disconnect(String userId) async {
     // ignore: unused_local_variable
-    final ApiResponseModel res =
-        await ApiService.post(path: '/connection/disconnect', body: {
-      'userId': _profileController.myProfile.uid,
-      'connectedId': userId,
-      'timestamp': DateTime.now().millisecondsSinceEpoch
-    });
+    final ApiResponseModel res = await ApiService.post(
+        path: '/connection/disconnect',
+        body: <String, dynamic>{
+          'userId': _profileController.myProfile.uid,
+          'connectedId': userId,
+          'timestamp': DateTime.now().millisecondsSinceEpoch
+        });
   }
 
   void connectToUser() async {
@@ -100,7 +102,7 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
       // connecteds.add(user);
       _profileController.updateConnections(publicUser.uid);
       setState(() {
-        publicUser = UserModel.fromMap({
+        publicUser = UserModel.fromMap(<dynamic, dynamic>{
           ...publicUser.toMap(),
           'connectionCount': publicUser.connectionCount == null
               ? 1
@@ -112,7 +114,7 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
       _profileController.updateConnections(publicUser.uid);
 
       setState(() {
-        publicUser = UserModel.fromMap({
+        publicUser = UserModel.fromMap(<dynamic, dynamic>{
           ...publicUser.toMap(),
           'connectionCount': publicUser.connectionCount == null
               ? null
@@ -151,7 +153,7 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
           icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
         ),
         title: Text('@${publicUser.username}'),
-        actions: [
+        actions: <Widget>[
           publicUser.uid != _profileController.myProfile.uid
               ? Padding(
                   padding: const EdgeInsets.only(right: 15.0),
@@ -162,7 +164,7 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
                           builder: (BuildContext context) => AlertDialog(
                             content: Column(
                               mainAxisSize: MainAxisSize.min,
-                              children: [
+                              children: <Widget>[
                                 ListTile(
                                   onTap: () {
                                     navigateTo(context);
@@ -183,7 +185,7 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
                                           centralize: true,
                                           color: Colors.black.withOpacity(.6),
                                         ),
-                                        actions: [
+                                        actions: <Widget>[
                                           TextButton(
                                             onPressed: () =>
                                                 navigateTo(context),
@@ -233,7 +235,7 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
                                   contentPadding: EdgeInsets.zero,
                                   title: publicUser.isSubscribed == true
                                       ? Row(
-                                          children: [
+                                          children: <Widget>[
                                             TextWidget(
                                               text: blocked == true
                                                   ? 'Unblock @${publicUser.name}'
@@ -274,7 +276,7 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
                                           centralize: true,
                                           color: Colors.black.withOpacity(.6),
                                         ),
-                                        actions: [
+                                        actions: <Widget>[
                                           TextButton(
                                             onPressed: () =>
                                                 navigateTo(context),
@@ -379,7 +381,7 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
                                 .where((MarketModel market) =>
                                     market.userId == publicUser.uid)
                                 .isEmpty
-                            ? [
+                            ? <Widget>[
                                 const Tab(
                                   text: 'About',
                                 ),
@@ -387,7 +389,7 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
                                   text: 'Posts',
                                 ),
                               ]
-                            : [
+                            : <Widget>[
                                 const Tab(
                                   text: 'About',
                                 ),
@@ -412,13 +414,13 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
                                 .where((MarketModel market) =>
                                     market.userId == publicUser.uid)
                                 .isEmpty
-                            ? [
+                            ? <Widget>[
                                 SingleChildScrollView(
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
-                                    children: [
+                                    children: <Widget>[
                                       const SizedBox(
                                         height: 30,
                                       ),
@@ -435,14 +437,14 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
                                   loading: isLoading,
                                 ),
                               ]
-                            : [
+                            : <Widget>[
                                 // Container(),
                                 SingleChildScrollView(
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
-                                    children: [
+                                    children: <Widget>[
                                       const SizedBox(
                                         height: 30,
                                       ),
@@ -477,7 +479,7 @@ class _PublicProfileScreenState extends State<PublicProfileScreen> {
                                       Column(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
-                                        children: [
+                                        children: <Widget>[
                                           GetBuilder<MarketController>(builder:
                                               (MarketController
                                                   homeController) {

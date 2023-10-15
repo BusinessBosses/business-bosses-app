@@ -43,7 +43,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
           appBar: AppBar(
             automaticallyImplyLeading: false,
             title: Text('@${profileController.myProfile.username}'),
-            actions: [
+            actions: <Widget>[
               IconButton(
                   icon: SvgPicture.asset(
                     'assets/svgs/settings.svg',
@@ -59,7 +59,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
             height: MediaQuery.of(context).size.height,
             width: MediaQuery.of(context).size.width,
             child: Stack(
-              children: [
+              children: <Widget>[
                 Container(
                   height: MediaQuery.of(context).size.height,
                   width: MediaQuery.of(context).size.width,
@@ -85,7 +85,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                           ? 2
                           : 3,
                       child: Column(
-                        children: [
+                        children: <Widget>[
                           // if (_publicUser.uid !=
                           //     'FirebaseAuth.instance.currentUser.uid') ...{
                           OutlineButtonHeader(
@@ -111,7 +111,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                           market.userId ==
                                           profileController.myProfile.uid)
                                       .isEmpty
-                                  ? [
+                                  ? <Widget>[
                                       const Tab(
                                         text: 'About',
                                       ),
@@ -119,7 +119,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                         text: 'Posts',
                                       ),
                                     ]
-                                  : [
+                                  : <Widget>[
                                       const Tab(
                                         text: 'About',
                                       ),
@@ -146,14 +146,14 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                             market.userId ==
                                             profileController.myProfile.uid)
                                         .isEmpty
-                                    ? [
+                                    ? <Widget>[
                                         SingleChildScrollView(
                                           child: Column(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.start,
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.start,
-                                            children: [
+                                            children: <Widget>[
                                               const SizedBox(
                                                 height: 30,
                                               ),
@@ -171,14 +171,14 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                               profileController.isLoading.value,
                                         ),
                                       ]
-                                    : [
+                                    : <Widget>[
                                         SingleChildScrollView(
                                           child: Column(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.start,
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.start,
-                                            children: [
+                                            children: <Widget>[
                                               const SizedBox(
                                                 height: 30,
                                               ),
@@ -197,7 +197,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                         ),
                                         SingleChildScrollView(
                                           child: Column(
-                                            children: [
+                                            children: <Widget>[
                                               GetBuilder<MarketController>(
                                                 builder: (MarketController
                                                     marketController) {

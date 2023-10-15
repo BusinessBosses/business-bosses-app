@@ -44,7 +44,7 @@ class MCustomButton extends StatelessWidget {
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
+                        children: <Widget>[
                           child ?? Container(),
                           if (label != null)
                             Text(
@@ -80,7 +80,7 @@ class MCustomButton extends StatelessWidget {
                           child: Row(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
+                            children: <Widget>[
                               child ?? Container(),
                               if (label != null)
                                 Text(
@@ -118,7 +118,7 @@ class MCustomButton extends StatelessWidget {
                               child: Row(
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
+                                children: <Widget>[
                                   child ?? Container(),
                                   if (label != null)
                                     Text(
@@ -153,7 +153,7 @@ class MCustomButton extends StatelessWidget {
                               child: Row(
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
+                                children: <Widget>[
                                   child ?? Container(),
                                   if (label != null)
                                     Text(

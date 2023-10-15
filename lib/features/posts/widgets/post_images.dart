@@ -9,21 +9,21 @@ import 'images_viewer_screen.dart';
 class PostImages extends StatelessWidget {
   final PostModel post;
   final isVideo;
-  const PostImages({Key? key, required this.post, this.isVideo: false})
+  const PostImages({Key? key, required this.post, this.isVideo = false})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: [
+      children: <Widget>[
         Stack(
-          children: [
+          children: <Widget>[
             GestureDetector(
               onTap: () {
                 if (isVideo) {
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (context) => VideoScreen(
+                      builder: (BuildContext context) => VideoScreen(
                         post: post,
                       ),
                     ),
@@ -60,8 +60,8 @@ class PostImages extends StatelessWidget {
                 width: double.infinity,
                 height: 72.0,
                 child: Row(
-                  children: [
-                    ...[2, 3, 4, 5]
+                  children: <Widget>[
+                    ...<int>[2, 3, 4, 5]
                         .map(
                           (int i) => Expanded(
                             flex: 1,
@@ -80,7 +80,7 @@ class PostImages extends StatelessWidget {
                                       );
                                     },
                                     child: Stack(
-                                      children: [
+                                      children: <Widget>[
                                         Container(
                                           padding: const EdgeInsets.only(
                                               top: 10.0, right: 10),

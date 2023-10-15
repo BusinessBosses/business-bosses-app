@@ -13,7 +13,7 @@ Widget sellingGuide(BuildContext context) {
       padding: const EdgeInsets.all(15),
       child: Column(
         mainAxisSize: MainAxisSize.min,
-        children: [
+        children: <Widget>[
           SizedBox(
             height: SizeConfig.safeBlockVertical * 3,
           ),
@@ -34,7 +34,7 @@ Widget sellingGuide(BuildContext context) {
           ),
           const Row(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+            children: <Widget>[
               Text('🚫 ', style: bodyText2),
               Expanded(
                 child: Text(
@@ -48,7 +48,7 @@ Widget sellingGuide(BuildContext context) {
           ),
           const Row(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+            children: <Widget>[
               Text('🚫  ', style: bodyText2),
               Expanded(
                 child: Text(
@@ -62,7 +62,7 @@ Widget sellingGuide(BuildContext context) {
           ),
           const Row(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+            children: <Widget>[
               Text('🚫  ', style: bodyText2),
               Expanded(
                 child: Text(
@@ -76,7 +76,7 @@ Widget sellingGuide(BuildContext context) {
           ),
           const Row(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+            children: <Widget>[
               Text('🚫  ', style: bodyText2),
               Expanded(
                 child: Text(
@@ -90,7 +90,7 @@ Widget sellingGuide(BuildContext context) {
           ),
           const Row(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+            children: <Widget>[
               Text('🚫  ', style: bodyText2),
               Expanded(
                 child: Text(
@@ -107,7 +107,7 @@ Widget sellingGuide(BuildContext context) {
           ),
           const Row(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+            children: <Widget>[
               Text('✅  ', style: bodyText2),
               Expanded(
                 child: Text(
@@ -121,7 +121,7 @@ Widget sellingGuide(BuildContext context) {
           ),
           const Row(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+            children: <Widget>[
               Text('✅  ', style: bodyText2),
               Expanded(
                 child: Text(

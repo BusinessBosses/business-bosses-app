@@ -27,7 +27,7 @@ class AllLikes extends StatelessWidget {
               ? Padding(
                   padding: const EdgeInsets.only(top: 0.0),
                   child: Row(
-                    children: [
+                    children: <Widget>[
                       Text(postLikedByUser[i].name!),
                       const SizedBox(width: 5),
                       SvgPicture.asset(

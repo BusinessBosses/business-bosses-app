@@ -39,7 +39,7 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
   late final TabController _searchTabController;
 
   List<Widget> get mActions {
-    return [
+    return <Widget>[
       IconButton(
         icon: _isSearching
             ? const Icon(Icons.close)
@@ -73,7 +73,7 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
             height: MediaQuery.of(context).size.height,
             width: MediaQuery.of(context).size.width,
             child: Stack(
-              children: [
+              children: <Widget>[
                 Padding(
                   padding: const EdgeInsets.only(bottom: 50.0),
                   child: Container(
@@ -111,7 +111,7 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
                                       labelStyle: TextStyle(
                                           fontWeight: FontWeight.w500),
                                       labelColor: Colors.black,
-                                      tabs: [
+                                      tabs: <Widget>[
                                           Tab(
                                             text: 'Challenge',
                                           ),
@@ -127,7 +127,7 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
                                       labelStyle: const TextStyle(
                                           fontWeight: FontWeight.w500),
                                       labelColor: Colors.black,
-                                      tabs: const [
+                                      tabs: const <Widget>[
                                         Tab(
                                           text: 'Groups',
                                         ),
@@ -139,7 +139,7 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
                             ),
                             body: !_isSearching
                                 ? TabBarView(
-                                    children: [
+                                    children: <Widget>[
                                       // content of Tab 1
                                       controller.loading.value
                                           ? const Center(
@@ -278,7 +278,7 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
                                   )
                                 : TabBarView(
                                     controller: _searchTabController,
-                                    children: [
+                                    children: <Widget>[
                                       Container(
                                         color: Theme.of(context)
                                             .scaffoldBackgroundColor,

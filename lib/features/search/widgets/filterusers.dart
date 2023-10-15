@@ -19,7 +19,7 @@ class FilterUsers extends StatefulWidget {
   // ignore: public_member_api_docs
   const FilterUsers(
       {Key? key,
-      this.filterItems = const [],
+      this.filterItems = const <UserModel>[],
       this.isLoading = false,
       this.isSearch = false,
       this.onConnectionChange})
@@ -42,7 +42,7 @@ class _FilterUsersState extends State<FilterUsers> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
+        children: <Widget>[
           Container(
             height: MediaQuery.of(context).size.height,
             color: Colors.white,
@@ -58,7 +58,7 @@ class _FilterUsersState extends State<FilterUsers> {
                     // subTitle: 'Be the first one to like!',
                   )
                 : Stack(
-                    children: [
+                    children: <Widget>[
                       ListView.builder(
                         padding: const EdgeInsets.only(bottom: 48.0),
                         controller: _controller,
@@ -80,7 +80,7 @@ class _FilterUsersState extends State<FilterUsers> {
                           if (!widget.isSearch) if (i == 0) {
                             return Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
+                              children: <Widget>[
                                 Container(
                                   width: MediaQuery.of(context).size.width,
                                   color: backgroundcolorinterface,
@@ -152,7 +152,7 @@ class _FilterUsersState extends State<FilterUsers> {
                                               .bossOfTheWeek?.isSubscribed ==
                                           true
                                       ? Row(
-                                          children: [
+                                          children: <Widget>[
                                             Text(profileController
                                                     .bossOfTheWeek?.name ??
                                                 profileController
@@ -187,7 +187,7 @@ class _FilterUsersState extends State<FilterUsers> {
                           return widget.filterItems[i].isRanked == true
                               ? Container()
                               : Column(
-                                  children: [
+                                  children: <Widget>[
                                     ListTile(
                                       onTap: () async {
                                         Get.toNamed(Routes.publicProfile,
@@ -239,7 +239,7 @@ class _FilterUsersState extends State<FilterUsers> {
                                                   .isSubscribed ==
                                               true
                                           ? Row(
-                                              children: [
+                                              children: <Widget>[
                                                 Text(widget.filterItems[i]
                                                                 .name !=
                                                             null &&

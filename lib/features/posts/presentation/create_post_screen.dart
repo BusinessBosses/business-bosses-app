@@ -102,7 +102,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20.0),
                     child: Column(
-                      children: [
+                      children: <Widget>[
                         const UserDetailsWidget(),
                         TextInput(
                           onDetectionTyped: (String text) {

@@ -48,7 +48,7 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
       Get.put(CreateMarketController());
   List<bool>? _fileProcessing;
 
-  List<MyAssetEntity> _myAssetsEntities = [];
+  List<MyAssetEntity> _myAssetsEntities = <MyAssetEntity>[];
 
   MarketModel? _market;
 
@@ -78,7 +78,7 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
     _priceController.text = _market?.price ?? '';
     _selectedCategory = _market?.category;
     _selectedLocation = _market?.location;
-    _fileProcessing = [];
+    _fileProcessing = <bool>[];
   }
 
   @override
@@ -93,7 +93,7 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
           appBar: AppBar(
             title: Text(widget.isUpd ? 'Edit Listing' : 'Create Listing'),
             automaticallyImplyLeading: false, // Used for removing back buttoon.
-            actions: [
+            actions: <Widget>[
               IconButton(
                 icon: const Icon(Icons.close),
                 onPressed: () {
@@ -263,7 +263,7 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
                           },
                           child: FieldContainer(
                             child: Row(
-                              children: [
+                              children: <Widget>[
                                 SvgPicture.asset('assets/svgs/file.svg'),
                                 const SizedBox(width: 16.0),
                                 Expanded(
@@ -308,7 +308,7 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
                                       child: Column(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
-                                        children: [
+                                        children: <Widget>[
                                           Text(
                                             'Boost this listing?',
                                             style: TextStyle(
@@ -328,7 +328,7 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
                                       ),
                                     ),
                                     Row(
-                                      children: [
+                                      children: <Widget>[
                                         const Text(
                                           'No',
                                           style: TextStyle(
@@ -404,7 +404,7 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
                         padding: const EdgeInsets.symmetric(horizontal: 20.0),
                         child: Text.rich(
                           TextSpan(
-                            children: [
+                            children: <InlineSpan>[
                               const TextSpan(
                                 text:
                                     'By clicking on Sell, you confirm that you will abide by the ',
@@ -474,13 +474,15 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
         'userId': _market?.userId,
         'user': _market?.user?.toMap(),
       });
-      await ApiService.put(path: 'markets/${_market?.marketId}', body: {
-        'category': _selectedCategory,
-        'location': _selectedLocation,
-        'description': descriptionController.text,
-        'price': _priceController.text,
-        'images': _market?.images,
-      });
+      await ApiService.put(
+          path: 'markets/${_market?.marketId}',
+          body: <String, dynamic>{
+            'category': _selectedCategory,
+            'location': _selectedLocation,
+            'description': descriptionController.text,
+            'price': _priceController.text,
+            'images': _market?.images,
+          });
       Get.back();
     }
   }

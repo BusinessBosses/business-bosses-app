@@ -44,7 +44,7 @@ class PostGridItem extends StatelessWidget {
           borderRadius: BorderRadius.circular(radiusValue),
         ),
         child: Stack(
-          children: [
+          children: <Widget>[
             SizedBox(
               width: double.infinity,
               height: double.infinity,
@@ -110,7 +110,7 @@ class PostGridItem extends StatelessWidget {
                         top: 8.0, bottom: 8.0, left: 8.0, right: 8.0),
                     // height: 30.0,
                     child: Row(
-                      children: [
+                      children: <Widget>[
                         const Icon(
                           Icons.copy,
                           size: 18.0,
@@ -194,7 +194,7 @@ class PostGridItem extends StatelessWidget {
           style: bodyText1,
         ),
         content: const Text('Are you sure to delete this post?'),
-        actions: [
+        actions: <Widget>[
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
             child: const Text('No'),
@@ -211,7 +211,7 @@ class PostGridItem extends StatelessWidget {
     );
   }
 
-  final List<PopupMenuEntry<String>> _popupItemPostMore = [
+  final List<PopupMenuEntry<String>> _popupItemPostMore = <PopupMenuEntry<String>>[
     const PopupMenuItem<String>(
       value: 'Edit',
       child: Text(

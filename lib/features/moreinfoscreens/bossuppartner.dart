@@ -100,10 +100,10 @@ class BossuppartnerItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<dynamic> photos = [companyPhoto];
+    List<dynamic> photos = <dynamic>[companyPhoto];
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
+      children: <Widget>[
         id != 5
             ? const SizedBox(
                 width: double.infinity,
@@ -121,7 +121,7 @@ class BossuppartnerItem extends StatelessWidget {
                 padding: const EdgeInsets.only(left: 20, right: 20),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
+                  children: <Widget>[
                     GestureDetector(
                       onTap: () {
                         Navigator.of(context).push(
@@ -182,7 +182,7 @@ class BossuppartnerItem extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.only(left: 15, right: 20),
                     child: Row(
-                      children: [
+                      children: <Widget>[
                         SvgPicture.asset(
                           'assets/svgs/link.svg',
                           height: 14.0,
@@ -225,7 +225,7 @@ class BossuppartnerItem extends StatelessWidget {
                 const EdgeInsets.only(left: 20, right: 20, top: 5, bottom: 5),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
-              children: [
+              children: <Widget>[
                 const Text(
                   'Want to be a Partner?',
                   style: TextStyle(

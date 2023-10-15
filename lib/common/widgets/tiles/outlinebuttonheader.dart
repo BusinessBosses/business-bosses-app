@@ -14,7 +14,7 @@ Container OutlineButtonHeader(BuildContext context, UserModel myProfile) {
     alignment: Alignment.center,
     child: Row(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: [
+      children: <Widget>[
         const SizedBox(
           width: 10,
         ),
@@ -25,7 +25,7 @@ Container OutlineButtonHeader(BuildContext context, UserModel myProfile) {
             },
             child: Row(
               mainAxisSize: MainAxisSize.min,
-              children: [
+              children: <Widget>[
                 const Text(
                   'Edit',
                   style: TextStyle(
@@ -55,7 +55,7 @@ Container OutlineButtonHeader(BuildContext context, UserModel myProfile) {
             },
             child: Row(
               mainAxisSize: MainAxisSize.min,
-              children: [
+              children: <Widget>[
                 const Text(
                   'Earn',
                   style: TextStyle(
@@ -83,7 +83,7 @@ Container OutlineButtonHeader(BuildContext context, UserModel myProfile) {
             },
             child: Row(
               mainAxisSize: MainAxisSize.min,
-              children: [
+              children: <Widget>[
                 const Text(
                   'Analyse',
                   style: TextStyle(

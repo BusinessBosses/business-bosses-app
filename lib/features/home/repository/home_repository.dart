@@ -101,22 +101,22 @@ class HomeRepository {
   /// Update Views
   static Future<ApiResponseModel> updateViews(String id, int views) async {
     final ApiResponseModel response = await ApiService.put(
-        path: 'post/update-post/$id', body: {'views': views});
+        path: 'post/update-post/$id', body: <String, dynamic>{'views': views});
     return response;
   }
 
   /// Update Views
   static Future<ApiResponseModel> updateForumViews(String id, int views) async {
-    final ApiResponseModel response =
-        await ApiService.put(path: 'forum/update/$id', body: {'views': views});
+    final ApiResponseModel response = await ApiService.put(
+        path: 'forum/update/$id', body: <String, dynamic>{'views': views});
     return response;
   }
 
   /// Update Views
   static Future<ApiResponseModel> updatemarketViews(
       String id, int views) async {
-    final ApiResponseModel response =
-        await ApiService.put(path: 'markets/$id', body: {'views': views});
+    final ApiResponseModel response = await ApiService.put(
+        path: 'markets/$id', body: <String, dynamic>{'views': views});
     return response;
   }
 }

@@ -14,7 +14,7 @@ class MySearchTab {
   }
 
   Map<String, dynamic> toMap() {
-    return {
+    return <String, dynamic>{
       'id': label,
       'label': label,
       'widget': widget,
@@ -30,7 +30,7 @@ class MySearchTab {
   }
 
   static List<MySearchTab> cloneList(List<MySearchTab> list) {
-    List<MySearchTab> l = [];
+    List<MySearchTab> l = <MySearchTab>[];
     for (MySearchTab element in list) {
       l.add(MySearchTab.fromMap(element.toMap()));
     }

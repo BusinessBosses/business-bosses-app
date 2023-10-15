@@ -22,13 +22,13 @@ class LoginScreen extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 20.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
+              children: <Widget>[
                 const SizedBox(height: 69.0),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
+                  children: <Widget>[
                     const Column(
-                      children: [
+                      children: <Widget>[
                         TextWidget(
                           text: 'Log In',
                           color: primaryColorLT,
@@ -46,7 +46,7 @@ class LoginScreen extends StatelessWidget {
                     ),
                     const SizedBox(width: 46),
                     Column(
-                      children: [
+                      children: <Widget>[
                         GestureDetector(
                           onTap: () {
                             Get.toNamed(Routes.registration);

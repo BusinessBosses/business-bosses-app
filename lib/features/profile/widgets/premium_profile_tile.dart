@@ -22,7 +22,7 @@ Widget premiumButtonHeader(
     height: 30.0,
     padding: const EdgeInsets.all(0.0),
     width: 80,
-    child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+    child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: <Widget>[
       Expanded(
           child: myProfile.connecteds != null &&
                   myProfile.connecteds!.contains(publicUser.uid)
@@ -43,7 +43,7 @@ Widget premiumButtonHeader(
                         return const AlertDialog(
                           content: Column(
                             mainAxisSize: MainAxisSize.min,
-                            children: [
+                            children: <Widget>[
                               CircularProgressIndicator(),
                             ],
                           ),

@@ -25,11 +25,11 @@ class ReferScreen extends StatefulWidget {
 }
 
 class _ReferScreenState extends State<ReferScreen> {
-  final List<UserModel> _referrableConnections = [];
+  final List<UserModel> _referrableConnections = <UserModel>[];
   final ProfileController _profileController = Get.find();
   late UserModel _specificUser;
 
-  final List<String> _selectedUsers = [];
+  final List<String> _selectedUsers = <String>[];
 
   bool _isProcessing = false;
   bool _isLoading = false;
@@ -136,7 +136,7 @@ class _ReferScreenState extends State<ReferScreen> {
               itemCount: _referrableConnections.length,
               itemBuilder: (BuildContext context, int i) {
                 return Column(
-                  children: [
+                  children: <Widget>[
                     ListTile(
                       onTap: () {
                         _addRemoveUser(_referrableConnections[i].uid);
@@ -173,7 +173,7 @@ class _ReferScreenState extends State<ReferScreen> {
 
   Future<void> _fetchMyConnections() async {}
 
-  final List<MyUser> _searchedList = [];
+  final List<MyUser> _searchedList = <MyUser>[];
 
   void _onSearch(String val) {}
 
@@ -183,7 +183,7 @@ class _ReferScreenState extends State<ReferScreen> {
       _isProcessing = true;
     });
     final ApiResponseModel res =
-        await ApiService.post(path: '/referal/refer', body: {
+        await ApiService.post(path: '/referal/refer', body: <String, dynamic>{
       'referredUserUid': _specificUser.uid,
       'referBy': _profileController.myProfile.uid,
       'referTo': _selectedUsers

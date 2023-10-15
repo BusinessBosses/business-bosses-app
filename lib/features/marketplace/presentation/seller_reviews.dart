@@ -136,7 +136,7 @@ class _SellerReviewScreenState extends State<SellerReviewScreen> {
         ),
         body: SingleChildScrollView(
           child: Column(
-            children: [
+            children: <Widget>[
               Container(
                 height: 20,
                 color: backgroundcolorinterface,
@@ -190,11 +190,11 @@ class _SellerReviewScreenState extends State<SellerReviewScreen> {
                           ),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
+                            children: <Widget>[
                               Column(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
+                                children: <Widget>[
                                   const Text(
                                     'Rating',
                                     style: TextStyle(
@@ -205,7 +205,7 @@ class _SellerReviewScreenState extends State<SellerReviewScreen> {
                                   ),
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
+                                    children: <Widget>[
                                       Text(currentRating.toStringAsFixed(1),
                                           style: const TextStyle(
                                             fontWeight: FontWeight.bold,
@@ -223,7 +223,7 @@ class _SellerReviewScreenState extends State<SellerReviewScreen> {
                                   Text(
                                       'Based on ${reviews?.length ?? 0} reviews'),
                                   Row(
-                                    children: [
+                                    children: <Widget>[
                                       Icon(
                                         Icons.star,
                                         color: widget.user.averageRating! >= 1
@@ -277,9 +277,9 @@ class _SellerReviewScreenState extends State<SellerReviewScreen> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceEvenly,
                                 crossAxisAlignment: CrossAxisAlignment.end,
-                                children: [
+                                children: <Widget>[
                                   Row(
-                                    children: [
+                                    children: <Widget>[
                                       const Text(
                                         '5 Stars',
                                         style: TextStyle(
@@ -311,7 +311,7 @@ class _SellerReviewScreenState extends State<SellerReviewScreen> {
                                     ],
                                   ),
                                   Row(
-                                    children: [
+                                    children: <Widget>[
                                       const Text(
                                         '4 Stars',
                                         style: TextStyle(
@@ -343,7 +343,7 @@ class _SellerReviewScreenState extends State<SellerReviewScreen> {
                                     ],
                                   ),
                                   Row(
-                                    children: [
+                                    children: <Widget>[
                                       const Text(
                                         '3 Stars',
                                         style: TextStyle(
@@ -375,7 +375,7 @@ class _SellerReviewScreenState extends State<SellerReviewScreen> {
                                     ],
                                   ),
                                   Row(
-                                    children: [
+                                    children: <Widget>[
                                       const Text(
                                         '2 Stars',
                                         style: TextStyle(
@@ -409,7 +409,7 @@ class _SellerReviewScreenState extends State<SellerReviewScreen> {
                                   Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
-                                    children: [
+                                    children: <Widget>[
                                       const Text(
                                         '1 Star',
                                         style: TextStyle(
@@ -449,7 +449,7 @@ class _SellerReviewScreenState extends State<SellerReviewScreen> {
                     ),
                     reviews == null
                         ? const Column(
-                            children: [
+                            children: <Widget>[
                               SizedBox(
                                 height: 60,
                               ),
@@ -517,7 +517,7 @@ class _SellerReviewScreenState extends State<SellerReviewScreen> {
                   child: Container(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
+                      children: <Widget>[
                         Container(
                           width: MediaQuery.of(context).size.width,
                           padding: const EdgeInsets.all(10),
@@ -530,7 +530,7 @@ class _SellerReviewScreenState extends State<SellerReviewScreen> {
                           ),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
+                            children: <Widget>[
                               const Text(
                                 'Rate Seller',
                                 style: TextStyle(
@@ -568,7 +568,7 @@ class _SellerReviewScreenState extends State<SellerReviewScreen> {
                           ),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
+                            children: <Widget>[
                               IconButton(
                                 icon: Icon(
                                   Icons.star,
@@ -676,7 +676,7 @@ class _SellerReviewScreenState extends State<SellerReviewScreen> {
                               });
                               await ApiService.post(
                                 path: 'reviews',
-                                body: {
+                                body: <String, dynamic>{
                                   'sellerId': widget.user.uid,
                                   'rating': rater,
                                   'reviewText': reviewText,
@@ -684,7 +684,7 @@ class _SellerReviewScreenState extends State<SellerReviewScreen> {
                               );
                               await ApiService.post(
                                 path: 'notification',
-                                body: {
+                                body: <String, dynamic>{
                                   'senderUid': _profileController.myProfile.uid,
                                   'receiverUid': widget.user.uid,
                                   'title': 'Seller Review',
@@ -757,7 +757,7 @@ class _SellerReviewScreenState extends State<SellerReviewScreen> {
                 child: Container(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
+                    children: <Widget>[
                       Container(
                         width: MediaQuery.of(context).size.width,
                         padding: const EdgeInsets.all(10),
@@ -770,7 +770,7 @@ class _SellerReviewScreenState extends State<SellerReviewScreen> {
                         ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
+                          children: <Widget>[
                             const Text(
                               'Rate Seller',
                               style: TextStyle(
@@ -808,7 +808,7 @@ class _SellerReviewScreenState extends State<SellerReviewScreen> {
                         ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
+                          children: <Widget>[
                             IconButton(
                               icon: Icon(
                                 Icons.star,
@@ -917,7 +917,7 @@ class _SellerReviewScreenState extends State<SellerReviewScreen> {
                             });
                             await ApiService.put(
                               path: 'reviews/$Id',
-                              body: {
+                              body: <String, dynamic>{
                                 'rating': rater,
                                 'reviewText': reviewText,
                               },

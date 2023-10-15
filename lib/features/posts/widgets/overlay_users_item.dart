@@ -64,7 +64,7 @@ class OverlayUsersItems extends StatelessWidget {
                       ),
                       title: users[i].isSubscribed == true
                           ? Row(
-                              children: [
+                              children: <Widget>[
                                 Text(users[i].name ?? '@${users[i].username}'),
                                 const SizedBox(width: 5),
                                 SvgPicture.asset(

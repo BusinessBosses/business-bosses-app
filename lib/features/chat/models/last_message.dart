@@ -4,9 +4,9 @@ class LastMessage {
   String? text;
   String? uid;
   int? timestamp;
-  List<String>? deletedBy = [];
+  List<String>? deletedBy = <String>[];
   bool? deleted;
-  List<String>? deletedBySingles = [];
+  List<String>? deletedBySingles = <String>[];
   UserModel? user;
   bool? isRead;
 
@@ -37,9 +37,9 @@ class LastMessage {
       deleted: map['deleted'] as bool,
       uid: map['uid'] as String,
       deletedBy:
-          map['deletedBy'] == null ? [] : List<String>.from(map['deletedBy']),
+          map['deletedBy'] == null ? <String>[] : List<String>.from(map['deletedBy']),
       deletedBySingles: map['deletedBySingles'] == null
-          ? []
+          ? <String>[]
           : List<String>.from(map['deletedBySingles']),
       timestamp: map['timestamp'] as int,
       isRead: map['isRead'] as bool,
@@ -99,7 +99,7 @@ class LastMessage {
 
 Map<dynamic, dynamic> toReadMap() {
   // ignore: unnecessary_cast
-  return {
+  return <String, bool>{
     'isRead': true,
   } as Map<dynamic, dynamic>;
 }
