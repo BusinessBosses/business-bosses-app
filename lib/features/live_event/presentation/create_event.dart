@@ -304,6 +304,18 @@ class _CreateEventState extends State<CreateEvent> {
     super.dispose();
   }
 
+  @override
+  void initState() {
+    super.initState();
+
+    // Check if widget.event is not null and populate the title
+    if (widget.event != null) {
+      titleController.text = widget.event!.title!;
+      startAt = widget.event!.startAt!;
+      endAt = widget.event!.endAt!;
+    }
+  }
+
   Future<void> _selectDate(BuildContext context, bool isStartTime) async {
     DatePicker.showDateTimePicker(
       context,
