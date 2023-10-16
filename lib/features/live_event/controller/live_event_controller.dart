@@ -17,7 +17,9 @@ class LiveController extends GetxController {
     loading(true);
     update();
     final ApiResponseModel response = await ApiService.get(path: 'event/all');
-
+    events.clear();
+    ongoing.clear();
+    upcoming.clear();
     if (response.success) {
       DateTime now = DateTime.now();
       DateTime today = DateTime(now.year, now.month, now.day);
@@ -87,16 +89,103 @@ class LiveController extends GetxController {
       if (newEvent.startAt!.isAtSameMomentAs(today) ||
           newEvent.startAt!.isAfter(now)) {
         // Event starts today, it's an upcoming event
-        upcoming.add(newEvent);
+        // Find the index where the new event should be inserted based on startAt
+        index = upcoming.indexWhere(
+            (EventModel event) => event.startAt!.isAfter(newEvent.startAt!));
+
+        if (index == -1) {
+          // If the index is -1, it means the new event should be placed at the end
+          upcoming.add(newEvent);
+        } else {
+          // Insert the new event at the correct position
+          upcoming.insert(index, newEvent);
+        }
       } else if (newEvent.startAt!.isBefore(now) &&
           newEvent.endAt!.isAfter(now)) {
-        // Event has already started, it's not upcoming
-        ongoing.add(newEvent);
+        index = ongoing.indexWhere(
+            (EventModel event) => event.startAt!.isAfter(newEvent.startAt!));
+
+        if (index == -1) {
+          // If the index is -1, it means the new event should be placed at the end
+          ongoing.add(newEvent);
+        } else {
+          // Insert the new event at the correct position
+          ongoing.insert(index, newEvent);
+        }
       }
     } else {
       showSnackbar(
         title: 'OOPS!',
         message: 'An error occurred while adding an event, please try again!',
+        error: true,
+      );
+    }
+    update();
+  }
+
+  void updateEvent(Map<String, dynamic> data) async {
+    EventModel updatedEvent = EventModel.fromMap(data);
+    final ApiResponseModel response =
+        await ApiService.put(path: 'event/${updatedEvent.id}', body: data);
+
+    if (response.success) {
+      // Check if the event already exists in the events list
+      int eventIndex =
+          events.indexWhere((EventModel event) => event.id == updatedEvent.id);
+
+      if (eventIndex != -1) {
+        // Remove the existing event
+        events.removeAt(eventIndex);
+
+        // Add the updated event back to the list
+        events.add(updatedEvent);
+
+        // Sort the events based on startAt
+        events.sort((a, b) => a.startAt!.compareTo(b.startAt!));
+
+        DateTime now = DateTime.now();
+        DateTime today = DateTime(now.year, now.month, now.day);
+
+        if (updatedEvent.startAt!.isAtSameMomentAs(today) ||
+            updatedEvent.startAt!.isAfter(now)) {
+          // Updated event starts today, it's an upcoming event
+          // Find the index where the updated event should be inserted based on startAt
+          int index = upcoming.indexWhere(
+              (event) => event.startAt!.isAfter(updatedEvent.startAt!));
+
+          if (index == -1) {
+            // If the index is -1, it means the updated event should be placed at the end
+            upcoming.add(updatedEvent);
+          } else {
+            // Insert the updated event at the correct position
+            upcoming.insert(index, updatedEvent);
+          }
+        } else if (updatedEvent.startAt!.isBefore(now) &&
+            updatedEvent.endAt!.isAfter(now)) {
+          // Updated event has already started, it's not upcoming
+          // Find the index where the updated event should be inserted based on startAt
+          int index = ongoing.indexWhere(
+              (event) => event.startAt!.isAfter(updatedEvent.startAt!));
+
+          if (index == -1) {
+            // If the index is -1, it means the updated event should be placed at the end
+            ongoing.add(updatedEvent);
+          } else {
+            // Insert the updated event at the correct position
+            ongoing.insert(index, updatedEvent);
+          }
+        }
+      } else {
+        showSnackbar(
+          title: 'OOPS!',
+          message: 'Error While Updating Event!',
+          error: true,
+        );
+      }
+    } else {
+      showSnackbar(
+        title: 'OOPS!',
+        message: 'Event not found for update',
         error: true,
       );
     }
