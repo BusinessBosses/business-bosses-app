@@ -5,6 +5,7 @@ import 'dart:math';
 import 'package:business_bosses_v2/action/action.dart';
 import 'package:business_bosses_v2/features/live_event/models/events_model.dart';
 import 'package:business_bosses_v2/features/live_event/presentation/confirm_create_event.dart';
+import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart';
 import 'package:flutter_svg/svg.dart';
@@ -25,18 +26,24 @@ class CreateEvent extends StatefulWidget {
 
 class _CreateEventState extends State<CreateEvent> {
   TextEditingController titleController = TextEditingController();
+  final ProfileController profileController = Get.find();
   DateTime startAt = DateTime.now();
   DateTime endAt = DateTime.now();
   DateTime selectedDateTime = DateTime.now();
   final LiveController liveEventController = Get.find();
-  String? eventID;
+  String? roomID;
 
   @override
   Widget build(BuildContext context) {
-    final String roomID = generateRandomRoomID();
-    setState(() {
-      eventID = roomID;
-    });
+    if (widget.event != null) {
+      setState(() {
+        roomID = widget.event!.roomId;
+      });
+    } else {
+      setState(() {
+        roomID = generateRandomRoomID();
+      });
+    }
     final DateFormat dateFormat = DateFormat('d MMM, y');
 
     // Format the date
@@ -52,10 +59,10 @@ class _CreateEventState extends State<CreateEvent> {
           icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
         ),
         centerTitle: true,
-        title: const Text(
-          'Create Event',
+        title: Text(
+          widget.event != null ? 'Update Event' : 'Create Event',
           textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 20),
+          style: const TextStyle(fontSize: 20),
         ),
       ),
       body: SizedBox(
@@ -247,15 +254,26 @@ class _CreateEventState extends State<CreateEvent> {
                   }
                   Map<String, dynamic> data = <String, dynamic>{
                     'title': titleController.text,
-                    'roomId': eventID,
+                    'roomId': roomID,
                     'startAt': formattedStartDateTime,
                     'endAt': formattedEndDateTime,
-                    'startTime': '00:00:00'
+                    'startTime': '00:00:00',
+                    'user': profileController.myProfile.toMap(),
                   };
-                  liveEventController.createEvent(data);
-                  Get.off(() => ConfirmCreateEvent(roomID: roomID));
+
+                  if (widget.event != null) {
+                    data['id'] = widget.event?.id;
+                  }
+                  if (widget.event != null) {
+                    liveEventController.updateEvent(data);
+                    Get.off(() => ConfirmCreateEvent(roomID: roomID!));
+                  } else {
+                    liveEventController.createEvent(data);
+                    Get.off(() => ConfirmCreateEvent(roomID: roomID!));
+                  }
                 },
-                child: const Text('Create Event'),
+                child: Text(
+                    widget.event != null ? 'Update Event' : 'Create Event'),
               ),
             ),
           ],
@@ -302,6 +320,18 @@ class _CreateEventState extends State<CreateEvent> {
   void dispose() {
     titleController.dispose();
     super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Check if widget.event is not null and populate the title
+    if (widget.event != null) {
+      titleController.text = widget.event!.title!;
+      startAt = widget.event!.startAt!.toLocal();
+      endAt = widget.event!.endAt!.toLocal();
+    }
   }
 
   Future<void> _selectDate(BuildContext context, bool isStartTime) async {

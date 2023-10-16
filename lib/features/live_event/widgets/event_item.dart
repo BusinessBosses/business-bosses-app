@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import '../../../action/action.dart';
 
 class EventItem extends StatelessWidget {
   final EventModel event;
@@ -43,7 +44,11 @@ class EventItem extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           GestureDetector(
-            onTap: () {},
+            onTap: () {
+              String message =
+                  'Join The Event \'${event.title!}\' On The Business Bosses App With Event ID: ${event.roomId}';
+              socialShare(message);
+            },
             child: Container(
               decoration: const BoxDecoration(
                 borderRadius: BorderRadius.all(Radius.circular(50)),
