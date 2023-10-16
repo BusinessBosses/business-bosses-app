@@ -38,6 +38,7 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
     Routes.myProfile
   ];
   int currentTimestamp = DateTime.now().millisecondsSinceEpoch;
+  // ignore: unused_field
   late FirebaseAnalyticsObserver _observer;
 
   // final GetStorage sandBox = GetStorage();
