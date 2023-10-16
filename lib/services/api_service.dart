@@ -10,16 +10,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:cloudinary_public/cloudinary_public.dart';
 import '../navigation/routes.dart';
-
-// final cloudinary = CloudinaryPublic(
-//   'your_cloud_name',
-//   'your_api_key',
-//   'your_api_secret',
-// );
-
-final cloudinary = CloudinaryPublic('dojxok41c', 'UPLOAD_PRESET', cache: false);
 
 /// SERVER BASE URL
 // const String {Constants.baseUrl} = 'https://businessbosses-api.vercel.app/api/v1';
