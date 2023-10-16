@@ -64,7 +64,7 @@ class CreatePostController extends GetxController {
     /// UPLOADED FILE URLS
     List<String> fileUrls = <String>[];
     Map<String, dynamic> mediaUrls = <String, dynamic>{};
-    print('===============>>>>>>>><<<<<<<<<<<<<<<< seleted vide$selectedVid');
+
     if (selectedVid != null) {
       MediaUploadResult result =
           await ApiService.uploadMediaFiles(selectedVid!, vidThumbnail!);
@@ -75,10 +75,6 @@ class CreatePostController extends GetxController {
         showSnackbar(message: 'Error Uploading video');
         return null;
       } else {
-        print(
-            '===============>>>>>>>><<<<<<<<<<<<<<<< thumbnail $thumbnailUrl');
-        print('===============>>>>>>>><<<<<<<<<<<<<<<< videoUrl $videoUrl');
-
         return mediaUrls = <String, dynamic>{
           'images': thumbnailUrl,
           'videoUrl': videoUrl
@@ -130,9 +126,7 @@ class CreatePostController extends GetxController {
     if (validateCreatePostData(body)) {
       loading(true);
       update();
-      print('seletesdkfjkajdfkajfkjadkfjakfjksa');
       if (imageFileList.isEmpty && selectedVid == null) {
-        print('==========>>>>>>>>>imagfile is empty');
         final ApiResponseModel response = await PostRepository.createPost(body);
 
         if (response.success) {
@@ -149,12 +143,11 @@ class CreatePostController extends GetxController {
           }
           Get.snackbar('Success', 'Post created successfully');
         }
-      } else if (selectedVid == null) {
+      } else if (selectedVid != null) {
         if (await uploadFile() == null) {
           showSnackbar(message: 'Error Uploading image');
         } else {
           final Map<String, dynamic>? files = await uploadFile();
-          print('============this is the videos stuffs $files');
           final thumbnail = files?['images'];
           final videoUrl = files?['videoUrl'];
           final ApiResponseModel response =
@@ -181,12 +174,10 @@ class CreatePostController extends GetxController {
           }
         }
       } else {
-        print('=======>>>>>there was an uploaded file');
         if (await uploadFile() == null) {
           showSnackbar(message: 'Error Uploading video');
         } else {
           final Map<String, dynamic>? file = await uploadFile();
-          print('==============this is the file $file');
           final ApiResponseModel response = await PostRepository.createPost(
               <String, dynamic>{...body, 'images': file?['fileUrls']});
 

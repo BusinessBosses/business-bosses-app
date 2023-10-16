@@ -10,8 +10,16 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:cloudinary_public/cloudinary_public.dart';
 import '../navigation/routes.dart';
+
+// final cloudinary = CloudinaryPublic(
+//   'your_cloud_name',
+//   'your_api_key',
+//   'your_api_secret',
+// );
+
+final cloudinary = CloudinaryPublic('dojxok41c', 'UPLOAD_PRESET', cache: false);
 
 /// SERVER BASE URL
 // const String {Constants.baseUrl} = 'https://businessbosses-api.vercel.app/api/v1';
@@ -27,6 +35,11 @@ class MediaUploadResult {
   final String thumbnailUrl;
 
   MediaUploadResult(this.videoUrl, this.thumbnailUrl);
+}
+
+class MediaUploadException implements Exception {
+  final String message;
+  MediaUploadException(this.message);
 }
 
 class ApiService {
@@ -90,6 +103,7 @@ class ApiService {
     http.MultipartRequest request =
         http.MultipartRequest('POST', Uri.parse(uploadUrl));
     request.files.add(await http.MultipartFile.fromPath('file', image.path));
+    print("image url ========${image.path}");
     try {
       final http.StreamedResponse streamedResponse = await request.send();
 
@@ -113,63 +127,37 @@ class ApiService {
     }
   }
 
-// //upload media files
-//   static Future<Map<String, dynamic>> uploadMediaFiles(
-//       File video, File thumbnail) async {
-//     String uploadUrl =
-//         'http://44.210.87.234/upload_media.php'; // Replace with the actual URL for media upload
-//     http.MultipartRequest request =
-//         http.MultipartRequest('POST', Uri.parse(uploadUrl));
-
-//     request.files.add(await http.MultipartFile.fromPath('video', video.path));
-//     request.files
-//         .add(await http.MultipartFile.fromPath('thumbnail', thumbnail.path));
-
-//     try {
-//       final http.StreamedResponse streamedResponse = await request.send();
-
-//       Map<String, dynamic> result =
-//           json.decode(await streamedResponse.stream.bytesToString());
-
-//       if (result['success']) {
-//         return result;
-//       } else {
-//         throw Exception('An error occurred during media upload.');
-//       }
-//     } catch (e) {
-//       throw Exception('An error occurred during media upload.');
-//     }
-//   }
-
+  /// UPLOAD FILE
   static Future<MediaUploadResult> uploadMediaFiles(
       File video, File thumbnail) async {
-    String uploadUrl = 'http://44.210.87.234/upload.php';
+    String uploadUrl = 'http://44.210.87.234/upload-video.php';
     http.MultipartRequest request =
         http.MultipartRequest('POST', Uri.parse(uploadUrl));
-
-    request.files.add(await http.MultipartFile.fromPath('file', video.path));
-    // request.files
-    //     .add(await http.MultipartFile.fromPath('thumbnail', thumbnail.path));
-
-    print('kfkjdkfjkdajfk $request');
-
+    request.files.add(await http.MultipartFile.fromPath('video', video.path));
+    request.files
+        .add(await http.MultipartFile.fromPath('thumbnail', thumbnail.path));
     try {
       final http.StreamedResponse streamedResponse = await request.send();
 
-      Map<String, dynamic> result =
+      Map<dynamic, dynamic> result =
           json.decode(await streamedResponse.stream.bytesToString());
-
       if (result['success']) {
-        print('this is ther result of the upload');
-        final String videoUrl = result['videoUrl'];
-        final String thumbnailUrl = result['thumbnailUrl'];
+        final videoUrl = result['video_url'];
+        final thumbnailUrl = result['thumbnail_url'];
         return MediaUploadResult(videoUrl, thumbnailUrl);
       } else {
-        throw Exception('An error occurred during media upload.');
+        showSnackbar(
+            title: 'OOPS!',
+            message: 'An error occurred, please try again!',
+            error: true);
+        throw MediaUploadException('Upload failed: ${result['error']}');
       }
     } catch (e) {
-      print(e);
-      throw Exception('An error occurred during media upload.');
+      showSnackbar(
+          title: 'OOPS!',
+          message: 'An error occurred, please try again!',
+          error: true);
+      throw MediaUploadException('An error occurred during media upload: $e');
     }
   }
 
