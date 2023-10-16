@@ -30,7 +30,6 @@ environment:
 dependencies:
   cached_network_image: ^3.2.3
   chewie: ^1.7.1
-  cloudinary_public: ^0.21.0
   connectivity: ^3.0.6
   countdown_progress_indicator: ^0.1.2
   country_list_pick: ^1.0.1+6
