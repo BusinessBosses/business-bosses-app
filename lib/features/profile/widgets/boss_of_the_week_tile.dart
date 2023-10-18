@@ -15,6 +15,7 @@ import '../../../navigation/routes.dart';
 import '../../../services/api_service.dart';
 import '../../../utils/theme/theme.dart';
 import '../controller/profile_controller.dart';
+import '../../moreinfoscreens/bossuppartner.dart';
 import '../../home/controller/home_controller.dart';
 
 /// BOSS OF THE WEEK HOMEPAGE TILE
