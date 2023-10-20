@@ -61,28 +61,29 @@ class AllImagesItem extends StatelessWidget {
                 ),
               ),
             ),
-            Positioned(
-              top: 0,
-              bottom: 0,
-              right: 0,
-              left: 0,
-              child: GestureDetector(
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (BuildContext context) => VideoScreen(
-                        post: post!,
+            if (isVideo)
+              Positioned(
+                top: 0,
+                bottom: 0,
+                right: 0,
+                left: 0,
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (BuildContext context) => VideoScreen(
+                          post: post!,
+                        ),
                       ),
-                    ),
-                  );
-                },
-                child: Icon(
-                  Icons.play_circle_outlined,
-                  color: Colors.black.withOpacity(0.5),
-                  size: 48,
+                    );
+                  },
+                  child: Icon(
+                    Icons.play_circle_outlined,
+                    color: Colors.black.withOpacity(0.5),
+                    size: 48,
+                  ),
                 ),
               ),
-            ),
             Positioned(
               bottom: 10,
               right: 10,

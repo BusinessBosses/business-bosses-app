@@ -1,16 +1,20 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:math';
+import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/features/premium/reviewpayment.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
+import 'package:flutter_paystack/flutter_paystack.dart';
+
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
 import '../../../action/action.dart';
-import '../../../common/dialogs/snackbar.dart';
+// import '../../../common/diaprints/snackbar.dart';
 import '../../../common/widgets/buttons/my_button.dart';
 import '../../../common/widgets/text_widget.dart';
 import '../../../utils/theme/theme.dart';
@@ -38,6 +42,7 @@ class _BoostPostState extends State<BoostPost> {
   bool isCoin = false;
   late Map<String, dynamic>? paymantIntent;
   final ProfileController profileController = Get.find();
+  final payStackClient = PaystackPlugin();
 
   late String duration;
   List<Map<String, dynamic>> plans = <Map<String, dynamic>>[
@@ -79,6 +84,7 @@ class _BoostPostState extends State<BoostPost> {
   }
 
   late String initPlan;
+  late String myPlan;
   String calculateAmount(String amount) {
     final int calculatedAmount = (int.parse(amount)) * 100;
     return calculatedAmount.toString();
@@ -100,7 +106,7 @@ class _BoostPostState extends State<BoostPost> {
         setState(() {
           _isProcessing = false;
         });
-        log(' =>> $error');
+        print(' =>> $error');
         showSnackBar(context,
             message: 'Opps!! Something went wrong. Try again');
       });
@@ -114,7 +120,7 @@ class _BoostPostState extends State<BoostPost> {
       setState(() {
         _isProcessing = false;
       });
-      log('Here ->>>>>> $e');
+      print('Here ->>>>>> $e');
 
       showSnackBar(context, message: 'Opps!! Something went wrong. Try again');
     }
@@ -136,14 +142,14 @@ class _BoostPostState extends State<BoostPost> {
             'Content-Type': 'application/x-www-form-urlencoded'
           });
 
-      // log(res.body);
+      // print(res.body);
 
       return jsonDecode(res.body);
     } catch (e) {
       setState(() {
         _isProcessing = false;
       });
-      log('Here ->>>>>> $e');
+      print('Here ->>>>>> $e');
 
       showSnackbar(
           title: 'OOPS!',
@@ -152,7 +158,7 @@ class _BoostPostState extends State<BoostPost> {
     }
   }
 
-  Future<void> makePayment() async {
+  Future<void> makeStripePayment() async {
     if (isCoin &&
         profileController.myProfile.coinscount! >=
             (int.parse(initPlan) * 100)) {
@@ -178,7 +184,7 @@ class _BoostPostState extends State<BoostPost> {
           builder: (BuildContext context) => const Confirmation(),
         ));
       } catch (e) {
-        log(e.toString());
+        print(e.toString());
       }
     } else {
       try {
@@ -197,12 +203,12 @@ class _BoostPostState extends State<BoostPost> {
           ),
         )
             .then((void value) {
-          // log(value.toString());
+          // print(value.toString());
         });
 
         displaySheet();
       } catch (e) {
-        log(e.toString());
+        print(e.toString());
       }
     }
     setState(() {
@@ -210,13 +216,41 @@ class _BoostPostState extends State<BoostPost> {
     });
   }
 
+  void _startPaystack() async {
+    String? publicKey = dotenv.env['PAYSTACK_PUBLIC_KEY'];
+    await payStackClient.initialize(publicKey: publicKey!);
+  }
+
+  final String reference =
+      "unique_transaction_ref_${Random().nextInt(1000000)}";
+
+  void _makePayment() async {
+    final Charge charge = Charge()
+      ..email = profileController.myProfile.email
+      // ..amount = (int.parse(initPlan) * 100000)
+      ..amount = 10000
+      ..reference = reference;
+
+    final CheckoutResponse response = await payStackClient.checkout(context,
+        charge: charge, method: CheckoutMethod.card);
+
+    if (response.status && response.reference == reference) {
+      showSnackBar(context,
+          message: 'Payment Successful, Thanks for your patronage !');
+    } else {
+      showSnackBar(context, message: 'Opps!! Something went wrong. Try again');
+    }
+  }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     initPlan = plans[0]['amount'];
+    myPlan = options[0]['optionname'];
+    _startPaystack();
 
-    // log(widget.postId);
+    // print(widget.postId);
   }
 
   @override
@@ -412,10 +446,10 @@ class _BoostPostState extends State<BoostPost> {
                     .map(
                       (Map<String, dynamic> options) => PaymentOptionCard(
                         option: options,
-                        activeoption: initPlan,
+                        activeoption: myPlan,
                         onTap: (String newoption) {
                           setState(() {
-                            initPlan = newoption;
+                            myPlan = newoption;
                           });
                         },
                       ),
@@ -431,7 +465,7 @@ class _BoostPostState extends State<BoostPost> {
                   const SizedBox(
                     height: 20,
                   ),
-                  if (initPlan == 'Coins (100 Coins = \$1)') ...<Widget>[
+                  if (myPlan == 'Coins (100 Coins = \$1)') ...<Widget>[
                     MyButton(
                       isProcessing: _isProcessing,
                       labelStyle: const TextStyle(
@@ -445,10 +479,10 @@ class _BoostPostState extends State<BoostPost> {
                           ? 'Pay With Card'
                           : 'Continue',
                       onPressed: () async {
-                        await makePayment();
+                        await makeStripePayment();
                       },
                     ),
-                  ] else if (initPlan == 'Card Payment') ...<Widget>[
+                  ] else if (myPlan == 'Card Payment') ...<Widget>[
                     MyButton(
                       isProcessing: _isProcessing,
                       labelStyle: const TextStyle(
@@ -462,12 +496,14 @@ class _BoostPostState extends State<BoostPost> {
                           ? 'Pay With Card'
                           : 'Continue',
                       onPressed: () async {
-                        await makePayment();
+                        await makeStripePayment();
                       },
                     ),
-                  ] else if (initPlan == 'PayStack') ...<Widget>[
+                  ] else if (myPlan == 'PayStack') ...<Widget>[
                     MyButton(
-                      onPressed: () async {},
+                      onPressed: () async {
+                        _makePayment();
+                      },
                       labelStyle: const TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.w700,
