@@ -201,6 +201,11 @@ class HomeController extends GetxController {
       frms.add({'isForum': true, 'data': forums[i], 'isSponsored': false});
     }
 
+    // for (int i = 0; i < promotedPosts.length; i++) {
+    //   psts.add(
+    //       {'isForum': false, 'data': promotedPosts[i], 'isSponsored': true});
+    // }
+
     for (int i = 0; i < posts.length; i++) {
       psts.add({'isForum': false, 'data': posts[i], 'isSponsored': false});
     }

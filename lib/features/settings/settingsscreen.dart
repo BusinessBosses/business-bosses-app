@@ -42,8 +42,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
     );
 
     if (res.success) {
-      if (await canLaunchUrlString(res.data)) {
-        await launchUrlString(res.data, mode: LaunchMode.externalApplication);
+      if (res.data['isUrl']) {
+        if (await canLaunchUrlString(res.data['url'])) {
+          await launchUrlString(res.data, mode: LaunchMode.externalApplication);
+        }
+      } else if (res.data['isUrl'] == false) {
+        showSnackbar(
+            title: 'OOPS!', message: res.data['message'], error: false);
       }
     } else {
       showSnackbar(

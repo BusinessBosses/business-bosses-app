@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'package:business_bosses_v2/features/premium/reviewpayment.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -49,6 +50,21 @@ class _BoostPostState extends State<BoostPost> {
       'amount': '5',
       'duration': 'Duration 5 Days',
       'reach': 'Reach 900 to 1.2k people'
+    },
+  ];
+
+  List<Map<String, dynamic>> options = <Map<String, dynamic>>[
+    <String, dynamic>{
+      'optionname': 'Coins (100 Coins = \$1)',
+      'optionsvg': 'assets/svgs/coin.svg'
+    },
+    <String, dynamic>{
+      'optionname': 'Card Payment',
+      'optionsvg': 'assets/svgs/cardlogo.svg'
+    },
+    <String, dynamic>{
+      'optionname': 'PayStack',
+      'optionsvg': 'assets/svgs/paystack.svg'
     },
   ];
 
@@ -339,65 +355,129 @@ class _BoostPostState extends State<BoostPost> {
               height: 15,
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Column(
-                children: <Widget>[
-                  Row(
-                    children: <Widget>[
-                      Checkbox(
-                        value: isCoin,
-                        onChanged: (bool? value) {
-                          setState(() {
-                            isCoin = value!;
-                          });
-                        },
-                      ),
-                      const Text(
-                        'Pay With Coin (100 Coins = \$1)',
-                      ),
-                    ],
-                  ),
-                  Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 12, vertical: 3),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFF4F4F4),
-                      borderRadius: BorderRadius.circular(3.5),
-                    ),
-                    child: isCoin
-                        ? profileController.myProfile.coinscount! <
-                                (int.parse(initPlan) * 100)
-                            ? const TextWidget(
-                                text: 'You do not have enough coins to promote',
-                                color: Color(0xFF232324),
-                                fontWeight: FontWeight.w600,
-                                size: 12)
-                            : Container()
-                        : Container(),
-                  ),
-                ],
+              padding: const EdgeInsets.only(left: 20.0),
+              child: TextWidget(
+                text: 'Select a Payment Option',
+                size: 18,
+                fontWeight: FontWeight.w700,
               ),
             ),
+            // Padding(
+            //   padding: const EdgeInsets.symmetric(horizontal: 20),
+            //   child: Column(
+            //     children: <Widget>[
+            //       Row(
+            //         children: <Widget>[
+            //           Checkbox(
+            //             value: isCoin,
+            //             onChanged: (bool? value) {
+            //               setState(() {
+            //                 isCoin = value!;
+            //               });
+            //             },
+            //           ),
+            //           const Text(
+            //             'Pay With Coin (100 Coins = \$1)',
+            //           ),
+            //         ],
+            //       ),
+            //       Container(
+            //         padding:
+            //             const EdgeInsets.symmetric(horizontal: 12, vertical: 3),
+            //         decoration: BoxDecoration(
+            //           color: const Color(0xFFF4F4F4),
+            //           borderRadius: BorderRadius.circular(3.5),
+            //         ),
+            //         child: isCoin
+            //             ? profileController.myProfile.coinscount! <
+            //                     (int.parse(initPlan) * 100)
+            //                 ? const TextWidget(
+            //                     text: 'You do not have enough coins to promote',
+            //                     color: Color(0xFF232324),
+            //                     fontWeight: FontWeight.w600,
+            //                     size: 12)
+            //                 : Container()
+            //             : Container(),
+            //       ),
+            //     ],
+            //   ),
+            // ),
             const SizedBox(
               height: 30,
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: MyButton(
-                isProcessing: _isProcessing,
-                labelStyle: const TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w700,
-                  fontSize: 18,
-                ),
-                label: (isCoin &&
-                        profileController.myProfile.coinscount! <
-                            (int.parse(initPlan) * 100))
-                    ? 'Pay With Card'
-                    : 'Continue',
-                onPressed: () async {
-                  await makePayment();
-                },
+              padding: const EdgeInsets.only(left: 20.0, right: 20),
+              child: Column(
+                children: options
+                    .map(
+                      (Map<String, dynamic> options) => PaymentOptionCard(
+                        option: options,
+                        activeoption: initPlan,
+                        onTap: (String newoption) {
+                          setState(() {
+                            initPlan = newoption;
+                          });
+                        },
+                      ),
+                    )
+                    .toList(),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 20, right: 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  if (initPlan == 'Coins (100 Coins = \$1)') ...<Widget>[
+                    MyButton(
+                      isProcessing: _isProcessing,
+                      labelStyle: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w700,
+                        fontSize: 18,
+                      ),
+                      label: (isCoin &&
+                              profileController.myProfile.coinscount! <
+                                  (int.parse(initPlan) * 100))
+                          ? 'Pay With Card'
+                          : 'Continue',
+                      onPressed: () async {
+                        await makePayment();
+                      },
+                    ),
+                  ] else if (initPlan == 'Card Payment') ...<Widget>[
+                    MyButton(
+                      isProcessing: _isProcessing,
+                      labelStyle: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w700,
+                        fontSize: 18,
+                      ),
+                      label: (isCoin &&
+                              profileController.myProfile.coinscount! <
+                                  (int.parse(initPlan) * 100))
+                          ? 'Pay With Card'
+                          : 'Continue',
+                      onPressed: () async {
+                        await makePayment();
+                      },
+                    ),
+                  ] else if (initPlan == 'PayStack') ...<Widget>[
+                    MyButton(
+                      onPressed: () async {},
+                      labelStyle: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w700,
+                        fontSize: 18,
+                      ),
+                      label: 'Pay now',
+                    )
+                  ] else
+                    ...<Widget>[]
+                ],
               ),
             ),
             const SizedBox(

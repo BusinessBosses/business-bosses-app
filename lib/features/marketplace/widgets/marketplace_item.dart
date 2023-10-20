@@ -720,14 +720,14 @@ class _MarketTileState extends State<MarketTile> {
                                                   child: const Center(
                                                     child: Padding(
                                                       padding:
-                                                          EdgeInsets.all(6.0),
+                                                          EdgeInsets.all(5.0),
                                                       child: Text(
                                                         'Message Seller',
                                                         style: TextStyle(
                                                           color: primaryColorLT,
                                                           fontWeight:
                                                               FontWeight.w700,
-                                                          fontSize: 12,
+                                                          fontSize: 11,
                                                         ),
                                                       ),
                                                     ),
