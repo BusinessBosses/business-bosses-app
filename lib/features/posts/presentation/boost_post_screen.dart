@@ -227,8 +227,8 @@ class _BoostPostState extends State<BoostPost> {
   void _makePayment() async {
     final Charge charge = Charge()
       ..email = profileController.myProfile.email
-      // ..amount = (int.parse(initPlan) * 100000)
-      ..amount = 10000
+      ..amount = (int.parse(initPlan) * 100000)
+      // ..amount = 10000
       ..reference = reference;
 
     final CheckoutResponse response = await payStackClient.checkout(context,
