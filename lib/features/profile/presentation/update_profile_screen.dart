@@ -1371,7 +1371,13 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
     setState(() {
       _isProcessing = true;
     });
-
+    if (_bio == null || _bio?.trim() == '') {
+      showSnackBar(
+        context,
+        message: 'Please enter a bio',
+      );
+      return;
+    }
     final SharedPreferences prefs = await SharedPreferences.getInstance();
 
     Map<String, dynamic> updateData = <String, dynamic>{
