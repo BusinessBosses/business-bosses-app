@@ -144,9 +144,10 @@ class _VideoScreenState extends State<VideoScreen> {
   @override
   void initState() {
     super.initState();
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: <SystemUiOverlay>[
-      SystemUiOverlay.bottom,
-    ]);
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
+        overlays: <SystemUiOverlay>[
+          SystemUiOverlay.bottom,
+        ]);
     _post = widget.post;
     initializeVideo();
   }
@@ -224,88 +225,93 @@ class _VideoScreenState extends State<VideoScreen> {
             Positioned(
               width: MediaQuery.of(context).size.width,
               bottom: 0,
-              child: Container(
-                padding: const EdgeInsets.all(10),
-                color: const Color(0XFF000000).withOpacity(.3),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    // SizedBox(
-                    //   width: MediaQuery.of(context).size.width,
-                    //   child: MyPostItemText(
-                    //     _post,
-                    //     isDarkView: true,
-                    //     onDetectableTextTap: _onDetectableTextTap,
-                    //   ),
-                    // ),
-                    // const SizedBox(height: 5.0),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      // crossAxisAlignment: CrossAxisAlignment.,
-                      children: <Widget>[
-                        Row(
-                          children: <Widget>[
-                            TextButton.icon(
-                              onPressed: onLikeTap,
-                              icon: widget.post.likes?.contains(
-                                          profileController.myProfile.uid) ==
-                                      true
-                                  ? const Icon(Icons.favorite)
-                                  : const Icon(
-                                      Icons.favorite_outline,
-                                      color: Colors.white,
-                                    ),
-                              label: Text(
-                                '${widget.post.likes?.length ?? 0}',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyMedium
-                                    ?.copyWith(
-                                      fontWeight: FontWeight.w700,
-                                      color: Colors.white,
-                                    ),
+              child: GestureDetector(
+                onDoubleTap: onLikeTap,
+                child: Container(
+                  padding: const EdgeInsets.all(10),
+                  color: const Color(0XFF000000).withOpacity(.3),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      // SizedBox(
+                      //   width: MediaQuery.of(context).size.width,
+                      //   child: MyPostItemText(
+                      //     _post,
+                      //     isDarkView: true,
+                      //     onDetectableTextTap: _onDetectableTextTap,
+                      //   ),
+                      // ),
+                      // const SizedBox(height: 5.0),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        // crossAxisAlignment: CrossAxisAlignment.,
+                        children: <Widget>[
+                          Row(
+                            children: <Widget>[
+                              TextButton.icon(
+                                onPressed: onLikeTap,
+                                icon: widget.post.likes?.contains(
+                                            profileController.myProfile.uid) ==
+                                        true
+                                    ? const Icon(Icons.favorite)
+                                    : const Icon(
+                                        Icons.favorite_outline,
+                                        color: Colors.white,
+                                      ),
+                                label: Text(
+                                  '${widget.post.likes?.length ?? 0}',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium
+                                      ?.copyWith(
+                                        fontWeight: FontWeight.w700,
+                                        color: Colors.white,
+                                      ),
+                                ),
                               ),
-                            ),
-                            TextButton.icon(
-                              onPressed: _showBottomSheet,
-                              icon: SvgPicture.asset(
-                                'assets/svgs/comment.svg',
-                                color: Colors.white,
+                              TextButton.icon(
+                                onPressed: _showBottomSheet,
+                                icon: SvgPicture.asset(
+                                  'assets/svgs/comment.svg',
+                                  color: Colors.white,
+                                ),
+                                label: Text(
+                                  '${_post.comments?.length ?? 0}',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium
+                                      ?.copyWith(
+                                        fontWeight: FontWeight.w700,
+                                        color: Colors.white,
+                                      ),
+                                ),
                               ),
-                              label: Text(
-                                '${_post.comments?.length ?? 0}',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyMedium
-                                    ?.copyWith(
-                                      fontWeight: FontWeight.w700,
-                                      color: Colors.white,
-                                    ),
+                              const SizedBox(width: 8.0),
+                              GestureDetector(
+                                onTap: () => _sharePost(),
+                                child: SvgPicture.asset(
+                                  'assets/svgs/share.svg',
+                                  height: 20.0,
+                                  width: 20.0,
+                                  color: Colors.white,
+                                ),
                               ),
-                            ),
-                            const SizedBox(width: 8.0),
-                            GestureDetector(
-                              onTap: () => _sharePost(),
-                              child: SvgPicture.asset(
-                                'assets/svgs/share.svg',
-                                height: 20.0,
-                                width: 20.0,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ],
-                        ),
-                        // Spacer(),
-                        Text(
-                          TimeFormat.formatString(_post.timestamp),
-                          style:
-                              Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                    color: Colors.white,
-                                  ),
-                        ),
-                      ],
-                    )
-                  ],
+                            ],
+                          ),
+                          // Spacer(),
+                          Text(
+                            TimeFormat.formatString(_post.timestamp),
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.copyWith(
+                                  color: Colors.white,
+                                ),
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
                 ),
               ),
             )
