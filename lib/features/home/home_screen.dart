@@ -11,6 +11,7 @@ import 'package:lottie/lottie.dart';
 import 'package:text_scroll/text_scroll.dart';
 import 'package:upgrader/upgrader.dart';
 import 'package:visibility_detector/visibility_detector.dart';
+import '../../utils/constants/constants.dart';
 import '../../utils/theme/theme.dart';
 import '../chat/controllers/chat_controller.dart';
 import '../chat/models/my_message.dart';
@@ -23,6 +24,7 @@ import '../posts/widgets/userpost_tile.dart';
 import '../profile/controller/profile_controller.dart';
 import '../profile/widgets/boss_of_the_week_tile.dart';
 import 'widgets/forum_item.dart';
+import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key, this.onPageChange});
@@ -35,6 +37,8 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   final ProfileController _profileController = Get.find();
+  late IO.Socket socket;
+
   // int currentTimestamp = DateTime.now().millisecondsSinceEpoch;
   // final GetStorage sandBox = GetStorage();
   final ScrollController _scrollController = ScrollController();
@@ -53,6 +57,25 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
         homeController.fetchPosts();
       }
     });
+
+    socket = IO.io(Constants.socketUrl, <String, dynamic>{
+      'autoConnect': false,
+      'transports': ['websocket'],
+    });
+    socket.connect();
+    socket.onConnect((_) {
+      print('Connection established');
+    });
+
+    socket.on('newPostEvent', (data) {
+      print("this is the new data ${data}");
+      homeController.sinkPosts(data);
+      // print(data);
+    });
+
+    socket.onDisconnect((_) => print('Connection Disconnection'));
+    socket.onConnectError((err) => print(err));
+    socket.onError((err) => print(err));
   }
 
   @override
