@@ -45,6 +45,39 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   final MarketController marketController = Get.put(MarketController());
   final BossUpController bossUpController = Get.put(BossUpController());
 
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   WidgetsBinding.instance.addObserver(this);
+  //   final HomeController homeController = Get.find();
+  //   _scrollController.addListener(() {
+  //     if (_scrollController.position.pixels >=
+  //             _scrollController.position.maxScrollExtent - 300 &&
+  //         !homeController.loadingMore.value) {
+  //       homeController.fetchPosts();
+  //     }
+  //   });
+
+  //   socket = IO.io(Constants.socketUrl, <String, dynamic>{
+  //     'autoConnect': false,
+  //     'transports': ['websocket'],
+  //   });
+  //   socket.connect();
+  //   socket.onConnect((_) {
+  //     print('Connection established');
+  //   });
+
+  //   socket.on('newPostEvent', (data) {
+  //     print("this is the new data ${data}");
+  //     homeController.sinkPosts(data);
+  //     // print(data);
+  //   });
+
+  //   socket.onDisconnect((_) => print('Connection Disconnection'));
+  //   socket.onConnectError((err) => print(err));
+  //   socket.onError((err) => print(err));
+  // }
+
   @override
   void initState() {
     super.initState();
@@ -58,24 +91,51 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       }
     });
 
-    socket = IO.io(Constants.socketUrl, <String, dynamic>{
-      'autoConnect': false,
-      'transports': ['websocket'],
-    });
-    socket.connect();
-    socket.onConnect((_) {
-      print('Connection established');
-    });
+    // Function to establish the WebSocket connection
+    void connectSocket() {
+      socket = IO.io(Constants.socketUrl, <String, dynamic>{
+        'transports': ['websocket'],
+      });
 
-    socket.on('newPostEvent', (data) {
-      print("this is the new data ${data}");
-      homeController.sinkPosts(data);
-      // print(data);
-    });
+      socket.onConnect((_) {
+        print('Connection established');
+      });
 
-    socket.onDisconnect((_) => print('Connection Disconnection'));
-    socket.onConnectError((err) => print(err));
-    socket.onError((err) => print(err));
+      socket.on('newPostEvent', (data) {
+        // homeController.sinkPosts(data);
+        print(data['newPost']);
+        final int postIndex = homeController.mixedPosts.indexWhere(
+            (Map<String, dynamic> element) =>
+                element['shouldCount'] == null &&
+                !element['isForum'] &&
+                element['data'].postId == data['newPost']['postId']);
+        print("================postIndex $postIndex");
+        if (postIndex == -1) {
+          homeController.sinkPosts(data);
+        }
+      });
+
+      socket.onDisconnect((_) {
+        print('Connection Disconnection');
+        // Reconnect the socket when it's disconnected
+        Future.delayed(Duration(seconds: 5), () {
+          connectSocket();
+        });
+      });
+
+      socket.onConnectError((err) {
+        print(err);
+        // Handle connection errors as needed
+      });
+
+      socket.onError((err) {
+        print(err);
+        // Handle socket errors as needed
+      });
+    }
+
+    // Initial connection
+    connectSocket();
   }
 
   @override
@@ -91,6 +151,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   @override
   void dispose() {
     _scrollController.dispose();
+    socket.off('newPostEvent'); // Remove the listener
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
