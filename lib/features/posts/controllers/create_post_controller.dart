@@ -6,10 +6,12 @@ import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/posts/repository/post_repository.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
+import 'package:business_bosses_v2/utils/constants/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
+import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 import '../../../common/widgets/gallery_screen.dart';
 import '../../profile/controller/profile_controller.dart';
@@ -19,6 +21,7 @@ import '../presentation/boost_post_screen.dart';
 /// CREATEPOSTCONTROLLER
 class CreatePostController extends GetxController {
   final HomeController _homeController = Get.find();
+  late IO.Socket socket;
 
   /// ALL USERS FOR MENTIONS
   RxList<UserModel> users = RxList<UserModel>(<UserModel>[]);
@@ -161,6 +164,8 @@ class CreatePostController extends GetxController {
             imageFileList.clear();
             _homeController.addNewPost(response.data, profileController);
             profileController.addNewPost(response.data);
+            // Emit a WebSocket event to notify other users of the new post
+            socket.emit('newPostEvent', {'newPost': "this is the new posts"});
 
             if (shouldPromote.value == true) {
               Get.to(() => BoostPost(
@@ -444,6 +449,19 @@ class CreatePostController extends GetxController {
     _picker = ImagePicker();
 
     super.onInit();
+
+    socket = IO.io(Constants.socketUrl, <String, dynamic>{
+      'autoConnect': false,
+      'transports': ['websocket'],
+    });
+    socket.connect();
+    socket.onConnect((_) {
+      print('Connection established');
+
+      socket.onDisconnect((_) => print('Connection Disconnection'));
+      socket.onConnectError((err) => print(err));
+      socket.onError((err) => print(err));
+    });
   }
 
   @override
@@ -453,5 +471,13 @@ class CreatePostController extends GetxController {
     imageFileList.clear();
     shouldPromote(false);
     super.onClose();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    socket.disconnect();
+    socket.dispose();
+    super.dispose();
   }
 }
