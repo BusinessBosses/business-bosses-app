@@ -1,6 +1,9 @@
 import 'package:business_bosses_v2/features/home/bottom_nav.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
+import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 class BottomBar extends StatelessWidget {
@@ -107,17 +110,79 @@ class BottomBar extends StatelessWidget {
                 ),
               ],
             ),
-            Positioned(
-              left: 0,
-              right: 0,
-              child: Container(
-                alignment: Alignment.center,
-                child: FloatingActionButton(
-                  child: const Icon(Icons.add),
-                  onPressed: () async {
-                    Get.toNamed(Routes.createPost);
-                  },
-                ),
+            Align(
+              alignment: Alignment.center,
+              child: Positioned(
+                left: 0,
+                right: 0,
+                child: Container(
+                    width: 50,
+                    height: 50,
+                    alignment: Alignment.center,
+                    child: SpeedDial(
+                      marginBottom: 40,
+                      icon: Icons.add,
+                      activeIcon: Icons.close,
+                      buttonSize: 56.0,
+                      visible: true,
+                      closeManually: false,
+                      curve: Curves.bounceIn,
+                      overlayColor: Colors.white,
+                      overlayOpacity: 0.0,
+                      onOpen: () => print('OPENING DIAL'),
+                      onClose: () => print('DIAL CLOSED'),
+                      tooltip: 'Speed Dial',
+                      heroTag: 'speed-dial-hero-tag',
+                      backgroundColor: Colors.transparent,
+                      foregroundColor: Colors.white,
+                      elevation: 8.0,
+                      shape: const CircleBorder(),
+                      gradientBoxShape: BoxShape.circle,
+                      gradient: const LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [primaryColorLT, primaryColorLT],
+                      ),
+                      children: [
+                        SpeedDialChild(
+                          child: Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: SvgPicture.asset(
+                              'assets/svgs/text.svg',
+                              color: Colors.white,
+                            ),
+                          ),
+                          backgroundColor: Colors.red,
+                          label: 'Create Post',
+                          labelStyle: const TextStyle(
+                              fontSize: 18.0, fontWeight: FontWeight.w700),
+                          onTap: () {},
+                          onLongPress: () => print('FIRST CHILD LONG PRESS'),
+                        ),
+                        SpeedDialChild(
+                          child: Padding(
+                            padding: const EdgeInsets.all(14.0),
+                            child: SvgPicture.asset(
+                              'assets/svgs/liveevent.svg',
+                              color: Colors.white,
+                            ),
+                          ),
+                          backgroundColor: Colors.black,
+                          label: 'Start Event',
+                          labelStyle: const TextStyle(
+                              fontSize: 18.0, fontWeight: FontWeight.w700),
+                          onTap: () => print('SECOND CHILD'),
+                          onLongPress: () => print('SECOND CHILD LONG PRESS'),
+                        ),
+                      ],
+                    )
+                    // child: FloatingActionButton(
+                    //   child: const Icon(Icons.add),
+                    //   onPressed: () async {
+                    //     Get.toNamed(Routes.createPost);
+                    //   },
+                    // ),
+                    ),
               ),
             )
           ],

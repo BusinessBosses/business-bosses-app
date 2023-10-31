@@ -86,6 +86,7 @@ dependencies:
   visibility_detector: ^0.4.0+2
   webview_flutter: ^4.4.1
   zego_uikit_prebuilt_live_audio_room: ^2.11.3
+  flutter_speed_dial: ^3.0.5
 
 dev_dependencies:
   flutter_launcher_icons: ^0.13.1

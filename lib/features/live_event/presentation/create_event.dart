@@ -266,10 +266,12 @@ class _CreateEventState extends State<CreateEvent> {
                   }
                   if (widget.event != null) {
                     liveEventController.updateEvent(data);
-                    Get.off(() => ConfirmCreateEvent(roomID: roomID!));
+                    Get.off(() => ConfirmCreateEvent(
+                        roomID: roomID!, time: formattedStartDateTime));
                   } else {
                     liveEventController.createEvent(data);
-                    Get.off(() => ConfirmCreateEvent(roomID: roomID!));
+                    Get.off(() => ConfirmCreateEvent(
+                        roomID: roomID!, time: formattedStartDateTime));
                   }
                 },
                 child: Text(
