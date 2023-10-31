@@ -1,5 +1,6 @@
 // ignore_for_file: library_prefixes, public_member_api_docs, always_specify_types, always_declare_return_types, avoid_print
 
+import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/common/models/comment_model.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
@@ -461,8 +462,17 @@ class HomeController extends GetxController {
         1, {'isForum': false, 'data': modelizedNewPost, 'isSponsored': false});
 
     // posts.insert(0, modelizedNewPost);
-
     update();
+    socket.emit('newPostEvent', {
+      'newPost': newPost,
+      'user': {
+        'username': profileController.myProfile.username,
+        'email': profileController.myProfile.email,
+        'uid': profileController.myProfile.uid,
+        'name': profileController.myProfile.name,
+        'bio': profileController.myProfile.bio
+      }
+    });
   }
 
   void removePostsByUserId(String? userId) {
@@ -640,6 +650,22 @@ class HomeController extends GetxController {
       loadingMore(false);
     }
     update();
+  }
+
+  Future<void> sinkPosts(Map<String, dynamic> data) async {
+    if (profileController.myProfile.uid != data['user']['uid']) {
+      PostModel modelizedNewPost = PostModel.fromMap({
+        ...data['newPost'],
+        'coins': <String>[],
+        'likes': <String>[],
+        'comments': <CommentModel>[],
+        'user': data['user']
+      });
+      mixedPosts.insert(1,
+          {'isForum': false, 'data': modelizedNewPost, 'isSponsored': false});
+
+      update();
+    }
   }
 
   void removePost(String postId) {

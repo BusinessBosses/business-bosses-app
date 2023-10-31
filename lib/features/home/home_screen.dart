@@ -11,6 +11,7 @@ import 'package:lottie/lottie.dart';
 import 'package:text_scroll/text_scroll.dart';
 import 'package:upgrader/upgrader.dart';
 import 'package:visibility_detector/visibility_detector.dart';
+import '../../utils/constants/constants.dart';
 import '../../utils/theme/theme.dart';
 import '../chat/controllers/chat_controller.dart';
 import '../chat/models/my_message.dart';
@@ -23,6 +24,7 @@ import '../posts/widgets/userpost_tile.dart';
 import '../profile/controller/profile_controller.dart';
 import '../profile/widgets/boss_of_the_week_tile.dart';
 import 'widgets/forum_item.dart';
+import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key, this.onPageChange});
@@ -35,11 +37,46 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   final ProfileController _profileController = Get.find();
+  late IO.Socket socket;
+
   // int currentTimestamp = DateTime.now().millisecondsSinceEpoch;
   // final GetStorage sandBox = GetStorage();
   final ScrollController _scrollController = ScrollController();
   final MarketController marketController = Get.put(MarketController());
   final BossUpController bossUpController = Get.put(BossUpController());
+
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   WidgetsBinding.instance.addObserver(this);
+  //   final HomeController homeController = Get.find();
+  //   _scrollController.addListener(() {
+  //     if (_scrollController.position.pixels >=
+  //             _scrollController.position.maxScrollExtent - 300 &&
+  //         !homeController.loadingMore.value) {
+  //       homeController.fetchPosts();
+  //     }
+  //   });
+
+  //   socket = IO.io(Constants.socketUrl, <String, dynamic>{
+  //     'autoConnect': false,
+  //     'transports': ['websocket'],
+  //   });
+  //   socket.connect();
+  //   socket.onConnect((_) {
+  //     print('Connection established');
+  //   });
+
+  //   socket.on('newPostEvent', (data) {
+  //     print("this is the new data ${data}");
+  //     homeController.sinkPosts(data);
+  //     // print(data);
+  //   });
+
+  //   socket.onDisconnect((_) => print('Connection Disconnection'));
+  //   socket.onConnectError((err) => print(err));
+  //   socket.onError((err) => print(err));
+  // }
 
   @override
   void initState() {
@@ -53,6 +90,52 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
         homeController.fetchPosts();
       }
     });
+
+    // Function to establish the WebSocket connection
+    void connectSocket() {
+      socket = IO.io(Constants.socketUrl, <String, dynamic>{
+        'transports': ['websocket'],
+      });
+
+      socket.onConnect((_) {
+        print('Connection established');
+      });
+
+      socket.on('newPostEvent', (data) {
+        // homeController.sinkPosts(data);
+        print(data['newPost']);
+        final int postIndex = homeController.mixedPosts.indexWhere(
+            (Map<String, dynamic> element) =>
+                element['shouldCount'] == null &&
+                !element['isForum'] &&
+                element['data'].postId == data['newPost']['postId']);
+        print("================postIndex $postIndex");
+        if (postIndex == -1) {
+          homeController.sinkPosts(data);
+        }
+      });
+
+      socket.onDisconnect((_) {
+        print('Connection Disconnection');
+        // Reconnect the socket when it's disconnected
+        Future.delayed(Duration(seconds: 5), () {
+          connectSocket();
+        });
+      });
+
+      socket.onConnectError((err) {
+        print(err);
+        // Handle connection errors as needed
+      });
+
+      socket.onError((err) {
+        print(err);
+        // Handle socket errors as needed
+      });
+    }
+
+    // Initial connection
+    connectSocket();
   }
 
   @override
@@ -68,6 +151,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   @override
   void dispose() {
     _scrollController.dispose();
+    socket.off('newPostEvent'); // Remove the listener
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
