@@ -85,6 +85,7 @@ dependencies:
   video_thumbnail: ^0.5.3
   visibility_detector: ^0.4.0+2
   webview_flutter: ^4.4.1
+  youtube_player_flutter: ^8.1.2
   zego_uikit_prebuilt_live_audio_room: ^2.11.3
 
 dev_dependencies:
