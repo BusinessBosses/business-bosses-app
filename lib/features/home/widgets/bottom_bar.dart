@@ -124,6 +124,7 @@ class BottomBar extends StatelessWidget {
                       icon: Icons.add,
                       activeIcon: Icons.close,
                       spacing: 3,
+                      switchLabelPosition: true,
                       childPadding: const EdgeInsets.all(5),
                       spaceBetweenChildren: 4,
                       visible: true,

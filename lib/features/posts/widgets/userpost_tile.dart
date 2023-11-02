@@ -137,32 +137,16 @@ class _PostTileState extends State<PostTile> {
         final jsonData = jsonDecode(jsonSubstring);
 
         title = jsonData['title'];
-        roomid = jsonData['roomid'];
+        roomid = jsonData['roomId'];
         date = jsonData['date'];
         starttime = jsonData['starttime'];
         host = jsonData['host'];
         photourl = jsonData['photourl'];
 
-        print('Title: $title');
-        print('Room ID: $roomid');
-        print('Date: $date');
-        print('Start Time: $starttime');
-        print('Host: $host');
-        print('Photo URL: $photourl');
-
         final Event event = Event(
-          title: 'Event title',
-          description: 'Event description',
-          location: 'Event location',
+          title: '$title',
           startDate: DateTime(3),
           endDate: DateTime(4),
-          // iosParams: IOSParams(
-          //   reminder: Duration(/* Ex. hours:1 */), // on iOS, you can set alarm notification after your event.
-          //   url: 'https://www.example.com', // on iOS, you can set url to your event.
-          // ),
-          // androidParams: AndroidParams(
-          //   emailInvites: [], // on Android, you can add invite emails to your event.
-          // ),
         );
       } catch (e) {}
     } else {}
@@ -522,7 +506,7 @@ class _PostTileState extends State<PostTile> {
                         GestureDetector(
                           onTap: () {
                             Add2Calendar.addEvent2Cal(Event(
-                                title: 'title',
+                                title: '$title',
                                 startDate: DateTime.now(),
                                 endDate: DateTime.now()
                                     .add(const Duration(minutes: 30))));
@@ -577,9 +561,10 @@ class _PostTileState extends State<PostTile> {
                                             ),
                                           ),
                                           Text(
-                                            '$roomid',
-                                            style:
-                                                TextStyle(color: Colors.white),
+                                            'ID: $roomid',
+                                            style: const TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.w900),
                                           )
                                         ],
                                       ),
@@ -587,7 +572,7 @@ class _PostTileState extends State<PostTile> {
                                         padding: const EdgeInsets.all(8.0),
                                         child: Text(
                                           '$title',
-                                          style: TextStyle(
+                                          style: const TextStyle(
                                               color: Colors.white,
                                               fontSize: 18,
                                               fontWeight: FontWeight.w700),
@@ -603,7 +588,7 @@ class _PostTileState extends State<PostTile> {
                                               height: 25,
                                               width: 25,
                                             ),
-                                            SizedBox(
+                                            const SizedBox(
                                               width: 10,
                                             ),
                                             Text(
@@ -618,7 +603,7 @@ class _PostTileState extends State<PostTile> {
                                       ),
                                       Text(
                                         '$date',
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                             fontWeight: FontWeight.w700,
                                             color: Colors.white),
                                       ),
