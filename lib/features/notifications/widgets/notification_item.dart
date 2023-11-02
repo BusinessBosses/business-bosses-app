@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 
+import '../../../navigation/routes.dart';
 import '../../../utils/theme/theme.dart';
 import '../models/my_notification.dart';
 
@@ -21,7 +23,11 @@ class NotificationItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: onTap,
+      onTap: () {
+        myNotification.title.contains('New Message')
+            ? print(myNotification.message)
+            : Get.toNamed(Routes.publicProfile, arguments: myNotification.user);
+      },
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Row(

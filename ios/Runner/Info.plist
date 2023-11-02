@@ -87,6 +87,11 @@
 		<string>whatsapp</string>
 		<string>tg</string>
 	</array>
+	<key>NSContactsUsageDescription</key>
+		<string>Contact-usage</string>
+	<key>NSCalendarsUsageDescription</key>
+		<string>Calendar-usage</string>
+
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>LSSupportsOpeningDocumentsInPlace</key>

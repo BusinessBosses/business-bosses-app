@@ -55,4 +55,6 @@ class Routes {
   static const String reviewpayment = '/reviewpayment';
   static const String liveEvents = '/liveEvents';
   static const String confirmcreateevent = '/confirmcreateevent';
+  static const String createevent = '/createevent';
+  static const String sellscreen = '/sellscreen';
 }

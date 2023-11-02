@@ -112,78 +112,83 @@ class BottomBar extends StatelessWidget {
             ),
             Align(
               alignment: Alignment.center,
-              child: Positioned(
-                left: 0,
-                right: 0,
-                child: Container(
-                    width: 50,
-                    height: 50,
+              child: Stack(children: [
+                Positioned(
+                  left: 0,
+                  right: 0,
+                  child: Container(
+                    width: 55,
+                    height: 55,
                     alignment: Alignment.center,
                     child: SpeedDial(
-                      marginBottom: 40,
                       icon: Icons.add,
                       activeIcon: Icons.close,
-                      buttonSize: 56.0,
+                      spacing: 3,
+                      childPadding: const EdgeInsets.all(5),
+                      spaceBetweenChildren: 4,
                       visible: true,
+                      direction: SpeedDialDirection.up,
                       closeManually: false,
-                      curve: Curves.bounceIn,
-                      overlayColor: Colors.white,
-                      overlayOpacity: 0.0,
-                      onOpen: () => print('OPENING DIAL'),
-                      onClose: () => print('DIAL CLOSED'),
-                      tooltip: 'Speed Dial',
+                      renderOverlay: true,
+                      overlayColor: Colors.black,
+                      overlayOpacity: 0.8,
+                      useRotationAnimation: true,
+                      tooltip: 'Open Speed Dial',
                       heroTag: 'speed-dial-hero-tag',
-                      backgroundColor: Colors.transparent,
-                      foregroundColor: Colors.white,
-                      elevation: 8.0,
+                      elevation: 3.0,
+                      animationCurve: Curves.elasticInOut,
+                      isOpenOnStart: false,
                       shape: const CircleBorder(),
-                      gradientBoxShape: BoxShape.circle,
-                      gradient: const LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: [primaryColorLT, primaryColorLT],
-                      ),
                       children: [
                         SpeedDialChild(
-                          child: Padding(
-                            padding: const EdgeInsets.all(10.0),
-                            child: SvgPicture.asset(
-                              'assets/svgs/text.svg',
-                              color: Colors.white,
+                            child: Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: SvgPicture.asset(
+                                'assets/svgs/text.svg',
+                                color: Colors.white,
+                              ),
                             ),
-                          ),
-                          backgroundColor: Colors.red,
-                          label: 'Create Post',
-                          labelStyle: const TextStyle(
-                              fontSize: 18.0, fontWeight: FontWeight.w700),
-                          onTap: () {},
-                          onLongPress: () => print('FIRST CHILD LONG PRESS'),
-                        ),
+                            backgroundColor: Colors.red,
+                            label: 'Create a Post',
+                            labelStyle: const TextStyle(
+                                fontSize: 18.0, fontWeight: FontWeight.w700),
+                            onTap: () =>
+                                Get.toNamed(Routes.createPost, arguments: {
+                                  'sharemessage': '',
+                                  'title': '',
+                                })),
                         SpeedDialChild(
-                          child: Padding(
-                            padding: const EdgeInsets.all(14.0),
-                            child: SvgPicture.asset(
-                              'assets/svgs/liveevent.svg',
-                              color: Colors.white,
+                            child: Padding(
+                              padding: const EdgeInsets.all(14.0),
+                              child: SvgPicture.asset(
+                                'assets/svgs/liveevent.svg',
+                                color: Colors.white,
+                              ),
                             ),
-                          ),
-                          backgroundColor: Colors.black,
-                          label: 'Start Event',
-                          labelStyle: const TextStyle(
-                              fontSize: 18.0, fontWeight: FontWeight.w700),
-                          onTap: () => print('SECOND CHILD'),
-                          onLongPress: () => print('SECOND CHILD LONG PRESS'),
-                        ),
+                            backgroundColor: Colors.black,
+                            label: 'Create an Event',
+                            labelStyle: const TextStyle(
+                                fontSize: 18.0, fontWeight: FontWeight.w700),
+                            onTap: () => Get.toNamed(Routes.createevent)),
+                        SpeedDialChild(
+                            child: Padding(
+                              padding: const EdgeInsets.all(0.0),
+                              child: SvgPicture.asset(
+                                'assets/svgs/sellicon.svg',
+                                color: Colors.white,
+                                height: 30,
+                              ),
+                            ),
+                            backgroundColor: Colors.green,
+                            label: 'Sell a Product',
+                            labelStyle: const TextStyle(
+                                fontSize: 18.0, fontWeight: FontWeight.w700),
+                            onTap: () => Get.toNamed(Routes.sellscreen)),
                       ],
-                    )
-                    // child: FloatingActionButton(
-                    //   child: const Icon(Icons.add),
-                    //   onPressed: () async {
-                    //     Get.toNamed(Routes.createPost);
-                    //   },
-                    // ),
                     ),
-              ),
+                  ),
+                ),
+              ]),
             )
           ],
         ),

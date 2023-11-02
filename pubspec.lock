@@ -17,6 +17,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.3.7"
+  add_2_calendar:
+    dependency: "direct main"
+    description:
+      name: add_2_calendar
+      sha256: dbcd0bf296fbbe00861a6f101af8cdb3c163a8c3ff5d3c99a4b081c2f37c724f
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.2.5"
   analyzer:
     dependency: transitive
     description:
@@ -575,10 +583,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_speed_dial
-      sha256: "228e68bc418126f05c45450d23dbe85dc270cd2e1f5764938c0d93b985882c5a"
+      sha256: "698a037274a66dbae8697c265440e6acb6ab6cae9ac5f95c749e7944d8f28d41"
       url: "https://pub.dev"
     source: hosted
-    version: "3.0.5"
+    version: "7.0.0"
   flutter_staggered_grid_view:
     dependency: "direct main"
     description:

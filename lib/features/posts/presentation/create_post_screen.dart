@@ -59,11 +59,17 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
 
   @override
   Widget build(BuildContext context) {
-    String sharemessage = Get.arguments ?? "";
+    final Map<String, dynamic> arguments = Get.arguments;
+    final String sharemessage = arguments['sharemessage'] ?? "";
+    final String title = arguments['title'];
+    final String livedata = arguments['livedata'] ?? "";
+
     if (widget.postId != null) {
       _titleCtrl.text = widget.post!;
     } else {
-      _titleCtrl.text = sharemessage;
+      title.isNotEmpty
+          ? _titleCtrl.text = sharemessage + '\n\nTitle: $title '
+          : _titleCtrl.text == '';
     }
     return GetBuilder<CreatePostController>(
       builder: (CreatePostController controller) => WillPopScope(
@@ -204,7 +210,9 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                           /// Otherwise, create the post
                           if (widget.postId == null) {
                             await controller.createPost(<String, dynamic>{
-                              'title': _titleCtrl.text.trim(),
+                              'title': title.isNotEmpty
+                                  ? '${_titleCtrl.text.trim()} lvdtarg123$livedata'
+                                  : _titleCtrl.text.trim(),
                               'timestamp':
                                   DateTime.now().millisecondsSinceEpoch,
                             }, _profileController);

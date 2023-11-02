@@ -15,7 +15,11 @@ import '../../../common/dialogs/snackbar.dart';
 class ConfirmCreateEvent extends StatefulWidget {
   final String roomID;
   final String? time;
-  const ConfirmCreateEvent({super.key, required this.roomID, this.time});
+  final String? title;
+  final String? livedata;
+
+  const ConfirmCreateEvent(
+      {super.key, required this.roomID, this.time, this.title, this.livedata});
 
   @override
   State<ConfirmCreateEvent> createState() => _ConfirmCreateEventState();
@@ -132,8 +136,15 @@ class _ConfirmCreateEventState extends State<ConfirmCreateEvent> {
               buttonType: ButtonType.elevated,
               onPressed: () {
                 String sharemessage =
-                    'Hey! I\'ve got a live event coming up at ${widget.time}. Join event with Room ID: ${widget.roomID}';
-                Get.toNamed(Routes.createPost, arguments: sharemessage);
+                    'Hey there! I\'ve got a live event coming up on ${widget.time} Join with Room ID: ${widget.roomID}';
+                String title = '${widget.title}';
+                String livedata = '${widget.livedata}';
+
+                Get.toNamed(Routes.createPost, arguments: {
+                  'sharemessage': sharemessage,
+                  'title': title,
+                  'livedata': livedata,
+                });
               },
               child: const Text('Post on Business Bosses'),
             ),

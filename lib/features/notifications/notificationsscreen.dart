@@ -3,6 +3,7 @@ import 'package:business_bosses_v2/features/notifications/controller/notificatio
 import 'package:business_bosses_v2/features/notifications/widgets/nonotificationfoundwidget.dart';
 import 'package:business_bosses_v2/features/notifications/widgets/notification_item.dart';
 import 'package:business_bosses_v2/features/notifications/widgets/quotewidget.dart';
+import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
@@ -148,7 +149,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                               ),
                                             NotificationItem(
                                               controller.notifications[i],
-                                              onTap: () {},
+                                              onTap: () => print('object'),
                                             )
                                           ],
                                         );

@@ -122,7 +122,7 @@ class _LiveEventState extends State<LiveEvent> {
                                       softWrap: true,
                                     ),
                                   ),
-                                  profileController.myProfile.isSubscribed
+                                  !profileController.myProfile.isSubscribed
                                       ? Positioned(
                                           bottom: 10,
                                           right: 35,
