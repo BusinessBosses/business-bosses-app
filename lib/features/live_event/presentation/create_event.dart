@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs
 
+import 'dart:io';
 import 'dart:math';
 
 import 'package:business_bosses_v2/action/action.dart';
@@ -10,7 +11,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:business_bosses_v2/services/api_service.dart';
+import 'package:business_bosses_v2/utils/theme/theme.dart';
+import 'package:business_bosses_v2/common/widgets/typography/text_widget.dart';
 
 import '../../../common/widgets/buttons/custom_button.dart';
 import '../controller/live_event_controller.dart';
@@ -32,6 +37,7 @@ class _CreateEventState extends State<CreateEvent> {
   DateTime selectedDateTime = DateTime.now();
   final LiveController liveEventController = Get.find();
   String? roomID;
+  File? _selectedImage;
 
   @override
   Widget build(BuildContext context) {
@@ -211,11 +217,72 @@ class _CreateEventState extends State<CreateEvent> {
                 ),
               ),
             ),
+            if (_selectedImage == null)
+              Padding(
+                padding: const EdgeInsets.all(15.0),
+                child: Row(
+                  children: <Widget>[
+                    const TextWidget(
+                      text: 'Add image',
+                      fontWeight: FontWeight.w700,
+                      size: 17,
+                    ),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    GestureDetector(
+                      onTap: () => _pickImage(context),
+                      child: CircleAvatar(
+                        radius: 26 / 1.38,
+                        backgroundColor: backgroundColor,
+                        child: SvgPicture.asset(
+                          'assets/svgs/addimagepost.svg',
+                          height: 18,
+                        ),
+                      ),
+                    ),
+                    const Spacer(),
+                    const Text(
+                      'Max file size for images is 10Mb',
+                      style: TextStyle(fontSize: 11, color: Colors.red),
+                    )
+                  ],
+                ),
+              ),
+            if (_selectedImage != null)
+              Stack(
+                children: <Widget>[
+                  SizedBox(
+                    width: 100, // Adjust the width as needed
+                    height: 100, // Adjust the height as needed
+                    child: Image.file(_selectedImage!),
+                  ),
+                  Positioned(
+                    top: 25,
+                    right: 25,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle, // Make it a circle
+                        color: Colors.red
+                            .withOpacity(0.5), // Choose your desired color
+                      ),
+                      child: IconButton(
+                        icon: const Icon(
+                          Icons.close,
+                          color: Colors.white,
+                        ), // Close icon
+                        onPressed: _removeImage,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: CustomButton(
                 buttonType: ButtonType.elevated,
                 onPressed: () async {
+                  String? imageUrl;
                   final DateTime endAtt = endAt.toUtc();
                   final DateFormat dateFormat =
                       DateFormat('yyyy-MM-dd HH:mm:ss.SSSSSS');
@@ -226,7 +293,7 @@ class _CreateEventState extends State<CreateEvent> {
 
                   // Format the UTC DateTime to the desired string format
                   String formattedStartDateTime = dateFormat.format(startAtt);
-                  print(formattedEndDateTime);
+
                   if (titleController.text.isEmpty) {
                     showSnackBar(
                       context,
@@ -252,6 +319,13 @@ class _CreateEventState extends State<CreateEvent> {
                         message: 'Event duration cannot be more than 2 hours');
                     return;
                   }
+                  if (_selectedImage != null) {
+                    dynamic response =
+                        await ApiService.uploadFile(_selectedImage!);
+                    if (response['success']) {
+                      imageUrl = response['fileUrl'];
+                    }
+                  }
                   Map<String, dynamic> data = <String, dynamic>{
                     'title': titleController.text,
                     'roomId': roomID,
@@ -259,6 +333,7 @@ class _CreateEventState extends State<CreateEvent> {
                     'endAt': formattedEndDateTime,
                     'startTime': '00:00:00',
                     'user': profileController.myProfile.toMap(),
+                    'image': imageUrl,
                   };
 
                   if (widget.event != null) {
@@ -332,6 +407,25 @@ class _CreateEventState extends State<CreateEvent> {
       startAt = widget.event!.startAt!.toLocal();
       endAt = widget.event!.endAt!.toLocal();
     }
+  }
+
+  Future<void> _pickImage(BuildContext context) async {
+    final ImagePicker imagePicker = ImagePicker();
+    final XFile? image =
+        await imagePicker.pickImage(source: ImageSource.gallery);
+
+    if (image != null) {
+      // Handle the selected image. You can save it, display it, or upload it.
+      setState(() {
+        _selectedImage = File(image.path);
+      });
+    }
+  }
+
+  void _removeImage() {
+    setState(() {
+      _selectedImage = null;
+    });
   }
 
   Future<void> _selectDate(BuildContext context, bool isStartTime) async {

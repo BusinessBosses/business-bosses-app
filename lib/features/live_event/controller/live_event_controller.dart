@@ -69,7 +69,6 @@ class LiveController extends GetxController {
         ...data,
         'id': response.data['id'],
       };
-
       EventModel newEvent = EventModel.fromMap(dataNew);
 
       // Find the index where the new event should be inserted based on startAt

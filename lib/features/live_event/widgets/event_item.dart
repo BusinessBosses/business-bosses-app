@@ -210,6 +210,7 @@ class EventItem extends StatelessWidget {
                                     title: event.title!,
                                     roomID: event.roomId!,
                                     isHost: true,
+                                    image: event.image,
                                   );
                                 } else {
                                   jumpToLivePage(
@@ -217,6 +218,7 @@ class EventItem extends StatelessWidget {
                                     title: event.title!,
                                     roomID: event.roomId!,
                                     isHost: false,
+                                    image: event.image,
                                   );
                                 }
                               },
@@ -313,7 +315,11 @@ class EventItem extends StatelessWidget {
   }
 
   void jumpToLivePage(BuildContext context,
-      {required String roomID, required bool isHost, required String title}) {
+      {required String roomID,
+      required bool isHost,
+      required String title,
+      String? image}) {
+    print('Image $image');
     Navigator.push(
       context,
       // ignore: always_specify_types
@@ -322,6 +328,7 @@ class EventItem extends StatelessWidget {
           roomID: roomID,
           isHost: isHost,
           title: title,
+          image: image,
         ),
       ),
     );
