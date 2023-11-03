@@ -127,14 +127,10 @@ class _PostTileState extends State<PostTile> {
 
   @override
   Widget build(BuildContext context) {
-    final fullString = widget.post.title;
     String? title, roomid, date, starttime, host, photourl;
-    if (fullString.contains("lvdtarg123")) {
-      final startIndex = fullString.indexOf("lvdtarg123");
-      final jsonSubstring =
-          fullString.substring(startIndex + "lvdtarg123".length);
+    if (widget.post.livedata!.isNotEmpty) {
       try {
-        final jsonData = jsonDecode(jsonSubstring);
+        final jsonData = jsonDecode(widget.post.livedata.toString());
 
         title = jsonData['title'];
         roomid = jsonData['roomId'];

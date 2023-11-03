@@ -349,9 +349,8 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                               //       DateTime.now().millisecondsSinceEpoch,
                               // }, _profileController);
                               await controller.createPost(<String, dynamic>{
-                                'title': title.isNotEmpty
-                                    ? '${_titleCtrl.text.trim()} lvdtarg123$livedata'
-                                    : _titleCtrl.text.trim(),
+                                'livedata': title.isNotEmpty ? livedata : "",
+                                'title': _titleCtrl.text.trim(),
                                 'ytUrl': _ytUrl,
                                 'images': _ytUrl != null && _ytUrl != ''
                                     ? 'https://api.businessbosses.co.uk/appfiles/1698854755_13_download_(1).png'

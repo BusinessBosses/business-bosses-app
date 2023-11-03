@@ -14,6 +14,7 @@ class PostModel {
   final UserModel? user;
   final String? videoUrl;
   final String? ytUrl;
+  final String? livedata;
   final bool isRanked;
   int? views;
   final bool? promote;
@@ -31,6 +32,7 @@ class PostModel {
     this.user,
     this.videoUrl,
     this.ytUrl,
+    this.livedata,
     required this.isRanked,
     this.views = 0,
     this.promote,
@@ -50,6 +52,7 @@ class PostModel {
     UserModel? user,
     String? videoUrl,
     String? ytUrl,
+    String? livedata,
     bool? isRanked,
     int? views,
     bool? promote,
@@ -68,6 +71,7 @@ class PostModel {
       user: user ?? this.user,
       videoUrl: videoUrl ?? this.videoUrl,
       ytUrl: ytUrl ?? this.ytUrl,
+      livedata: livedata ?? this.livedata,
       isRanked: isRanked ?? this.isRanked,
       views: views ?? this.views,
       promote: promote ?? this.promote,
@@ -89,6 +93,7 @@ class PostModel {
       'user': user?.toMap(),
       'videoUrl': videoUrl,
       'ytUrl': ytUrl,
+      'livedata': livedata,
       'isRanked': isRanked,
       'views': views,
       'promote': promote,
@@ -122,6 +127,7 @@ class PostModel {
           : null,
       videoUrl: map['videoUrl'] != null ? map['videoUrl'] as String : null,
       ytUrl: map['ytUrl'] != null ? map['ytUrl'] as String : null,
+      livedata: map['livedata'] != null ? map['livedata'] as String : null,
       isRanked: map['isRanked'] as bool,
       views: map['views'] != null ? map['views'] as int : null,
       promote: map['promote'] != null ? map['promote'] as bool : null,
