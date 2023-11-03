@@ -23,11 +23,7 @@ class NotificationItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {
-        myNotification.title.contains('New Message')
-            ? print(myNotification.message)
-            : Get.toNamed(Routes.publicProfile, arguments: myNotification.user);
-      },
+      onTap: onTap,
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Row(
