@@ -473,10 +473,7 @@ class _PostTileState extends State<PostTile> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             DetectableText(
-                              text: widget.post.title.contains('lvdtarg123')
-                                  ? widget.post.title.substring(0,
-                                      widget.post.title.indexOf('lvdtarg123'))
-                                  : widget.post.title,
+                              text: widget.post.title,
                               detectionRegExp: detectionRegExp(hashtag: false)!,
                               detectedStyle: bodyText2.copyWith(
                                 color: Colors.blue,
@@ -498,7 +495,7 @@ class _PostTileState extends State<PostTile> {
                             const SizedBox(height: 10),
                           ],
                         ),
-                      if (widget.post.title.contains('lvdtarg123')) ...<Widget>[
+                      if (widget.post.livedata!.isNotEmpty) ...<Widget>[
                         GestureDetector(
                           onTap: () {
                             Add2Calendar.addEvent2Cal(Event(
