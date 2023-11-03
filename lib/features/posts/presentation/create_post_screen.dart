@@ -122,7 +122,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                       padding: const EdgeInsets.symmetric(horizontal: 20.0),
                       child: Column(
                         children: <Widget>[
-                          // const UserDetailsWidget(),
+                          const UserDetailsWidget(),
                           TextInput(
                             onDetectionTyped: (String text) {
                               // List<UserModel> filterUser =
@@ -349,7 +349,9 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                               //       DateTime.now().millisecondsSinceEpoch,
                               // }, _profileController);
                               await controller.createPost(<String, dynamic>{
-                                'title': _titleCtrl.text.trim(),
+                                'title': title.isNotEmpty
+                                    ? '${_titleCtrl.text.trim()} lvdtarg123$livedata'
+                                    : _titleCtrl.text.trim(),
                                 'ytUrl': _ytUrl,
                                 'images': _ytUrl != null && _ytUrl != ''
                                     ? 'https://api.businessbosses.co.uk/appfiles/1698854755_13_download_(1).png'
