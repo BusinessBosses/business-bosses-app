@@ -1,3 +1,7 @@
+import 'dart:convert';
+
+import 'package:add_2_calendar/add_2_calendar.dart';
+import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/posts/controllers/create_post_controller.dart';
 import 'package:business_bosses_v2/features/posts/models/post_model.dart';
@@ -123,6 +127,30 @@ class _PostTileState extends State<PostTile> {
 
   @override
   Widget build(BuildContext context) {
+    final fullString = widget.post.title;
+    String? title, roomid, date, starttime, host, photourl;
+    if (fullString.contains("lvdtarg123")) {
+      final startIndex = fullString.indexOf("lvdtarg123");
+      final jsonSubstring =
+          fullString.substring(startIndex + "lvdtarg123".length);
+      try {
+        final jsonData = jsonDecode(jsonSubstring);
+
+        title = jsonData['title'];
+        roomid = jsonData['roomId'];
+        date = jsonData['date'];
+        starttime = jsonData['starttime'];
+        host = jsonData['host'];
+        photourl = jsonData['photourl'];
+
+        final Event event = Event(
+          title: '$title',
+          startDate: DateTime(3),
+          endDate: DateTime(4),
+        );
+      } catch (e) {}
+    } else {}
+
     if (hide == false) {
       final List<PopupMenuEntry<String>> myPopupMore = <PopupMenuEntry<String>>[
         const PopupMenuItem<String>(
@@ -449,7 +477,10 @@ class _PostTileState extends State<PostTile> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             DetectableText(
-                              text: widget.post.title,
+                              text: widget.post.title.contains('lvdtarg123')
+                                  ? widget.post.title.substring(0,
+                                      widget.post.title.indexOf('lvdtarg123'))
+                                  : widget.post.title,
                               detectionRegExp: detectionRegExp(hashtag: false)!,
                               detectedStyle: bodyText2.copyWith(
                                 color: Colors.blue,
@@ -471,14 +502,119 @@ class _PostTileState extends State<PostTile> {
                             const SizedBox(height: 10),
                           ],
                         ),
-                      // if (widget.post.images?.isNotEmpty ?? false)
-                      //   PostImages(
-                      //     post: widget.post,
-                      //     isVideo: widget.post.videoUrl != null &&
-                      //             widget.post.videoUrl != ''
-                      //         ? true
-                      //         : false,
-                      //   ),
+                      if (widget.post.title.contains('lvdtarg123')) ...<Widget>[
+                        GestureDetector(
+                          onTap: () {
+                            Add2Calendar.addEvent2Cal(Event(
+                                title: '$title',
+                                startDate: DateTime.now(),
+                                endDate: DateTime.now()
+                                    .add(const Duration(minutes: 30))));
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12),
+                              image: const DecorationImage(
+                                image:
+                                    AssetImage('assets/images/liveeventt.png'),
+                                fit: BoxFit.cover,
+                              ),
+                              // You can also add other properties like boxShadow for a more realistic effect
+                            ),
+                            child: Stack(children: [
+                              Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                child: Container(
+                                  child: Column(
+                                    children: <Widget>[
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: <Widget>[
+                                          Container(
+                                            decoration: BoxDecoration(
+                                              color: Colors.white.withAlpha(70),
+                                              borderRadius:
+                                                  BorderRadius.circular(5),
+                                            ),
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(5.0),
+                                              child: Row(
+                                                children: <Widget>[
+                                                  SvgPicture.asset(
+                                                    'assets/svgs/liveeventt.svg',
+                                                    height: 12,
+                                                    color: Colors.white,
+                                                  ),
+                                                  const SizedBox(
+                                                    width: 5,
+                                                  ),
+                                                  const Text(
+                                                    'Upcoming Live Event',
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                          Text(
+                                            'ID: $roomid',
+                                            style: const TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.w900),
+                                          )
+                                        ],
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Text(
+                                          '$title',
+                                          style: const TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.w700),
+                                        ),
+                                      ),
+                                      Center(
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: <Widget>[
+                                            NetworkImageWithPlaceHolder(
+                                              imageUrl: '$photourl',
+                                              height: 25,
+                                              width: 25,
+                                            ),
+                                            const SizedBox(
+                                              width: 10,
+                                            ),
+                                            Text(
+                                              '$host',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.w500,
+                                                  color: Colors.white
+                                                      .withAlpha(200)),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      Text(
+                                        '$date',
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.w700,
+                                            color: Colors.white),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ]),
+                          ),
+                        )
+                      ],
                       if (widget.post.images?.isNotEmpty ?? false)
                         PostImages(
                           post: widget.post,

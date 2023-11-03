@@ -59,14 +59,24 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
     // if (widget.pos != null) {
     // _createPostController.imageFileList
     //     .addAll(widget.images!.map((String? image) => XFile(image!)));
+
     _createPostController.initializePostEditImage(widget.postDetail?.images);
     // }
   }
 
   @override
   Widget build(BuildContext context) {
+    final Map<String, dynamic> arguments = Get.arguments;
+    final String sharemessage = arguments['sharemessage'] ?? "";
+    final String title = arguments['title'];
+    final String livedata = arguments['livedata'] ?? "";
+
     if (widget.postId != null) {
       _titleCtrl.text = widget.post!;
+    } else {
+      title.isNotEmpty
+          ? _titleCtrl.text = sharemessage + '\n\nTitle: $title '
+          : _titleCtrl.text == '';
     }
     return GetBuilder<CreatePostController>(
       builder: (CreatePostController controller) => WillPopScope(

@@ -239,6 +239,22 @@ class SubscriptionConfirmation extends StatelessWidget {
                                                 )
                                               ],
                                             ),
+                                            const SizedBox(height: 15),
+                                            Row(
+                                              children: <Widget>[
+                                                SvgPicture.asset(
+                                                    'assets/svgs/rankingicon.svg',
+                                                    height: 23),
+                                                const SizedBox(width: 18),
+                                                const Text(
+                                                  'Create Live Events',
+                                                  style: TextStyle(
+                                                      fontSize: 14,
+                                                      fontWeight:
+                                                          FontWeight.w600),
+                                                )
+                                              ],
+                                            ),
                                           ],
                                         ),
                                       )

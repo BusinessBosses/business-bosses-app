@@ -1,13 +1,18 @@
 // ignore_for_file: public_member_api_docs
 
+import 'dart:convert';
+
+import 'package:add_2_calendar/add_2_calendar.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/features/live_event/controller/live_event_controller.dart';
 import 'package:business_bosses_v2/features/live_event/models/events_model.dart';
 import 'package:business_bosses_v2/features/live_event/presentation/create_event.dart';
 import 'package:business_bosses_v2/features/live_event/widgets/call_room.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
+import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -35,36 +40,108 @@ class EventItem extends StatelessWidget {
     final DateTime localEndTime = event.endAt!.toLocal();
 
     final String formattedDate = dateFormat.format(localStartTime);
+
     final String formattedStartTime = timeFormat.format(localStartTime);
     final String formattedEndTime = timeFormat.format(localEndTime);
+
+    Map<String, dynamic> dataa = <String, dynamic>{
+      'title': event.title,
+      'roomId': event.roomId,
+      'date': formattedDate,
+      'starttime': formattedStartTime,
+      'host': event.user!.name,
+      'photourl': event.user!.photoUrl,
+    };
+
+    String? jsonData = jsonEncode(dataa);
 
     return Padding(
       padding: const EdgeInsets.only(left: 15),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          GestureDetector(
-            onTap: () {
-              String message =
-                  'Join The Event \'${event.title!}\' On The Business Bosses App With Event ID: ${event.roomId}';
-              socialShare(message);
-            },
-            child: Container(
-              decoration: const BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(50)),
-                color: backgroundcolorinterface,
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: SvgPicture.asset(
-                  'assets/svgs/share.svg',
-                  height: 15.0,
-                  width: 15.0,
-                  // ignore: deprecated_member_use
-                  color: textColor.withOpacity(1.0),
+          SpeedDial(
+            backgroundColor: backgroundcolorinterface,
+            icon: Icons.share,
+            buttonSize: Size(40, 40),
+            iconTheme: const IconThemeData(color: Colors.black),
+            activeIcon: Icons.close,
+            spacing: 3,
+            childPadding: const EdgeInsets.all(5),
+            spaceBetweenChildren: 4,
+            switchLabelPosition: true,
+            visible: true,
+            direction: SpeedDialDirection.down,
+            closeManually: false,
+            renderOverlay: true,
+            overlayColor: Colors.black,
+            overlayOpacity: 0.8,
+            useRotationAnimation: true,
+            tooltip: 'Open Speed Dial',
+            heroTag: 'speed-dial-hero-tag',
+            elevation: 0.0,
+            animationCurve: Curves.elasticInOut,
+            isOpenOnStart: false,
+            shape: const CircleBorder(),
+            children: [
+              SpeedDialChild(
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: SvgPicture.asset(
+                      'assets/svgs/text.svg',
+                      color: Colors.white,
+                    ),
+                  ),
+                  backgroundColor: Colors.red,
+                  label: 'Post on Business Bosses',
+                  labelStyle: const TextStyle(
+                      fontSize: 18.0, fontWeight: FontWeight.w700),
+                  onTap: () => Get.toNamed(Routes.createPost, arguments: {
+                        'sharemessage':
+                            'Hey there! Join this event on $formattedDate  $formattedStartTime with Room ID: ${event.roomId}',
+                        'title': event.title,
+                        'livedata': jsonData,
+                      })),
+              SpeedDialChild(
+                child: Padding(
+                  padding: const EdgeInsets.all(14.0),
+                  child: SvgPicture.asset(
+                    'assets/svgs/share.svg',
+                    height: 15.0,
+                    width: 15.0,
+                    // ignore: deprecated_member_use
+                    color: textColor.withOpacity(1.0),
+                  ),
                 ),
+                backgroundColor: Colors.white,
+                label: 'Share',
+                labelStyle: const TextStyle(
+                    fontSize: 18.0, fontWeight: FontWeight.w700),
+                onTap: () {
+                  String message =
+                      'Hey there! Join this event on $formattedDate  $formattedStartTime with Room ID: ${event.roomId}';
+                  socialShare(message);
+                },
               ),
-            ),
+              SpeedDialChild(
+                  child: Padding(
+                    padding: const EdgeInsets.all(13.0),
+                    child: SvgPicture.asset(
+                      'assets/svgs/calendar.svg',
+                      color: Colors.black,
+                    ),
+                  ),
+                  backgroundColor: Colors.white,
+                  label: 'Save to Calendar',
+                  labelStyle: const TextStyle(
+                      fontSize: 18.0, fontWeight: FontWeight.w700),
+                  onTap: () {
+                    Add2Calendar.addEvent2Cal(Event(
+                        title: event.title ?? "",
+                        startDate: event.startAt!,
+                        endDate: event.endAt!));
+                  }),
+            ],
           ),
           Expanded(
             child: Container(

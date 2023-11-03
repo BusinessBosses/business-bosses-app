@@ -328,6 +328,22 @@ class _PremiumScreenState extends State<PremiumScreen> {
                                                 )
                                               ],
                                             ),
+                                            const SizedBox(height: 15),
+                                            Row(
+                                              children: <Widget>[
+                                                SvgPicture.asset(
+                                                    'assets/svgs/liveevent.svg',
+                                                    height: 23),
+                                                const SizedBox(width: 18),
+                                                const Text(
+                                                  'Create Live Events',
+                                                  style: TextStyle(
+                                                      fontSize: 14,
+                                                      fontWeight:
+                                                          FontWeight.w600),
+                                                )
+                                              ],
+                                            ),
                                           ],
                                         ),
                                       )
