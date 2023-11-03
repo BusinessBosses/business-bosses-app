@@ -165,4 +165,16 @@ class Validator {
     if (val.length < 2) return 'Invalid value';
     return null;
   }
+
+  static bool isYouTubeLink(String url) {
+    // Regular expression to match YouTube video URLs
+    final RegExp regExp = RegExp(
+        r'^https?://(?:www\.)?youtu\.?be(?:\.com)?/.*(?:\?v=|/embed/|/videos/|/watch\?v=)([\w-]+)');
+
+    if (regExp.hasMatch(url)) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 }

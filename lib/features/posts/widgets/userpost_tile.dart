@@ -78,8 +78,8 @@ class _PostTileState extends State<PostTile> {
   }
 
   void connectToUser() async {
-    print(
-        'This are my connected users ${profileController.myProfile.connecteds}');
+    // print(
+    //     'This are my connected users ${profileController.myProfile.connecteds}');
     final int checkConnected = profileController.myProfile.connecteds == null
         ? -1
         : profileController.myProfile.connecteds!
@@ -618,8 +618,8 @@ class _PostTileState extends State<PostTile> {
                       if (widget.post.images?.isNotEmpty ?? false)
                         PostImages(
                           post: widget.post,
-                          isVideo: widget.post.videoUrl != null &&
-                                  widget.post.videoUrl != ''
+                          isYt: widget.post.ytUrl != null &&
+                                  widget.post.ytUrl != ''
                               ? true
                               : false,
                         ),

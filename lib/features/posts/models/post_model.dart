@@ -13,6 +13,7 @@ class PostModel {
   final List<CommentModel>? comments;
   final UserModel? user;
   final String? videoUrl;
+  final String? ytUrl;
   final bool isRanked;
   int? views;
   final bool? promote;
@@ -29,6 +30,7 @@ class PostModel {
     this.comments,
     this.user,
     this.videoUrl,
+    this.ytUrl,
     required this.isRanked,
     this.views = 0,
     this.promote,
@@ -47,6 +49,7 @@ class PostModel {
     List<CommentModel>? comments,
     UserModel? user,
     String? videoUrl,
+    String? ytUrl,
     bool? isRanked,
     int? views,
     bool? promote,
@@ -64,6 +67,7 @@ class PostModel {
       comments: comments ?? this.comments,
       user: user ?? this.user,
       videoUrl: videoUrl ?? this.videoUrl,
+      ytUrl: ytUrl ?? this.ytUrl,
       isRanked: isRanked ?? this.isRanked,
       views: views ?? this.views,
       promote: promote ?? this.promote,
@@ -84,6 +88,7 @@ class PostModel {
       'comments': comments?.map((CommentModel x) => x.toMap()).toList(),
       'user': user?.toMap(),
       'videoUrl': videoUrl,
+      'ytUrl': ytUrl,
       'isRanked': isRanked,
       'views': views,
       'promote': promote,
@@ -116,6 +121,7 @@ class PostModel {
           ? UserModel.fromMap(map['user'] as Map<String, dynamic>)
           : null,
       videoUrl: map['videoUrl'] != null ? map['videoUrl'] as String : null,
+      ytUrl: map['ytUrl'] != null ? map['ytUrl'] as String : null,
       isRanked: map['isRanked'] as bool,
       views: map['views'] != null ? map['views'] as int : null,
       promote: map['promote'] != null ? map['promote'] as bool : null,
