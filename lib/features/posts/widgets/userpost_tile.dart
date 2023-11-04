@@ -127,14 +127,10 @@ class _PostTileState extends State<PostTile> {
 
   @override
   Widget build(BuildContext context) {
-    final fullString = widget.post.title;
     String? title, roomid, date, starttime, host, photourl;
-    if (fullString.contains("lvdtarg123")) {
-      final startIndex = fullString.indexOf("lvdtarg123");
-      final jsonSubstring =
-          fullString.substring(startIndex + "lvdtarg123".length);
+    if (widget.post.livedata!.isNotEmpty) {
       try {
-        final jsonData = jsonDecode(jsonSubstring);
+        final jsonData = jsonDecode(widget.post.livedata.toString());
 
         title = jsonData['title'];
         roomid = jsonData['roomId'];
@@ -477,10 +473,7 @@ class _PostTileState extends State<PostTile> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             DetectableText(
-                              text: widget.post.title.contains('lvdtarg123')
-                                  ? widget.post.title.substring(0,
-                                      widget.post.title.indexOf('lvdtarg123'))
-                                  : widget.post.title,
+                              text: widget.post.title,
                               detectionRegExp: detectionRegExp(hashtag: false)!,
                               detectedStyle: bodyText2.copyWith(
                                 color: Colors.blue,
@@ -502,7 +495,7 @@ class _PostTileState extends State<PostTile> {
                             const SizedBox(height: 10),
                           ],
                         ),
-                      if (widget.post.title.contains('lvdtarg123')) ...<Widget>[
+                      if (widget.post.livedata!.isNotEmpty) ...<Widget>[
                         GestureDetector(
                           onTap: () {
                             Add2Calendar.addEvent2Cal(Event(
