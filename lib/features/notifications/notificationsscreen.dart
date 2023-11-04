@@ -155,7 +155,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                                         .notifications[i].title
                                                         .contains('New Message')
                                                     ? print(controller
-                                                        .notifications[i])
+                                                        .notifications[i].user)
                                                     : print(controller
                                                         .notifications[i]);
                                               },

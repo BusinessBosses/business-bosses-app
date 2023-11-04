@@ -380,23 +380,23 @@ class PostImages extends StatelessWidget {
                   ),
                 ),
               ),
-            if (!isYt)
-              Positioned(
-                bottom: 10,
-                right: 10,
-                child: Container(
-                    decoration: BoxDecoration(
-                        color: Colors.black.withOpacity(0.5),
-                        borderRadius: BorderRadius.circular(6)),
-                    child: const Padding(
-                      padding: EdgeInsets.only(
-                          top: 3.0, bottom: 3, left: 6, right: 6),
-                      child: Text(
-                        'time',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    )),
-              )
+            // if (!isYt)
+            //   Positioned(
+            //     bottom: 10,
+            //     right: 10,
+            //     child: Container(
+            //         decoration: BoxDecoration(
+            //             color: Colors.black.withOpacity(0.5),
+            //             borderRadius: BorderRadius.circular(6)),
+            //         child: const Padding(
+            //           padding: EdgeInsets.only(
+            //               top: 3.0, bottom: 3, left: 6, right: 6),
+            //           child: Text(
+            //             'time',
+            //             style: TextStyle(color: Colors.white),
+            //           ),
+            //         )),
+            //   )
           ],
         ),
         // SizedBox(height: 4.0),

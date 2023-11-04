@@ -422,7 +422,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                               //       DateTime.now().millisecondsSinceEpoch,
                               // }, _profileController);
                               await controller.createPost(<String, dynamic>{
-                                'livedata': title.isNotEmpty ? livedata : "",
+                                'livedata': livedata,
                                 'title': _titleCtrl.text.trim(),
                                 'ytUrl': _ytUrl,
                                 'images': _ytUrl != null && _ytUrl != ''

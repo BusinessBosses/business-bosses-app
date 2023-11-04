@@ -130,7 +130,7 @@ class _PostTileState extends State<PostTile> {
     String? title, roomid, date, starttime, host, photourl;
     if (widget.post.livedata!.isNotEmpty) {
       try {
-        final jsonData = jsonDecode(widget.post.livedata.toString());
+        final jsonData = jsonDecode(widget.post.livedata!.toString());
 
         title = jsonData['title'];
         roomid = jsonData['roomId'];
@@ -595,7 +595,7 @@ class _PostTileState extends State<PostTile> {
                                         ),
                                       ),
                                       Text(
-                                        '$date',
+                                        '$date, $starttime',
                                         style: const TextStyle(
                                             fontWeight: FontWeight.w700,
                                             color: Colors.white),
