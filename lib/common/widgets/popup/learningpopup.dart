@@ -73,10 +73,16 @@ class LearningPopUp extends StatelessWidget {
                   const SizedBox(
                     width: 5,
                   ),
-                  const Text(
-                    'To sell your products and services, list on Marketplace',
-                    style: TextStyle(color: primaryColorLT),
-                  )
+                  const Expanded(
+                    child: Text(
+                      'To sell your products and services, list on Marketplace',
+                      style: TextStyle(color: primaryColorLT),
+                      overflow: TextOverflow
+                          .visible, // or TextOverflow.ellipsis if you want an ellipsis when it overflows
+                      softWrap:
+                          true, // This allows the text to wrap to the next line
+                    ),
+                  ),
                 ],
               ),
             ),
