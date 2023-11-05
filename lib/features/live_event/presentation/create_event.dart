@@ -40,12 +40,14 @@ class _CreateEventState extends State<CreateEvent> {
 
   String? roomID;
   File? _selectedImage;
+  String? updateImage;
 
   @override
   Widget build(BuildContext context) {
     if (widget.event != null) {
       setState(() {
         roomID = widget.event!.roomId;
+        updateImage = widget.event!.image;
       });
     } else {
       setState(() {
@@ -338,7 +340,7 @@ class _CreateEventState extends State<CreateEvent> {
                     'endAt': formattedEndDateTime,
                     'startTime': '00:00:00',
                     'user': profileController.myProfile.toMap(),
-                    'photourl': imageUrl,
+                    'image': imageUrl,
                   };
 
                   Map<String, dynamic> dataa = <String, dynamic>{
