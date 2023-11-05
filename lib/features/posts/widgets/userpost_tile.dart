@@ -128,7 +128,7 @@ class _PostTileState extends State<PostTile> {
   @override
   Widget build(BuildContext context) {
     String? title, roomid, date, starttime, host, photourl;
-    if (widget.post.livedata!.isNotEmpty) {
+    if (widget.post.livedata != null && widget.post.livedata!.isNotEmpty) {
       try {
         final jsonData = jsonDecode(widget.post.livedata.toString());
 
@@ -495,7 +495,8 @@ class _PostTileState extends State<PostTile> {
                             const SizedBox(height: 10),
                           ],
                         ),
-                      if (widget.post.livedata!.isNotEmpty) ...<Widget>[
+                      if (widget.post.livedata != null &&
+                          widget.post.livedata!.isNotEmpty) ...<Widget>[
                         GestureDetector(
                           onTap: () {
                             Add2Calendar.addEvent2Cal(Event(
