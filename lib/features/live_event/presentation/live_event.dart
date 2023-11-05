@@ -122,42 +122,38 @@ class _LiveEventState extends State<LiveEvent> {
                                       softWrap: true,
                                     ),
                                   ),
-                                  !profileController.myProfile.isSubscribed
-                                      ? Positioned(
-                                          bottom: 10,
-                                          right: 35,
-                                          child: ElevatedButton(
-                                            onPressed: () => Navigator.push(
-                                              context,
-                                              // ignore: always_specify_types
-                                              MaterialPageRoute(
-                                                builder:
-                                                    (BuildContext context) =>
-                                                        const CreateEvent(),
-                                              ),
-                                            ),
-                                            style: ElevatedButton.styleFrom(
-                                              backgroundColor: Colors.white,
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                horizontal: 20,
-                                                vertical: 10,
-                                              ),
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(25.0),
-                                              ),
-                                            ),
-                                            child: const Text(
-                                              'Create Live Event',
-                                              style: TextStyle(
-                                                color: Colors.red,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                          ),
-                                        )
-                                      : Container(),
+                                  Positioned(
+                                    bottom: 10,
+                                    right: 35,
+                                    child: ElevatedButton(
+                                      onPressed: () => Navigator.push(
+                                        context,
+                                        // ignore: always_specify_types
+                                        MaterialPageRoute(
+                                          builder: (BuildContext context) =>
+                                              const CreateEvent(),
+                                        ),
+                                      ),
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: Colors.white,
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 20,
+                                          vertical: 10,
+                                        ),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(25.0),
+                                        ),
+                                      ),
+                                      child: const Text(
+                                        'Create Live Event',
+                                        style: TextStyle(
+                                          color: Colors.red,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
                                 ],
                               ),
                               Container(

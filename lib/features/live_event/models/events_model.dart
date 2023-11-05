@@ -11,6 +11,7 @@ class EventModel {
   final String? startTime;
   final bool? status;
   final UserModel? user;
+  final String? image;
   EventModel({
     this.id,
     required this.roomId,
@@ -20,6 +21,7 @@ class EventModel {
     required this.startTime,
     this.status,
     this.user,
+    this.image,
   });
 
   EventModel copyWith({
@@ -31,6 +33,7 @@ class EventModel {
     String? startTime,
     bool? status,
     UserModel? user,
+    String? image,
   }) {
     return EventModel(
       id: id ?? this.id,
@@ -41,6 +44,7 @@ class EventModel {
       startTime: startTime ?? this.startTime,
       status: status ?? this.status,
       user: user ?? this.user,
+      image: image ?? this.image,
     );
   }
 
@@ -54,6 +58,7 @@ class EventModel {
       'startTime': startTime,
       'status': status,
       'user': user,
+      'image': image,
     };
   }
 
@@ -72,6 +77,7 @@ class EventModel {
       user: map['user'] != null
           ? UserModel.fromMap(map['user'] as Map<String, dynamic>)
           : null,
+      image: map['image'] != null ? map['image'] as String : null,
     );
   }
 }
