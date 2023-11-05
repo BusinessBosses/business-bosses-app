@@ -74,7 +74,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
       _titleCtrl.text = widget.post!;
     } else {
       title.isNotEmpty
-          ? _titleCtrl.text = sharemessage + '\n\nTitle: $title '
+          ? _titleCtrl.text = sharemessage + '\n\nTitle: $title'
           : _titleCtrl.text == '';
     }
     return GetBuilder<CreatePostController>(

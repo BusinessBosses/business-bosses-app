@@ -16,6 +16,7 @@ import 'package:detectable_text_field/widgets/detectable_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:socket_io_client/socket_io_client.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../../action/action.dart';
@@ -127,7 +128,7 @@ class _PostTileState extends State<PostTile> {
 
   @override
   Widget build(BuildContext context) {
-    String? title, roomid, date, starttime, host, photourl;
+    String? title, roomid, date, starttime, host, photourl, startat, endat;
     if (widget.post.livedata != null && widget.post.livedata!.isNotEmpty) {
       try {
         final jsonData = jsonDecode(widget.post.livedata!.toString());
@@ -138,12 +139,8 @@ class _PostTileState extends State<PostTile> {
         starttime = jsonData['starttime'];
         host = jsonData['host'];
         photourl = jsonData['photourl'];
-
-        final Event event = Event(
-          title: '$title',
-          startDate: DateTime(3),
-          endDate: DateTime(4),
-        );
+        startat = jsonData['startat'];
+        endat = jsonData['endat'];
       } catch (e) {}
     } else {}
 
@@ -501,9 +498,8 @@ class _PostTileState extends State<PostTile> {
                           onTap: () {
                             Add2Calendar.addEvent2Cal(Event(
                                 title: '$title',
-                                startDate: DateTime.now(),
-                                endDate: DateTime.now()
-                                    .add(const Duration(minutes: 30))));
+                                startDate: DateTime.parse(startat!),
+                                endDate: DateTime.parse(endat!)));
                           },
                           child: Container(
                             decoration: BoxDecoration(

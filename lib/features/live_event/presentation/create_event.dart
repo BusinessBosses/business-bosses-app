@@ -353,6 +353,8 @@ class _CreateEventState extends State<CreateEvent> {
                     'roomId': roomID,
                     'date': formattedDate,
                     'starttime': formattedStartTime,
+                    'startat': startAtt.toString(),
+                    'endat': endAtt.toString(),
                     'host': profileController.myProfile.name,
                     'photourl': profileController.myProfile.photoUrl,
                   };
