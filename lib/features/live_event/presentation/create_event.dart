@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs
 
 import 'dart:io';
+import 'dart:convert';
 import 'dart:math';
 
 import 'package:business_bosses_v2/action/action.dart';
@@ -36,6 +37,7 @@ class _CreateEventState extends State<CreateEvent> {
   DateTime endAt = DateTime.now();
   DateTime selectedDateTime = DateTime.now();
   final LiveController liveEventController = Get.find();
+
   String? roomID;
   File? _selectedImage;
 
@@ -54,6 +56,7 @@ class _CreateEventState extends State<CreateEvent> {
 
     // Format the date
     final String formattedDate = dateFormat.format(startAt);
+
     // Here, you can define the content of your bottom sheet.
     return Scaffold(
       backgroundColor: Colors.white,
@@ -286,6 +289,7 @@ class _CreateEventState extends State<CreateEvent> {
                   final DateTime endAtt = endAt.toUtc();
                   final DateFormat dateFormat =
                       DateFormat('yyyy-MM-dd HH:mm:ss.SSSSSS');
+                  final DateFormat timeFormat = DateFormat('h:mm a');
 
                   // Format the UTC DateTime to the desired string format
                   String formattedEndDateTime = dateFormat.format(endAtt);
@@ -293,6 +297,7 @@ class _CreateEventState extends State<CreateEvent> {
 
                   // Format the UTC DateTime to the desired string format
                   String formattedStartDateTime = dateFormat.format(startAtt);
+                  String formattedStartTime = timeFormat.format(startAtt);
 
                   if (titleController.text.isEmpty) {
                     showSnackBar(
@@ -333,18 +338,39 @@ class _CreateEventState extends State<CreateEvent> {
                     'endAt': formattedEndDateTime,
                     'startTime': '00:00:00',
                     'user': profileController.myProfile.toMap(),
-                    'image': imageUrl,
+                    'photourl': imageUrl,
                   };
+
+                  Map<String, dynamic> dataa = <String, dynamic>{
+                    'title': titleController.text,
+                    'roomId': roomID,
+                    'date': formattedDate,
+                    'starttime': formattedStartTime,
+                    'host': profileController.myProfile.name,
+                    'photourl': profileController.myProfile.photoUrl,
+                  };
+
+                  String? jsonData = jsonEncode(dataa);
 
                   if (widget.event != null) {
                     data['id'] = widget.event?.id;
                   }
                   if (widget.event != null) {
                     liveEventController.updateEvent(data);
-                    Get.off(() => ConfirmCreateEvent(roomID: roomID!));
+                    Get.off(() => ConfirmCreateEvent(
+                          roomID: roomID!,
+                          time: '$formattedDate  $formattedStartTime ',
+                          title: titleController.text,
+                          livedata: jsonData,
+                        ));
                   } else {
                     liveEventController.createEvent(data);
-                    Get.off(() => ConfirmCreateEvent(roomID: roomID!));
+                    Get.off(() => ConfirmCreateEvent(
+                          roomID: roomID!,
+                          time: '$formattedDate  $formattedStartTime ',
+                          title: titleController.text,
+                          livedata: jsonData,
+                        ));
                   }
                 },
                 child: Text(

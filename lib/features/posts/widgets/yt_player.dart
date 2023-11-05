@@ -1,88 +1,10 @@
-// import 'package:business_bosses_v2/features/posts/models/post_model.dart';
-// import 'package:flutter/material.dart';
-// import 'package:youtube_player_flutter/youtube_player_flutter.dart';
-
-// class YoutubePlay extends StatefulWidget {
-//   const YoutubePlay({super.key, required this.post});
-//   final PostModel post;
-//   @override
-//   State<YoutubePlay> createState() => _YoutubePlayState();
-// }
-
-// class _YoutubePlayState extends State<YoutubePlay> {
-//   // late String videoUrl = _post.ytUrl as String;
-//   final String videoUrl = "https://www.youtube.com/watch?v=YMx8Bbev6T4";
-//   late PostModel _post;
-
-//   late YoutubePlayerController _controller;
-
-//   @override
-//   void initState() {
-//     // TODO: implement initState
-//     super.initState();
-//     _post = widget.post;
-//     final videoId = YoutubePlayer.convertUrlToId(videoUrl);
-//     _controller = YoutubePlayerController(
-//       initialVideoId: videoId!,
-//       flags: const YoutubePlayerFlags(
-//         mute: false,
-//         autoPlay: false,
-//         disableDragSeek: false,
-//         loop: false,
-//         isLive: false,
-//         forceHD: false,
-//         enableCaption: true,
-//       ),
-//     );
-//   }
-
-//   @override
-//   void deactivate() {
-//     // Pauses video while navigating to next page.
-//     _controller.pause();
-//     super.deactivate();
-//   }
-
-//   @override
-//   void dispose() {
-//     _controller.dispose();
-//     super.dispose();
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       body: Container(
-//         height: 240,
-//         child: YoutubePlayer(
-//           controller: _controller,
-//           showVideoProgressIndicator: true,
-//           onReady: () => debugPrint("=======Ready"),
-//           bottomActions: [
-//             CurrentPosition(),
-//             ProgressBar(
-//               isExpanded: true,
-//               colors: const ProgressBarColors(
-//                 playedColor: Colors.red,
-//                 handleColor: Colors.redAccent,
-//               ),
-//             ),
-//             const PlaybackSpeedButton()
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
-
 import 'package:flutter/material.dart';
 
 import 'package:flutter/services.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
-import 'package:visibility_detector/visibility_detector.dart';
 
 class YoutubeVideo extends StatefulWidget {
-  String youtubeUrl;
+  final String youtubeUrl;
 
   YoutubeVideo(this.youtubeUrl);
 
@@ -91,10 +13,7 @@ class YoutubeVideo extends StatefulWidget {
 }
 
 class _YoutubeVideoState extends State<YoutubeVideo> {
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
   late YoutubePlayerController _controller;
-  late TextEditingController _idController;
-  late TextEditingController _seekToController;
   bool _isPlayerReady = false;
   late String videoId;
 
@@ -106,7 +25,7 @@ class _YoutubeVideoState extends State<YoutubeVideo> {
       initialVideoId: videoId,
       flags: const YoutubePlayerFlags(
         mute: false,
-        autoPlay: false,
+        autoPlay: true,
         disableDragSeek: false,
         loop: false,
         isLive: false,
@@ -114,8 +33,6 @@ class _YoutubeVideoState extends State<YoutubeVideo> {
         enableCaption: true,
       ),
     )..addListener(listener);
-    _idController = TextEditingController();
-    _seekToController = TextEditingController();
   }
 
   void listener() {
@@ -126,7 +43,7 @@ class _YoutubeVideoState extends State<YoutubeVideo> {
 
   @override
   void deactivate() {
-    // Pauses video while navigating to next page.
+    // Pauses video while navigating to the next page.
     _controller.pause();
     super.deactivate();
   }
@@ -134,65 +51,94 @@ class _YoutubeVideoState extends State<YoutubeVideo> {
   @override
   void dispose() {
     _controller.dispose();
-    _idController.dispose();
-    _seekToController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 200,
-      color: Colors.blue,
-      child: VisibilityDetector(
-        key: const Key("unique key"),
-        onVisibilityChanged: (info) {
-          if (info.visibleFraction == 0) {
-            _controller.pause();
-          } else {
-            _controller.value.isPlaying
-                ? _controller.play()
-                : _controller.pause();
-          }
-        },
-        child: YoutubePlayerBuilder(
-          onExitFullScreen: () {
-            // The player forces portraitUp after exiting fullscreen. This overrides the behaviour.
-            SystemChrome.setPreferredOrientations(DeviceOrientation.values);
-          },
-          player: YoutubePlayer(
-            controller: _controller,
-            showVideoProgressIndicator: true,
-            progressIndicatorColor: Colors.blueAccent,
-            topActions: <Widget>[
-              const SizedBox(width: 8.0),
-              Expanded(
-                child: Text(
-                  _controller.metadata.title,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 18.0,
-                  ),
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 1,
-                ),
-              ),
-            ],
-            onReady: () {
-              _controller.addListener(listener);
-            },
-            onEnded: (data) {},
-          ),
-          builder: (context, player) => Scaffold(
-            key: _scaffoldKey,
-            body: ListView(
+    return OrientationBuilder(
+      builder: (context, orientation) {
+        if (orientation == Orientation.portrait) {
+          SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+        } else {
+          SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+        }
+        return Scaffold(
+          backgroundColor: Colors.black,
+          body: SafeArea(
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                player,
+                if (orientation == Orientation.portrait)
+                  const SizedBox(
+                    height: 50,
+                    child: BackButton(
+                      color: Colors.white,
+                    ),
+                  ),
+                Expanded(
+                  child: Center(
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                        left: 8,
+                        right: 8,
+                      ),
+                      child: YoutubePlayer(
+                        showVideoProgressIndicator: true,
+                        onEnded: (metaData) {},
+                        controller: _controller,
+                        aspectRatio: 1.5,
+                        progressIndicatorColor: Colors.red,
+                        bottomActions: [
+                          const SizedBox(width: 14.0),
+                          CurrentPosition(),
+                          const SizedBox(width: 8.0),
+                          ProgressBar(
+                            isExpanded: true,
+                            colors: const ProgressBarColors(),
+                          ),
+                          RemainingDuration(),
+                          const PlaybackSpeedButton(),
+                          IconButton(
+                            icon: Icon(
+                              orientation == Orientation.landscape
+                                  ? Icons.fullscreen_exit
+                                  : Icons.fullscreen,
+                              color: Colors.white,
+                            ),
+                            onPressed: () {
+                              if (orientation == Orientation.landscape) {
+                                portraitModeOnly();
+                              } else {
+                                landscapeModeOnly();
+                              }
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
-        ),
-      ),
+        );
+      },
     );
+  }
+
+  void portraitModeOnly() {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+  }
+
+  void landscapeModeOnly() {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight,
+    ]);
   }
 }

@@ -692,7 +692,9 @@ class _SellerReviewScreenState extends State<SellerReviewScreen> {
                                       '${_profileController.myProfile.username} has reviewed your store',
                                   'timestamp':
                                       DateTime.now().millisecondsSinceEpoch,
-                                  'notificationType': 'Review'
+                                  'notificationType': 'Review',
+                                  'username': widget.user.username,
+                                  'user': widget.user,
                                 },
                               );
                               await processData();

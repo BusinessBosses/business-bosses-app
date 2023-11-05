@@ -1,8 +1,10 @@
 import 'package:business_bosses_v2/common/widgets/safety_model.dart';
+import 'package:business_bosses_v2/features/chat/chat_room_screen.dart';
 import 'package:business_bosses_v2/features/notifications/controller/notification_controller.dart';
 import 'package:business_bosses_v2/features/notifications/widgets/nonotificationfoundwidget.dart';
 import 'package:business_bosses_v2/features/notifications/widgets/notification_item.dart';
 import 'package:business_bosses_v2/features/notifications/widgets/quotewidget.dart';
+import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
@@ -148,7 +150,15 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                               ),
                                             NotificationItem(
                                               controller.notifications[i],
-                                              onTap: () {},
+                                              onTap: () {
+                                                controller
+                                                        .notifications[i].title
+                                                        .contains('New Message')
+                                                    ? print(controller
+                                                        .notifications[i])
+                                                    : print(controller
+                                                        .notifications[i]);
+                                              },
                                             )
                                           ],
                                         );

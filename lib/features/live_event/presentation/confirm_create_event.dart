@@ -3,6 +3,7 @@
 import 'package:business_bosses_v2/common/widgets/buttons/custom_button.dart';
 import 'package:business_bosses_v2/features/live_event/controller/live_event_controller.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
+import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -13,7 +14,12 @@ import '../../../common/dialogs/snackbar.dart';
 
 class ConfirmCreateEvent extends StatefulWidget {
   final String roomID;
-  const ConfirmCreateEvent({super.key, required this.roomID});
+  final String? time;
+  final String? title;
+  final String? livedata;
+
+  const ConfirmCreateEvent(
+      {super.key, required this.roomID, this.time, this.title, this.livedata});
 
   @override
   State<ConfirmCreateEvent> createState() => _ConfirmCreateEventState();
@@ -24,8 +30,20 @@ class _ConfirmCreateEventState extends State<ConfirmCreateEvent> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text('Event Created'),
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
+        ),
+        centerTitle: true,
+        title: const Text(
+          'Event Created',
+          textAlign: TextAlign.center,
+          style: TextStyle(fontSize: 20),
+        ),
       ),
       body: Column(
         children: <Widget>[
@@ -48,38 +66,93 @@ class _ConfirmCreateEventState extends State<ConfirmCreateEvent> {
               ),
             ),
           ),
+          const SizedBox(
+            height: 20,
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              IconButton(
-                icon: const Icon(Icons.copy),
-                onPressed: () {
-                  // Copy the generated room ID to the clipboard
+              GestureDetector(
+                onTap: () {
                   final String generatedRoomID = widget.roomID;
                   Clipboard.setData(ClipboardData(text: generatedRoomID));
                   showSnackbar(message: 'Room ID copied to clipboard');
                 },
+                child: Container(
+                  decoration: BoxDecoration(
+                      color: backgroundcolorinterface,
+                      borderRadius: BorderRadius.circular(50)),
+                  child: const Padding(
+                    padding: EdgeInsets.only(
+                        left: 15.0, right: 15, top: 8, bottom: 8),
+                    child: Row(
+                      children: [
+                        Text('Copy ID'),
+                        SizedBox(
+                          width: 5,
+                        ),
+                        Icon(Icons.copy)
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(
+                width: 5,
               ),
               GestureDetector(
                 onTap: () {
                   String message =
-                      'Join My Event On The Business Bosses App With Room ID: ${widget.roomID}';
+                      'Join this Event On The Business Bosses App With Room ID: ${widget.roomID}';
                   socialShare(message);
                 },
-                child: SvgPicture.asset(
-                  'assets/svgs/share.svg',
-                  height: 15.0,
-                  width: 15.0,
-                  // ignore: deprecated_member_use
-                  color: Colors.black,
+                child: Container(
+                  decoration: BoxDecoration(
+                      color: backgroundcolorinterface,
+                      borderRadius: BorderRadius.circular(50)),
+                  child: const Padding(
+                    padding: EdgeInsets.only(
+                        left: 15.0, right: 15, top: 8, bottom: 8),
+                    child: Row(
+                      children: <Widget>[
+                        Text('Share ID'),
+                        SizedBox(
+                          width: 5,
+                        ),
+                        Icon(Icons.share)
+                      ],
+                    ),
+                  ),
                 ),
               ),
             ],
+          ),
+          const SizedBox(
+            height: 30,
           ),
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: CustomButton(
               buttonType: ButtonType.elevated,
+              onPressed: () {
+                String sharemessage =
+                    'Hey there! I\'ve got a live event coming up on ${widget.time} Join with Room ID: ${widget.roomID}';
+                String title = '${widget.title}';
+                String livedata = '${widget.livedata}';
+
+                Get.toNamed(Routes.createPost, arguments: {
+                  'sharemessage': sharemessage,
+                  'title': title,
+                  'livedata': livedata,
+                });
+              },
+              child: const Text('Post on Business Bosses'),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 16, right: 16, top: 5),
+            child: CustomButton(
+              buttonType: ButtonType.outline,
               onPressed: () {
                 liveController.initEvents();
                 Get.toNamed(Routes.liveEvents);

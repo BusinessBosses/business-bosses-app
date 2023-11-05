@@ -1,5 +1,6 @@
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/features/posts/widgets/video_screen.dart';
+import 'package:business_bosses_v2/features/posts/widgets/youtube_display.dart';
 import 'package:business_bosses_v2/features/posts/widgets/yt_player.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
@@ -313,24 +314,24 @@ class PostImages extends StatelessWidget {
           children: <Widget>[
             GestureDetector(
               onTap: () {
-                // if (isYt) {
-                //   Navigator.of(context).push(
-                //     MaterialPageRoute(
-                //       builder: (BuildContext context) => YoutubeVideo(
-                //         post.ytUrl!,
-                //       ),
-                //     ),
-                //   );
-                // } else {
-                //   Navigator.of(context).push(
-                //     MaterialPageRoute(
-                //       builder: (BuildContext context) => ImagesViewerScreen(
-                //         urls: post.images,
-                //         text: post.title,
-                //       ),
-                //     ),
-                //   );
-                // }
+                if (isYt) {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (BuildContext context) => YoutubeVideo(
+                        post.ytUrl!,
+                      ),
+                    ),
+                  );
+                } else {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (BuildContext context) => ImagesViewerScreen(
+                        urls: post.images,
+                        text: post.title,
+                      ),
+                    ),
+                  );
+                }
                 if (!isYt) {
                   Navigator.of(context).push(
                     MaterialPageRoute(
@@ -343,7 +344,7 @@ class PostImages extends StatelessWidget {
                 }
               },
               child: isYt
-                  ? YoutubeVideo(post.ytUrl!)
+                  ? YoutubeDisplay(post.ytUrl!)
                   : Padding(
                       padding: const EdgeInsets.only(left: 0, right: 0),
                       child: NetworkImageWithPlaceHolder(
@@ -357,28 +358,29 @@ class PostImages extends StatelessWidget {
                     ),
             ),
             if (isYt)
-              // Positioned(
-              //   top: 0,
-              //   bottom: 0,
-              //   right: 0,
-              //   left: 0,
-              //   child: GestureDetector(
-              //     onTap: () {
-              //       // Navigator.of(context).push(
-              //       //   MaterialPageRoute(
-              //       //     builder: (BuildContext context) => YoutubeVideo(
-              //       //       post.ytUrl!,
-              //       //     ),
-              //       //   ),
-              //       // );
-              //     },
-              //     child: Icon(
-              //       Icons.play_circle_outlined,
-              //       color: Colors.black.withOpacity(0.5),
-              //       size: 48,
-              //     ),
-              //   ),
-              // ),
+              Positioned(
+                top: 0,
+                bottom: 0,
+                right: 0,
+                left: 0,
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (BuildContext context) => YoutubeVideo(
+                          post.ytUrl!,
+                        ),
+                      ),
+                    );
+                  },
+                  child: Icon(
+                    Icons.play_circle_outlined,
+                    color: Colors.black.withOpacity(0.5),
+                    size: 48,
+                  ),
+                ),
+              ),
+            if (!isYt)
               Positioned(
                 bottom: 10,
                 right: 10,
