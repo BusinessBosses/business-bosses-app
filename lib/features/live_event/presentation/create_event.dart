@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:business_bosses_v2/action/action.dart';
+import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/features/live_event/models/events_model.dart';
 import 'package:business_bosses_v2/features/live_event/presentation/confirm_create_event.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
@@ -254,13 +255,15 @@ class _CreateEventState extends State<CreateEvent> {
                   ],
                 ),
               ),
-            if (_selectedImage != null)
+            if (_selectedImage != null || updateImage != null)
               Stack(
                 children: <Widget>[
                   SizedBox(
                     width: 100, // Adjust the width as needed
                     height: 100, // Adjust the height as needed
-                    child: Image.file(_selectedImage!),
+                    child: updateImage == null
+                        ? Image.file(_selectedImage!)
+                        : NetworkImageWithPlaceHolder(imageUrl: updateImage),
                   ),
                   Positioned(
                     top: 25,
@@ -332,6 +335,8 @@ class _CreateEventState extends State<CreateEvent> {
                     if (response['success']) {
                       imageUrl = response['fileUrl'];
                     }
+                  } else if (updateImage != null) {
+                    imageUrl = updateImage;
                   }
                   Map<String, dynamic> data = <String, dynamic>{
                     'title': titleController.text,
@@ -453,6 +458,7 @@ class _CreateEventState extends State<CreateEvent> {
   void _removeImage() {
     setState(() {
       _selectedImage = null;
+      updateImage = null;
     });
   }
 
