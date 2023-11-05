@@ -136,7 +136,7 @@ class _ConfirmCreateEventState extends State<ConfirmCreateEvent> {
               buttonType: ButtonType.elevated,
               onPressed: () {
                 String sharemessage =
-                    'Hey there! I\'ve got a live event coming up on ${widget.time} Join with Room ID: ${widget.roomID}';
+                    'Hey there! Join this event on ${widget.time} with Room ID: ${widget.roomID}';
                 String title = '${widget.title}';
                 String livedata = '${widget.livedata}';
 
