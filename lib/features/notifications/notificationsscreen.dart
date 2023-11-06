@@ -154,10 +154,20 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                                 controller
                                                         .notifications[i].title
                                                         .contains('New Message')
-                                                    ? print(controller
-                                                        .notifications[i])
-                                                    : print(controller
-                                                        .notifications[i]);
+                                                    ? Get.to(
+                                                        () =>
+                                                            const ChatRoomScreen(
+                                                              frommarketplace:
+                                                                  false,
+                                                            ),
+                                                        arguments: controller
+                                                            .notifications[i]
+                                                            .user!)
+                                                    : Get.toNamed(
+                                                        Routes.publicProfile,
+                                                        arguments: controller
+                                                            .notifications[i]
+                                                            .user!);
                                               },
                                             )
                                           ],

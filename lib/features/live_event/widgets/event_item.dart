@@ -51,6 +51,8 @@ class EventItem extends StatelessWidget {
       'starttime': formattedStartTime,
       'host': event.user!.name,
       'photourl': event.user!.photoUrl,
+      'startat': event.startAt.toString(),
+      'endat': event.endAt.toString(),
     };
 
     String? jsonData = jsonEncode(dataa);

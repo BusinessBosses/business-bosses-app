@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:flutter/services.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import 'package:visibility_detector/visibility_detector.dart';
@@ -49,7 +48,7 @@ class _YoutubeDisplayState extends State<YoutubeDisplay> {
 
   @override
   void deactivate() {
-    // Pauses video while navigating to next page.
+    // Pauses video while navigating to the next page.
     _controller.pause();
     super.deactivate();
   }
@@ -65,8 +64,11 @@ class _YoutubeDisplayState extends State<YoutubeDisplay> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(50), // Adjust the radius as needed
+        color: Colors.blue,
+      ),
       height: 200,
-      color: Colors.blue,
       child: VisibilityDetector(
         key: const Key("unique key"),
         onVisibilityChanged: (info) {
@@ -78,40 +80,45 @@ class _YoutubeDisplayState extends State<YoutubeDisplay> {
                 : _controller.pause();
           }
         },
-        child: YoutubePlayerBuilder(
-          onExitFullScreen: () {
-            // The player forces portraitUp after exiting fullscreen. This overrides the behaviour.
-            SystemChrome.setPreferredOrientations(DeviceOrientation.values);
-          },
-          player: YoutubePlayer(
-            controller: _controller,
-            showVideoProgressIndicator: true,
-            progressIndicatorColor: Colors.blueAccent,
-            topActions: <Widget>[
-              const SizedBox(width: 8.0),
-              Expanded(
-                child: Text(
-                  _controller.metadata.title,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 18.0,
-                  ),
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 1,
-                ),
-              ),
-            ],
-            onReady: () {
-              _controller.addListener(listener);
+        child: ClipRRect(
+          // Use ClipRRect to round the player
+          borderRadius:
+              BorderRadius.circular(10), // Adjust the radius as needed
+          child: YoutubePlayerBuilder(
+            onExitFullScreen: () {
+              // The player forces portraitUp after exiting fullscreen. This overrides the behavior.
+              SystemChrome.setPreferredOrientations(DeviceOrientation.values);
             },
-            onEnded: (data) {},
-          ),
-          builder: (context, player) => Scaffold(
-            key: _scaffoldKey,
-            body: ListView(
-              children: [
-                player,
+            player: YoutubePlayer(
+              controller: _controller,
+              showVideoProgressIndicator: true,
+              progressIndicatorColor: Colors.blueAccent,
+              topActions: <Widget>[
+                const SizedBox(width: 8.0),
+                Expanded(
+                  child: Text(
+                    _controller.metadata.title,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 18.0,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                  ),
+                ),
               ],
+              onReady: () {
+                _controller.addListener(listener);
+              },
+              onEnded: (data) {},
+            ),
+            builder: (context, player) => Scaffold(
+              key: _scaffoldKey,
+              body: ListView(
+                children: [
+                  player,
+                ],
+              ),
             ),
           ),
         ),
