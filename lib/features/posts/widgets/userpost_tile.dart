@@ -5,6 +5,7 @@ import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/live_event/models/events_model.dart';
 import 'package:business_bosses_v2/features/live_event/presentation/create_event.dart';
+import 'package:business_bosses_v2/features/live_event/widgets/call_room.dart';
 import 'package:business_bosses_v2/features/posts/controllers/create_post_controller.dart';
 import 'package:business_bosses_v2/features/posts/models/post_model.dart';
 import 'package:business_bosses_v2/features/posts/widgets/post_images.dart';
@@ -18,6 +19,7 @@ import 'package:detectable_text_field/widgets/detectable_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:lottie/lottie.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
@@ -547,17 +549,40 @@ class _PostTileState extends State<PostTile> {
                                                   const EdgeInsets.all(5.0),
                                               child: Row(
                                                 children: <Widget>[
-                                                  SvgPicture.asset(
-                                                    'assets/svgs/liveeventt.svg',
-                                                    height: 12,
-                                                    color: Colors.white,
-                                                  ),
+                                                  (DateTime.now().isAfter(
+                                                              DateTime.parse(
+                                                                  startat!)) &&
+                                                          DateTime.now()
+                                                              .isBefore(DateTime
+                                                                  .parse(
+                                                                      endat!)))
+                                                      ? Lottie.asset(
+                                                          'assets/anim/liveeventwhite.json',
+                                                          height: 12,
+                                                        )
+                                                      : SvgPicture.asset(
+                                                          'assets/svgs/liveeventt.svg',
+                                                          height: 12,
+                                                          color: Colors.white,
+                                                        ),
                                                   const SizedBox(
                                                     width: 5,
                                                   ),
-                                                  const Text(
-                                                    'Upcoming Live Event',
-                                                    style: TextStyle(
+                                                  Text(
+                                                    (DateTime.now().isAfter(
+                                                                DateTime.parse(
+                                                                    startat!)) &&
+                                                            DateTime.now()
+                                                                .isBefore(DateTime
+                                                                    .parse(
+                                                                        endat!)))
+                                                        ? 'Ongoing Live Event'
+                                                        : DateTime.now().isAfter(
+                                                                DateTime.parse(
+                                                                    startat!))
+                                                            ? 'Ended event'
+                                                            : 'Upcoming Live event',
+                                                    style: const TextStyle(
                                                       color: Colors.white,
                                                     ),
                                                   ),
@@ -607,7 +632,16 @@ class _PostTileState extends State<PostTile> {
                                         ),
                                       ),
                                       Text(
-                                        '$date, $starttime',
+                                        DateTime.now()
+                                                .isAfter(DateTime.parse(endat!))
+                                            ? 'Ended'
+                                            : DateTime.now().isAfter(
+                                                        DateTime.parse(
+                                                            startat!)) &&
+                                                    DateTime.now().isBefore(
+                                                        DateTime.parse(endat!))
+                                                ? 'Happening now'
+                                                : '$date, $starttime',
                                         style: const TextStyle(
                                             fontWeight: FontWeight.w700,
                                             color: Colors.white),
@@ -738,24 +772,79 @@ class _PostTileState extends State<PostTile> {
                       ),
                     ),
                     const SizedBox(width: 8.0),
-                    GestureDetector(
-                      onTap: () => _sharePost(),
-                      child: SvgPicture.asset(
-                        'assets/svgs/share.svg',
-                        height: 15.0,
-                        width: 15.0,
-                      ),
-                    ),
-                    const Spacer(),
-                    Padding(
-                      padding: const EdgeInsets.only(right: 15),
-                      child: Text(
-                        TimeFormat.formatString(widget.post.timestamp),
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              color: textColor.withOpacity(0.4),
+                    if (widget.post.livedata != null &&
+                        widget.post.livedata!.isNotEmpty) ...<Widget>[
+                      (DateTime.now().isAfter(DateTime.parse(startat!)) &&
+                              DateTime.now().isBefore(DateTime.parse(endat!)) &&
+                              widget.post.user!.uid !=
+                                  profileController.myProfile.uid)
+                          ? Expanded(
+                              child: Padding(
+                              padding: const EdgeInsets.only(right: 15),
+                              child: ElevatedButton(
+                                  onPressed: () {
+                                    final String enteredRoomID = event.roomId!;
+                                    if (profileController.myProfile.uid !=
+                                        event.user?.uid) {
+                                      jumpToLivePage(
+                                        context,
+                                        title: event.title!,
+                                        roomID: enteredRoomID,
+                                        isHost: false,
+                                      );
+                                    } else {
+                                      jumpToLivePage(
+                                        context,
+                                        title: event.title!,
+                                        roomID: enteredRoomID,
+                                        isHost: true,
+                                      );
+                                    }
+                                  },
+                                  child: const Text('Join')),
+                            ))
+                          : GestureDetector(
+                              onTap: () => _sharePost(),
+                              child: SvgPicture.asset(
+                                'assets/svgs/share.svg',
+                                height: 15.0,
+                                width: 15.0,
+                              ),
                             ),
+                      const Spacer(),
+                      Padding(
+                        padding: const EdgeInsets.only(right: 15),
+                        child: Text(
+                          TimeFormat.formatString(widget.post.timestamp),
+                          style:
+                              Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                    color: textColor.withOpacity(0.4),
+                                  ),
+                        ),
+                      )
+                    ],
+                    if (widget.post.livedata == null &&
+                        widget.post.livedata!.isEmpty) ...<Widget>[
+                      GestureDetector(
+                        onTap: () => _sharePost(),
+                        child: SvgPicture.asset(
+                          'assets/svgs/share.svg',
+                          height: 15.0,
+                          width: 15.0,
+                        ),
                       ),
-                    )
+                      const Spacer(),
+                      Padding(
+                        padding: const EdgeInsets.only(right: 15),
+                        child: Text(
+                          TimeFormat.formatString(widget.post.timestamp),
+                          style:
+                              Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                    color: textColor.withOpacity(0.4),
+                                  ),
+                        ),
+                      )
+                    ],
                   ],
                 )
               ],
@@ -918,6 +1007,25 @@ class _PostTileState extends State<PostTile> {
               ),
             )
           ],
+        ),
+      ),
+    );
+  }
+
+  void jumpToLivePage(
+    BuildContext context, {
+    required String roomID,
+    required bool isHost,
+    required String title,
+  }) {
+    Navigator.push(
+      context,
+      // ignore: always_specify_types
+      MaterialPageRoute(
+        builder: (BuildContext context) => CallRoom(
+          title: title,
+          roomID: roomID,
+          isHost: isHost,
         ),
       ),
     );
