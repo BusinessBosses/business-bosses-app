@@ -338,6 +338,7 @@ class _CreateEventState extends State<CreateEvent> {
                   } else if (updateImage != null) {
                     imageUrl = updateImage;
                   }
+
                   Map<String, dynamic> data = <String, dynamic>{
                     'title': titleController.text,
                     'roomId': roomID,
@@ -357,6 +358,8 @@ class _CreateEventState extends State<CreateEvent> {
                     'endat': endAtt.toString(),
                     'host': profileController.myProfile.name,
                     'photourl': profileController.myProfile.photoUrl,
+                    'user': profileController.myProfile.toString(),
+                    'image': _selectedImage ?? "",
                   };
 
                   String? jsonData = jsonEncode(dataa);

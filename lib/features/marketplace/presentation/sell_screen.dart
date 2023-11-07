@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:photo_manager/photo_manager.dart';
-
 import '../../../action/action.dart';
 import '../../../common/dialogs/snackbar.dart';
 import '../../../common/models/comment_model.dart';
@@ -65,6 +64,7 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
   bool _shouldPromote = false;
   final TextEditingController descriptionController = TextEditingController();
   final TextEditingController _priceController = TextEditingController();
+  final TextEditingController _discountController = TextEditingController();
 
   @override
   void initState() {
@@ -109,15 +109,59 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
               children: <Widget>[
                 Padding(
                   padding: const EdgeInsets.only(left: 16.0, right: 16),
-                  child: TextFormField(
-                    controller: _priceController,
-                    onChanged: (String val) => price = val,
-                    textInputAction: TextInputAction.next,
-                    keyboardType: TextInputType.text,
-                    maxLength: 15,
-                    decoration: inputDecoration.copyWith(
-                      hintText: 'Enter Price in USD (Example \$10)',
-                    ),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        flex:
+                            2, // Adjust the flex value to control the relative sizes
+                        child: Stack(children: [
+                          TextFormField(
+                            controller: _priceController,
+                            onChanged: (String val) => price = val,
+                            textInputAction: TextInputAction.next,
+                            keyboardType: TextInputType.text,
+                            maxLength: 15,
+                            decoration: inputDecoration.copyWith(
+                              hintText: 'Enter Price in USD (Example \$10)',
+                            ),
+                          )
+                        ]),
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      Expanded(
+                        flex:
+                            1, // Adjust the flex value to control the relative sizes
+                        child: Stack(
+                          children: [
+                            TextFormField(
+                              controller: _discountController,
+                              onChanged: (String val) => price = val,
+                              textInputAction: TextInputAction.next,
+                              keyboardType: TextInputType.number,
+                              maxLength: 3,
+                              decoration: inputDecoration.copyWith(
+                                hintText: 'Discount',
+                              ),
+                            ),
+                            const Positioned(
+                              right: 10,
+                              top: 0,
+                              bottom: 25,
+                              child: Align(
+                                alignment: Alignment
+                                    .centerRight, // Vertically centers the text
+                                child: Text(
+                                  '%',
+                                  style: TextStyle(fontWeight: FontWeight.w700),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 const SizedBox(height: 24.0),
@@ -473,6 +517,7 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
         'images': _market?.images,
         'userId': _market?.userId,
         'user': _market?.user?.toMap(),
+        'discount': _discountController.text ?? '0',
       });
       await ApiService.put(
           path: 'markets/${_market?.marketId}',

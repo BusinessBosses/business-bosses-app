@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:add_2_calendar/add_2_calendar.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
+import 'package:business_bosses_v2/features/live_event/models/events_model.dart';
+import 'package:business_bosses_v2/features/live_event/presentation/create_event.dart';
 import 'package:business_bosses_v2/features/posts/controllers/create_post_controller.dart';
 import 'package:business_bosses_v2/features/posts/models/post_model.dart';
 import 'package:business_bosses_v2/features/posts/widgets/post_images.dart';
@@ -144,12 +146,21 @@ class _PostTileState extends State<PostTile> {
       } catch (e) {}
     } else {}
 
+    EventModel event = EventModel(
+      title: title,
+      roomId: roomid ?? '',
+      startAt: DateTime.parse(startat ?? '2023-11-07T10:45:00.000Z'),
+      endAt: DateTime.parse(endat ?? '2023-11-07T10:45:00.000Z'),
+      startTime: starttime ?? '',
+      user: widget.post.user,
+    );
+
     if (hide == false) {
       final List<PopupMenuEntry<String>> myPopupMore = <PopupMenuEntry<String>>[
-        const PopupMenuItem<String>(
-          value: 'Edit',
+        PopupMenuItem<String>(
+          value: widget.post.livedata!.isEmpty ? 'Edit' : 'updateevent',
           child: Text(
-            'Edit',
+            widget.post.livedata!.isEmpty ? 'Edit' : 'Update Event',
             style: bodyText2,
           ),
         ),
@@ -349,6 +360,10 @@ class _PostTileState extends State<PostTile> {
                                             post: widget.post.title,
                                             postDetail: widget.post,
                                             images: widget.post.images,
+                                          ));
+                                    } else if (val == 'updateevent') {
+                                      Get.to(() => CreateEvent(
+                                            event: event,
                                           ));
                                     } else if (val == 'Delete') {
                                       showDialog(

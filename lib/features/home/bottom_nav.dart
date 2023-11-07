@@ -1,9 +1,12 @@
+import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/common/widgets/text_widget.dart';
+import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 import '../../utils/theme/theme.dart';
 import '../posts/presentation/create_post_screen.dart';
 import '../profile/presentation/myprofilescreen.dart';
@@ -37,6 +40,7 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
     Routes.marketPlace,
     Routes.myProfile
   ];
+
   int currentTimestamp = DateTime.now().millisecondsSinceEpoch;
   // ignore: unused_field
   late FirebaseAnalyticsObserver _observer;
@@ -270,12 +274,15 @@ class BottomTabButton extends StatelessWidget {
   final bool isActive;
   // ignore: public_member_api_docs
   final String icon;
+
   // ignore: public_member_api_docs
   final void Function()? onTap;
   // ignore: public_member_api_docs
   final String label;
   // ignore: public_member_api_docs
   final int count;
+
+  final Widget? widget;
 
   /// Bottom Tab Button click
   const BottomTabButton({
@@ -285,10 +292,12 @@ class BottomTabButton extends StatelessWidget {
     required this.onTap,
     this.label = '',
     this.count = 0,
+    this.widget,
   });
 
   @override
   Widget build(BuildContext context) {
+    final ProfileController profileController = Get.find();
     return InkWell(
       onTap: onTap,
       child: Container(
@@ -301,15 +310,37 @@ class BottomTabButton extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  SizedBox(
-                    height: 30.0,
-                    child: SvgPicture.asset(
-                      icon,
-                      height: 23,
-                      width: 23,
-                      color: isActive ? primaryColorLT : iconColor,
-                    ),
-                  ),
+                  icon.isNotEmpty
+                      ? SizedBox(
+                          height: 30.0,
+                          child: SvgPicture.asset(
+                            icon,
+                            height: 23,
+                            width: 23,
+                            color: isActive ? primaryColorLT : iconColor,
+                          ),
+                        )
+                      : SizedBox(
+                          height: 30.0,
+                          width: 30.0,
+                          child: Align(
+                            alignment: Alignment.topLeft,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(1000),
+                              child: NetworkImageWithPlaceHolder(
+                                imageUrl:
+                                    profileController.myProfile.photoUrl ?? '',
+                                height: 105.0,
+                                width: 105.0,
+                                radius: radius,
+                                cacheHeight: 120,
+                                cacheWidth: 120,
+                                placeHolder: Icons.person,
+                                iconSize: 64.0,
+                              ),
+                            ),
+                          ),
+                        ),
                   if (label.isNotEmpty)
                     FittedBox(
                       child: Text(

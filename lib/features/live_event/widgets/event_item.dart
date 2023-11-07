@@ -45,6 +45,7 @@ class EventItem extends StatelessWidget {
     final String formattedEndTime = timeFormat.format(localEndTime);
 
     Map<String, dynamic> dataa = <String, dynamic>{
+      'id': event.id,
       'title': event.title,
       'roomId': event.roomId,
       'date': formattedDate,
@@ -53,6 +54,8 @@ class EventItem extends StatelessWidget {
       'photourl': event.user!.photoUrl,
       'startat': event.startAt.toString(),
       'endat': event.endAt.toString(),
+      'image': event.image,
+      'user': event.user,
     };
 
     String? jsonData = jsonEncode(dataa);
@@ -121,7 +124,7 @@ class EventItem extends StatelessWidget {
                     fontSize: 18.0, fontWeight: FontWeight.w700),
                 onTap: () {
                   String message =
-                      'Hey there! Join this event on $formattedDate  $formattedStartTime with Room ID: ${event.roomId}';
+                      'Hey there! Join this event on $formattedDate  $formattedStartTime with Room ID: ${event.roomId}  https://businessbosses.onelink.me/xLWk/36a2ff16';
                   socialShare(message);
                 },
               ),
