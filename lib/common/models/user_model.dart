@@ -29,6 +29,7 @@ class UserModel {
   final List<Industry>? interests;
   final List<String>? productsandservices;
   final List<ReferralsModel>? referals;
+  final bool? toPost;
 
   // final List<String>? deviceTokens;
 
@@ -93,6 +94,7 @@ class UserModel {
     this.averageRating,
     this.isSubscribed = false,
     this.isUpdated,
+    this.toPost = true,
   });
 
   UserModel copyWith({
@@ -118,6 +120,7 @@ class UserModel {
     List<Industry>? interests,
     List<String>? productsandservices,
     List<ReferralsModel>? referals,
+    bool? toPost,
 
     // List<String>? deviceTokens,
 
@@ -183,6 +186,7 @@ class UserModel {
       connecteds: connecteds ?? this.connecteds,
       averageRating: averageRating ?? this.averageRating,
       isSubscribed: isSubscribed ?? this.isSubscribed,
+      toPost: toPost ?? this.toPost,
       isUpdated: isUpdated ?? this.isUpdated,
     );
   }
@@ -232,6 +236,7 @@ class UserModel {
       'averageRating': averageRating,
       'isSubscribed': isSubscribed,
       'isUpdated': isUpdated,
+      'toPost': toPost,
     };
   }
 
@@ -323,6 +328,7 @@ class UserModel {
       isRanked: map['isRanked'] != null ? map['isRanked'] as bool : null,
       isSubscribed:
           map['isSubscribed'] != null ? map['isSubscribed'] as bool : false,
+      toPost: map['toPost'] != null ? map['toPost'] as bool : false,
       isUpdated: map['isUpdated'] != null ? map['isUpdated'] as bool : false,
       inviteId: map['inviteId'] != null ? map['inviteId'] as String : null,
       averageRating: map['averageRating'] != null
