@@ -501,18 +501,24 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                   onPressed: () {
                     onRefer();
                   },
-                  child: const Text(
-                    'Refer',
-                    style: TextStyle(color: primaryColorLT),
+                  child: const Padding(
+                    padding: EdgeInsets.all(15.0),
+                    child: Text(
+                      'Refer',
+                      style: TextStyle(color: primaryColorLT),
+                    ),
                   ),
                 )
               : ElevatedButton(
                   onPressed: () async {
                     connectToUser();
                   },
-                  child: const Text(
-                    'Connect',
-                    style: TextStyle(color: Colors.white),
+                  child: const Padding(
+                    padding: EdgeInsets.all(15.0),
+                    child: Text(
+                      'Connect',
+                      style: TextStyle(color: Colors.white),
+                    ),
                   ),
                 ),
         ],

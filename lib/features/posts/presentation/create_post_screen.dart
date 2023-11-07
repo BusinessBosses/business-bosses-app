@@ -294,8 +294,9 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                       ),
                                     ),
                                   )),
-                              const SizedBox(
-                                width: 5,
+                              const Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 8.0),
+                                child: Text('or'),
                               ),
                               Container(
                                   decoration: BoxDecoration(

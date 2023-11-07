@@ -1,4 +1,5 @@
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
+import 'package:business_bosses_v2/common/widgets/typography/text_widget.dart';
 import 'package:business_bosses_v2/features/forum/models/forum_model.dart';
 import 'package:business_bosses_v2/features/posts/widgets/preview.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
@@ -37,6 +38,7 @@ class _CreateBossUpScreenState extends State<CreateBossUpScreen> {
   bool isProcessing = false;
   bool isUpdating = false;
   bool isbossup = true;
+  bool isVisible = false;
   late String industryId;
   final TextEditingController descriptionController = TextEditingController();
   @override
@@ -132,41 +134,89 @@ class _CreateBossUpScreenState extends State<CreateBossUpScreen> {
                     ),
                   ),
                   const SizedBox(height: 12.0),
-                  GestureDetector(
-                    onTap: () {
-                      if (controller.imageFileList.length < 5) {
-                        controller.onPickImage();
-                      } else {
-                        showSnackbar(
-                            message: 'You can only upload up to 5 images.');
-                      }
-                    },
-                    child: FieldContainer(
-                      child: Row(
-                        children: <Widget>[
-                          SvgPicture.asset('assets/svgs/file.svg'),
-                          const SizedBox(width: 16.0),
-                          Expanded(
-                            child: Text(
-                              'Add Attachment',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium
-                                  ?.copyWith(color: hintColor),
+                  Row(
+                    children: [
+                      Container(
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(50)),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 8, vertical: 8),
+                            child: GestureDetector(
+                              onTap: () {
+                                if (controller.imageFileList.length < 5) {
+                                  controller.onPickImage();
+                                } else {
+                                  showSnackbar(
+                                      message:
+                                          'You can only upload up to 5 images.');
+                                }
+                              },
+                              child: Row(
+                                children: <Widget>[
+                                  const TextWidget(
+                                    text: 'Add Attachment',
+                                    fontWeight: FontWeight.w700,
+                                    size: 15,
+                                  ),
+                                  const SizedBox(
+                                    width: 5,
+                                  ),
+                                  SvgPicture.asset(
+                                    'assets/svgs/addimagepost.svg',
+                                    height: 11,
+                                  ),
+
+                                  // const Text(
+                                  //   'Max file size for images is 10Mb',
+                                  //   style: TextStyle(fontSize: 11, color: Colors.red),
+                                  // )
+                                ],
+                              ),
                             ),
-                          ),
-                          const SizedBox(width: 16.0),
-                          CircleAvatar(
-                            radius: 26 / 1.38,
-                            backgroundColor: backgroundColor,
-                            child: SvgPicture.asset(
-                              'assets/svgs/addimagepost.svg',
-                              height: 18,
-                            ),
-                          ),
-                        ],
+                          )),
+                      const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 8.0),
+                        child: Text('or'),
                       ),
-                    ),
+                      Container(
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(50)),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 8, vertical: 8),
+                            child: GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  isVisible = !isVisible;
+                                });
+                              },
+                              child: Row(
+                                children: <Widget>[
+                                  const TextWidget(
+                                    text: 'Add Youtube link',
+                                    fontWeight: FontWeight.w700,
+                                    size: 15,
+                                  ),
+                                  const SizedBox(
+                                    width: 5,
+                                  ),
+                                  SvgPicture.asset(
+                                    'assets/svgs/yt.svg',
+                                    height: 15,
+                                  ),
+
+                                  // const Text(
+                                  //   'Max file size for images is 10Mb',
+                                  //   style: TextStyle(fontSize: 11, color: Colors.red),
+                                  // )
+                                ],
+                              ),
+                            ),
+                          )),
+                    ],
                   ),
                   const SizedBox(height: 8.0),
                   Preview(controller: controller),
