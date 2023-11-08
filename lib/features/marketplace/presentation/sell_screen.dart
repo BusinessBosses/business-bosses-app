@@ -58,6 +58,7 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
   String? filterCode;
   String? filterLocation;
   String? filterCategory;
+  String? discount;
 
   bool _isProcessing = false;
   bool? _isUpdating;
@@ -76,6 +77,7 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
     }
     descriptionController.text = _market?.description ?? '';
     _priceController.text = _market?.price ?? '';
+    _discountController.text = _market?.discount.toString() ?? '';
     _selectedCategory = _market?.category;
     _selectedLocation = _market?.location;
     _fileProcessing = <bool>[];
@@ -500,6 +502,7 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
         'location': _selectedLocation,
         'description': description,
         'price': price,
+        'discount': discount,
         'timestamp': DateTime.now().millisecondsSinceEpoch,
       }, _shouldPromote);
     } else {
@@ -517,7 +520,7 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
         'images': _market?.images,
         'userId': _market?.userId,
         'user': _market?.user?.toMap(),
-        'discount': _discountController.text ?? '0',
+        'discount': _discountController.text,
       });
       await ApiService.put(
           path: 'markets/${_market?.marketId}',
@@ -527,6 +530,7 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
             'description': descriptionController.text,
             'price': _priceController.text,
             'images': _market?.images,
+            'discount': _discountController.text,
           });
       Get.back();
     }
