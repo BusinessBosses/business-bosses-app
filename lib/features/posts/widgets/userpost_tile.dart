@@ -801,14 +801,33 @@ class _PostTileState extends State<PostTile> {
                                   },
                                   child: const Text('Join')),
                             ))
-                          : GestureDetector(
-                              onTap: () => _sharePost(),
-                              child: SvgPicture.asset(
-                                'assets/svgs/share.svg',
-                                height: 15.0,
-                                width: 15.0,
-                              ),
-                            ),
+                          : Expanded(
+                              child: Row(
+                              children: [
+                                GestureDetector(
+                                  onTap: () => _sharePost(),
+                                  child: SvgPicture.asset(
+                                    'assets/svgs/share.svg',
+                                    height: 15.0,
+                                    width: 15.0,
+                                  ),
+                                ),
+                                const Spacer(),
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 15),
+                                  child: Text(
+                                    TimeFormat.formatString(
+                                        widget.post.timestamp),
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium
+                                        ?.copyWith(
+                                          color: textColor.withOpacity(0.4),
+                                        ),
+                                  ),
+                                )
+                              ],
+                            ))
                     ],
                     if (widget.post.livedata == null &&
                         widget.post.livedata!.isEmpty) ...<Widget>[
