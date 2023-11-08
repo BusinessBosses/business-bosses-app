@@ -20,9 +20,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
-import 'package:socket_io_client/socket_io_client.dart';
 import 'package:url_launcher/url_launcher_string.dart';
-
 import '../../../action/action.dart';
 import '../../../common/models/api_response_model.dart';
 import '../../../common/models/comment_model.dart';
