@@ -157,16 +157,18 @@ class _PostTileState extends State<PostTile> {
 
     if (hide == false) {
       final List<PopupMenuEntry<String>> myPopupMore = <PopupMenuEntry<String>>[
-        const PopupMenuItem<String>(
-          value: 'Edit',
-          child: Text(
-            'Edit',
-            style: bodyText2,
+        if (widget.post.livedata!.isEmpty)
+          const PopupMenuItem<String>(
+            value: 'Edit',
+            child: Text(
+              'Edit',
+              style: bodyText2,
+            ),
           ),
-        ),
-        const PopupMenuDivider(
-          height: 0.0,
-        ),
+        if (widget.post.livedata!.isEmpty)
+          const PopupMenuDivider(
+            height: 0.0,
+          ),
         const PopupMenuItem<String>(
           value: 'Delete',
           child: Text(
