@@ -775,9 +775,7 @@ class _PostTileState extends State<PostTile> {
                     if (widget.post.livedata != null &&
                         widget.post.livedata!.isNotEmpty) ...<Widget>[
                       (DateTime.now().isAfter(DateTime.parse(startat!)) &&
-                              DateTime.now().isBefore(DateTime.parse(endat!)) &&
-                              widget.post.user!.uid !=
-                                  profileController.myProfile.uid)
+                              DateTime.now().isBefore(DateTime.parse(endat!)))
                           ? Expanded(
                               child: Padding(
                               padding: const EdgeInsets.only(right: 15),
@@ -811,17 +809,6 @@ class _PostTileState extends State<PostTile> {
                                 width: 15.0,
                               ),
                             ),
-                      const Spacer(),
-                      Padding(
-                        padding: const EdgeInsets.only(right: 15),
-                        child: Text(
-                          TimeFormat.formatString(widget.post.timestamp),
-                          style:
-                              Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                    color: textColor.withOpacity(0.4),
-                                  ),
-                        ),
-                      )
                     ],
                     if (widget.post.livedata == null &&
                         widget.post.livedata!.isEmpty) ...<Widget>[
