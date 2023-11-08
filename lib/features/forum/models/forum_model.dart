@@ -9,6 +9,7 @@ class ForumModel {
   final String? description;
   final String? industry;
   final String? title;
+  final String? ytUrl;
   final List<String>? images;
   final int? timestamp;
   late final List<String>? likes;
@@ -17,21 +18,21 @@ class ForumModel {
   final UserModel? user;
   int? views = 0;
   final bool? isRanked;
-  ForumModel({
-    required this.forumId,
-    required this.industryId,
-    this.description,
-    this.industry,
-    this.title,
-    this.images,
-    this.timestamp,
-    this.likes,
-    this.views = 0,
-    this.coins,
-    this.comments,
-    this.user,
-    this.isRanked,
-  });
+  ForumModel(
+      {required this.forumId,
+      required this.industryId,
+      this.description,
+      this.industry,
+      this.title,
+      this.images,
+      this.timestamp,
+      this.likes,
+      this.views = 0,
+      this.coins,
+      this.comments,
+      this.user,
+      this.isRanked,
+      this.ytUrl});
 
   ForumModel copyWith({
     String? forumId,
@@ -47,6 +48,7 @@ class ForumModel {
     UserModel? user,
     bool? isRanked,
     int? views,
+    String? ytUrl,
   }) {
     return ForumModel(
       forumId: forumId ?? this.forumId,
@@ -62,6 +64,7 @@ class ForumModel {
       user: user ?? this.user,
       views: views ?? this.views,
       isRanked: isRanked ?? this.isRanked,
+      ytUrl: ytUrl ?? this.ytUrl,
     );
   }
 
@@ -80,6 +83,7 @@ class ForumModel {
       'user': user!.toMap(),
       'views': views,
       'isRanked': isRanked,
+      'ytUrl': ytUrl,
     };
   }
 
@@ -90,6 +94,7 @@ class ForumModel {
       description:
           map['description'] != null ? map['description'] as String : null,
       title: map['title'] != null ? map['title'] as String : null,
+      ytUrl: map['ytUrl'] != null ? map['ytUrl'] as String : null,
       industry: map['industry'] != null ? map['industry'] as String : null,
       images: map['images'] != null && map['images'] != ''
           ? List<String>.from((map['images']))

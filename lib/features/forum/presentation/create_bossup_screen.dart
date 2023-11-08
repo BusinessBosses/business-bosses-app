@@ -39,6 +39,7 @@ class _CreateBossUpScreenState extends State<CreateBossUpScreen> {
   bool isUpdating = false;
   bool isbossup = true;
   bool isVisible = false;
+  String? _ytUrl;
   late String industryId;
   final TextEditingController descriptionController = TextEditingController();
   @override
@@ -218,7 +219,52 @@ class _CreateBossUpScreenState extends State<CreateBossUpScreen> {
                           )),
                     ],
                   ),
-                  const SizedBox(height: 8.0),
+                  const SizedBox(height: 10.0),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    child: Container(
+                      decoration: const BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(15),
+                        ),
+                      ),
+                      child: Visibility(
+                        visible: isVisible,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                          child: TextFormField(
+                            onChanged: (String val) {
+                              _ytUrl = val;
+                              setState(() {});
+                            },
+                            // validator: (value) {
+                            //   if (value == null || value.isEmpty) {
+                            //     return '';
+                            //   }
+                            //   return null;
+                            // },
+                            // textInputAction: TextInputAction.done,
+                            keyboardType: TextInputType.visiblePassword,
+                            maxLines: 1,
+                            decoration: InputDecoration(
+                              hintText: 'Paste a Youtube Video link here',
+                              border: InputBorder.none,
+                              hintStyle: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium!
+                                  .copyWith(
+                                    color: textColor.withOpacity(0.2),
+                                  ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 8,
+                  ),
                   Preview(controller: controller),
                   const SizedBox(height: 24.0),
                   MCustomButton(
@@ -227,7 +273,11 @@ class _CreateBossUpScreenState extends State<CreateBossUpScreen> {
                         'title': title.trim(),
                         'description': description.trim(),
                         'timestamp': DateTime.now().millisecondsSinceEpoch,
-                        'industryId': industryId
+                        'industryId': industryId,
+                        'ytUrl': _ytUrl,
+                        'images': _ytUrl != null && _ytUrl != ''
+                            ? 'https://api.businessbosses.co.uk/appfiles/1698854755_13_download_(1).png'
+                            : null,
                       });
                       if (isbossup == true) {
                         Map<String, dynamic> updateData = <String, dynamic>{
