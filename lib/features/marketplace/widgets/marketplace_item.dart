@@ -404,6 +404,15 @@ class _MarketTileState extends State<MarketTile> {
                                           fontWeight: FontWeight.w800,
                                         ),
                                       ),
+                                      const SizedBox(
+                                        width: 5,
+                                      ),
+                                      Text(
+                                        _post.discount.toString(),
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.w800,
+                                        ),
+                                      ),
                                     ],
                                   ),
                                 ),
