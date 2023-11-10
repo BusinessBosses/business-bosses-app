@@ -53,6 +53,7 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
 
   String? description;
   String? price;
+  String? discount;
   String? _selectedCategory;
   String? _selectedLocation;
   String? filterCode;
@@ -139,7 +140,7 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
                           children: [
                             TextFormField(
                               controller: _discountController,
-                              onChanged: (String val) => price = val,
+                              onChanged: (String val) => discount = val,
                               textInputAction: TextInputAction.next,
                               keyboardType: TextInputType.number,
                               maxLength: 3,
@@ -529,6 +530,7 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
             'location': _selectedLocation,
             'description': descriptionController.text,
             'price': _priceController.text,
+            'discount': _discountController.text,
             'images': _market?.images,
             'discount': _discountController.text,
           });

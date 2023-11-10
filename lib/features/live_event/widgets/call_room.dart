@@ -1,8 +1,10 @@
 // ignore_for_file: public_member_api_docs
 
+import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/features/live_event/widgets/zego_details.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
+import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:zego_uikit_prebuilt_live_audio_room/zego_uikit_prebuilt_live_audio_room.dart';
@@ -30,10 +32,11 @@ class CallRoom extends StatelessWidget {
       ),
       body: Column(
         children: <Widget>[
-          SizedBox(
-            height: 120,
-            child: NetworkImageWithPlaceHolder(imageUrl: image),
-          ),
+          if (image != null)
+            SizedBox(
+              height: 120,
+              child: NetworkImageWithPlaceHolder(imageUrl: image),
+            ),
           Expanded(
             child: ZegoUIKitPrebuiltLiveAudioRoom(
               appID: ZegoDetails
@@ -48,7 +51,57 @@ class CallRoom extends StatelessWidget {
                   ? ZegoUIKitPrebuiltLiveAudioRoomConfig.host()
                   : ZegoUIKitPrebuiltLiveAudioRoomConfig.audience()
                 ..innerText.memberListTitle = 'Members'
+                ..inRoomMessageConfig = ZegoInRoomMessageConfig(
+                  itemBuilder: (
+                    BuildContext context,
+                    ZegoInRoomMessage message,
+                    Map<String, dynamic> extraInfo,
+                  ) {
+                    /// how to use itemBuilder to custom message view
+                    return Container(
+                        decoration: const BoxDecoration(
+                            color: Colors.grey,
+                            borderRadius: BorderRadius.all(Radius.circular(6))),
+                        padding: const EdgeInsets.all(10),
+                        margin: const EdgeInsets.all(10),
+                        child: Row(
+                          children: [
+                            GestureDetector(
+                              onTap: (() {
+                                if (profileController.myProfile.uid !=
+                                    message.user.id.toString()) {
+                                  Get.toNamed(Routes.publicProfile,
+                                      arguments:
+                                          UserModel.fromMap(<String, dynamic>{
+                                        'uid': message.user.id.toString(),
+                                        'username': message.user.name,
+                                        'email': 'hhh',
+                                      }));
+                                }
+                              }),
+                              child: Text(
+                                '${message.user.name}:',
+                                style: const TextStyle(
+                                    color: Colors.yellow,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            const SizedBox(width: 5),
+                            Text(
+                              message.message,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ));
+                  },
+                )
                 ..hostSeatIndexes = [0]
+                ..topMenuBarConfig.buttons = [
+                  ZegoMenuBarButtonName.minimizingButton
+                ]
                 ..layoutConfig.rowConfigs = [
                   ZegoLiveAudioRoomLayoutRowConfig(
                       count: 1,

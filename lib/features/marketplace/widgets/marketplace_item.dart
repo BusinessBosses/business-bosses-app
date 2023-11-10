@@ -405,31 +405,14 @@ class _MarketTileState extends State<MarketTile> {
                                         ),
                                       ),
                                       const SizedBox(
-                                        width: 10,
+                                        width: 5,
                                       ),
-                                      _post.discount != null &&
-                                              _post.discount != '0'
-                                          ? Container(
-                                              decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(5),
-                                                  color: Colors.greenAccent
-                                                      .withAlpha(50)),
-                                              child: Padding(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 5.0),
-                                                child: Text(
-                                                  '-' +
-                                                      _post.discount
-                                                          .toString() +
-                                                      '%',
-                                                  style: TextStyle(
-                                                      color: Colors.green),
-                                                ),
-                                              ),
-                                            )
-                                          : Container(),
+                                      Text(
+                                        _post.discount.toString(),
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.w800,
+                                        ),
+                                      ),
                                     ],
                                   ),
                                 ),
