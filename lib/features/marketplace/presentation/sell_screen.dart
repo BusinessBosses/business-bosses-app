@@ -59,8 +59,6 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
   String? filterCode;
   String? filterLocation;
   String? filterCategory;
-  String? discount;
-
   bool _isProcessing = false;
   bool? _isUpdating;
   bool _shouldPromote = false;

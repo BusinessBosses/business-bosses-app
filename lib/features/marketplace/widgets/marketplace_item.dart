@@ -405,14 +405,30 @@ class _MarketTileState extends State<MarketTile> {
                                         ),
                                       ),
                                       const SizedBox(
-                                        width: 5,
+                                        width: 8,
                                       ),
-                                      Text(
-                                        _post.discount.toString(),
-                                        style: const TextStyle(
-                                          fontWeight: FontWeight.w800,
-                                        ),
-                                      ),
+                                      _post.discount.toString() == '0'
+                                          ? Container()
+                                          : Container(
+                                              decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(5),
+                                                  color: Colors.greenAccent
+                                                      .withAlpha(80)),
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 5.0,
+                                                        vertical: 2),
+                                                child: Text(
+                                                  '-${_post.discount}%',
+                                                  style: const TextStyle(
+                                                    color: Colors.green,
+                                                    fontWeight: FontWeight.w800,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
                                     ],
                                   ),
                                 ),
