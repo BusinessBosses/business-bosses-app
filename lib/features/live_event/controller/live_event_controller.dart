@@ -61,7 +61,7 @@ class LiveController extends GetxController {
     return foundEvent;
   }
 
-  void createEvent(Map<String, dynamic> data) async {
+  Future<void> createEvent(Map<String, dynamic> data) async {
     final ApiResponseModel response =
         await ApiService.post(path: 'event', body: data);
     if (response.success) {
@@ -122,7 +122,7 @@ class LiveController extends GetxController {
     update();
   }
 
-  void updateEvent(Map<String, dynamic> data) async {
+  Future<void> updateEvent(Map<String, dynamic> data) async {
     EventModel updatedEvent = EventModel.fromMap(data);
     final ApiResponseModel response =
         await ApiService.put(path: 'event/${updatedEvent.id}', body: data);
