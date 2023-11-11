@@ -245,143 +245,152 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                     const SizedBox(
                       height: 10,
                     ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: Column(
-                        children: [
-                          Row(
-                            children: [
-                              Container(
-                                  decoration: BoxDecoration(
-                                      color: backgroundColor,
-                                      borderRadius: BorderRadius.circular(50)),
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 8, vertical: 8),
-                                    child: GestureDetector(
-                                      onTap: () {
-                                        if (controller.imageFileList.length <
-                                            5) {
-                                          controller.onPickImage(
-                                              GalleryType.images,
-                                              isUpdating: false);
-                                        } else {
-                                          showSnackbar(
-                                              message:
-                                                  'You can only upload up to 5 images.');
-                                        }
-                                      },
-                                      child: Row(
-                                        children: <Widget>[
-                                          const TextWidget(
-                                            text: 'Add image',
-                                            fontWeight: FontWeight.w700,
-                                            size: 15,
-                                          ),
-                                          const SizedBox(
-                                            width: 5,
-                                          ),
-                                          SvgPicture.asset(
-                                            'assets/svgs/addimagepost.svg',
-                                            height: 11,
-                                          ),
+                    title.isNotEmpty
+                        ? Container()
+                        : Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                            child: Column(
+                              children: [
+                                Row(
+                                  children: [
+                                    Container(
+                                        decoration: BoxDecoration(
+                                            color: backgroundColor,
+                                            borderRadius:
+                                                BorderRadius.circular(50)),
+                                        child: Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 8, vertical: 8),
+                                          child: GestureDetector(
+                                            onTap: () {
+                                              if (controller
+                                                      .imageFileList.length <
+                                                  5) {
+                                                controller.onPickImage(
+                                                    GalleryType.images,
+                                                    isUpdating: false);
+                                              } else {
+                                                showSnackbar(
+                                                    message:
+                                                        'You can only upload up to 5 images.');
+                                              }
+                                            },
+                                            child: Row(
+                                              children: <Widget>[
+                                                const TextWidget(
+                                                  text: 'Add image',
+                                                  fontWeight: FontWeight.w700,
+                                                  size: 15,
+                                                ),
+                                                const SizedBox(
+                                                  width: 5,
+                                                ),
+                                                SvgPicture.asset(
+                                                  'assets/svgs/addimagepost.svg',
+                                                  height: 11,
+                                                ),
 
-                                          // const Text(
-                                          //   'Max file size for images is 10Mb',
-                                          //   style: TextStyle(fontSize: 11, color: Colors.red),
-                                          // )
-                                        ],
-                                      ),
+                                                // const Text(
+                                                //   'Max file size for images is 10Mb',
+                                                //   style: TextStyle(fontSize: 11, color: Colors.red),
+                                                // )
+                                              ],
+                                            ),
+                                          ),
+                                        )),
+                                    const Padding(
+                                      padding:
+                                          EdgeInsets.symmetric(horizontal: 8.0),
+                                      child: Text('or'),
                                     ),
-                                  )),
-                              const Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 8.0),
-                                child: Text('or'),
-                              ),
-                              Container(
-                                  decoration: BoxDecoration(
-                                      color: backgroundColor,
-                                      borderRadius: BorderRadius.circular(50)),
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 8, vertical: 8),
-                                    child: GestureDetector(
-                                      onTap: () {
-                                        setState(() {
-                                          isVisible = !isVisible;
-                                        });
-                                      },
-                                      child: Row(
-                                        children: <Widget>[
-                                          const TextWidget(
-                                            text: 'Add Youtube link',
-                                            fontWeight: FontWeight.w700,
-                                            size: 15,
-                                          ),
-                                          const SizedBox(
-                                            width: 5,
-                                          ),
-                                          SvgPicture.asset(
-                                            'assets/svgs/yt.svg',
-                                            height: 15,
-                                          ),
+                                    Container(
+                                        decoration: BoxDecoration(
+                                            color: backgroundColor,
+                                            borderRadius:
+                                                BorderRadius.circular(50)),
+                                        child: Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 8, vertical: 8),
+                                          child: GestureDetector(
+                                            onTap: () {
+                                              setState(() {
+                                                isVisible = !isVisible;
+                                              });
+                                            },
+                                            child: Row(
+                                              children: <Widget>[
+                                                const TextWidget(
+                                                  text: 'Add Youtube link',
+                                                  fontWeight: FontWeight.w700,
+                                                  size: 15,
+                                                ),
+                                                const SizedBox(
+                                                  width: 5,
+                                                ),
+                                                SvgPicture.asset(
+                                                  'assets/svgs/yt.svg',
+                                                  height: 15,
+                                                ),
 
-                                          // const Text(
-                                          //   'Max file size for images is 10Mb',
-                                          //   style: TextStyle(fontSize: 11, color: Colors.red),
-                                          // )
-                                        ],
-                                      ),
-                                    ),
-                                  )),
-                            ],
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Container(
-                            decoration: const BoxDecoration(
-                              color: backgroundColor,
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(15),
-                              ),
-                            ),
-                            child: Visibility(
-                              visible: isVisible,
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 12.0),
-                                child: TextFormField(
-                                  onChanged: (String val) {
-                                    _ytUrl = val;
-                                    setState(() {});
-                                  },
-                                  // validator: (value) {
-                                  //   if (value == null || value.isEmpty) {
-                                  //     return '';
-                                  //   }
-                                  //   return null;
-                                  // },
-                                  // textInputAction: TextInputAction.done,
-                                  keyboardType: TextInputType.visiblePassword,
-                                  maxLines: 1,
-                                  decoration: InputDecoration(
-                                    hintText: 'Paste a Youtube Video link here',
-                                    border: InputBorder.none,
-                                    hintStyle: Theme.of(context)
-                                        .textTheme
-                                        .bodyMedium!
-                                        .copyWith(
-                                          color: textColor.withOpacity(0.2),
-                                        ),
-                                  ),
+                                                // const Text(
+                                                //   'Max file size for images is 10Mb',
+                                                //   style: TextStyle(fontSize: 11, color: Colors.red),
+                                                // )
+                                              ],
+                                            ),
+                                          ),
+                                        )),
+                                  ],
                                 ),
-                              ),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                Container(
+                                  decoration: const BoxDecoration(
+                                    color: backgroundColor,
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(15),
+                                    ),
+                                  ),
+                                  child: Visibility(
+                                    visible: isVisible,
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 12.0),
+                                      child: TextFormField(
+                                        onChanged: (String val) {
+                                          _ytUrl = val;
+                                          setState(() {});
+                                        },
+                                        // validator: (value) {
+                                        //   if (value == null || value.isEmpty) {
+                                        //     return '';
+                                        //   }
+                                        //   return null;
+                                        // },
+                                        // textInputAction: TextInputAction.done,
+                                        keyboardType:
+                                            TextInputType.visiblePassword,
+                                        maxLines: 1,
+                                        decoration: InputDecoration(
+                                          hintText:
+                                              'Paste a Youtube Video link here',
+                                          border: InputBorder.none,
+                                          hintStyle: Theme.of(context)
+                                              .textTheme
+                                              .bodyMedium!
+                                              .copyWith(
+                                                color:
+                                                    textColor.withOpacity(0.2),
+                                              ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              ],
                             ),
-                          )
-                        ],
-                      ),
-                    ),
+                          ),
                     const SizedBox(
                       height: 10,
                     ),

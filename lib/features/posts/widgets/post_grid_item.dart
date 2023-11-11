@@ -30,6 +30,47 @@ class PostGridItem extends StatelessWidget {
     this.hasMore = true,
   }) : super(key: key);
 
+  List<PopupMenuEntry<String>> getPopupItems() {
+    List<PopupMenuEntry<String>> items = [];
+
+    if (post.livedata!.isEmpty) {
+      items.add(
+        const PopupMenuItem<String>(
+          value: 'Edit',
+          child: Text(
+            'Edit',
+            style: bodyText2,
+          ),
+        ),
+      );
+      items.add(const PopupMenuDivider(height: 0.0));
+    }
+
+    items.add(
+      const PopupMenuItem<String>(
+        value: 'Delete',
+        child: Text(
+          'Delete',
+          style: bodyText2,
+        ),
+      ),
+    );
+
+    items.add(const PopupMenuDivider(height: 0.0));
+
+    items.add(
+      const PopupMenuItem<String>(
+        value: 'Boost',
+        child: Text(
+          'Boost',
+          style: bodyText2,
+        ),
+      ),
+    );
+
+    return items;
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -140,7 +181,7 @@ class PostGridItem extends StatelessWidget {
                   height: 26.0,
                   width: 26.0,
                   child: MyPopupMenuButton(
-                    popupItems: _popupItemPostMore,
+                    popupItems: getPopupItems(),
                     icon: const Icon(
                       Icons.more_vert,
                       color: Colors.white,
@@ -210,34 +251,4 @@ class PostGridItem extends StatelessWidget {
       ),
     );
   }
-
-  final List<PopupMenuEntry<String>> _popupItemPostMore = <PopupMenuEntry<String>>[
-    const PopupMenuItem<String>(
-      value: 'Edit',
-      child: Text(
-        'Edit',
-        style: bodyText2,
-      ),
-    ),
-    const PopupMenuDivider(
-      height: 0.0,
-    ),
-    const PopupMenuItem<String>(
-      value: 'Delete',
-      child: Text(
-        'Delete',
-        style: bodyText2,
-      ),
-    ),
-    const PopupMenuDivider(
-      height: 0.0,
-    ),
-    const PopupMenuItem<String>(
-      value: 'Boost',
-      child: Text(
-        'Boost',
-        style: bodyText2,
-      ),
-    ),
-  ];
 }

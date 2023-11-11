@@ -1,6 +1,4 @@
 import 'dart:convert';
-
-import 'package:add_2_calendar/add_2_calendar.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/live_event/models/events_model.dart';
@@ -513,10 +511,10 @@ class _PostTileState extends State<PostTile> {
                           widget.post.livedata!.isNotEmpty) ...<Widget>[
                         GestureDetector(
                           onTap: () {
-                            Add2Calendar.addEvent2Cal(Event(
-                                title: '$title',
-                                startDate: DateTime.parse(startat!),
-                                endDate: DateTime.parse(endat!)));
+                            // Add2Calendar.addEvent2Cal(Event(
+                            //     title: '$title',
+                            //     startDate: DateTime.parse(startat!),
+                            //     endDate: DateTime.parse(endat!)));
                           },
                           child: Container(
                             decoration: BoxDecoration(

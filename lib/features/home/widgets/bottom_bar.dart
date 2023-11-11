@@ -153,18 +153,21 @@ class BottomBar extends StatelessWidget {
                                               const Divider(),
                                           itemBuilder: (context, index) {
                                             return ListTile(
-                                              onTap: index == 0
-                                                  ? () => Get.toNamed(
-                                                          Routes.createPost,
-                                                          arguments: {
+                                              onTap: () {
+                                                Navigator.pop(context);
+                                                index == 0
+                                                    ? Get.toNamed(
+                                                        Routes.createPost,
+                                                        arguments: {
                                                             'sharemessage': '',
                                                             'title': '',
                                                           })
-                                                  : index == 1
-                                                      ? () => Get.toNamed(
-                                                          Routes.sellscreen)
-                                                      : () => Get.toNamed(
-                                                          Routes.createevent),
+                                                    : index == 1
+                                                        ? Get.toNamed(
+                                                            Routes.sellscreen)
+                                                        : Get.toNamed(
+                                                            Routes.createevent);
+                                              },
                                               minVerticalPadding: 0,
                                               contentPadding:
                                                   EdgeInsets.only(left: 10),

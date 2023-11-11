@@ -487,40 +487,39 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
       width: double.infinity,
       child: Row(
         children: <Widget>[
-          user?.connecteds != null &&
-                  _profileController.myProfile.connecteds!.contains(user!.uid)
-              ? ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white,
-                    elevation: 0,
-                    side: const BorderSide(
-                      color: primaryColorLT,
-                      width: 1,
-                    ),
-                  ),
-                  onPressed: () {
-                    onRefer();
-                  },
-                  child: const Padding(
-                    padding: EdgeInsets.all(15.0),
-                    child: Text(
-                      'Refer',
-                      style: TextStyle(color: primaryColorLT),
-                    ),
-                  ),
-                )
-              : ElevatedButton(
-                  onPressed: () async {
-                    connectToUser();
-                  },
-                  child: const Padding(
-                    padding: EdgeInsets.all(15.0),
-                    child: Text(
-                      'Connect',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
-                ),
+          ElevatedButton(
+            onPressed: () async {
+              connectToUser();
+            },
+            child: Text(
+              user?.connecteds != null &&
+                      _profileController.myProfile.connecteds!
+                          .contains(user!.uid)
+                  ? 'Connected'
+                  : 'Connect',
+              style: const TextStyle(color: Colors.white),
+            ),
+          ),
+          const SizedBox(
+            width: 10,
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.white,
+              elevation: 0,
+              side: const BorderSide(
+                color: primaryColorLT,
+                width: 1,
+              ),
+            ),
+            onPressed: () {
+              onRefer();
+            },
+            child: const Text(
+              'Refer',
+              style: TextStyle(color: primaryColorLT),
+            ),
+          )
         ],
       ),
     );
