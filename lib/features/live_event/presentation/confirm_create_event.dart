@@ -112,7 +112,7 @@ class _ConfirmCreateEventState extends State<ConfirmCreateEvent> {
               GestureDetector(
                 onTap: () {
                   String message =
-                      'Join this Event On The Business Bosses App With Room ID: ${widget.roomID}';
+                      'Join this Event On The Business Bosses App With Room ID: ${widget.roomID} https://businessbosses.onelink.me/xLWk/36a2ff16';
                   socialShare(message);
                 },
                 child: Container(

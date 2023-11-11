@@ -2,7 +2,6 @@
 
 import 'dart:convert';
 
-import 'package:add_2_calendar/add_2_calendar.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/features/live_event/controller/live_event_controller.dart';
 import 'package:business_bosses_v2/features/live_event/models/events_model.dart';
@@ -55,7 +54,6 @@ class EventItem extends StatelessWidget {
       'startat': event.startAt.toString(),
       'endat': event.endAt.toString(),
       'image': event.image,
-      'user': event.user?.toMap(),
     };
 
     String? jsonData = jsonEncode(dataa);
@@ -141,10 +139,10 @@ class EventItem extends StatelessWidget {
                   labelStyle: const TextStyle(
                       fontSize: 18.0, fontWeight: FontWeight.w700),
                   onTap: () {
-                    Add2Calendar.addEvent2Cal(Event(
-                        title: event.title ?? "",
-                        startDate: event.startAt!,
-                        endDate: event.endAt!));
+                    // Add2Calendar.addEvent2Cal(Event(
+                    //     title: event.title ?? "",
+                    //     startDate: event.startAt!,
+                    //     endDate: event.endAt!));
                   }),
             ],
           ),

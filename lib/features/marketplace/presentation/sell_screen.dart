@@ -59,7 +59,6 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
   String? filterCode;
   String? filterLocation;
   String? filterCategory;
-
   bool _isProcessing = false;
   bool? _isUpdating;
   bool _shouldPromote = false;
@@ -520,7 +519,7 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
         'images': _market?.images,
         'userId': _market?.userId,
         'user': _market?.user?.toMap(),
-        'discount': _discountController.text ?? '0',
+        'discount': _discountController.text,
       });
       await ApiService.put(
           path: 'markets/${_market?.marketId}',
@@ -531,6 +530,7 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
             'price': _priceController.text,
             'discount': _discountController.text,
             'images': _market?.images,
+            'discount': _discountController.text,
           });
       Get.back();
     }
