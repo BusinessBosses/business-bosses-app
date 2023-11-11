@@ -368,7 +368,7 @@ class _CreateEventState extends State<CreateEvent> {
                     data['id'] = widget.event?.id;
                   }
                   if (widget.event != null) {
-                    liveEventController.updateEvent(data);
+                    await liveEventController.updateEvent(data);
                     Get.off(() => ConfirmCreateEvent(
                           roomID: roomID!,
                           time: '$formattedDate  $formattedStartTime ',
@@ -376,12 +376,13 @@ class _CreateEventState extends State<CreateEvent> {
                           livedata: jsonData,
                         ));
                   } else {
-                    liveEventController.createEvent(data);
+                    await liveEventController.createEvent(data);
                     Get.off(() => ConfirmCreateEvent(
                           roomID: roomID!,
                           time: '$formattedDate  $formattedStartTime ',
                           title: titleController.text,
                           livedata: jsonData,
+                          isUpdate: true,
                         ));
                   }
                 },

@@ -17,9 +17,16 @@ class ConfirmCreateEvent extends StatefulWidget {
   final String? time;
   final String? title;
   final String? livedata;
+  final bool? isUpdate;
 
-  const ConfirmCreateEvent(
-      {super.key, required this.roomID, this.time, this.title, this.livedata});
+  const ConfirmCreateEvent({
+    super.key,
+    required this.roomID,
+    this.time,
+    this.title,
+    this.livedata,
+    this.isUpdate = false,
+  });
 
   @override
   State<ConfirmCreateEvent> createState() => _ConfirmCreateEventState();
@@ -39,10 +46,12 @@ class _ConfirmCreateEventState extends State<ConfirmCreateEvent> {
           icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
         ),
         centerTitle: true,
-        title: const Text(
-          'Event Created',
+        title: Text(
+          widget.isUpdate != null && widget.isUpdate == true
+              ? 'Event Updated'
+              : 'Event Created',
           textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 20),
+          style: const TextStyle(fontSize: 20),
         ),
       ),
       body: Column(

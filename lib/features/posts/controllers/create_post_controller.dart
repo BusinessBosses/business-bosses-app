@@ -5,6 +5,7 @@ import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/posts/repository/post_repository.dart';
+import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:business_bosses_v2/utils/constants/constants.dart';
 import 'package:flutter/material.dart';
@@ -195,6 +196,15 @@ class CreatePostController extends GetxController {
           }
         }
       } else {
+        if (imageFileList.isNotEmpty &&
+            (body['ytUrl'] != null && body['ytUrl'] != '')) {
+          loading(false);
+          update();
+          return showSnackbar(
+              message: 'Cannot add attachment and youtube link',
+              title: 'OOPS!',
+              error: true);
+        }
         if (await uploadFile() == null) {
           showSnackbar(message: 'Error Uploading video');
         } else {
@@ -214,6 +224,7 @@ class CreatePostController extends GetxController {
                   ));
             } else {
               Get.back();
+              // Get.toNamed(Routes.home);
             }
             Get.snackbar('Success', 'Post created successfully');
           }
