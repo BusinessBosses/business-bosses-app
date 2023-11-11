@@ -421,7 +421,7 @@ class _MarketTileState extends State<MarketTile> {
                                                         horizontal: 5.0,
                                                         vertical: 2),
                                                 child: Text(
-                                                  '-${_post.discount}%',
+                                                  '${_post.discount}% off',
                                                   style: const TextStyle(
                                                     color: Colors.green,
                                                     fontWeight: FontWeight.w800,
