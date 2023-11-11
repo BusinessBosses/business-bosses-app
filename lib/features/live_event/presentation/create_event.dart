@@ -382,6 +382,7 @@ class _CreateEventState extends State<CreateEvent> {
                           time: '$formattedDate  $formattedStartTime ',
                           title: titleController.text,
                           livedata: jsonData,
+                          isUpdate: true,
                         ));
                   }
                 },
