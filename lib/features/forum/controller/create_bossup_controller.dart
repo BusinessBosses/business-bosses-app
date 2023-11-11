@@ -74,6 +74,15 @@ class CreateBossUpController extends GetxController {
           Get.back();
         }
       } else {
+        if (imageFileList.isNotEmpty &&
+            (body['ytUrl'] != null && body['ytUrl'] != '')) {
+          loading(false);
+          update();
+          return showSnackbar(
+              message: 'Cannot add attachment and youtube link',
+              title: 'OOPS!',
+              error: true);
+        }
         if (await uploadFile() == null) {
           showSnackbar(message: 'Error Uploading image');
         } else {
