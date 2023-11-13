@@ -359,7 +359,7 @@ class _CreateEventState extends State<CreateEvent> {
                     'host': profileController.myProfile.name,
                     'photourl': profileController.myProfile.photoUrl,
                     'user': profileController.myProfile.toString(),
-                    'image': _selectedImage ?? "",
+                    'image': imageUrl ?? '',
                   };
 
                   String? jsonData = jsonEncode(dataa);
