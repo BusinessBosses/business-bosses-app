@@ -430,7 +430,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                                                   memCacheWidth:
                                                                       256,
                                                                   imageUrl:
-                                                                      'http://44.210.87.234/learningImages/marketplace.jpg',
+                                                                      'http://44.209.251.59/learningImages/marketplace.jpg',
                                                                   placeholder: (BuildContext
                                                                               context,
                                                                           String
@@ -995,7 +995,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
           'categoryId': Constants.MARKET_PLACE_CATEGORY_ID,
           'description': '- Sell your products and services \n - Find Supplies',
           'industry': 'Market Place',
-          'photo': 'http://44.210.87.234/learningImages/marketplace.jpg',
+          'photo': 'http://44.209.251.59/learningImages/marketplace.jpg',
           'active': true,
           'timestamp': DateTime.now().millisecondsSinceEpoch
         };
