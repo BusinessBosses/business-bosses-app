@@ -27,9 +27,9 @@ class CreateBossUpController extends GetxController {
     if (title.isEmpty || desc.isEmpty) {
       return false;
     } else if (ytUrl != 'null' && ytUrl.isNotEmpty) {
-      // Regular expression to match YouTube video URLs
+      // Regular expression to match YouTube video URLs, including YouTube Shorts
       final RegExp regExp = RegExp(
-          r'^https?://(?:www\.)?youtu\.?be(?:\.com)?/.*(?:\?v=|/embed/|/videos/|/watch\?v=)([\w-]+)');
+          r'^(https?://)?(www\.)?(youtu\.be/|youtube\.com/shorts/)([\w-]+)(\?[^\s]*)?$');
       if (regExp.hasMatch(ytUrl)) {
         return true;
       } else {
