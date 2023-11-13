@@ -512,6 +512,7 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
         'description': descriptionController.text,
         'price': _priceController.text,
         'promote': _market?.promote,
+        'approved': _market?.approved,
         'likes': _market?.likes,
         'comments':
             _market?.comments?.map((CommentModel x) => x.toMap()).toList(),
@@ -530,7 +531,6 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
             'price': _priceController.text,
             'discount': _discountController.text,
             'images': _market?.images,
-            'discount': _discountController.text,
           });
       Get.back();
     }
