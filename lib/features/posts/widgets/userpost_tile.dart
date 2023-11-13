@@ -129,7 +129,7 @@ class _PostTileState extends State<PostTile> {
   @override
   Widget build(BuildContext context) {
     String? title, roomid, date, starttime, host, photourl, startat, endat;
-    if (widget.post.livedata != null && widget.post.livedata!.isNotEmpty) {
+    if (widget.post.livedata != null) {
       try {
         final jsonData = jsonDecode(widget.post.livedata!.toString());
 
@@ -155,7 +155,7 @@ class _PostTileState extends State<PostTile> {
 
     if (hide == false) {
       final List<PopupMenuEntry<String>> myPopupMore = <PopupMenuEntry<String>>[
-        if (widget.post.livedata!.isEmpty)
+        if (widget.post.livedata == null)
           const PopupMenuItem<String>(
             value: 'Edit',
             child: Text(
@@ -163,7 +163,7 @@ class _PostTileState extends State<PostTile> {
               style: bodyText2,
             ),
           ),
-        if (widget.post.livedata!.isEmpty)
+        if (widget.post.livedata == null)
           const PopupMenuDivider(
             height: 0.0,
           ),
@@ -507,8 +507,7 @@ class _PostTileState extends State<PostTile> {
                             const SizedBox(height: 10),
                           ],
                         ),
-                      if (widget.post.livedata != null &&
-                          widget.post.livedata!.isNotEmpty) ...<Widget>[
+                      if (widget.post.livedata != null) ...<Widget>[
                         GestureDetector(
                           onTap: () {
                             // Add2Calendar.addEvent2Cal(Event(
@@ -770,8 +769,7 @@ class _PostTileState extends State<PostTile> {
                       ),
                     ),
                     const SizedBox(width: 8.0),
-                    if (widget.post.livedata != null &&
-                        widget.post.livedata!.isNotEmpty) ...<Widget>[
+                    if (widget.post.livedata != null) ...<Widget>[
                       (DateTime.now().isAfter(DateTime.parse(startat!)) &&
                               DateTime.now().isBefore(DateTime.parse(endat!)))
                           ? Expanded(
@@ -827,8 +825,7 @@ class _PostTileState extends State<PostTile> {
                               ],
                             ))
                     ],
-                    if (widget.post.livedata == null &&
-                        widget.post.livedata!.isEmpty) ...<Widget>[
+                    if (widget.post.livedata == null) ...<Widget>[
                       GestureDetector(
                         onTap: () => _sharePost(),
                         child: SvgPicture.asset(
