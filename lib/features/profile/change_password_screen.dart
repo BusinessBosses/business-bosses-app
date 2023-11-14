@@ -22,7 +22,6 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   AutovalidateMode _autovalidateMode = AutovalidateMode.disabled;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool _isProcessing = false;
-  final ApiService _apiService = ApiService();
   String? _currentPassword, _newPassword;
 
   @override

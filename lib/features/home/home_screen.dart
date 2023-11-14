@@ -2,6 +2,7 @@
 
 import 'package:business_bosses_v2/common/widgets/safety_model.dart';
 import 'package:business_bosses_v2/features/forum/controller/bossup_controller.dart';
+import 'package:business_bosses_v2/features/home/controller/commumities_controller.dart';
 import 'package:business_bosses_v2/features/home/widgets/bottom_bar.dart';
 import 'package:business_bosses_v2/features/live_event/presentation/live_event.dart';
 import 'package:flutter/material.dart';
@@ -43,8 +44,9 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   // final GetStorage sandBox = GetStorage();
   final ScrollController _scrollController = ScrollController();
   final MarketController marketController = Get.put(MarketController());
+  final CommunitiesController _communitiesController =
+      Get.put(CommunitiesController());
   final BossUpController bossUpController = Get.put(BossUpController());
-
   // @override
   // void initState() {
   //   super.initState();
@@ -268,6 +270,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                             _profileController.loadBoss();
                             marketController.initMarket();
                             marketController.initUsers();
+                            _communitiesController.fetchIndustries();
                             bossUpController.fetchForums();
                           },
                           icon: const Icon(
@@ -287,6 +290,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                                 _profileController.loadBoss();
                                 marketController.initMarket();
                                 marketController.initUsers();
+                                _communitiesController.fetchIndustries();
                                 bossUpController.fetchForums();
                               },
                               icon: const Icon(

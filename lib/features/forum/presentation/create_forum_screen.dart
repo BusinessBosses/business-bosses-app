@@ -15,7 +15,6 @@ import '../../../common/dialogs/snackbar.dart';
 import '../../../common/widgets/buttons/my_outlined_button.dart';
 import '../../../utils/theme/theme.dart';
 import '../../home/bottom_nav.dart';
-import '../widgets/field_container.dart';
 
 class CreateForumScreen extends StatefulWidget {
   static const String routeName = '/create-forum-screen';
@@ -41,12 +40,14 @@ class _CreateForumScreenState extends State<CreateForumScreen> {
   String? _ytUrl;
   bool isImageSelected = false;
   bool isYoutubeSelected = false;
+  final TextEditingController descriptionController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
 
     final arguments = Get.arguments;
+    descriptionController.text = forum.description ?? '';
 
     if (arguments == null) {
       Get.back();
@@ -128,8 +129,7 @@ class _CreateForumScreenState extends State<CreateForumScreen> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
                     child: DetectableTextField(
-                      controller:
-                          TextEditingController(text: forum.description),
+                      controller: descriptionController,
                       detectionRegExp: detectionRegExp(hashtag: false)!,
                       onDetectionTyped: (String text) {},
                       onDetectionFinished: () {},

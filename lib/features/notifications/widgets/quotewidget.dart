@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import '../../../common/models/quote.dart';
 import '../../../utils/theme/theme.dart';
 
+// ignore: non_constant_identifier_names
 Widget QuoteWidget(Quote quote) {
   return Container(
     decoration: BoxDecoration(
@@ -41,7 +42,7 @@ Widget QuoteWidget(Quote quote) {
                       children: <Widget>[
                         Expanded(
                           child: Text(
-                            ' ${quote.message ?? "Always give without remembering and always receive without forgetting."}',
+                            ' ${quote.message}',
                             style: bodyText1.copyWith(
                                 fontWeight: FontWeight.normal),
                           ),
@@ -51,7 +52,7 @@ Widget QuoteWidget(Quote quote) {
                     Container(
                       alignment: Alignment.bottomRight,
                       child: Text(
-                        quote.by ?? 'Brian Tracy',
+                        quote.by,
                         style: bodyText1,
                       ),
                     ),

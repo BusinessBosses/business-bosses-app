@@ -1,7 +1,6 @@
 // ignore_for_file: public_member_api_docs
 
 import 'package:business_bosses_v2/utils/theme/theme.dart';
-import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
 import 'package:detectable_text_field/widgets/detectable_text_field.dart';
 import 'package:flutter/material.dart';
 

@@ -13,6 +13,7 @@ import '../widgets/connection_user_tile.dart';
 
 class AllConnectionsScreen extends StatelessWidget {
   static const String routeName = '/all-connections-screen';
+  // ignore: unused_field
   final ConnectionController _connectionController =
       Get.put(ConnectionController());
   final ProfileController _profileController = Get.find();

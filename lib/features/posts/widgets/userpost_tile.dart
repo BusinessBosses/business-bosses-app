@@ -560,6 +560,7 @@ class _PostTileState extends State<PostTile> {
                                                       : SvgPicture.asset(
                                                           'assets/svgs/liveeventt.svg',
                                                           height: 12,
+                                                          // ignore: deprecated_member_use
                                                           color: Colors.white,
                                                         ),
                                                   const SizedBox(
@@ -568,7 +569,7 @@ class _PostTileState extends State<PostTile> {
                                                   Text(
                                                     (DateTime.now().isAfter(
                                                                 DateTime.parse(
-                                                                    startat!)) &&
+                                                                    startat)) &&
                                                             DateTime.now()
                                                                 .isBefore(DateTime
                                                                     .parse(
@@ -576,7 +577,7 @@ class _PostTileState extends State<PostTile> {
                                                         ? 'Ongoing Live Event'
                                                         : DateTime.now().isAfter(
                                                                 DateTime.parse(
-                                                                    startat!))
+                                                                    startat))
                                                             ? 'Ended event'
                                                             : 'Upcoming Live event',
                                                     style: const TextStyle(
@@ -634,9 +635,9 @@ class _PostTileState extends State<PostTile> {
                                             ? 'Ended'
                                             : DateTime.now().isAfter(
                                                         DateTime.parse(
-                                                            startat!)) &&
+                                                            startat)) &&
                                                     DateTime.now().isBefore(
-                                                        DateTime.parse(endat!))
+                                                        DateTime.parse(endat))
                                                 ? 'Happening now'
                                                 : '$date, $starttime',
                                         style: const TextStyle(
@@ -761,7 +762,7 @@ class _PostTileState extends State<PostTile> {
                       icon: const Icon(Icons.remove_red_eye_outlined,
                           size: 19, color: Colors.black),
                       label: Text(
-                        '${formatCount(widget.post.views!) ?? 0}',
+                        formatCount(widget.post.views!),
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                               fontWeight: FontWeight.w700,
                               color: textColor.withOpacity(0.8),

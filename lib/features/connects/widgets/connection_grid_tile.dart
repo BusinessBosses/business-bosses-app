@@ -30,6 +30,7 @@ class ConnectionGridTile extends StatefulWidget {
 class _ConnectionGridTileState extends State<ConnectionGridTile> {
   @override
   Widget build(BuildContext context) {
+    // ignore: unused_local_variable
     CompleteSearchController controller = Get.find();
     return InkWell(
       onTap: () {
@@ -56,7 +57,7 @@ class _ConnectionGridTileState extends State<ConnectionGridTile> {
                     child: Row(
                       children: <Widget>[
                         Text(
-                          widget.user.name ?? widget.user.username ?? '',
+                          widget.user.name ?? widget.user.username,
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                           textAlign: TextAlign.center,
@@ -72,7 +73,7 @@ class _ConnectionGridTileState extends State<ConnectionGridTile> {
                     ),
                   )
                 : Text(
-                    widget.user.name ?? widget.user.username ?? '',
+                    widget.user.name ?? widget.user.username,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     textAlign: TextAlign.center,

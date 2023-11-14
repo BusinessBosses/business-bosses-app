@@ -12,7 +12,9 @@ import 'package:socket_io_client/socket_io_client.dart';
 import 'package:uuid/uuid.dart';
 
 class ChatController extends GetxController {
+  // ignore: unused_field
   final bool _isLoading = true;
+  // ignore: unused_field
   final bool _isSearching = false;
   List<MessageModel> chatMessages = <MessageModel>[];
   List<MessageModel> chats = <MessageModel>[];

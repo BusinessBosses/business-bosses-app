@@ -3,7 +3,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
-import '../../../services/api_service.dart';
 import '../../../utils/theme/theme.dart';
 import 'reset_password_screen.dart';
 
@@ -28,8 +27,6 @@ class _ForgotPasswordVerificationScreenState
     extends State<ForgotPasswordVerificationScreen> {
   String currentText = '';
   bool _isProcessing = false;
-
-  final ApiService _apiService = ApiService();
 
   @override
   Widget build(BuildContext context) {

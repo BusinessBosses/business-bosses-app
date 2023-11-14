@@ -33,6 +33,7 @@ class MyTitle {
   static List<MyTitle> toCategoriesList({
     required List snapshot,
   }) {
+    // ignore: unnecessary_null_comparison
     if (snapshot == null) return <MyTitle>[];
     List<MyTitle> cats = <MyTitle>[];
     // Map<dynamic, dynamic> values = snapshot.value;
