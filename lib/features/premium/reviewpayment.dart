@@ -23,14 +23,11 @@ class ReviewPayment extends StatefulWidget {
 }
 
 class _ReviewPaymentState extends State<ReviewPayment> {
-  bool _isProcessing = false;
   ProfileController profileController = Get.find();
 
   ///intialize the payment
   Future<void> makePayment() async {
-    setState(() {
-      _isProcessing = true;
-    });
+    setState(() {});
     final ApiResponseModel res =
         await ApiService.post(path: 'subscription', body: <String, dynamic>{
       'price': argument['price'],
@@ -45,9 +42,7 @@ class _ReviewPaymentState extends State<ReviewPayment> {
       // ignore: use_build_context_synchronously
       showSnackBar(context, message: res.message);
     }
-    setState(() {
-      _isProcessing = false;
-    });
+    setState(() {});
   }
 
   void sendPaymentData(Map data) async {
@@ -73,9 +68,7 @@ class _ReviewPaymentState extends State<ReviewPayment> {
   ///intialize the payment
   Future<void> makePayPallPayment(String plan) async {
     try {
-      setState(() {
-        _isProcessing = true;
-      });
+      setState(() {});
       final ApiResponseModel res = await ApiService.get(
         path: 'payment/plan/$plan',
       );
@@ -88,18 +81,14 @@ class _ReviewPaymentState extends State<ReviewPayment> {
         // ignore: use_build_context_synchronously
         showSnackBar(context, message: res.message);
       }
-      setState(() {
-        _isProcessing = false;
-      });
+      setState(() {});
     } catch (e) {}
   }
 
   ///intialize the payment
   Future<void> makePaystackPayment(String plan) async {
     try {
-      setState(() {
-        _isProcessing = true;
-      });
+      setState(() {});
       final ApiResponseModel res =
           await ApiService.post(path: 'paystack', body: {
         'plan': argument['plan'],
@@ -113,9 +102,7 @@ class _ReviewPaymentState extends State<ReviewPayment> {
         // ignore: use_build_context_synchronously
         showSnackBar(context, message: res.message);
       }
-      setState(() {
-        _isProcessing = false;
-      });
+      setState(() {});
     } catch (e) {}
   }
 
@@ -415,7 +402,6 @@ class _ReviewPaymentState extends State<ReviewPayment> {
                           MyButton(
                             onPressed: () async {
                               plan = argument['plan'];
-                              _isProcessing = true;
                               await makePaystackPayment(plan);
                             },
                             labelStyle: const TextStyle(

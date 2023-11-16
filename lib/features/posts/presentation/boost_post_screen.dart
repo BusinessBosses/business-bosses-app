@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 import 'dart:math';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/features/premium/reviewpayment.dart';
@@ -106,7 +105,6 @@ class _BoostPostState extends State<BoostPost> {
         setState(() {
           _isProcessing = false;
         });
-        print(' =>> $error');
         showSnackBar(context,
             message: 'Opps!! Something went wrong. Try again');
       });
@@ -114,6 +112,7 @@ class _BoostPostState extends State<BoostPost> {
       setState(() {
         _isProcessing = false;
       });
+      // ignore: use_build_context_synchronously
       showSnackBar(context, message: 'Opps!! Something went wrong. Try again');
       // print('Here ->>>>>> $e');
     } catch (e) {

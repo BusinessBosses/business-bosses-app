@@ -59,43 +59,50 @@ class CallRoom extends StatelessWidget {
                   ) {
                     /// how to use itemBuilder to custom message view
                     return Container(
-                        decoration: const BoxDecoration(
-                            color: Colors.grey,
-                            borderRadius: BorderRadius.all(Radius.circular(6))),
-                        padding: const EdgeInsets.all(10),
-                        margin: const EdgeInsets.all(10),
-                        child: Row(
-                          children: [
-                            GestureDetector(
-                              onTap: (() {
-                                if (profileController.myProfile.uid !=
-                                    message.user.id.toString()) {
-                                  Get.toNamed(Routes.publicProfile,
-                                      arguments:
-                                          UserModel.fromMap(<String, dynamic>{
-                                        'uid': message.user.id.toString(),
-                                        'username': message.user.name,
-                                        'email': 'hhh',
-                                      }));
-                                }
-                              }),
-                              child: Text(
-                                '${message.user.name}:',
+                      decoration: const BoxDecoration(
+                        color: Colors.grey,
+                        borderRadius: BorderRadius.all(Radius.circular(6)),
+                      ),
+                      padding: const EdgeInsets.all(10),
+                      margin: const EdgeInsets.all(10),
+                      child: GestureDetector(
+                        onTap: () {
+                          if (profileController.myProfile.uid !=
+                              message.user.id.toString()) {
+                            Get.toNamed(
+                              Routes.publicProfile,
+                              arguments: UserModel.fromMap(
+                                <String, dynamic>{
+                                  'uid': message.user.id.toString(),
+                                  'username': message.user.name,
+                                  'email': 'hhh',
+                                },
+                              ),
+                            );
+                          }
+                        },
+                        child: RichText(
+                          text: TextSpan(
+                            children: [
+                              TextSpan(
+                                text: '${message.user.name}: ',
                                 style: const TextStyle(
-                                    color: Colors.yellow,
-                                    fontWeight: FontWeight.bold),
+                                  color: Colors.yellow,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
-                            ),
-                            const SizedBox(width: 5),
-                            Text(
-                              message.message,
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
+                              TextSpan(
+                                text: message.message,
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
-                            ),
-                          ],
-                        ));
+                            ],
+                          ),
+                        ),
+                      ),
+                    );
                   },
                 )
                 ..hostSeatIndexes = [0]

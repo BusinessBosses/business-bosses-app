@@ -4,9 +4,9 @@ import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 class YoutubeDisplay extends StatefulWidget {
-  String youtubeUrl;
+  final String youtubeUrl;
 
-  YoutubeDisplay(this.youtubeUrl);
+  const YoutubeDisplay(this.youtubeUrl, {super.key});
 
   @override
   _YoutubeDisplayState createState() => _YoutubeDisplayState();
@@ -17,7 +17,7 @@ class _YoutubeDisplayState extends State<YoutubeDisplay> {
   late YoutubePlayerController _controller;
   late TextEditingController _idController;
   late TextEditingController _seekToController;
-  bool _isPlayerReady = false;
+  final bool _isPlayerReady = false;
   late String videoId;
 
   @override

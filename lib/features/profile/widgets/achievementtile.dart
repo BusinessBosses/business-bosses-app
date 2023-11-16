@@ -14,7 +14,6 @@ class AchievementsExpansionTile extends StatefulWidget {
 class _AchievementsExpansionTileState extends State<AchievementsExpansionTile> {
   TextEditingController achievementController = TextEditingController();
   final List<String> achievements = <String>[];
-  String? _achievements;
 
   void addItemToList() {
     if (achievementController.text.isNotEmpty &&
@@ -22,7 +21,6 @@ class _AchievementsExpansionTileState extends State<AchievementsExpansionTile> {
         achievements.length <= 2) {
       setState(() {
         achievements.insert(0, achievementController.text);
-        _achievements = achievements.join('+');
       });
     }
   }

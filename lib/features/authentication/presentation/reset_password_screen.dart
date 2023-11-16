@@ -23,6 +23,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
 
   AutovalidateMode _autovalidateMode = AutovalidateMode.disabled;
 
+  // ignore: unused_field
   String? _email;
   String? _password;
   String? _confirmPassword;

@@ -14,7 +14,6 @@ import '../../../services/api_service.dart';
 import '../../../utils/theme/theme.dart';
 import '../../home/bottom_nav.dart';
 import '../controller/create_bossup_controller.dart';
-import '../widgets/field_container.dart';
 
 // ignore: public_member_api_docs
 class CreateBossUpScreen extends StatefulWidget {

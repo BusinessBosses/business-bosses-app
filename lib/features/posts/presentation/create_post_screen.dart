@@ -43,6 +43,10 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   final ProfileController _profileController = Get.find();
   final CreatePostController _createPostController =
       Get.put(CreatePostController());
+  final Map<String, dynamic>? arguments = Get.arguments;
+  String? sharemessage;
+  String? title;
+  String? livedata;
 
   void onDetectionFinished() {
     _overlayEntry?.remove();
@@ -59,24 +63,23 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
     // _createPostController.imageFileList
     //     .addAll(widget.images!.map((String? image) => XFile(image!)));
 
+    sharemessage = arguments?['sharemessage'];
+    title = arguments?['title'];
+    livedata = arguments?['livedata'];
+
+    if (widget.postId != null) {
+      _titleCtrl.text = widget.post!;
+    } else {
+      title != null
+          ? _titleCtrl.text = '$sharemessage\n\nTitle: $title'
+          : _titleCtrl.text == '';
+    }
     _createPostController.initializePostEditImage(widget.postDetail?.images);
     // }
   }
 
   @override
   Widget build(BuildContext context) {
-    final Map<String, dynamic> arguments = Get.arguments;
-    final String sharemessage = arguments['sharemessage'] ?? "";
-    final String title = arguments['title'];
-    final String livedata = arguments['livedata'] ?? "";
-
-    if (widget.postId != null) {
-      _titleCtrl.text = widget.post!;
-    } else {
-      title.isNotEmpty
-          ? _titleCtrl.text = sharemessage + '\n\nTitle: $title'
-          : _titleCtrl.text == '';
-    }
     return GetBuilder<CreatePostController>(
       builder: (CreatePostController controller) => WillPopScope(
         onWillPop: () async {
@@ -123,129 +126,17 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                         children: <Widget>[
                           const UserDetailsWidget(),
                           TextInput(
-                            onDetectionTyped: (String text) {
-                              // List<UserModel> filterUser =
-                              //     controller.filterUsers(text);
-
-                              // setState(() {});
-
-                              // if (_overlayEntry != null) {
-                              //   _overlayEntry?.remove();
-                              // }
-                              // _overlayEntry = OverlayEntry(
-                              //   builder: (BuildContext context) {
-                              //     return OverlayUsersItems(
-                              //       initialText: text,
-                              //       users: filterUser,
-                              //       onClose: () {
-                              //         _titleCtrl.text = '${_titleCtrl.text} ';
-                              //         _titleCtrl.selection =
-                              //             TextSelection.fromPosition(
-                              //           TextPosition(
-                              //               offset: _titleCtrl.text.length),
-                              //         );
-                              //         _overlayEntry = null;
-                              //         setState(() {});
-                              //       },
-                              //       onTap: (UserModel u) {
-                              //         String te = _titleCtrl.text.trim();
-                              //         List<String> allWords = <String>[];
-                              //         allWords = te.split(' ');
-                              //         allWords.removeAt(allWords.length - 1);
-                              //         allWords.add('@${u.username}');
-                              //         te = '';
-                              //         for (int i = 0;
-                              //             i < allWords.length;
-                              //             i++) {
-                              //           te = '$te${allWords[i]} ';
-                              //         }
-
-                              //         _titleCtrl.clear();
-
-                              //         _titleCtrl.text = te;
-                              //         _titleCtrl.selection =
-                              //             TextSelection.fromPosition(
-                              //           TextPosition(
-                              //               offset: _titleCtrl.text.length),
-                              //         );
-                              //         setState(() {});
-                              //       },
-                              //     );
-                              //   },
-                              // );
-                              // Overlay.of(context).insert(_overlayEntry);
-                              // setState(() {});
-                            },
+                            onDetectionTyped: (String text) {},
                             titleController: _titleCtrl,
                             onDetectionFinished: onDetectionFinished,
                           ),
-
-                          // Container(
-                          //   height: 50,
-                          //   decoration: const BoxDecoration(
-                          //     color: backgroundColor,
-                          //     borderRadius: BorderRadius.all(
-                          //       Radius.circular(15),
-                          //     ),
-                          //   ),
-                          //   child: Padding(
-                          //     padding: const EdgeInsets.all(15.0),
-                          //     child: Column(
-                          //       children: <Widget>[
-                          //         Expanded(
-                          //           child: TextFormField(
-                          //             onChanged: (String val) {
-                          //               _ytUrl = val;
-                          //               setState(() {});
-                          //             },
-                          //             validator: (value) {
-                          //               if (value == null || value.isEmpty) {
-                          //                 return null; // No error message when the field is empty
-                          //               } else if (!Validator.isYouTubeLink(
-                          //                   value)) {
-                          //                 return 'Please enter a valid YouTube link';
-                          //               }
-                          //               return null;
-                          //             },
-                          //             textInputAction: TextInputAction.done,
-                          //             keyboardType:
-                          //                 TextInputType.visiblePassword,
-                          //             decoration: InputDecoration(
-                          //               hintText:
-                          //                   'Paste a Youtube Video link here',
-                          //               border: InputBorder.none,
-                          //               hintStyle: Theme.of(context)
-                          //                   .textTheme
-                          //                   .bodyMedium!
-                          //                   .copyWith(
-                          //                     color: textColor.withOpacity(0.2),
-                          //                   ),
-                          //             ),
-                          //           ),
-                          //         ),
-                          //         if (_ytUrl != null &&
-                          //             _ytUrl!.isNotEmpty &&
-                          //             !Validator.isYouTubeLink(_ytUrl!))
-                          //           Container(
-                          //             margin: const EdgeInsets.only(top: 4.0),
-                          //             child: Text(
-                          //               'Please enter a valid YouTube link',
-                          //               style: TextStyle(
-                          //                 color: Colors.red,
-                          //               ),
-                          //             ),
-                          //           ),
-                          //       ],
-                          //     ),
-                          //   ),
-                          // ),
                         ],
                       ),
                     ),
                     const SizedBox(
                       height: 10,
                     ),
-                    title.isNotEmpty
+                    title != null
                         ? Container()
                         : Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 20),

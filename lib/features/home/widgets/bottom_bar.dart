@@ -1,13 +1,9 @@
 import 'package:business_bosses_v2/features/home/bottom_nav.dart';
-import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-
-import '../../../common/widgets/network_image_with_placeholder.dart';
 
 class BottomBar extends StatelessWidget {
   const BottomBar({Key? key, this.activeIndex = 0}) : super(key: key);
@@ -15,7 +11,6 @@ class BottomBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ProfileController profileController = Get.find();
     return Align(
       alignment: Alignment.bottomCenter,
       child: Container(
@@ -149,19 +144,18 @@ class BottomBar extends StatelessWidget {
                                         // Set a specific height
                                         child: ListView.separated(
                                           itemCount: 3,
-                                          separatorBuilder: (context, index) =>
-                                              const Divider(),
-                                          itemBuilder: (context, index) {
+                                          separatorBuilder:
+                                              (BuildContext context,
+                                                      int index) =>
+                                                  const Divider(),
+                                          itemBuilder: (BuildContext context,
+                                              int index) {
                                             return ListTile(
                                               onTap: () {
                                                 Navigator.pop(context);
                                                 index == 0
                                                     ? Get.toNamed(
-                                                        Routes.createPost,
-                                                        arguments: {
-                                                            'sharemessage': '',
-                                                            'title': '',
-                                                          })
+                                                        Routes.createPost)
                                                     : index == 1
                                                         ? Get.toNamed(
                                                             Routes.sellscreen)
@@ -170,7 +164,8 @@ class BottomBar extends StatelessWidget {
                                               },
                                               minVerticalPadding: 0,
                                               contentPadding:
-                                                  EdgeInsets.only(left: 10),
+                                                  const EdgeInsets.only(
+                                                      left: 10),
                                               leading: SvgPicture.asset(
                                                 index == 0
                                                     ? 'assets/svgs/text.svg'

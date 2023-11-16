@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:get/get.dart';
 
-import '../../../navigation/routes.dart';
 import '../../../utils/theme/theme.dart';
 import '../models/my_notification.dart';
 

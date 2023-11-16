@@ -28,7 +28,6 @@ class PremiumScreen extends StatefulWidget {
 class _PremiumScreenState extends State<PremiumScreen> {
   int _currentIndex = 0;
   String paymentMethodId = '';
-  final ProfileController _profileController = Get.find();
   final Map<int, Widget> _segments = <int, Widget>{
     0: const Padding(
       padding: EdgeInsets.all(8),
@@ -43,7 +42,6 @@ class _PremiumScreenState extends State<PremiumScreen> {
     )
   };
 
-  bool _isProcessing = false;
   bool isCoin = false;
   bool isSubscribed = false;
   late Map<String, dynamic>? paymantIntent;
@@ -76,13 +74,9 @@ class _PremiumScreenState extends State<PremiumScreen> {
       Navigator.of(context).push(MaterialPageRoute(
         builder: (BuildContext context) => const SubscriptionConfirmation(),
       ));
-      setState(() {
-        _isProcessing = false;
-      });
+      setState(() {});
     } catch (e) {
-      setState(() {
-        _isProcessing = false;
-      });
+      setState(() {});
       log('Here ->>>>>> $e');
 
       showSnackbar(
@@ -94,9 +88,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
 
   ///intialize the payment
   Future<void> makePayment() async {
-    setState(() {
-      _isProcessing = true;
-    });
+    setState(() {});
     final ApiResponseModel res =
         await ApiService.post(path: 'subscription', body: <String, dynamic>{
       'price': plans[_currentIndex]['price'],
@@ -113,9 +105,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
           message: 'An error occurred, please try again!',
           error: true);
     }
-    setState(() {
-      _isProcessing = false;
-    });
+    setState(() {});
   }
 
   @override

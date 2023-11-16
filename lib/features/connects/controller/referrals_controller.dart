@@ -53,12 +53,14 @@ class ReferralsController extends GetxController {
   }
 
   Future<void> connect(String userId) async {
+    // ignore: unused_local_variable
     final ApiResponseModel res = await ApiService.post(
         path: '/connection/connect',
         body: <String, dynamic>{'connectedId': userId});
   }
 
   Future<void> disconnect(String userId) async {
+    // ignore: unused_local_variable
     final ApiResponseModel res = await ApiService.post(
         path: '/connection/disconnect',
         body: <String, dynamic>{'connectedId': userId});

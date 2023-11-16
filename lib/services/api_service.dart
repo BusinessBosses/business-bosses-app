@@ -90,7 +90,7 @@ class ApiService {
 
   /// UPLOAD FILE
   static Future<dynamic> uploadFile(File image) async {
-    String uploadUrl = 'http://44.210.87.234/upload.php';
+    String uploadUrl = 'https://businessbosses.com.ng/upload.php';
     http.MultipartRequest request =
         http.MultipartRequest('POST', Uri.parse(uploadUrl));
     request.files.add(await http.MultipartFile.fromPath('file', image.path));
@@ -121,7 +121,7 @@ class ApiService {
   /// UPLOAD FILE
   static Future<MediaUploadResult> uploadMediaFiles(
       File video, File thumbnail) async {
-    String uploadUrl = 'http://44.210.87.234/upload-video.php';
+    String uploadUrl = 'https://businessbosses.com.ng/upload-video.php';
     http.MultipartRequest request =
         http.MultipartRequest('POST', Uri.parse(uploadUrl));
     request.files.add(await http.MultipartFile.fromPath('video', video.path));

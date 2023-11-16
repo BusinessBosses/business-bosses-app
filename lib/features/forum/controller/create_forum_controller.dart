@@ -35,11 +35,28 @@ class CreateForumController extends GetxController {
   }
 
   bool validateCreatePostData(Map<String, dynamic> data) {
-    if (data['title'].toString().isEmpty ||
-        data['description'].toString().isEmpty) {
+    // if (data['title'].toString().isEmpty ||
+    //     data['description'].toString().isEmpty) {
+    //   return false;
+    // } else {
+    //   return true;
+    // }
+    final String title = data['title'].toString();
+    final String desc = data['description'].toString();
+    final String ytUrl = data['ytUrl'].toString();
+    if (title.isEmpty || desc.isEmpty) {
       return false;
+    } else if (ytUrl != 'null' && ytUrl.isNotEmpty) {
+      // Regular expression to match YouTube video URLs, including YouTube Shorts
+      final RegExp regExp = RegExp(
+          r'^(https?://)?(www\.)?(youtu\.be/|youtube\.com/shorts/)([\w-]+)(\?[^\s]*)?$');
+      if (regExp.hasMatch(ytUrl)) {
+        return true;
+      } else {
+        return false;
+      }
     } else {
-      return true;
+      return true; // Return false if ytUrl is null
     }
   }
 
@@ -167,7 +184,9 @@ class CreateForumController extends GetxController {
       update();
     } else {
       showSnackbar(
-          message: 'Post can\'t be empty', title: 'OOPS!', error: true);
+          message: 'Post can\'t be empty or contain unwanted characters',
+          title: 'OOPS!',
+          error: true);
       return;
     }
   }

@@ -14,6 +14,7 @@ class PromotionScreen extends StatefulWidget {
   const PromotionScreen({Key? key}) : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _PromotionScreenState createState() => _PromotionScreenState();
 }
 
@@ -112,7 +113,9 @@ class _PromotionScreenState extends State<PromotionScreen> {
                   color: Colors.white,
                 ),
                 child: Column(
-                  children: <Widget>[Image.asset('assets/images/invitepicture.png')],
+                  children: <Widget>[
+                    Image.asset('assets/images/invitepicture.png')
+                  ],
                 )),
             Container(
                 width: MediaQuery.of(context).size.width,
@@ -278,6 +281,7 @@ class _PromotionScreenState extends State<PromotionScreen> {
                     const SizedBox(
                       width: 20,
                     ),
+                    // ignore: unnecessary_null_comparison
                     _referralId == null
                         ? const Icon(
                             Icons.content_copy,
@@ -303,6 +307,7 @@ class _PromotionScreenState extends State<PromotionScreen> {
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: <Widget>[
+                          // ignore: unnecessary_null_comparison
                           _referralId == null
                               ? const Text(
                                   'Create InviteId',
@@ -377,6 +382,7 @@ class _PromotionScreenState extends State<PromotionScreen> {
   }
 
   void _shareWithFriends() {
+    // ignore: unnecessary_null_comparison
     if (_referralId == null) return;
     String message = 'Check out Business Bosses.\n'
         'An app to meet entrepreneurs and grow your business. Join now for FREE promotion\n'

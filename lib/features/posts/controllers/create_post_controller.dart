@@ -56,27 +56,26 @@ class CreatePostController extends GetxController {
   bool validateCreatePostData(Map<String, dynamic> data) {
     final String title = data['title'].toString();
     final String ytUrl = data['ytUrl'].toString();
-    // if (title.isEmpty && imageFileList.isEmpty) {
-    //   return false;
-    // } else if (ytUrl.isNotEmpty && ytUrl != '') {
-    //   // Regular expression to match YouTube video URLs
-    //   final RegExp regExp = RegExp(
-    //       r'^https?://(?:www\.)?youtu\.?be(?:\.com)?/.*(?:\?v=|/embed/|/videos/|/watch\?v=)([\w-]+)');
-    //   print(ytUrl);
-    //   if (regExp.hasMatch(ytUrl)) {
-    //     return true;
-    //   } else {
-    //     return false;
-    //   }
-    // } else {
-    //   return true; // Return false if ytUrl is null
-    // }
-
     if (title.isEmpty && imageFileList.isEmpty) {
       return false;
+    } else if (ytUrl.isNotEmpty && ytUrl != 'null') {
+      // Regular expression to match YouTube video URLs, including YouTube Shorts
+      final RegExp regExp = RegExp(
+          r'^(https?://)?(www\.)?(youtu\.be/|youtube\.com/shorts/)([\w-]+)(\?[^\s]*)?$');
+      if (regExp.hasMatch(ytUrl)) {
+        return true;
+      } else {
+        return false;
+      }
     } else {
       return true; // Return false if ytUrl is null
     }
+
+    // if (title.isEmpty && imageFileList.isEmpty) {
+    //   return false;
+    // } else {
+    //   return true; // Return false if ytUrl is null
+    // }
   }
 
   /// UPLOAD FILE TO REMOTE SERVER

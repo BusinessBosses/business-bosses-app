@@ -8,7 +8,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 import '../../action/action.dart';
-import '../../common/models/my_user.dart';
 import '../../common/widgets/network_image_with_placeholder.dart';
 import '../../common/widgets/safety_model.dart';
 import '../../common/widgets/search/search_bar.dart' as searchBar;
@@ -173,8 +172,6 @@ class _ReferScreenState extends State<ReferScreen> {
 
   Future<void> _fetchMyConnections() async {}
 
-  final List<MyUser> _searchedList = <MyUser>[];
-
   void _onSearch(String val) {}
 
   void _onReferringToYourConnections() async {
@@ -202,13 +199,16 @@ class _ReferScreenState extends State<ReferScreen> {
     });
   }
 
+  // ignore: unused_element
   Future<void> _sendNotificationToReferTo(
       List<String> tokens, List<String> receivers) async {}
 
+  // ignore: unused_element
   Future<void> _sendNotificationToMainUser(
       List<String> tokens, List<String> receivers) async {}
 
   Future<void> _createMyReferrals(List<String> referToUsers) async {
+    // ignore: unused_local_variable
     String path = '${Constants.USERS}/${_specificUser.uid}/${Constants.REFERS}';
   }
 

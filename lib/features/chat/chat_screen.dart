@@ -148,6 +148,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
   void _onSearch(String val) {
     if (val.trim().isEmpty) return;
+    // ignore: unused_local_variable
     final List<LastMessage> data = _myChats.where((LastMessage e) {
       return e.user!.name!.toLowerCase().contains(val.trim().toLowerCase());
     }).toList();
@@ -184,7 +185,8 @@ class ChatItem extends StatefulWidget {
 }
 
 class _ChatItemState extends State<ChatItem> {
-  final List<PopupMenuEntry<String>> _popupItemForumMore = <PopupMenuEntry<String>>[
+  final List<PopupMenuEntry<String>> _popupItemForumMore =
+      <PopupMenuEntry<String>>[
     const PopupMenuItem<String>(
       value: 'Delete Chat',
       child: Text(
