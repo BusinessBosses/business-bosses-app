@@ -20,11 +20,8 @@ class _ReferralsDetailsScreenState extends State<ReferralsDetailsScreen> {
   final ScrollController _controller = ScrollController();
 
   List<MyRefers> _referrals = <MyRefers>[];
-  List<String> _userUids = <String>[];
 
   final List<MyUser> _users = <MyUser>[];
-
-  final int _loadedItemsCount = 0;
 
   bool _isInit = false;
   final bool _isLoadingNext = false;
@@ -36,7 +33,6 @@ class _ReferralsDetailsScreenState extends State<ReferralsDetailsScreen> {
       _controller.addListener(_scrollListener);
       _referrals = ModalRoute.of(context)?.settings.arguments as List<MyRefers>;
       if (_referrals.isEmpty) navigateTo(context);
-      _userUids = MyRefers.uniqueUserUidList(referralsList: _referrals);
       _loadNextConnections();
       _isInit = true;
     }

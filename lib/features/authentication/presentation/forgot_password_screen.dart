@@ -23,8 +23,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   AutovalidateMode _autovalidateMode = AutovalidateMode.disabled;
 
   String? _email;
+  // ignore: unused_field
   bool? _isUniqueEmail;
-  final ApiService _apiService = ApiService();
 
   @override
   Widget build(BuildContext context) {

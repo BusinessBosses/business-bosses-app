@@ -33,7 +33,7 @@ class PostGridItem extends StatelessWidget {
   List<PopupMenuEntry<String>> getPopupItems() {
     List<PopupMenuEntry<String>> items = [];
 
-    if (post.livedata!.isEmpty) {
+    if (post.livedata == null) {
       items.add(
         const PopupMenuItem<String>(
           value: 'Edit',

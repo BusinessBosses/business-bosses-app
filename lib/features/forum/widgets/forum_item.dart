@@ -22,7 +22,6 @@ import '../../../common/widgets/user_avatar_with_badge.dart';
 import '../../../services/api_service.dart';
 import '../../../utils/theme/theme.dart';
 import '../../../utils/time_format.dart';
-import '../../posts/widgets/all_images_item.dart';
 import '../../profile/controller/profile_controller.dart';
 import '../../profile/widgets/premium_profile_tile.dart';
 import 'forum_like_comment.dart';

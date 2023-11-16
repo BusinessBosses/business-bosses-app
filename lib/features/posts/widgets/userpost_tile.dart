@@ -129,7 +129,7 @@ class _PostTileState extends State<PostTile> {
   @override
   Widget build(BuildContext context) {
     String? title, roomid, date, starttime, host, photourl, startat, endat;
-    if (widget.post.livedata != null && widget.post.livedata!.isNotEmpty) {
+    if (widget.post.livedata != null) {
       try {
         final jsonData = jsonDecode(widget.post.livedata!.toString());
 
@@ -155,7 +155,7 @@ class _PostTileState extends State<PostTile> {
 
     if (hide == false) {
       final List<PopupMenuEntry<String>> myPopupMore = <PopupMenuEntry<String>>[
-        if (widget.post.livedata!.isEmpty)
+        if (widget.post.livedata == null)
           const PopupMenuItem<String>(
             value: 'Edit',
             child: Text(
@@ -163,7 +163,7 @@ class _PostTileState extends State<PostTile> {
               style: bodyText2,
             ),
           ),
-        if (widget.post.livedata!.isEmpty)
+        if (widget.post.livedata == null)
           const PopupMenuDivider(
             height: 0.0,
           ),
@@ -507,8 +507,7 @@ class _PostTileState extends State<PostTile> {
                             const SizedBox(height: 10),
                           ],
                         ),
-                      if (widget.post.livedata != null &&
-                          widget.post.livedata!.isNotEmpty) ...<Widget>[
+                      if (widget.post.livedata != null) ...<Widget>[
                         GestureDetector(
                           onTap: () {
                             // Add2Calendar.addEvent2Cal(Event(
@@ -561,6 +560,7 @@ class _PostTileState extends State<PostTile> {
                                                       : SvgPicture.asset(
                                                           'assets/svgs/liveeventt.svg',
                                                           height: 12,
+                                                          // ignore: deprecated_member_use
                                                           color: Colors.white,
                                                         ),
                                                   const SizedBox(
@@ -569,7 +569,7 @@ class _PostTileState extends State<PostTile> {
                                                   Text(
                                                     (DateTime.now().isAfter(
                                                                 DateTime.parse(
-                                                                    startat!)) &&
+                                                                    startat)) &&
                                                             DateTime.now()
                                                                 .isBefore(DateTime
                                                                     .parse(
@@ -577,7 +577,7 @@ class _PostTileState extends State<PostTile> {
                                                         ? 'Ongoing Live Event'
                                                         : DateTime.now().isAfter(
                                                                 DateTime.parse(
-                                                                    startat!))
+                                                                    startat))
                                                             ? 'Ended event'
                                                             : 'Upcoming Live event',
                                                     style: const TextStyle(
@@ -635,9 +635,9 @@ class _PostTileState extends State<PostTile> {
                                             ? 'Ended'
                                             : DateTime.now().isAfter(
                                                         DateTime.parse(
-                                                            startat!)) &&
+                                                            startat)) &&
                                                     DateTime.now().isBefore(
-                                                        DateTime.parse(endat!))
+                                                        DateTime.parse(endat))
                                                 ? 'Happening now'
                                                 : '$date, $starttime',
                                         style: const TextStyle(
@@ -762,7 +762,7 @@ class _PostTileState extends State<PostTile> {
                       icon: const Icon(Icons.remove_red_eye_outlined,
                           size: 19, color: Colors.black),
                       label: Text(
-                        '${formatCount(widget.post.views!) ?? 0}',
+                        formatCount(widget.post.views!),
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                               fontWeight: FontWeight.w700,
                               color: textColor.withOpacity(0.8),
@@ -770,8 +770,7 @@ class _PostTileState extends State<PostTile> {
                       ),
                     ),
                     const SizedBox(width: 8.0),
-                    if (widget.post.livedata != null &&
-                        widget.post.livedata!.isNotEmpty) ...<Widget>[
+                    if (widget.post.livedata != null) ...<Widget>[
                       (DateTime.now().isAfter(DateTime.parse(startat!)) &&
                               DateTime.now().isBefore(DateTime.parse(endat!)))
                           ? Expanded(
@@ -827,8 +826,7 @@ class _PostTileState extends State<PostTile> {
                               ],
                             ))
                     ],
-                    if (widget.post.livedata == null &&
-                        widget.post.livedata!.isEmpty) ...<Widget>[
+                    if (widget.post.livedata == null) ...<Widget>[
                       GestureDetector(
                         onTap: () => _sharePost(),
                         child: SvgPicture.asset(

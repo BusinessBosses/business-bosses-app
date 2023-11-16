@@ -22,8 +22,6 @@ class _InvitedUsersScreenState extends State<InvitedUsersScreen> {
   final List<MyUser> _users = <MyUser>[];
   List<Invite> invitedUsers = <Invite>[];
 
-  final int _loadedItems = 0;
-
   final bool _isLoadingNext = false;
   bool _isInit = false;
 

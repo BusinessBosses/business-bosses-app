@@ -70,6 +70,7 @@ class Industry {
   }
 
   static List<Industry> toJustSortIndustryList(List<dynamic> responseData) {
+    // ignore: unnecessary_null_comparison
     if (responseData == null) return <Industry>[];
     List<Industry> items = <Industry>[];
     for (final postJson in responseData) {

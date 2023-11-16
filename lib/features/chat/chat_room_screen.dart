@@ -40,13 +40,16 @@ class ChatRoomScreen extends StatefulWidget {
 
 class _ChatRoomScreenState extends State<ChatRoomScreen> {
   final ProfileController _profileController = Get.find();
+  // ignore: unused_field
   final HomeController _homeController = Get.find();
+  // ignore: unused_field
   final ChatController _chatController = Get.find();
   late TextEditingController _textEditingController;
   late UserModel args;
   bool showColumn = true;
   // bool showEmoji = false;
-  final List<PopupMenuEntry<String>> _popupItemForumMore = <PopupMenuEntry<String>>[
+  final List<PopupMenuEntry<String>> _popupItemForumMore =
+      <PopupMenuEntry<String>>[
     const PopupMenuItem<String>(
       value: 'Delete Chat',
       child: Text(
@@ -256,7 +259,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                                                     color: Colors.white,
                                                     child: Padding(
                                                       padding: const EdgeInsets
-                                                              .symmetric(
+                                                          .symmetric(
                                                           horizontal: 20,
                                                           vertical: 20),
                                                       child: Column(
@@ -437,7 +440,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                                                     color: Colors.white,
                                                     child: Padding(
                                                       padding: const EdgeInsets
-                                                              .symmetric(
+                                                          .symmetric(
                                                           horizontal: 20,
                                                           vertical: 20),
                                                       child: Column(
@@ -618,7 +621,8 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                                                         .pop(context);
                                                     showDialog(
                                                       context: context,
-                                                      builder: (BuildContext context) {
+                                                      builder: (BuildContext
+                                                          context) {
                                                         return AlertDialog(
                                                           title: const TextWidget(
                                                               text:
@@ -766,6 +770,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
   void _setLastMessage(MessageModel message) {}
 
   void DeleteLastMessage(MessageModel message) {
+    // ignore: unused_local_variable
     String senderPath = '${Constants.USERS_CHATS}/${message.senderUid}';
   }
 
@@ -794,6 +799,7 @@ class SendMessageBox extends StatelessWidget {
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    // ignore: unused_local_variable
     String? previousScreen = Get.previousRoute;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

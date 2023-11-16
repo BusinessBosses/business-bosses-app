@@ -27,6 +27,7 @@ class ConnectionUserItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // ignore: unnecessary_null_comparison
     return user == null
         ? const ListTile(
             title: Text('User may not exist any more'),

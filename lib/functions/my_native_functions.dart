@@ -60,6 +60,7 @@ class MyNativeFunctions {
 
   static List<File> toImageFile(FilePickerResult result) {
     List<File> files = <File>[];
+    // ignore: unnecessary_null_comparison
     if (result != null) {
       List<PlatformFile> platformFiles = result.files;
       for (PlatformFile plf in platformFiles) {

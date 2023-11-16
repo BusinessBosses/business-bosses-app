@@ -21,6 +21,7 @@ class AuthController extends GetxController {
   /// AUTH LOADING STATE
   RxBool isLoading = RxBool(false);
 
+  // ignore: unused_field
   final GlobalKey<State> _key = GlobalKey<State>();
 
   final ApiService _apiService = ApiService();
@@ -72,7 +73,10 @@ class AuthController extends GetxController {
       subject,
       content: <Content>[content],
       templateId: dotenv.env['SENDGRID_TEMPLATE_ID'],
-      customArgs: <String, String>{'username': userName, 'otp': code.toString()},
+      customArgs: <String, String>{
+        'username': userName,
+        'otp': code.toString()
+      },
     );
     mailer.send(email).then((Result<void> result) {
       if (result.isError) {
@@ -119,7 +123,10 @@ class AuthController extends GetxController {
       subject,
       content: <Content>[content],
       templateId: dotenv.env['SENDGRID_FORGOT_TEMPLATE_ID'],
-      customArgs: <String, String>{'username': username, 'otp': code.toString()},
+      customArgs: <String, String>{
+        'username': username,
+        'otp': code.toString()
+      },
     );
     mailer.send(email).then((Result<void> result) {
       if (result.isError) {

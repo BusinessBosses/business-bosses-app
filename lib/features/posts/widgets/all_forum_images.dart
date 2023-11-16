@@ -1,6 +1,4 @@
 import 'package:business_bosses_v2/features/forum/models/forum_model.dart';
-import 'package:business_bosses_v2/features/posts/models/post_model.dart';
-import 'package:business_bosses_v2/features/posts/widgets/video_screen.dart';
 import 'package:business_bosses_v2/features/posts/widgets/youtube_display.dart';
 import 'package:business_bosses_v2/features/posts/widgets/yt_player.dart';
 import 'package:flutter/material.dart';

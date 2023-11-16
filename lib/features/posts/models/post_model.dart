@@ -127,7 +127,7 @@ class PostModel {
           : null,
       videoUrl: map['videoUrl'] != null ? map['videoUrl'] as String : null,
       ytUrl: map['ytUrl'] != null ? map['ytUrl'] as String : null,
-      livedata: map['livedata'] != null ? map['livedata'] as String : "",
+      livedata: map['livedata'] != null ? map['livedata'] as String : null,
       isRanked: map['isRanked'] as bool,
       views: map['views'] != null ? map['views'] as int : null,
       promote: map['promote'] != null ? map['promote'] as bool : null,
