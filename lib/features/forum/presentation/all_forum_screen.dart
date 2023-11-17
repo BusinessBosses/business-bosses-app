@@ -39,35 +39,6 @@ class _AllForumScreenState extends State<AllForumScreen> {
   final HomeController hmeController = Get.find();
   // final List<ForumModel> forums = [];
 
-  String formatCount(int count) {
-    if (count >= 1000) {
-      double countInK = count / 1000;
-      if (countInK >= 1000) {
-        return '${(countInK / 1000).toStringAsFixed(1)}m';
-      } else {
-        return '${countInK.toStringAsFixed(1)}k';
-      }
-    } else {
-      return count.toString();
-    }
-  }
-
-  void toggleJoinAndLeaveIndustry(ForumController controller) {
-    final String myUid = _myProfile.myProfile.uid;
-    // print(myUid);
-    if (industry.joinedUsers?.contains(myUid) ?? false) {
-      industry.joinedUsers!.removeWhere((String element) => element == myUid);
-    } else {
-      if (industry.joinedUsers == null) {
-        industry.joinedUsers = <String>[myUid];
-      } else {
-        industry.joinedUsers!.add(myUid);
-      }
-    }
-    setState(() {});
-    controller.joinAndLeaveIndustry(myUid, industry.industryId!);
-  }
-
   @override
   void initState() {
     // TODO: implement initState
@@ -98,7 +69,7 @@ class _AllForumScreenState extends State<AllForumScreen> {
             appBar: AppBar(
               leading: IconButton(
                 onPressed: () {
-                  Navigator.pop(context);
+                  Get.back();
                 },
                 icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
               ),
@@ -488,5 +459,41 @@ class _AllForumScreenState extends State<AllForumScreen> {
             ));
       },
     );
+  }
+
+  String formatCount(int count) {
+    if (count >= 1000) {
+      double countInK = count / 1000;
+      if (countInK >= 1000) {
+        return '${(countInK / 1000).toStringAsFixed(1)}m';
+      } else {
+        return '${countInK.toStringAsFixed(1)}k';
+      }
+    } else {
+      return count.toString();
+    }
+  }
+
+  void toggleJoinAndLeaveIndustry(ForumController controller) {
+    final String myUid = _myProfile.myProfile.uid;
+    // print(myUid);
+    if (industry.joinedUsers?.contains(myUid) ?? false) {
+      industry.joinedUsers!.removeWhere((String element) => element == myUid);
+    } else {
+      if (industry.joinedUsers == null) {
+        industry.joinedUsers = <String>[myUid];
+      } else {
+        industry.joinedUsers!.add(myUid);
+      }
+    }
+    setState(() {});
+    controller.joinAndLeaveIndustry(myUid, industry.industryId!);
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    Get.delete<ForumController>();
+    super.dispose();
   }
 }
