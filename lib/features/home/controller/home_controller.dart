@@ -699,6 +699,7 @@ class HomeController extends GetxController {
   }
 
   void updateViews(PostModel post) {
+    HomeRepository.updateViews(post.postId, post.views! + 1);
     final int postIndex = mixedPosts.indexWhere(
         (Map<String, dynamic> element) =>
             element['shouldCount'] == null &&
@@ -708,7 +709,6 @@ class HomeController extends GetxController {
       // Increment the view count of the post by 1
       mixedPosts[postIndex]['data'].setViews(post.views! + 1);
       update();
-      HomeRepository.updateViews(post.postId, post.views!);
     }
   }
 

@@ -407,7 +407,9 @@ class _MarketTileState extends State<MarketTile> {
                                       const SizedBox(
                                         width: 8,
                                       ),
-                                      _post.discount.toString() == '0'
+                                      _post.discount.toString() == '0' ||
+                                              _post.discount == null ||
+                                              _post.discount == ''
                                           ? Container()
                                           : Container(
                                               decoration: BoxDecoration(
