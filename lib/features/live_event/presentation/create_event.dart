@@ -37,7 +37,8 @@ class _CreateEventState extends State<CreateEvent> {
   DateTime startAt = DateTime.now();
   DateTime endAt = DateTime.now();
   DateTime selectedDateTime = DateTime.now();
-  final LiveController liveEventController = Get.find();
+  final LiveController liveEventController = Get.put(LiveController());
+  bool isLoading = false;
 
   String? roomID;
   File? _selectedImage;
@@ -288,8 +289,12 @@ class _CreateEventState extends State<CreateEvent> {
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: CustomButton(
+                isProcessing: isLoading,
                 buttonType: ButtonType.elevated,
                 onPressed: () async {
+                  setState(() {
+                    isLoading = true;
+                  });
                   String? imageUrl;
                   final DateTime endAtt = endAt.toUtc();
                   final DateFormat dateFormat =
@@ -309,12 +314,18 @@ class _CreateEventState extends State<CreateEvent> {
                       context,
                       message: 'Please enter a title',
                     );
+                    setState(() {
+                      isLoading = false;
+                    });
                     return;
                   }
                   if (endAt.isBefore(startAt)) {
                     // Show an error message or handle it in a way that's appropriate for your app.
                     showSnackBar(context,
                         message: 'End time cannot be before start time');
+                    setState(() {
+                      isLoading = false;
+                    });
                     return;
                   }
                   if (startAt.isBefore(DateTime.now()) ||
@@ -322,11 +333,17 @@ class _CreateEventState extends State<CreateEvent> {
                     // Show an error message or handle it as per your app's requirements.
                     showSnackBar(context,
                         message: 'Start time cannot be in the past');
+                    setState(() {
+                      isLoading = false;
+                    });
                     return;
                   }
                   if (endAt.isAfter(startAt.add(const Duration(hours: 2)))) {
                     showSnackBar(context,
                         message: 'Event duration cannot be more than 2 hours');
+                    setState(() {
+                      isLoading = false;
+                    });
                     return;
                   }
                   if (_selectedImage != null) {
@@ -374,6 +391,7 @@ class _CreateEventState extends State<CreateEvent> {
                           time: '$formattedDate  $formattedStartTime ',
                           title: titleController.text,
                           livedata: jsonData,
+                          isUpdate: false,
                         ));
                   } else {
                     await liveEventController.createEvent(data);
