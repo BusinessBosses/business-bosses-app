@@ -200,7 +200,7 @@ class CreatePostController extends GetxController {
           loading(false);
           update();
           return showSnackbar(
-              message: 'Cannot add attachment and youtube link',
+              message: 'You cannot add image & YouTube link, please remove one',
               title: 'OOPS!',
               error: true);
         }

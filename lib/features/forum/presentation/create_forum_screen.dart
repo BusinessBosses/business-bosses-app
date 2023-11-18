@@ -14,7 +14,6 @@ import '../../../action/action.dart';
 import '../../../common/dialogs/snackbar.dart';
 import '../../../common/widgets/buttons/my_outlined_button.dart';
 import '../../../utils/theme/theme.dart';
-import '../../home/bottom_nav.dart';
 
 class CreateForumScreen extends StatefulWidget {
   static const String routeName = '/create-forum-screen';
@@ -33,7 +32,7 @@ class _CreateForumScreenState extends State<CreateForumScreen> {
   String description = '';
   ForumModel forum = ForumModel(forumId: '', industryId: '');
   bool isUpdating = false;
-  bool isbossup = true;
+  late bool isbossup;
   late String industryId;
   String? categoryId;
   bool isVisible = false;
@@ -47,17 +46,17 @@ class _CreateForumScreenState extends State<CreateForumScreen> {
     super.initState();
 
     final arguments = Get.arguments;
-    descriptionController.text = forum.description ?? '';
 
     if (arguments == null) {
       Get.back();
     } else {
-      isbossup = arguments['isBossUp'] ?? true;
+      isbossup = arguments['isBossUp'] ?? false;
       if (arguments['isUpdating'] != null) {
         isUpdating = true;
         forum = arguments['forum'];
         title = forum.title ?? '';
         description = forum.description ?? '';
+        descriptionController.text = forum.description ?? '';
         industryId = forum.industryId;
         _createForumController.initializeForumEditImage(forum.images);
       } else {
@@ -89,15 +88,7 @@ class _CreateForumScreenState extends State<CreateForumScreen> {
                 IconButton(
                   icon: const Icon(Icons.close),
                   onPressed: () {
-                    isbossup
-                        ? Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (BuildContext context) =>
-                                  const BottomNavScreen(2, true),
-                            ),
-                          )
-                        : Get.back();
+                    isbossup ? Get.back() : Get.back();
                   },
                 )
               ],

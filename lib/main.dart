@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:developer';
 
-import 'package:business_bosses_v2/features/live_event/controller/live_event_controller.dart';
 import 'package:business_bosses_v2/navigation/navigation.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/services/firebase_analytics.dart';
@@ -43,22 +42,42 @@ void main() async {
   FirebaseMessaging.instance.requestPermission();
 
   /// BACKGROUND HANDLER
-  FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) async {
-    Navigator.pushNamed(
-      navigatorKey.currentState!.context,
-      Routes.notifications,
-    );
+  FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage? message) async {
+    if (message != null && message.notification != null) {
+      String? title = message.notification!.title?.toLowerCase();
+      if (title != null && title.contains('new message')) {
+        Navigator.pushNamed(
+          navigatorKey.currentState!.context,
+          Routes.chat,
+        );
+      } else {
+        print('me 1');
+        Navigator.pushNamed(
+          navigatorKey.currentState!.context,
+          Routes.notifications,
+        );
+      }
+    }
   });
 
   /// TERMINATED HANDLER
   FirebaseMessaging.instance
       .getInitialMessage()
       .then((RemoteMessage? message) async {
-    if (message != null) {
-      Navigator.pushNamed(
-        navigatorKey.currentState!.context,
-        Routes.notifications,
-      );
+    if (message != null && message.notification != null) {
+      String? title = message.notification!.title?.toLowerCase();
+      if (title != null && title.contains('new message')) {
+        Navigator.pushNamed(
+          navigatorKey.currentState!.context,
+          Routes.chat,
+        );
+      } else {
+        print('me 2');
+        Navigator.pushNamed(
+          navigatorKey.currentState!.context,
+          Routes.notifications,
+        );
+      }
     }
   });
 
@@ -128,7 +147,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Get.put(LiveController());
     SystemChrome.setSystemUIOverlayStyle(
       const SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,

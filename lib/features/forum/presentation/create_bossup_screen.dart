@@ -12,7 +12,6 @@ import '../../../action/action.dart';
 import '../../../common/widgets/buttons/my_outlined_button.dart';
 import '../../../services/api_service.dart';
 import '../../../utils/theme/theme.dart';
-import '../../home/bottom_nav.dart';
 import '../controller/create_bossup_controller.dart';
 
 // ignore: public_member_api_docs
@@ -77,15 +76,7 @@ class _CreateBossUpScreenState extends State<CreateBossUpScreen> {
                 IconButton(
                   icon: const Icon(Icons.close),
                   onPressed: () {
-                    isbossup
-                        ? Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (BuildContext context) =>
-                                  const BottomNavScreen(1, true),
-                            ),
-                          )
-                        : Get.back();
+                    isbossup ? Get.back() : Get.back();
                   },
                 )
               ],

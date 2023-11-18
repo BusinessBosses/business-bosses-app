@@ -441,7 +441,6 @@ class _ForumItemState extends State<ForumItem> {
                                                   arguments: <String, Object>{
                                                     'isUpdating': true,
                                                     'forum': widget.forum,
-                                                    'isBossUp': false,
                                                   });
                                             } else if (val == 'Delete') {
                                               _showDialog();

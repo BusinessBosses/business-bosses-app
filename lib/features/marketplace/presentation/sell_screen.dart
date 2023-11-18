@@ -332,9 +332,12 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
                           ),
                         ),
                       ),
-                widget.isUpd
-                    ? Container()
-                    : Preview(controller: createMarketController),
+                Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: widget.isUpd
+                      ? Container()
+                      : Preview(controller: createMarketController),
+                ),
                 widget.isUpd
                     ? Container()
                     : Column(

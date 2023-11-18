@@ -473,6 +473,7 @@ class _LiveEventState extends State<LiveEvent> {
 
   @override
   void dispose() {
+    Get.delete<LiveController>();
     super.dispose();
   }
 
