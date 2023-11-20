@@ -399,7 +399,6 @@ class EventItem extends StatelessWidget {
       required bool isHost,
       required String title,
       String? image}) {
-    print('Image $image');
     Navigator.push(
       context,
       // ignore: always_specify_types
