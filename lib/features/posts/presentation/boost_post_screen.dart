@@ -158,6 +158,8 @@ class _BoostPostState extends State<BoostPost> {
   }
 
   Future<void> makeStripePayment() async {
+    // print(
+    //     'isCoined ${isCoin} && ${profileController.myProfile.coinscount} and the amount ${int.parse(initPlan) * 100}');
     if (isCoin &&
         profileController.myProfile.coinscount! >=
             (int.parse(initPlan) * 100)) {
@@ -478,6 +480,10 @@ class _BoostPostState extends State<BoostPost> {
                           ? 'Pay With Card'
                           : 'Continue',
                       onPressed: () async {
+                        isCoin = profileController.myProfile.coinscount! >=
+                                (int.parse(initPlan) * 100)
+                            ? true
+                            : false;
                         await makeStripePayment();
                       },
                     ),
