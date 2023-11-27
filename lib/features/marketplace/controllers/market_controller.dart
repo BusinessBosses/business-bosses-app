@@ -1,6 +1,7 @@
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
+import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
@@ -15,6 +16,8 @@ class MarketController extends GetxController {
   late IO.Socket socket;
   List<MarketModel> allmarkets = <MarketModel>[];
   RxList<MarketModel> markets = RxList<MarketModel>(<MarketModel>[]);
+  RxList<MarketModel> products = RxList<MarketModel>(<MarketModel>[]);
+  RxList<MarketModel> services = RxList<MarketModel>(<MarketModel>[]);
   RxList<MarketModel> searchResult = RxList<MarketModel>(<MarketModel>[]);
   RxList<UserModel> users = RxList<UserModel>(<UserModel>[]);
   RxInt paginationPage = RxInt(1);
@@ -29,19 +32,56 @@ class MarketController extends GetxController {
   final HomeController _homeController = Get.find();
   final ProfileController _profileController = Get.find();
   void removeListing(String marketId) {
+    ApiService.delete(path: 'markets/$marketId');
     final int marketIndex = markets
         .indexWhere((MarketModel element) => element.marketId == marketId);
     if (marketIndex != -1) {
       markets.removeAt(marketIndex);
-      update();
     }
+
+    // Check in the products list
+    final int productIndex = products
+        .indexWhere((MarketModel element) => element.marketId == marketId);
+    if (productIndex != -1) {
+      products.removeAt(productIndex);
+    }
+
+    // Check in the services list
+    final int serviceIndex = services
+        .indexWhere((MarketModel element) => element.marketId == marketId);
+    if (serviceIndex != -1) {
+      services.removeAt(serviceIndex);
+    }
+    update();
   }
 
   void updateListing(int index, Map<String, dynamic> data) {
     if (index != -1) {
+      // Create an updated market model
+      MarketModel updatedMarket = MarketModel.fromMap(data);
+      print(updatedMarket.isProduct);
+      // Update in the main list
       markets[index] = MarketModel.fromMap(data);
+
+      // Update in the products list if it's a product
+      final int productIndex = products.indexWhere(
+          (MarketModel element) => element.marketId == updatedMarket.marketId);
+      print(productIndex);
+      if (productIndex != -1) {
+        products[productIndex] = updatedMarket;
+      }
+      print(updatedMarket.isProduct);
+      // Update in the services list if it's a service
+
+      final int serviceIndex = services.indexWhere(
+          (MarketModel element) => element.marketId == updatedMarket.marketId);
+
+      if (serviceIndex != -1) {
+        services[serviceIndex] = updatedMarket;
+      }
+
+      update();
     }
-    update();
   }
 
   void updatemarketViews(MarketModel post) {
@@ -88,6 +128,15 @@ class MarketController extends GetxController {
               .toList()
         }));
       }
+      // Filter markets based on isProduct value
+      final List<MarketModel> productMarkets =
+          markets.where((MarketModel market) => market.isProduct).toList();
+      final List<MarketModel> serviceMarkets =
+          markets.where((MarketModel market) => !market.isProduct).toList();
+      products.clear();
+      services.clear();
+      products.addAll(productMarkets);
+      services.addAll(serviceMarkets);
       _homeController.addMarkets(markets);
     }
   }
@@ -143,6 +192,14 @@ class MarketController extends GetxController {
 
     markets.insert(0, modelizedNewPost);
 
+    // Check if it's a product and add to the products list
+    if (modelizedNewPost.isProduct) {
+      products.insert(0, modelizedNewPost);
+    } else {
+      // If it's not a product, assume it's a service and add to the services list
+      services.insert(0, modelizedNewPost);
+    }
+
     update();
   }
 
@@ -155,6 +212,24 @@ class MarketController extends GetxController {
       });
 
       markets[postIndex] = modelizedUpdatedPost;
+
+      // Update in the products list if it's a product
+      if (modelizedUpdatedPost.isProduct) {
+        final int productIndex = products.indexWhere((MarketModel element) =>
+            element.marketId == modelizedUpdatedPost.marketId);
+        if (productIndex != -1) {
+          products[productIndex] = modelizedUpdatedPost;
+        }
+      }
+
+      // Update in the services list if it's not a product
+      if (!modelizedUpdatedPost.isProduct) {
+        final int serviceIndex = services.indexWhere((MarketModel element) =>
+            element.marketId == modelizedUpdatedPost.marketId);
+        if (serviceIndex != -1) {
+          services[serviceIndex] = modelizedUpdatedPost;
+        }
+      }
 
       update();
     }

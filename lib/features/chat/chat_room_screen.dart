@@ -3,6 +3,7 @@ import 'package:business_bosses_v2/common/models/user_model.dart';
 // import 'package:flutter/foundation.dart' as foundation;
 import 'package:business_bosses_v2/features/chat/controllers/chat_controller.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
+import 'package:business_bosses_v2/features/marketplace/presentation/seller_reviews.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
@@ -21,7 +22,6 @@ import '../../common/widgets/user_avatar_with_badge.dart';
 import '../../utils/constants/constants.dart';
 import '../../utils/theme/theme.dart';
 import '../marketplace/models/market_model.dart';
-import '../marketplace/presentation/seller_reviews.dart';
 import 'models/my_message.dart';
 
 class ChatRoomScreen extends StatefulWidget {

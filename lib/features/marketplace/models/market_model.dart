@@ -19,6 +19,7 @@ class MarketModel {
   bool approved;
   int? timestamp;
   int? views;
+  bool isProduct;
   final List<String>? likes;
   final List<String>? coins;
   final List<CommentModel>? comments;
@@ -39,6 +40,7 @@ class MarketModel {
     this.coins,
     this.comments,
     this.discount = '0',
+    this.isProduct = true,
   });
 
   MarketModel copyWith({
@@ -58,6 +60,7 @@ class MarketModel {
     List<String>? coins,
     List<CommentModel>? comments,
     String? discount,
+    bool? isProduct,
   }) {
     return MarketModel(
       description: description ?? this.description,
@@ -76,6 +79,7 @@ class MarketModel {
       comments: comments ?? this.comments,
       views: views ?? this.views,
       discount: discount ?? this.discount,
+      isProduct: isProduct ?? this.isProduct,
     );
   }
 
@@ -97,6 +101,7 @@ class MarketModel {
       'views': views,
       'comments': comments?.map((CommentModel x) => x.toMap()).toList(),
       'discount': discount,
+      'isProduct': isProduct,
     };
   }
 
@@ -125,6 +130,7 @@ class MarketModel {
               .map((e) => CommentModel.fromMap(e as Map<String, dynamic>))
               .toList()
           : null,
+      isProduct: map['isProduct'] as bool,
     );
   }
 

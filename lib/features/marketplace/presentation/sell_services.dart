@@ -1,6 +1,5 @@
 import 'package:business_bosses_v2/features/home/widgets/sellingpopup.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
-import 'package:country_list_pick/country_list_pick.dart';
 import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
 import 'package:detectable_text_field/widgets/detectable_text_field.dart';
 import 'package:flutter/gestures.dart';
@@ -22,21 +21,21 @@ import '../controllers/market_controller.dart';
 import '../models/market_model.dart';
 
 /// SELLING SCREEN MARKETPLACE
-class CreateSellingitemScreen extends StatefulWidget {
+class CreateServiceScreen extends StatefulWidget {
   /// SELLING SCREEN MARKETPLACE
-  const CreateSellingitemScreen({Key? key, this.market, required this.isUpd})
+  const CreateServiceScreen({Key? key, this.market, required this.isUpd})
       : super(key: key);
 
   /// String if to update;
   final MarketModel? market;
   final bool isUpd;
-  // CreateSellingitemScreen();
+  // CreateServiceScreen();
   @override
-  _CreateSellingitemScreenState createState() =>
-      _CreateSellingitemScreenState();
+  // ignore: library_private_types_in_public_api
+  _CreateServiceScreenState createState() => _CreateServiceScreenState();
 }
 
-class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
+class _CreateServiceScreenState extends State<CreateServiceScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   // ignore: unused_field
@@ -63,8 +62,6 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
   bool? _isUpdating;
   bool _shouldPromote = false;
   final TextEditingController descriptionController = TextEditingController();
-  final TextEditingController _priceController = TextEditingController();
-  final TextEditingController _discountController = TextEditingController();
 
   @override
   void initState() {
@@ -75,9 +72,21 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
       _market = widget.market;
     }
     descriptionController.text = _market?.description ?? '';
-    _priceController.text = _market?.price ?? '';
-    _discountController.text = _market?.discount.toString() ?? '';
-    _selectedCategory = _market?.category;
+    price = _market?.price ?? '';
+    if (_market?.category == 'Write 1 Page Business Plan') {
+      _selectedCategory = 'Write 1 Page Business Plan - \$10';
+    } else if (_market?.category == 'Build 1 Page Website') {
+      _selectedCategory = 'Build 1 Page Website - \$10';
+    } else if (_market?.category == 'Create Social Media AD') {
+      _selectedCategory = 'Create Social Media AD - \$10';
+    } else if (_market?.category == 'Monthly Account Book Keeping') {
+      _selectedCategory = 'Monthly Account Book Keeping - \$10';
+    } else if (_market?.category == 'Logo & Branding Guidelines') {
+      _selectedCategory = 'Logo & Branding Guidelines - \$10';
+    } else if (_market?.category == 'Test, Review & Feedback') {
+      _selectedCategory = 'Test, Review & Feedback - \$5';
+    }
+
     _selectedLocation = _market?.location;
     _fileProcessing = <bool>[];
   }
@@ -93,8 +102,8 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
           key: _scaffoldKey,
           appBar: AppBar(
             title: Text(widget.isUpd
-                ? 'Edit Product Listing'
-                : 'Create Product Listing'),
+                ? 'Edit Service Listing'
+                : 'Create Service Listing'),
             automaticallyImplyLeading: false, // Used for removing back buttoon.
             actions: <Widget>[
               IconButton(
@@ -112,59 +121,56 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
               children: <Widget>[
                 Padding(
                   padding: const EdgeInsets.only(left: 16.0, right: 16),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        flex:
-                            2, // Adjust the flex value to control the relative sizes
-                        child: Stack(children: [
-                          TextFormField(
-                            controller: _priceController,
-                            onChanged: (String val) => price = val,
-                            textInputAction: TextInputAction.next,
-                            keyboardType: TextInputType.text,
-                            maxLength: 15,
-                            decoration: inputDecoration.copyWith(
-                              hintText: 'Enter Price in USD (Example \$10)',
-                            ),
-                          )
-                        ]),
-                      ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      Expanded(
-                        flex:
-                            1, // Adjust the flex value to control the relative sizes
-                        child: Stack(
-                          children: [
-                            TextFormField(
-                              controller: _discountController,
-                              onChanged: (String val) => discount = val,
-                              textInputAction: TextInputAction.next,
-                              keyboardType: TextInputType.number,
-                              maxLength: 3,
-                              decoration: inputDecoration.copyWith(
-                                hintText: 'Discount',
-                              ),
-                            ),
-                            const Positioned(
-                              right: 10,
-                              top: 0,
-                              bottom: 25,
-                              child: Align(
-                                alignment: Alignment
-                                    .centerRight, // Vertically centers the text
-                                child: Text(
-                                  '%',
-                                  style: TextStyle(fontWeight: FontWeight.w700),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(radiusValue),
+                    ),
+                    padding: const EdgeInsets.only(
+                      left: 16.0,
+                      right: 16,
+                      top: 4,
+                      bottom: 5,
+                    ),
+                    child: DropdownButton<String>(
+                      underline: Container(),
+                      value: _selectedCategory,
+                      isExpanded: true,
+                      icon: const Icon(Icons.keyboard_arrow_right),
+                      iconSize: 24,
+                      elevation: 16,
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          _selectedCategory = newValue;
+                          if (newValue == 'Test, Review & Feedback - \$5') {
+                            price = '\$5';
+                          } else {
+                            price = '\$10';
+                          }
+                        });
+                      },
+                      items: <String?>[
+                        null,
+                        'Write 1 Page Business Plan - \$10',
+                        'Build 1 Page Website - \$10',
+                        'Create Social Media AD - \$10',
+                        'Monthly Account Book Keeping - \$10',
+                        'Logo & Branding Guidelines - \$10',
+                        'Test, Review & Feedback - \$5',
+                      ].map<DropdownMenuItem<String>>((String? value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: value != null
+                              ? Text(value)
+                              : Text(
+                                  value ?? 'Select Service',
+                                  style: bodyText2.copyWith(
+                                    color: hintColor,
+                                  ),
                                 ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
+                        );
+                      }).toList(),
+                    ),
                   ),
                 ),
                 const SizedBox(height: 24.0),
@@ -204,37 +210,40 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
                     ),
                     child: DropdownButton<String>(
                       underline: Container(),
-                      value: _selectedCategory,
+                      value: _selectedLocation,
                       isExpanded: true,
                       icon: const Icon(Icons.keyboard_arrow_right),
                       iconSize: 24,
                       elevation: 16,
                       onChanged: (String? newValue) {
                         setState(() {
-                          _selectedCategory = newValue!;
+                          _selectedLocation = newValue!;
                         });
                       },
                       items: <String?>[
                         null,
-                        'Home, Garden & Outdoors',
-                        'Fashion & Beauty',
-                        'Sports & Entertainment',
-                        'Books & Education',
-                        'Jewellery & Timepieces',
-                        'Security, Safety & Equipment',
-                        'Video Games & Electronics',
-                        'Agriculture, Food, Beverage',
-                        'Construction & Real Estate',
-                        'Vehicle & Transportation',
-                        'Business Services & Events',
-                        'Other',
+                        '1 Day Delivery',
+                        '2 Day Delivery',
+                        '3 Day Delivery',
+                        '4 Day Delivery',
+                        '5 Day Delivery',
+                        '6 Day Delivery',
+                        '7 Day Delivery',
+                        '8 Day Delivery',
+                        '9 Day Delivery',
+                        '10 Day Delivery',
+                        '11 Day Delivery',
+                        '12 Day Delivery',
+                        '13 Day Delivery',
+                        '14 Day Delivery',
+                        '15 Day Delivery',
                       ].map<DropdownMenuItem<String>>((String? value) {
                         return DropdownMenuItem<String>(
                           value: value,
                           child: value != null
                               ? Text(value)
                               : Text(
-                                  value ?? 'Select Category',
+                                  value ?? 'Select Delivery Time',
                                   style: bodyText2.copyWith(
                                     color: hintColor,
                                   ),
@@ -242,52 +251,6 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
                         );
                       }).toList(),
                     ),
-                  ),
-                ),
-                const SizedBox(height: 12.0),
-                Padding(
-                  padding: const EdgeInsets.only(left: 8.0, right: 8),
-                  child: CountryListPick(
-                    appBar: AppBar(
-                      leading: IconButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
-                      ),
-                      centerTitle: true,
-                      // ignore: prefer_const_constructors
-                      title: Text(
-                        'Select Location',
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(fontSize: 20),
-                      ),
-                    ),
-                    initialSelection: _selectedLocation,
-                    pickerBuilder:
-                        (BuildContext context, CountryCode? countryCode) {
-                      return Container(
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(radiusValue),
-                        ),
-                        child: ListTile(
-                          leading: _selectedLocation != null
-                              ? Text(_selectedLocation!)
-                              : Text(
-                                  'Location',
-                                  style: bodyText2.copyWith(color: hintColor),
-                                ),
-                          trailing: const Icon(Icons.keyboard_arrow_right),
-                        ),
-                      );
-                    },
-                    onChanged: (CountryCode? code) {
-                      setState(() {
-                        _selectedLocation = code!.name!;
-                      });
-                    },
-                    useSafeArea: false,
                   ),
                 ),
                 const SizedBox(
@@ -418,8 +381,7 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
                       setState(() {
                         _isProcessing = true;
                       });
-                      if (descriptionController.text.isEmpty ||
-                          _priceController.text.isEmpty) {
+                      if (descriptionController.text.isEmpty) {
                         showSnackBar(
                           context,
                           message:
@@ -499,23 +461,39 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
     });
   }
 
+  String? removeAfterHyphen(String? input) {
+    // Find the index of the hyphen
+    int hyphenIndex = input!.indexOf('-');
+
+    // Check if the hyphen exists in the string
+    if (hyphenIndex != -1) {
+      // Remove everything after the hyphen (including the hyphen itself)
+      return input.substring(0, hyphenIndex).trim();
+    } else {
+      // If no hyphen is found, return the original string
+
+      return input;
+    }
+  }
+
   Future<void> _onChangeForum() async {
     if (widget.isUpd == false) {
       await createMarketController.createForum(<String, dynamic>{
-        'category': _selectedCategory,
+        'category': removeAfterHyphen(_selectedCategory),
         'location': _selectedLocation,
         'description': description,
         'price': price,
         'discount': discount,
         'timestamp': DateTime.now().millisecondsSinceEpoch,
+        'isProduct': false,
       }, _shouldPromote);
     } else {
       await _marketController.updatePost(<String, dynamic>{
         'marketId': _market?.marketId,
-        'category': _selectedCategory,
+        'category': removeAfterHyphen(_selectedCategory),
         'location': _selectedLocation,
         'description': descriptionController.text,
-        'price': _priceController.text,
+        'price': price,
         'promote': _market?.promote,
         'approved': _market?.approved,
         'likes': _market?.likes,
@@ -525,16 +503,15 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
         'images': _market?.images,
         'userId': _market?.userId,
         'user': _market?.user?.toMap(),
-        'discount': _discountController.text,
+        'isProduct': false,
       });
       await ApiService.put(
           path: 'markets/${_market?.marketId}',
           body: <String, dynamic>{
-            'category': _selectedCategory,
+            'category': removeAfterHyphen(_selectedCategory),
             'location': _selectedLocation,
             'description': descriptionController.text,
-            'price': _priceController.text,
-            'discount': _discountController.text,
+            'price': price,
             'images': _market?.images,
           });
       Get.back();

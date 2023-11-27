@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:business_bosses_v2/features/marketplace/presentation/subscription_confirmation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -11,7 +12,6 @@ import '../../../utils/theme/theme.dart';
 import '../../common/dialogs/snackbar.dart';
 import '../../common/models/api_response_model.dart';
 import '../../common/widgets/buttons/custom_button.dart';
-import '../marketplace/presentation/subscription_confirmation.dart';
 import '../profile/controller/profile_controller.dart';
 import '../../navigation/routes.dart';
 import '../../services/api_service.dart';
