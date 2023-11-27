@@ -50,7 +50,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
   String? filterLocation;
   String? filterCategory;
   int pageSize = 20;
-  int? filteredCategory;
+  String? filteredCategory;
 
   @override
   void initState() {
@@ -135,7 +135,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                       ),
                                       child: DropdownButton<String>(
                                         underline: Container(),
-                                        value: _selectedCategory,
+                                        value: filteredCategory,
                                         isExpanded: true,
                                         icon: const Icon(
                                           Icons.keyboard_arrow_right,
@@ -144,23 +144,13 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                         elevation: 16,
                                         onChanged: (String? newValue) {
                                           setState(() {
-                                            _selectedCategory = newValue!;
+                                            filteredCategory = newValue!;
                                           });
                                         },
                                         items: <String?>[
                                           null,
-                                          'Home, Garden & Outdoors',
-                                          'Fashion & Beauty',
-                                          'Sports & Entertainment',
-                                          'Books & Education',
-                                          'Jewellery & Timepieces',
-                                          'Security, Safety & Equipment',
-                                          'Video Games & Electronics',
-                                          'Agriculture, Food, Beverage',
-                                          'Construction & Real Estate',
-                                          'Vehicle & Transportation',
-                                          'Business Services & Events',
-                                          'Other',
+                                          'Products',
+                                          'Services',
                                         ].map<DropdownMenuItem<String>>(
                                             (String? value) {
                                           return DropdownMenuItem<String>(
@@ -168,7 +158,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                             child: value != null
                                                 ? Text(value)
                                                 : Text(
-                                                    value ?? 'Select Category',
+                                                    value ?? 'Select Listing',
                                                     style: bodyText2.copyWith(
                                                       color: hintColor,
                                                     ),
@@ -178,55 +168,271 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                       ),
                                     ),
                                     const SizedBox(height: 12.0),
-                                    CountryListPick(
-                                      appBar: AppBar(
-                                        leading: IconButton(
-                                          onPressed: () {
-                                            Navigator.pop(context);
-                                          },
-                                          icon: SvgPicture.asset(
-                                              'assets/svgs/backbutton.svg'),
-                                        ),
-                                        centerTitle: true,
-                                        // ignore: prefer_const_constructors
-                                        title: Text(
-                                          'Select Location',
-                                          textAlign: TextAlign.center,
-                                          style: const TextStyle(fontSize: 20),
-                                        ),
-                                      ),
-                                      initialSelection: filterCode ?? 'GB',
-                                      pickerBuilder: (BuildContext context,
-                                          CountryCode? countryCode) {
-                                        return Container(
-                                          decoration: BoxDecoration(
-                                            color: backgroundcolorinterface,
-                                            borderRadius: BorderRadius.circular(
-                                                radiusValue),
-                                          ),
-                                          child: ListTile(
-                                            leading: _selectedLocation != null
-                                                ? Text(_selectedLocation!)
-                                                : Text(
-                                                    'Location',
-                                                    style: bodyText2.copyWith(
-                                                        color: hintColor),
+                                    filteredCategory == 'Products'
+                                        ? Container(
+                                            decoration: BoxDecoration(
+                                              color: backgroundcolorinterface,
+                                              borderRadius:
+                                                  BorderRadius.circular(
+                                                      radiusValue),
+                                            ),
+                                            padding: const EdgeInsets.only(
+                                              left: 16.0,
+                                              right: 16,
+                                              top: 4,
+                                              bottom: 5,
+                                            ),
+                                            margin: const EdgeInsets.only(
+                                              left: 10,
+                                              right: 10,
+                                            ),
+                                            child: DropdownButton<String>(
+                                              underline: Container(),
+                                              value: _selectedCategory,
+                                              isExpanded: true,
+                                              icon: const Icon(
+                                                Icons.keyboard_arrow_right,
+                                              ),
+                                              iconSize: 24,
+                                              elevation: 16,
+                                              onChanged: (String? newValue) {
+                                                setState(() {
+                                                  _selectedCategory = newValue!;
+                                                });
+                                              },
+                                              items: <String?>[
+                                                null,
+                                                'Home, Garden & Outdoors',
+                                                'Fashion & Beauty',
+                                                'Sports & Entertainment',
+                                                'Books & Education',
+                                                'Jewellery & Timepieces',
+                                                'Security, Safety & Equipment',
+                                                'Video Games & Electronics',
+                                                'Agriculture, Food, Beverage',
+                                                'Construction & Real Estate',
+                                                'Vehicle & Transportation',
+                                                'Business Services & Events',
+                                                'Other',
+                                              ].map<DropdownMenuItem<String>>(
+                                                  (String? value) {
+                                                return DropdownMenuItem<String>(
+                                                  value: value,
+                                                  child: value != null
+                                                      ? Text(value)
+                                                      : Text(
+                                                          value ??
+                                                              'Select Category',
+                                                          style: bodyText2
+                                                              .copyWith(
+                                                            color: hintColor,
+                                                          ),
+                                                        ),
+                                                );
+                                              }).toList(),
+                                            ),
+                                          )
+                                        : filteredCategory == 'Services'
+                                            ? Container(
+                                                decoration: BoxDecoration(
+                                                  color:
+                                                      backgroundcolorinterface,
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          radiusValue),
+                                                ),
+                                                padding: const EdgeInsets.only(
+                                                  left: 16.0,
+                                                  right: 16,
+                                                  top: 4,
+                                                  bottom: 5,
+                                                ),
+                                                margin: const EdgeInsets.only(
+                                                  left: 10,
+                                                  right: 10,
+                                                ),
+                                                child: DropdownButton<String>(
+                                                  underline: Container(),
+                                                  value: _selectedCategory,
+                                                  isExpanded: true,
+                                                  icon: const Icon(
+                                                    Icons.keyboard_arrow_right,
                                                   ),
-                                            trailing: const Icon(
-                                                Icons.keyboard_arrow_right),
-                                          ),
-                                        );
-                                      },
-                                      onChanged: (CountryCode? code) {
-                                        setState(
-                                          () {
-                                            _selectedLocation = code?.name;
-                                            filterCode = code?.code;
-                                          },
-                                        );
-                                      },
-                                      useSafeArea: false,
-                                    ),
+                                                  iconSize: 24,
+                                                  elevation: 16,
+                                                  onChanged:
+                                                      (String? newValue) {
+                                                    setState(() {
+                                                      _selectedCategory =
+                                                          newValue!;
+                                                    });
+                                                  },
+                                                  items: <String?>[
+                                                    null,
+                                                    'Write 1 Page Business Plan',
+                                                    'Build 1 Page Website',
+                                                    'Create Social Media AD',
+                                                    'Monthly Account Book Keeping',
+                                                    'Logo & Branding Guidelines',
+                                                    'Test, Review & Feedback',
+                                                  ].map<
+                                                          DropdownMenuItem<
+                                                              String>>(
+                                                      (String? value) {
+                                                    return DropdownMenuItem<
+                                                        String>(
+                                                      value: value,
+                                                      child: value != null
+                                                          ? Text(value)
+                                                          : Text(
+                                                              value ??
+                                                                  'Select Service Type',
+                                                              style: bodyText2
+                                                                  .copyWith(
+                                                                color:
+                                                                    hintColor,
+                                                              ),
+                                                            ),
+                                                    );
+                                                  }).toList(),
+                                                ),
+                                              )
+                                            : Container(),
+                                    const SizedBox(height: 12.0),
+                                    filteredCategory == 'Products'
+                                        ? CountryListPick(
+                                            appBar: AppBar(
+                                              leading: IconButton(
+                                                onPressed: () {
+                                                  Navigator.pop(context);
+                                                },
+                                                icon: SvgPicture.asset(
+                                                    'assets/svgs/backbutton.svg'),
+                                              ),
+                                              centerTitle: true,
+                                              // ignore: prefer_const_constructors
+                                              title: Text(
+                                                'Select Location',
+                                                textAlign: TextAlign.center,
+                                                style: const TextStyle(
+                                                    fontSize: 20),
+                                              ),
+                                            ),
+                                            initialSelection:
+                                                filterCode ?? 'GB',
+                                            pickerBuilder:
+                                                (BuildContext context,
+                                                    CountryCode? countryCode) {
+                                              return Container(
+                                                decoration: BoxDecoration(
+                                                  color:
+                                                      backgroundcolorinterface,
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          radiusValue),
+                                                ),
+                                                child: ListTile(
+                                                  leading: _selectedLocation !=
+                                                          null
+                                                      ? Text(_selectedLocation!)
+                                                      : Text(
+                                                          'Location',
+                                                          style: bodyText2
+                                                              .copyWith(
+                                                                  color:
+                                                                      hintColor),
+                                                        ),
+                                                  trailing: const Icon(Icons
+                                                      .keyboard_arrow_right),
+                                                ),
+                                              );
+                                            },
+                                            onChanged: (CountryCode? code) {
+                                              setState(
+                                                () {
+                                                  _selectedLocation =
+                                                      code?.name;
+                                                  filterCode = code?.code;
+                                                },
+                                              );
+                                            },
+                                            useSafeArea: false,
+                                          )
+                                        : filteredCategory == 'Services'
+                                            ? Container(
+                                                decoration: BoxDecoration(
+                                                  color:
+                                                      backgroundcolorinterface,
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          radiusValue),
+                                                ),
+                                                padding: const EdgeInsets.only(
+                                                  left: 16.0,
+                                                  right: 16,
+                                                  top: 4,
+                                                  bottom: 5,
+                                                ),
+                                                margin: const EdgeInsets.only(
+                                                  left: 10,
+                                                  right: 10,
+                                                ),
+                                                child: DropdownButton<String>(
+                                                  underline: Container(),
+                                                  value: _selectedLocation,
+                                                  isExpanded: true,
+                                                  icon: const Icon(
+                                                    Icons.keyboard_arrow_right,
+                                                  ),
+                                                  iconSize: 24,
+                                                  elevation: 16,
+                                                  onChanged:
+                                                      (String? newValue) {
+                                                    setState(() {
+                                                      _selectedLocation =
+                                                          newValue!;
+                                                    });
+                                                  },
+                                                  items: <String?>[
+                                                    null,
+                                                    '1 Day Delivery',
+                                                    '2 Day Delivery',
+                                                    '3 Day Delivery',
+                                                    '4 Day Delivery',
+                                                    '5 Day Delivery',
+                                                    '6 Day Delivery',
+                                                    '7 Day Delivery',
+                                                    '8 Day Delivery',
+                                                    '9 Day Delivery',
+                                                    '10 Day Delivery',
+                                                    '11 Day Delivery',
+                                                    '12 Day Delivery',
+                                                    '13 Day Delivery',
+                                                    '14 Day Delivery',
+                                                    '15 Day Delivery',
+                                                  ].map<
+                                                          DropdownMenuItem<
+                                                              String>>(
+                                                      (String? value) {
+                                                    return DropdownMenuItem<
+                                                        String>(
+                                                      value: value,
+                                                      child: value != null
+                                                          ? Text(value)
+                                                          : Text(
+                                                              value ??
+                                                                  'Select Delivery Time',
+                                                              style: bodyText2
+                                                                  .copyWith(
+                                                                color:
+                                                                    hintColor,
+                                                              ),
+                                                            ),
+                                                    );
+                                                  }).toList(),
+                                                ),
+                                              )
+                                            : Container(),
                                   ],
                                 ),
                               ),
@@ -246,6 +452,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                             filterCategory = null;
                                             _selectedLocation = null;
                                             _selectedCategory = null;
+                                            filteredCategory = null;
                                             _marketController.updateFiltered();
                                             _marketController.initMarket();
                                             Navigator.of(context).pop();
