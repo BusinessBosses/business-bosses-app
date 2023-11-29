@@ -1,9 +1,11 @@
 // ignore_for_file: public_member_api_docs
 
 import 'package:business_bosses_v2/common/models/user_model.dart';
+import 'package:business_bosses_v2/features/profile/widgets/profile_picture_display.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 
 import '../../../common/widgets/network_image_with_placeholder.dart';
 
@@ -28,22 +30,28 @@ class _PublicProfileTileState extends State<PublicProfileTile> {
           Stack(
             clipBehavior: Clip.none,
             children: <Widget>[
-              SizedBox(
-                height: 120.0,
-                width: 120.0,
-                child: Align(
-                  alignment: Alignment.topLeft,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(1000),
-                    child: NetworkImageWithPlaceHolder(
-                      imageUrl: widget.myProfile.photoUrl ?? '',
-                      height: 105.0,
-                      width: 105.0,
-                      radius: radius,
-                      cacheHeight: 120,
-                      cacheWidth: 120,
-                      placeHolder: Icons.person,
-                      iconSize: 64.0,
+              GestureDetector(
+                onTap: () {
+                  Get.to(() =>
+                      ProfilePictureDisplay(widget.myProfile.photoUrl ?? ''));
+                },
+                child: SizedBox(
+                  height: 120.0,
+                  width: 120.0,
+                  child: Align(
+                    alignment: Alignment.topLeft,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(1000),
+                      child: NetworkImageWithPlaceHolder(
+                        imageUrl: widget.myProfile.photoUrl ?? '',
+                        height: 105.0,
+                        width: 105.0,
+                        radius: radius,
+                        cacheHeight: 120,
+                        cacheWidth: 120,
+                        placeHolder: Icons.person,
+                        iconSize: 64.0,
+                      ),
                     ),
                   ),
                 ),
