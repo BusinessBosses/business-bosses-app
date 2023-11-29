@@ -1,5 +1,5 @@
 import 'package:business_bosses_v2/features/marketplace/presentation/boost_market_screen.dart';
-import 'package:business_bosses_v2/features/marketplace/presentation/sell_screen.dart';
+import 'package:business_bosses_v2/features/marketplace/presentation/sell_services.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/seller_reviews.dart';
 
 import 'package:business_bosses_v2/features/marketplace/widgets/post_images_market.dart';
@@ -29,13 +29,13 @@ import '../models/market_model.dart';
 import 'post_like_comment.dart';
 
 /// import 'rep';
-class MarketTile extends StatefulWidget {
+class ServiceTile extends StatefulWidget {
   final MarketModel post;
   final dynamic controller;
   final Function(int)? onPageChange;
 
   ///
-  const MarketTile(
+  const ServiceTile(
       {Key? key,
       required this.post,
       required this.controller,
@@ -43,10 +43,10 @@ class MarketTile extends StatefulWidget {
       : super(key: key);
 
   @override
-  State<MarketTile> createState() => _MarketTileState();
+  State<ServiceTile> createState() => _ServiceTileState();
 }
 
-class _MarketTileState extends State<MarketTile> {
+class _ServiceTileState extends State<ServiceTile> {
   bool hide = false;
   final MarketController _marketController = Get.find();
   final ProfileController profileController = Get.find();
@@ -82,7 +82,7 @@ class _MarketTileState extends State<MarketTile> {
   }
 
   @override
-  void didUpdateWidget(covariant MarketTile oldWidget) {
+  void didUpdateWidget(covariant ServiceTile oldWidget) {
     // TODO: implement didUpdateWidget
     super.didUpdateWidget(oldWidget);
     _post = widget.post;
@@ -271,7 +271,7 @@ class _MarketTileState extends State<MarketTile> {
                                         onSelected: (String val) {
                                           if (val == 'Edit') {
                                             Get.to(
-                                              () => CreateSellingitemScreen(
+                                              () => CreateServiceScreen(
                                                 isUpd: true,
                                                 market: _post,
                                               ),
@@ -297,9 +297,7 @@ class _MarketTileState extends State<MarketTile> {
                                                       _marketController
                                                           .removeListing(
                                                               _post.marketId);
-                                                      ApiService.delete(
-                                                          path:
-                                                              'markets/${_post.marketId}');
+                                                      ;
                                                       // setState(() {
                                                       //   hide = true;
                                                       // });
@@ -400,7 +398,7 @@ class _MarketTileState extends State<MarketTile> {
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: <Widget>[
                                       Text(
-                                        _post.price.toString(),
+                                        '${_post.category} - ${_post.price.toString()}',
                                         style: const TextStyle(
                                           fontWeight: FontWeight.w800,
                                         ),
@@ -488,8 +486,10 @@ class _MarketTileState extends State<MarketTile> {
                                               _post.category != null
                                           ? Row(
                                               children: <Widget>[
-                                                SvgPicture.asset(
-                                                    'assets/svgs/location.svg'),
+                                                const Icon(
+                                                  Icons.timelapse,
+                                                  size: 12,
+                                                ),
                                                 const SizedBox(
                                                   width: 1,
                                                 ),
@@ -505,24 +505,6 @@ class _MarketTileState extends State<MarketTile> {
                                                   overflow:
                                                       TextOverflow.ellipsis,
                                                   softWrap: false,
-                                                ),
-                                                const SizedBox(
-                                                  width: 5,
-                                                ),
-                                                SvgPicture.asset(
-                                                    'assets/svgs/category.svg'),
-                                                const SizedBox(
-                                                  width: 3,
-                                                ),
-                                                Text(
-                                                  _post.category!.length > 50
-                                                      ? '${_post.category!.substring(0, 50)}...'
-                                                      : _post.category!,
-                                                  style: const TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.normal,
-                                                      fontSize: 12,
-                                                      color: subtextColor),
                                                 ),
                                                 const SizedBox(
                                                   width: 5,

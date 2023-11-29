@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/features/marketplace/controllers/market_controller.dart';
 import 'package:business_bosses_v2/features/marketplace/models/market_model.dart';
+import 'package:business_bosses_v2/features/marketplace/presentation/boost_market_screen.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +12,6 @@ import 'package:image_picker/image_picker.dart';
 
 import '../../../common/models/api_response_model.dart';
 import '../../forum/repository/forum_repository.dart';
-import '../presentation/boost_market_screen.dart';
 
 class CreateMarketController extends GetxController {
   RxBool loading = false.obs;
