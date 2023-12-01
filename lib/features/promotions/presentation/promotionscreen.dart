@@ -298,6 +298,7 @@ class _PromotionScreenState extends State<PromotionScreen> {
                     const SizedBox(width: 8.0),
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
+                          backgroundColor: backgroundcolorinterface,
                           minimumSize: const Size(
                               150, 45) // put the width and height you want
                           ),
@@ -320,13 +321,16 @@ class _PromotionScreenState extends State<PromotionScreen> {
                                   'Invite',
                                   style: TextStyle(
                                       fontSize: 15,
-                                      color: Colors.white,
+                                      color: textColor,
                                       fontWeight: FontWeight.w500),
                                 ),
                           const SizedBox(
                             width: 5,
                           ),
-                          SvgPicture.asset('assets/svgs/invite.svg')
+                          SvgPicture.asset(
+                            'assets/svgs/invite.svg',
+                            color: textColor,
+                          )
                         ],
                       ),
                     ),
@@ -373,6 +377,21 @@ class _PromotionScreenState extends State<PromotionScreen> {
               width: double.infinity,
               height: 1.5,
               child: ColoredBox(color: backgroundcolorinterface),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            GestureDetector(
+              onTap: () {
+                Get.toNamed(Routes.marketPlace);
+              },
+              child: const Text(
+                'Sell your product or service',
+                style: TextStyle(
+                  fontWeight: FontWeight.w700,
+                  decoration: TextDecoration.underline,
+                ),
+              ),
             ),
             const SizedBox(height: 74.0),
           ],
