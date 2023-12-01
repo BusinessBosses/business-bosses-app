@@ -129,6 +129,7 @@ class _PostTileState extends State<PostTile> {
   @override
   Widget build(BuildContext context) {
     String? title, roomid, date, starttime, host, photourl, startat, endat;
+
     if (widget.post.livedata != null) {
       try {
         final jsonData = jsonDecode(widget.post.livedata!.toString());
@@ -546,13 +547,13 @@ class _PostTileState extends State<PostTile> {
                                                   const EdgeInsets.all(5.0),
                                               child: Row(
                                                 children: <Widget>[
-                                                  (DateTime.now().isAfter(
-                                                              DateTime.parse(
-                                                                  startat!)) &&
-                                                          DateTime.now()
-                                                              .isBefore(DateTime
-                                                                  .parse(
-                                                                      endat!)))
+                                                  (DateTime.now().isAfter(DateTime
+                                                              .parse(startat ??
+                                                                  '2023-11-07T10:45:00.000Z')) &&
+                                                          DateTime.now().isBefore(
+                                                              DateTime.parse(endat ??
+                                                                  DateTime.now()
+                                                                      .toIso8601String())))
                                                       ? Lottie.asset(
                                                           'assets/anim/liveeventwhite.json',
                                                           height: 12,
@@ -569,15 +570,17 @@ class _PostTileState extends State<PostTile> {
                                                   Text(
                                                     (DateTime.now().isAfter(
                                                                 DateTime.parse(
-                                                                    startat)) &&
-                                                            DateTime.now()
-                                                                .isBefore(DateTime
-                                                                    .parse(
-                                                                        endat!)))
+                                                                    startat ??
+                                                                        '2023-11-07T10:45:00.000Z')) &&
+                                                            DateTime.now().isBefore(
+                                                                DateTime.parse(endat ??
+                                                                    DateTime.now()
+                                                                        .toIso8601String())))
                                                         ? 'Ongoing Live Event'
                                                         : DateTime.now().isAfter(
                                                                 DateTime.parse(
-                                                                    startat))
+                                                                    startat ??
+                                                                        '2023-11-07T10:45:00.000Z'))
                                                             ? 'Ended event'
                                                             : 'Upcoming Live event',
                                                     style: const TextStyle(
@@ -630,14 +633,18 @@ class _PostTileState extends State<PostTile> {
                                         ),
                                       ),
                                       Text(
-                                        DateTime.now()
-                                                .isAfter(DateTime.parse(endat!))
+                                        DateTime.now().isAfter(DateTime.parse(
+                                                endat ??
+                                                    DateTime.now()
+                                                        .toIso8601String()))
                                             ? 'Ended'
-                                            : DateTime.now().isAfter(
-                                                        DateTime.parse(
-                                                            startat)) &&
+                                            : DateTime.now().isAfter(DateTime
+                                                        .parse(startat ??
+                                                            '2023-11-07T10:45:00.000Z')) &&
                                                     DateTime.now().isBefore(
-                                                        DateTime.parse(endat))
+                                                        DateTime.parse(endat ??
+                                                            DateTime.now()
+                                                                .toIso8601String()))
                                                 ? 'Happening now'
                                                 : '$date, $starttime',
                                         style: const TextStyle(
@@ -771,8 +778,10 @@ class _PostTileState extends State<PostTile> {
                     ),
                     const SizedBox(width: 8.0),
                     if (widget.post.livedata != null) ...<Widget>[
-                      (DateTime.now().isAfter(DateTime.parse(startat!)) &&
-                              DateTime.now().isBefore(DateTime.parse(endat!)))
+                      (DateTime.now().isAfter(DateTime.parse(startat ??
+                                  DateTime.now().toIso8601String())) &&
+                              DateTime.now().isBefore(DateTime.parse(
+                                  endat ?? DateTime.now().toIso8601String())))
                           ? Expanded(
                               child: Padding(
                               padding: const EdgeInsets.only(right: 15),
