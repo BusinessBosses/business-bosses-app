@@ -283,7 +283,7 @@ class BottomBar extends StatelessWidget {
     );
   }
 
-  sellProduct(BuildContext context) {
+  void sellProduct(BuildContext context) {
     showModalBottomSheet(
         context: context,
         shape: const RoundedRectangleBorder(
