@@ -492,14 +492,14 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                                                 // Handle case where there are no more sponsored posts
                                                 return const SizedBox(); // You can return an empty widget or something else
                                               }
-                                            } else if (index % 3 == 0) {
+                                            } else if (index % 4 == 0) {
                                               // Display Sponsored Post after every 3 non-sponsored posts
                                               final int sponsoredIndex =
-                                                  (index / 3).floor();
+                                                  (index / 4).floor();
                                               if (sponsoredIndex <
                                                   controller
                                                       .sponsoredPosts.length) {
-                                                final promotedPosts =
+                                                final PostModel promotedPosts =
                                                     controller.sponsoredPosts[
                                                             sponsoredIndex]
                                                         ['data'] as PostModel;
@@ -525,16 +525,39 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                                                       });
                                                     }
                                                   },
-                                                  child: PostTile(
-                                                    controller: controller,
-                                                    post: promotedPosts,
-                                                    onPageChange: (int page) {
-                                                      if (widget.onPageChange !=
-                                                          null) {
-                                                        widget.onPageChange!(
-                                                            page);
-                                                      }
-                                                    },
+                                                  child: Column(
+                                                    children: [
+                                                      // Sponsored Post
+                                                      PostTile(
+                                                        controller: controller,
+                                                        post: promotedPosts,
+                                                        onPageChange:
+                                                            (int page) {
+                                                          if (widget
+                                                                  .onPageChange !=
+                                                              null) {
+                                                            widget.onPageChange!(
+                                                                page);
+                                                          }
+                                                        },
+                                                      ),
+                                                      // Non-promoted posts
+                                                      // Adjust the height based on your design
+                                                      PostTile(
+                                                        controller: controller,
+                                                        post: mixedPost['data']
+                                                            as PostModel,
+                                                        onPageChange:
+                                                            (int page) {
+                                                          if (widget
+                                                                  .onPageChange !=
+                                                              null) {
+                                                            widget.onPageChange!(
+                                                                page);
+                                                          }
+                                                        },
+                                                      ),
+                                                    ],
                                                   ),
                                                 );
                                               } else {
