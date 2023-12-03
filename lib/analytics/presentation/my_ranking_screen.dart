@@ -1,8 +1,10 @@
 // ignore_for_file: always_specify_types, unused_field, public_member_api_docs, constant_identifier_names, unused_element
 
 import 'package:business_bosses_v2/features/posts/models/post_model.dart';
+import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 
 import '../../common/models/user_model.dart';
 import '../../features/promotions/referrals.dart';
@@ -23,6 +25,7 @@ class _MyRankingScreenState extends State<MyRankingScreen> {
   final List<Ranking> _weeklyRanking = [];
   final List<Ranking> _monthlyRanking = [];
   final List<Ranking> _top10WeeklyRanking = [];
+  final ProfileController profile = Get.find();
 
   // List<Ranking> _top10MonthlyRanking = [];
   // List<Ranking> _top25WeeklyRanking = [];
@@ -222,9 +225,7 @@ class _MyRankingScreenState extends State<MyRankingScreen> {
                                         child: Align(
                                       alignment: Alignment.center,
                                       child: Text(
-                                        _myWeeklyRanking.isNotEmpty
-                                            ? '10%'
-                                            : '50%',
+                                        profile.myProfile.weeklyRank ?? "0%",
                                         style: bodyText1.copyWith(
                                             fontSize: 15.0,
                                             fontWeight: FontWeight.w900),
@@ -309,9 +310,7 @@ class _MyRankingScreenState extends State<MyRankingScreen> {
                                         child: Align(
                                       alignment: Alignment.center,
                                       child: Text(
-                                        _myWeeklyRanking.isNotEmpty
-                                            ? '10%'
-                                            : '50%',
+                                        profile.myProfile.monthlyRank ?? "0%",
                                         style: bodyText1.copyWith(
                                             fontSize: 15.0,
                                             fontWeight: FontWeight.w900),

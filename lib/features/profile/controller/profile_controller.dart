@@ -19,13 +19,17 @@ class ProfileController extends GetxController {
   RxBool isLoading = RxBool(false);
 
   ///MODELIZE RAW DATA AND PUSH TO STATE
-  void processDataToState(dynamic userData, List interests) {
+  void processDataToState(
+      dynamic userData, List interests, dynamic userRanking) {
+    print(userRanking);
     final UserModel modelizedData = UserModel.fromMap(<dynamic, dynamic>{
       ...userData,
       'connections':
           userData['connections'].map((mp) => mp['connect']).toList(),
       'connecteds': userData['connecteds'],
-      'interests': interests
+      'interests': interests,
+      'weeklyRank': userRanking['rankWeekly'],
+      'monthlyRank': userRanking['rankMonthly']
     });
     myProfile = modelizedData;
     update();
