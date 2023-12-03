@@ -99,90 +99,94 @@ class _AllForumScreenState extends State<AllForumScreen> {
                               const SizedBox(
                                 height: 10,
                               ),
-                              Row(
-                                children: <Widget>[
-                                  GestureDetector(
-                                    onTap: () => <Future>{
-                                      industry.categoryId!.toString() ==
-                                              Constants.LEARNINGID
-                                          ? showDialog(
-                                              context: context,
-                                              builder: (BuildContext context) =>
-                                                  const LearningPopUp(),
-                                            )
-                                          : showDialog(
-                                              context: context,
-                                              builder: (BuildContext context) =>
-                                                  const OpportunitiesPopup(),
-                                            )
-                                    },
-                                    child: Padding(
-                                      padding:
-                                          const EdgeInsets.only(left: 20.0),
-                                      child: Row(
-                                        children: <Widget>[
-                                          const Text(
-                                            'Info',
-                                            style: TextStyle(
-                                                fontSize: 12,
-                                                fontWeight: FontWeight.w700),
-                                          ),
-                                          const SizedBox(
-                                            width: 5,
-                                          ),
-                                          SvgPicture.asset(
-                                            'assets/svgs/info.svg',
-                                            height: 20,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                  const Spacer(),
-                                  Align(
-                                      alignment: Alignment.centerRight,
+                              if (_myProfile.myProfile.toPost)
+                                Row(
+                                  children: <Widget>[
+                                    GestureDetector(
+                                      onTap: () => <Future>{
+                                        industry.categoryId!.toString() ==
+                                                Constants.LEARNINGID
+                                            ? showDialog(
+                                                context: context,
+                                                builder:
+                                                    (BuildContext context) =>
+                                                        const LearningPopUp(),
+                                              )
+                                            : showDialog(
+                                                context: context,
+                                                builder: (BuildContext
+                                                        context) =>
+                                                    const OpportunitiesPopup(),
+                                              )
+                                      },
                                       child: Padding(
                                         padding:
-                                            const EdgeInsets.only(right: 20),
-                                        child: ElevatedButton(
-                                          style: ElevatedButton.styleFrom(
-                                              minimumSize: const Size(150, 45)),
-                                          onPressed: () {
-                                            Get.toNamed(Routes.createForum,
-                                                arguments: <String, Object?>{
-                                                  'isBossUp': false,
-                                                  'industryId':
-                                                      industry.industryId,
-                                                  'categoryId':
-                                                      industry.categoryId
-                                                });
-                                          },
-                                          child: Row(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: <Widget>[
-                                              Text(
-                                                industry.categoryId!
-                                                            .toString() ==
-                                                        Constants.LEARNINGID
-                                                    ? 'Start a Topic'
-                                                    : 'Share Opportunities',
-                                                style: const TextStyle(
-                                                    fontSize: 15,
-                                                    color: Colors.white,
-                                                    fontWeight:
-                                                        FontWeight.w500),
-                                              ),
-                                              const SizedBox(
-                                                width: 5,
-                                              ),
-                                              SvgPicture.asset(
-                                                  'assets/svgs/startatopic.svg')
-                                            ],
-                                          ),
+                                            const EdgeInsets.only(left: 20.0),
+                                        child: Row(
+                                          children: <Widget>[
+                                            const Text(
+                                              'Info',
+                                              style: TextStyle(
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.w700),
+                                            ),
+                                            const SizedBox(
+                                              width: 5,
+                                            ),
+                                            SvgPicture.asset(
+                                              'assets/svgs/info.svg',
+                                              height: 20,
+                                            ),
+                                          ],
                                         ),
-                                      )),
-                                ],
-                              ),
+                                      ),
+                                    ),
+                                    const Spacer(),
+                                    Align(
+                                        alignment: Alignment.centerRight,
+                                        child: Padding(
+                                          padding:
+                                              const EdgeInsets.only(right: 20),
+                                          child: ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
+                                                minimumSize:
+                                                    const Size(150, 45)),
+                                            onPressed: () {
+                                              Get.toNamed(Routes.createForum,
+                                                  arguments: <String, Object?>{
+                                                    'isBossUp': false,
+                                                    'industryId':
+                                                        industry.industryId,
+                                                    'categoryId':
+                                                        industry.categoryId
+                                                  });
+                                            },
+                                            child: Row(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: <Widget>[
+                                                Text(
+                                                  industry.categoryId!
+                                                              .toString() ==
+                                                          Constants.LEARNINGID
+                                                      ? 'Start a Topic'
+                                                      : 'Share Opportunities',
+                                                  style: const TextStyle(
+                                                      fontSize: 15,
+                                                      color: Colors.white,
+                                                      fontWeight:
+                                                          FontWeight.w500),
+                                                ),
+                                                const SizedBox(
+                                                  width: 5,
+                                                ),
+                                                SvgPicture.asset(
+                                                    'assets/svgs/startatopic.svg')
+                                              ],
+                                            ),
+                                          ),
+                                        )),
+                                  ],
+                                ),
                               Container(
                                 decoration: BoxDecoration(
                                   boxShadow: <BoxShadow>[
