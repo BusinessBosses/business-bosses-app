@@ -126,6 +126,8 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                                   setState(() {
                                                     if (filteredCategory ==
                                                         'Products') {
+                                                      _selectedLocation = null;
+                                                      _selectedCategory = null;
                                                       filteredCategory = null;
                                                     } else {
                                                       filteredCategory =
@@ -178,6 +180,8 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                                   setState(() {
                                                     if (filteredCategory ==
                                                         'Services') {
+                                                      _selectedLocation = null;
+                                                      _selectedCategory = null;
                                                       filteredCategory = null;
                                                     } else {
                                                       filteredCategory =
