@@ -152,6 +152,10 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                                     top: 15,
                                                     bottom: 15,
                                                   ),
+                                                  margin: const EdgeInsets.only(
+                                                    left: 10,
+                                                    right: 10,
+                                                  ),
                                                   child: const Row(
                                                     mainAxisAlignment:
                                                         MainAxisAlignment
@@ -205,6 +209,10 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                                     right: 16,
                                                     top: 15,
                                                     bottom: 15,
+                                                  ),
+                                                  margin: const EdgeInsets.only(
+                                                    left: 10,
+                                                    right: 10,
                                                   ),
                                                   child: const Row(
                                                     mainAxisAlignment:
