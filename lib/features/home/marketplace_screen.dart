@@ -117,55 +117,112 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                               content: SingleChildScrollView(
                                 child: Column(
                                   children: <Widget>[
-                                    Container(
-                                      decoration: BoxDecoration(
-                                        color: backgroundcolorinterface,
-                                        borderRadius:
-                                            BorderRadius.circular(radiusValue),
-                                      ),
-                                      padding: const EdgeInsets.only(
-                                        left: 16.0,
-                                        right: 16,
-                                        top: 4,
-                                        bottom: 5,
-                                      ),
-                                      margin: const EdgeInsets.only(
-                                        left: 10,
-                                        right: 10,
-                                      ),
-                                      child: DropdownButton<String>(
-                                        underline: Container(),
-                                        value: filteredCategory,
-                                        isExpanded: true,
-                                        icon: const Icon(
-                                          Icons.keyboard_arrow_right,
-                                        ),
-                                        iconSize: 24,
-                                        elevation: 16,
-                                        onChanged: (String? newValue) {
-                                          setState(() {
-                                            filteredCategory = newValue!;
-                                          });
-                                        },
-                                        items: <String?>[
-                                          null,
-                                          'Products',
-                                          'Services',
-                                        ].map<DropdownMenuItem<String>>(
-                                            (String? value) {
-                                          return DropdownMenuItem<String>(
-                                            value: value,
-                                            child: value != null
-                                                ? Text(value)
-                                                : Text(
-                                                    value ?? 'Select Listing',
-                                                    style: bodyText2.copyWith(
-                                                      color: hintColor,
-                                                    ),
+                                    Column(
+                                      children: <Widget>[
+                                        filteredCategory == null ||
+                                                filteredCategory == 'Products'
+                                            ? GestureDetector(
+                                                onTap: () {
+                                                  setState(() {
+                                                    if (filteredCategory ==
+                                                        'Products') {
+                                                      filteredCategory = null;
+                                                    } else {
+                                                      filteredCategory =
+                                                          'Products';
+                                                    }
+                                                  });
+                                                },
+                                                child: Container(
+                                                  alignment:
+                                                      Alignment.bottomLeft,
+                                                  decoration: BoxDecoration(
+                                                    color:
+                                                        backgroundcolorinterface,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            radiusValue),
                                                   ),
-                                          );
-                                        }).toList(),
-                                      ),
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                    left: 16.0,
+                                                    right: 16,
+                                                    top: 15,
+                                                    bottom: 15,
+                                                  ),
+                                                  child: const Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    children: <Widget>[
+                                                      Text(
+                                                        'Products',
+                                                        style: TextStyle(
+                                                          fontSize: 16,
+                                                        ),
+                                                      ),
+                                                      Icon(
+                                                        Icons.arrow_forward_ios,
+                                                        size: 10,
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              )
+                                            : Container(),
+                                        const SizedBox(height: 10),
+                                        filteredCategory == null ||
+                                                filteredCategory == 'Services'
+                                            ? GestureDetector(
+                                                onTap: () {
+                                                  setState(() {
+                                                    if (filteredCategory ==
+                                                        'Services') {
+                                                      filteredCategory = null;
+                                                    } else {
+                                                      filteredCategory =
+                                                          'Services';
+                                                    }
+                                                  });
+                                                },
+                                                child: Container(
+                                                  alignment:
+                                                      Alignment.bottomLeft,
+                                                  decoration: BoxDecoration(
+                                                    color:
+                                                        backgroundcolorinterface,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            radiusValue),
+                                                  ),
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                    left: 16.0,
+                                                    right: 16,
+                                                    top: 15,
+                                                    bottom: 15,
+                                                  ),
+                                                  child: const Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    children: <Widget>[
+                                                      Text(
+                                                        'Services',
+                                                        style: TextStyle(
+                                                          fontSize: 16,
+                                                        ),
+                                                      ),
+                                                      Icon(
+                                                        Icons.arrow_forward_ios,
+                                                        size: 10,
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              )
+                                            : Container(),
+                                      ],
                                     ),
                                     const SizedBox(height: 12.0),
                                     filteredCategory == 'Products'
@@ -1254,6 +1311,22 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                 )),
         ),
       ),
+    );
+  }
+
+  Widget _buildListItem(String? value) {
+    return ListTile(
+      title: Text(
+        value ?? 'Select Listing',
+        style: TextStyle(
+          color: hintColor,
+        ),
+      ),
+      onTap: () {
+        setState(() {
+          filteredCategory = value;
+        });
+      },
     );
   }
 }

@@ -29,7 +29,7 @@ class UserModel {
   final List<Industry>? interests;
   final List<String>? productsandservices;
   final List<ReferralsModel>? referals;
-  final bool? toPost;
+  final bool toPost;
   final String? weeklyRank;
   final String? monthlyRank;
 
