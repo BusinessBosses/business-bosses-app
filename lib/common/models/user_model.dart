@@ -30,6 +30,8 @@ class UserModel {
   final List<String>? productsandservices;
   final List<ReferralsModel>? referals;
   final bool toPost;
+  final String? weeklyRank;
+  final String? monthlyRank;
 
   // final List<String>? deviceTokens;
 
@@ -95,6 +97,8 @@ class UserModel {
     this.isSubscribed = false,
     this.isUpdated,
     this.toPost = true,
+    this.weeklyRank,
+    this.monthlyRank,
   });
 
   UserModel copyWith({
@@ -121,6 +125,8 @@ class UserModel {
     List<String>? productsandservices,
     List<ReferralsModel>? referals,
     bool? toPost,
+    String? weeklyRank,
+    String? monthlyRank,
 
     // List<String>? deviceTokens,
 
@@ -187,6 +193,8 @@ class UserModel {
       averageRating: averageRating ?? this.averageRating,
       isSubscribed: isSubscribed ?? this.isSubscribed,
       toPost: toPost ?? this.toPost,
+      weeklyRank: weeklyRank ?? this.weeklyRank,
+      monthlyRank: monthlyRank ?? this.monthlyRank,
       isUpdated: isUpdated ?? this.isUpdated,
     );
   }
@@ -237,6 +245,8 @@ class UserModel {
       'isSubscribed': isSubscribed,
       'isUpdated': isUpdated,
       'toPost': toPost,
+      'weeklyRank': weeklyRank,
+      'monthlyRank': monthlyRank,
     };
   }
 
@@ -331,6 +341,10 @@ class UserModel {
       toPost: map['toPost'] != null ? map['toPost'] as bool : false,
       isUpdated: map['isUpdated'] != null ? map['isUpdated'] as bool : false,
       inviteId: map['inviteId'] != null ? map['inviteId'] as String : null,
+      weeklyRank:
+          map['weeklyRank'] != null ? map['weeklyRank'] as String : null,
+      monthlyRank:
+          map['monthlyRank'] != null ? map['monthlyRank'] as String : null,
       averageRating: map['averageRating'] != null
           ? (map['averageRating'] is int
               ? (map['averageRating'] as int).toDouble()
