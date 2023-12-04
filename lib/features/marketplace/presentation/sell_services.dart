@@ -62,6 +62,7 @@ class _CreateServiceScreenState extends State<CreateServiceScreen> {
   bool? _isUpdating;
   bool _shouldPromote = false;
   final TextEditingController descriptionController = TextEditingController();
+  final TextEditingController _priceController = TextEditingController();
 
   @override
   void initState() {
@@ -73,20 +74,8 @@ class _CreateServiceScreenState extends State<CreateServiceScreen> {
     }
     descriptionController.text = _market?.description ?? '';
     price = _market?.price ?? '';
-    if (_market?.category == 'Write 1 Page Business Plan') {
-      _selectedCategory = 'Write 1 Page Business Plan - \$10';
-    } else if (_market?.category == 'Build 1 Page Website') {
-      _selectedCategory = 'Build 1 Page Website - \$10';
-    } else if (_market?.category == 'Create Social Media AD') {
-      _selectedCategory = 'Create Social Media AD - \$10';
-    } else if (_market?.category == 'Monthly Account Book Keeping') {
-      _selectedCategory = 'Monthly Account Book Keeping - \$10';
-    } else if (_market?.category == 'Logo & Branding Guidelines') {
-      _selectedCategory = 'Logo & Branding Guidelines - \$10';
-    } else if (_market?.category == 'Test, Review & Feedback') {
-      _selectedCategory = 'Test, Review & Feedback - \$5';
-    }
-
+    _priceController.text = _market?.price ?? '';
+    _selectedCategory = _market?.category;
     _selectedLocation = _market?.location;
     _fileProcessing = <bool>[];
   }
@@ -142,21 +131,17 @@ class _CreateServiceScreenState extends State<CreateServiceScreen> {
                       onChanged: (String? newValue) {
                         setState(() {
                           _selectedCategory = newValue;
-                          if (newValue == 'Test, Review & Feedback - \$5') {
-                            price = '\$5';
-                          } else {
-                            price = '\$10';
-                          }
                         });
                       },
                       items: <String?>[
                         null,
-                        'Write 1 Page Business Plan - \$10',
-                        'Build 1 Page Website - \$10',
-                        'Create Social Media AD - \$10',
-                        'Monthly Account Book Keeping - \$10',
-                        'Logo & Branding Guidelines - \$10',
-                        'Test, Review & Feedback - \$5',
+                        'Write 1 Page Business Plan',
+                        'Build 1 Page Website',
+                        'Create Social Media AD',
+                        'Monthly Account Book Keeping',
+                        'Logo & Branding Guidelines',
+                        'Test, Review & Feedback',
+                        'Other Business Service',
                       ].map<DropdownMenuItem<String>>((String? value) {
                         return DropdownMenuItem<String>(
                           value: value,
@@ -174,6 +159,40 @@ class _CreateServiceScreenState extends State<CreateServiceScreen> {
                   ),
                 ),
                 const SizedBox(height: 24.0),
+                Padding(
+                  padding: const EdgeInsets.only(left: 16.0, right: 16),
+                  child: Stack(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: TextFormField(
+                          controller: _priceController,
+                          onChanged: (String val) => price = val,
+                          textInputAction: TextInputAction.next,
+                          keyboardType: TextInputType.number,
+                          maxLength: 3,
+                          decoration: inputDecoration.copyWith(
+                            hintText: 'Price',
+                          ),
+                        ),
+                      ),
+                      const Positioned(
+                        left: 10,
+                        top: 0,
+                        bottom: 25,
+                        child: Align(
+                          alignment: Alignment
+                              .centerLeft, // Vertically centers the text
+                          child: Text(
+                            '\$',
+                            style: TextStyle(fontWeight: FontWeight.w700),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 12.0),
                 Padding(
                   padding: const EdgeInsets.only(left: 16.0, right: 16),
                   child: DetectableTextField(
