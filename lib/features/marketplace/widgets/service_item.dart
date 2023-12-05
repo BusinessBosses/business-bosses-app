@@ -398,7 +398,7 @@ class _ServiceTileState extends State<ServiceTile> {
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: <Widget>[
                                       Text(
-                                        '${_post.category} - ${_post.price.toString()}',
+                                        '${_post.category} - \$${_post.price.toString()}',
                                         style: const TextStyle(
                                           fontWeight: FontWeight.w800,
                                         ),

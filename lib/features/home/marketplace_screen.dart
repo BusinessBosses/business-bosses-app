@@ -126,6 +126,8 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                                   setState(() {
                                                     if (filteredCategory ==
                                                         'Products') {
+                                                      _selectedLocation = null;
+                                                      _selectedCategory = null;
                                                       filteredCategory = null;
                                                     } else {
                                                       filteredCategory =
@@ -149,6 +151,10 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                                     right: 16,
                                                     top: 15,
                                                     bottom: 15,
+                                                  ),
+                                                  margin: const EdgeInsets.only(
+                                                    left: 10,
+                                                    right: 10,
                                                   ),
                                                   child: const Row(
                                                     mainAxisAlignment:
@@ -178,6 +184,8 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                                   setState(() {
                                                     if (filteredCategory ==
                                                         'Services') {
+                                                      _selectedLocation = null;
+                                                      _selectedCategory = null;
                                                       filteredCategory = null;
                                                     } else {
                                                       filteredCategory =
@@ -201,6 +209,10 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                                     right: 16,
                                                     top: 15,
                                                     bottom: 15,
+                                                  ),
+                                                  margin: const EdgeInsets.only(
+                                                    left: 10,
+                                                    right: 10,
                                                   ),
                                                   child: const Row(
                                                     mainAxisAlignment:
