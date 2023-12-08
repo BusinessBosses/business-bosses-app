@@ -191,7 +191,6 @@ class MarketController extends GetxController {
     });
 
     markets.insert(0, modelizedNewPost);
-    _homeController.markets.insert(0, modelizedNewPost);
 
     // Check if it's a product and add to the products list
     if (modelizedNewPost.isProduct) {

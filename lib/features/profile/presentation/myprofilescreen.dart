@@ -199,76 +199,81 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                         SingleChildScrollView(
                                           child: Column(
                                             children: <Widget>[
-                                              marketController.markets
-                                                      .where((MarketModel
-                                                              market) =>
-                                                          market.userId ==
-                                                          profileController
-                                                              .myProfile.uid)
-                                                      .isEmpty
-                                                  ? const SafetyModel(
-                                                      isLoading: false,
-                                                      icon: Icon(
-                                                        Icons.warning,
-                                                        color: Colors.grey,
-                                                        size: 80.0,
-                                                      ),
-                                                      title:
-                                                          'This user has no items in store',
-                                                      // subTitle: '',
-                                                    )
-                                                  : ListView.builder(
-                                                      shrinkWrap: true,
-                                                      physics:
-                                                          const NeverScrollableScrollPhysics(),
-                                                      itemCount: marketController
-                                                          .markets
-                                                          .where((MarketModel
-                                                                  market) =>
-                                                              market.userId ==
-                                                              profileController
-                                                                  .myProfile
-                                                                  .uid)
-                                                          .length,
-                                                      itemBuilder:
-                                                          (BuildContext context,
-                                                              int index) {
-                                                        final List<MarketModel>
-                                                            filteredMarkets =
-                                                            marketController
-                                                                .markets
-                                                                .where((MarketModel
-                                                                        market) =>
-                                                                    market
-                                                                        .userId ==
-                                                                    profileController
-                                                                        .myProfile
-                                                                        .uid)
-                                                                .toList();
-                                                        final MarketModel
-                                                            market =
-                                                            filteredMarkets[
-                                                                index];
+                                              Obx(() {
+                                                return marketController.markets
+                                                        .where((MarketModel
+                                                                market) =>
+                                                            market.userId ==
+                                                            profileController
+                                                                .myProfile.uid)
+                                                        .isEmpty
+                                                    ? const SafetyModel(
+                                                        isLoading: false,
+                                                        icon: Icon(
+                                                          Icons.warning,
+                                                          color: Colors.grey,
+                                                          size: 80.0,
+                                                        ),
+                                                        title:
+                                                            'This user has no items in store',
+                                                        // subTitle: '',
+                                                      )
+                                                    : ListView.builder(
+                                                        shrinkWrap: true,
+                                                        physics:
+                                                            const NeverScrollableScrollPhysics(),
+                                                        itemCount: marketController
+                                                            .markets
+                                                            .where((MarketModel
+                                                                    market) =>
+                                                                market.userId ==
+                                                                profileController
+                                                                    .myProfile
+                                                                    .uid)
+                                                            .length,
+                                                        itemBuilder:
+                                                            (BuildContext
+                                                                    context,
+                                                                int index) {
+                                                          final List<
+                                                                  MarketModel>
+                                                              filteredMarkets =
+                                                              marketController
+                                                                  .markets
+                                                                  .where((MarketModel
+                                                                          market) =>
+                                                                      market
+                                                                          .userId ==
+                                                                      profileController
+                                                                          .myProfile
+                                                                          .uid)
+                                                                  .toList();
+                                                          final MarketModel
+                                                              market =
+                                                              filteredMarkets[
+                                                                  index];
 
-                                                        return market.isProduct
-                                                            ? MarketTile(
-                                                                post: market,
-                                                                controller:
-                                                                    marketController,
-                                                                key: ValueKey(
-                                                                    market
-                                                                        .marketId),
-                                                              )
-                                                            : ServiceTile(
-                                                                post: market,
-                                                                controller:
-                                                                    marketController,
-                                                                key: ValueKey(
-                                                                    market
-                                                                        .marketId),
-                                                              );
-                                                      },
-                                                    ),
+                                                          return market
+                                                                  .isProduct
+                                                              ? MarketTile(
+                                                                  post: market,
+                                                                  controller:
+                                                                      marketController,
+                                                                  key: ValueKey(
+                                                                      market
+                                                                          .marketId),
+                                                                )
+                                                              : ServiceTile(
+                                                                  post: market,
+                                                                  controller:
+                                                                      marketController,
+                                                                  key: ValueKey(
+                                                                      market
+                                                                          .marketId),
+                                                                );
+                                                        },
+                                                      );
+                                              }),
                                               const SizedBox(
                                                 height: 100,
                                               )
