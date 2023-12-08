@@ -591,6 +591,7 @@ class _MarketTileState extends State<MarketTile> {
                                             _post.marketId,
                                             'market',
                                             _post.userId);
+                                        setState(() {});
                                       },
                                       icon: _post.likes?.contains(
                                                   profileController
@@ -623,7 +624,9 @@ class _MarketTileState extends State<MarketTile> {
                                               PostLikeCommentItem(
                                             post: _post,
                                             onComment: (CommentModel
-                                                newComment) async {},
+                                                newComment) async {
+                                              setState(() {});
+                                            },
                                           ),
                                         );
                                       },
@@ -653,6 +656,7 @@ class _MarketTileState extends State<MarketTile> {
                                                 'market',
                                                 _post.user!.uid,
                                               );
+                                              setState(() {});
                                             },
                                             icon: _post.coins?.contains(
                                                         profileController

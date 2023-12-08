@@ -18,31 +18,36 @@ class LiveController extends GetxController {
     update();
     final ApiResponseModel response = await ApiService.get(path: 'event/all');
     events.clear();
-    ongoing.clear();
     upcoming.clear();
+    ongoing.clear();
+
     if (response.success) {
       DateTime now = DateTime.now();
       DateTime today = DateTime(now.year, now.month, now.day);
       List<dynamic> rows = response.data['rows'];
-      for (dynamic row in rows) {
-        events.add(EventModel.fromMap(row));
-      }
-      events.sort(
-          (EventModel a, EventModel b) => a.startAt!.compareTo(b.startAt!));
 
-      for (EventModel event in events) {
+      for (dynamic row in rows) {
+        EventModel event = EventModel.fromMap(row);
+        events.add(event);
+
         DateTime startAt = event.startAt!;
         DateTime endAt = event.endAt!;
 
         if (startAt.isAtSameMomentAs(today) || startAt.isAfter(now)) {
-          // Event starts today, it's an upcoming event
+          // Event starts today or in the future, it's an upcoming event
           upcoming.add(event);
         } else if (startAt.isBefore(now) && endAt.isAfter(now)) {
-          // Event has already started, it's not upcoming
+          // Event has already started and is ongoing
           ongoing.add(event);
         }
       }
+      events.clear();
+      events.addAll(ongoing);
+      events.addAll(upcoming);
+      // Sort the events based on startAt
+      events.sort((a, b) => a.startAt!.compareTo(b.startAt!));
     }
+
     loading(false);
     update();
   }
