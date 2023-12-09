@@ -133,6 +133,27 @@ void processDeepLink(Uri uri) {
         Routes.settings,
       );
     }
+  } else if (uri.scheme == 'myapp' && uri.host == 'app.notification') {
+    String? notificationParam = uri.queryParameters['type'];
+
+    if (notificationParam != null) {
+      bool success = notificationParam.toLowerCase() == 'message';
+      if (success) {
+        Navigator.pushNamed(
+          navigatorKey.currentState!.context,
+          Routes.home,
+        );
+      }
+    }
+  } else if (uri.scheme == 'https' && uri.host == 'app.main') {
+    String? notificationParam = uri.queryParameters['type'];
+    if (notificationParam != null) {
+      bool success = notificationParam.toLowerCase() == 'message';
+      if (success) {
+        // showAboutDialog(context: Get.context!);
+        // Get.toNamed(Routes.login);
+      }
+    }
   }
 }
 
