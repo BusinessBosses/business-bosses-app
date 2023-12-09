@@ -573,6 +573,7 @@ class _ServiceTileState extends State<ServiceTile> {
                                             _post.marketId,
                                             'market',
                                             _post.userId);
+                                        setState(() {});
                                       },
                                       icon: _post.likes?.contains(
                                                   profileController
@@ -605,7 +606,9 @@ class _ServiceTileState extends State<ServiceTile> {
                                               PostLikeCommentItem(
                                             post: _post,
                                             onComment: (CommentModel
-                                                newComment) async {},
+                                                newComment) async {
+                                              setState(() {});
+                                            },
                                           ),
                                         );
                                       },
@@ -635,6 +638,7 @@ class _ServiceTileState extends State<ServiceTile> {
                                                 'market',
                                                 _post.user!.uid,
                                               );
+                                              setState(() {});
                                             },
                                             icon: _post.coins?.contains(
                                                         profileController
