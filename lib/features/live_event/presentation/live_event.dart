@@ -16,6 +16,7 @@ import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:lottie/lottie.dart';
 import 'package:timezone/data/latest.dart' as tzdata;
 
 import '../../../action/action.dart';
@@ -31,7 +32,6 @@ class LiveEvent extends StatefulWidget {
 class _LiveEventState extends State<LiveEvent> {
   final LiveController liveEventController = Get.put(LiveController());
   TextEditingController joinEvent = TextEditingController();
-  int _currentIndex = 0;
   final ScrollController scrollController = ScrollController();
   final ProfileController profileController = Get.find();
 
@@ -42,20 +42,6 @@ class _LiveEventState extends State<LiveEvent> {
   }
 
   DateTime selectedDateTime = DateTime.now();
-
-  final Map<int, Widget> _segments = <int, Widget>{
-    0: const Padding(
-      padding: EdgeInsets.all(8),
-      child: Text(
-        'Ongoing',
-        style: TextStyle(fontWeight: FontWeight.bold),
-      ),
-    ),
-    1: const Padding(
-      padding: EdgeInsets.all(8),
-      child: Text('Upcoming', style: TextStyle(fontWeight: FontWeight.bold)),
-    )
-  };
 
   @override
   Widget build(BuildContext context) {
@@ -228,65 +214,56 @@ class _LiveEventState extends State<LiveEvent> {
                                 ),
                               ),
                               const SizedBox(height: 10),
-                              Padding(
-                                padding: const EdgeInsets.only(top: 20.0),
-                                child: Align(
-                                  alignment: Alignment.topCenter,
-                                  child: CupertinoSlidingSegmentedControl<int>(
-                                    padding: const EdgeInsets.all(5),
-                                    children: _segments,
-                                    onValueChanged: (int? value) {
-                                      setState(() {
-                                        _currentIndex = value!;
-                                      });
-                                    },
-                                    groupValue: _currentIndex,
-                                  ),
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(
-                                  left: 15,
-                                  top: 20,
-                                  right: 15,
-                                  bottom: 10,
-                                ),
-                                child: Row(
-                                  children: <Widget>[
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                        top: 5,
-                                        bottom: 3,
-                                      ),
-                                      child: Text(
-                                        _currentIndex == 0
-                                            ? 'Ongoing'
-                                            : 'Upcoming',
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(left: 8),
-                                      child: Text(
-                                        _currentIndex == 0 ? 'Now' : 'Events',
-                                        style: const TextStyle(
-                                          fontSize: 23,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ),
                             ],
                           ),
                         ),
                       ];
                     },
-                    body: _currentIndex == 0
-                        ? const EventCall(
-                            ongoing: true,
-                          )
-                        : const EventCall()));
+                    body: DefaultTabController(
+                      length: 3, // Number of tabs
+                      child: Column(
+                        children: <Widget>[
+                          Container(
+                            constraints:
+                                const BoxConstraints.expand(height: 50),
+                            child: TabBar(
+                              tabs: <Widget>[
+                                Tab(
+                                  child: Lottie.asset(
+                                    'assets/anim/liveevent.json',
+                                    height: 25,
+                                  ),
+                                ),
+                                const Tab(text: 'Ongoing'),
+                                const Tab(text: 'Upcoming'),
+                              ],
+                            ),
+                          ),
+                          const Expanded(
+                            child: TabBarView(
+                              children: <Widget>[
+                                // Content of Tab 1
+                                EventCall(
+                                  full: true,
+                                ),
+
+                                // Content of Tab 2
+                                EventCall(
+                                  ongoing: true,
+                                ),
+
+                                // Content of Tab 3
+
+                                EventCall(
+                                  ongoing: false,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ));
       },
     );
   }
@@ -484,8 +461,9 @@ class _LiveEventState extends State<LiveEvent> {
 }
 
 class EventCall extends StatefulWidget {
-  const EventCall({super.key, this.ongoing = false});
+  const EventCall({super.key, this.ongoing = false, this.full = false});
   final bool ongoing;
+  final bool full;
 
   @override
   State<EventCall> createState() => _EventCallState();
@@ -496,40 +474,59 @@ class _EventCallState extends State<EventCall> {
 
   @override
   Widget build(BuildContext context) {
-    if (!widget.ongoing) {
-      return liveEventController.upcoming.isNotEmpty
+    if (widget.full) {
+      return liveEventController.events.isNotEmpty
           ? Obx(
               () => ListView.builder(
-                itemCount: liveEventController.upcoming.length,
+                itemCount: liveEventController.events.length,
                 itemBuilder: (BuildContext context, int index) {
-                  EventModel event = liveEventController.upcoming[index];
+                  EventModel event = liveEventController.events[index];
                   return EventItem(
                     event: event,
-                    ongoing: false,
+                    ongoing: liveEventController.ongoing.contains(event)
+                        ? true
+                        : false,
                   );
                 },
               ),
             )
           : const Center(
-              child: Text('No Live Event is Upcoming'),
+              child: Text('No Event Available!'),
             );
     } else {
-      return liveEventController.ongoing.isNotEmpty
-          ? Obx(
-              () => ListView.builder(
-                itemCount: liveEventController.ongoing.length,
-                itemBuilder: (BuildContext context, int index) {
-                  EventModel event = liveEventController.ongoing[index];
-                  return EventItem(
-                    event: event,
-                    ongoing: true,
-                  );
-                },
-              ),
-            )
-          : const Center(
-              child: Text('No Live Event is Ongoing'),
-            );
+      return !widget.ongoing
+          ? liveEventController.upcoming.isNotEmpty
+              ? Obx(
+                  () => ListView.builder(
+                    itemCount: liveEventController.upcoming.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      EventModel event = liveEventController.upcoming[index];
+                      return EventItem(
+                        event: event,
+                        ongoing: false,
+                      );
+                    },
+                  ),
+                )
+              : const Center(
+                  child: Text('No Live Event is Upcoming'),
+                )
+          : liveEventController.ongoing.isNotEmpty
+              ? Obx(
+                  () => ListView.builder(
+                    itemCount: liveEventController.ongoing.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      EventModel event = liveEventController.ongoing[index];
+                      return EventItem(
+                        event: event,
+                        ongoing: true,
+                      );
+                    },
+                  ),
+                )
+              : const Center(
+                  child: Text('No Live Event is Ongoing'),
+                );
     }
   }
 }
