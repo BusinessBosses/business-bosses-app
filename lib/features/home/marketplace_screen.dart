@@ -75,234 +75,65 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
     int userCount = _marketController.users.length;
     String formattedUserCount = formatCount(userCount);
 
-    return GetBuilder<MarketController>(
-        builder: (MarketController marketController) {
-      return Scaffold(
-        backgroundColor: backgroundcolorinterface,
-        appBar: AppBar(
-            automaticallyImplyLeading: false,
-            title: const Text('Marketplace'),
-            actions: <Widget>[
-              IconButton(
-                  icon: _isSearching
-                      ? const Icon(Icons.close)
-                      : SvgPicture.asset(
-                          'assets/svgs/search.svg',
-                        ),
-                  onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return Center(
-                          child: StatefulBuilder(builder:
-                              (BuildContext context, StateSetter setState) {
-                            return AlertDialog(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(16.0),
-                              ),
-                              title: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+    return Scaffold(
+      backgroundColor: backgroundcolorinterface,
+      appBar: AppBar(
+          automaticallyImplyLeading: false,
+          title: const Text('Marketplace'),
+          actions: <Widget>[
+            IconButton(
+                icon: _isSearching
+                    ? const Icon(Icons.close)
+                    : SvgPicture.asset(
+                        'assets/svgs/search.svg',
+                      ),
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return Center(
+                        child: StatefulBuilder(builder:
+                            (BuildContext context, StateSetter setState) {
+                          return AlertDialog(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16.0),
+                            ),
+                            title: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                const Text('Filter'),
+                                IconButton(
+                                  icon: const Icon(Icons.close),
+                                  color: Colors.red,
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                              ],
+                            ),
+                            content: SingleChildScrollView(
+                              child: Column(
                                 children: <Widget>[
-                                  const Text('Filter'),
-                                  IconButton(
-                                    icon: const Icon(Icons.close),
-                                    color: Colors.red,
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                    },
-                                  ),
-                                ],
-                              ),
-                              content: SingleChildScrollView(
-                                child: Column(
-                                  children: <Widget>[
-                                    Column(
-                                      children: <Widget>[
-                                        filteredCategory == null ||
-                                                filteredCategory == 'Products'
-                                            ? GestureDetector(
-                                                onTap: () {
-                                                  setState(() {
-                                                    if (filteredCategory ==
-                                                        'Products') {
-                                                      _selectedLocation = null;
-                                                      _selectedCategory = null;
-                                                      filteredCategory = null;
-                                                    } else {
-                                                      filteredCategory =
-                                                          'Products';
-                                                    }
-                                                  });
-                                                },
-                                                child: Container(
-                                                  alignment:
-                                                      Alignment.bottomLeft,
-                                                  decoration: BoxDecoration(
-                                                    color:
-                                                        backgroundcolorinterface,
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            radiusValue),
-                                                  ),
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                    left: 16.0,
-                                                    right: 16,
-                                                    top: 15,
-                                                    bottom: 15,
-                                                  ),
-                                                  margin: const EdgeInsets.only(
-                                                    left: 10,
-                                                    right: 10,
-                                                  ),
-                                                  child: const Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceBetween,
-                                                    children: <Widget>[
-                                                      Text(
-                                                        'Products',
-                                                        style: TextStyle(
-                                                          fontSize: 16,
-                                                        ),
-                                                      ),
-                                                      Icon(
-                                                        Icons.arrow_forward_ios,
-                                                        size: 10,
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              )
-                                            : Container(),
-                                        const SizedBox(height: 10),
-                                        filteredCategory == null ||
-                                                filteredCategory == 'Services'
-                                            ? GestureDetector(
-                                                onTap: () {
-                                                  setState(() {
-                                                    if (filteredCategory ==
-                                                        'Services') {
-                                                      _selectedLocation = null;
-                                                      _selectedCategory = null;
-                                                      filteredCategory = null;
-                                                    } else {
-                                                      filteredCategory =
-                                                          'Services';
-                                                    }
-                                                  });
-                                                },
-                                                child: Container(
-                                                  alignment:
-                                                      Alignment.bottomLeft,
-                                                  decoration: BoxDecoration(
-                                                    color:
-                                                        backgroundcolorinterface,
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            radiusValue),
-                                                  ),
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                    left: 16.0,
-                                                    right: 16,
-                                                    top: 15,
-                                                    bottom: 15,
-                                                  ),
-                                                  margin: const EdgeInsets.only(
-                                                    left: 10,
-                                                    right: 10,
-                                                  ),
-                                                  child: const Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceBetween,
-                                                    children: <Widget>[
-                                                      Text(
-                                                        'Services',
-                                                        style: TextStyle(
-                                                          fontSize: 16,
-                                                        ),
-                                                      ),
-                                                      Icon(
-                                                        Icons.arrow_forward_ios,
-                                                        size: 10,
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              )
-                                            : Container(),
-                                      ],
-                                    ),
-                                    const SizedBox(height: 12.0),
-                                    filteredCategory == 'Products'
-                                        ? Container(
-                                            decoration: BoxDecoration(
-                                              color: backgroundcolorinterface,
-                                              borderRadius:
-                                                  BorderRadius.circular(
-                                                      radiusValue),
-                                            ),
-                                            padding: const EdgeInsets.only(
-                                              left: 16.0,
-                                              right: 16,
-                                              top: 4,
-                                              bottom: 5,
-                                            ),
-                                            margin: const EdgeInsets.only(
-                                              left: 10,
-                                              right: 10,
-                                            ),
-                                            child: DropdownButton<String>(
-                                              underline: Container(),
-                                              value: _selectedCategory,
-                                              isExpanded: true,
-                                              icon: const Icon(
-                                                Icons.keyboard_arrow_right,
-                                              ),
-                                              iconSize: 24,
-                                              elevation: 16,
-                                              onChanged: (String? newValue) {
+                                  Column(
+                                    children: <Widget>[
+                                      filteredCategory == null ||
+                                              filteredCategory == 'Products'
+                                          ? GestureDetector(
+                                              onTap: () {
                                                 setState(() {
-                                                  _selectedCategory = newValue!;
+                                                  if (filteredCategory ==
+                                                      'Products') {
+                                                    _selectedLocation = null;
+                                                    _selectedCategory = null;
+                                                    filteredCategory = null;
+                                                  } else {
+                                                    filteredCategory =
+                                                        'Products';
+                                                  }
                                                 });
                                               },
-                                              items: <String?>[
-                                                null,
-                                                'Home, Garden & Outdoors',
-                                                'Fashion & Beauty',
-                                                'Sports & Entertainment',
-                                                'Books & Education',
-                                                'Jewellery & Timepieces',
-                                                'Security, Safety & Equipment',
-                                                'Video Games & Electronics',
-                                                'Agriculture, Food, Beverage',
-                                                'Construction & Real Estate',
-                                                'Vehicle & Transportation',
-                                                'Business Services & Events',
-                                                'Other',
-                                              ].map<DropdownMenuItem<String>>(
-                                                  (String? value) {
-                                                return DropdownMenuItem<String>(
-                                                  value: value,
-                                                  child: value != null
-                                                      ? Text(value)
-                                                      : Text(
-                                                          value ??
-                                                              'Select Category',
-                                                          style: bodyText2
-                                                              .copyWith(
-                                                            color: hintColor,
-                                                          ),
-                                                        ),
-                                                );
-                                              }).toList(),
-                                            ),
-                                          )
-                                        : filteredCategory == 'Services'
-                                            ? Container(
+                                              child: Container(
+                                                alignment: Alignment.bottomLeft,
                                                 decoration: BoxDecoration(
                                                   color:
                                                       backgroundcolorinterface,
@@ -313,122 +144,52 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                                 padding: const EdgeInsets.only(
                                                   left: 16.0,
                                                   right: 16,
-                                                  top: 4,
-                                                  bottom: 5,
+                                                  top: 15,
+                                                  bottom: 15,
                                                 ),
                                                 margin: const EdgeInsets.only(
                                                   left: 10,
                                                   right: 10,
                                                 ),
-                                                child: DropdownButton<String>(
-                                                  underline: Container(),
-                                                  value: _selectedCategory,
-                                                  isExpanded: true,
-                                                  icon: const Icon(
-                                                    Icons.keyboard_arrow_right,
-                                                  ),
-                                                  iconSize: 24,
-                                                  elevation: 16,
-                                                  onChanged:
-                                                      (String? newValue) {
-                                                    setState(() {
-                                                      _selectedCategory =
-                                                          newValue!;
-                                                    });
-                                                  },
-                                                  items: <String?>[
-                                                    null,
-                                                    'Write 1 Page Business Plan',
-                                                    'Build 1 Page Website',
-                                                    'Create Social Media AD',
-                                                    'Monthly Account Book Keeping',
-                                                    'Logo & Branding Guidelines',
-                                                    'Test, Review & Feedback',
-                                                  ].map<
-                                                          DropdownMenuItem<
-                                                              String>>(
-                                                      (String? value) {
-                                                    return DropdownMenuItem<
-                                                        String>(
-                                                      value: value,
-                                                      child: value != null
-                                                          ? Text(value)
-                                                          : Text(
-                                                              value ??
-                                                                  'Select Service Type',
-                                                              style: bodyText2
-                                                                  .copyWith(
-                                                                color:
-                                                                    hintColor,
-                                                              ),
-                                                            ),
-                                                    );
-                                                  }).toList(),
+                                                child: const Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: <Widget>[
+                                                    Text(
+                                                      'Products',
+                                                      style: TextStyle(
+                                                        fontSize: 16,
+                                                      ),
+                                                    ),
+                                                    Icon(
+                                                      Icons.arrow_forward_ios,
+                                                      size: 10,
+                                                    ),
+                                                  ],
                                                 ),
-                                              )
-                                            : Container(),
-                                    const SizedBox(height: 12.0),
-                                    filteredCategory == 'Products'
-                                        ? CountryListPick(
-                                            appBar: AppBar(
-                                              leading: IconButton(
-                                                onPressed: () {
-                                                  Navigator.pop(context);
-                                                },
-                                                icon: SvgPicture.asset(
-                                                    'assets/svgs/backbutton.svg'),
                                               ),
-                                              centerTitle: true,
-                                              // ignore: prefer_const_constructors
-                                              title: Text(
-                                                'Select Location',
-                                                textAlign: TextAlign.center,
-                                                style: const TextStyle(
-                                                    fontSize: 20),
-                                              ),
-                                            ),
-                                            initialSelection:
-                                                filterCode ?? 'GB',
-                                            pickerBuilder:
-                                                (BuildContext context,
-                                                    CountryCode? countryCode) {
-                                              return Container(
-                                                decoration: BoxDecoration(
-                                                  color:
-                                                      backgroundcolorinterface,
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          radiusValue),
-                                                ),
-                                                child: ListTile(
-                                                  leading: _selectedLocation !=
-                                                          null
-                                                      ? Text(_selectedLocation!)
-                                                      : Text(
-                                                          'Location',
-                                                          style: bodyText2
-                                                              .copyWith(
-                                                                  color:
-                                                                      hintColor),
-                                                        ),
-                                                  trailing: const Icon(Icons
-                                                      .keyboard_arrow_right),
-                                                ),
-                                              );
-                                            },
-                                            onChanged: (CountryCode? code) {
-                                              setState(
-                                                () {
-                                                  _selectedLocation =
-                                                      code?.name;
-                                                  filterCode = code?.code;
-                                                },
-                                              );
-                                            },
-                                            useSafeArea: false,
-                                          )
-                                        : filteredCategory == 'Services'
-                                            ? Container(
+                                            )
+                                          : Container(),
+                                      const SizedBox(height: 10),
+                                      filteredCategory == null ||
+                                              filteredCategory == 'Services'
+                                          ? GestureDetector(
+                                              onTap: () {
+                                                setState(() {
+                                                  if (filteredCategory ==
+                                                      'Services') {
+                                                    _selectedLocation = null;
+                                                    _selectedCategory = null;
+                                                    filteredCategory = null;
+                                                  } else {
+                                                    filteredCategory =
+                                                        'Services';
+                                                  }
+                                                });
+                                              },
+                                              child: Container(
+                                                alignment: Alignment.bottomLeft,
                                                 decoration: BoxDecoration(
                                                   color:
                                                       backgroundcolorinterface,
@@ -439,435 +200,705 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                                 padding: const EdgeInsets.only(
                                                   left: 16.0,
                                                   right: 16,
-                                                  top: 4,
-                                                  bottom: 5,
+                                                  top: 15,
+                                                  bottom: 15,
                                                 ),
                                                 margin: const EdgeInsets.only(
                                                   left: 10,
                                                   right: 10,
                                                 ),
-                                                child: DropdownButton<String>(
-                                                  underline: Container(),
-                                                  value: _selectedLocation,
-                                                  isExpanded: true,
-                                                  icon: const Icon(
-                                                    Icons.keyboard_arrow_right,
-                                                  ),
-                                                  iconSize: 24,
-                                                  elevation: 16,
-                                                  onChanged:
-                                                      (String? newValue) {
-                                                    setState(() {
-                                                      _selectedLocation =
-                                                          newValue!;
-                                                    });
-                                                  },
-                                                  items: <String?>[
-                                                    null,
-                                                    '1 Day Delivery',
-                                                    '2 Day Delivery',
-                                                    '3 Day Delivery',
-                                                    '4 Day Delivery',
-                                                    '5 Day Delivery',
-                                                    '6 Day Delivery',
-                                                    '7 Day Delivery',
-                                                    '8 Day Delivery',
-                                                    '9 Day Delivery',
-                                                    '10 Day Delivery',
-                                                    '11 Day Delivery',
-                                                    '12 Day Delivery',
-                                                    '13 Day Delivery',
-                                                    '14 Day Delivery',
-                                                    '15 Day Delivery',
-                                                  ].map<
-                                                          DropdownMenuItem<
-                                                              String>>(
-                                                      (String? value) {
-                                                    return DropdownMenuItem<
-                                                        String>(
-                                                      value: value,
-                                                      child: value != null
-                                                          ? Text(value)
-                                                          : Text(
-                                                              value ??
-                                                                  'Select Delivery Time',
-                                                              style: bodyText2
-                                                                  .copyWith(
-                                                                color:
-                                                                    hintColor,
-                                                              ),
-                                                            ),
-                                                    );
-                                                  }).toList(),
+                                                child: const Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: <Widget>[
+                                                    Text(
+                                                      'Services',
+                                                      style: TextStyle(
+                                                        fontSize: 16,
+                                                      ),
+                                                    ),
+                                                    Icon(
+                                                      Icons.arrow_forward_ios,
+                                                      size: 10,
+                                                    ),
+                                                  ],
                                                 ),
-                                              )
-                                            : Container(),
-                                  ],
-                                ),
-                              ),
-                              actions: <Widget>[
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                      right: 25.0, bottom: 10),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: <Widget>[
-                                      TextButton(
-                                        child: const Text('Reset'),
-                                        onPressed: () {
-                                          setState(() {
-                                            filterLocation = null;
-                                            filterCode = null;
-                                            filterCategory = null;
-                                            _selectedLocation = null;
-                                            _selectedCategory = null;
-                                            filteredCategory = null;
-                                            _marketController.updateFiltered();
-                                            _marketController.initMarket();
-                                            Navigator.of(context).pop();
-                                          });
-                                        },
-                                      ),
-                                      ElevatedButton(
-                                        child: const Text('Search'),
-                                        onPressed: () {
-                                          setState(() {
-                                            filterLocation = _selectedLocation;
-                                            filterCategory = _selectedCategory;
-                                            _marketController.filterMarket(
-                                                filterLocation, filterCategory);
-                                          });
-                                          Navigator.of(context).pop();
-                                        },
-                                      ),
+                                              ),
+                                            )
+                                          : Container(),
                                     ],
                                   ),
-                                )
-                              ],
-                            );
-                          }),
-                        );
-                      },
-                    );
-                  }),
-            ]),
-        body: _marketController.isLoading
-            ? const CircularProgressIndicator()
-            : SizedBox(
-                height: MediaQuery.of(context).size.height,
-                width: MediaQuery.of(context).size.width,
-                child: Stack(
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 30.0),
-                      child: Container(
-                        height: MediaQuery.of(context).size.height,
-                        width: MediaQuery.of(context).size.width,
-                        color: Colors.white,
-                        child: NestedScrollView(
-                          headerSliverBuilder:
-                              (BuildContext context, bool innerBoxIsScrolled) {
-                            return <Widget>[
-                              SliverStickyHeader(
-                                sticky: false,
-                                header: Column(
+                                  const SizedBox(height: 12.0),
+                                  filteredCategory == 'Products'
+                                      ? Container(
+                                          decoration: BoxDecoration(
+                                            color: backgroundcolorinterface,
+                                            borderRadius: BorderRadius.circular(
+                                                radiusValue),
+                                          ),
+                                          padding: const EdgeInsets.only(
+                                            left: 16.0,
+                                            right: 16,
+                                            top: 4,
+                                            bottom: 5,
+                                          ),
+                                          margin: const EdgeInsets.only(
+                                            left: 10,
+                                            right: 10,
+                                          ),
+                                          child: DropdownButton<String>(
+                                            underline: Container(),
+                                            value: _selectedCategory,
+                                            isExpanded: true,
+                                            icon: const Icon(
+                                              Icons.keyboard_arrow_right,
+                                            ),
+                                            iconSize: 24,
+                                            elevation: 16,
+                                            onChanged: (String? newValue) {
+                                              setState(() {
+                                                _selectedCategory = newValue!;
+                                              });
+                                            },
+                                            items: <String?>[
+                                              null,
+                                              'Home, Garden & Outdoors',
+                                              'Fashion & Beauty',
+                                              'Sports & Entertainment',
+                                              'Books & Education',
+                                              'Jewellery & Timepieces',
+                                              'Security, Safety & Equipment',
+                                              'Video Games & Electronics',
+                                              'Agriculture, Food, Beverage',
+                                              'Construction & Real Estate',
+                                              'Vehicle & Transportation',
+                                              'Business Services & Events',
+                                              'Other',
+                                            ].map<DropdownMenuItem<String>>(
+                                                (String? value) {
+                                              return DropdownMenuItem<String>(
+                                                value: value,
+                                                child: value != null
+                                                    ? Text(value)
+                                                    : Text(
+                                                        value ??
+                                                            'Select Category',
+                                                        style:
+                                                            bodyText2.copyWith(
+                                                          color: hintColor,
+                                                        ),
+                                                      ),
+                                              );
+                                            }).toList(),
+                                          ),
+                                        )
+                                      : filteredCategory == 'Services'
+                                          ? Container(
+                                              decoration: BoxDecoration(
+                                                color: backgroundcolorinterface,
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        radiusValue),
+                                              ),
+                                              padding: const EdgeInsets.only(
+                                                left: 16.0,
+                                                right: 16,
+                                                top: 4,
+                                                bottom: 5,
+                                              ),
+                                              margin: const EdgeInsets.only(
+                                                left: 10,
+                                                right: 10,
+                                              ),
+                                              child: DropdownButton<String>(
+                                                underline: Container(),
+                                                value: _selectedCategory,
+                                                isExpanded: true,
+                                                icon: const Icon(
+                                                  Icons.keyboard_arrow_right,
+                                                ),
+                                                iconSize: 24,
+                                                elevation: 16,
+                                                onChanged: (String? newValue) {
+                                                  setState(() {
+                                                    _selectedCategory =
+                                                        newValue!;
+                                                  });
+                                                },
+                                                items: <String?>[
+                                                  null,
+                                                  'Write 1 Page Business Plan',
+                                                  'Build 1 Page Website',
+                                                  'Create Social Media AD',
+                                                  'Monthly Account Book Keeping',
+                                                  'Logo & Branding Guidelines',
+                                                  'Test, Review & Feedback',
+                                                ].map<DropdownMenuItem<String>>(
+                                                    (String? value) {
+                                                  return DropdownMenuItem<
+                                                      String>(
+                                                    value: value,
+                                                    child: value != null
+                                                        ? Text(value)
+                                                        : Text(
+                                                            value ??
+                                                                'Select Service Type',
+                                                            style: bodyText2
+                                                                .copyWith(
+                                                              color: hintColor,
+                                                            ),
+                                                          ),
+                                                  );
+                                                }).toList(),
+                                              ),
+                                            )
+                                          : Container(),
+                                  const SizedBox(height: 12.0),
+                                  filteredCategory == 'Products'
+                                      ? CountryListPick(
+                                          appBar: AppBar(
+                                            leading: IconButton(
+                                              onPressed: () {
+                                                Navigator.pop(context);
+                                              },
+                                              icon: SvgPicture.asset(
+                                                  'assets/svgs/backbutton.svg'),
+                                            ),
+                                            centerTitle: true,
+                                            // ignore: prefer_const_constructors
+                                            title: Text(
+                                              'Select Location',
+                                              textAlign: TextAlign.center,
+                                              style:
+                                                  const TextStyle(fontSize: 20),
+                                            ),
+                                          ),
+                                          initialSelection: filterCode ?? 'GB',
+                                          pickerBuilder: (BuildContext context,
+                                              CountryCode? countryCode) {
+                                            return Container(
+                                              decoration: BoxDecoration(
+                                                color: backgroundcolorinterface,
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        radiusValue),
+                                              ),
+                                              child: ListTile(
+                                                leading: _selectedLocation !=
+                                                        null
+                                                    ? Text(_selectedLocation!)
+                                                    : Text(
+                                                        'Location',
+                                                        style:
+                                                            bodyText2.copyWith(
+                                                                color:
+                                                                    hintColor),
+                                                      ),
+                                                trailing: const Icon(
+                                                    Icons.keyboard_arrow_right),
+                                              ),
+                                            );
+                                          },
+                                          onChanged: (CountryCode? code) {
+                                            setState(
+                                              () {
+                                                _selectedLocation = code?.name;
+                                                filterCode = code?.code;
+                                              },
+                                            );
+                                          },
+                                          useSafeArea: false,
+                                        )
+                                      : filteredCategory == 'Services'
+                                          ? Container(
+                                              decoration: BoxDecoration(
+                                                color: backgroundcolorinterface,
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        radiusValue),
+                                              ),
+                                              padding: const EdgeInsets.only(
+                                                left: 16.0,
+                                                right: 16,
+                                                top: 4,
+                                                bottom: 5,
+                                              ),
+                                              margin: const EdgeInsets.only(
+                                                left: 10,
+                                                right: 10,
+                                              ),
+                                              child: DropdownButton<String>(
+                                                underline: Container(),
+                                                value: _selectedLocation,
+                                                isExpanded: true,
+                                                icon: const Icon(
+                                                  Icons.keyboard_arrow_right,
+                                                ),
+                                                iconSize: 24,
+                                                elevation: 16,
+                                                onChanged: (String? newValue) {
+                                                  setState(() {
+                                                    _selectedLocation =
+                                                        newValue!;
+                                                  });
+                                                },
+                                                items: <String?>[
+                                                  null,
+                                                  '1 Day Delivery',
+                                                  '2 Day Delivery',
+                                                  '3 Day Delivery',
+                                                  '4 Day Delivery',
+                                                  '5 Day Delivery',
+                                                  '6 Day Delivery',
+                                                  '7 Day Delivery',
+                                                  '8 Day Delivery',
+                                                  '9 Day Delivery',
+                                                  '10 Day Delivery',
+                                                  '11 Day Delivery',
+                                                  '12 Day Delivery',
+                                                  '13 Day Delivery',
+                                                  '14 Day Delivery',
+                                                  '15 Day Delivery',
+                                                ].map<DropdownMenuItem<String>>(
+                                                    (String? value) {
+                                                  return DropdownMenuItem<
+                                                      String>(
+                                                    value: value,
+                                                    child: value != null
+                                                        ? Text(value)
+                                                        : Text(
+                                                            value ??
+                                                                'Select Delivery Time',
+                                                            style: bodyText2
+                                                                .copyWith(
+                                                              color: hintColor,
+                                                            ),
+                                                          ),
+                                                  );
+                                                }).toList(),
+                                              ),
+                                            )
+                                          : Container(),
+                                ],
+                              ),
+                            ),
+                            actions: <Widget>[
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                    right: 25.0, bottom: 10),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
                                   children: <Widget>[
-                                    Container(
-                                      width: double.infinity,
-                                      color: backgroundcolorinterface,
-                                      child: Stack(
-                                        children: <Widget>[
-                                          Padding(
-                                            padding: const EdgeInsets.only(
-                                                left: 20, top: 25),
-                                            child: GestureDetector(
-                                              onTap: (() {
-                                                showDialog(
-                                                  context: context,
-                                                  builder:
-                                                      (BuildContext context) =>
-                                                          sellingGuide(context),
-                                                );
-                                              }),
-                                              child: Row(
-                                                children: <Widget>[
-                                                  const Text(
-                                                    'Guidelines ',
-                                                    style: TextStyle(
-                                                        fontSize: 12,
-                                                        fontWeight:
-                                                            FontWeight.w700),
-                                                  ),
-                                                  SvgPicture.asset(
-                                                    'assets/svgs/info.svg',
-                                                    height: 20,
-                                                  ),
-                                                ],
+                                    TextButton(
+                                      child: const Text('Reset'),
+                                      onPressed: () {
+                                        setState(() {
+                                          filterLocation = null;
+                                          filterCode = null;
+                                          filterCategory = null;
+                                          _selectedLocation = null;
+                                          _selectedCategory = null;
+                                          filteredCategory = null;
+                                          _marketController.updateFiltered();
+                                          _marketController.initMarket();
+                                          Navigator.of(context).pop();
+                                        });
+                                      },
+                                    ),
+                                    ElevatedButton(
+                                      child: const Text('Search'),
+                                      onPressed: () {
+                                        setState(() {
+                                          filterLocation = _selectedLocation;
+                                          filterCategory = _selectedCategory;
+                                          _marketController.filterMarket(
+                                              filterLocation, filterCategory);
+                                        });
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              )
+                            ],
+                          );
+                        }),
+                      );
+                    },
+                  );
+                }),
+          ]),
+      body: _marketController.isLoading
+          ? const CircularProgressIndicator()
+          : SizedBox(
+              height: MediaQuery.of(context).size.height,
+              width: MediaQuery.of(context).size.width,
+              child: Stack(
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 30.0),
+                    child: Container(
+                      height: MediaQuery.of(context).size.height,
+                      width: MediaQuery.of(context).size.width,
+                      color: Colors.white,
+                      child: NestedScrollView(
+                        headerSliverBuilder:
+                            (BuildContext context, bool innerBoxIsScrolled) {
+                          return <Widget>[
+                            SliverStickyHeader(
+                              sticky: false,
+                              header: Column(
+                                children: <Widget>[
+                                  Container(
+                                    width: double.infinity,
+                                    color: backgroundcolorinterface,
+                                    child: Stack(
+                                      children: <Widget>[
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                              left: 20, top: 25),
+                                          child: GestureDetector(
+                                            onTap: (() {
+                                              showDialog(
+                                                context: context,
+                                                builder:
+                                                    (BuildContext context) =>
+                                                        sellingGuide(context),
+                                              );
+                                            }),
+                                            child: Row(
+                                              children: <Widget>[
+                                                const Text(
+                                                  'Guidelines ',
+                                                  style: TextStyle(
+                                                      fontSize: 12,
+                                                      fontWeight:
+                                                          FontWeight.w700),
+                                                ),
+                                                SvgPicture.asset(
+                                                  'assets/svgs/info.svg',
+                                                  height: 20,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                        Column(children: <Widget>[
+                                          const SizedBox(
+                                            height: 10,
+                                          ),
+                                          Align(
+                                            alignment: Alignment.centerRight,
+                                            child: Padding(
+                                              padding: const EdgeInsets.only(
+                                                right: 20,
+                                              ),
+                                              child: ElevatedButton(
+                                                style: ElevatedButton.styleFrom(
+                                                    minimumSize: const Size(150,
+                                                        45) // put the width and height you want
+                                                    ),
+                                                onPressed: () {
+                                                  showModalBottomSheet(
+                                                      context: context,
+                                                      shape:
+                                                          const RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .vertical(
+                                                          top: Radius.circular(
+                                                              25.0),
+                                                        ),
+                                                      ),
+                                                      builder: (BuildContext
+                                                          context) {
+                                                        return SizedBox(
+                                                          height: 200,
+                                                          child: Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(15.0),
+                                                            child: Column(
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .start,
+                                                              mainAxisSize:
+                                                                  MainAxisSize
+                                                                      .min,
+                                                              children: <Widget>[
+                                                                Expanded(
+                                                                  // Set a specific height
+                                                                  child: ListView
+                                                                      .separated(
+                                                                    itemCount:
+                                                                        2,
+                                                                    separatorBuilder:
+                                                                        (BuildContext context,
+                                                                                int index) =>
+                                                                            const Divider(),
+                                                                    itemBuilder:
+                                                                        (BuildContext
+                                                                                context,
+                                                                            int index) {
+                                                                      return ListTile(
+                                                                        onTap:
+                                                                            () {
+                                                                          Navigator.pop(
+                                                                              context);
+                                                                          index == 0
+                                                                              ? Get.toNamed(Routes.sellscreen)
+                                                                              : Get.to(() => const CreateServiceScreen(isUpd: false));
+                                                                        },
+                                                                        minVerticalPadding:
+                                                                            0,
+                                                                        contentPadding: const EdgeInsets
+                                                                            .only(
+                                                                            left:
+                                                                                10),
+                                                                        leading:
+                                                                            SvgPicture.asset(
+                                                                          index == 0
+                                                                              ? 'assets/svgs/sellicon.svg'
+                                                                              : 'assets/svgs/sellicon.svg',
+                                                                          height: index == 0
+                                                                              ? 25
+                                                                              : index == 1
+                                                                                  ? 30
+                                                                                  : 22,
+                                                                          color:
+                                                                              textColor.withOpacity(1),
+                                                                        ),
+                                                                        title:
+                                                                            Text(
+                                                                          index == 0
+                                                                              ? 'Sell your product'
+                                                                              : 'Sell your service',
+                                                                          style: const TextStyle(
+                                                                              fontSize: 18,
+                                                                              fontWeight: FontWeight.w700),
+                                                                        ),
+                                                                      );
+                                                                    },
+                                                                  ),
+                                                                )
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        );
+                                                      });
+                                                },
+                                                child: Row(
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
+                                                  children: <Widget>[
+                                                    const Text(
+                                                      'Sell',
+                                                      style: TextStyle(
+                                                          fontSize: 15,
+                                                          color: Colors.white,
+                                                          fontWeight:
+                                                              FontWeight.w500),
+                                                    ),
+                                                    const SizedBox(
+                                                      width: 5,
+                                                    ),
+                                                    SvgPicture.asset(
+                                                        'assets/svgs/startatopic.svg')
+                                                  ],
+                                                ),
                                               ),
                                             ),
                                           ),
-                                          Column(children: <Widget>[
-                                            const SizedBox(
-                                              height: 10,
+                                          Container(
+                                            decoration: BoxDecoration(
+                                              boxShadow: <BoxShadow>[
+                                                BoxShadow(
+                                                  color: Colors.black
+                                                      .withOpacity(0.09),
+                                                  blurRadius:
+                                                      100.0, // soften the shadow
+                                                  spreadRadius:
+                                                      5, //extend the shadow
+                                                )
+                                              ],
                                             ),
-                                            Align(
-                                              alignment: Alignment.centerRight,
-                                              child: Padding(
-                                                padding: const EdgeInsets.only(
-                                                  right: 20,
+                                            child: Stack(
+                                              children: <Widget>[
+                                                Container(
+                                                  margin: const EdgeInsets.only(
+                                                      bottom: 10,
+                                                      top: 10,
+                                                      right: 20,
+                                                      left: 20),
+                                                  height: 150,
+                                                  width: double.infinity,
+                                                  child: ClipRRect(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            15.0),
+                                                    child: const ColoredBox(
+                                                        color: Colors.white),
+                                                  ),
                                                 ),
-                                                child: ElevatedButton(
-                                                  style: ElevatedButton.styleFrom(
-                                                      minimumSize: const Size(
-                                                          150,
-                                                          45) // put the width and height you want
-                                                      ),
-                                                  onPressed: () {
-                                                    showModalBottomSheet(
-                                                        context: context,
-                                                        shape:
-                                                            const RoundedRectangleBorder(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .vertical(
-                                                            top:
-                                                                Radius.circular(
-                                                                    25.0),
-                                                          ),
-                                                        ),
-                                                        builder: (BuildContext
-                                                            context) {
-                                                          return SizedBox(
-                                                            height: 200,
-                                                            child: Padding(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .all(
-                                                                      15.0),
-                                                              child: Column(
-                                                                crossAxisAlignment:
-                                                                    CrossAxisAlignment
-                                                                        .start,
-                                                                mainAxisSize:
-                                                                    MainAxisSize
-                                                                        .min,
-                                                                children: <Widget>[
-                                                                  Expanded(
-                                                                    // Set a specific height
-                                                                    child: ListView
-                                                                        .separated(
-                                                                      itemCount:
-                                                                          2,
-                                                                      separatorBuilder:
-                                                                          (BuildContext context, int index) =>
-                                                                              const Divider(),
-                                                                      itemBuilder:
-                                                                          (BuildContext context,
-                                                                              int index) {
-                                                                        return ListTile(
-                                                                          onTap:
-                                                                              () {
-                                                                            Navigator.pop(context);
-                                                                            index == 0
-                                                                                ? Get.toNamed(Routes.sellscreen)
-                                                                                : Get.to(() => const CreateServiceScreen(isUpd: false));
-                                                                          },
-                                                                          minVerticalPadding:
-                                                                              0,
-                                                                          contentPadding: const EdgeInsets
-                                                                              .only(
-                                                                              left: 10),
-                                                                          leading:
-                                                                              SvgPicture.asset(
-                                                                            index == 0
-                                                                                ? 'assets/svgs/sellicon.svg'
-                                                                                : 'assets/svgs/sellicon.svg',
-                                                                            height: index == 0
-                                                                                ? 25
-                                                                                : index == 1
-                                                                                    ? 30
-                                                                                    : 22,
-                                                                            color:
-                                                                                textColor.withOpacity(1),
-                                                                          ),
-                                                                          title:
-                                                                              Text(
-                                                                            index == 0
-                                                                                ? 'Sell your product'
-                                                                                : 'Sell your service',
-                                                                            style:
-                                                                                const TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
-                                                                          ),
-                                                                        );
-                                                                      },
-                                                                    ),
-                                                                  )
-                                                                ],
+                                                Column(
+                                                  children: <Widget>[
+                                                    Row(
+                                                      children: <Widget>[
+                                                        Container(
+                                                          margin:
+                                                              const EdgeInsets
+                                                                  .only(
+                                                                  top: 25,
+                                                                  right: 20,
+                                                                  left: 35),
+                                                          height: 86,
+                                                          width: 142,
+                                                          child: ClipRRect(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        10.0),
+                                                            child: FittedBox(
+                                                              child:
+                                                                  CachedNetworkImage(
+                                                                memCacheWidth:
+                                                                    256,
+                                                                imageUrl:
+                                                                    'https://businessbosses.com.ng/learningImages/marketplace.jpg',
+                                                                placeholder: (BuildContext
+                                                                            context,
+                                                                        String
+                                                                            photo) =>
+                                                                    const CircularProgressIndicator(),
+                                                                errorWidget: (BuildContext
+                                                                            context,
+                                                                        String
+                                                                            photo,
+                                                                        dynamic
+                                                                            error) =>
+                                                                    const Icon(Icons
+                                                                        .error),
                                                               ),
                                                             ),
-                                                          );
-                                                        });
-                                                  },
-                                                  child: Row(
-                                                    mainAxisSize:
-                                                        MainAxisSize.min,
-                                                    children: <Widget>[
-                                                      const Text(
-                                                        'Sell',
-                                                        style: TextStyle(
-                                                            fontSize: 15,
-                                                            color: Colors.white,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .w500),
-                                                      ),
-                                                      const SizedBox(
-                                                        width: 5,
-                                                      ),
-                                                      SvgPicture.asset(
-                                                          'assets/svgs/startatopic.svg')
-                                                    ],
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                            Container(
-                                              decoration: BoxDecoration(
-                                                boxShadow: <BoxShadow>[
-                                                  BoxShadow(
-                                                    color: Colors.black
-                                                        .withOpacity(0.09),
-                                                    blurRadius:
-                                                        100.0, // soften the shadow
-                                                    spreadRadius:
-                                                        5, //extend the shadow
-                                                  )
-                                                ],
-                                              ),
-                                              child: Stack(
-                                                children: <Widget>[
-                                                  Container(
-                                                    margin:
-                                                        const EdgeInsets.only(
-                                                            bottom: 10,
-                                                            top: 10,
-                                                            right: 20,
-                                                            left: 20),
-                                                    height: 150,
-                                                    width: double.infinity,
-                                                    child: ClipRRect(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              15.0),
-                                                      child: const ColoredBox(
-                                                          color: Colors.white),
-                                                    ),
-                                                  ),
-                                                  Column(
-                                                    children: <Widget>[
-                                                      Row(
-                                                        children: <Widget>[
-                                                          Container(
-                                                            margin:
+                                                          ),
+                                                        ),
+                                                        Expanded(
+                                                          child: Padding(
+                                                            padding:
                                                                 const EdgeInsets
                                                                     .only(
-                                                                    top: 25,
-                                                                    right: 20,
-                                                                    left: 35),
-                                                            height: 86,
-                                                            width: 142,
-                                                            child: ClipRRect(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          10.0),
-                                                              child: FittedBox(
-                                                                child:
-                                                                    CachedNetworkImage(
-                                                                  memCacheWidth:
-                                                                      256,
-                                                                  imageUrl:
-                                                                      'https://businessbosses.com.ng/learningImages/marketplace.jpg',
-                                                                  placeholder: (BuildContext
-                                                                              context,
-                                                                          String
-                                                                              photo) =>
-                                                                      const CircularProgressIndicator(),
-                                                                  errorWidget: (BuildContext context,
-                                                                          String
-                                                                              photo,
-                                                                          dynamic
-                                                                              error) =>
-                                                                      const Icon(
-                                                                          Icons
-                                                                              .error),
-                                                                ),
+                                                                    right: 35),
+                                                            child: Text(
+                                                              _marketController
+                                                                  .marketDescription,
+                                                              style:
+                                                                  const TextStyle(
+                                                                fontSize: 15,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w700,
                                                               ),
+                                                              softWrap: true,
+                                                              maxLines: 5,
                                                             ),
                                                           ),
-                                                          Expanded(
-                                                            child: Padding(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .only(
-                                                                      right:
-                                                                          35),
-                                                              child: Text(
-                                                                marketController
-                                                                    .marketDescription,
-                                                                style:
-                                                                    const TextStyle(
-                                                                  fontSize: 15,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w700,
-                                                                ),
-                                                                softWrap: true,
-                                                                maxLines: 5,
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                      Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .only(
-                                                          left: 32,
-                                                          top: 0,
-                                                          right: 20,
                                                         ),
-                                                        child: Row(
-                                                          children: <Widget>[
-                                                            Row(
-                                                              children: <Widget>[
-                                                                Padding(
+                                                      ],
+                                                    ),
+                                                    Padding(
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                        left: 32,
+                                                        top: 0,
+                                                        right: 20,
+                                                      ),
+                                                      child: Row(
+                                                        children: <Widget>[
+                                                          Row(
+                                                            children: <Widget>[
+                                                              Padding(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                        .only(
+                                                                        right:
+                                                                            2,
+                                                                        top: 5),
+                                                                child:
+                                                                    SvgPicture
+                                                                        .asset(
+                                                                  'assets/svgs/members.svg',
+                                                                  height: 15,
+                                                                  color:
+                                                                      primaryColorLT,
+                                                                ),
+                                                              ),
+                                                              GestureDetector(
+                                                                onTap: () {
+                                                                  Get.to(() =>
+                                                                      MarketMembersScreen(
+                                                                        users: _marketController
+                                                                            .users,
+                                                                      ));
+                                                                },
+                                                                child: Padding(
                                                                   padding:
                                                                       const EdgeInsets
                                                                           .only(
-                                                                          right:
-                                                                              2,
                                                                           top:
-                                                                              5),
+                                                                              5.0),
                                                                   child:
-                                                                      SvgPicture
-                                                                          .asset(
-                                                                    'assets/svgs/members.svg',
-                                                                    height: 15,
-                                                                    color:
-                                                                        primaryColorLT,
+                                                                      RichText(
+                                                                    text:
+                                                                        TextSpan(
+                                                                      children: <InlineSpan>[
+                                                                        TextSpan(
+                                                                            text:
+                                                                                'Members ($formattedUserCount)',
+                                                                            style:
+                                                                                const TextStyle(
+                                                                              fontSize: 12,
+                                                                              fontWeight: FontWeight.w600,
+                                                                              color: primaryColorLT,
+                                                                              decoration: TextDecoration.underline,
+                                                                            )),
+                                                                      ],
+                                                                    ),
                                                                   ),
                                                                 ),
-                                                                GestureDetector(
-                                                                  onTap: () {
-                                                                    Get.to(() =>
-                                                                        MarketMembersScreen(
-                                                                          users:
-                                                                              _marketController.users,
-                                                                        ));
-                                                                  },
-                                                                  child:
-                                                                      Padding(
+                                                              ),
+                                                            ],
+                                                          ),
+                                                          Row(
+                                                            children: <Widget>[
+                                                              Padding(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                        .only(
+                                                                        left: 8,
+                                                                        top: 5,
+                                                                        right:
+                                                                            3),
+                                                                child:
+                                                                    SvgPicture
+                                                                        .asset(
+                                                                  'assets/svgs/marketplace.svg',
+                                                                  color:
+                                                                      textColor,
+                                                                  height: 15,
+                                                                ),
+                                                              ),
+                                                              Obx(
+                                                                () {
+                                                                  int postCount =
+                                                                      _marketController
+                                                                          .products
+                                                                          .length;
+                                                                  String
+                                                                      formattedpostCount =
+                                                                      formatCount(
+                                                                          postCount);
+                                                                  return Padding(
                                                                     padding: const EdgeInsets
                                                                         .only(
                                                                         top:
@@ -878,375 +909,313 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                                                           TextSpan(
                                                                         children: <InlineSpan>[
                                                                           TextSpan(
-                                                                              text: 'Members ($formattedUserCount)',
-                                                                              style: const TextStyle(
-                                                                                fontSize: 12,
-                                                                                fontWeight: FontWeight.w600,
-                                                                                color: primaryColorLT,
-                                                                                decoration: TextDecoration.underline,
-                                                                              )),
+                                                                            text:
+                                                                                'Listings ($formattedpostCount)',
+                                                                            style:
+                                                                                const TextStyle(
+                                                                              fontSize: 12,
+                                                                              color: textColor,
+                                                                              fontWeight: FontWeight.w600,
+                                                                            ),
+                                                                          ),
                                                                         ],
                                                                       ),
                                                                     ),
-                                                                  ),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                            Row(
-                                                              children: <Widget>[
-                                                                Padding(
-                                                                  padding:
-                                                                      const EdgeInsets
-                                                                          .only(
-                                                                          left:
-                                                                              8,
-                                                                          top:
-                                                                              5,
-                                                                          right:
-                                                                              3),
-                                                                  child:
-                                                                      SvgPicture
-                                                                          .asset(
-                                                                    'assets/svgs/marketplace.svg',
-                                                                    color:
-                                                                        textColor,
-                                                                    height: 15,
-                                                                  ),
-                                                                ),
-                                                                Obx(
-                                                                  () {
-                                                                    int postCount =
-                                                                        _marketController
-                                                                            .products
-                                                                            .length;
-                                                                    String
-                                                                        formattedpostCount =
-                                                                        formatCount(
-                                                                            postCount);
-                                                                    return Padding(
-                                                                      padding: const EdgeInsets
-                                                                          .only(
-                                                                          top:
-                                                                              5.0),
-                                                                      child:
-                                                                          RichText(
-                                                                        text:
-                                                                            TextSpan(
-                                                                          children: <InlineSpan>[
-                                                                            TextSpan(
-                                                                              text: 'Listings ($formattedpostCount)',
-                                                                              style: const TextStyle(
-                                                                                fontSize: 12,
-                                                                                color: textColor,
-                                                                                fontWeight: FontWeight.w600,
-                                                                              ),
-                                                                            ),
-                                                                          ],
-                                                                        ),
-                                                                      ),
-                                                                    );
-                                                                  },
-                                                                ),
-                                                              ],
-                                                            ),
-                                                            const Spacer(),
-                                                            Align(
-                                                                alignment: Alignment
-                                                                    .centerRight,
-                                                                child: Row(
-                                                                  crossAxisAlignment:
-                                                                      CrossAxisAlignment
-                                                                          .center,
-                                                                  mainAxisAlignment:
-                                                                      MainAxisAlignment
-                                                                          .end,
-                                                                  children: <Widget>[
-                                                                    joinedButton(),
-                                                                  ],
-                                                                ))
-                                                          ],
-                                                        ),
+                                                                  );
+                                                                },
+                                                              ),
+                                                            ],
+                                                          ),
+                                                          const Spacer(),
+                                                          Align(
+                                                              alignment: Alignment
+                                                                  .centerRight,
+                                                              child: Row(
+                                                                crossAxisAlignment:
+                                                                    CrossAxisAlignment
+                                                                        .center,
+                                                                mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .end,
+                                                                children: <Widget>[
+                                                                  joinedButton(),
+                                                                ],
+                                                              ))
+                                                        ],
                                                       ),
-                                                      const SizedBox(
-                                                        height: 1,
-                                                      ),
-                                                    ],
-                                                  )
-                                                ],
-                                              ),
+                                                    ),
+                                                    const SizedBox(
+                                                      height: 1,
+                                                    ),
+                                                  ],
+                                                )
+                                              ],
                                             ),
-                                          ]),
-                                        ],
-                                      ),
+                                          ),
+                                        ]),
+                                      ],
                                     ),
-                                  ],
-                                ),
-                              )
-                            ];
-                          },
-                          body: Padding(
-                            padding: const EdgeInsets.only(bottom: 50, top: 0),
-                            child: Obx(() {
-                              if (_marketController.loading.value) {
-                                return const Center(
-                                    child: CircularProgressIndicator());
-                              } else if (_marketController.error.value) {
-                                return const SafetyModel(
-                                  isLoading: false,
-                                  title: 'Error While Loading Data',
-                                  subTitle: 'Try Reloading Again',
-                                  icon: Icon(
-                                    Icons.warning,
-                                    size: 60,
                                   ),
-                                );
-                              } else {
-                                return _marketController.products.isEmpty &&
-                                        !_marketController.isfiltered.value
-                                    ? SafetyModel(
-                                        isLoading: false,
-                                        icon: const Icon(
-                                          Icons.edit,
-                                          color: Colors.grey,
-                                          size: 80.0,
-                                        ),
-                                        title:
-                                            'Be the first one to Sell your Item',
-                                        // subTitle: '',
-                                        clickableText: 'Post an item',
-                                        onTap: () {
-                                          Get.to(
-                                            () => const CreateSellingitemScreen(
-                                              isUpd: false,
-                                            ),
-                                          );
-                                        },
-                                      )
-                                    : _marketController.searchResult.isEmpty &&
-                                            _marketController.isfiltered.value
-                                        ? SafetyModel(
-                                            isLoading: false,
-                                            icon: const Icon(
-                                              Icons.shopping_cart,
-                                              color: Colors.grey,
-                                              size: 80.0,
-                                            ),
-                                            title:
-                                                'No Items Available For This Search',
-                                            // subTitle: '',
-                                            clickableText: 'View All',
-                                            onTap: () {
-                                              setState(
-                                                () {
-                                                  filterLocation = null;
-                                                  filterCode = null;
-                                                  filterCategory = null;
-                                                  _selectedLocation = null;
-                                                  _selectedCategory = null;
-                                                  _marketController
-                                                      .updateFiltered();
-                                                  _marketController
-                                                      .initMarket();
-                                                },
-                                              );
-                                            },
-                                          )
-                                        : RefreshIndicator(
-                                            onRefresh: refreshData,
-                                            child: NotificationListener<
-                                                ScrollNotification>(
-                                              onNotification:
-                                                  (ScrollNotification
-                                                      scrollInfo) {
-                                                if (scrollInfo.metrics.pixels ==
-                                                    scrollInfo.metrics
-                                                        .maxScrollExtent) {
-                                                  _marketController.loadMore(
-                                                      pageSize,
-                                                      _marketController
-                                                          .paginationPage
-                                                          .value);
-                                                  _marketController
-                                                      .paginationPage.value++;
-                                                }
-                                                return false;
+                                ],
+                              ),
+                            )
+                          ];
+                        },
+                        body: Padding(
+                          padding: const EdgeInsets.only(bottom: 50, top: 0),
+                          child: Obx(() {
+                            if (_marketController.loading.value) {
+                              return const Center(
+                                  child: CircularProgressIndicator());
+                            } else if (_marketController.error.value) {
+                              return const SafetyModel(
+                                isLoading: false,
+                                title: 'Error While Loading Data',
+                                subTitle: 'Try Reloading Again',
+                                icon: Icon(
+                                  Icons.warning,
+                                  size: 60,
+                                ),
+                              );
+                            } else {
+                              return _marketController.products.isEmpty &&
+                                      !_marketController.isfiltered.value
+                                  ? SafetyModel(
+                                      isLoading: false,
+                                      icon: const Icon(
+                                        Icons.edit,
+                                        color: Colors.grey,
+                                        size: 80.0,
+                                      ),
+                                      title:
+                                          'Be the first one to Sell your Item',
+                                      // subTitle: '',
+                                      clickableText: 'Post an item',
+                                      onTap: () {
+                                        Get.to(
+                                          () => const CreateSellingitemScreen(
+                                            isUpd: false,
+                                          ),
+                                        );
+                                      },
+                                    )
+                                  : _marketController.searchResult.isEmpty &&
+                                          _marketController.isfiltered.value
+                                      ? SafetyModel(
+                                          isLoading: false,
+                                          icon: const Icon(
+                                            Icons.shopping_cart,
+                                            color: Colors.grey,
+                                            size: 80.0,
+                                          ),
+                                          title:
+                                              'No Items Available For This Search',
+                                          // subTitle: '',
+                                          clickableText: 'View All',
+                                          onTap: () {
+                                            setState(
+                                              () {
+                                                filterLocation = null;
+                                                filterCode = null;
+                                                filterCategory = null;
+                                                _selectedLocation = null;
+                                                _selectedCategory = null;
+                                                _marketController
+                                                    .updateFiltered();
+                                                _marketController.initMarket();
                                               },
-                                              child:
-                                                  _marketController
-                                                          .isfiltered.value
-                                                      ? ListView.builder(
-                                                          shrinkWrap: true,
-                                                          itemCount: _marketController
+                                            );
+                                          },
+                                        )
+                                      : RefreshIndicator(
+                                          onRefresh: refreshData,
+                                          child: NotificationListener<
+                                              ScrollNotification>(
+                                            onNotification: (ScrollNotification
+                                                scrollInfo) {
+                                              if (scrollInfo.metrics.pixels ==
+                                                  scrollInfo.metrics
+                                                      .maxScrollExtent) {
+                                                // _marketController.loadMore(
+                                                //     pageSize,
+                                                //     _marketController
+                                                //         .paginationPage.value);
+                                                // _marketController
+                                                //     .paginationPage.value++;
+                                              }
+                                              return false;
+                                            },
+                                            child: _marketController
+                                                    .isfiltered.value
+                                                ? ListView.builder(
+                                                    shrinkWrap: true,
+                                                    itemCount: _marketController
+                                                            .isfiltered.value
+                                                        ? _marketController
+                                                            .searchResult.length
+                                                        : _marketController
+                                                                .markets
+                                                                .length +
+                                                            1,
+                                                    itemBuilder:
+                                                        (BuildContext context,
+                                                            int index) {
+                                                      if (index <
+                                                          (_marketController
                                                                   .isfiltered
                                                                   .value
                                                               ? _marketController
                                                                   .searchResult
                                                                   .length
                                                               : _marketController
-                                                                      .markets
-                                                                      .length +
-                                                                  1,
-                                                          itemBuilder:
-                                                              (BuildContext
-                                                                      context,
-                                                                  int index) {
-                                                            if (index <
-                                                                (_marketController
-                                                                        .isfiltered
-                                                                        .value
-                                                                    ? _marketController
-                                                                        .searchResult
-                                                                        .length
-                                                                    : _marketController
-                                                                        .markets
-                                                                        .length)) {
-                                                              final MarketModel
-                                                                  market =
-                                                                  _marketController
-                                                                          .isfiltered
-                                                                          .value
-                                                                      ? _marketController
-                                                                              .searchResult[
-                                                                          index]
-                                                                      : _marketController
-                                                                              .markets[
-                                                                          index];
-                                                              return VisibilityDetector(
-                                                                key: Key(index
-                                                                    .toString()),
-                                                                onVisibilityChanged:
-                                                                    (VisibilityInfo
-                                                                        info) {
-                                                                  final bool
-                                                                      hasIncrementedView =
-                                                                      hmeController
-                                                                          .itemsWithIncrementedViews
-                                                                          .contains(_marketController
-                                                                              .markets[index]
-                                                                              .marketId);
-                                                                  if (info.visibleFraction ==
-                                                                          1.0 &&
-                                                                      !hasIncrementedView) {
-                                                                    _marketController
-                                                                        .updatemarketViews(
-                                                                            _marketController.markets[index]);
-                                                                    setState(
-                                                                        () {
-                                                                      hmeController
-                                                                          .itemsWithIncrementedViews
-                                                                          .add(_marketController
-                                                                              .markets[index]
-                                                                              .marketId); // Set the flag to prevent further increments
-                                                                    });
-                                                                  }
-                                                                },
-                                                                child: _marketController
+                                                                  .markets
+                                                                  .length)) {
+                                                        final MarketModel
+                                                            market =
+                                                            _marketController
+                                                                    .isfiltered
+                                                                    .value
+                                                                ? _marketController
+                                                                        .searchResult[
+                                                                    index]
+                                                                : _marketController
+                                                                        .markets[
+                                                                    index];
+                                                        return VisibilityDetector(
+                                                          key: Key(
+                                                              index.toString()),
+                                                          onVisibilityChanged:
+                                                              (VisibilityInfo
+                                                                  info) {
+                                                            final bool
+                                                                hasIncrementedView =
+                                                                hmeController
+                                                                    .itemsWithIncrementedViews
+                                                                    .contains(_marketController
                                                                         .markets[
                                                                             index]
-                                                                        .isProduct
-                                                                    ? MarketTile(
-                                                                        post:
-                                                                            market,
-                                                                        controller:
-                                                                            _marketController,
-                                                                        key: ValueKey(_marketController
-                                                                            .markets[index]
-                                                                            .marketId),
-                                                                      )
-                                                                    : ServiceTile(
-                                                                        post:
-                                                                            market,
-                                                                        controller:
-                                                                            _marketController,
-                                                                        key: ValueKey(_marketController
-                                                                            .markets[index]
-                                                                            .marketId),
-                                                                      ),
-                                                              );
-                                                            } else {
-                                                              // Display a loading indicator at the end of the list
-                                                              if (_marketController
-                                                                  .loadingMore
-                                                                  .value) {
-                                                                return const Padding(
-                                                                  padding:
-                                                                      EdgeInsets
-                                                                          .all(
-                                                                              8.0),
-                                                                  child: Center(
-                                                                    child:
-                                                                        CircularProgressIndicator(),
-                                                                  ),
-                                                                );
-                                                              } else {
-                                                                return const SizedBox
-                                                                    .shrink();
-                                                              }
+                                                                        .marketId);
+                                                            if (info.visibleFraction ==
+                                                                    1.0 &&
+                                                                !hasIncrementedView) {
+                                                              _marketController
+                                                                  .updatemarketViews(
+                                                                      _marketController
+                                                                              .markets[
+                                                                          index]);
+                                                              setState(() {
+                                                                hmeController
+                                                                    .itemsWithIncrementedViews
+                                                                    .add(_marketController
+                                                                        .markets[
+                                                                            index]
+                                                                        .marketId); // Set the flag to prevent further increments
+                                                              });
                                                             }
                                                           },
-                                                        )
-                                                      : DefaultTabController(
-                                                          length:
-                                                              3, // Number of tabs
-                                                          child: Column(
-                                                            children: <Widget>[
-                                                              Container(
-                                                                constraints:
-                                                                    const BoxConstraints
-                                                                        .expand(
-                                                                        height:
-                                                                            50),
-                                                                child:
-                                                                    const TabBar(
-                                                                  tabs: <Widget>[
-                                                                    Tab(
-                                                                      icon: Icon(
-                                                                          Icons
-                                                                              .dashboard),
+                                                          child:
+                                                              _marketController
+                                                                      .markets[
+                                                                          index]
+                                                                      .isProduct
+                                                                  ? MarketTile(
+                                                                      post:
+                                                                          market,
+                                                                      controller:
+                                                                          _marketController,
+                                                                      key: ValueKey(_marketController
+                                                                          .markets[
+                                                                              index]
+                                                                          .marketId),
+                                                                    )
+                                                                  : ServiceTile(
+                                                                      post:
+                                                                          market,
+                                                                      controller:
+                                                                          _marketController,
+                                                                      key: ValueKey(_marketController
+                                                                          .markets[
+                                                                              index]
+                                                                          .marketId),
                                                                     ),
-                                                                    Tab(
-                                                                        text:
-                                                                            'Products'),
-                                                                    Tab(
-                                                                        text:
-                                                                            'Services'),
-                                                                  ],
-                                                                ),
+                                                        );
+                                                      } else {
+                                                        // Display a loading indicator at the end of the list
+                                                        if (_marketController
+                                                            .loadingMore
+                                                            .value) {
+                                                          return const Padding(
+                                                            padding:
+                                                                EdgeInsets.all(
+                                                                    8.0),
+                                                            child: Center(
+                                                              child:
+                                                                  CircularProgressIndicator(),
+                                                            ),
+                                                          );
+                                                        } else {
+                                                          return const SizedBox
+                                                              .shrink();
+                                                        }
+                                                      }
+                                                    },
+                                                  )
+                                                : DefaultTabController(
+                                                    length: 3, // Number of tabs
+                                                    child: Column(
+                                                      children: <Widget>[
+                                                        Container(
+                                                          constraints:
+                                                              const BoxConstraints
+                                                                  .expand(
+                                                                  height: 50),
+                                                          child: const TabBar(
+                                                            tabs: <Widget>[
+                                                              Tab(
+                                                                icon: Icon(Icons
+                                                                    .dashboard),
                                                               ),
-                                                              const Expanded(
-                                                                child:
-                                                                    TabBarView(
-                                                                  children: <Widget>[
-                                                                    // Content of Tab 1
-                                                                    MarketsPage(),
-
-                                                                    // Content of Tab 2
-                                                                    ProductsPage(),
-
-                                                                    // Content of Tab 3
-                                                                    ServicesPage()
-                                                                  ],
-                                                                ),
-                                                              ),
+                                                              Tab(
+                                                                  text:
+                                                                      'Products'),
+                                                              Tab(
+                                                                  text:
+                                                                      'Services'),
                                                             ],
                                                           ),
                                                         ),
-                                            ),
-                                          );
-                              }
-                            }),
-                          ),
+                                                        const Expanded(
+                                                          child: TabBarView(
+                                                            children: <Widget>[
+                                                              // Content of Tab 1
+                                                              MarketsPage(),
+
+                                                              // Content of Tab 2
+                                                              ProductsPage(),
+
+                                                              // Content of Tab 3
+                                                              ServicesPage()
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                          ),
+                                        );
+                            }
+                          }),
                         ),
                       ),
                     ),
-                    const BottomBar(
-                      activeIndex: 2,
-                    )
-                  ],
-                ),
+                  ),
+                  const BottomBar(
+                    activeIndex: 2,
+                  )
+                ],
               ),
-      );
-    });
+            ),
+    );
   }
 
   Future<void> loadData() async {
@@ -1299,46 +1268,32 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
         child: SizedBox(
           height: 38,
           width: 75,
-          child: Obx(() => !_marketController.isJoined.value
-              ? const MCustomButton(
-                  child: Text(
-                    'Join',
-                    style: TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.w700,
-                      color: primaryColorLT,
+          child: Obx(
+            () => !_marketController.isJoined.value
+                ? const MCustomButton(
+                    child: Text(
+                      'Join',
+                      style: TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w700,
+                        color: primaryColorLT,
+                      ),
+                    ),
+                  )
+                : const MCustomButton(
+                    buttonType: ButtonType.outlinegrey,
+                    child: Text(
+                      'Leave',
+                      style: TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w700,
+                        color: Color(0xFF777777),
+                      ),
                     ),
                   ),
-                )
-              : const MCustomButton(
-                  buttonType: ButtonType.outlinegrey,
-                  child: Text(
-                    'Leave',
-                    style: TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.w700,
-                      color: Color(0xFF777777),
-                    ),
-                  ),
-                )),
+          ),
         ),
       ),
-    );
-  }
-
-  Widget _buildListItem(String? value) {
-    return ListTile(
-      title: Text(
-        value ?? 'Select Listing',
-        style: TextStyle(
-          color: hintColor,
-        ),
-      ),
-      onTap: () {
-        setState(() {
-          filteredCategory = value;
-        });
-      },
     );
   }
 }
