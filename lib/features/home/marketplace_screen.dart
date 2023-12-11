@@ -655,7 +655,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                                                         contentPadding: const EdgeInsets
                                                                             .only(
                                                                             left:
-                                                                                10),
+                                                                                10,),
                                                                         leading:
                                                                             SvgPicture.asset(
                                                                           index == 0
