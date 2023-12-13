@@ -14,6 +14,7 @@
 		97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FD1CF9000F007C117D /* Assets.xcassets */; };
 		97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */; };
 		A28765D62A8D29EB00B00E4B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A28765D52A8D29EB00B00E4B /* GoogleService-Info.plist */; };
+		A2EB29C52B28661A00C7621B /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A2EB29C42B28661A00C7621B /* StoreKit.framework */; };
 		A2FEE9C02A06963300F08A5F /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A2FEE9BF2A06963300F08A5F /* Pods_Runner.framework */; };
 /* End PBXBuildFile section */
 
@@ -52,6 +53,7 @@
 		A24A8C9A2A066EFB001F1211 /* RunnerRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = RunnerRelease.entitlements; sourceTree = "<group>"; };
 		A28765D52A8D29EB00B00E4B /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "Runner/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		A2B471942A05554C00F62044 /* RunnerProfile.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = RunnerProfile.entitlements; sourceTree = "<group>"; };
+		A2EB29C42B28661A00C7621B /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		A2FEE9BF2A06963300F08A5F /* Pods_Runner.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Pods_Runner.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -61,6 +63,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A2FEE9C02A06963300F08A5F /* Pods_Runner.framework in Frameworks */,
+				A2EB29C52B28661A00C7621B /* StoreKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -70,6 +73,7 @@
 		840822A7517DA2EAB35245A1 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				A2EB29C42B28661A00C7621B /* StoreKit.framework */,
 				A2FEE9BF2A06963300F08A5F /* Pods_Runner.framework */,
 				85799246E869708DDD217D52 /* Pods_Runner.framework */,
 			);
