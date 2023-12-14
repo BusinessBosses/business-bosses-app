@@ -360,7 +360,6 @@ class _ReviewPaymentState extends State<ReviewPayment> {
                                           .contains('annually')
                                       ? 'xyz.codexia.businessbosses.annual'
                                       : 'xyz.codexia.businessbosses.monthly');
-                                  Get.toNamed(Routes.subscriptionconfirmation);
                                 } catch (e) {
                                   showSnackbar(
                                     title: 'OOPS!',
