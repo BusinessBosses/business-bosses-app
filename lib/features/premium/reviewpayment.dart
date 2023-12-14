@@ -354,10 +354,24 @@ class _ReviewPaymentState extends State<ReviewPayment> {
                                 setState(() {
                                   _isProcessing = true;
                                 });
-                                await Purchases.purchaseProduct(
-                                    argument.toString().contains('annually')
-                                        ? 'xyz.codexia.businessbosses.annual'
-                                        : 'xyz.codexia.businessbosses.monthly');
+                                try {
+                                  await Purchases.purchaseProduct(argument
+                                          .toString()
+                                          .contains('annually')
+                                      ? 'xyz.codexia.businessbosses.annual'
+                                      : 'xyz.codexia.businessbosses.monthly');
+                                  Get.toNamed(Routes.subscriptionconfirmation);
+                                } catch (e) {
+                                  showSnackbar(
+                                    title: 'OOPS!',
+                                    message:
+                                        'An error occurred while making payment, please try again!',
+                                    error: true,
+                                  );
+                                  setState(() {
+                                    _isProcessing = false;
+                                  });
+                                }
                               },
                               isProcessing: _isProcessing,
                               buttonType: ButtonType.elevated,
