@@ -144,7 +144,7 @@ class SubscriptionConfirmation extends StatelessWidget {
                                       ),
                                       Padding(
                                         padding: const EdgeInsets.only(
-                                            top: 60.0, left: 30),
+                                            top: 40.0, left: 30),
                                         child: Column(
                                           mainAxisAlignment:
                                               MainAxisAlignment.start,
@@ -157,7 +157,7 @@ class SubscriptionConfirmation extends StatelessWidget {
                                                   fontSize: 16,
                                                   fontWeight: FontWeight.bold),
                                             ),
-                                            const SizedBox(height: 30),
+                                            const SizedBox(height: 20),
                                             Row(
                                               children: <Widget>[
                                                 SvgPicture.asset(
@@ -243,7 +243,7 @@ class SubscriptionConfirmation extends StatelessWidget {
                                             Row(
                                               children: <Widget>[
                                                 SvgPicture.asset(
-                                                    'assets/svgs/rankingicon.svg',
+                                                    'assets/svgs/liveevent.svg',
                                                     height: 23),
                                                 const SizedBox(width: 18),
                                                 const Text(

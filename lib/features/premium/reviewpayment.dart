@@ -50,19 +50,19 @@ class _ReviewPaymentState extends State<ReviewPayment> {
     setState(() {});
   }
 
-  void sendPaymentData(Map data) async {
+  void sendapplePaymentData(Map data) async {
     Map<String, dynamic> paymentData = <String, dynamic>{
       'price': argument['price'],
       'plan': argument['plan'],
-      'token': data['token'],
     };
 
     final ApiResponseModel response =
-        await ApiService.post(path: 'subscription/payment', body: paymentData);
+        await ApiService.post(path: 'apple-sub', body: paymentData);
 
     if (response.success) {
       Get.toNamed(Routes.subscriptionconfirmation);
     } else {
+      print(response);
       showSnackbar(
           title: 'OOPS!',
           message: 'An error occurred, please try again!',
@@ -360,6 +360,11 @@ class _ReviewPaymentState extends State<ReviewPayment> {
                                           .contains('annually')
                                       ? 'xyz.codexia.businessbosses.annual'
                                       : 'xyz.codexia.businessbosses.monthly');
+                                  Map<String, dynamic> data = <String, dynamic>{
+                                    'price': argument['price'],
+                                    'plan': argument['plan'],
+                                  };
+                                  sendapplePaymentData(data);
                                 } catch (e) {
                                   showSnackbar(
                                     title: 'OOPS!',

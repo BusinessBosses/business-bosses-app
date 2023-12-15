@@ -178,7 +178,6 @@ class AuthController extends GetxController {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String? savedAuthCred = prefs.getString('_authCred');
-      String? savedPassword = prefs.getString('_password');
       final AuthorizationCredentialAppleID appleCredential =
           await SignInWithApple.getAppleIDCredential(
         scopes: <AppleIDAuthorizationScopes>[
@@ -187,8 +186,6 @@ class AuthController extends GetxController {
         ],
         nonce: nonce,
       );
-
-      print(savedAuthCred);
 
       if (appleCredential.email != null) {
         _authCred = appleCredential.email;
@@ -262,12 +259,6 @@ class AuthController extends GetxController {
   }
 
   Future<dynamic> _handleRegister() async {
-    print(_authCred!);
-    // if (emailValidatorExists(_authCred!, isUnique: false)) {
-    //   dartdeveloper.log('exists');
-    //   Get.snackbar('Account Exists',
-    //       'An email address already exists for your Apple ID try logging in instead');
-    // } else {
     dynamic user =
         await _apiService.register(_authCred!, _password!, _authusername!, "");
     return user;
