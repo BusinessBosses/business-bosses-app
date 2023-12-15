@@ -50,7 +50,7 @@ class _ReviewPaymentState extends State<ReviewPayment> {
     setState(() {});
   }
 
-  void sendPaymentDatag(Map data) async {
+  void sendPaymentData(Map data) async {
     Map<String, dynamic> paymentData = <String, dynamic>{
       'price': argument['price'],
       'plan': argument['plan'],
