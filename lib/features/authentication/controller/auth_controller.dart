@@ -47,10 +47,9 @@ class AuthController extends GetxController {
     }
   }
 
-  Future<void> saveToSharedPreferences(String authCred, String password) async {
+  Future<void> saveToSharedPreferences(String authCred) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString('_authCred', authCred);
-    prefs.setString('_password', password);
   }
 
   /// SEND OTP TO USER EMAIL FOR VERIFICATION
@@ -174,10 +173,9 @@ class AuthController extends GetxController {
   Future<void> appleAuthentication() async {
     final String rawNonce = generateNonce();
     final String nonce = sha256ofString(rawNonce);
+    SharedPreferences prefs = await SharedPreferences.getInstance();
 
     try {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      String? savedAuthCred = prefs.getString('_authCred');
       final AuthorizationCredentialAppleID appleCredential =
           await SignInWithApple.getAppleIDCredential(
         scopes: <AppleIDAuthorizationScopes>[
@@ -187,18 +185,18 @@ class AuthController extends GetxController {
         nonce: nonce,
       );
 
+      _authCred = appleCredential.email ?? prefs.getString('_authCred');
+      _authusername =
+          '${appleCredential.givenName} ${appleCredential.familyName}';
+
       if (appleCredential.email != null) {
-        _authCred = appleCredential.email;
-        _password = 'password';
-        _authusername =
-            '${appleCredential.givenName} ${appleCredential.familyName}';
+        saveToSharedPreferences(_authCred!);
         dynamic user = await _handleRegister();
         if (user['success'] == false) {
           Get.snackbar('Error', user['error']);
         } else {
           Get.snackbar('Success', 'Authentication completed');
           await logEvents('signup', 'email');
-          await saveToSharedPreferences(_authCred!, _password!);
           Get.toNamed(
             Routes.updateProfile,
             arguments: UserModel(
@@ -208,8 +206,6 @@ class AuthController extends GetxController {
           );
         }
       } else {
-        _authCred = savedAuthCred;
-        _password = 'password';
         await logEvents('login', 'Apple SignIn');
         dynamic user = await _handleLogin();
         if (user['success'] == false) {
@@ -254,15 +250,25 @@ class AuthController extends GetxController {
   }
 
   Future<dynamic> _handleLogin() async {
-    dynamic user = await _apiService.login(_authCred!, _password!);
+    dynamic user = await _apiService.googleLogin(
+      _authCred!,
+      _password ?? DateTime.now().millisecondsSinceEpoch.toString(),
+    );
     return user;
   }
 
   Future<dynamic> _handleRegister() async {
-    dynamic user =
-        await _apiService.register(_authCred!, _password!, _authusername!, "");
-    return user;
-    // }
+    if (emailValidatorExists(_authCred!, isUnique: false)) {
+      _handleLogin();
+    } else {
+      dynamic user = await _apiService.register(
+          _authCred!,
+          _password ?? DateTime.now().millisecondsSinceEpoch.toString(),
+          _authusername!,
+          "");
+      return user;
+      // }
+    }
   }
 
   logEvents(dynamic event, dynamic method) async {
