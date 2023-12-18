@@ -12,11 +12,13 @@ import 'package:socket_io_client/socket_io_client.dart';
 import 'package:uuid/uuid.dart';
 
 class ChatController extends GetxController {
+  // ignore: unused_field
   final bool _isLoading = true;
+  // ignore: unused_field
   final bool _isSearching = false;
-  List<MessageModel> chatMessages = [];
-  List<MessageModel> chats = [];
-  List<MessageModel> searchedChats = [];
+  List<MessageModel> chatMessages = <MessageModel>[];
+  List<MessageModel> chats = <MessageModel>[];
+  List<MessageModel> searchedChats = <MessageModel>[];
   late ImagePicker _picker;
 
   final ProfileController _profileController = Get.find();
@@ -42,7 +44,7 @@ class ChatController extends GetxController {
             element.receiverUid == _profileController.myProfile.uid &&
             !element.seen)
         .toList();
-    socket.emit('seen-message', {
+    socket.emit('seen-message', <String, String>{
       'senderUid': counterId,
       'receiverUid': _profileController.myProfile.uid
     });
@@ -50,7 +52,7 @@ class ChatController extends GetxController {
       final int chatIndex = chatMessages.indexWhere((MessageModel element) =>
           element.messageId == userConversations[i].messageId);
       chatMessages[chatIndex] = MessageModel.fromMap(
-          {...chatMessages[chatIndex].toMap(), 'seen': true});
+          <String, dynamic>{...chatMessages[chatIndex].toMap(), 'seen': true});
     }
 
     extractChats(_profileController.myProfile.uid);
@@ -69,8 +71,10 @@ class ChatController extends GetxController {
       update();
     }
 
-    homeController.socket.emit('delete-message',
-        {'messageId': messageId, 'userId': _profileController.myProfile.uid});
+    homeController.socket.emit('delete-message', <String, String>{
+      'messageId': messageId,
+      'userId': _profileController.myProfile.uid
+    });
   }
 
   void deleteChat(String chatPartyId) {
@@ -83,8 +87,10 @@ class ChatController extends GetxController {
     extractChats(myId);
     update();
 
-    homeController.socket.emit('delete-chat',
-        {'chatParty': chatPartyId, 'userId': _profileController.myProfile.uid});
+    homeController.socket.emit('delete-chat', <String, String>{
+      'chatParty': chatPartyId,
+      'userId': _profileController.myProfile.uid
+    });
   }
 
   /// EXTRACT UNIQUE CHATS ON SEARCH (REMOVE DUPLICATES)
@@ -154,18 +160,20 @@ class ChatController extends GetxController {
   void addNewChat(Map<String, dynamic> data, UserModel user) {
     final HomeController homeController = Get.find();
 
-    final Map<String, dynamic> body = {
+    final Map<String, dynamic> body = <String, dynamic>{
       ...data,
       'timestamp': DateTime.now().millisecondsSinceEpoch,
       'messageId': const Uuid().v4(),
       'seen': false
     };
 
-    chatMessages.insert(
-        0, MessageModel.fromMap({...body, 'user': user.toMap()}));
+    chatMessages.insert(0,
+        MessageModel.fromMap(<String, dynamic>{...body, 'user': user.toMap()}));
     extractChats(data['senderUid']);
-    homeController.socket.emit('new-message',
-        {'data': body, 'sender': _profileController.myProfile.toMap()});
+    homeController.socket.emit('new-message', <String, Map<String, dynamic>>{
+      'data': body,
+      'sender': _profileController.myProfile.toMap()
+    });
     update();
   }
 
@@ -173,7 +181,7 @@ class ChatController extends GetxController {
       Map<String, dynamic> data, UserModel user, String marketId) {
     final HomeController homeController = Get.find();
 
-    final Map<String, dynamic> body = {
+    final Map<String, dynamic> body = <String, dynamic>{
       ...data,
       'timestamp': DateTime.now().millisecondsSinceEpoch,
       'messageId': const Uuid().v4(),
@@ -181,29 +189,33 @@ class ChatController extends GetxController {
       'seen': false
     };
 
-    chatMessages.insert(
-        0, MessageModel.fromMap({...body, 'user': user.toMap()}));
+    chatMessages.insert(0,
+        MessageModel.fromMap(<String, dynamic>{...body, 'user': user.toMap()}));
     extractChats(data['senderUid']);
-    homeController.socket.emit('new-message',
-        {'data': body, 'sender': _profileController.myProfile.toMap()});
+    homeController.socket.emit('new-message', <String, Map<String, dynamic>>{
+      'data': body,
+      'sender': _profileController.myProfile.toMap()
+    });
     update();
   }
 
   void uploadNewChat(Map<String, dynamic> data, UserModel user) {
     final HomeController homeController = Get.find();
 
-    final Map<String, dynamic> body = {
+    final Map<String, dynamic> body = <String, dynamic>{
       ...data,
       'timestamp': DateTime.now().millisecondsSinceEpoch,
       'messageId': const Uuid().v4(),
       'seen': false
     };
 
-    chatMessages.insert(
-        0, MessageModel.fromMap({...body, 'user': user.toMap()}));
+    chatMessages.insert(0,
+        MessageModel.fromMap(<String, dynamic>{...body, 'user': user.toMap()}));
     extractChats(data['senderUid']);
-    homeController.socket.emit('new-message',
-        {'data': body, 'sender': _profileController.myProfile.toMap()});
+    homeController.socket.emit('new-message', <String, Map<String, dynamic>>{
+      'data': body,
+      'sender': _profileController.myProfile.toMap()
+    });
     update();
   }
 
@@ -216,7 +228,7 @@ class ChatController extends GetxController {
 
         final File imageFile = File(image.path);
         final String messageId = const Uuid().v4();
-        final Map<String, dynamic> body = {
+        final Map<String, dynamic> body = <String, dynamic>{
           'senderUid': _profileController.myProfile.uid,
           'receiverUid': Get.arguments.uid,
           'image': imageFile.path,
@@ -226,7 +238,9 @@ class ChatController extends GetxController {
           'isRawImage': true
         };
         chatMessages.insert(
-            0, MessageModel.fromMap({...body, 'user': Get.arguments.toMap()}));
+            0,
+            MessageModel.fromMap(
+                <String, dynamic>{...body, 'user': Get.arguments.toMap()}));
         extractChats(_profileController.myProfile.uid);
         update();
         final uploadResponse = await ApiService.uploadFile(imageFile);
@@ -240,8 +254,9 @@ class ChatController extends GetxController {
           showSnackbar(message: 'Error Uploading image');
         } else {
           final String imageUrl = uploadResponse['fileUrl'];
-          homeController.socket.emit('new-message', {
-            'data': {
+          homeController.socket
+              .emit('new-message', <String, Map<String, dynamic>>{
+            'data': <String, dynamic>{
               ...body,
               'image': imageUrl,
             },

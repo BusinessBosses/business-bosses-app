@@ -13,7 +13,10 @@ class PostModel {
   final List<CommentModel>? comments;
   final UserModel? user;
   final String? videoUrl;
+  final String? ytUrl;
+  final String? livedata;
   final bool isRanked;
+  int? views;
   final bool? promote;
   final dynamic promotionDuration;
   final String? plan;
@@ -28,7 +31,10 @@ class PostModel {
     this.comments,
     this.user,
     this.videoUrl,
+    this.ytUrl,
+    this.livedata,
     required this.isRanked,
+    this.views = 0,
     this.promote,
     required this.promotionDuration,
     this.plan,
@@ -45,7 +51,10 @@ class PostModel {
     List<CommentModel>? comments,
     UserModel? user,
     String? videoUrl,
+    String? ytUrl,
+    String? livedata,
     bool? isRanked,
+    int? views,
     bool? promote,
     dynamic promotionDuration,
     String? plan,
@@ -61,7 +70,10 @@ class PostModel {
       comments: comments ?? this.comments,
       user: user ?? this.user,
       videoUrl: videoUrl ?? this.videoUrl,
+      ytUrl: ytUrl ?? this.ytUrl,
+      livedata: livedata ?? this.livedata,
       isRanked: isRanked ?? this.isRanked,
+      views: views ?? this.views,
       promote: promote ?? this.promote,
       promotionDuration: promotionDuration ?? this.promotionDuration,
       plan: plan ?? this.plan,
@@ -80,7 +92,10 @@ class PostModel {
       'comments': comments?.map((CommentModel x) => x.toMap()).toList(),
       'user': user?.toMap(),
       'videoUrl': videoUrl,
+      'ytUrl': ytUrl,
+      'livedata': livedata,
       'isRanked': isRanked,
+      'views': views,
       'promote': promote,
       'promotionDuration': promotionDuration,
       'plan': plan,
@@ -111,11 +126,18 @@ class PostModel {
           ? UserModel.fromMap(map['user'] as Map<String, dynamic>)
           : null,
       videoUrl: map['videoUrl'] != null ? map['videoUrl'] as String : null,
+      ytUrl: map['ytUrl'] != null ? map['ytUrl'] as String : null,
+      livedata: map['livedata'] != null ? map['livedata'] as String : null,
       isRanked: map['isRanked'] as bool,
+      views: map['views'] != null ? map['views'] as int : null,
       promote: map['promote'] != null ? map['promote'] as bool : null,
       promotionDuration: map['promotionDuration'] as dynamic,
       plan: map['plan'] != null ? map['plan'] as String : null,
       approved: map['approved'] != null ? map['approved'] as bool : null,
     );
+  }
+
+  setViews(int newViews) {
+    views = newViews;
   }
 }

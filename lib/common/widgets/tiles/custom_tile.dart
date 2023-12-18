@@ -24,7 +24,7 @@ class CustomTile extends StatelessWidget {
       onTap: onTap,
       child: SizedBox(
         child: Wrap(
-          children: [
+          children: <Widget>[
             Container(
               decoration: BoxDecoration(
                 color: Colors.white,
@@ -40,7 +40,7 @@ class CustomTile extends StatelessWidget {
                 alignment: Alignment.topLeft,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
+                  children: <Widget>[
                     ListTile(
                       title: Text(
                         label,
@@ -69,7 +69,7 @@ class CustomTile extends StatelessWidget {
                           placeholder: (BuildContext context, String photo) =>
                               const CircularProgressIndicator(),
                           errorWidget:
-                              (BuildContext context, String photo, error) =>
+                              (BuildContext context, String photo, Object error) =>
                                   const Icon(Icons.error),
                         ),
                       ),

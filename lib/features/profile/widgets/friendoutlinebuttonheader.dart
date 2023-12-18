@@ -16,7 +16,7 @@ Widget OutlineButtonHeader(UserModel publicUser, UserModel myProfile,
     height: 50.0,
     padding: const EdgeInsets.all(4.0),
     width: double.infinity,
-    child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+    child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: <Widget>[
       Expanded(
         child: MCustomButton(
           buttonType: myProfile.connecteds != null &&
@@ -65,7 +65,7 @@ Widget OutlineButtonHeader(UserModel publicUser, UserModel myProfile,
                   return const AlertDialog(
                     content: Column(
                       mainAxisSize: MainAxisSize.min,
-                      children: [
+                      children: <Widget>[
                         CircularProgressIndicator(),
                       ],
                     ),

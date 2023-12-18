@@ -66,7 +66,9 @@ class _BoostMarketState extends State<BoostMarket> {
 
   void displaySheet() async {
     try {
-      await Stripe.instance.presentPaymentSheet().then((PaymentSheetPaymentOption? value) async {
+      await Stripe.instance
+          .presentPaymentSheet()
+          .then((PaymentSheetPaymentOption? value) async {
         await updatePost();
 
         Navigator.of(context).push(MaterialPageRoute(
@@ -100,7 +102,7 @@ class _BoostMarketState extends State<BoostMarket> {
 
   Future<dynamic> createPaymentIntent(String amount, String currency) async {
     try {
-      Map<String, dynamic> body = {
+      Map<String, dynamic> body = <String, dynamic>{
         'amount': calculateAmount(amount),
         'currency': currency,
         'payment_method_types[]': 'card'
@@ -109,7 +111,7 @@ class _BoostMarketState extends State<BoostMarket> {
       http.Response res = await http.post(
           Uri.parse('https://api.stripe.com/v1/payment_intents'),
           body: body,
-          headers: {
+          headers: <String, String>{
             'Authorization': 'Bearer ${dotenv.env['STRIPE_SEC_KEY']}',
             'Content-Type': 'application/x-www-form-urlencoded'
           });
@@ -213,12 +215,12 @@ class _BoostMarketState extends State<BoostMarket> {
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+          children: <Widget>[
             const SizedBox(
               height: 15,
             ),
             Stack(
-              children: [
+              children: <Widget>[
                 Image.asset(
                   'assets/images/boost_banner.png',
                   width: size.width,
@@ -230,7 +232,7 @@ class _BoostMarketState extends State<BoostMarket> {
                   left: 20,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
+                    children: <Widget>[
                       TextWidget(
                         text: 'Reach\na Wider Audience',
                         color: Color(0xFFFFFFFF),
@@ -329,9 +331,9 @@ class _BoostMarketState extends State<BoostMarket> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Column(
-                children: [
+                children: <Widget>[
                   Row(
-                    children: [
+                    children: <Widget>[
                       Checkbox(
                         value: isCoin,
                         onChanged: (bool? value) {
@@ -432,10 +434,10 @@ class BoostPlanCard extends StatelessWidget {
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+          children: <Widget>[
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
+              children: <Widget>[
                 TextWidget(
                   text: '\$${plan['amount']}.00',
                   size: 15,

@@ -3,6 +3,7 @@ import 'package:flutter_switch/flutter_switch.dart';
 
 import '../../../utils/theme/theme.dart';
 
+// ignore: must_be_immutable
 class SettingsItem extends StatefulWidget {
   final bool isTitle;
   final String label;
@@ -28,7 +29,7 @@ class _SettingsItemState extends State<SettingsItem> {
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
+      children: <Widget>[
         widget.isTitle
             ? Text(
                 widget.label,

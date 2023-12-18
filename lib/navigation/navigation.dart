@@ -9,8 +9,12 @@ import 'package:business_bosses_v2/features/home/controller/commumities_controll
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/home/home_screen.dart';
 import 'package:business_bosses_v2/features/home/marketplace_screen.dart';
+import 'package:business_bosses_v2/features/live_event/presentation/confirm_create_event.dart';
+import 'package:business_bosses_v2/features/live_event/presentation/create_event.dart';
+import 'package:business_bosses_v2/features/live_event/presentation/live_event.dart';
 import 'package:business_bosses_v2/features/marketplace/controllers/market_controller.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/renewconfirmation.dart';
+import 'package:business_bosses_v2/features/marketplace/presentation/sell_screen.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/subscription_confirmation.dart';
 import 'package:business_bosses_v2/features/posts/presentation/confirmation.dart';
 import 'package:business_bosses_v2/features/settings/community_rules_screen.dart';
@@ -45,7 +49,8 @@ import 'package:business_bosses_v2/features/search/presentation/complete_searchi
 import 'package:business_bosses_v2/features/settings/invite_a_friendscreen.dart';
 import 'package:business_bosses_v2/features/settings/settingsscreen.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
-import 'package:business_bosses_v2/premium/premiumscreen.dart';
+import 'package:business_bosses_v2/features/premium/premiumscreen.dart';
+import 'package:business_bosses_v2/features/premium/reviewpayment.dart';
 import 'package:get/get.dart';
 
 import '../features/forum/presentation/create_bossup_screen.dart';
@@ -227,6 +232,30 @@ class Nav {
     GetPage(
       name: Routes.subscriptionconfirmation,
       page: () => const SubscriptionConfirmation(),
+    ),
+    GetPage(
+      name: Routes.reviewpayment,
+      page: () => const ReviewPayment(),
+    ),
+    GetPage(
+      name: Routes.liveEvents,
+      page: () => const LiveEvent(),
+    ),
+    GetPage(
+      name: Routes.confirmcreateevent,
+      page: () => const ConfirmCreateEvent(
+        roomID: '',
+      ),
+    ),
+    GetPage(
+      name: Routes.createevent,
+      page: () => const CreateEvent(),
+    ),
+    GetPage(
+      name: Routes.sellscreen,
+      page: () => const CreateSellingitemScreen(
+        isUpd: false,
+      ),
     ),
   ];
 }

@@ -1,14 +1,19 @@
 import 'dart:convert';
-import 'dart:developer';
+import 'dart:math';
+import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
+import 'package:business_bosses_v2/features/premium/reviewpayment.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
+import 'package:flutter_paystack/flutter_paystack.dart';
+
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
 import '../../../action/action.dart';
+// import '../../../common/diaprints/snackbar.dart';
 import '../../../common/widgets/buttons/my_button.dart';
 import '../../../common/widgets/text_widget.dart';
 import '../../../utils/theme/theme.dart';
@@ -36,6 +41,7 @@ class _BoostPostState extends State<BoostPost> {
   bool isCoin = false;
   late Map<String, dynamic>? paymantIntent;
   final ProfileController profileController = Get.find();
+  final payStackClient = PaystackPlugin();
 
   late String duration;
   List<Map<String, dynamic>> plans = <Map<String, dynamic>>[
@@ -51,6 +57,21 @@ class _BoostPostState extends State<BoostPost> {
     },
   ];
 
+  List<Map<String, dynamic>> options = <Map<String, dynamic>>[
+    <String, dynamic>{
+      'optionname': 'Coins (100 Coins = \$1)',
+      'optionsvg': 'assets/svgs/coin.svg'
+    },
+    <String, dynamic>{
+      'optionname': 'Card Payment',
+      'optionsvg': 'assets/svgs/cardlogo.svg'
+    },
+    <String, dynamic>{
+      'optionname': 'PayStack',
+      'optionsvg': 'assets/svgs/paystack.svg'
+    },
+  ];
+
   Future<void> updatePost(String method) async {
     ApiService.put(
         path: 'post/update-post/${widget.postId}',
@@ -62,6 +83,7 @@ class _BoostPostState extends State<BoostPost> {
   }
 
   late String initPlan;
+  late String myPlan;
   String calculateAmount(String amount) {
     final int calculatedAmount = (int.parse(amount)) * 100;
     return calculatedAmount.toString();
@@ -69,7 +91,9 @@ class _BoostPostState extends State<BoostPost> {
 
   void displaySheet() async {
     try {
-      await Stripe.instance.presentPaymentSheet().then((PaymentSheetPaymentOption? value) async {
+      await Stripe.instance
+          .presentPaymentSheet()
+          .then((PaymentSheetPaymentOption? value) async {
         await updatePost('card');
 
         Navigator.of(context).push(MaterialPageRoute(
@@ -81,7 +105,6 @@ class _BoostPostState extends State<BoostPost> {
         setState(() {
           _isProcessing = false;
         });
-        log(' =>> $error');
         showSnackBar(context,
             message: 'Opps!! Something went wrong. Try again');
       });
@@ -89,13 +112,14 @@ class _BoostPostState extends State<BoostPost> {
       setState(() {
         _isProcessing = false;
       });
+      // ignore: use_build_context_synchronously
       showSnackBar(context, message: 'Opps!! Something went wrong. Try again');
       // print('Here ->>>>>> $e');
     } catch (e) {
       setState(() {
         _isProcessing = false;
       });
-      log('Here ->>>>>> $e');
+      print('Here ->>>>>> $e');
 
       showSnackBar(context, message: 'Opps!! Something went wrong. Try again');
     }
@@ -103,7 +127,7 @@ class _BoostPostState extends State<BoostPost> {
 
   Future<dynamic> createPaymentIntent(String amount, String currency) async {
     try {
-      Map<String, dynamic> body = {
+      Map<String, dynamic> body = <String, dynamic>{
         'amount': calculateAmount(amount),
         'currency': currency,
         'payment_method_types[]': 'card'
@@ -112,25 +136,30 @@ class _BoostPostState extends State<BoostPost> {
       http.Response res = await http.post(
           Uri.parse('https://api.stripe.com/v1/payment_intents'),
           body: body,
-          headers: {
+          headers: <String, String>{
             'Authorization': 'Bearer ${dotenv.env['STRIPE_SEC_KEY']}',
             'Content-Type': 'application/x-www-form-urlencoded'
           });
 
-      // log(res.body);
+      // print(res.body);
 
       return jsonDecode(res.body);
     } catch (e) {
       setState(() {
         _isProcessing = false;
       });
-      log('Here ->>>>>> $e');
+      print('Here ->>>>>> $e');
 
-      showSnackBar(context, message: 'Opps!! Something went wrong. Try again');
+      showSnackbar(
+          title: 'OOPS!',
+          message: 'An error occurred, please try again!',
+          error: true);
     }
   }
 
-  Future<void> makePayment() async {
+  Future<void> makeStripePayment() async {
+    // print(
+    //     'isCoined ${isCoin} && ${profileController.myProfile.coinscount} and the amount ${int.parse(initPlan) * 100}');
     if (isCoin &&
         profileController.myProfile.coinscount! >=
             (int.parse(initPlan) * 100)) {
@@ -156,7 +185,7 @@ class _BoostPostState extends State<BoostPost> {
           builder: (BuildContext context) => const Confirmation(),
         ));
       } catch (e) {
-        log(e.toString());
+        print(e.toString());
       }
     } else {
       try {
@@ -169,15 +198,18 @@ class _BoostPostState extends State<BoostPost> {
           paymentSheetParameters: SetupPaymentSheetParameters(
             paymentIntentClientSecret: paymantIntent!['client_secret'],
             merchantDisplayName: 'Business Bosses',
+            // applePay: const PaymentSheetApplePay(
+            //   merchantCountryCode: 'US',
+            // ),
           ),
         )
             .then((void value) {
-          // log(value.toString());
+          // print(value.toString());
         });
 
         displaySheet();
       } catch (e) {
-        log(e.toString());
+        print(e.toString());
       }
     }
     setState(() {
@@ -185,13 +217,41 @@ class _BoostPostState extends State<BoostPost> {
     });
   }
 
+  void _startPaystack() async {
+    String? publicKey = dotenv.env['PAYSTACK_PUBLIC_KEY'];
+    await payStackClient.initialize(publicKey: publicKey!);
+  }
+
+  final String reference =
+      "unique_transaction_ref_${Random().nextInt(1000000)}";
+
+  void _makePayment() async {
+    final Charge charge = Charge()
+      ..email = profileController.myProfile.email
+      ..amount = (int.parse(initPlan) * 100000)
+      // ..amount = 10000
+      ..reference = reference;
+
+    final CheckoutResponse response = await payStackClient.checkout(context,
+        charge: charge, method: CheckoutMethod.card);
+
+    if (response.status && response.reference == reference) {
+      showSnackBar(context,
+          message: 'Payment Successful, Thanks for your patronage !');
+    } else {
+      showSnackBar(context, message: 'Opps!! Something went wrong. Try again');
+    }
+  }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     initPlan = plans[0]['amount'];
+    myPlan = options[0]['optionname'];
+    _startPaystack();
 
-    // log(widget.postId);
+    // print(widget.postId);
   }
 
   @override
@@ -216,12 +276,12 @@ class _BoostPostState extends State<BoostPost> {
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+          children: <Widget>[
             const SizedBox(
               height: 15,
             ),
             Stack(
-              children: [
+              children: <Widget>[
                 Image.asset(
                   'assets/images/boost_banner.png',
                   width: size.width,
@@ -233,7 +293,7 @@ class _BoostPostState extends State<BoostPost> {
                   left: 20,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
+                    children: <Widget>[
                       TextWidget(
                         text: 'Reach\na Wider Audience',
                         color: Color(0xFFFFFFFF),
@@ -330,65 +390,135 @@ class _BoostPostState extends State<BoostPost> {
               height: 15,
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Column(
-                children: [
-                  Row(
-                    children: [
-                      Checkbox(
-                        value: isCoin,
-                        onChanged: (bool? value) {
-                          setState(() {
-                            isCoin = value!;
-                          });
-                        },
-                      ),
-                      const Text(
-                        'Pay With Coin (100 Coins = \$1)',
-                      ),
-                    ],
-                  ),
-                  Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 12, vertical: 3),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFF4F4F4),
-                      borderRadius: BorderRadius.circular(3.5),
-                    ),
-                    child: isCoin
-                        ? profileController.myProfile.coinscount! <
-                                (int.parse(initPlan) * 100)
-                            ? const TextWidget(
-                                text: 'You do not have enough coins to promote',
-                                color: Color(0xFF232324),
-                                fontWeight: FontWeight.w600,
-                                size: 12)
-                            : Container()
-                        : Container(),
-                  ),
-                ],
+              padding: const EdgeInsets.only(left: 20.0),
+              child: TextWidget(
+                text: 'Select a Payment Option',
+                size: 18,
+                fontWeight: FontWeight.w700,
               ),
             ),
+            // Padding(
+            //   padding: const EdgeInsets.symmetric(horizontal: 20),
+            //   child: Column(
+            //     children: <Widget>[
+            //       Row(
+            //         children: <Widget>[
+            //           Checkbox(
+            //             value: isCoin,
+            //             onChanged: (bool? value) {
+            //               setState(() {
+            //                 isCoin = value!;
+            //               });
+            //             },
+            //           ),
+            //           const Text(
+            //             'Pay With Coin (100 Coins = \$1)',
+            //           ),
+            //         ],
+            //       ),
+            //       Container(
+            //         padding:
+            //             const EdgeInsets.symmetric(horizontal: 12, vertical: 3),
+            //         decoration: BoxDecoration(
+            //           color: const Color(0xFFF4F4F4),
+            //           borderRadius: BorderRadius.circular(3.5),
+            //         ),
+            //         child: isCoin
+            //             ? profileController.myProfile.coinscount! <
+            //                     (int.parse(initPlan) * 100)
+            //                 ? const TextWidget(
+            //                     text: 'You do not have enough coins to promote',
+            //                     color: Color(0xFF232324),
+            //                     fontWeight: FontWeight.w600,
+            //                     size: 12)
+            //                 : Container()
+            //             : Container(),
+            //       ),
+            //     ],
+            //   ),
+            // ),
             const SizedBox(
               height: 30,
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: MyButton(
-                isProcessing: _isProcessing,
-                labelStyle: const TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w700,
-                  fontSize: 18,
-                ),
-                label: (isCoin &&
-                        profileController.myProfile.coinscount! <
-                            (int.parse(initPlan) * 100))
-                    ? 'Pay With Card'
-                    : 'Continue',
-                onPressed: () async {
-                  await makePayment();
-                },
+              padding: const EdgeInsets.only(left: 20.0, right: 20),
+              child: Column(
+                children: options
+                    .map(
+                      (Map<String, dynamic> options) => PaymentOptionCard(
+                        option: options,
+                        activeoption: myPlan,
+                        onTap: (String newoption) {
+                          setState(() {
+                            myPlan = newoption;
+                          });
+                        },
+                      ),
+                    )
+                    .toList(),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 20, right: 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  if (myPlan == 'Coins (100 Coins = \$1)') ...<Widget>[
+                    MyButton(
+                      isProcessing: _isProcessing,
+                      labelStyle: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w700,
+                        fontSize: 18,
+                      ),
+                      label: (isCoin &&
+                              profileController.myProfile.coinscount! <
+                                  (int.parse(initPlan) * 100))
+                          ? 'Pay With Card'
+                          : 'Continue',
+                      onPressed: () async {
+                        isCoin = profileController.myProfile.coinscount! >=
+                                (int.parse(initPlan) * 100)
+                            ? true
+                            : false;
+                        await makeStripePayment();
+                      },
+                    ),
+                  ] else if (myPlan == 'Card Payment') ...<Widget>[
+                    MyButton(
+                      isProcessing: _isProcessing,
+                      labelStyle: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w700,
+                        fontSize: 18,
+                      ),
+                      label: (isCoin &&
+                              profileController.myProfile.coinscount! <
+                                  (int.parse(initPlan) * 100))
+                          ? 'Pay With Card'
+                          : 'Continue',
+                      onPressed: () async {
+                        await makeStripePayment();
+                      },
+                    ),
+                  ] else if (myPlan == 'PayStack') ...<Widget>[
+                    MyButton(
+                      onPressed: () async {
+                        _makePayment();
+                      },
+                      labelStyle: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w700,
+                        fontSize: 18,
+                      ),
+                      label: 'Pay now',
+                    )
+                  ] else
+                    ...<Widget>[]
+                ],
               ),
             ),
             const SizedBox(
@@ -435,10 +565,10 @@ class BoostPlanCard extends StatelessWidget {
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+          children: <Widget>[
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
+              children: <Widget>[
                 TextWidget(
                   text: '\$${plan['amount']}.00',
                   size: 15,

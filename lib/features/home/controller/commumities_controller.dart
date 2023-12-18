@@ -12,9 +12,9 @@ class CommunitiesController extends GetxController {
   final HomeController _homeController = Get.find();
   final ProfileController _profileController = Get.find();
 
-  List<Industry> industries = [];
-  List<Industry> searchedIndustries = [];
-  List<ForumModel> searchedForums = [];
+  List<Industry> industries = <Industry>[];
+  List<Industry> searchedIndustries = <Industry>[];
+  List<ForumModel> searchedForums = <ForumModel>[];
   RxBool loading = RxBool(false);
   RxBool loadingSearch = RxBool(false);
   RxBool error = RxBool(false);
@@ -25,8 +25,8 @@ class CommunitiesController extends GetxController {
         .where((Industry element) => element.categoryId == categoryId)
         .toList();
 
-    filteredIndustries
-        .sort((Industry a, Industry b) => a.industry!.compareTo(b.industry!)); // Sort here
+    filteredIndustries.sort((Industry a, Industry b) =>
+        a.industry!.compareTo(b.industry!)); // Sort here
 
     return filteredIndustries;
   }
@@ -46,7 +46,7 @@ class CommunitiesController extends GetxController {
           await HomeRepository.searchIndustries(query.trim());
       if (response.success) {
         for (int i = 0; i < response.data['rows'].length; i++) {
-          searchedForums.add(ForumModel.fromMap({
+          searchedForums.add(ForumModel.fromMap(<String, dynamic>{
             ...response.data['rows'][i],
             'likes': response.data['rows'][i]['likes']
                 .map((dynamic like) => like['userId'].toString())
@@ -84,14 +84,14 @@ class CommunitiesController extends GetxController {
     }
     update();
     if (_profileController.myProfile.uid != receiverUid) {
-      socket.emit('like', {
+      socket.emit('like', <String, String>{
         'postId': postId,
         'userId': userId,
         'type': type,
         'receiverUid': receiverUid,
       });
     } else {
-      socket.emit('like', {
+      socket.emit('like', <String, String>{
         'postId': postId,
         'userId': userId,
         'type': type,
@@ -116,7 +116,7 @@ class CommunitiesController extends GetxController {
         profileController.updateCoinCount(-1);
         searchedForums[postIndex].coins!.add(userId);
       }
-      socket.emit('coin', {
+      socket.emit('coin', <String, String>{
         'postId': postId,
         'userId': userId,
         'type': type,
@@ -133,8 +133,8 @@ class CommunitiesController extends GetxController {
     final ApiResponseModel response = await HomeRepository.fetchIndustries();
     if (response.success) {
       industries = Industry.toIndustries(snapshot: response.data['rows']);
-      industries
-          .sort((Industry a, Industry b) => a.industry!.compareTo(b.industry!)); // Sort here
+      industries.sort((Industry a, Industry b) =>
+          a.industry!.compareTo(b.industry!)); // Sort here
       _homeController.addIndustries(industries);
     } else {
       error(true);

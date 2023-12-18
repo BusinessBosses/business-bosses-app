@@ -133,10 +133,20 @@ class Validator {
 
   /// VAlidate bio is not empty
   static String? bioValidator(String? val) {
-    if (val!.trim().isEmpty) {
+    if (val == null) {
+      return 'Bio cannot be null';
+    }
+    val = val.trim();
+    if (val.isEmpty) {
       return 'Bio cannot be empty';
     }
-    if (val.length < 12) return 'Bio is too short';
+    if (val.length < 12) {
+      return 'Bio is too short';
+    }
+    if (RegExp(r'[^\x20-\x7E]').hasMatch(val)) {
+      return 'Bio contains invalid characters';
+    }
+
     return null;
   }
 
@@ -154,5 +164,17 @@ class Validator {
     if (val.contains(' ')) return 'You can\'t enter space';
     if (val.length < 2) return 'Invalid value';
     return null;
+  }
+
+  static bool isYouTubeLink(String url) {
+    // Regular expression to match YouTube video URLs
+    final RegExp regExp = RegExp(
+        r'^https?://(?:www\.)?youtu\.?be(?:\.com)?/.*(?:\?v=|/embed/|/videos/|/watch\?v=)([\w-]+)');
+
+    if (regExp.hasMatch(url)) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }

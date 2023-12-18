@@ -10,8 +10,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:visibility_detector/visibility_detector.dart';
 
 import '../../../navigation/routes.dart';
+import '../../home/controller/home_controller.dart';
 import '../models/industry.dart';
 import '../../../utils/theme/theme.dart';
 import '../widgets/forum_item.dart';
@@ -34,36 +36,8 @@ class _AllForumScreenState extends State<AllForumScreen> {
   final ScrollController scrollController = ScrollController();
   late Industry industry;
   final ProfileController _myProfile = Get.find();
+  final HomeController hmeController = Get.find();
   // final List<ForumModel> forums = [];
-
-  String formatCount(int count) {
-    if (count >= 1000) {
-      double countInK = count / 1000;
-      if (countInK >= 1000) {
-        return '${(countInK / 1000).toStringAsFixed(1)}m';
-      } else {
-        return '${countInK.toStringAsFixed(1)}k';
-      }
-    } else {
-      return count.toString();
-    }
-  }
-
-  void toggleJoinAndLeaveIndustry(ForumController controller) {
-    final String myUid = _myProfile.myProfile.uid;
-    // print(myUid);
-    if (industry.joinedUsers?.contains(myUid) ?? false) {
-      industry.joinedUsers!.removeWhere((String element) => element == myUid);
-    } else {
-      if (industry.joinedUsers == null) {
-        industry.joinedUsers = [myUid];
-      } else {
-        industry.joinedUsers!.add(myUid);
-      }
-    }
-    setState(() {});
-    controller.joinAndLeaveIndustry(myUid, industry.industryId!);
-  }
 
   @override
   void initState() {
@@ -87,7 +61,7 @@ class _AllForumScreenState extends State<AllForumScreen> {
     String formattedUserCount = formatCount(userCount);
     return GetBuilder<ForumController>(
       builder: (ForumController controller) {
-        int postCount = controller.totalForums.value ?? 0;
+        int postCount = controller.totalForums.value;
         String formattedpostCount = formatCount(postCount);
         return Scaffold(
             backgroundColor: backgroundcolorinterface,
@@ -95,7 +69,7 @@ class _AllForumScreenState extends State<AllForumScreen> {
             appBar: AppBar(
               leading: IconButton(
                 onPressed: () {
-                  Navigator.pop(context);
+                  Get.back();
                 },
                 icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
               ),
@@ -116,102 +90,106 @@ class _AllForumScreenState extends State<AllForumScreen> {
                   SliverStickyHeader(
                     sticky: false,
                     header: Column(
-                      children: [
+                      children: <Widget>[
                         Container(
                           width: double.infinity,
                           color: Colors.transparent,
                           child: Column(
-                            children: [
+                            children: <Widget>[
                               const SizedBox(
                                 height: 10,
                               ),
-                              Row(
-                                children: [
-                                  GestureDetector(
-                                    onTap: () => {
-                                      industry.categoryId!.toString() ==
-                                              Constants.LEARNINGID
-                                          ? showDialog(
-                                              context: context,
-                                              builder: (BuildContext context) =>
-                                                  const LearningPopUp(),
-                                            )
-                                          : showDialog(
-                                              context: context,
-                                              builder: (BuildContext context) =>
-                                                  const OpportunitiesPopup(),
-                                            )
-                                    },
-                                    child: Padding(
-                                      padding:
-                                          const EdgeInsets.only(left: 20.0),
-                                      child: Row(
-                                        children: [
-                                          const Text(
-                                            'Info',
-                                            style: TextStyle(
-                                                fontSize: 12,
-                                                fontWeight: FontWeight.w700),
-                                          ),
-                                          const SizedBox(
-                                            width: 5,
-                                          ),
-                                          SvgPicture.asset(
-                                            'assets/svgs/info.svg',
-                                            height: 20,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                  const Spacer(),
-                                  Align(
-                                      alignment: Alignment.centerRight,
+                              if (_myProfile.myProfile.toPost)
+                                Row(
+                                  children: <Widget>[
+                                    GestureDetector(
+                                      onTap: () => <Future>{
+                                        industry.categoryId!.toString() ==
+                                                Constants.LEARNINGID
+                                            ? showDialog(
+                                                context: context,
+                                                builder:
+                                                    (BuildContext context) =>
+                                                        const LearningPopUp(),
+                                              )
+                                            : showDialog(
+                                                context: context,
+                                                builder: (BuildContext
+                                                        context) =>
+                                                    const OpportunitiesPopup(),
+                                              )
+                                      },
                                       child: Padding(
                                         padding:
-                                            const EdgeInsets.only(right: 20),
-                                        child: ElevatedButton(
-                                          style: ElevatedButton.styleFrom(
-                                              minimumSize: const Size(150, 45)),
-                                          onPressed: () {
-                                            Get.toNamed(Routes.createForum,
-                                                arguments: {
-                                                  'isBossUp': false,
-                                                  'industryId':
-                                                      industry.industryId,
-                                                  'categoryId':
-                                                      industry.categoryId
-                                                });
-                                          },
-                                          child: Row(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              Text(
-                                                industry.categoryId!
-                                                            .toString() ==
-                                                        Constants.LEARNINGID
-                                                    ? 'Start a Topic'
-                                                    : 'Share Opportunities',
-                                                style: const TextStyle(
-                                                    fontSize: 15,
-                                                    color: Colors.white,
-                                                    fontWeight:
-                                                        FontWeight.w500),
-                                              ),
-                                              const SizedBox(
-                                                width: 5,
-                                              ),
-                                              SvgPicture.asset(
-                                                  'assets/svgs/startatopic.svg')
-                                            ],
-                                          ),
+                                            const EdgeInsets.only(left: 20.0),
+                                        child: Row(
+                                          children: <Widget>[
+                                            const Text(
+                                              'Info',
+                                              style: TextStyle(
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.w700),
+                                            ),
+                                            const SizedBox(
+                                              width: 5,
+                                            ),
+                                            SvgPicture.asset(
+                                              'assets/svgs/info.svg',
+                                              height: 20,
+                                            ),
+                                          ],
                                         ),
-                                      )),
-                                ],
-                              ),
+                                      ),
+                                    ),
+                                    const Spacer(),
+                                    Align(
+                                        alignment: Alignment.centerRight,
+                                        child: Padding(
+                                          padding:
+                                              const EdgeInsets.only(right: 20),
+                                          child: ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
+                                                minimumSize:
+                                                    const Size(150, 45)),
+                                            onPressed: () {
+                                              Get.toNamed(Routes.createForum,
+                                                  arguments: <String, Object?>{
+                                                    'isBossUp': false,
+                                                    'industryId':
+                                                        industry.industryId,
+                                                    'categoryId':
+                                                        industry.categoryId
+                                                  });
+                                            },
+                                            child: Row(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: <Widget>[
+                                                Text(
+                                                  industry.categoryId!
+                                                              .toString() ==
+                                                          Constants.LEARNINGID
+                                                      ? 'Start a Topic'
+                                                      : 'Share Opportunities',
+                                                  style: const TextStyle(
+                                                      fontSize: 15,
+                                                      color: Colors.white,
+                                                      fontWeight:
+                                                          FontWeight.w500),
+                                                ),
+                                                const SizedBox(
+                                                  width: 5,
+                                                ),
+                                                SvgPicture.asset(
+                                                    'assets/svgs/startatopic.svg')
+                                              ],
+                                            ),
+                                          ),
+                                        )),
+                                  ],
+                                ),
                               Container(
                                 decoration: BoxDecoration(
-                                  boxShadow: [
+                                  boxShadow: <BoxShadow>[
                                     BoxShadow(
                                       color: Colors.black.withOpacity(0.09),
                                       blurRadius: 100.0, // soften the shadow
@@ -220,7 +198,7 @@ class _AllForumScreenState extends State<AllForumScreen> {
                                   ],
                                 ),
                                 child: Stack(
-                                  children: [
+                                  children: <Widget>[
                                     Container(
                                       margin: const EdgeInsets.only(
                                           top: 10, right: 20, left: 20),
@@ -234,9 +212,9 @@ class _AllForumScreenState extends State<AllForumScreen> {
                                       ),
                                     ),
                                     Column(
-                                      children: [
+                                      children: <Widget>[
                                         Row(
-                                          children: [
+                                          children: <Widget>[
                                             Container(
                                               margin: const EdgeInsets.only(
                                                   top: 25, right: 20, left: 35),
@@ -249,7 +227,7 @@ class _AllForumScreenState extends State<AllForumScreen> {
                                                   fit: BoxFit.fill,
                                                   child: CachedNetworkImage(
                                                     imageUrl: industry.photo ??
-                                                        'http://44.210.87.234/learningImages/events.jpg',
+                                                        'https://businessbosses.com.ng/learningImages/events.jpg',
                                                     memCacheHeight: 256,
                                                     memCacheWidth: 256,
                                                     placeholder: (BuildContext
@@ -261,7 +239,7 @@ class _AllForumScreenState extends State<AllForumScreen> {
                                                         (BuildContext context,
                                                                 // ignore: always_specify_types
                                                                 String photo,
-                                                                error) =>
+                                                                Object error) =>
                                                             const Icon(
                                                                 Icons.error),
                                                   ),
@@ -289,9 +267,9 @@ class _AllForumScreenState extends State<AllForumScreen> {
                                           padding: const EdgeInsets.only(
                                               left: 32, right: 20),
                                           child: Row(
-                                            children: [
+                                            children: <Widget>[
                                               Row(
-                                                children: [
+                                                children: <Widget>[
                                                   Padding(
                                                     padding:
                                                         const EdgeInsets.only(
@@ -308,7 +286,7 @@ class _AllForumScreenState extends State<AllForumScreen> {
                                                             top: 5.0),
                                                     child: RichText(
                                                       text: TextSpan(
-                                                        children: [
+                                                        children: <InlineSpan>[
                                                           TextSpan(
                                                             text: industry
                                                                         .joinedUsers ==
@@ -346,7 +324,7 @@ class _AllForumScreenState extends State<AllForumScreen> {
                                                 ],
                                               ),
                                               Row(
-                                                children: [
+                                                children: <Widget>[
                                                   Padding(
                                                     padding:
                                                         const EdgeInsets.only(
@@ -365,7 +343,7 @@ class _AllForumScreenState extends State<AllForumScreen> {
                                                             top: 5.0),
                                                     child: RichText(
                                                       text: TextSpan(
-                                                        children: [
+                                                        children: <InlineSpan>[
                                                           TextSpan(
                                                             text: industry
                                                                         .categoryId!
@@ -455,15 +433,71 @@ class _AllForumScreenState extends State<AllForumScreen> {
 
                               //controller: differentController,
 
-                              itemBuilder: (BuildContext context, int i) =>
-                                  ForumItem(
-                                forum: controller.forums[i],
-                                key: ValueKey(controller.forums[i].forumId),
-                                controller: controller,
-                              ),
-                            ),
+                              itemBuilder: (BuildContext context, int i) {
+                                return VisibilityDetector(
+                                  key: Key(i.toString()),
+                                  onVisibilityChanged: (VisibilityInfo info) {
+                                    final bool hasIncrementedView =
+                                        hmeController.itemsWithIncrementedViews
+                                            .contains(
+                                                controller.forums[i].forumId);
+                                    if (info.visibleFraction == 1.0 &&
+                                        !hasIncrementedView) {
+                                      controller.updateForumViews(
+                                          controller.forums[i]);
+                                      setState(() {
+                                        hmeController.itemsWithIncrementedViews
+                                            .add(controller.forums[i]
+                                                .forumId); // Set the flag to prevent further increments
+                                      });
+                                    }
+                                  },
+                                  child: ForumItem(
+                                    forum: controller.forums[i],
+                                    key: ValueKey(controller.forums[i].forumId),
+                                    controller: controller,
+                                    isBossUp: true,
+                                  ),
+                                );
+                              }),
             ));
       },
     );
+  }
+
+  String formatCount(int count) {
+    if (count >= 1000) {
+      double countInK = count / 1000;
+      if (countInK >= 1000) {
+        return '${(countInK / 1000).toStringAsFixed(1)}m';
+      } else {
+        return '${countInK.toStringAsFixed(1)}k';
+      }
+    } else {
+      return count.toString();
+    }
+  }
+
+  void toggleJoinAndLeaveIndustry(ForumController controller) {
+    final String myUid = _myProfile.myProfile.uid;
+    // print(myUid);
+    if (industry.joinedUsers?.contains(myUid) ?? false) {
+      industry.joinedUsers!.removeWhere((String element) => element == myUid);
+    } else {
+      if (industry.joinedUsers == null) {
+        industry.joinedUsers = <String>[myUid];
+      } else {
+        industry.joinedUsers!.add(myUid);
+      }
+    }
+    setState(() {});
+    controller.joinAndLeaveIndustry(myUid, industry.industryId!);
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    Get.delete<ForumController>();
+    super.dispose();
   }
 }

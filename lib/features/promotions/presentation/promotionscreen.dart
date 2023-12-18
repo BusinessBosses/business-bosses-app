@@ -14,6 +14,7 @@ class PromotionScreen extends StatefulWidget {
   const PromotionScreen({Key? key}) : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _PromotionScreenState createState() => _PromotionScreenState();
 }
 
@@ -44,7 +45,7 @@ class _PromotionScreenState extends State<PromotionScreen> {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
+          children: <Widget>[
             Container(
                 padding:
                     const EdgeInsets.only(left: 8, right: 8, top: 5, bottom: 5),
@@ -54,7 +55,7 @@ class _PromotionScreenState extends State<PromotionScreen> {
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
+                  children: <Widget>[
                     const Text(
                       'My Coin Balance',
                       style:
@@ -89,7 +90,7 @@ class _PromotionScreenState extends State<PromotionScreen> {
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(0.0),
         child: Column(
-          children: [
+          children: <Widget>[
             const SizedBox(
               height: 20,
             ),
@@ -112,7 +113,9 @@ class _PromotionScreenState extends State<PromotionScreen> {
                   color: Colors.white,
                 ),
                 child: Column(
-                  children: [Image.asset('assets/images/invitepicture.png')],
+                  children: <Widget>[
+                    Image.asset('assets/images/invitepicture.png')
+                  ],
                 )),
             Container(
                 width: MediaQuery.of(context).size.width,
@@ -120,7 +123,7 @@ class _PromotionScreenState extends State<PromotionScreen> {
                   color: Colors.white,
                 ),
                 child: Column(
-                  children: [
+                  children: <Widget>[
                     const Text(
                       'Earn Coins!',
                       style:
@@ -137,7 +140,7 @@ class _PromotionScreenState extends State<PromotionScreen> {
                       padding: const EdgeInsets.only(left: 20, right: 20),
                       child: Wrap(
                         alignment: WrapAlignment.center,
-                        children: [
+                        children: <Widget>[
                           const Text(
                             'to join Business Bosses and get 20',
                             style: TextStyle(
@@ -153,14 +156,14 @@ class _PromotionScreenState extends State<PromotionScreen> {
                             width: 20,
                           ),
                           const SizedBox(width: 5),
-                          const Text(
-                            'for each friend.',
-                            style: TextStyle(
-                              fontSize: 15,
-                              color: textColor,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
+                          // const Text(
+                          //   'for each friend.',
+                          //   style: TextStyle(
+                          //     fontSize: 15,
+                          //     color: textColor,
+                          //     fontWeight: FontWeight.w700,
+                          //   ),
+                          // ),
                         ],
                       ),
                     ),
@@ -172,13 +175,13 @@ class _PromotionScreenState extends State<PromotionScreen> {
                         Get.toNamed(Routes.premiumscreen);
                       },
                       child: Column(
-                        children: [
+                        children: <Widget>[
                           const SizedBox(
                             height: 10,
                           ),
                           Container(
                               decoration: BoxDecoration(
-                                boxShadow: [
+                                boxShadow: <BoxShadow>[
                                   BoxShadow(
                                     color: Colors.black.withOpacity(0.09),
                                     blurRadius: 500.0,
@@ -200,7 +203,7 @@ class _PromotionScreenState extends State<PromotionScreen> {
                                           child: Row(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.center,
-                                            children: [
+                                            children: <Widget>[
                                               const Text(
                                                 'Subscribe to Premium',
                                                 style: TextStyle(
@@ -251,10 +254,10 @@ class _PromotionScreenState extends State<PromotionScreen> {
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
+                  children: <Widget>[
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
+                      children: <Widget>[
                         Text(
                           'Invite Id:',
                           textAlign: TextAlign.center,
@@ -278,6 +281,7 @@ class _PromotionScreenState extends State<PromotionScreen> {
                     const SizedBox(
                       width: 20,
                     ),
+                    // ignore: unnecessary_null_comparison
                     _referralId == null
                         ? const Icon(
                             Icons.content_copy,
@@ -294,6 +298,7 @@ class _PromotionScreenState extends State<PromotionScreen> {
                     const SizedBox(width: 8.0),
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
+                          backgroundColor: backgroundcolorinterface,
                           minimumSize: const Size(
                               150, 45) // put the width and height you want
                           ),
@@ -302,7 +307,8 @@ class _PromotionScreenState extends State<PromotionScreen> {
                       },
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
-                        children: [
+                        children: <Widget>[
+                          // ignore: unnecessary_null_comparison
                           _referralId == null
                               ? const Text(
                                   'Create InviteId',
@@ -315,13 +321,16 @@ class _PromotionScreenState extends State<PromotionScreen> {
                                   'Invite',
                                   style: TextStyle(
                                       fontSize: 15,
-                                      color: Colors.white,
+                                      color: textColor,
                                       fontWeight: FontWeight.w500),
                                 ),
                           const SizedBox(
                             width: 5,
                           ),
-                          SvgPicture.asset('assets/svgs/invite.svg')
+                          SvgPicture.asset(
+                            'assets/svgs/invite.svg',
+                            color: textColor,
+                          )
                         ],
                       ),
                     ),
@@ -344,7 +353,7 @@ class _PromotionScreenState extends State<PromotionScreen> {
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
+                  children: <Widget>[
                     Text(
                       'Accepted Invitation:',
                       textAlign: TextAlign.center,
@@ -369,6 +378,21 @@ class _PromotionScreenState extends State<PromotionScreen> {
               height: 1.5,
               child: ColoredBox(color: backgroundcolorinterface),
             ),
+            const SizedBox(
+              height: 20,
+            ),
+            GestureDetector(
+              onTap: () {
+                Get.toNamed(Routes.marketPlace);
+              },
+              child: const Text(
+                'Sell your product or service',
+                style: TextStyle(
+                  fontWeight: FontWeight.w700,
+                  decoration: TextDecoration.underline,
+                ),
+              ),
+            ),
             const SizedBox(height: 74.0),
           ],
         ),
@@ -377,6 +401,7 @@ class _PromotionScreenState extends State<PromotionScreen> {
   }
 
   void _shareWithFriends() {
+    // ignore: unnecessary_null_comparison
     if (_referralId == null) return;
     String message = 'Check out Business Bosses.\n'
         'An app to meet entrepreneurs and grow your business. Join now for FREE promotion\n'

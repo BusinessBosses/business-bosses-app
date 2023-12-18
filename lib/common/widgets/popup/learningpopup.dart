@@ -20,7 +20,7 @@ class LearningPopUp extends StatelessWidget {
         padding: const EdgeInsets.all(15),
         child: Column(
           mainAxisSize: MainAxisSize.min,
-          children: [
+          children: <Widget>[
             const SizedBox(
               height: 20,
             ),
@@ -64,7 +64,7 @@ class LearningPopUp extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
+                children: <Widget>[
                   SvgPicture.asset(
                     'assets/svgs/report.svg',
                     color: primaryColorLT,
@@ -73,10 +73,16 @@ class LearningPopUp extends StatelessWidget {
                   const SizedBox(
                     width: 5,
                   ),
-                  const Text(
-                    'To sell your products and services, list on Marketplace',
-                    style: TextStyle(color: primaryColorLT),
-                  )
+                  const Expanded(
+                    child: Text(
+                      'To sell your products and services, list on Marketplace',
+                      style: TextStyle(color: primaryColorLT),
+                      overflow: TextOverflow
+                          .visible, // or TextOverflow.ellipsis if you want an ellipsis when it overflows
+                      softWrap:
+                          true, // This allows the text to wrap to the next line
+                    ),
+                  ),
                 ],
               ),
             ),

@@ -13,10 +13,13 @@ class MarketModel {
   String userId;
   List<dynamic>? images;
   String price;
+  String? discount;
   UserModel? user;
   bool promote;
   bool approved;
   int? timestamp;
+  int? views;
+  bool isProduct;
   final List<String>? likes;
   final List<String>? coins;
   final List<CommentModel>? comments;
@@ -33,8 +36,11 @@ class MarketModel {
     this.promote = false,
     this.approved = false,
     this.likes,
+    this.views = 0,
     this.coins,
     this.comments,
+    this.discount = '0',
+    this.isProduct = true,
   });
 
   MarketModel copyWith({
@@ -49,9 +55,12 @@ class MarketModel {
     bool? promote,
     bool? approved,
     int? timestamp,
+    int? views,
     List<String>? likes,
     List<String>? coins,
     List<CommentModel>? comments,
+    String? discount,
+    bool? isProduct,
   }) {
     return MarketModel(
       description: description ?? this.description,
@@ -68,6 +77,9 @@ class MarketModel {
       likes: likes ?? this.likes,
       coins: coins ?? this.coins,
       comments: comments ?? this.comments,
+      views: views ?? this.views,
+      discount: discount ?? this.discount,
+      isProduct: isProduct ?? this.isProduct,
     );
   }
 
@@ -86,7 +98,10 @@ class MarketModel {
       'timestamp': timestamp,
       'likes': likes,
       'coins': coins,
+      'views': views,
       'comments': comments?.map((CommentModel x) => x.toMap()).toList(),
+      'discount': discount,
+      'isProduct': isProduct,
     };
   }
 
@@ -106,6 +121,8 @@ class MarketModel {
       userId: map['userId'] as String,
       promote: map['promote'] as bool,
       approved: map['approved'] as bool,
+      views: map['views'] != null ? map['views'] as int : 0,
+      discount: map['discount'] != null ? map['discount'] as String : '0',
       likes: map['likes'] != null ? List<String>.from((map['likes'])) : null,
       coins: map['coins'] != null ? List<String>.from((map['coins'])) : null,
       comments: map['comments'] != null
@@ -113,10 +130,15 @@ class MarketModel {
               .map((e) => CommentModel.fromMap(e as Map<String, dynamic>))
               .toList()
           : null,
+      isProduct: map['isProduct'] as bool,
     );
   }
 
   String toJson() => json.encode(toMap());
+
+  setViews(int newViews) {
+    views = newViews;
+  }
 
   factory MarketModel.fromJson(String source) =>
       MarketModel.fromMap(json.decode(source) as Map<String, dynamic>);

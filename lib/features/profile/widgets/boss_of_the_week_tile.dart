@@ -1,8 +1,12 @@
+import 'dart:io';
+
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
+import 'package:business_bosses_v2/features/moreinfoscreens/bossuppartner.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../action/action.dart';
 import '../../../common/widgets/network_image_with_placeholder.dart';
@@ -10,7 +14,6 @@ import '../../../common/widgets/popup/bossup_challenge_popup.dart';
 import '../../../navigation/routes.dart';
 import '../../../services/api_service.dart';
 import '../../../utils/theme/theme.dart';
-import '../../moreinfoscreens/bossuppartner.dart';
 import '../controller/profile_controller.dart';
 import '../../home/controller/home_controller.dart';
 
@@ -38,7 +41,7 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
         return const AlertDialog(
           content: Column(
             mainAxisSize: MainAxisSize.min,
-            children: [
+            children: <Widget>[
               CircularProgressIndicator(),
             ],
           ),
@@ -91,7 +94,7 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                 Align(
                   alignment: Alignment.topLeft,
                   child: Row(
-                    children: [
+                    children: <Widget>[
                       CircleAvatar(
                         radius: 48 / 3,
                         backgroundColor: primaryColorLT.withOpacity(0.1),
@@ -147,10 +150,10 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                         color: Colors.transparent,
                       ),
                       child: Row(
-                        children: [
+                        children: <Widget>[
                           Stack(
                             clipBehavior: Clip.none,
-                            children: [
+                            children: <Widget>[
                               GestureDetector(
                                 onTap: (() {
                                   Get.toNamed(Routes.publicProfile,
@@ -202,14 +205,14 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
+                              children: <Widget>[
                                 if (user?.category == null &&
                                     user?.companyName == null &&
                                     user?.location == null)
                                   const SizedBox(height: 12.0),
                                 user?.isSubscribed == true
                                     ? Row(
-                                        children: [
+                                        children: <Widget>[
                                           Text(
                                               user?.name != null &&
                                                       user!.name!.length <= 20
@@ -258,7 +261,7 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                                             MainAxisAlignment.start,
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
-                                        children: [
+                                        children: <Widget>[
                                           Text(
                                             user!.bio.toString(),
                                             maxLines: 2,
@@ -269,7 +272,7 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                                             ),
                                           ),
                                           Row(
-                                            children: [
+                                            children: <Widget>[
                                               Expanded(
                                                 child: outlineButtonHeader(() {
                                                   onRefer(user!);
@@ -301,68 +304,116 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                         child: Padding(
                           padding: const EdgeInsets.only(right: 0, top: 5),
                           child: Container(
-                            height: 40,
-                            decoration: BoxDecoration(
-                              color: const Color(0xFFFFFFFF),
-                              borderRadius: BorderRadius.circular(10),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.grey.withOpacity(0.3),
-                                  spreadRadius: 20,
-                                  blurRadius: 500,
-                                  offset: const Offset(0, 3),
-                                ),
-                              ],
-                            ),
-                            child: Row(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                    left: 10,
+                              height: 40,
+                              decoration: BoxDecoration(
+                                color: const Color(0xFFFFFFFF),
+                                borderRadius: BorderRadius.circular(10),
+                                boxShadow: <BoxShadow>[
+                                  BoxShadow(
+                                    color: Colors.grey.withOpacity(0.3),
+                                    spreadRadius: 20,
+                                    blurRadius: 500,
+                                    offset: const Offset(0, 3),
                                   ),
-                                  child: Center(
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(2),
-                                      child: Text(
-                                        homeController.bossUpTitle.toString(),
-                                        style: const TextStyle(fontSize: 11),
+                                ],
+                              ),
+                              child: Row(
+                                children: <Widget>[
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                      left: 10,
+                                    ),
+                                    child: GestureDetector(
+                                      onTap: () async {
+                                        if (await canLaunchUrl(Uri.parse(
+                                            homeController.bossUpLink))) {
+                                          await launchUrl(Uri.parse(
+                                              homeController.bossUpLink));
+                                        }
+                                      },
+                                      child: Center(
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(2),
+                                          child: Text(
+                                            homeController.bossUpTitle
+                                                .toString(),
+                                            style:
+                                                const TextStyle(fontSize: 13),
+                                          ),
+                                        ),
                                       ),
                                     ),
                                   ),
-                                ),
-                                const SizedBox(width: 10),
-                                Text(
-                                  '|',
-                                  style: TextStyle(
-                                      fontSize: 20,
-                                      color: textColor.withOpacity(0.5)),
-                                ),
-                                const SizedBox(width: 10),
-                                Text(
-                                  homeController.bossUp != null &&
-                                          homeController.bossUp!.isNotEmpty
-                                      ? homeController
-                                              .bossUp!.last['companyName'] ??
-                                          ''
-                                      : '',
-                                  style: const TextStyle(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.bold,
+                                  const SizedBox(width: 10),
+                                  Platform.isIOS
+                                      ? Padding(
+                                          padding: const EdgeInsets.only(
+                                              left: 0.0, bottom: 4),
+                                          child: Text(
+                                            '|',
+                                            style: TextStyle(
+                                              fontSize: 20,
+                                              color: textColor.withOpacity(0.5),
+                                            ),
+                                          ),
+                                        )
+                                      : Text(
+                                          '|',
+                                          style: TextStyle(
+                                            fontSize: 20,
+                                            color: textColor.withOpacity(0.5),
+                                          ),
+                                        ),
+                                  const SizedBox(width: 10),
+                                  Platform.isIOS
+                                      ? Expanded(
+                                          child: Text(
+                                            homeController.bossUp != null &&
+                                                    homeController
+                                                        .bossUp!.isNotEmpty
+                                                ? homeController.bossUp!
+                                                        .last['companyName'] ??
+                                                    ''
+                                                : '',
+                                            style: const TextStyle(
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                            overflow: TextOverflow.ellipsis,
+                                            maxLines: 1,
+                                          ),
+                                        )
+                                      : Expanded(
+                                          child: Text(
+                                            homeController.bossUp != null &&
+                                                    homeController
+                                                        .bossUp!.isNotEmpty
+                                                ? homeController.bossUp!
+                                                        .last['companyName'] ??
+                                                    ''
+                                                : '',
+                                            style: const TextStyle(
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                            overflow: TextOverflow.ellipsis,
+                                            maxLines: 1,
+                                          ),
+                                        ),
+                                  const SizedBox(
+                                    width: 15,
                                   ),
-                                  overflow: TextOverflow.ellipsis,
-                                  softWrap: false,
-                                ),
-                                const Spacer(),
-                                Padding(
-                                  padding: const EdgeInsets.only(right: 10.0),
-                                  child: SvgPicture.asset(
-                                    'assets/svgs/nexticon.svg',
-                                    color: textColor,
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                      right: 10.0,
+                                    ),
+                                    child: SvgPicture.asset(
+                                      'assets/svgs/nexticon.svg',
+                                      color: textColor,
+                                    ),
+                                  )
+                                ],
+                              )),
                         ),
                       )
                     : const SizedBox(),
@@ -375,7 +426,7 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
   Widget qouteWidget(List<Map<String, dynamic>> quote) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
+      children: <Widget>[
         const Text(
           "Today's Quote",
           style: TextStyle(
@@ -393,7 +444,7 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
             padding: const EdgeInsets.all(16.0),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
+              children: <Widget>[
                 CircleAvatar(
                     radius: 48 / 2,
                     backgroundColor: primaryColorLT.withOpacity(0.1),
@@ -404,13 +455,13 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
+                    children: <Widget>[
                       Text(
                         quote[0]['by'] ?? 'Brian Tracy',
                         style: bodyText1,
                       ),
                       Row(
-                        children: [
+                        children: <Widget>[
                           Expanded(
                             child: Text(
                               ' ${quote[0]['message'] ?? "Always give without remembering and always receive without forgetting."}',
@@ -435,7 +486,7 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
       padding: const EdgeInsets.all(0.0),
       width: double.infinity,
       child: Row(
-        children: [
+        children: <Widget>[
           ElevatedButton(
             onPressed: () async {
               connectToUser();
@@ -468,7 +519,7 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
               'Refer',
               style: TextStyle(color: primaryColorLT),
             ),
-          ),
+          )
         ],
       ),
     );
@@ -487,7 +538,7 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
     if (checkConnected == -1) {
       _profileController.updateConnections(user!.uid);
       setState(() {
-        user = UserModel.fromMap({
+        user = UserModel.fromMap(<dynamic, dynamic>{
           ...user!.toMap(),
           'connectionCount':
               user?.connectionCount == null ? 1 : user!.connectionCount! + 1
@@ -498,7 +549,7 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
       _profileController.updateConnections(user!.uid);
 
       setState(() {
-        user = UserModel.fromMap({
+        user = UserModel.fromMap(<dynamic, dynamic>{
           ...user!.toMap(),
           'connectionCount':
               user?.connectionCount == null ? null : user!.connectionCount! - 1
@@ -510,7 +561,7 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
   }
 
   void updateReferals(int refs) {
-    user = UserModel.fromMap({
+    user = UserModel.fromMap(<dynamic, dynamic>{
       ...user!.toMap(),
       'referalCount':
           user?.referals == null ? refs : user!.referals!.length + refs
@@ -519,7 +570,7 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
   }
 
   Future<void> disconnect(String userId) async {
-    ApiService.post(path: '/connection/disconnect', body: {
+    ApiService.post(path: '/connection/disconnect', body: <String, dynamic>{
       'userId': _profileController.myProfile.uid,
       'connectedId': userId,
       'timestamp': DateTime.now().millisecondsSinceEpoch
@@ -534,7 +585,7 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
   }
 
   Future<void> connect(String userId) async {
-    ApiService.post(path: '/connection/connect', body: {
+    ApiService.post(path: '/connection/connect', body: <String, dynamic>{
       'userId': _profileController.myProfile.uid,
       'connectedId': userId,
       'timestamp': DateTime.now().millisecondsSinceEpoch

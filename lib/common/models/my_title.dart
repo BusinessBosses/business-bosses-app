@@ -16,7 +16,7 @@ class MyTitle {
 
   Map<dynamic, dynamic> toMap() {
     // ignore: unnecessary_cast
-    return {
+    return <String, Object?>{
       'id': id,
       'title': title,
     } as Map<dynamic, dynamic>;
@@ -24,7 +24,7 @@ class MyTitle {
 
   Map<dynamic, dynamic> toSetMap() {
     // ignore: unnecessary_cast
-    return {
+    return <String, Object?>{
       'id': id,
       'title': title,
     } as Map<dynamic, dynamic>;
@@ -33,8 +33,9 @@ class MyTitle {
   static List<MyTitle> toCategoriesList({
     required List snapshot,
   }) {
-    if (snapshot == null) return [];
-    List<MyTitle> cats = [];
+    // ignore: unnecessary_null_comparison
+    if (snapshot == null) return <MyTitle>[];
+    List<MyTitle> cats = <MyTitle>[];
     // Map<dynamic, dynamic> values = snapshot.value;
     for (int i = 0; i < snapshot.length; i++) {
       final MyTitle cat = MyTitle.toObject(snapshot[i]);

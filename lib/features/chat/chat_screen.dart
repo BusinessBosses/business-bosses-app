@@ -36,7 +36,7 @@ class _ChatScreenState extends State<ChatScreen> {
   final ChatController _chatController = Get.find();
 
   bool _isSearching = false;
-  final List<LastMessage> _myChats = [];
+  final List<LastMessage> _myChats = <LastMessage>[];
 
   @override
   Widget build(BuildContext context) {
@@ -70,7 +70,7 @@ class _ChatScreenState extends State<ChatScreen> {
                     ),
                     centerTitle: true,
                     title: const Text('Chats'),
-                    actions: [
+                    actions: <Widget>[
                       IconButton(
                         onPressed: _onChangeSearching,
                         icon: SvgPicture.asset('assets/svgs/search.svg'),
@@ -78,7 +78,7 @@ class _ChatScreenState extends State<ChatScreen> {
                     ],
                   ),
             body: Stack(
-              children: [
+              children: <Widget>[
                 controller.chatMessages.isEmpty
                     ? const SafetyModel(
                         isLoading: false,
@@ -148,6 +148,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
   void _onSearch(String val) {
     if (val.trim().isEmpty) return;
+    // ignore: unused_local_variable
     final List<LastMessage> data = _myChats.where((LastMessage e) {
       return e.user!.name!.toLowerCase().contains(val.trim().toLowerCase());
     }).toList();
@@ -184,7 +185,8 @@ class ChatItem extends StatefulWidget {
 }
 
 class _ChatItemState extends State<ChatItem> {
-  final List<PopupMenuEntry<String>> _popupItemForumMore = [
+  final List<PopupMenuEntry<String>> _popupItemForumMore =
+      <PopupMenuEntry<String>>[
     const PopupMenuItem<String>(
       value: 'Delete Chat',
       child: Text(
@@ -225,7 +227,7 @@ class _ChatItemState extends State<ChatItem> {
               key: widget.key,
               padding: const EdgeInsets.all(16.0),
               child: Row(
-                children: [
+                children: <Widget>[
                   if (getUnreadMessages()) const UnReadDot() else Container(),
                   Container(
                     width: 80.0,
@@ -241,16 +243,16 @@ class _ChatItemState extends State<ChatItem> {
                   ),
                   Expanded(
                     child: Column(
-                      children: [
+                      children: <Widget>[
                         Row(
-                          children: [
+                          children: <Widget>[
                             Expanded(
                               child: widget.myChatUser.user!.isSubscribed ==
                                       true
                                   ? Padding(
                                       padding: const EdgeInsets.only(top: 0.0),
                                       child: Row(
-                                        children: [
+                                        children: <Widget>[
                                           Text(
                                             widget.myChatUser.user!.name !=
                                                         null &&
@@ -313,7 +315,7 @@ class _ChatItemState extends State<ChatItem> {
                           ],
                         ),
                         Row(
-                          children: [
+                          children: <Widget>[
                             Expanded(
                               child: widget.myChatUser.deleted == true
                                   ? Text(
@@ -357,7 +359,7 @@ class _ChatItemState extends State<ChatItem> {
         return AlertDialog(
           title: TextWidget(
               text: 'All Messages with ${chatParty.username} will be deleted'),
-          actions: [
+          actions: <Widget>[
             TextButton(
                 onPressed: () {
                   Navigator.of(context).pop();

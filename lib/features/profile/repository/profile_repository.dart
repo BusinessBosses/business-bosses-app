@@ -10,6 +10,13 @@ class ProfileRepository {
     return response;
   }
 
+  static Future<ApiResponseModel> fetchUserMarket(
+      int page, int size, String userId) async {
+    final ApiResponseModel response = await ApiService.get(
+        path: 'markets/user/$userId?page=$page&size=$size');
+    return response;
+  }
+
   /// GET BOSS OF THE WEEK
   static Future<ApiResponseModel> fetchBoss() async {
     final ApiResponseModel response =

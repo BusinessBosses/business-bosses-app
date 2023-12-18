@@ -136,7 +136,7 @@ class _SellerReviewScreenState extends State<SellerReviewScreen> {
         ),
         body: SingleChildScrollView(
           child: Column(
-            children: [
+            children: <Widget>[
               Container(
                 height: 20,
                 color: backgroundcolorinterface,
@@ -190,11 +190,11 @@ class _SellerReviewScreenState extends State<SellerReviewScreen> {
                           ),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
+                            children: <Widget>[
                               Column(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
+                                children: <Widget>[
                                   const Text(
                                     'Rating',
                                     style: TextStyle(
@@ -205,7 +205,7 @@ class _SellerReviewScreenState extends State<SellerReviewScreen> {
                                   ),
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
+                                    children: <Widget>[
                                       Text(currentRating.toStringAsFixed(1),
                                           style: const TextStyle(
                                             fontWeight: FontWeight.bold,
@@ -223,7 +223,7 @@ class _SellerReviewScreenState extends State<SellerReviewScreen> {
                                   Text(
                                       'Based on ${reviews?.length ?? 0} reviews'),
                                   Row(
-                                    children: [
+                                    children: <Widget>[
                                       Icon(
                                         Icons.star,
                                         color: widget.user.averageRating! >= 1
@@ -277,9 +277,9 @@ class _SellerReviewScreenState extends State<SellerReviewScreen> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceEvenly,
                                 crossAxisAlignment: CrossAxisAlignment.end,
-                                children: [
+                                children: <Widget>[
                                   Row(
-                                    children: [
+                                    children: <Widget>[
                                       const Text(
                                         '5 Stars',
                                         style: TextStyle(
@@ -311,7 +311,7 @@ class _SellerReviewScreenState extends State<SellerReviewScreen> {
                                     ],
                                   ),
                                   Row(
-                                    children: [
+                                    children: <Widget>[
                                       const Text(
                                         '4 Stars',
                                         style: TextStyle(
@@ -343,7 +343,7 @@ class _SellerReviewScreenState extends State<SellerReviewScreen> {
                                     ],
                                   ),
                                   Row(
-                                    children: [
+                                    children: <Widget>[
                                       const Text(
                                         '3 Stars',
                                         style: TextStyle(
@@ -375,7 +375,7 @@ class _SellerReviewScreenState extends State<SellerReviewScreen> {
                                     ],
                                   ),
                                   Row(
-                                    children: [
+                                    children: <Widget>[
                                       const Text(
                                         '2 Stars',
                                         style: TextStyle(
@@ -409,7 +409,7 @@ class _SellerReviewScreenState extends State<SellerReviewScreen> {
                                   Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
-                                    children: [
+                                    children: <Widget>[
                                       const Text(
                                         '1 Star',
                                         style: TextStyle(
@@ -449,7 +449,7 @@ class _SellerReviewScreenState extends State<SellerReviewScreen> {
                     ),
                     reviews == null
                         ? const Column(
-                            children: [
+                            children: <Widget>[
                               SizedBox(
                                 height: 60,
                               ),
@@ -507,213 +507,223 @@ class _SellerReviewScreenState extends State<SellerReviewScreen> {
             builder: (BuildContext context, StateSetter setState) {
               return FractionallySizedBox(
                 heightFactor: 0.5,
-                child: Container(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Container(
-                        width: MediaQuery.of(context).size.width,
-                        padding: const EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                          color: Colors.grey[200],
-                          borderRadius: const BorderRadius.only(
-                            topLeft: Radius.circular(12),
-                            topRight: Radius.circular(12),
+                child: GestureDetector(
+                  onTap: () {
+                    FocusScope.of(context).unfocus();
+                  },
+                  onVerticalDragDown: (_) {
+                    FocusScope.of(context).unfocus();
+                  },
+                  child: Container(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: <Widget>[
+                        Container(
+                          width: MediaQuery.of(context).size.width,
+                          padding: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            color: Colors.grey[200],
+                            borderRadius: const BorderRadius.only(
+                              topLeft: Radius.circular(12),
+                              topRight: Radius.circular(12),
+                            ),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              const Text(
+                                'Rate Seller',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              IconButton(
+                                icon: const Icon(Icons.close),
+                                onPressed: () {
+                                  setState(
+                                    () {
+                                      rater = 0;
+                                      reviewText = '';
+                                    },
+                                  );
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                            ],
                           ),
                         ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            const Text(
-                              'Rate Seller',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            IconButton(
-                              icon: const Icon(Icons.close),
-                              onPressed: () {
-                                setState(
-                                  () {
-                                    rater = 0;
-                                    reviewText = '';
-                                  },
-                                );
-                                Navigator.of(context).pop();
-                              },
-                            ),
-                          ],
+                        const SizedBox(
+                          height: 30,
                         ),
-                      ),
-                      const SizedBox(
-                        height: 30,
-                      ),
-                      Container(
-                        width: MediaQuery.of(context).size.width * 0.9,
-                        padding: const EdgeInsets.all(15),
-                        decoration: BoxDecoration(
-                          color: Colors.grey[200],
-                          borderRadius: const BorderRadius.only(
-                            topLeft: Radius.circular(12),
-                            topRight: Radius.circular(12),
+                        Container(
+                          width: MediaQuery.of(context).size.width * 0.9,
+                          padding: const EdgeInsets.all(15),
+                          decoration: BoxDecoration(
+                            color: Colors.grey[200],
+                            borderRadius: const BorderRadius.only(
+                              topLeft: Radius.circular(12),
+                              topRight: Radius.circular(12),
+                            ),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              IconButton(
+                                icon: Icon(
+                                  Icons.star,
+                                  color: rater >= 1
+                                      ? const Color.fromRGBO(255, 202, 40, 1)
+                                      : const Color.fromRGBO(229, 229, 229, 1),
+                                  size: 40,
+                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    rater = 1;
+                                  });
+                                },
+                              ),
+                              IconButton(
+                                icon: Icon(
+                                  Icons.star,
+                                  color: rater >= 2
+                                      ? const Color.fromRGBO(255, 202, 40, 1)
+                                      : const Color.fromRGBO(229, 229, 229, 1),
+                                  size: 40,
+                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    rater = 2;
+                                  });
+                                },
+                              ),
+                              IconButton(
+                                icon: Icon(
+                                  Icons.star,
+                                  color: rater >= 3
+                                      ? const Color.fromRGBO(255, 202, 40, 1)
+                                      : const Color.fromRGBO(229, 229, 229, 1),
+                                  size: 40,
+                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    rater = 3;
+                                  });
+                                },
+                              ),
+                              IconButton(
+                                icon: Icon(
+                                  Icons.star,
+                                  color: rater >= 4
+                                      ? const Color.fromRGBO(255, 202, 40, 1)
+                                      : const Color.fromRGBO(229, 229, 229, 1),
+                                  size: 40,
+                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    rater = 4;
+                                  });
+                                },
+                              ),
+                              IconButton(
+                                icon: Icon(
+                                  Icons.star,
+                                  color: rater >= 5
+                                      ? const Color.fromRGBO(255, 202, 40, 1)
+                                      : const Color.fromRGBO(229, 229, 229, 1),
+                                  size: 40,
+                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    rater = 5;
+                                  });
+                                },
+                              ),
+                            ],
                           ),
                         ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            IconButton(
-                              icon: Icon(
-                                Icons.star,
-                                color: rater >= 1
-                                    ? const Color.fromRGBO(255, 202, 40, 1)
-                                    : const Color.fromRGBO(229, 229, 229, 1),
-                                size: 40,
-                              ),
-                              onPressed: () {
-                                setState(() {
-                                  rater = 1;
-                                });
-                              },
+                        const SizedBox(height: 24),
+                        Container(
+                          width: MediaQuery.of(context).size.width * 0.9,
+                          decoration: BoxDecoration(
+                            color: Colors.grey[200],
+                            borderRadius: const BorderRadius.only(
+                              topLeft: Radius.circular(12),
+                              topRight: Radius.circular(12),
                             ),
-                            IconButton(
-                              icon: Icon(
-                                Icons.star,
-                                color: rater >= 2
-                                    ? const Color.fromRGBO(255, 202, 40, 1)
-                                    : const Color.fromRGBO(229, 229, 229, 1),
-                                size: 40,
-                              ),
-                              onPressed: () {
-                                setState(() {
-                                  rater = 2;
-                                });
-                              },
+                          ),
+                          child: TextField(
+                            maxLines: 4,
+                            onChanged: (String value) {
+                              reviewText = value;
+                            },
+                            decoration: const InputDecoration(
+                              hintText: 'Write your Review here...',
+                              border: InputBorder.none,
+                              contentPadding: EdgeInsets.all(10),
                             ),
-                            IconButton(
-                              icon: Icon(
-                                Icons.star,
-                                color: rater >= 3
-                                    ? const Color.fromRGBO(255, 202, 40, 1)
-                                    : const Color.fromRGBO(229, 229, 229, 1),
-                                size: 40,
-                              ),
-                              onPressed: () {
-                                setState(() {
-                                  rater = 3;
-                                });
-                              },
-                            ),
-                            IconButton(
-                              icon: Icon(
-                                Icons.star,
-                                color: rater >= 4
-                                    ? const Color.fromRGBO(255, 202, 40, 1)
-                                    : const Color.fromRGBO(229, 229, 229, 1),
-                                size: 40,
-                              ),
-                              onPressed: () {
-                                setState(() {
-                                  rater = 4;
-                                });
-                              },
-                            ),
-                            IconButton(
-                              icon: Icon(
-                                Icons.star,
-                                color: rater >= 5
-                                    ? const Color.fromRGBO(255, 202, 40, 1)
-                                    : const Color.fromRGBO(229, 229, 229, 1),
-                                size: 40,
-                              ),
-                              onPressed: () {
-                                setState(() {
-                                  rater = 5;
-                                });
-                              },
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 24),
-                      Container(
-                        width: MediaQuery.of(context).size.width * 0.9,
-                        decoration: BoxDecoration(
-                          color: Colors.grey[200],
-                          borderRadius: const BorderRadius.only(
-                            topLeft: Radius.circular(12),
-                            topRight: Radius.circular(12),
                           ),
                         ),
-                        child: TextField(
-                          maxLines: 4,
-                          onChanged: (String value) {
-                            reviewText = value;
-                          },
-                          decoration: const InputDecoration(
-                            hintText: 'Write your Review here...',
-                            border: InputBorder.none,
-                            contentPadding: EdgeInsets.all(10),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 24),
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.6,
-                        child: MCustomButton(
-                          isProcessing: isSending,
-                          buttonType: ButtonType.elevated,
-                          onPressed: () async {
-                            setState(() {
-                              isSending = true;
-                            });
-                            await ApiService.post(
-                              path: 'reviews',
-                              body: {
-                                'sellerId': widget.user.uid,
-                                'rating': rater,
-                                'reviewText': reviewText,
-                              },
-                            );
-                            await ApiService.post(
-                              path: 'notification',
-                              body: {
-                                'senderUid': _profileController.myProfile.uid,
-                                'receiverUid': widget.user.uid,
-                                'title': 'Seller Review',
-                                'message':
-                                    '${_profileController.myProfile.username} has reviewed your store',
-                                'timestamp':
-                                    DateTime.now().millisecondsSinceEpoch,
-                                'notificationType': 'Review'
-                              },
-                            );
-                            await processData();
-                            final Map<String, dynamic> currentUser =
-                                await ProfileController.loadData(
-                                    widget.user.uid);
-                            if (mounted) {
-                              setState(
-                                () {
-                                  cUser =
-                                      UserModel.fromMap(currentUser['user']);
-                                  currentRating = currentUser['user']
-                                          ['averageRating']
-                                      .toDouble();
-                                  rater = 0;
-                                  reviewText = '';
-                                  isSending = false;
+                        const SizedBox(height: 24),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.6,
+                          child: MCustomButton(
+                            isProcessing: isSending,
+                            buttonType: ButtonType.elevated,
+                            onPressed: () async {
+                              setState(() {
+                                isSending = true;
+                              });
+                              await ApiService.post(
+                                path: 'reviews',
+                                body: <String, dynamic>{
+                                  'sellerId': widget.user.uid,
+                                  'rating': rater,
+                                  'reviewText': reviewText,
                                 },
                               );
-                            }
-                            _marketController.updateUser(
-                                widget.user.uid, currentRating);
-                            Get.back();
-                          },
-                          child: const Text('Rate'),
+                              await ApiService.post(
+                                path: 'notification',
+                                body: <String, dynamic>{
+                                  'senderUid': _profileController.myProfile.uid,
+                                  'receiverUid': widget.user.uid,
+                                  'title': 'Seller Review',
+                                  'message':
+                                      '${_profileController.myProfile.username} has reviewed your store',
+                                  'timestamp':
+                                      DateTime.now().millisecondsSinceEpoch,
+                                  'notificationType': 'Review',
+                                  'username': widget.user.username,
+                                  'user': widget.user,
+                                },
+                              );
+                              await processData();
+                              final Map<String, dynamic> currentUser =
+                                  await ProfileController.loadData(
+                                      widget.user.uid);
+                              if (mounted) {
+                                setState(
+                                  () {
+                                    cUser =
+                                        UserModel.fromMap(currentUser['user']);
+                                    currentRating = currentUser['user']
+                                            ['averageRating']
+                                        .toDouble();
+                                    rater = 0;
+                                    reviewText = '';
+                                    isSending = false;
+                                  },
+                                );
+                              }
+                              _marketController.updateUser(
+                                  widget.user.uid, currentRating);
+                              Get.back();
+                            },
+                            child: const Text('Rate'),
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               );
@@ -749,7 +759,7 @@ class _SellerReviewScreenState extends State<SellerReviewScreen> {
                 child: Container(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
+                    children: <Widget>[
                       Container(
                         width: MediaQuery.of(context).size.width,
                         padding: const EdgeInsets.all(10),
@@ -762,7 +772,7 @@ class _SellerReviewScreenState extends State<SellerReviewScreen> {
                         ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
+                          children: <Widget>[
                             const Text(
                               'Rate Seller',
                               style: TextStyle(
@@ -800,7 +810,7 @@ class _SellerReviewScreenState extends State<SellerReviewScreen> {
                         ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
+                          children: <Widget>[
                             IconButton(
                               icon: Icon(
                                 Icons.star,
@@ -909,7 +919,7 @@ class _SellerReviewScreenState extends State<SellerReviewScreen> {
                             });
                             await ApiService.put(
                               path: 'reviews/$Id',
-                              body: {
+                              body: <String, dynamic>{
                                 'rating': rater,
                                 'reviewText': reviewText,
                               },

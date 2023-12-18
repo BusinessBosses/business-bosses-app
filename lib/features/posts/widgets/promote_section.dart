@@ -10,8 +10,6 @@ class PromoteSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-
     return Column(
       children: <Widget>[
         const SizedBox(
@@ -22,7 +20,7 @@ class PromoteSection extends StatelessWidget {
         Align(
           alignment: Alignment.center,
           child: GestureDetector(
-            onTap: () => {controller.togglePromote()},
+            onTap: () => <void>{controller.togglePromote()},
             child: Container(
               child: Padding(
                 padding: const EdgeInsets.only(
@@ -34,7 +32,7 @@ class PromoteSection extends StatelessWidget {
                     const Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
+                        children: <Widget>[
                           Text(
                             'Boost Post',
                             style: TextStyle(
@@ -54,7 +52,7 @@ class PromoteSection extends StatelessWidget {
                       ),
                     ),
                     Row(
-                      children: [
+                      children: <Widget>[
                         const Text(
                           'No',
                           style: TextStyle(

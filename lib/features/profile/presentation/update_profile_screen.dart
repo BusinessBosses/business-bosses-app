@@ -1,9 +1,12 @@
+// ignore_for_file: unused_field, public_member_api_docs, always_specify_types, empty_catches, unused_element
+
 import 'dart:io';
 
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:country_list_pick/country_list_pick.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -130,7 +133,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
             _isUploading = false;
           });
           showSnackbar(
-              title: 'OOPS!!', message: 'Could not upload Image. Try again');
+              title: 'OOPS!', message: 'Could not upload image. Try again');
         }
       }
     } catch (e) {}
@@ -1321,7 +1324,10 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
         debugPrint('Image not selected');
       }
     } catch (exception) {
-      showSnackBar(context, message: exception.toString());
+      showSnackbar(
+          title: 'OOPS!',
+          message: 'An error occurred, please try again!',
+          error: true);
     }
   }
 
@@ -1365,7 +1371,13 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
     setState(() {
       _isProcessing = true;
     });
-
+    if (_bio == null || _bio?.trim() == '') {
+      showSnackBar(
+        context,
+        message: 'Please enter a bio',
+      );
+      return;
+    }
     final SharedPreferences prefs = await SharedPreferences.getInstance();
 
     Map<String, dynamic> updateData = <String, dynamic>{
@@ -1401,9 +1413,18 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
         // Get.back();
         // return;
       }
+      FirebaseMessaging.instance.getToken().then((String? value) {
+        Map<String, dynamic> data = <String, dynamic>{
+          'deviceToken': value,
+        };
+        ApiService.post(path: 'users/add-device-token', body: data);
+      });
       Get.toNamed(Routes.home);
     } else {
-      Get.snackbar('Error', response.message);
+      showSnackbar(
+          title: 'OOPS!',
+          message: 'An error occurred, please try again!',
+          error: true);
     }
 
     // if (!_formKey.currentState!.validate()) {

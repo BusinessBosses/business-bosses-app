@@ -28,12 +28,12 @@ class PostInteractionsWidget extends StatelessWidget {
     return GetBuilder<HomeController>(
       builder: (HomeController controller) {
         return Container(
-          padding: const EdgeInsets.only(left: 15, right: 15),
+          padding: const EdgeInsets.only(left: 0, right: 0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+            children: <Widget>[
               Row(
-                children: [
+                children: <Widget>[
                   TextButton.icon(
                     onPressed: () async {
                       controller.postLike(profileController.myProfile.uid,
@@ -42,8 +42,14 @@ class PostInteractionsWidget extends StatelessWidget {
                     icon:
                         post.likes?.contains(profileController.myProfile.uid) ==
                                 true
-                            ? SvgPicture.asset('assets/svgs/likefilled.svg')
-                            : SvgPicture.asset('assets/svgs/like.svg'),
+                            ? SvgPicture.asset(
+                                'assets/svgs/likefilled.svg',
+                                height: 15,
+                              )
+                            : SvgPicture.asset(
+                                'assets/svgs/like.svg',
+                                height: 15,
+                              ),
                     label: Text(
                       '${post.likes?.length ?? 0}',
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
@@ -62,7 +68,10 @@ class PostInteractionsWidget extends StatelessWidget {
                         ),
                       );
                     },
-                    icon: SvgPicture.asset('assets/svgs/comment.svg'),
+                    icon: SvgPicture.asset(
+                      'assets/svgs/comment.svg',
+                      height: 15,
+                    ),
                     label: Text(
                       '${post.comments?.length ?? 0}',
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
@@ -85,10 +94,28 @@ class PostInteractionsWidget extends StatelessWidget {
                     icon:
                         post.coins?.contains(profileController.myProfile.uid) ==
                                 true
-                            ? SvgPicture.asset('assets/svgs/coin.svg')
-                            : SvgPicture.asset('assets/svgs/coin.svg'),
+                            ? SvgPicture.asset(
+                                'assets/svgs/coin.svg',
+                                height: 20,
+                              )
+                            : SvgPicture.asset(
+                                'assets/svgs/coin.svg',
+                                height: 20,
+                              ),
                     label: Text(
                       '${post.coins?.length ?? 0}',
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            fontWeight: FontWeight.w700,
+                            color: textColor.withOpacity(0.8),
+                          ),
+                    ),
+                  ),
+                  TextButton.icon(
+                    onPressed: () async {},
+                    icon: const Icon(Icons.remove_red_eye_outlined,
+                        size: 19, color: Colors.black),
+                    label: Text(
+                      '${post.views ?? 0}',
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                             fontWeight: FontWeight.w700,
                             color: textColor.withOpacity(0.8),
@@ -100,24 +127,27 @@ class PostInteractionsWidget extends StatelessWidget {
                     onTap: sharePost,
                     child: SvgPicture.asset(
                       'assets/svgs/share.svg',
-                      height: 18.0,
-                      width: 18.0,
+                      height: 15.0,
+                      width: 15.0,
                     ),
                   ),
                   const Spacer(),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 15),
-                    child: Text(
-                      TimeFormat.formatString(post.timestamp),
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: textColor.withOpacity(0.4),
-                          ),
-                    ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.only(right: 15),
+                        child: Text(
+                          TimeFormat.formatString(post.timestamp),
+                          style:
+                              Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                    color: textColor.withOpacity(0.4),
+                                  ),
+                        ),
+                      ),
+                    ],
                   )
                 ],
-              ),
-              const SizedBox(
-                height: 10,
               ),
             ],
           ),

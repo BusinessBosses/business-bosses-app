@@ -10,7 +10,7 @@ class MyResponse {
   });
 
   Map<String, dynamic> toMap() {
-    return {
+    return <String, dynamic>{
       'success': success,
       'message': message,
       'data': data,

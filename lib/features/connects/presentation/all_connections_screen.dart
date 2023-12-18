@@ -13,6 +13,7 @@ import '../widgets/connection_user_tile.dart';
 
 class AllConnectionsScreen extends StatelessWidget {
   static const String routeName = '/all-connections-screen';
+  // ignore: unused_field
   final ConnectionController _connectionController =
       Get.put(ConnectionController());
   final ProfileController _profileController = Get.find();
@@ -57,7 +58,7 @@ class AllConnectionsScreen extends StatelessWidget {
                         textAlign: TextAlign.center,
                         style: TextStyle(fontSize: 20),
                       ),
-                      actions: [
+                      actions: <Widget>[
                         IconButton(
                           onPressed: () {
                             controller.toggleSearchState();
@@ -67,16 +68,16 @@ class AllConnectionsScreen extends StatelessWidget {
                       ],
                     ),
               body: Stack(
-                children: [
+                children: <Widget>[
                   controller.loading
                       ? const Center(
                           child: CircularProgressIndicator.adaptive())
                       : Column(
-                          children: [
+                          children: <Widget>[
                             Material(
                               color: Colors.white,
                               child: TabBar(
-                                tabs: [
+                                tabs: <Widget>[
                                   Tab(
                                     child: FittedBox(
                                       child: Text(
@@ -111,7 +112,7 @@ class AllConnectionsScreen extends StatelessWidget {
                               ),
                             ),
                             Expanded(
-                              child: TabBarView(children: [
+                              child: TabBarView(children: <Widget>[
                                 controller.connections.isEmpty
                                     ? getSafetyModel(
                                         '${_profileController.myProfile.uid == Get.arguments['uid'] ? 'You don\'t have any' : 'User has no'} connections yet')

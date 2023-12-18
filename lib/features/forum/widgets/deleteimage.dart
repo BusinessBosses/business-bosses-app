@@ -6,6 +6,7 @@ Widget deleteImage(int index) {
     right: 5.0,
     top: 5.0,
     child: GestureDetector(
+      // ignore: dead_code
       onTap: isProcessing ? null : () => _removeImage(index),
       child: Container(
         height: 30.0,

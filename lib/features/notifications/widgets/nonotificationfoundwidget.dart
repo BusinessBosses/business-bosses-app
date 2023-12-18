@@ -8,7 +8,7 @@ Center noNotificationsFoundWidget(String title) {
   return Center(
     child: SingleChildScrollView(
       child: Column(
-        children: [
+        children: <Widget>[
           SafetyModel(
             isLoading: false,
             icon: SvgPicture.asset(

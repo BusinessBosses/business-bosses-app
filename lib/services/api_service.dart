@@ -10,7 +10,6 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../navigation/routes.dart';
 
 /// SERVER BASE URL
@@ -21,18 +20,31 @@ import '../navigation/routes.dart';
 final GetStorage sandBox = GetStorage();
 
 /// API CALLS
+
+class MediaUploadResult {
+  final String videoUrl;
+  final String thumbnailUrl;
+
+  MediaUploadResult(this.videoUrl, this.thumbnailUrl);
+}
+
+class MediaUploadException implements Exception {
+  final String message;
+  MediaUploadException(this.message);
+}
+
 class ApiService {
   /// LOGIN POINT
   Future<dynamic> login(String email, String password) async {
     /// Obtain shared preferences.
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    Map<String, dynamic> data = {
+    Map<String, dynamic> data = <String, dynamic>{
       'email': email,
       'password': password,
     };
     final http.Response response = await http.post(
       Uri.parse('${Constants.baseUrl}/auth/sign-in'),
-      headers: {'Content-Type': 'application/json'},
+      headers: <String, String>{'Content-Type': 'application/json'},
       body: jsonEncode(data),
     );
     if (response.statusCode == 200) {
@@ -53,13 +65,13 @@ class ApiService {
   Future<dynamic> googleLogin(String email, String token) async {
     /// Obtain shared preferences.
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    Map<String, dynamic> data = {
+    Map<String, dynamic> data = <String, dynamic>{
       'email': email,
       'token': token,
     };
     final http.Response response = await http.post(
       Uri.parse('${Constants.baseUrl}/auth/google-sign-in'),
-      headers: {'Content-Type': 'application/json'},
+      headers: <String, String>{'Content-Type': 'application/json'},
       body: jsonEncode(data),
     );
     if (response.statusCode == 200) {
@@ -78,10 +90,11 @@ class ApiService {
 
   /// UPLOAD FILE
   static Future<dynamic> uploadFile(File image) async {
-    String uploadUrl = 'http://44.210.87.234/upload.php';
+    String uploadUrl = 'https://businessbosses.com.ng/upload.php';
     http.MultipartRequest request =
         http.MultipartRequest('POST', Uri.parse(uploadUrl));
     request.files.add(await http.MultipartFile.fromPath('file', image.path));
+    print("image url ========${image.path}");
     try {
       final http.StreamedResponse streamedResponse = await request.send();
 
@@ -90,12 +103,52 @@ class ApiService {
       if (result['success']) {
         return result;
       } else {
-        showSnackbar(message: result['message'], title: 'Error Occured');
+        showSnackbar(
+            title: 'OOPS!',
+            message: 'An error occurred, please try again!',
+            error: true);
         return null;
       }
     } catch (e) {
-      showSnackbar(message: e.toString());
+      showSnackbar(
+          title: 'OOPS!',
+          message: 'An error occurred, please try again!',
+          error: true);
       return null;
+    }
+  }
+
+  /// UPLOAD FILE
+  static Future<MediaUploadResult> uploadMediaFiles(
+      File video, File thumbnail) async {
+    String uploadUrl = 'https://businessbosses.com.ng/upload-video.php';
+    http.MultipartRequest request =
+        http.MultipartRequest('POST', Uri.parse(uploadUrl));
+    request.files.add(await http.MultipartFile.fromPath('video', video.path));
+    request.files
+        .add(await http.MultipartFile.fromPath('thumbnail', thumbnail.path));
+    try {
+      final http.StreamedResponse streamedResponse = await request.send();
+
+      Map<dynamic, dynamic> result =
+          json.decode(await streamedResponse.stream.bytesToString());
+      if (result['success']) {
+        final videoUrl = result['video_url'];
+        final thumbnailUrl = result['thumbnail_url'];
+        return MediaUploadResult(videoUrl, thumbnailUrl);
+      } else {
+        showSnackbar(
+            title: 'OOPS!',
+            message: 'An error occurred, please try again!',
+            error: true);
+        throw MediaUploadException('Upload failed: ${result['error']}');
+      }
+    } catch (e) {
+      showSnackbar(
+          title: 'OOPS!',
+          message: 'An error occurred, please try again!',
+          error: true);
+      throw MediaUploadException('An error occurred during media upload: $e');
     }
   }
 
@@ -104,7 +157,7 @@ class ApiService {
       String email, String password, String username, String? inviteId) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    Map<String, dynamic> data = {
+    Map<String, dynamic> data = <String, dynamic>{
       'username': username,
       'email': email,
       'password': password,
@@ -112,7 +165,7 @@ class ApiService {
     };
     final http.Response response = await http.post(
       Uri.parse('${Constants.baseUrl}/auth/sign-up'),
-      headers: {'Content-Type': 'application/json'},
+      headers: <String, String>{'Content-Type': 'application/json'},
       body: jsonEncode(data),
     );
     if (response.statusCode == 201) {
@@ -130,13 +183,13 @@ class ApiService {
 
   /// CHANGE PASSWORD
   Future<dynamic> changePassword(String email, String password) async {
-    Map<String, dynamic> data = {
+    Map<String, dynamic> data = <String, dynamic>{
       'email': email,
       'newPassword': password,
     };
     final http.Response response = await http.post(
       Uri.parse('${Constants.baseUrl}/auth/reset-password'),
-      headers: {'Content-Type': 'application/json'},
+      headers: <String, String>{'Content-Type': 'application/json'},
       body: jsonEncode(data),
     );
     if (response.statusCode == 200) {
@@ -154,13 +207,13 @@ class ApiService {
 
   /// VERIFY USERNAME OR EMAIL DURING SIGNUP
   Future<bool?> verifyUnique(String username, String email) async {
-    Map<String, dynamic> data = {
+    Map<String, dynamic> data = <String, dynamic>{
       'username': username,
       'email': email,
     };
     final http.Response response = await http.post(
       Uri.parse('${Constants.baseUrl}/auth/email-exist'),
-      headers: {'Content-Type': 'application/json'},
+      headers: <String, String>{'Content-Type': 'application/json'},
       body: jsonEncode(data),
     );
     if (response.statusCode == 200) {
@@ -181,6 +234,7 @@ class ApiService {
 
   ///LOGOUT
   Future<void> logout() async {
+    await get(path: 'auth/logout');
     final SharedPreferences prefs = await SharedPreferences.getInstance();
 
     await sandBox.remove(Constants.ACCESS_TOKEN);
@@ -210,8 +264,12 @@ class ApiService {
       log(response.body);
       return ApiResponseModel.fromMap(jsonDecode(response.body));
     } catch (e) {
-      showSnackbar(message: e.toString());
-      return ApiResponseModel(success: false, message: e.toString(), data: {});
+      showSnackbar(
+          title: 'OOPS!',
+          message: 'An error occurred, please try again!',
+          error: true);
+      return ApiResponseModel(
+          success: false, message: e.toString(), data: <dynamic, dynamic>{});
     }
   }
 
@@ -235,8 +293,12 @@ class ApiService {
 
       return ApiResponseModel.fromMap(jsonDecode(response.body));
     } catch (e) {
-      showSnackbar(message: e.toString(), error: true);
-      return ApiResponseModel(success: false, message: e.toString(), data: {});
+      // showSnackbar(
+      //     title: 'OOPS!',
+      //     message: 'An error occurred, please try again!',
+      //     error: true);
+      return ApiResponseModel(
+          success: false, message: e.toString(), data: <dynamic, dynamic>{});
     }
   }
 
@@ -261,8 +323,12 @@ class ApiService {
 
       return ApiResponseModel.fromMap(jsonDecode(response.body));
     } catch (e) {
-      showSnackbar(message: e.toString());
-      return ApiResponseModel(success: false, message: e.toString(), data: {});
+      // showSnackbar(
+      //     title: 'OOPS!',
+      //     message: 'An error occurred, please try again!',
+      //     error: true);
+      return ApiResponseModel(
+          success: false, message: e.toString(), data: <dynamic, dynamic>{});
     }
   }
 
@@ -283,8 +349,12 @@ class ApiService {
       log(response.body);
       return ApiResponseModel.fromMap(jsonDecode(response.body));
     } catch (e) {
-      showSnackbar(message: e.toString());
-      return ApiResponseModel(success: false, message: e.toString(), data: {});
+      showSnackbar(
+          title: 'OOPS!',
+          message: 'An error occurred, please try again!',
+          error: true);
+      return ApiResponseModel(
+          success: false, message: e.toString(), data: <dynamic, dynamic>{});
     }
   }
 }
@@ -292,14 +362,14 @@ class ApiService {
 /// Add Subscription
 Future<dynamic> addSubscription(
     String plan, String price, bool isSubscribed) async {
-  Map<String, dynamic> data = {
+  Map<String, dynamic> data = <String, dynamic>{
     'plan': plan,
     'price': price,
     'isSubscribed': isSubscribed
   };
   final http.Response response = await http.post(
     Uri.parse('${Constants.baseUrl}/subscription'),
-    headers: {'Content-Type': 'application/json'},
+    headers: <String, String>{'Content-Type': 'application/json'},
     body: jsonEncode(data),
   );
   if (response.statusCode == 200) {

@@ -1,9 +1,13 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:visibility_detector/visibility_detector.dart';
 
 import '../../../common/widgets/popup/bossup_challenge_popup.dart';
 import '../../../common/widgets/safety_model.dart';
@@ -52,7 +56,7 @@ class _BossUpSectionState extends State<BossUpSection> {
           .removeWhere((String element) => element == myUid);
     } else {
       if (widget.industry.joinedUsers == null) {
-        widget.industry.joinedUsers = [myUid];
+        widget.industry.joinedUsers = <String>[myUid];
       } else {
         widget.industry.joinedUsers!.add(myUid);
       }
@@ -88,11 +92,11 @@ class _BossUpSectionState extends State<BossUpSection> {
               SliverStickyHeader(
                 sticky: false,
                 header: Column(
-                  children: [
+                  children: <Widget>[
                     Container(
                       width: double.infinity,
                       color: backgroundcolorinterface,
-                      child: Stack(children: [
+                      child: Stack(children: <Widget>[
                         Padding(
                             padding: const EdgeInsets.only(left: 20, top: 25),
                             child: GestureDetector(
@@ -104,7 +108,7 @@ class _BossUpSectionState extends State<BossUpSection> {
                                 );
                               }),
                               child: Row(
-                                children: [
+                                children: <Widget>[
                                   const Text(
                                     'About ',
                                     style: TextStyle(
@@ -119,7 +123,7 @@ class _BossUpSectionState extends State<BossUpSection> {
                               ),
                             )),
                         Column(
-                          children: [
+                          children: <Widget>[
                             const SizedBox(
                               height: 10,
                             ),
@@ -147,7 +151,7 @@ class _BossUpSectionState extends State<BossUpSection> {
                                             .showSnackBar(snackBar);
                                       } else {
                                         Get.toNamed(Routes.createBossUp,
-                                            arguments: {
+                                            arguments: <String, Object?>{
                                               'isBossUp': true,
                                               'industryId':
                                                   widget.industry.industryId
@@ -156,7 +160,7 @@ class _BossUpSectionState extends State<BossUpSection> {
                                     },
                                     child: Row(
                                       mainAxisSize: MainAxisSize.min,
-                                      children: [
+                                      children: <Widget>[
                                         const Text(
                                           'Enter Challenge',
                                           style: TextStyle(
@@ -175,7 +179,7 @@ class _BossUpSectionState extends State<BossUpSection> {
                                 )),
                             Container(
                               decoration: BoxDecoration(
-                                boxShadow: [
+                                boxShadow: <BoxShadow>[
                                   BoxShadow(
                                     color: Colors.black.withOpacity(0.09),
                                     blurRadius: 100.0, // soften the shadow
@@ -184,7 +188,7 @@ class _BossUpSectionState extends State<BossUpSection> {
                                 ],
                               ),
                               child: Stack(
-                                children: [
+                                children: <Widget>[
                                   Container(
                                     margin: const EdgeInsets.only(
                                         top: 10, right: 20, left: 20),
@@ -197,9 +201,9 @@ class _BossUpSectionState extends State<BossUpSection> {
                                     ),
                                   ),
                                   Column(
-                                    children: [
+                                    children: <Widget>[
                                       Row(
-                                        children: [
+                                        children: <Widget>[
                                           Container(
                                             margin: const EdgeInsets.only(
                                                 top: 25, right: 20, left: 35),
@@ -254,9 +258,9 @@ class _BossUpSectionState extends State<BossUpSection> {
                                         padding: const EdgeInsets.only(
                                             left: 32, right: 20.0),
                                         child: Row(
-                                          children: [
+                                          children: <Widget>[
                                             Row(
-                                              children: [
+                                              children: <Widget>[
                                                 Padding(
                                                   padding:
                                                       const EdgeInsets.only(
@@ -273,7 +277,7 @@ class _BossUpSectionState extends State<BossUpSection> {
                                                           top: 5.0),
                                                   child: RichText(
                                                     text: TextSpan(
-                                                      children: [
+                                                      children: <InlineSpan>[
                                                         TextSpan(
                                                           text: widget.industry
                                                                       .joinedUsers ==
@@ -310,7 +314,7 @@ class _BossUpSectionState extends State<BossUpSection> {
                                               ],
                                             ),
                                             Row(
-                                              children: [
+                                              children: <Widget>[
                                                 Padding(
                                                   padding:
                                                       const EdgeInsets.only(
@@ -329,7 +333,7 @@ class _BossUpSectionState extends State<BossUpSection> {
                                                           top: 5.0),
                                                   child: RichText(
                                                     text: TextSpan(
-                                                      children: [
+                                                      children: <InlineSpan>[
                                                         TextSpan(
                                                           text:
                                                               'Entries ($formattedpostCount) ',
@@ -397,77 +401,146 @@ class _BossUpSectionState extends State<BossUpSection> {
                                               BorderRadius.circular(10),
                                         ),
                                         child: Container(
-                                          decoration: BoxDecoration(
-                                            color: const Color(0xFFFFFFFF)
-                                                .withAlpha(150),
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                            // boxShadow: [
-                                            //   BoxShadow(
-                                            //     color:
-                                            //         Colors.white.withOpacity(1),
-                                            //     spreadRadius: 20,
-                                            //     blurRadius: 500,
-                                            //     offset: const Offset(0, 3),
-                                            //   ),
-                                            // ],
-                                          ),
-                                          child: Row(
-                                            children: [
-                                              Padding(
-                                                padding: const EdgeInsets.only(
-                                                  left: 10,
-                                                ),
-                                                child: Center(
-                                                  child: Padding(
-                                                    padding:
-                                                        const EdgeInsets.all(2),
-                                                    child: Text(
-                                                      hmeController.bossUpTitle
-                                                          .toString(),
-                                                      style: const TextStyle(
-                                                          fontSize: 11),
+                                            decoration: BoxDecoration(
+                                              color: const Color(0xFFFFFFFF)
+                                                  .withAlpha(150),
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                              // boxShadow: [
+                                              //   BoxShadow(
+                                              //     color:
+                                              //         Colors.white.withOpacity(1),
+                                              //     spreadRadius: 20,
+                                              //     blurRadius: 500,
+                                              //     offset: const Offset(0, 3),
+                                              //   ),
+                                              // ],
+                                            ),
+                                            child: Row(
+                                              children: <Widget>[
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                    left: 10,
+                                                  ),
+                                                  child: GestureDetector(
+                                                    onTap: () async {
+                                                      if (await canLaunchUrl(Uri
+                                                          .parse(hmeController
+                                                              .bossUpLink))) {
+                                                        await launchUrl(Uri
+                                                            .parse(hmeController
+                                                                .bossUpLink));
+                                                      }
+                                                    },
+                                                    child: Center(
+                                                      child: Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(2),
+                                                        child: Text(
+                                                          hmeController
+                                                              .bossUpTitle
+                                                              .toString(),
+                                                          style:
+                                                              const TextStyle(
+                                                                  fontSize: 13),
+                                                        ),
+                                                      ),
                                                     ),
                                                   ),
                                                 ),
-                                              ),
-                                              const SizedBox(width: 10),
-                                              Text(
-                                                '|',
-                                                style: TextStyle(
-                                                    fontSize: 20,
-                                                    color: textColor
-                                                        .withOpacity(0.5)),
-                                              ),
-                                              const SizedBox(width: 10),
-                                              Text(
-                                                hmeController.bossUp != null &&
-                                                        hmeController
-                                                            .bossUp!.isNotEmpty
-                                                    ? hmeController
-                                                                .bossUp!.last[
-                                                            'companyName'] ??
-                                                        ''
-                                                    : '',
-                                                style: const TextStyle(
-                                                  fontSize: 15,
-                                                  fontWeight: FontWeight.bold,
+                                                const SizedBox(width: 10),
+                                                Platform.isIOS
+                                                    ? Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .only(
+                                                                left: 0.0,
+                                                                bottom: 4),
+                                                        child: Text(
+                                                          '|',
+                                                          style: TextStyle(
+                                                            fontSize: 20,
+                                                            color: textColor
+                                                                .withOpacity(
+                                                                    0.5),
+                                                          ),
+                                                        ),
+                                                      )
+                                                    : Text(
+                                                        '|',
+                                                        style: TextStyle(
+                                                          fontSize: 20,
+                                                          color: textColor
+                                                              .withOpacity(0.5),
+                                                        ),
+                                                      ),
+                                                const SizedBox(width: 10),
+                                                Platform.isIOS
+                                                    ? Expanded(
+                                                        child: Text(
+                                                          hmeController.bossUp !=
+                                                                      null &&
+                                                                  hmeController
+                                                                      .bossUp!
+                                                                      .isNotEmpty
+                                                              ? hmeController
+                                                                          .bossUp!
+                                                                          .last[
+                                                                      'companyName'] ??
+                                                                  ''
+                                                              : '',
+                                                          style:
+                                                              const TextStyle(
+                                                            fontSize: 15,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                          ),
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                          maxLines: 1,
+                                                        ),
+                                                      )
+                                                    : Expanded(
+                                                        child: Text(
+                                                          hmeController.bossUp !=
+                                                                      null &&
+                                                                  hmeController
+                                                                      .bossUp!
+                                                                      .isNotEmpty
+                                                              ? hmeController
+                                                                          .bossUp!
+                                                                          .last[
+                                                                      'companyName'] ??
+                                                                  ''
+                                                              : '',
+                                                          style:
+                                                              const TextStyle(
+                                                            fontSize: 15,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                          ),
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                          maxLines: 1,
+                                                        ),
+                                                      ),
+                                                const SizedBox(
+                                                  width: 15,
                                                 ),
-                                                overflow: TextOverflow.ellipsis,
-                                                softWrap: false,
-                                              ),
-                                              const Spacer(),
-                                              Padding(
-                                                padding: const EdgeInsets.only(
-                                                    right: 10.0),
-                                                child: SvgPicture.asset(
-                                                  'assets/svgs/nexticon.svg',
-                                                  color: textColor,
-                                                ),
-                                              )
-                                            ],
-                                          ),
-                                        ),
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                    right: 10.0,
+                                                  ),
+                                                  child: SvgPicture.asset(
+                                                    'assets/svgs/nexticon.svg',
+                                                    color: textColor,
+                                                  ),
+                                                )
+                                              ],
+                                            )),
                                       ),
                                     ),
                                   )
@@ -508,20 +581,42 @@ class _BossUpSectionState extends State<BossUpSection> {
                         : RefreshIndicator(
                             onRefresh: refreshData,
                             child: ListView.builder(
-                              itemCount: controller.forums.length,
+                                itemCount: controller.forums.length,
 
-                              // <-- this will disable scroll
+                                // <-- this will disable scroll
 
-                              //controller: differentController,
+                                //controller: differentController,
 
-                              itemBuilder: (BuildContext context, int i) =>
-                                  ForumItem(
-                                forum: controller.forums[i],
-                                key: ValueKey(controller.forums[i].forumId),
-                                controller: controller,
-                                isBossUp: true,
-                              ),
-                            ),
+                                itemBuilder: (BuildContext context, int i) {
+                                  return VisibilityDetector(
+                                    key: Key(i.toString()),
+                                    onVisibilityChanged: (VisibilityInfo info) {
+                                      final bool hasIncrementedView =
+                                          hmeController
+                                              .itemsWithIncrementedViews
+                                              .contains(
+                                                  controller.forums[i].forumId);
+                                      if (info.visibleFraction == 1.0 &&
+                                          !hasIncrementedView) {
+                                        controller.updateForumViews(
+                                            controller.forums[i]);
+                                        setState(() {
+                                          hmeController
+                                              .itemsWithIncrementedViews
+                                              .add(controller.forums[i]
+                                                  .forumId); // Set the flag to prevent further increments
+                                        });
+                                      }
+                                    },
+                                    child: ForumItem(
+                                      forum: controller.forums[i],
+                                      key: ValueKey(
+                                          controller.forums[i].forumId),
+                                      controller: controller,
+                                      isBossUp: true,
+                                    ),
+                                  );
+                                }),
                           ),
           ),
         );

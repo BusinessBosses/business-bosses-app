@@ -71,14 +71,14 @@ class _SpecificUserListScreenState extends State<SpecificUserListScreen> {
                   // subTitle: 'Be the first one to like!',
                 )
               : Stack(
-                  children: [
+                  children: <Widget>[
                     ListView.builder(
                       padding: const EdgeInsets.only(bottom: 48.0),
                       controller: _controller,
                       itemCount: controller.members.length,
                       itemBuilder: (BuildContext context, int i) {
                         return Column(
-                          children: [
+                          children: <Widget>[
                             ListTile(
                               onTap: () async {
                                 Get.toNamed(Routes.publicProfile,
@@ -108,7 +108,7 @@ class _SpecificUserListScreenState extends State<SpecificUserListScreen> {
                               // ),
                               title: controller.members[i].isSubscribed == true
                                   ? Row(
-                                      children: [
+                                      children: <Widget>[
                                         Text(controller.members[i].name ??
                                             controller.members[i].username),
                                         const SizedBox(width: 5),

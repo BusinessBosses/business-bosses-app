@@ -32,7 +32,7 @@ class _WriteACommentState extends State<WriteAComment> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
+        children: <Widget>[
           UserAvatarWithBadge(
             user: _profileController.myProfile,
             height: 32.0,

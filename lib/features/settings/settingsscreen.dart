@@ -1,4 +1,7 @@
+// ignore_for_file: public_member_api_docs, library_private_types_in_public_api, always_specify_types, deprecated_member_use
+
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:business_bosses_v2/common/widgets/buttons/my_outlined_button.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
@@ -7,16 +10,16 @@ import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:yaml/yaml.dart';
 
-import '../../action/action.dart';
+import '../../common/dialogs/snackbar.dart';
 import '../../common/models/api_response_model.dart';
 import '../../navigation/routes.dart';
 import '../../services/api_service.dart';
-import '../../utils/constants/constants.dart';
 import '../posts/widgets/settings_item.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -41,15 +44,36 @@ class _SettingsScreenState extends State<SettingsScreen> {
     );
 
     if (res.success) {
-      if (await canLaunchUrlString(res.data)) {
-        await launchUrlString(res.data, mode: LaunchMode.externalApplication);
+      if (res.data['isUrl']) {
+        if (await canLaunchUrlString(res.data['url'])) {
+          await launchUrlString(res.data, mode: LaunchMode.externalApplication);
+        }
+      } else if (res.data['isUrl'] == false) {
+        showSnackbar(
+            title: 'OOPS!', message: res.data['message'], error: false);
       }
     } else {
-      showSnackBar(context, message: res.message);
+      showSnackbar(
+          title: 'OOPS!',
+          message: 'An error occurred, please try again!',
+          error: true);
     }
     // setState(() {
     //   _isProcessing = false;
     // });
+  }
+
+  void getCustomerInfo() async {
+    try {
+      CustomerInfo purchaserInfo = await Purchases.getCustomerInfo();
+      String managementURL = purchaserInfo.managementURL!;
+      await launch(managementURL);
+    } catch (e) {
+      showSnackbar(
+          title: 'OOPS!',
+          message: 'An error occurred, please try again!',
+          error: true);
+    }
   }
 
   String version = '';
@@ -97,7 +121,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ),
             ),
             const SizedBox(height: 24.0),
-            profileController.myProfile.isSubscribed
+            profileController.myProfile.isSubscribed && Platform.isAndroid
                 ? Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
                     child: InkWell(
@@ -179,6 +203,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                               SvgPicture.asset(
                                                 'assets/svgs/goldcheckmark.svg',
                                                 height: 25,
+                                                color: primaryColorLT,
                                               ),
                                               const SizedBox(width: 15),
                                               const Expanded(
@@ -274,9 +299,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                               setState(() {
                                                 _isProcessing = true;
                                               });
-                                              await cancelSubscription(
-                                                  profileController
-                                                      .myProfile.uid);
+                                              Platform.isAndroid
+                                                  ? cancelSubscription(
+                                                      profileController
+                                                          .myProfile.uid)
+                                                  : getCustomerInfo();
                                               setState(() {
                                                 _isProcessing = false;
                                               });
@@ -295,7 +322,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                                       color: Colors.white,
                                                     ),
                                                   )
-                                                : const Text('Cancel Subscription'),
+                                                : const Text(
+                                                    'Cancel Subscription'),
                                           ),
                                           const SizedBox(
                                             width: 10,
@@ -416,7 +444,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
         throw 'Could not launch $mailUrl';
       }
     } catch (e) {
-      showSnackBar(context, message: '${Constants.STGW}, try again later');
+      showSnackbar(
+          title: 'OOPS!',
+          message: 'An error occurred, please try again!',
+          error: true);
     }
   }
 

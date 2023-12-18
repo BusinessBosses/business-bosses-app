@@ -1,6 +1,7 @@
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/features/forum/models/industry.dart';
+import 'package:business_bosses_v2/features/home/repository/home_repository.dart';
 import 'package:business_bosses_v2/features/posts/models/post_model.dart';
 import 'package:business_bosses_v2/features/profile/repository/profile_repository.dart';
 import 'package:get/get.dart';
@@ -14,17 +15,21 @@ class ProfileController extends GetxController {
   /// MODELIZED PROFILE DATA
   UserModel myProfile = UserModel();
   UserModel? bossOfTheWeek = UserModel();
-  List<PostModel> posts = [];
+  List<PostModel> posts = <PostModel>[];
   RxBool isLoading = RxBool(false);
 
   ///MODELIZE RAW DATA AND PUSH TO STATE
-  void processDataToState(dynamic userData, List interests) {
-    final UserModel modelizedData = UserModel.fromMap({
+  void processDataToState(
+      dynamic userData, List interests, dynamic userRanking) {
+    print(userRanking);
+    final UserModel modelizedData = UserModel.fromMap(<dynamic, dynamic>{
       ...userData,
       'connections':
           userData['connections'].map((mp) => mp['connect']).toList(),
       'connecteds': userData['connecteds'],
-      'interests': interests
+      'interests': interests,
+      'weeklyRank': userRanking['rankWeekly'],
+      'monthlyRank': userRanking['rankMonthly']
     });
     myProfile = modelizedData;
     update();
@@ -43,7 +48,7 @@ class ProfileController extends GetxController {
 
   ///MODELIZE RAW DATA AND PUSH TO STATE
   void processBossToState(dynamic userData) {
-    final UserModel modelizedData = UserModel.fromMap({
+    final UserModel modelizedData = UserModel.fromMap(<dynamic, dynamic>{
       ...userData,
       'connections': userData['connections'].map((e) => e['connect']).toList(),
       'connecteds': userData['connecteds'].map((e) => e['userId']).toList()
@@ -54,8 +59,10 @@ class ProfileController extends GetxController {
   }
 
   void updateCoinCount(int num) {
-    myProfile = UserModel.fromMap(
-        {...myProfile.toMap(), 'coinscount': myProfile.coinscount! + num});
+    myProfile = UserModel.fromMap(<dynamic, dynamic>{
+      ...myProfile.toMap(),
+      'coinscount': myProfile.coinscount! + num
+    });
     update();
   }
 
@@ -63,6 +70,10 @@ class ProfileController extends GetxController {
   void updateProfile(Map<String, dynamic> newData) {
     myProfile = UserModel.fromMap(newData);
     update();
+  }
+
+  void updatePostViews(PostModel post, int views) {
+    HomeRepository.updateViews(post.postId, views);
   }
 
   void updateConnections(String uid) {
@@ -74,9 +85,9 @@ class ProfileController extends GetxController {
             ?.where((String element) => element != uid)
             .toList()
         : myProfile.connecteds == null
-            ? [uid]
-            : [...myProfile.connecteds!, uid];
-    myProfile = UserModel.fromMap({
+            ? <String>[uid]
+            : <String>[...myProfile.connecteds!, uid];
+    myProfile = UserModel.fromMap(<dynamic, dynamic>{
       ...myProfile.toMap(),
       'connecteds': newConnecteds,
       'connectedCount': checkIfConnected
@@ -99,14 +110,14 @@ class ProfileController extends GetxController {
   }
 
   static Future<Map<String, dynamic>> loadData(String userId) async {
-    List<PostModel> posts = [];
+    List<PostModel> posts = <PostModel>[];
     final ApiResponseModel response =
         // ProfileRepos
         await ProfileRepository.fetchData(0, 50, userId);
     if (response.success) {
       final List psts = response.data['posts']['rows'];
       for (int i = 0; i < psts.length; i++) {
-        posts.add(PostModel.fromMap({
+        posts.add(PostModel.fromMap(<String, dynamic>{
           ...psts[i],
           'likes': psts[i]['likes']
               .map((like) => like['userId'].toString())
@@ -116,9 +127,9 @@ class ProfileController extends GetxController {
         }));
       }
 
-      return {
+      return <String, dynamic>{
         'posts': posts,
-        'user': {
+        'user': <dynamic, dynamic>{
           ...response.data['user']['data'],
           'connections': response.data['user']['data']['connections']
               .map((mp) => mp['connect'])
@@ -127,9 +138,9 @@ class ProfileController extends GetxController {
         'industries': response.data['industries']
       };
     } else {
-      return {
-        'posts': [],
-        'user': {
+      return <String, dynamic>{
+        'posts': <PostModel>[],
+        'user': <dynamic, dynamic>{
           ...response.data['user']['data'],
           'connections': response.data['user']['data']['connections']
               .map((mp) => mp['connect'])
@@ -144,12 +155,12 @@ class ProfileController extends GetxController {
   void addNewPost(
     Map<String, dynamic> newPost,
   ) async {
-    PostModel modelizedNewPost = PostModel.fromMap({
+    PostModel modelizedNewPost = PostModel.fromMap(<String, dynamic>{
       ...newPost,
       'coins': <String>[],
       'likes': <String>[],
       'comments': <CommentModel>[],
-      'user': {
+      'user': <String, String?>{
         'username': myProfile.username,
         'email': myProfile.email,
         'uid': myProfile.uid,

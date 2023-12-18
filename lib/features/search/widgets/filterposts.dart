@@ -32,7 +32,7 @@ class FilterPosts extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
+              children: <Widget>[
                 Container(
                   child: const Padding(
                     padding: EdgeInsets.only(
@@ -88,7 +88,7 @@ class FilterPosts extends StatelessWidget {
                 key: key,
                 separatorBuilder: (_, __) => const SizedBox(height: 8.0),
                 padding: const EdgeInsets.all(16.0),
-                itemCount: filterItems.length ?? 0,
+                itemCount: filterItems.length,
                 itemBuilder: (BuildContext context, int i) {
                   return PostTile(
                     post: filterItems[i],

@@ -1,8 +1,10 @@
 import 'package:business_bosses_v2/common/widgets/safety_model.dart';
+import 'package:business_bosses_v2/features/chat/chat_room_screen.dart';
 import 'package:business_bosses_v2/features/notifications/controller/notification_controller.dart';
 import 'package:business_bosses_v2/features/notifications/widgets/nonotificationfoundwidget.dart';
 import 'package:business_bosses_v2/features/notifications/widgets/notification_item.dart';
 import 'package:business_bosses_v2/features/notifications/widgets/quotewidget.dart';
+import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
@@ -72,7 +74,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                           height: 80.0,
                           width: 80.0,
                         ),
-                        title: 'OOPS!! Something went Wrong',
+                        title: 'OOPS! Something went Wrong',
                         subTitle: 'Could not get notifications',
                         clickableText: 'Reload',
                         onTap: controller.loadNotifications,
@@ -100,7 +102,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                             : Column(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
+                                children: <Widget>[
                                   const SizedBox(
                                     height: 10,
                                   ),
@@ -130,7 +132,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                         return Column(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
-                                          children: [
+                                          children: <Widget>[
                                             if (i == 0 ||
                                                 formattedDate !=
                                                     TimeFormat.toDayFormat(
@@ -148,7 +150,25 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                               ),
                                             NotificationItem(
                                               controller.notifications[i],
-                                              onTap: () {},
+                                              onTap: () {
+                                                controller
+                                                        .notifications[i].title
+                                                        .contains('New Message')
+                                                    ? Get.to(
+                                                        () =>
+                                                            const ChatRoomScreen(
+                                                              frommarketplace:
+                                                                  false,
+                                                            ),
+                                                        arguments: controller
+                                                            .notifications[i]
+                                                            .user!)
+                                                    : Get.toNamed(
+                                                        Routes.publicProfile,
+                                                        arguments: controller
+                                                            .notifications[i]
+                                                            .user!);
+                                              },
                                             )
                                           ],
                                         );

@@ -22,7 +22,6 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   AutovalidateMode _autovalidateMode = AutovalidateMode.disabled;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool _isProcessing = false;
-  final ApiService _apiService = ApiService();
   String? _currentPassword, _newPassword;
 
   @override
@@ -54,7 +53,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
               absorbing: _isProcessing,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
+                children: <Widget>[
                   Text(
                     'Old password',
                     style: Theme.of(context)
@@ -145,8 +144,10 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
       Get.snackbar('Success', 'Password Updated Succesfully');
       if (Get.isRegistered<ProfileController>()) {
         final ProfileController profileController = Get.find();
-        profileController.updateProfile(
-            {...profileController.myProfile.toMap(), ...updateData});
+        profileController.updateProfile(<String, dynamic>{
+          ...profileController.myProfile.toMap(),
+          ...updateData
+        });
         // Get.back();
         // return;
       }

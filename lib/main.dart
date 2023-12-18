@@ -15,14 +15,18 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uni_links/uni_links.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+final _configuration =
+    PurchasesConfiguration('appl_fpKOUqIrKWZpOCQbxcYdfiIMgjj');
 
 void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+  await Purchases.configure(_configuration);
   await GetStorage.init();
   await dotenv.load();
   await Firebase.initializeApp();
@@ -30,31 +34,54 @@ void main() async {
   AnalyticsServices();
   Stripe.publishableKey =
       'pk_live_51MAcspEGsMsi6baUVnDR3Vlfh14vm73Oz9Z4LwYcvzOTdd6AvRRHrGCkpIoYmTfe2iSXm7ju2RQtO4UYJTvodFPR008RO7V1j3';
+  Stripe.merchantIdentifier = 'merchant.businessbosses';
 
-  // Stripe.publishableKey =
-  //     'pk_test_51MAcspEGsMsi6baUQ14KJlYZVcpaKiRtC5wnN42Jq3vOl68JwSahkzoiUOrOh9zGyG9nDj1bML8jOlfwMDai51Rm00vWZoIAgE';
+  Stripe.publishableKey =
+      'pk_live_51MAcspEGsMsi6baUVnDR3Vlfh14vm73Oz9Z4LwYcvzOTdd6AvRRHrGCkpIoYmTfe2iSXm7ju2RQtO4UYJTvodFPR008RO7V1j3';
 
   FirebaseMessaging.instance.getToken().then((String? value) {
     // print(value);
   });
 
+  FirebaseMessaging.instance.requestPermission();
+
   /// BACKGROUND HANDLER
-  FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) async {
-    Navigator.pushNamed(
-      navigatorKey.currentState!.context,
-      Routes.notifications,
-    );
+  FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage? message) async {
+    if (message != null && message.notification != null) {
+      String? title = message.notification!.title?.toLowerCase();
+      if (title != null && title.contains('new message')) {
+        Navigator.pushNamed(
+          navigatorKey.currentState!.context,
+          Routes.chat,
+        );
+      } else {
+        print('me 1');
+        Navigator.pushNamed(
+          navigatorKey.currentState!.context,
+          Routes.notifications,
+        );
+      }
+    }
   });
 
   /// TERMINATED HANDLER
   FirebaseMessaging.instance
       .getInitialMessage()
       .then((RemoteMessage? message) async {
-    if (message != null) {
-      Navigator.pushNamed(
-        navigatorKey.currentState!.context,
-        Routes.notifications,
-      );
+    if (message != null && message.notification != null) {
+      String? title = message.notification!.title?.toLowerCase();
+      if (title != null && title.contains('new message')) {
+        Navigator.pushNamed(
+          navigatorKey.currentState!.context,
+          Routes.chat,
+        );
+      } else {
+        print('me 2');
+        Navigator.pushNamed(
+          navigatorKey.currentState!.context,
+          Routes.notifications,
+        );
+      }
     }
   });
 
@@ -109,6 +136,27 @@ void processDeepLink(Uri uri) {
         navigatorKey.currentState!.context,
         Routes.settings,
       );
+    }
+  } else if (uri.scheme == 'myapp' && uri.host == 'app.notification') {
+    String? notificationParam = uri.queryParameters['type'];
+
+    if (notificationParam != null) {
+      bool success = notificationParam.toLowerCase() == 'message';
+      if (success) {
+        Navigator.pushNamed(
+          navigatorKey.currentState!.context,
+          Routes.home,
+        );
+      }
+    }
+  } else if (uri.scheme == 'https' && uri.host == 'app.main') {
+    String? notificationParam = uri.queryParameters['type'];
+    if (notificationParam != null) {
+      bool success = notificationParam.toLowerCase() == 'message';
+      if (success) {
+        // showAboutDialog(context: Get.context!);
+        // Get.toNamed(Routes.login);
+      }
     }
   }
 }

@@ -36,7 +36,7 @@ class _ImagesViewerScreenState extends State<ImagesViewerScreen> {
     return Scaffold(
       backgroundColor: Colors.black,
       body: Stack(
-        children: [
+        children: <Widget>[
           widget.urls == null
               ? Container()
               : Swiper(
@@ -70,7 +70,7 @@ class _ImagesViewerScreenState extends State<ImagesViewerScreen> {
                 child: RichText(
                   textAlign: TextAlign.center,
                   text: TextSpan(
-                    children: [
+                    children: <InlineSpan>[
                       _isFullTextVisiable
                           ? TextSpan(
                               text: widget.text,

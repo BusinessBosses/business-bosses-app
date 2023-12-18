@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/posts/widgets/likecommentandcointile.dart';
 import 'package:flutter/material.dart';
@@ -6,6 +8,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 import '../../../action/action.dart';
+import '../../../common/dialogs/snackbar.dart';
 import '../../../common/generic_slider.dart';
 import '../../../common/models/my_response.dart';
 import '../../../common/widgets/text_widget.dart';
@@ -38,6 +41,7 @@ class PostDetailsScreen extends StatelessWidget {
     // String? postId;
     // int? postIndex;
     ProfileController profileController = Get.find();
+    // ignore: unused_local_variable
     HomeController controller = Get.find();
     return Scaffold(
         backgroundColor: Colors.white,
@@ -51,6 +55,7 @@ class PostDetailsScreen extends StatelessWidget {
           centerTitle: true,
           title: const Text('View Post'),
         ),
+        // ignore: unnecessary_null_comparison
         body: post == null
             ? const Center(
                 child: CircularProgressIndicator.adaptive(),
@@ -59,7 +64,7 @@ class PostDetailsScreen extends StatelessWidget {
                 child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
+                    children: <Widget>[
                     const SizedBox(
                       width: double.infinity,
                       height: 20,
@@ -137,28 +142,20 @@ class PostDetailsScreen extends StatelessWidget {
                               isVideo: true,
                               // i: postIndex!,
                             )
-                          : Padding(
-                              padding: const EdgeInsets.only(
-                                left: 0,
-                                right: 0,
-                                top: 0,
-                              ),
-                              child:
-                                  post.images != null && post.images!.isNotEmpty
-                                      ? Container(
-                                          height: 200,
-                                          decoration: const BoxDecoration(
-                                            color: Colors.black,
-                                            borderRadius: BorderRadius.all(
-                                              Radius.circular(15),
-                                            ),
-                                          ),
-                                          child: GenericSlider(
-                                            images: post.images!,
-                                          ),
-                                        )
-                                      : null,
-                            ),
+                          : post.images != null && post.images!.isNotEmpty
+                              ? Container(
+                                  height: 200,
+                                  decoration: const BoxDecoration(
+                                    color: Colors.black,
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(15),
+                                    ),
+                                  ),
+                                  child: GenericSlider(
+                                    images: post.images!,
+                                  ),
+                                )
+                              : null,
                     ),
                     PostInteractionsWidget(
                         post: post,
@@ -173,16 +170,16 @@ class PostDetailsScreen extends StatelessWidget {
                       height: 10,
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(right: 15),
+                      padding: const EdgeInsets.only(right: 0),
                       child: Align(
-                        alignment: Alignment.centerRight,
+                        alignment: Alignment.center,
                         child: Padding(
                             padding: const EdgeInsets.only(right: 0),
                             child: post.user!.uid ==
                                     profileController.myProfile.uid
                                 ? post.promote != null && post.promote == true
                                     ? Align(
-                                        alignment: Alignment.centerRight,
+                                        alignment: Alignment.center,
                                         child: GestureDetector(
                                           onTap: () {
                                             navigateTo(context,
@@ -205,7 +202,7 @@ class PostDetailsScreen extends StatelessWidget {
                                             child: const Row(
                                               mainAxisAlignment:
                                                   MainAxisAlignment.center,
-                                              children: [
+                                              children: <Widget>[
                                                 TextWidget(
                                                   text: 'View Analytics',
                                                   color: Colors.white,
@@ -274,7 +271,10 @@ class PostDetailsScreen extends StatelessWidget {
       BuildContext context, LinkableElement linkableElement) async {
     MyResponse res = await MyNativeFunctions.onUrlLaunch(linkableElement.url);
     if (!res.success) {
-      showSnackBar(context, message: res.message);
+      showSnackbar(
+          title: 'OOPS!',
+          message: 'An error occurred, please try again!',
+          error: true);
     }
   }
 

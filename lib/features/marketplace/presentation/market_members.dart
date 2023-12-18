@@ -55,14 +55,14 @@ class _MarketMembersScreenState extends State<MarketMembersScreen> {
               subTitle: 'Be the first one to join!',
             )
           : Stack(
-              children: [
+              children: <Widget>[
                 ListView.builder(
                   padding: const EdgeInsets.only(bottom: 48.0),
                   controller: _controller,
                   itemCount: widget.users.length,
                   itemBuilder: (BuildContext context, int i) {
                     return Column(
-                      children: [
+                      children: <Widget>[
                         ListTile(
                           onTap: () async {
                             Get.toNamed(Routes.publicProfile,
@@ -77,7 +77,7 @@ class _MarketMembersScreenState extends State<MarketMembersScreen> {
                           ),
                           title: widget.users[i].isSubscribed == true
                               ? Row(
-                                  children: [
+                                  children: <Widget>[
                                     Text(widget.users[i].name ??
                                         widget.users[i].username),
                                     const SizedBox(width: 5),

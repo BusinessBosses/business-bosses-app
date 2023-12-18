@@ -5,11 +5,16 @@ import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/posts/repository/post_repository.dart';
+import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
+import 'package:business_bosses_v2/utils/constants/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:video_thumbnail/video_thumbnail.dart';
+import 'package:socket_io_client/socket_io_client.dart' as IO;
 
+import '../../../common/widgets/gallery_screen.dart';
 import '../../profile/controller/profile_controller.dart';
 import '../models/post_model.dart';
 import '../presentation/boost_post_screen.dart';
@@ -17,6 +22,7 @@ import '../presentation/boost_post_screen.dart';
 /// CREATEPOSTCONTROLLER
 class CreatePostController extends GetxController {
   final HomeController _homeController = Get.find();
+  late IO.Socket socket;
 
   /// ALL USERS FOR MENTIONS
   RxList<UserModel> users = RxList<UserModel>(<UserModel>[]);
@@ -24,6 +30,18 @@ class CreatePostController extends GetxController {
   /// SELECTED IMAGES
   RxList<XFile> imageFileList = RxList<XFile>(<XFile>[]);
   RxList<String> updatingImageFileList = RxList<String>(<String>[]);
+
+  ///my asserts
+  List<MyAssetEntity> myAssetsEntities = <MyAssetEntity>[];
+
+  /// file processing
+  List<bool> fileProcessing = <bool>[];
+
+  ///seleted video
+  File? selectedVid;
+
+  ///video thumbnail
+  File? vidThumbnail;
 
   /// PROMOTE STATE
   RxBool shouldPromote = false.obs;
@@ -36,47 +54,89 @@ class CreatePostController extends GetxController {
 
   ///   VALIDATE CREATE POST DATA
   bool validateCreatePostData(Map<String, dynamic> data) {
-    if (data['title'].toString().isEmpty && imageFileList.isEmpty) {
+    final String title = data['title'].toString();
+    final String ytUrl = data['ytUrl'].toString();
+    if (title.isEmpty && imageFileList.isEmpty) {
       return false;
+    } else if (ytUrl.isNotEmpty && ytUrl != 'null') {
+      // Regular expression to match YouTube video URLs, including YouTube Shorts
+      final RegExp regExp = RegExp(
+          r'^(https?://)?(www\.)?(youtu\.be/|youtube\.com/shorts/)([\w-]+)(\?[^\s]*)?$');
+      if (regExp.hasMatch(ytUrl)) {
+        return true;
+      } else {
+        return false;
+      }
     } else {
-      return true;
+      return true; // Return false if ytUrl is null
     }
+
+    // if (title.isEmpty && imageFileList.isEmpty) {
+    //   return false;
+    // } else {
+    //   return true; // Return false if ytUrl is null
+    // }
   }
 
   /// UPLOAD FILE TO REMOTE SERVER
-  Future<dynamic> uploadFile() async {
+  Future<Map<String, dynamic>?> uploadFile() async {
     /// UPLOADED FILE URLS
     List<String> fileUrls = <String>[];
+    Map<String, dynamic> mediaUrls = <String, dynamic>{};
 
-    /// FILED SELECTED FILES
-    List<File> resourceFile = <File>[];
+    if (selectedVid != null) {
+      MediaUploadResult result =
+          await ApiService.uploadMediaFiles(selectedVid!, vidThumbnail!);
+      String videoUrl = result.videoUrl;
+      String thumbnailUrl = result.thumbnailUrl;
 
-    for (int i = 0; i < imageFileList.length; i++) {
-      File file = File(imageFileList[i].path);
-      resourceFile.add(file);
-    }
-
-    for (int i = 0; i < imageFileList.length; i++) {
-      final int bytes = resourceFile[i].readAsBytesSync().lengthInBytes;
-      final double kb = bytes / 1024;
-      final double mb = kb / 1024;
-
-      if (mb >= 5) {
-        showSnackbar(message: 'Image size should be maximum 10 MB.');
-        loading(false);
+      if (videoUrl == null) {
+        showSnackbar(message: 'Error Uploading video');
         return null;
       } else {
-        final dynamic res = await ApiService.uploadFile(resourceFile[i]);
+        return mediaUrls = <String, dynamic>{
+          'images': thumbnailUrl,
+          'videoUrl': videoUrl
+        };
+      }
+    } else {
+      /// FILED SELECTED FILES
+      List<File> resourceFile = <File>[];
 
-        if (res == null) {
+      for (int i = 0; i < imageFileList.length; i++) {
+        File file = File(imageFileList[i].path);
+        resourceFile.add(file);
+      }
+
+      for (int i = 0; i < imageFileList.length; i++) {
+        final int bytes = resourceFile[i].readAsBytesSync().lengthInBytes;
+        final double kb = bytes / 1024;
+        final double mb = kb / 1024;
+
+        if (mb >= 5) {
+          showSnackbar(message: 'Image size should be maximum 10 MB.');
+          loading(false);
           return null;
         } else {
-          fileUrls.add(res['fileUrl']);
+          final dynamic res = await ApiService.uploadFile(resourceFile[i]);
+
+          if (res == null) {
+            return null;
+          } else {
+            fileUrls.add(res['fileUrl']);
+          }
         }
       }
     }
 
-    return fileUrls;
+    // return fileUrls;
+    if (fileUrls.isNotEmpty) {
+      return <String, dynamic>{'fileUrls': fileUrls};
+    } else if (mediaUrls.isNotEmpty) {
+      return mediaUrls;
+    }
+
+    return null;
   }
 
   /// CREATE POST CONTROLLER (REGISTER NEW POST TO REMOTE DATA SOURCE)
@@ -85,7 +145,7 @@ class CreatePostController extends GetxController {
     if (validateCreatePostData(body)) {
       loading(true);
       update();
-      if (imageFileList.isEmpty) {
+      if (imageFileList.isEmpty && selectedVid == null) {
         final ApiResponseModel response = await PostRepository.createPost(body);
 
         if (response.success) {
@@ -102,12 +162,54 @@ class CreatePostController extends GetxController {
           }
           Get.snackbar('Success', 'Post created successfully');
         }
-      } else {
+      } else if (selectedVid != null) {
         if (await uploadFile() == null) {
           showSnackbar(message: 'Error Uploading image');
         } else {
+          final Map<String, dynamic>? files = await uploadFile();
+          final thumbnail = files?['images'];
+          final videoUrl = files?['videoUrl'];
+          final ApiResponseModel response =
+              await PostRepository.createPost(<String, dynamic>{
+            ...body,
+            'images': thumbnail,
+            'videoUrl': videoUrl
+          });
+
+          if (response.success) {
+            imageFileList.clear();
+            _homeController.addNewPost(response.data, profileController);
+            profileController.addNewPost(response.data);
+            // Emit a WebSocket event to notify other users of the new post
+            socket.emit('newPostEvent', {'newPost': "this is the new posts"});
+
+            if (shouldPromote.value == true) {
+              Get.to(() => BoostPost(
+                    postId: response.data['postId'],
+                    postTitle: response.data['title'],
+                  ));
+            } else {
+              Get.back();
+            }
+            Get.snackbar('Success', 'Post created successfully');
+          }
+        }
+      } else {
+        if (imageFileList.isNotEmpty &&
+            (body['ytUrl'] != null && body['ytUrl'] != '')) {
+          loading(false);
+          update();
+          return showSnackbar(
+              message: 'You cannot add image & YouTube link, please remove one',
+              title: 'OOPS!',
+              error: true);
+        }
+        if (await uploadFile() == null) {
+          showSnackbar(message: 'Error Uploading video');
+        } else {
+          final Map<String, dynamic>? file = await uploadFile();
           final ApiResponseModel response = await PostRepository.createPost(
-              <String, dynamic>{...body, 'images': await uploadFile()});
+              <String, dynamic>{...body, 'images': file?['fileUrls']});
 
           if (response.success) {
             imageFileList.clear();
@@ -121,6 +223,7 @@ class CreatePostController extends GetxController {
                   ));
             } else {
               Get.back();
+              // Get.toNamed(Routes.home);
             }
             Get.snackbar('Success', 'Post created successfully');
           }
@@ -130,7 +233,9 @@ class CreatePostController extends GetxController {
       update();
     } else {
       showSnackbar(
-          message: 'Post can\'t be empty', title: 'OOPS!', error: true);
+          message: 'Post can\'t be empty or contain unwanted characters',
+          title: 'OOPS!',
+          error: true);
       return;
     }
   }
@@ -164,7 +269,8 @@ class CreatePostController extends GetxController {
   Future<dynamic> uploadUpdatingFile() async {
     /// RAW FILES
     final List<String> rawFiles = updatingImageFileList
-        .where((String element) => !element.contains('http') && element.isNotEmpty)
+        .where(
+            (String element) => !element.contains('http') && element.isNotEmpty)
         .toList();
 
     /// UPLOADED FILE URLS
@@ -217,7 +323,8 @@ class CreatePostController extends GetxController {
     update();
     if (validateCreatePostData(post!.toMap())) {
       final List<String> hasNewUpload = updatingImageFileList
-          .where((String element) => !element.contains('http') && element.isNotEmpty)
+          .where((String element) =>
+              !element.contains('http') && element.isNotEmpty)
           .toList();
       if (hasNewUpload.isEmpty) {
         final ApiResponseModel response = await ApiService.put(
@@ -231,7 +338,7 @@ class CreatePostController extends GetxController {
         if (response.success) {
           final ProfileController profileController = Get.find();
           final HomeController homeController = Get.find();
-          PostModel modelizedPost = PostModel.fromMap({
+          PostModel modelizedPost = PostModel.fromMap(<String, dynamic>{
             ...post.toMap(),
             ...response.data,
           });
@@ -256,13 +363,13 @@ class CreatePostController extends GetxController {
             path: 'post/update-post/${post.postId}',
             body: <String, dynamic>{
               'title': title,
-              'images': [...alreadyUploadedFileUrls, ...uploadedFiles]
+              'images': <String>[...alreadyUploadedFileUrls, ...uploadedFiles]
             },
           );
           if (response.success) {
             final ProfileController profileController = Get.find();
             final HomeController homeController = Get.find();
-            PostModel modelizedPost = PostModel.fromMap({
+            PostModel modelizedPost = PostModel.fromMap(<String, dynamic>{
               ...post.toMap(),
               ...response.data,
             });
@@ -306,22 +413,46 @@ class CreatePostController extends GetxController {
   }
 
   /// PICK IMAGE FROM DEVICE GALLERY
-  Future<void> onPickImage({bool isUpdating = false}) async {
+  Future<void> onPickImage(GalleryType type, {bool isUpdating = false}) async {
     // print(" $updatingImageFileList $isUpdating");
-    try {
-      final List<XFile> pickedFileList = await _picker.pickMultiImage();
-      if (isUpdating) {
-        final List<String> paths =
-            pickedFileList.map((XFile e) => e.path).toList();
-        updatingImageFileList =
-            RxList<String>(<String>[...paths, ...updatingImageFileList]);
-      } else {
-        imageFileList =
-            RxList<XFile>(<XFile>[...pickedFileList, ...imageFileList]);
+    if (type == GalleryType.videos) {
+      final XFile? video = await _picker.pickVideo(source: ImageSource.gallery);
+      if (video != null) {
+        try {
+          final String? uint8list = await VideoThumbnail.thumbnailFile(
+            video: File(video.path).path,
+            imageFormat: ImageFormat.PNG,
+            maxWidth:
+                128, // specify the width of the thumbnail, let the height auto-scaled to keep the source aspect ratio
+            quality: 10,
+          );
+
+          selectedVid = File(video.path);
+          vidThumbnail = File(uint8list!);
+          print('++++++>>>>>>>>>>>>>>>this is the video $selectedVid');
+          print('++++++>>>>>>>>>>>>>>>this is the video $vidThumbnail');
+
+          update();
+        } catch (e) {
+          //handle error
+        }
       }
-      update();
-    } catch (e) {
-      // handle error
+    } else {
+      try {
+        final List<XFile> pickedFileList = await _picker.pickMultiImage();
+        if (isUpdating) {
+          final List<String> paths =
+              pickedFileList.map((XFile e) => e.path).toList();
+          updatingImageFileList =
+              RxList<String>(<String>[...paths, ...updatingImageFileList]);
+        } else {
+          imageFileList =
+              RxList<XFile>(<XFile>[...pickedFileList, ...imageFileList]);
+        }
+        update();
+      } catch (e) {
+        // handle error
+      }
     }
   }
 
@@ -344,6 +475,19 @@ class CreatePostController extends GetxController {
     _picker = ImagePicker();
 
     super.onInit();
+
+    socket = IO.io(Constants.socketUrl, <String, dynamic>{
+      'autoConnect': false,
+      'transports': ['websocket'],
+    });
+    socket.connect();
+    socket.onConnect((_) {
+      print('Connection established');
+
+      socket.onDisconnect((_) => print('Connection Disconnection'));
+      socket.onConnectError((err) => print(err));
+      socket.onError((err) => print(err));
+    });
   }
 
   @override
@@ -353,5 +497,13 @@ class CreatePostController extends GetxController {
     imageFileList.clear();
     shouldPromote(false);
     super.onClose();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    socket.disconnect();
+    socket.dispose();
+    super.dispose();
   }
 }

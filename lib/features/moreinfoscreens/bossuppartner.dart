@@ -1,6 +1,5 @@
 import 'dart:core';
 
-import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +10,6 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../action/action.dart';
 import '../../utils/constants/constants.dart';
 import '../../utils/theme/theme.dart';
-import '../chat/chat_room_screen.dart';
 import '../posts/widgets/images_viewer_screen.dart';
 
 // ignore: public_member_api_docs
@@ -102,10 +100,10 @@ class BossuppartnerItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<dynamic> photos = [companyPhoto];
+    List<dynamic> photos = <dynamic>[companyPhoto];
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
+      children: <Widget>[
         id != 5
             ? const SizedBox(
                 width: double.infinity,
@@ -123,7 +121,7 @@ class BossuppartnerItem extends StatelessWidget {
                 padding: const EdgeInsets.only(left: 20, right: 20),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
+                  children: <Widget>[
                     GestureDetector(
                       onTap: () {
                         Navigator.of(context).push(
@@ -184,7 +182,7 @@ class BossuppartnerItem extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.only(left: 15, right: 20),
                     child: Row(
-                      children: [
+                      children: <Widget>[
                         SvgPicture.asset(
                           'assets/svgs/link.svg',
                           height: 14.0,
@@ -227,7 +225,7 @@ class BossuppartnerItem extends StatelessWidget {
                 const EdgeInsets.only(left: 20, right: 20, top: 5, bottom: 5),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
-              children: [
+              children: <Widget>[
                 const Text(
                   'Want to be a Partner?',
                   style: TextStyle(
@@ -246,53 +244,12 @@ class BossuppartnerItem extends StatelessWidget {
                           fontSize: 15,
                         ),
                       ),
-                      onPressed: () {
-                        UserModel admin = UserModel.fromMap(<String, dynamic>{
-                          'uid': 'nbRsBEICSHdVlZhLyfKLnqOXQ4Y2',
-                          'username': 'businessbosses',
-                          'connectionCount': 42,
-                          'referalCount': 0,
-                          'invitations': 0,
-                          'connectedCount': 7,
-                          'inviteId': 'businessbosses657',
-                          'email': 'businessbosses1@gmail.com',
-                          'name': 'Business Bosses',
-                          'bio':
-                              'A revolutionary app for entrepreneurs to start, grow, and promote their businesses globally. CONNECT & GET REFERRALS',
-                          'companyName': '',
-                          'surname': null,
-                          'website': 'www.businessbosses.co.uk',
-                          'instagram': 'businessbosses',
-                          'twitter': '',
-                          'industry': 'Entrepreneur Lounge',
-                          'category': 'Administrator',
-                          'location': 'United Kingdom',
-                          'productsandservices': '',
-                          'ageRange': null,
-                          'gender': null,
-                          'bossOfTheWeekTimeStamp': null,
-                          'bossOfTheWeekUpTimeStamp': null,
-                          'timestamp': 1651300660806,
-                          'photoUrl':
-                              'http://44.210.87.234/appfiles/1651302940_66_image_picker_8959A259-3F93-4D3E-B252-F5F5C60E24B5-7236-000001E6D83D294C.jpg',
-                          'role': 'user',
-                          'coinscount': 247,
-                          'isRanked': false,
-                          'active': true,
-                          'deactivated': false,
-                          'lastLogin': '2023-07-15T17:07:15.000Z',
-                          'averageRating': 0,
-                          'unReadCount': 14,
-                          'isSubscribed': false,
-                          'createdAt': '2023-07-15T17:07:15.000Z',
-                          'updatedAt': '2023-07-15T17:07:15.000Z'
-                        });
-                        Get.to(
-                          () => const ChatRoomScreen(
-                            frommarketplace: false,
-                          ),
-                          arguments: admin,
-                        );
+                      onPressed: () async {
+                        if (await canLaunchUrl(Uri.parse(
+                            'https://businessbosses.news/our-partners/'))) {
+                          await launchUrl(Uri.parse(
+                              'https://businessbosses.news/our-partners/'));
+                        }
                       },
                     ),
                   ),

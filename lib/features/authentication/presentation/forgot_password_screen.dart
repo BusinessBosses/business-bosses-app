@@ -23,8 +23,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   AutovalidateMode _autovalidateMode = AutovalidateMode.disabled;
 
   String? _email;
+  // ignore: unused_field
   bool? _isUniqueEmail;
-  final ApiService _apiService = ApiService();
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +55,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               absorbing: _isProcessing,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
+                children: <Widget>[
                   Container(
                     padding: const EdgeInsets.all(16.0),
                     width: double.infinity,

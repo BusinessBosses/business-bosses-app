@@ -5,21 +5,33 @@
             "name": "business-bosses--v2",
             "request": "launch",
             "type": "dart",
-            "args": ["--sound-null-safety"]
+            "args": [
+                "--sound-null-safety"
+            ]
         },
         {
             "name": "business-bosses--v2 (profile mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "profile",
-            "args": ["--sound-null-safety"]
+            "args": [
+                "--sound-null-safety"
+            ]
         },
         {
             "name": "business-bosses--v2 (release mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "release",
-            "args": ["--sound-null-safety"]
+            "args": [
+                "--sound-null-safety"
+            ]
+        },
+        {
+            "name": "Flutter (lib/main.dart)",
+            "type": "dart",
+            "request": "launch",
+            "program": "lib/main.dart"
         }
     ]
 }

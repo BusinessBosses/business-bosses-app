@@ -1,4 +1,5 @@
-import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
+// ignore_for_file: library_prefixes, public_member_api_docs, always_specify_types, always_declare_return_types, avoid_print
+
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/common/models/comment_model.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
@@ -12,6 +13,7 @@ import 'package:business_bosses_v2/features/posts/models/post_model.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:business_bosses_v2/utils/constants/constants.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -29,6 +31,7 @@ class HomeController extends GetxController {
   //     Get.put(CommunitiesController());
 
   RxBool error = RxBool(false);
+  RxBool noConnection = RxBool(false);
   List<Industry> industries = [];
   List<UserModel> bossupMembers = [];
 
@@ -47,8 +50,10 @@ class HomeController extends GetxController {
   ];
   List<String> blocked = [];
   String bossUpTitle = 'Boss Up By';
+  String bossUpLink = '';
   RxList<MarketModel> markets = RxList<MarketModel>(<MarketModel>[]);
   RxList<UserModel> marketMembers = RxList<UserModel>(<UserModel>[]);
+  Set<dynamic> itemsWithIncrementedViews = {};
 
   void addIndustries(List<Industry> data) {
     industries = data;
@@ -196,14 +201,19 @@ class HomeController extends GetxController {
       frms.add({'isForum': true, 'data': forums[i], 'isSponsored': false});
     }
 
+    // for (int i = 0; i < promotedPosts.length; i++) {
+    //   psts.add(
+    //       {'isForum': false, 'data': promotedPosts[i], 'isSponsored': true});
+    // }
+
     for (int i = 0; i < posts.length; i++) {
       psts.add({'isForum': false, 'data': posts[i], 'isSponsored': false});
     }
 
-    for (int i = 0; i < promotedPosts.length; i++) {
-      psts.add(
-          {'isForum': false, 'data': promotedPosts[i], 'isSponsored': true});
-    }
+    // for (int i = 0; i < promotedPosts.length; i++) {
+    //   psts.add(
+    //       {'isForum': false, 'data': promotedPosts[i], 'isSponsored': true});
+    // }
 
     for (int i = 0; i < promotedPosts.length; i++) {
       sponsoredPst.add(
@@ -215,7 +225,8 @@ class HomeController extends GetxController {
             b['data'].timestamp - a['data'].timestamp);
 
     final List<Map<String, dynamic>> joinedSponsoredPosts = sponsoredPst
-      ..sort((Map<String, dynamic> a, Map<String, dynamic> b) => b['data'].timestamp - a['data'].timestamp);
+      ..sort((Map<String, dynamic> a, Map<String, dynamic> b) =>
+          b['data'].timestamp - a['data'].timestamp);
 
     mixedPosts.addAll(joinedPosts);
     sponsoredPosts.addAll(joinedSponsoredPosts);
@@ -234,9 +245,11 @@ class HomeController extends GetxController {
   /// LIKE AND UNLIKE FUNCTION
   void postLike(String userId, String postId, String type, String receiverUid) {
     if (type == 'post') {
+      //Non-sponsored posts
       final int postIndex = mixedPosts.indexWhere((Map<String, dynamic> post) =>
           post['shouldCount'] == null &&
           !post['isForum'] &&
+          !post['isSponsored'] &&
           post['data'].postId == postId);
       if (postIndex != -1) {
         final bool checkLiked =
@@ -247,6 +260,25 @@ class HomeController extends GetxController {
               .removeWhere((element) => element == userId);
         } else {
           mixedPosts[postIndex]['data'].likes!.add(userId);
+        }
+      }
+
+      //Sponsored posts
+      final int spIndex = sponsoredPosts.indexWhere(
+          (Map<String, dynamic> post) =>
+              post['shouldCount'] == null &&
+              !post['isForum'] &&
+              post['isSponsored'] &&
+              post['data'].postId == postId);
+      if (spIndex != -1) {
+        final bool checkLiked =
+            sponsoredPosts[spIndex]['data'].likes!.contains(userId);
+        if (checkLiked) {
+          sponsoredPosts[spIndex]['data']
+              .likes!
+              .removeWhere((element) => element == userId);
+        } else {
+          sponsoredPosts[spIndex]['data'].likes!.add(userId);
         }
       }
     } else {
@@ -288,19 +320,40 @@ class HomeController extends GetxController {
   /// COMMENT FUNCTION
   void comment(String postId, CommentModel comment, String type) {
     int postIndex;
+    int spIndex;
     if (type == 'post') {
+      //non-sponsored posts
       postIndex = mixedPosts.indexWhere((Map<String, dynamic> post) =>
           post['shouldCount'] == null &&
           !post['isForum'] &&
+          !post['isSponsored'] &&
+          post['data'].postId == postId);
+
+      //sponsored posts
+      spIndex = sponsoredPosts.indexWhere((Map<String, dynamic> post) =>
+          post['shouldCount'] == null &&
+          !post['isForum'] &&
+          post['isSponsored'] &&
           post['data'].postId == postId);
     } else {
+      //non-sponsored posts
       postIndex = mixedPosts.indexWhere((Map<String, dynamic> post) =>
           post['shouldCount'] == null &&
           post['isForum'] &&
+          !post['isSponsored'] &&
+          post['data'].forumId == postId);
+
+      //sponsored posts
+      spIndex = sponsoredPosts.indexWhere((Map<String, dynamic> post) =>
+          post['shouldCount'] == null &&
+          post['isForum'] &&
+          post['isSponsored'] &&
           post['data'].forumId == postId);
     }
     if (postIndex != -1) {
       mixedPosts[postIndex]['data'].comments!.add(comment);
+    } else if (spIndex != -1) {
+      sponsoredPosts[spIndex]['data'].comments!.add(comment);
     }
     update();
   }
@@ -309,9 +362,11 @@ class HomeController extends GetxController {
   void postCoin(String userId, String postId,
       ProfileController profileController, String type, String receiverUid) {
     if (type == 'post') {
+      //Non-sponsored Posts
       final int postIndex = mixedPosts.indexWhere((Map<String, dynamic> item) =>
           item['shouldCount'] == null &&
           !item['isForum'] &&
+          !item['isSponsored'] &&
           item['data'].postId == postId);
       if (postIndex != -1) {
         final bool checkIfCoined =
@@ -324,6 +379,27 @@ class HomeController extends GetxController {
         } else {
           profileController.updateCoinCount(-1);
           mixedPosts[postIndex]['data'].coins!.add(userId);
+        }
+      }
+
+      //sponsored posts
+      final int spIndex = sponsoredPosts.indexWhere(
+          (Map<String, dynamic> item) =>
+              item['shouldCount'] == null &&
+              !item['isForum'] &&
+              item['isSponsored'] &&
+              item['data'].postId == postId);
+      if (spIndex != -1) {
+        final bool checkIfCoined =
+            sponsoredPosts[spIndex]['data'].coins!.contains(userId);
+        if (checkIfCoined) {
+          profileController.updateCoinCount(1);
+          sponsoredPosts[spIndex]['data']
+              .coins!
+              .removeWhere((String element) => element == userId);
+        } else {
+          profileController.updateCoinCount(-1);
+          sponsoredPosts[spIndex]['data'].coins!.add(userId);
         }
       }
     } else {
@@ -385,8 +461,17 @@ class HomeController extends GetxController {
         1, {'isForum': false, 'data': modelizedNewPost, 'isSponsored': false});
 
     // posts.insert(0, modelizedNewPost);
-
     update();
+    socket.emit('newPostEvent', {
+      'newPost': newPost,
+      'user': {
+        'username': profileController.myProfile.username,
+        'email': profileController.myProfile.email,
+        'uid': profileController.myProfile.uid,
+        'name': profileController.myProfile.name,
+        'bio': profileController.myProfile.bio
+      }
+    });
   }
 
   void removePostsByUserId(String? userId) {
@@ -422,7 +507,7 @@ class HomeController extends GetxController {
           ),
           content: const TextWidget(
             text:
-                'We\'ve upgraded the Business Bosses app with new features and functionality to provide you with an enhanced Boss experience.',
+                'Your Session Has Expired. Login Again To Continue Using Business Bosses!',
           ),
           actions: [
             TextButton(
@@ -431,7 +516,7 @@ class HomeController extends GetxController {
                 Navigator.of(context).pop(context);
               },
               child: const TextWidget(
-                text: 'Reset your password & Sign in',
+                text: 'Login',
                 color: primaryColorLT,
               ),
             )
@@ -550,9 +635,12 @@ class HomeController extends GetxController {
       paginationPage(paginationPage.value + 1);
       processPostsAndForumsData(response.data);
     } else {
-      showSnackbar(title: 'OOPS!', message: response.message, error: true);
+      // showSnackbar(
+      //     title: 'OOPS!',
+      //     message: 'An error occurred, please try again!',
+      //     error: true);
 
-      error(true);
+      // error(true);
     }
 
     if (fromBackground) {
@@ -561,6 +649,22 @@ class HomeController extends GetxController {
       loadingMore(false);
     }
     update();
+  }
+
+  Future<void> sinkPosts(Map<String, dynamic> data) async {
+    if (profileController.myProfile.uid != data['user']['uid']) {
+      PostModel modelizedNewPost = PostModel.fromMap({
+        ...data['newPost'],
+        'coins': <String>[],
+        'likes': <String>[],
+        'comments': <CommentModel>[],
+        'user': data['user']
+      });
+      mixedPosts.insert(1,
+          {'isForum': false, 'data': modelizedNewPost, 'isSponsored': false});
+
+      update();
+    }
   }
 
   void removePost(String postId) {
@@ -577,7 +681,8 @@ class HomeController extends GetxController {
         element['isForum'] &&
         element['data'].forumId == forumId);
 
-    bossupForums.removeWhere((ForumModel element) => element.forumId == forumId);
+    bossupForums
+        .removeWhere((ForumModel element) => element.forumId == forumId);
     update();
   }
 
@@ -593,6 +698,34 @@ class HomeController extends GetxController {
     }
   }
 
+  void updateViews(PostModel post) {
+    HomeRepository.updateViews(post.postId, post.views! + 1);
+    final int postIndex = mixedPosts.indexWhere(
+        (Map<String, dynamic> element) =>
+            element['shouldCount'] == null &&
+            !element['isForum'] &&
+            element['data'].postId == post.postId);
+    if (postIndex != -1) {
+      // Increment the view count of the post by 1
+      mixedPosts[postIndex]['data'].setViews(post.views! + 1);
+      update();
+    }
+  }
+
+  void updateForumViews(ForumModel post) {
+    final int postIndex = mixedPosts.indexWhere(
+        (Map<String, dynamic> element) =>
+            element['shouldCount'] == null &&
+            element['isForum'] &&
+            element['data'].forumId == post.forumId);
+    if (postIndex != -1) {
+      // Increment the view count of the post by 1
+      mixedPosts[postIndex]['data'].setViews(post.views! + 1);
+      update();
+      HomeRepository.updateForumViews(post.forumId, post.views!);
+    }
+  }
+
   /// LOAD POSTS FROM REMOTE SOURCE
   Future<void> loadData() async {
     loading(true);
@@ -604,7 +737,8 @@ class HomeController extends GetxController {
       processPostsAndForumsData(response.data['posts']);
       profileController.processDataToState(
           {...response.data['user'], 'connecteds': response.data['connecteds']},
-          response.data['interests']);
+          response.data['interests'],
+          response.data['userRanking']);
       _chatController.processDataToState(
           response.data['chats'], profileController.myProfile.uid);
       socket.emit('handshake', profileController.myProfile.uid);
@@ -616,8 +750,15 @@ class HomeController extends GetxController {
             bossUp!.firstWhere((Map<String, dynamic> item) => item['id'] == 5);
 
         bossUpTitle = getTitle['companyName'];
+        bossUpLink = getTitle['companyUrl'];
         bossUp?.removeWhere((Map<String, dynamic> item) => item['id'] == 5);
       }
+      FirebaseMessaging.instance.getToken().then((String? value) {
+        Map<String, dynamic> data = <String, dynamic>{
+          'deviceToken': value,
+        };
+        ApiService.post(path: 'users/add-device-token', body: data);
+      });
       if (profileController.myProfile.bio == null) {
         Get.offAndToNamed(Routes.updateProfile,
             arguments: profileController.myProfile);
@@ -629,10 +770,10 @@ class HomeController extends GetxController {
       if (response.message == 'send a valid token') {
         showAccessTokenDialog();
       } else {
-        showSnackbar(
-            title: 'OOPS!',
-            message: 'Check your Internet Connection!',
-            error: true);
+        // showSnackbar(
+        //     title: 'OOPS!',
+        //     message: 'An error occurred, please try again!',
+        //     error: true);
       }
     }
 
@@ -675,10 +816,14 @@ class HomeController extends GetxController {
             bossUp!.firstWhere((Map<String, dynamic> item) => item['id'] == 5);
 
         bossUpTitle = getTitle['companyName'];
+        bossUpLink = getTitle['companyUrl'];
       }
     } else {
       error(true);
-      showSnackbar(title: 'OOPS!', message: response.message, error: true);
+      // showSnackbar(
+      //     title: 'OOPS!',
+      //     message: 'An error occurred, please try again!',
+      //     error: true);
     }
 
     refreshing(false);
@@ -723,7 +868,6 @@ class HomeController extends GetxController {
 
   @override
   void onInit() {
-    // TODO: implement onInit
     profileController = Get.put(ProfileController());
     _chatController = Get.put(ChatController());
     initSocket();
@@ -733,7 +877,6 @@ class HomeController extends GetxController {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     socket.disconnect();
     socket.dispose();
     super.dispose();

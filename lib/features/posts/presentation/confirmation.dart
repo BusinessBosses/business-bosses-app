@@ -28,7 +28,7 @@ class Confirmation extends StatelessWidget {
         ),
         body: SingleChildScrollView(
           child: Stack(
-            children: [
+            children: <Widget>[
               Padding(
                 padding: const EdgeInsets.only(
                   left: 32.5,
@@ -43,14 +43,14 @@ class Confirmation extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 21),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
+                  children: <Widget>[
                     const SizedBox(
                       height: 25,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
+                      children: <Widget>[
                         const CircleAvatar(
                           radius: 14,
                           backgroundColor: Color(0xFFF01C29),
@@ -102,7 +102,7 @@ class Confirmation extends StatelessWidget {
                     const Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
+                      children: <Widget>[
                         CircleAvatar(
                           radius: 14,
                           backgroundColor: Color(0xFFF01C29),
@@ -116,9 +116,9 @@ class Confirmation extends StatelessWidget {
                         ),
                         Expanded(
                           child: Column(
-                            children: [
+                            children: <Widget>[
                               Row(
-                                children: [
+                                children: <Widget>[
                                   TextWidget(
                                     text: 'Payment pending approval',
                                     size: 18,

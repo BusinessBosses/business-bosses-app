@@ -17,7 +17,7 @@ Widget profileinfodisplay(BuildContext context, UserModel publicUser) {
   return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
+      children: <Widget>[
         const SizedBox(
           height: 10,
         ),
@@ -41,7 +41,7 @@ Widget profileinfodisplay(BuildContext context, UserModel publicUser) {
         Padding(
           padding: const EdgeInsets.only(left: 15),
           child: Row(
-            children: [
+            children: <Widget>[
               // if (_profileController
               //         .myProfile.website
               //         ?.trim()
@@ -64,7 +64,7 @@ Widget profileinfodisplay(BuildContext context, UserModel publicUser) {
                     //     context, url);
                   },
                   child: Row(
-                    children: [
+                    children: <Widget>[
                       SvgPicture.asset(
                         'assets/svgs/link.svg',
                         height: 14.0,
@@ -157,7 +157,7 @@ Widget profileinfodisplay(BuildContext context, UserModel publicUser) {
           Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+            children: <Widget>[
               const SizedBox(
                 height: 35,
               ),
@@ -199,7 +199,7 @@ Widget profileinfodisplay(BuildContext context, UserModel publicUser) {
                             child: Row(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
+                                children: <Widget>[
                                   SvgPicture.asset(
                                     'assets/svgs/trophy.svg',
                                     color: Colors.black,
@@ -244,7 +244,7 @@ Widget profileinfodisplay(BuildContext context, UserModel publicUser) {
           Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+            children: <Widget>[
               const Padding(
                 padding: EdgeInsets.only(left: 15),
                 child: Text(
@@ -263,7 +263,7 @@ Widget profileinfodisplay(BuildContext context, UserModel publicUser) {
                   ? publicUser.productsandservices!
                       .where((String element) => element.isNotEmpty)
                       .toList()
-                  : [])
+                  : <String>[])
             ],
           ),
         const SizedBox(
@@ -284,14 +284,14 @@ Widget profileinfodisplay(BuildContext context, UserModel publicUser) {
         const SizedBox(
           height: 10,
         ),
-        Column(children: [
+        Column(children: <Widget>[
           ListView.builder(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
             itemBuilder: (BuildContext context, int i) {
               return Column(
-                children: [
+                children: <Widget>[
                   CustomTileInterest(
                     label: publicUser.interests != null
                         ? publicUser.interests![i].industry!

@@ -16,6 +16,7 @@ import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
+import '../../../../common/dialogs/snackbar.dart';
 import '../../../../common/widgets/buttons/custom_button.dart';
 import '../../../../common/widgets/buttons/icon_text_button.dart';
 import '../../../../common/widgets/text_widget.dart';
@@ -78,7 +79,7 @@ class _SignUpFormState extends State<SignUpForm> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
-                  children: [
+                  children: <Widget>[
                     TextFormField(
                       onChanged: (String val) {
                         _password = val;
@@ -199,13 +200,13 @@ class _SignUpFormState extends State<SignUpForm> {
       key: _formKey,
       autovalidateMode: _autoValidateMode,
       child: Column(
-        children: [
+        children: <Widget>[
           const SizedBox(height: 25.0),
 
           //email
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+            children: <Widget>[
               TextFormField(
                 onChanged: (String val) async {
                   _username = val;
@@ -291,7 +292,7 @@ class _SignUpFormState extends State<SignUpForm> {
           const SizedBox(height: 25.0),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+            children: <Widget>[
               TextFormField(
                 onChanged: (String val) {
                   _password = val;
@@ -399,7 +400,7 @@ class _SignUpFormState extends State<SignUpForm> {
 
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: [
+            children: <Widget>[
               Expanded(
                   child: Container(
                 color: hintColor,
@@ -408,7 +409,7 @@ class _SignUpFormState extends State<SignUpForm> {
               const SizedBox(width: 16.0),
               RichText(
                 text: const TextSpan(
-                  children: [
+                  children: <InlineSpan>[
                     TextSpan(
                       text: 'Or',
                       style: TextStyle(
@@ -440,7 +441,7 @@ class _SignUpFormState extends State<SignUpForm> {
           ),
           const SizedBox(height: 10.0),
           if (Platform.isIOS)
-            Stack(children: [
+            Stack(children: <Widget>[
               SizedBox(
                 height: 55,
                 child: SignInWithAppleButton(
@@ -493,7 +494,7 @@ class _SignUpFormState extends State<SignUpForm> {
       subtitle: RichText(
         textAlign: TextAlign.left,
         text: TextSpan(
-          children: [
+          children: <InlineSpan>[
             TextSpan(
               text: 'Check the box to Agree to the  ',
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
@@ -559,7 +560,10 @@ class _SignUpFormState extends State<SignUpForm> {
     if (canLunchLink) {
       await launchUrlString(url);
     } else {
-      Get.snackbar('An Error Occured', 'Try again later.');
+      showSnackbar(
+          title: 'OOPS!',
+          message: 'An error occurred, please try again!',
+          error: true);
     }
   }
 

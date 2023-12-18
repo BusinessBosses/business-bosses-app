@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import '../../../common/models/quote.dart';
 import '../../../utils/theme/theme.dart';
 
+// ignore: non_constant_identifier_names
 Widget QuoteWidget(Quote quote) {
   return Container(
     decoration: BoxDecoration(
@@ -12,7 +13,7 @@ Widget QuoteWidget(Quote quote) {
     ),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
+      children: <Widget>[
         const Padding(
           padding: EdgeInsets.only(left: 16.0, right: 16, top: 7),
           child: Text(
@@ -25,7 +26,7 @@ Widget QuoteWidget(Quote quote) {
               const EdgeInsets.only(left: 12.0, top: 5, right: 12, bottom: 5),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+            children: <Widget>[
               CircleAvatar(
                   radius: 48 / 2,
                   backgroundColor: primaryColorLT.withOpacity(0.1),
@@ -36,12 +37,12 @@ Widget QuoteWidget(Quote quote) {
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
+                  children: <Widget>[
                     Row(
-                      children: [
+                      children: <Widget>[
                         Expanded(
                           child: Text(
-                            ' ${quote.message ?? "Always give without remembering and always receive without forgetting."}',
+                            ' ${quote.message}',
                             style: bodyText1.copyWith(
                                 fontWeight: FontWeight.normal),
                           ),
@@ -51,7 +52,7 @@ Widget QuoteWidget(Quote quote) {
                     Container(
                       alignment: Alignment.bottomRight,
                       child: Text(
-                        quote.by ?? 'Brian Tracy',
+                        quote.by,
                         style: bodyText1,
                       ),
                     ),

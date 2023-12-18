@@ -30,6 +30,7 @@ class ConnectionGridTile extends StatefulWidget {
 class _ConnectionGridTileState extends State<ConnectionGridTile> {
   @override
   Widget build(BuildContext context) {
+    // ignore: unused_local_variable
     CompleteSearchController controller = Get.find();
     return InkWell(
       onTap: () {
@@ -41,7 +42,7 @@ class _ConnectionGridTileState extends State<ConnectionGridTile> {
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(radius), color: Colors.white),
         child: Column(
-          children: [
+          children: <Widget>[
             UserAvatarWithBadge(
               user: widget.user,
               height: 64.0,
@@ -54,9 +55,9 @@ class _ConnectionGridTileState extends State<ConnectionGridTile> {
                 ? Padding(
                     padding: const EdgeInsets.only(top: 0.0),
                     child: Row(
-                      children: [
+                      children: <Widget>[
                         Text(
-                          widget.user.name ?? widget.user.username ?? '',
+                          widget.user.name ?? widget.user.username,
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                           textAlign: TextAlign.center,
@@ -72,7 +73,7 @@ class _ConnectionGridTileState extends State<ConnectionGridTile> {
                     ),
                   )
                 : Text(
-                    widget.user.name ?? widget.user.username ?? '',
+                    widget.user.name ?? widget.user.username,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     textAlign: TextAlign.center,

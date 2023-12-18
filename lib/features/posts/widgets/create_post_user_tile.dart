@@ -29,9 +29,9 @@ class CreatePostUserTile extends StatelessWidget {
               ? Padding(
                   padding: const EdgeInsets.only(top: 0.0),
                   child: Row(
-                    children: [
+                    children: <Widget>[
                       Text(
-                        user!.name ?? user!.username ?? '',
+                        user!.name ?? user!.username,
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                         textAlign: TextAlign.center,
@@ -47,7 +47,7 @@ class CreatePostUserTile extends StatelessWidget {
                   ),
                 )
               : Text(
-                  user!.name ?? user!.username ?? '',
+                  user!.name ?? user!.username,
                   style: Theme.of(context)
                       .textTheme
                       .titleLarge!

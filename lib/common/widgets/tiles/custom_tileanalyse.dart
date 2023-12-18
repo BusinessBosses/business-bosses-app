@@ -22,7 +22,7 @@ class CustomTileAnalyse extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       // ignore: prefer_const_literals_to_create_immutables
-      children: [
+      children: <Widget>[
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 0.0),
           child: InkWell(

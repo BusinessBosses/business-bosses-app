@@ -6,6 +6,7 @@ import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:get/get.dart';
 
 import '../../../action/action.dart';
+import '../../../common/dialogs/snackbar.dart';
 import '../../../common/models/my_response.dart';
 import '../../../common/widgets/network_image_with_placeholder.dart';
 import '../../../common/widgets/popup/my_popup_menu_button.dart';
@@ -29,6 +30,47 @@ class PostGridItem extends StatelessWidget {
     this.hasMore = true,
   }) : super(key: key);
 
+  List<PopupMenuEntry<String>> getPopupItems() {
+    List<PopupMenuEntry<String>> items = [];
+
+    if (post.livedata == null) {
+      items.add(
+        const PopupMenuItem<String>(
+          value: 'Edit',
+          child: Text(
+            'Edit',
+            style: bodyText2,
+          ),
+        ),
+      );
+      items.add(const PopupMenuDivider(height: 0.0));
+    }
+
+    items.add(
+      const PopupMenuItem<String>(
+        value: 'Delete',
+        child: Text(
+          'Delete',
+          style: bodyText2,
+        ),
+      ),
+    );
+
+    items.add(const PopupMenuDivider(height: 0.0));
+
+    items.add(
+      const PopupMenuItem<String>(
+        value: 'Boost',
+        child: Text(
+          'Boost',
+          style: bodyText2,
+        ),
+      ),
+    );
+
+    return items;
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -43,7 +85,7 @@ class PostGridItem extends StatelessWidget {
           borderRadius: BorderRadius.circular(radiusValue),
         ),
         child: Stack(
-          children: [
+          children: <Widget>[
             SizedBox(
               width: double.infinity,
               height: double.infinity,
@@ -109,7 +151,7 @@ class PostGridItem extends StatelessWidget {
                         top: 8.0, bottom: 8.0, left: 8.0, right: 8.0),
                     // height: 30.0,
                     child: Row(
-                      children: [
+                      children: <Widget>[
                         const Icon(
                           Icons.copy,
                           size: 18.0,
@@ -139,7 +181,7 @@ class PostGridItem extends StatelessWidget {
                   height: 26.0,
                   width: 26.0,
                   child: MyPopupMenuButton(
-                    popupItems: _popupItemPostMore,
+                    popupItems: getPopupItems(),
                     icon: const Icon(
                       Icons.more_vert,
                       color: Colors.white,
@@ -177,7 +219,10 @@ class PostGridItem extends StatelessWidget {
       BuildContext context, LinkableElement linkableElement) async {
     MyResponse res = await MyNativeFunctions.onUrlLaunch(linkableElement.url);
     if (!res.success) {
-      showSnackBar(context, message: res.message);
+      showSnackbar(
+          title: 'OOPS!',
+          message: 'An error occurred, please try again!',
+          error: true);
     }
   }
 
@@ -190,7 +235,7 @@ class PostGridItem extends StatelessWidget {
           style: bodyText1,
         ),
         content: const Text('Are you sure to delete this post?'),
-        actions: [
+        actions: <Widget>[
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
             child: const Text('No'),
@@ -206,34 +251,4 @@ class PostGridItem extends StatelessWidget {
       ),
     );
   }
-
-  final List<PopupMenuEntry<String>> _popupItemPostMore = [
-    const PopupMenuItem<String>(
-      value: 'Edit',
-      child: Text(
-        'Edit',
-        style: bodyText2,
-      ),
-    ),
-    const PopupMenuDivider(
-      height: 0.0,
-    ),
-    const PopupMenuItem<String>(
-      value: 'Delete',
-      child: Text(
-        'Delete',
-        style: bodyText2,
-      ),
-    ),
-    const PopupMenuDivider(
-      height: 0.0,
-    ),
-    const PopupMenuItem<String>(
-      value: 'Boost',
-      child: Text(
-        'Boost',
-        style: bodyText2,
-      ),
-    ),
-  ];
 }

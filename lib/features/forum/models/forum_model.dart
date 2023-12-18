@@ -1,6 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 
-
 import 'package:business_bosses_v2/common/models/comment_model.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 
@@ -10,27 +9,30 @@ class ForumModel {
   final String? description;
   final String? industry;
   final String? title;
+  final String? ytUrl;
   final List<String>? images;
   final int? timestamp;
   late final List<String>? likes;
   final List<String>? coins;
   final List<CommentModel>? comments;
   final UserModel? user;
+  int? views = 0;
   final bool? isRanked;
-  ForumModel({
-    required this.forumId,
-    required this.industryId,
-    this.description,
-    this.industry,
-    this.title,
-    this.images,
-    this.timestamp,
-    this.likes,
-    this.coins,
-    this.comments,
-    this.user,
-    this.isRanked,
-  });
+  ForumModel(
+      {required this.forumId,
+      required this.industryId,
+      this.description,
+      this.industry,
+      this.title,
+      this.images,
+      this.timestamp,
+      this.likes,
+      this.views = 0,
+      this.coins,
+      this.comments,
+      this.user,
+      this.isRanked,
+      this.ytUrl});
 
   ForumModel copyWith({
     String? forumId,
@@ -45,6 +47,8 @@ class ForumModel {
     List<CommentModel>? comments,
     UserModel? user,
     bool? isRanked,
+    int? views,
+    String? ytUrl,
   }) {
     return ForumModel(
       forumId: forumId ?? this.forumId,
@@ -58,7 +62,9 @@ class ForumModel {
       coins: coins ?? this.coins,
       comments: comments ?? this.comments,
       user: user ?? this.user,
+      views: views ?? this.views,
       isRanked: isRanked ?? this.isRanked,
+      ytUrl: ytUrl ?? this.ytUrl,
     );
   }
 
@@ -75,7 +81,9 @@ class ForumModel {
       'coins': coins,
       'comments': comments!.map((CommentModel x) => x.toMap()).toList(),
       'user': user!.toMap(),
+      'views': views,
       'isRanked': isRanked,
+      'ytUrl': ytUrl,
     };
   }
 
@@ -86,6 +94,7 @@ class ForumModel {
       description:
           map['description'] != null ? map['description'] as String : null,
       title: map['title'] != null ? map['title'] as String : null,
+      ytUrl: map['ytUrl'] != null ? map['ytUrl'] as String : null,
       industry: map['industry'] != null ? map['industry'] as String : null,
       images: map['images'] != null && map['images'] != ''
           ? List<String>.from((map['images']))
@@ -108,7 +117,12 @@ class ForumModel {
       user: map['user'] != null
           ? UserModel.fromMap(map['user'] as Map<String, dynamic>)
           : null,
+      views: map['views'] != null ? map['views'] as int : 0,
       isRanked: map['isRanked'] ?? false,
     );
+  }
+
+  setViews(int newViews) {
+    views = newViews;
   }
 }

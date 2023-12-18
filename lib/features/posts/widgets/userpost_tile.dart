@@ -1,4 +1,9 @@
+import 'dart:convert';
+import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
+import 'package:business_bosses_v2/features/live_event/models/events_model.dart';
+import 'package:business_bosses_v2/features/live_event/presentation/create_event.dart';
+import 'package:business_bosses_v2/features/live_event/widgets/call_room.dart';
 import 'package:business_bosses_v2/features/posts/controllers/create_post_controller.dart';
 import 'package:business_bosses_v2/features/posts/models/post_model.dart';
 import 'package:business_bosses_v2/features/posts/widgets/post_images.dart';
@@ -12,9 +17,8 @@ import 'package:detectable_text_field/widgets/detectable_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:jiffy/jiffy.dart';
+import 'package:lottie/lottie.dart';
 import 'package:url_launcher/url_launcher_string.dart';
-
 import '../../../action/action.dart';
 import '../../../common/models/api_response_model.dart';
 import '../../../common/models/comment_model.dart';
@@ -25,6 +29,7 @@ import '../../../common/widgets/text_widget.dart';
 import '../../../common/widgets/user_avatar_with_badge.dart';
 import '../../../navigation/routes.dart';
 import '../../../utils/theme/theme.dart';
+import '../../../utils/time_format.dart';
 import '../presentation/boost_post_screen.dart';
 import '../presentation/create_post_screen.dart';
 
@@ -53,27 +58,29 @@ class _PostTileState extends State<PostTile> {
 
   Future<void> connect(String userId) async {
     // ignore: unused_local_variable
-    final ApiResponseModel res =
-        await ApiService.post(path: '/connection/connect', body: {
-      'userId': profileController.myProfile.uid,
-      'connectedId': userId,
-      'timestamp': DateTime.now().millisecondsSinceEpoch
-    });
+    final ApiResponseModel res = await ApiService.post(
+        path: '/connection/connect',
+        body: <String, dynamic>{
+          'userId': profileController.myProfile.uid,
+          'connectedId': userId,
+          'timestamp': DateTime.now().millisecondsSinceEpoch
+        });
   }
 
   Future<void> disconnect(String userId) async {
     // ignore: unused_local_variable
-    final ApiResponseModel res =
-        await ApiService.post(path: '/connection/disconnect', body: {
-      'userId': profileController.myProfile.uid,
-      'connectedId': userId,
-      'timestamp': DateTime.now().millisecondsSinceEpoch
-    });
+    final ApiResponseModel res = await ApiService.post(
+        path: '/connection/disconnect',
+        body: <String, dynamic>{
+          'userId': profileController.myProfile.uid,
+          'connectedId': userId,
+          'timestamp': DateTime.now().millisecondsSinceEpoch
+        });
   }
 
   void connectToUser() async {
-    print(
-        'This are my connected users ${profileController.myProfile.connecteds}');
+    // print(
+    //     'This are my connected users ${profileController.myProfile.connecteds}');
     final int checkConnected = profileController.myProfile.connecteds == null
         ? -1
         : profileController.myProfile.connecteds!
@@ -82,7 +89,7 @@ class _PostTileState extends State<PostTile> {
       // connecteds.add(user);
       profileController.updateConnections(widget.post.user!.uid);
       setState(() {
-        UserModel.fromMap({
+        UserModel.fromMap(<dynamic, dynamic>{
           ...widget.post.user!.toMap(),
           'connectionCount': widget.post.user!.connectionCount == null
               ? 1
@@ -94,7 +101,7 @@ class _PostTileState extends State<PostTile> {
       profileController.updateConnections(widget.post.user!.uid);
 
       setState(() {
-        UserModel.fromMap({
+        UserModel.fromMap(<dynamic, dynamic>{
           ...widget.post.user!.toMap(),
           'connectionCount': widget.post.user!.connectionCount == null
               ? null
@@ -106,20 +113,61 @@ class _PostTileState extends State<PostTile> {
     }
   }
 
+  String formatCount(int count) {
+    if (count >= 1000) {
+      double countInK = count / 1000;
+      if (countInK >= 1000) {
+        return '${(countInK / 1000).toStringAsFixed(1)}m';
+      } else {
+        return '${countInK.toStringAsFixed(1)}k';
+      }
+    } else {
+      return count.toString();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    String? title, roomid, date, starttime, host, photourl, startat, endat;
+
+    if (widget.post.livedata != null) {
+      try {
+        final jsonData = jsonDecode(widget.post.livedata!.toString());
+
+        title = jsonData['title'];
+        roomid = jsonData['roomId'];
+        date = jsonData['date'];
+        starttime = jsonData['starttime'];
+        host = jsonData['host'];
+        photourl = jsonData['photourl'];
+        startat = jsonData['startat'];
+        endat = jsonData['endat'];
+      } catch (e) {}
+    } else {}
+
+    EventModel event = EventModel(
+      title: title,
+      roomId: roomid ?? '',
+      startAt: DateTime.parse(startat ?? '2023-11-07T10:45:00.000Z'),
+      endAt: DateTime.parse(endat ?? '2023-11-07T10:45:00.000Z'),
+      startTime: starttime ?? '',
+      user: widget.post.user,
+    );
+
     if (hide == false) {
       final List<PopupMenuEntry<String>> myPopupMore = <PopupMenuEntry<String>>[
-        const PopupMenuItem<String>(
-          value: 'Edit',
-          child: Text(
-            'Edit',
-            style: bodyText2,
+        if (widget.post.livedata == null)
+          const PopupMenuItem<String>(
+            value: 'Edit',
+            child: Text(
+              'Edit',
+              style: bodyText2,
+            ),
           ),
-        ),
-        const PopupMenuDivider(
-          height: 0.0,
-        ),
+        if (widget.post.livedata == null)
+          const PopupMenuDivider(
+            height: 0.0,
+          ),
         const PopupMenuItem<String>(
           value: 'Delete',
           child: Text(
@@ -170,7 +218,7 @@ class _PostTileState extends State<PostTile> {
             decoration: const BoxDecoration(color: Colors.white),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
+              children: <Widget>[
                 ListTile(
                   contentPadding: const EdgeInsets.only(left: 15, right: 0),
                   leading: GestureDetector(
@@ -207,44 +255,75 @@ class _PostTileState extends State<PostTile> {
                       }
                     },
                     child: widget.post.user!.isSubscribed
-                        ? Padding(
-                            padding: const EdgeInsets.only(top: 0.0),
-                            child: Row(
-                              children: [
-                                Text(
-                                  widget.post.user!.name != null &&
-                                          widget.post.user!.name!.length <= 20
-                                      ? widget.post.user!.name!
-                                      : widget.post.user!.name != null
-                                          ? '${widget.post.user!.name!.substring(0, 20)}...'
-                                          : widget.post.user!.username,
-                                  style: Theme.of(context).textTheme.bodyLarge,
+                        ? profileController.myProfile.uid ==
+                                widget.post.user!.uid
+                            ? Padding(
+                                padding: const EdgeInsets.only(top: 0.0),
+                                child: Row(
+                                  children: <Widget>[
+                                    Text(
+                                      widget.post.user!.name != null &&
+                                              widget.post.user!.name!.length <=
+                                                  20
+                                          ? widget.post.user!.name!
+                                          : widget.post.user!.name != null
+                                              ? '${widget.post.user!.name!.substring(0, 20)}...'
+                                              : widget.post.user!.username,
+                                      style:
+                                          Theme.of(context).textTheme.bodyLarge,
+                                    ),
+                                    const SizedBox(width: 5),
+                                    SvgPicture.asset(
+                                      'assets/svgs/premiumbadge.svg',
+                                      height: 9,
+                                      color: primaryColorLT,
+                                    )
+                                  ],
                                 ),
-                                const SizedBox(width: 5),
-                                SvgPicture.asset(
-                                  'assets/svgs/premiumbadge.svg',
-                                  height: 9,
-                                  color: primaryColorLT,
-                                )
-                              ],
-                            ),
-                          )
+                              )
+                            : Padding(
+                                padding: const EdgeInsets.only(top: 0.0),
+                                child: Row(
+                                  children: <Widget>[
+                                    Text(
+                                      widget.post.user!.name != null &&
+                                              widget.post.user!.name!.length <=
+                                                  15
+                                          ? widget.post.user!.name!
+                                          : widget.post.user!.name != null
+                                              ? '${widget.post.user!.name!.substring(0, 12)}...'
+                                              : widget.post.user!.username,
+                                      style:
+                                          Theme.of(context).textTheme.bodyLarge,
+                                    ),
+                                    const SizedBox(width: 5),
+                                    SvgPicture.asset(
+                                      'assets/svgs/premiumbadge.svg',
+                                      height: 9,
+                                      color: primaryColorLT,
+                                    )
+                                  ],
+                                ),
+                              )
                         : Text(
                             widget.post.user!.name != null &&
                                     widget.post.user!.name!.length <= 20
                                 ? widget.post.user!.name!
                                 : widget.post.user!.name != null
-                                    ? '${widget.post.user!.name!.substring(0, 15)}...'
+                                    ? '${widget.post.user!.name!.substring(0, 12)}...'
                                     : widget.post.user!.username,
                             style: Theme.of(context).textTheme.bodyLarge,
                           ),
                   ),
                   trailing: SizedBox(
                     height: 30,
-                    width: 140,
+                    width:
+                        profileController.myProfile.uid != widget.post.user!.uid
+                            ? 140
+                            : 80,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
+                      children: <Widget>[
                         widget.post.user!.isSubscribed &&
                                 widget.post.user!.uid !=
                                     profileController.myProfile.uid
@@ -282,6 +361,10 @@ class _PostTileState extends State<PostTile> {
                                             post: widget.post.title,
                                             postDetail: widget.post,
                                             images: widget.post.images,
+                                          ));
+                                    } else if (val == 'updateevent') {
+                                      Get.to(() => CreateEvent(
+                                            event: event,
                                           ));
                                     } else if (val == 'Delete') {
                                       showDialog(
@@ -384,112 +467,309 @@ class _PostTileState extends State<PostTile> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
+                    children: <Widget>[
                       if (widget.post.promote! && widget.post.approved!)
-                        const TextWidget(
-                          text: 'Sponsored',
-                          fontWeight: FontWeight.w700,
-                          size: 10,
+                        const Column(
+                          children: <Widget>[
+                            TextWidget(
+                              text: 'Sponsored',
+                              fontWeight: FontWeight.w700,
+                              size: 10,
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                          ],
                         ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          DetectableText(
-                            text: widget.post.title,
-                            detectionRegExp: detectionRegExp(hashtag: false)!,
-                            detectedStyle: bodyText2.copyWith(
-                              color: Colors.blue,
+                      if (widget.post.title.isNotEmpty)
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            DetectableText(
+                              text: widget.post.title,
+                              detectionRegExp: detectionRegExp(hashtag: false)!,
+                              detectedStyle: bodyText2.copyWith(
+                                color: Colors.blue,
+                              ),
+                              moreStyle: bodyText2.copyWith(
+                                color: Colors.redAccent,
+                              ),
+                              lessStyle: bodyText2.copyWith(
+                                color: Colors.redAccent,
+                              ),
+                              trimExpandedText: '  show less',
+                              basicStyle: bodyText2.copyWith(color: textColor),
+                              onTap: (String link) async {
+                                String url = MyNativeFunctions.completeURL(
+                                    link, MyUrl.url);
+                                await launchUrlString(url);
+                              },
                             ),
-                            moreStyle: bodyText2.copyWith(
-                              color: Colors.redAccent,
+                            const SizedBox(height: 10),
+                          ],
+                        ),
+                      if (widget.post.livedata != null) ...<Widget>[
+                        GestureDetector(
+                          onTap: () {
+                            // Add2Calendar.addEvent2Cal(Event(
+                            //     title: '$title',
+                            //     startDate: DateTime.parse(startat!),
+                            //     endDate: DateTime.parse(endat!)));
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12),
+                              image: const DecorationImage(
+                                image:
+                                    AssetImage('assets/images/liveeventt.png'),
+                                fit: BoxFit.cover,
+                              ),
+                              // You can also add other properties like boxShadow for a more realistic effect
                             ),
-                            lessStyle: bodyText2.copyWith(
-                              color: Colors.redAccent,
-                            ),
-                            trimExpandedText: '  show less',
-                            basicStyle: bodyText2.copyWith(color: textColor),
-                            onTap: (String link) async {
-                              String url = MyNativeFunctions.completeURL(
-                                  link, MyUrl.url);
-                              await launchUrlString(url);
-                            },
+                            child: Stack(children: [
+                              Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                child: Container(
+                                  child: Column(
+                                    children: <Widget>[
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: <Widget>[
+                                          Container(
+                                            decoration: BoxDecoration(
+                                              color: Colors.white.withAlpha(70),
+                                              borderRadius:
+                                                  BorderRadius.circular(5),
+                                            ),
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(5.0),
+                                              child: Row(
+                                                children: <Widget>[
+                                                  (DateTime.now().isAfter(DateTime
+                                                              .parse(startat ??
+                                                                  '2023-11-07T10:45:00.000Z')) &&
+                                                          DateTime.now().isBefore(
+                                                              DateTime.parse(endat ??
+                                                                  DateTime.now()
+                                                                      .toIso8601String())))
+                                                      ? Lottie.asset(
+                                                          'assets/anim/liveeventwhite.json',
+                                                          height: 12,
+                                                        )
+                                                      : SvgPicture.asset(
+                                                          'assets/svgs/liveeventt.svg',
+                                                          height: 12,
+                                                          // ignore: deprecated_member_use
+                                                          color: Colors.white,
+                                                        ),
+                                                  const SizedBox(
+                                                    width: 5,
+                                                  ),
+                                                  Text(
+                                                    (DateTime.now().isAfter(
+                                                                DateTime.parse(
+                                                                    startat ??
+                                                                        '2023-11-07T10:45:00.000Z')) &&
+                                                            DateTime.now().isBefore(
+                                                                DateTime.parse(endat ??
+                                                                    DateTime.now()
+                                                                        .toIso8601String())))
+                                                        ? 'Ongoing Live Event'
+                                                        : DateTime.now().isAfter(
+                                                                DateTime.parse(
+                                                                    startat ??
+                                                                        '2023-11-07T10:45:00.000Z'))
+                                                            ? 'Ended event'
+                                                            : 'Upcoming Live event',
+                                                    style: const TextStyle(
+                                                      color: Colors.white,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                          Text(
+                                            'ID: $roomid',
+                                            style: const TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.w900),
+                                          )
+                                        ],
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Text(
+                                          '$title',
+                                          style: const TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.w700),
+                                        ),
+                                      ),
+                                      Center(
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: <Widget>[
+                                            NetworkImageWithPlaceHolder(
+                                              imageUrl: '$photourl',
+                                              height: 25,
+                                              width: 25,
+                                            ),
+                                            const SizedBox(
+                                              width: 10,
+                                            ),
+                                            Text(
+                                              '$host',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.w500,
+                                                  color: Colors.white
+                                                      .withAlpha(200)),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      Text(
+                                        DateTime.now().isAfter(DateTime.parse(
+                                                endat ??
+                                                    DateTime.now()
+                                                        .toIso8601String()))
+                                            ? 'Ended'
+                                            : DateTime.now().isAfter(DateTime
+                                                        .parse(startat ??
+                                                            '2023-11-07T10:45:00.000Z')) &&
+                                                    DateTime.now().isBefore(
+                                                        DateTime.parse(endat ??
+                                                            DateTime.now()
+                                                                .toIso8601String()))
+                                                ? 'Happening now'
+                                                : '$date, $starttime',
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.w700,
+                                            color: Colors.white),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ]),
                           ),
-                          const SizedBox(height: 16),
-                        ],
-                      ),
+                        )
+                      ],
                       if (widget.post.images?.isNotEmpty ?? false)
                         PostImages(
                           post: widget.post,
+                          isYt: widget.post.ytUrl != null &&
+                                  widget.post.ytUrl != ''
+                              ? true
+                              : false,
                         ),
                     ],
                   ),
                 ),
                 Row(
-                  children: [
-                    TextButton.icon(
-                      onPressed: () async {
-                        widget.controller.postLike(
-                            profileController.myProfile.uid,
-                            widget.post.postId,
-                            'post',
-                            widget.post.user!.uid);
-                      },
-                      icon: widget.post.likes
-                                  ?.contains(profileController.myProfile.uid) ==
-                              true
-                          ? SvgPicture.asset('assets/svgs/likefilled.svg')
-                          : SvgPicture.asset('assets/svgs/like.svg'),
-                      label: Text(
-                        '${widget.post.likes?.length ?? 0}',
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              fontWeight: FontWeight.w700,
-                              color: textColor.withOpacity(0.8),
-                            ),
+                  children: <Widget>[
+                    Container(
+                      padding: const EdgeInsets.only(right: 0.0),
+                      child: TextButton.icon(
+                        onPressed: () async {
+                          widget.controller.postLike(
+                              profileController.myProfile.uid,
+                              widget.post.postId,
+                              'post',
+                              widget.post.user!.uid);
+                        },
+                        icon: widget.post.likes?.contains(
+                                    profileController.myProfile.uid) ==
+                                true
+                            ? SvgPicture.asset(
+                                'assets/svgs/likefilled.svg',
+                                height: 15,
+                              )
+                            : SvgPicture.asset(
+                                'assets/svgs/like.svg',
+                                height: 15,
+                              ),
+                        label: Text(
+                          '${widget.post.likes?.length ?? 0}',
+                          style:
+                              Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                    fontWeight: FontWeight.w700,
+                                    color: textColor.withOpacity(0.8),
+                                  ),
+                        ),
                       ),
                     ),
-                    TextButton.icon(
-                      onPressed: () {
-                        showModalBottomSheet(
-                          context: context,
-                          builder: (BuildContext context) =>
-                              PostLikeCommentItem(
-                            post: widget.post,
-                            onComment: (CommentModel newComment) async {},
-                          ),
-                        );
-                      },
-                      icon: SvgPicture.asset('assets/svgs/comment.svg'),
-                      label: Text(
-                        '${widget.post.comments?.length ?? 0}',
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              fontWeight: FontWeight.w700,
-                              color: textColor.withOpacity(0.8),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 0.0),
+                      child: TextButton.icon(
+                        onPressed: () {
+                          showModalBottomSheet(
+                            context: context,
+                            builder: (BuildContext context) =>
+                                PostLikeCommentItem(
+                              post: widget.post,
+                              onComment: (CommentModel newComment) async {},
                             ),
+                          );
+                        },
+                        icon: SvgPicture.asset('assets/svgs/comment.svg',
+                            height: 15),
+                        label: Text(
+                          '${widget.post.comments?.length ?? 0}',
+                          style:
+                              Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                    fontWeight: FontWeight.w700,
+                                    color: textColor.withOpacity(0.8),
+                                  ),
+                        ),
                       ),
                     ),
                     // widget.post.user!.uid != profileController.myProfile.uid
+                    Container(
+                      padding: const EdgeInsets.only(right: 0.0),
+                      child: TextButton.icon(
+                        onPressed: () async {
+                          if (widget.post.user!.uid !=
+                              profileController.myProfile.uid) {
+                            homeController.postCoin(
+                                profileController.myProfile.uid,
+                                widget.post.postId,
+                                profileController,
+                                'post',
+                                widget.post.user!.uid);
+                          }
+                        },
+                        icon: widget.post.coins?.contains(
+                                    profileController.myProfile.uid) ==
+                                true
+                            ? SvgPicture.asset(
+                                'assets/svgs/coin.svg',
+                                height: 20,
+                              )
+                            : SvgPicture.asset(
+                                'assets/svgs/coin.svg',
+                                height: 20,
+                              ),
+                        label: Text(
+                          '${widget.post.coins?.length ?? 0}',
+                          style:
+                              Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                    fontWeight: FontWeight.w700,
+                                    color: textColor.withOpacity(0.8),
+                                  ),
+                        ),
+                      ),
+                    ),
                     TextButton.icon(
-                      onPressed: () async {
-                        if (widget.post.user!.uid !=
-                            profileController.myProfile.uid) {
-                          homeController.postCoin(
-                              profileController.myProfile.uid,
-                              widget.post.postId,
-                              profileController,
-                              'post',
-                              widget.post.user!.uid);
-                        }
-                      },
-                      icon: widget.post.coins
-                                  ?.contains(profileController.myProfile.uid) ==
-                              true
-                          ? SvgPicture.asset('assets/svgs/coin.svg')
-                          : SvgPicture.asset('assets/svgs/coin.svg'),
+                      onPressed: () async {},
+                      icon: const Icon(Icons.remove_red_eye_outlined,
+                          size: 19, color: Colors.black),
                       label: Text(
-                        '${widget.post.coins?.length ?? 0}',
+                        formatCount(widget.post.views!),
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                               fontWeight: FontWeight.w700,
                               color: textColor.withOpacity(0.8),
@@ -497,27 +777,85 @@ class _PostTileState extends State<PostTile> {
                       ),
                     ),
                     const SizedBox(width: 8.0),
-                    GestureDetector(
-                      onTap: () => _sharePost(),
-                      child: SvgPicture.asset(
-                        'assets/svgs/share.svg',
-                        height: 18.0,
-                        width: 18.0,
+                    if (widget.post.livedata != null) ...<Widget>[
+                      (DateTime.now().isAfter(DateTime.parse(startat ??
+                                  DateTime.now().toIso8601String())) &&
+                              DateTime.now().isBefore(DateTime.parse(
+                                  endat ?? DateTime.now().toIso8601String())))
+                          ? Expanded(
+                              child: Padding(
+                              padding: const EdgeInsets.only(right: 15),
+                              child: ElevatedButton(
+                                  onPressed: () {
+                                    final String enteredRoomID = event.roomId!;
+                                    if (profileController.myProfile.uid !=
+                                        event.user?.uid) {
+                                      jumpToLivePage(
+                                        context,
+                                        title: event.title!,
+                                        roomID: enteredRoomID,
+                                        isHost: false,
+                                      );
+                                    } else {
+                                      jumpToLivePage(
+                                        context,
+                                        title: event.title!,
+                                        roomID: enteredRoomID,
+                                        isHost: true,
+                                      );
+                                    }
+                                  },
+                                  child: const Text('Join')),
+                            ))
+                          : Expanded(
+                              child: Row(
+                              children: [
+                                GestureDetector(
+                                  onTap: () => _sharePost(),
+                                  child: SvgPicture.asset(
+                                    'assets/svgs/share.svg',
+                                    height: 15.0,
+                                    width: 15.0,
+                                  ),
+                                ),
+                                const Spacer(),
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 15),
+                                  child: Text(
+                                    TimeFormat.formatString(
+                                        widget.post.timestamp),
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium
+                                        ?.copyWith(
+                                          color: textColor.withOpacity(0.4),
+                                        ),
+                                  ),
+                                )
+                              ],
+                            ))
+                    ],
+                    if (widget.post.livedata == null) ...<Widget>[
+                      GestureDetector(
+                        onTap: () => _sharePost(),
+                        child: SvgPicture.asset(
+                          'assets/svgs/share.svg',
+                          height: 15.0,
+                          width: 15.0,
+                        ),
                       ),
-                    ),
-                    const Spacer(),
-                    Padding(
-                      padding: const EdgeInsets.only(right: 15),
-                      child: Text(
-                        Jiffy.parseFromMillisecondsSinceEpoch(
-                                widget.post.timestamp)
-                            .fromNow(),
-                        // TimeFormat.formatString(widget.post.timestamp),
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              color: textColor.withOpacity(0.4),
-                            ),
-                      ),
-                    )
+                      const Spacer(),
+                      Padding(
+                        padding: const EdgeInsets.only(right: 15),
+                        child: Text(
+                          TimeFormat.formatString(widget.post.timestamp),
+                          style:
+                              Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                    color: textColor.withOpacity(0.4),
+                                  ),
+                        ),
+                      )
+                    ],
                   ],
                 )
               ],
@@ -548,7 +886,7 @@ class _PostTileState extends State<PostTile> {
       builder: (BuildContext context) => AlertDialog(
         content: Column(
           mainAxisSize: MainAxisSize.min,
-          children: [
+          children: <Widget>[
             ListTile(
               onTap: () {
                 navigateTo(context);
@@ -567,7 +905,7 @@ class _PostTileState extends State<PostTile> {
                       centralize: true,
                       color: Colors.black.withOpacity(.6),
                     ),
-                    actions: [
+                    actions: <Widget>[
                       TextButton(
                         onPressed: () => navigateTo(context),
                         child: const TextWidget(
@@ -631,7 +969,7 @@ class _PostTileState extends State<PostTile> {
                       centralize: true,
                       color: Colors.black.withOpacity(.6),
                     ),
-                    actions: [
+                    actions: <Widget>[
                       TextButton(
                         onPressed: () => navigateTo(context),
                         child: const TextWidget(
@@ -680,6 +1018,25 @@ class _PostTileState extends State<PostTile> {
               ),
             )
           ],
+        ),
+      ),
+    );
+  }
+
+  void jumpToLivePage(
+    BuildContext context, {
+    required String roomID,
+    required bool isHost,
+    required String title,
+  }) {
+    Navigator.push(
+      context,
+      // ignore: always_specify_types
+      MaterialPageRoute(
+        builder: (BuildContext context) => CallRoom(
+          title: title,
+          roomID: roomID,
+          isHost: isHost,
         ),
       ),
     );

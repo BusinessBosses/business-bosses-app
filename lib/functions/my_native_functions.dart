@@ -59,7 +59,8 @@ class MyNativeFunctions {
   }
 
   static List<File> toImageFile(FilePickerResult result) {
-    List<File> files = [];
+    List<File> files = <File>[];
+    // ignore: unnecessary_null_comparison
     if (result != null) {
       List<PlatformFile> platformFiles = result.files;
       for (PlatformFile plf in platformFiles) {
@@ -67,7 +68,7 @@ class MyNativeFunctions {
       }
       return files;
     } else {
-      return [];
+      return <File>[];
     }
   }
 
@@ -98,6 +99,8 @@ class MyNativeFunctions {
         return 'https://$cUrl';
       } else if (cUrl.contains('http://')) {
         return cUrl;
+      } else if (cUrl.contains('https://')) {
+        return url;
       } else {
         return 'https://www.$cUrl';
       }

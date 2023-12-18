@@ -22,14 +22,14 @@ class GalleryPhotosScreen extends StatefulWidget {
 }
 
 class _GalleryPhotosScreenState extends State<GalleryPhotosScreen> {
-  List<AssetEntity> _asImages = [];
-  List<AssetEntity> _asVideos = [];
-  List<MyAssetEntity> _selectedAssetEntities = [];
+  List<AssetEntity> _asImages = <AssetEntity>[];
+  List<AssetEntity> _asVideos = <AssetEntity>[];
+  List<MyAssetEntity> _selectedAssetEntities = <MyAssetEntity>[];
   final ValueKey<String> _keyVideo = const ValueKey('video');
   final ValueKey<String> _keyImage = const ValueKey('Image');
   late PermissionState _permissionState;
 
-  List<File> files = [];
+  List<File> files = <File>[];
   int _selectedTabIndex = 0;
   bool _isInit = false;
   bool _isLoadingImages = true;
@@ -94,7 +94,7 @@ class _GalleryPhotosScreenState extends State<GalleryPhotosScreen> {
         },
       ),
       body: Stack(
-        children: [
+        children: <Widget>[
           _selectedTabIndex == 0
               ? _myAssetEntitiesImages.isEmpty
                   ? GallerySafety(title: 'image', isLoading: _isLoadingImages)
@@ -119,7 +119,7 @@ class _GalleryPhotosScreenState extends State<GalleryPhotosScreen> {
                         return Container(
                           margin: const EdgeInsets.all(1.0),
                           child: Stack(
-                            children: [
+                            children: <Widget>[
                               GestureDetector(
                                 onTap: () =>
                                     _onSelect(_myAssetEntitiesImages[i]),
@@ -160,7 +160,7 @@ class _GalleryPhotosScreenState extends State<GalleryPhotosScreen> {
                         return Container(
                           margin: const EdgeInsets.all(1.0),
                           child: Stack(
-                            children: [
+                            children: <Widget>[
                               GestureDetector(
                                 onTap: () =>
                                     _onSelect(_myAssetEntitiesVideos[i]),
@@ -220,7 +220,7 @@ class _GalleryPhotosScreenState extends State<GalleryPhotosScreen> {
                 child: SizedBox(
                     width: min(MediaQuery.of(context).size.width * 0.8, 600),
                     child: Row(
-                      children: [
+                      children: <Widget>[
                         Expanded(
                           child: GestureDetector(
                             onTap: () {
@@ -361,7 +361,7 @@ class _GalleryPhotosScreenState extends State<GalleryPhotosScreen> {
     } catch (e) {}
   }
 
-  final List<MyAssetEntity> _myAssetEntitiesImages = [];
+  final List<MyAssetEntity> _myAssetEntitiesImages = <MyAssetEntity>[];
   bool _isLoadingNextImages = false;
   int _loadedImages = 0;
 
@@ -374,7 +374,7 @@ class _GalleryPhotosScreenState extends State<GalleryPhotosScreen> {
       });
       return;
     }
-    final List<MyAssetEntity> newImages = [];
+    final List<MyAssetEntity> newImages = <MyAssetEntity>[];
     setState(() {
       _isLoadingNextImages = true;
     });
@@ -397,7 +397,7 @@ class _GalleryPhotosScreenState extends State<GalleryPhotosScreen> {
     }
   }
 
-  final List<MyAssetEntity> _myAssetEntitiesVideos = [];
+  final List<MyAssetEntity> _myAssetEntitiesVideos = <MyAssetEntity>[];
   bool _isLoadingNextVideos = false;
   int _loadedVideos = 0;
 
@@ -410,7 +410,7 @@ class _GalleryPhotosScreenState extends State<GalleryPhotosScreen> {
       });
       return;
     }
-    final List<MyAssetEntity> newVideos = [];
+    final List<MyAssetEntity> newVideos = <MyAssetEntity>[];
     setState(() {
       _isLoadingNextVideos = true;
     });
@@ -465,7 +465,7 @@ class AssetViewer extends StatelessWidget {
       return _buildContainer();
     }
     return Stack(
-      children: [
+      children: <Widget>[
         if (!isImage)
           const Center(
               child: Icon(Icons.image, color: Colors.grey, size: 48.0)),
@@ -548,7 +548,7 @@ class GallerySafety extends StatelessWidget {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: [
+        children: <Widget>[
           isLoading
               ? const SizedBox(
                   height: 24.0,
@@ -556,7 +556,7 @@ class GallerySafety extends StatelessWidget {
                   child: CircularProgressIndicator(),
                 )
               : Column(
-                  children: [
+                  children: <Widget>[
                     getIcon(title: title!),
                     const SizedBox(height: 16.0),
                     Text(

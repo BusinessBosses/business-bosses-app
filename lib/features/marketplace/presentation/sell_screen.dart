@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:photo_manager/photo_manager.dart';
-
 import '../../../action/action.dart';
 import '../../../common/dialogs/snackbar.dart';
 import '../../../common/models/comment_model.dart';
@@ -48,23 +47,24 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
       Get.put(CreateMarketController());
   List<bool>? _fileProcessing;
 
-  List<MyAssetEntity> _myAssetsEntities = [];
+  List<MyAssetEntity> _myAssetsEntities = <MyAssetEntity>[];
 
   MarketModel? _market;
 
   String? description;
   String? price;
+  String? discount;
   String? _selectedCategory;
   String? _selectedLocation;
   String? filterCode;
   String? filterLocation;
   String? filterCategory;
-
   bool _isProcessing = false;
   bool? _isUpdating;
   bool _shouldPromote = false;
   final TextEditingController descriptionController = TextEditingController();
   final TextEditingController _priceController = TextEditingController();
+  final TextEditingController _discountController = TextEditingController();
 
   @override
   void initState() {
@@ -76,9 +76,10 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
     }
     descriptionController.text = _market?.description ?? '';
     _priceController.text = _market?.price ?? '';
+    _discountController.text = _market?.discount.toString() ?? '';
     _selectedCategory = _market?.category;
     _selectedLocation = _market?.location;
-    _fileProcessing = [];
+    _fileProcessing = <bool>[];
   }
 
   @override
@@ -91,9 +92,11 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
           backgroundColor: backgroundcolorinterface,
           key: _scaffoldKey,
           appBar: AppBar(
-            title: Text(widget.isUpd ? 'Edit Listing' : 'Create Listing'),
+            title: Text(widget.isUpd
+                ? 'Edit Product Listing'
+                : 'Create Product Listing'),
             automaticallyImplyLeading: false, // Used for removing back buttoon.
-            actions: [
+            actions: <Widget>[
               IconButton(
                 icon: const Icon(Icons.close),
                 onPressed: () {
@@ -109,15 +112,59 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
               children: <Widget>[
                 Padding(
                   padding: const EdgeInsets.only(left: 16.0, right: 16),
-                  child: TextFormField(
-                    controller: _priceController,
-                    onChanged: (String val) => price = val,
-                    textInputAction: TextInputAction.next,
-                    keyboardType: TextInputType.text,
-                    maxLength: 15,
-                    decoration: inputDecoration.copyWith(
-                      hintText: 'Enter Price in USD (Example \$10)',
-                    ),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        flex:
+                            2, // Adjust the flex value to control the relative sizes
+                        child: Stack(children: [
+                          TextFormField(
+                            controller: _priceController,
+                            onChanged: (String val) => price = val,
+                            textInputAction: TextInputAction.next,
+                            keyboardType: TextInputType.text,
+                            maxLength: 15,
+                            decoration: inputDecoration.copyWith(
+                              hintText: 'Enter Price in USD (Example \$10)',
+                            ),
+                          )
+                        ]),
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      Expanded(
+                        flex:
+                            1, // Adjust the flex value to control the relative sizes
+                        child: Stack(
+                          children: [
+                            TextFormField(
+                              controller: _discountController,
+                              onChanged: (String val) => discount = val,
+                              textInputAction: TextInputAction.next,
+                              keyboardType: TextInputType.number,
+                              maxLength: 3,
+                              decoration: inputDecoration.copyWith(
+                                hintText: 'Discount',
+                              ),
+                            ),
+                            const Positioned(
+                              right: 10,
+                              top: 0,
+                              bottom: 25,
+                              child: Align(
+                                alignment: Alignment
+                                    .centerRight, // Vertically centers the text
+                                child: Text(
+                                  '%',
+                                  style: TextStyle(fontWeight: FontWeight.w700),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 const SizedBox(height: 24.0),
@@ -263,7 +310,7 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
                           },
                           child: FieldContainer(
                             child: Row(
-                              children: [
+                              children: <Widget>[
                                 SvgPicture.asset('assets/svgs/file.svg'),
                                 const SizedBox(width: 16.0),
                                 Expanded(
@@ -287,9 +334,12 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
                           ),
                         ),
                       ),
-                widget.isUpd
-                    ? Container()
-                    : Preview(controller: createMarketController),
+                Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: widget.isUpd
+                      ? Container()
+                      : Preview(controller: createMarketController),
+                ),
                 widget.isUpd
                     ? Container()
                     : Column(
@@ -308,7 +358,7 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
                                       child: Column(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
-                                        children: [
+                                        children: <Widget>[
                                           Text(
                                             'Boost this listing?',
                                             style: TextStyle(
@@ -328,7 +378,7 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
                                       ),
                                     ),
                                     Row(
-                                      children: [
+                                      children: <Widget>[
                                         const Text(
                                           'No',
                                           style: TextStyle(
@@ -404,7 +454,7 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
                         padding: const EdgeInsets.symmetric(horizontal: 20.0),
                         child: Text.rich(
                           TextSpan(
-                            children: [
+                            children: <InlineSpan>[
                               const TextSpan(
                                 text:
                                     'By clicking on Sell, you confirm that you will abide by the ',
@@ -456,6 +506,7 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
         'location': _selectedLocation,
         'description': description,
         'price': price,
+        'discount': discount,
         'timestamp': DateTime.now().millisecondsSinceEpoch,
       }, _shouldPromote);
     } else {
@@ -466,6 +517,7 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
         'description': descriptionController.text,
         'price': _priceController.text,
         'promote': _market?.promote,
+        'approved': _market?.approved,
         'likes': _market?.likes,
         'comments':
             _market?.comments?.map((CommentModel x) => x.toMap()).toList(),
@@ -473,14 +525,18 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
         'images': _market?.images,
         'userId': _market?.userId,
         'user': _market?.user?.toMap(),
+        'discount': _discountController.text,
       });
-      await ApiService.put(path: 'markets/${_market?.marketId}', body: {
-        'category': _selectedCategory,
-        'location': _selectedLocation,
-        'description': descriptionController.text,
-        'price': _priceController.text,
-        'images': _market?.images,
-      });
+      await ApiService.put(
+          path: 'markets/${_market?.marketId}',
+          body: <String, dynamic>{
+            'category': _selectedCategory,
+            'location': _selectedLocation,
+            'description': descriptionController.text,
+            'price': _priceController.text,
+            'discount': _discountController.text,
+            'images': _market?.images,
+          });
       Get.back();
     }
   }

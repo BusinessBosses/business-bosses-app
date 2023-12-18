@@ -41,6 +41,12 @@ class HomeRepository {
   }
 
   /// Fetch Marketplace Data
+  static Future<ApiResponseModel> fetchMarketDescription() async {
+    final ApiResponseModel response = await ApiService.get(path: 'admin');
+    return response;
+  }
+
+  /// Fetch Marketplace Data
   static Future<ApiResponseModel> fetchMoreMarket(int size, int page) async {
     final ApiResponseModel response =
         await ApiService.get(path: 'markets/all?size=$size&page=$page');
@@ -89,6 +95,28 @@ class HomeRepository {
   static Future<ApiResponseModel> fetchBlocked() async {
     final ApiResponseModel response =
         await ApiService.get(path: 'blockedpost/user');
+    return response;
+  }
+
+  /// Update Views
+  static Future<ApiResponseModel> updateViews(String id, int views) async {
+    final ApiResponseModel response = await ApiService.put(
+        path: 'post/update-post/$id', body: <String, dynamic>{'views': views});
+    return response;
+  }
+
+  /// Update Views
+  static Future<ApiResponseModel> updateForumViews(String id, int views) async {
+    final ApiResponseModel response = await ApiService.put(
+        path: 'forum/update/$id', body: <String, dynamic>{'views': views});
+    return response;
+  }
+
+  /// Update Views
+  static Future<ApiResponseModel> updatemarketViews(
+      String id, int views) async {
+    final ApiResponseModel response = await ApiService.put(
+        path: 'markets/$id', body: <String, dynamic>{'views': views});
     return response;
   }
 }

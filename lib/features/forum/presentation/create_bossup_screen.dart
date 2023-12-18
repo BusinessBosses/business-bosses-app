@@ -1,4 +1,5 @@
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
+import 'package:business_bosses_v2/common/widgets/typography/text_widget.dart';
 import 'package:business_bosses_v2/features/forum/models/forum_model.dart';
 import 'package:business_bosses_v2/features/posts/widgets/preview.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
@@ -11,9 +12,7 @@ import '../../../action/action.dart';
 import '../../../common/widgets/buttons/my_outlined_button.dart';
 import '../../../services/api_service.dart';
 import '../../../utils/theme/theme.dart';
-import '../../home/bottom_nav.dart';
 import '../controller/create_bossup_controller.dart';
-import '../widgets/field_container.dart';
 
 // ignore: public_member_api_docs
 class CreateBossUpScreen extends StatefulWidget {
@@ -37,6 +36,8 @@ class _CreateBossUpScreenState extends State<CreateBossUpScreen> {
   bool isProcessing = false;
   bool isUpdating = false;
   bool isbossup = true;
+  bool isVisible = false;
+  String? _ytUrl;
   late String industryId;
   final TextEditingController descriptionController = TextEditingController();
   @override
@@ -71,19 +72,11 @@ class _CreateBossUpScreenState extends State<CreateBossUpScreen> {
                   const Text('Introduce Your Business'),
               automaticallyImplyLeading:
                   false, // Used for removing back buttoon.
-              actions: [
+              actions: <Widget>[
                 IconButton(
                   icon: const Icon(Icons.close),
                   onPressed: () {
-                    isbossup
-                        ? Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (BuildContext context) =>
-                                  const BottomNavScreen(1, true),
-                            ),
-                          )
-                        : Get.back();
+                    isbossup ? Get.back() : Get.back();
                   },
                 )
               ],
@@ -93,7 +86,7 @@ class _CreateBossUpScreenState extends State<CreateBossUpScreen> {
                   const EdgeInsets.only(top: 16.0, left: 16.0, right: 16.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
+                children: <Widget>[
                   TextFormField(
                     // controller: _titleController,
                     initialValue: forum.title,
@@ -132,52 +125,149 @@ class _CreateBossUpScreenState extends State<CreateBossUpScreen> {
                     ),
                   ),
                   const SizedBox(height: 12.0),
-                  GestureDetector(
-                    onTap: () {
-                      if (controller.imageFileList.length < 5) {
-                        controller.onPickImage();
-                      } else {
-                        showSnackbar(
-                            message: 'You can only upload up to 5 images.');
-                      }
-                    },
-                    child: FieldContainer(
-                      child: Row(
-                        children: [
-                          SvgPicture.asset('assets/svgs/file.svg'),
-                          const SizedBox(width: 16.0),
-                          Expanded(
-                            child: Text(
-                              'Add Attachment',
-                              style: Theme.of(context)
+                  Row(
+                    children: [
+                      Container(
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(50)),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 8, vertical: 8),
+                            child: GestureDetector(
+                              onTap: () {
+                                if (controller.imageFileList.length < 5) {
+                                  controller.onPickImage();
+                                } else {
+                                  showSnackbar(
+                                      message:
+                                          'You can only upload up to 5 images.');
+                                }
+                              },
+                              child: Row(
+                                children: <Widget>[
+                                  const TextWidget(
+                                    text: 'Add Attachment',
+                                    fontWeight: FontWeight.w700,
+                                    size: 15,
+                                  ),
+                                  const SizedBox(
+                                    width: 5,
+                                  ),
+                                  SvgPicture.asset(
+                                    'assets/svgs/addimagepost.svg',
+                                    height: 11,
+                                  ),
+
+                                  // const Text(
+                                  //   'Max file size for images is 10Mb',
+                                  //   style: TextStyle(fontSize: 11, color: Colors.red),
+                                  // )
+                                ],
+                              ),
+                            ),
+                          )),
+                      const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 8.0),
+                        child: Text('or'),
+                      ),
+                      Container(
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(50)),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 8, vertical: 8),
+                            child: GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  isVisible = !isVisible;
+                                });
+                              },
+                              child: Row(
+                                children: <Widget>[
+                                  const TextWidget(
+                                    text: 'Add Youtube link',
+                                    fontWeight: FontWeight.w700,
+                                    size: 15,
+                                  ),
+                                  const SizedBox(
+                                    width: 5,
+                                  ),
+                                  SvgPicture.asset(
+                                    'assets/svgs/yt.svg',
+                                    height: 15,
+                                  ),
+
+                                  // const Text(
+                                  //   'Max file size for images is 10Mb',
+                                  //   style: TextStyle(fontSize: 11, color: Colors.red),
+                                  // )
+                                ],
+                              ),
+                            ),
+                          )),
+                    ],
+                  ),
+                  const SizedBox(height: 10.0),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    child: Container(
+                      decoration: const BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(15),
+                        ),
+                      ),
+                      child: Visibility(
+                        visible: isVisible,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                          child: TextFormField(
+                            onChanged: (String val) {
+                              _ytUrl = val;
+                              setState(() {});
+                            },
+                            // validator: (value) {
+                            //   if (value == null || value.isEmpty) {
+                            //     return '';
+                            //   }
+                            //   return null;
+                            // },
+                            // textInputAction: TextInputAction.done,
+                            keyboardType: TextInputType.visiblePassword,
+                            maxLines: 1,
+                            decoration: InputDecoration(
+                              hintText: 'Paste a Youtube Video link here',
+                              border: InputBorder.none,
+                              hintStyle: Theme.of(context)
                                   .textTheme
-                                  .bodyMedium
-                                  ?.copyWith(color: hintColor),
+                                  .bodyMedium!
+                                  .copyWith(
+                                    color: textColor.withOpacity(0.2),
+                                  ),
                             ),
                           ),
-                          const SizedBox(width: 16.0),
-                          CircleAvatar(
-                            radius: 26 / 1.38,
-                            backgroundColor: backgroundColor,
-                            child: SvgPicture.asset(
-                              'assets/svgs/addimagepost.svg',
-                              height: 18,
-                            ),
-                          ),
-                        ],
+                        ),
                       ),
                     ),
                   ),
-                  const SizedBox(height: 8.0),
+                  const SizedBox(
+                    height: 8,
+                  ),
                   Preview(controller: controller),
                   const SizedBox(height: 24.0),
                   MCustomButton(
                     onPressed: () async {
-                      controller.createForum({
+                      controller.createForum(<String, dynamic>{
                         'title': title.trim(),
                         'description': description.trim(),
                         'timestamp': DateTime.now().millisecondsSinceEpoch,
-                        'industryId': industryId
+                        'industryId': industryId,
+                        'ytUrl': _ytUrl,
+                        'images': _ytUrl != null && _ytUrl != ''
+                            ? 'https://api.businessbosses.co.uk/appfiles/1698854755_13_download_(1).png'
+                            : null,
                       });
                       if (isbossup == true) {
                         Map<String, dynamic> updateData = <String, dynamic>{
@@ -186,12 +276,12 @@ class _CreateBossUpScreenState extends State<CreateBossUpScreen> {
                         };
                         await ApiService.put(
                           path: 'users/${_profileController.myProfile.uid}',
-                          body: {
+                          body: <String, dynamic>{
                             'bossOfTheWeekTimeStamp':
                                 DateTime.now().millisecondsSinceEpoch,
                           },
                         );
-                        _profileController.updateProfile({
+                        _profileController.updateProfile(<String, dynamic>{
                           ..._profileController.myProfile.toMap(),
                           ...updateData
                         });
@@ -207,7 +297,7 @@ class _CreateBossUpScreenState extends State<CreateBossUpScreen> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
+                      children: <Widget>[
                         SvgPicture.asset(
                           'assets/svgs/report.svg',
                           color: primaryColorLT,

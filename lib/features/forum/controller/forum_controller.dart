@@ -5,6 +5,7 @@ import 'package:business_bosses_v2/features/forum/models/forum_model.dart';
 import 'package:business_bosses_v2/features/forum/models/industry.dart';
 import 'package:business_bosses_v2/features/forum/repository/forum_repository.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
+import 'package:business_bosses_v2/features/home/repository/home_repository.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -14,10 +15,10 @@ class ForumController extends GetxController {
   late IO.Socket socket;
   final HomeController _homeController = Get.find();
   final ProfileController _profileController = Get.find();
-  List<ForumModel> forums = [];
+  List<ForumModel> forums = <ForumModel>[];
   late Industry industry;
 
-  List<UserModel> members = [];
+  List<UserModel> members = <UserModel>[];
   RxInt totalForums = RxInt(0);
   RxInt page = RxInt(0);
   RxInt membersPage = RxInt(0);
@@ -47,7 +48,7 @@ class ForumController extends GetxController {
       industry.joinedUsers!.removeWhere((String element) => element == myUid);
     } else {
       if (industry.joinedUsers == null) {
-        industry.joinedUsers = [myUid];
+        industry.joinedUsers = <String>[myUid];
       } else {
         industry.joinedUsers!.add(myUid);
       }
@@ -72,7 +73,7 @@ class ForumController extends GetxController {
       // industry = Industry.toObject(response.data['industry']);
       for (int i = 0; i < response.data['rows'].length; i++) {
         if (response.data['rows'][i]['user'] != null) {
-          forums.add(ForumModel.fromMap({
+          forums.add(ForumModel.fromMap(<String, dynamic>{
             ...response.data['rows'][i],
             'likes': response.data['rows'][i]['likes']
                 .map((dynamic like) => like['userId'].toString())
@@ -89,6 +90,17 @@ class ForumController extends GetxController {
     loading(false);
 
     update();
+  }
+
+  void updateForumViews(ForumModel post) {
+    final int postIndex = forums
+        .indexWhere((ForumModel element) => element.forumId == post.forumId);
+    if (postIndex != -1) {
+      // Increment the view count of the post by 1
+      post.setViews(post.views! + 1);
+      update();
+      HomeRepository.updateForumViews(post.forumId, post.views!);
+    }
   }
 
   Future<void> fetchIndustryUsers(String industryId,
@@ -137,14 +149,14 @@ class ForumController extends GetxController {
     }
     update();
     if (_profileController.myProfile.uid != receiverUid) {
-      socket.emit('like', {
+      socket.emit('like', <String, String>{
         'postId': postId,
         'userId': userId,
         'type': type,
         'receiverUid': receiverUid,
       });
     } else {
-      socket.emit('like', {
+      socket.emit('like', <String, String>{
         'postId': postId,
         'userId': userId,
         'type': type,
@@ -153,7 +165,7 @@ class ForumController extends GetxController {
   }
 
   void joinAndLeaveIndustry(String userId, String industryId) {
-    socket.emit('join-leave-industry', {
+    socket.emit('join-leave-industry', <String, String>{
       'industryId': industryId,
       'userId': userId,
     });
@@ -186,7 +198,7 @@ class ForumController extends GetxController {
         profileController.updateCoinCount(-1);
         forums[postIndex].coins!.add(userId);
       }
-      socket.emit('coin', {
+      socket.emit('coin', <String, String>{
         'postId': postId,
         'userId': userId,
         'type': type,
@@ -198,7 +210,7 @@ class ForumController extends GetxController {
 
   /// ADD NEW POST TO STATE
   void addNewForum(Map<String, dynamic> newPost) async {
-    ForumModel modelizedNewPost = ForumModel.fromMap({
+    ForumModel modelizedNewPost = ForumModel.fromMap(<String, dynamic>{
       ...newPost,
       'coins': <String>[],
       'likes': <String>[],

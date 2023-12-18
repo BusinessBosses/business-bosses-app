@@ -66,7 +66,7 @@ class _ReviewTileState extends State<ReviewTile> {
                 color: Colors.white, borderRadius: BorderRadius.circular(0)),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
+              children: <Widget>[
                 ListTile(
                   contentPadding: const EdgeInsets.only(left: 15, right: 15),
                   leading: GestureDetector(
@@ -98,9 +98,9 @@ class _ReviewTileState extends State<ReviewTile> {
                     },
                     child: widget.post.rater.isSubscribed == true
                         ? Row(
-                            children: [
+                            children: <Widget>[
                               Text(
-                                '${widget.post.rater.name!.length <= 15 ? widget.post.rater.name : "${widget.post.rater.name!.substring(0, 15)}..."}',
+                                '${widget.post.rater.name!.length <= 15 ? widget.post.rater.name : "${widget.post.rater.name!.substring(0, 12)}..."}',
                                 style: Theme.of(context).textTheme.bodyLarge,
                               ),
                               const SizedBox(width: 5),
@@ -112,7 +112,7 @@ class _ReviewTileState extends State<ReviewTile> {
                             ],
                           )
                         : Text(
-                            '${widget.post.rater.name!.length <= 15 ? widget.post.rater.name : "${widget.post.rater.name!.substring(0, 15)}..."}',
+                            '${widget.post.rater.name!.length <= 15 ? widget.post.rater.name : "${widget.post.rater.name!.substring(0, 12)}..."}',
                             style: Theme.of(context).textTheme.bodyLarge,
                           ),
                   ),
@@ -121,7 +121,7 @@ class _ReviewTileState extends State<ReviewTile> {
                     width: 80,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
+                      children: <Widget>[
                         const SizedBox(
                           width: 10,
                         ),
@@ -202,15 +202,15 @@ class _ReviewTileState extends State<ReviewTile> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
+                    children: <Widget>[
                       const SizedBox(
                         height: 10,
                       ),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
+                        children: <Widget>[
                           Row(
-                            children: [
+                            children: <Widget>[
                               const Icon(
                                 Icons.star,
                                 color: Color.fromRGBO(255, 202, 40, 1),

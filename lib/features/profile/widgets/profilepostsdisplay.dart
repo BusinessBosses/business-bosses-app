@@ -1,16 +1,20 @@
 import 'package:business_bosses_v2/common/models/user_model.dart';
+import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/posts/models/post_model.dart';
 import 'package:business_bosses_v2/features/posts/widgets/post_grid_item.dart';
+import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../common/widgets/safety_model.dart';
 
+/// PROFILE POST SCREEN
 Widget profilepostsdisplay(
     BuildContext context, UserModel publicUser, List<PostModel> posts,
     {bool loading = true, bool ispublicposts = false}) {
-  // final ProfileController _profileController = Get.find();
+  final HomeController homeController = Get.find();
+  final ProfileController profileController = Get.find();
   return loading || posts.isEmpty
       ? SafetyModel(
           isLoading: loading,
@@ -41,11 +45,21 @@ Widget profilepostsdisplay(
                 top: 10.0, bottom: 120, left: 10, right: 10),
             itemCount: posts.length,
             itemBuilder: (BuildContext context, int i) {
+              final bool hasIncrementedView = homeController
+                  .itemsWithIncrementedViews
+                  .contains(posts[i].postId);
               return ispublicposts == false
                   ? PostGridItem(
                       post: posts[i],
-                      key: ValueKey(posts[i].postId),
+                      key: ValueKey<String>(posts[i].postId),
                       onTap: () {
+                        if (hasIncrementedView == false) {
+                          homeController.itemsWithIncrementedViews
+                              .add(posts[i].postId);
+                          posts[i].setViews(posts[i].views! + 1);
+                          profileController.updatePostViews(
+                              posts[i], posts[i].views!);
+                        }
                         Get.toNamed(Routes.postDetails, arguments: posts[i]);
                       },
                       // onDeletePost:
@@ -56,8 +70,15 @@ Widget profilepostsdisplay(
                   : PostGridItem(
                       hasMore: false,
                       post: posts[i],
-                      key: ValueKey(posts[i].postId),
+                      key: ValueKey<String>(posts[i].postId),
                       onTap: () {
+                        if (hasIncrementedView == false) {
+                          homeController.itemsWithIncrementedViews
+                              .add(posts[i].postId);
+                          posts[i].setViews(posts[i].views! + 1);
+                          profileController.updatePostViews(
+                              posts[i], posts[i].views!);
+                        }
                         Get.toNamed(Routes.postDetails, arguments: posts[i]);
                       },
                       // onDeletePost:

@@ -1,3 +1,4 @@
+import 'package:business_bosses_v2/common/widgets/typography/text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -13,8 +14,6 @@ import '../../../action/action.dart';
 import '../../../common/dialogs/snackbar.dart';
 import '../../../common/widgets/buttons/my_outlined_button.dart';
 import '../../../utils/theme/theme.dart';
-import '../../home/bottom_nav.dart';
-import '../widgets/field_container.dart';
 
 class CreateForumScreen extends StatefulWidget {
   static const String routeName = '/create-forum-screen';
@@ -33,9 +32,14 @@ class _CreateForumScreenState extends State<CreateForumScreen> {
   String description = '';
   ForumModel forum = ForumModel(forumId: '', industryId: '');
   bool isUpdating = false;
-  bool isbossup = true;
+  late bool isbossup;
   late String industryId;
   String? categoryId;
+  bool isVisible = false;
+  String? _ytUrl;
+  bool isImageSelected = false;
+  bool isYoutubeSelected = false;
+  final TextEditingController descriptionController = TextEditingController();
 
   @override
   void initState() {
@@ -46,12 +50,13 @@ class _CreateForumScreenState extends State<CreateForumScreen> {
     if (arguments == null) {
       Get.back();
     } else {
-      isbossup = arguments['isBossUp'] ?? true;
+      isbossup = arguments['isBossUp'] ?? false;
       if (arguments['isUpdating'] != null) {
         isUpdating = true;
         forum = arguments['forum'];
         title = forum.title ?? '';
         description = forum.description ?? '';
+        descriptionController.text = forum.description ?? '';
         industryId = forum.industryId;
         _createForumController.initializeForumEditImage(forum.images);
       } else {
@@ -79,19 +84,11 @@ class _CreateForumScreenState extends State<CreateForumScreen> {
                         : 'Share Opportunities',
               ),
               automaticallyImplyLeading: false,
-              actions: [
+              actions: <Widget>[
                 IconButton(
                   icon: const Icon(Icons.close),
                   onPressed: () {
-                    isbossup
-                        ? Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (BuildContext context) =>
-                                  const BottomNavScreen(2, true),
-                            ),
-                          )
-                        : Get.back();
+                    isbossup ? Get.back() : Get.back();
                   },
                 )
               ],
@@ -99,7 +96,7 @@ class _CreateForumScreenState extends State<CreateForumScreen> {
             body: SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
+                children: <Widget>[
                   const SizedBox(height: 16.0),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -123,8 +120,7 @@ class _CreateForumScreenState extends State<CreateForumScreen> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
                     child: DetectableTextField(
-                      controller:
-                          TextEditingController(text: forum.description),
+                      controller: descriptionController,
                       detectionRegExp: detectionRegExp(hashtag: false)!,
                       onDetectionTyped: (String text) {},
                       onDetectionFinished: () {},
@@ -145,44 +141,236 @@ class _CreateForumScreenState extends State<CreateForumScreen> {
                   ),
                   const SizedBox(height: 12.0),
                   // if (!isUpdating)
-                  GestureDetector(
-                    onTap: () {
-                      if (controller.imageFileList.length < 5) {
-                        controller.onPickImage(isUpdating: isUpdating);
-                      } else {
-                        showSnackbar(
-                            message: 'You can only upload up to 5 images.');
-                      }
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                      child: FieldContainer(
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: Text(
-                                'Add Attachment',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyMedium
-                                    ?.copyWith(color: hintColor),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 15.0),
+                    // child: Row(
+                    //   children: [
+                    //     Container(
+                    //         decoration: BoxDecoration(
+                    //             color: Colors.white,
+                    //             borderRadius: BorderRadius.circular(50)),
+                    //         child: Padding(
+                    //           padding: const EdgeInsets.symmetric(
+                    //               horizontal: 8, vertical: 8),
+                    //           child: GestureDetector(
+                    //             onTap: () {
+                    //               if (controller.imageFileList.length < 5) {
+                    //                 controller.onPickImage();
+                    //               } else {
+                    //                 showSnackbar(
+                    //                     message:
+                    //                         'You can only upload up to 5 images.');
+                    //               }
+                    //             },
+                    //             child: Row(
+                    //               children: <Widget>[
+                    //                 const TextWidget(
+                    //                   text: 'Add Attachment',
+                    //                   fontWeight: FontWeight.w700,
+                    //                   size: 15,
+                    //                 ),
+                    //                 const SizedBox(
+                    //                   width: 5,
+                    //                 ),
+                    //                 SvgPicture.asset(
+                    //                   'assets/svgs/addimagepost.svg',
+                    //                   height: 11,
+                    //                 ),
+
+                    //                 // const Text(
+                    //                 //   'Max file size for images is 10Mb',
+                    //                 //   style: TextStyle(fontSize: 11, color: Colors.red),
+                    //                 // )
+                    //               ],
+                    //             ),
+                    //           ),
+                    //         )),
+                    //     const Padding(
+                    //       padding: EdgeInsets.symmetric(horizontal: 8.0),
+                    //       child: Text('or'),
+                    //     ),
+                    //     Container(
+                    //         decoration: BoxDecoration(
+                    //             color: Colors.white,
+                    //             borderRadius: BorderRadius.circular(50)),
+                    //         child: Padding(
+                    //           padding: const EdgeInsets.symmetric(
+                    //               horizontal: 8, vertical: 8),
+                    //           child: GestureDetector(
+                    //             onTap: () {
+                    //               setState(() {
+                    //                 isVisible = !isVisible;
+                    //               });
+                    //             },
+                    //             child: Row(
+                    //               children: <Widget>[
+                    //                 const TextWidget(
+                    //                   text: 'Add Youtube link',
+                    //                   fontWeight: FontWeight.w700,
+                    //                   size: 15,
+                    //                 ),
+                    //                 const SizedBox(
+                    //                   width: 5,
+                    //                 ),
+                    //                 SvgPicture.asset(
+                    //                   'assets/svgs/yt.svg',
+                    //                   height: 15,
+                    //                 ),
+
+                    //               ],
+                    //             ),
+                    //           ),
+                    //         )),
+                    //   ],
+                    // ),
+
+                    child: Row(
+                      children: [
+                        Container(
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(50)),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 8, vertical: 8),
+                              child: GestureDetector(
+                                onTap: () {
+                                  if (controller.imageFileList.length < 5) {
+                                    controller.onPickImage();
+                                  } else {
+                                    showSnackbar(
+                                        message:
+                                            'You can only upload up to 5 images.');
+                                  }
+                                },
+                                child: Row(
+                                  children: <Widget>[
+                                    const TextWidget(
+                                      text: 'Add Attachment',
+                                      fontWeight: FontWeight.w700,
+                                      size: 15,
+                                    ),
+                                    const SizedBox(
+                                      width: 5,
+                                    ),
+                                    SvgPicture.asset(
+                                      'assets/svgs/addimagepost.svg',
+                                      height: 11,
+                                    ),
+                                    // Radio(
+                                    //   value: true,
+                                    //   groupValue: isImageSelected,
+                                    //   onChanged: (value) {
+                                    //     setState(() {
+                                    //       isImageSelected = value!;
+                                    //       isYoutubeSelected = false;
+                                    //     });
+                                    //   },
+                                    // ),
+                                    // const Text(
+                                    //   'Max file size for images is 10Mb',
+                                    //   style: TextStyle(fontSize: 11, color: Colors.red),
+                                    // )
+                                  ],
+                                ),
                               ),
-                            ),
-                            const SizedBox(width: 16.0),
-                            CircleAvatar(
-                              radius: 26 / 1.38,
-                              backgroundColor: backgroundColor,
-                              child: SvgPicture.asset(
-                                'assets/svgs/addimagepost.svg',
-                                height: 18,
+                            )),
+                        const Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 8.0),
+                          child: Text('or'),
+                        ),
+                        Container(
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(50)),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 8, vertical: 8),
+                              child: GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    isVisible = !isVisible;
+                                  });
+                                },
+                                child: Row(
+                                  children: <Widget>[
+                                    const TextWidget(
+                                      text: 'Add Youtube link',
+                                      fontWeight: FontWeight.w700,
+                                      size: 15,
+                                    ),
+                                    const SizedBox(
+                                      width: 5,
+                                    ),
+                                    SvgPicture.asset(
+                                      'assets/svgs/yt.svg',
+                                      height: 15,
+                                    ),
+                                    // Radio(
+                                    //   value: true,
+                                    //   groupValue: isYoutubeSelected,
+                                    //   onChanged: (value) {
+                                    //     setState(() {
+                                    //       isYoutubeSelected = value!;
+                                    //       isImageSelected = false;
+                                    //     });
+                                    //   },
+                                    // ),
+                                  ],
+                                ),
                               ),
+                            )),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 8.0),
+
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 14),
+                    child: Container(
+                      decoration: const BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(15),
+                        ),
+                      ),
+                      child: Visibility(
+                        visible: isVisible,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                          child: TextFormField(
+                            onChanged: (String val) {
+                              _ytUrl = val;
+                              setState(() {});
+                            },
+                            // validator: (value) {
+                            //   if (value == null || value.isEmpty) {
+                            //     return '';
+                            //   }
+                            //   return null;
+                            // },
+                            // textInputAction: TextInputAction.done,
+                            keyboardType: TextInputType.visiblePassword,
+                            maxLines: 1,
+                            decoration: InputDecoration(
+                              hintText: 'Paste a Youtube Video link here',
+                              border: InputBorder.none,
+                              hintStyle: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium!
+                                  .copyWith(
+                                    color: textColor.withOpacity(0.2),
+                                  ),
                             ),
-                          ],
+                          ),
                         ),
                       ),
                     ),
                   ),
-                  const SizedBox(height: 8.0),
+                  const SizedBox(
+                    height: 10,
+                  ),
+
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
                     child: Preview(
@@ -191,23 +379,28 @@ class _CreateForumScreenState extends State<CreateForumScreen> {
                     ),
                   ),
                   const SizedBox(height: 24.0),
+
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
                     child: MCustomButton(
                       onPressed: () {
                         if (isUpdating) {
-                          controller.editForum({
+                          controller.editForum(<String, dynamic>{
                             ...forum.toMap(),
                             'title': title.trim(),
                             'description': description.trim(),
                             'industryId': industryId,
                           }, isBossup: isbossup);
                         } else {
-                          controller.createForum({
+                          controller.createForum(<String, dynamic>{
                             'title': title.trim(),
                             'description': description.trim(),
                             'timestamp': DateTime.now().millisecondsSinceEpoch,
-                            'industryId': industryId
+                            'industryId': industryId,
+                            'ytUrl': _ytUrl,
+                            'images': _ytUrl != null && _ytUrl != ''
+                                ? 'https://api.businessbosses.co.uk/appfiles/1698854755_13_download_(1).png'
+                                : null,
                           });
                         }
                       },
@@ -239,7 +432,7 @@ class _CreateForumScreenState extends State<CreateForumScreen> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
+                        children: <Widget>[
                           SvgPicture.asset(
                             'assets/svgs/report.svg',
                             height: 18,

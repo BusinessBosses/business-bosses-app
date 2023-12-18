@@ -32,7 +32,7 @@ class ChatBox extends StatelessWidget {
     return message.senderUid != myUid
         ? Row(
             mainAxisAlignment: MainAxisAlignment.start,
-            children: [
+            children: <Widget>[
               message.deleted!.contains('myId') ||
                       message.deleted!.contains(message.senderUid)
                   ? Text(
@@ -74,7 +74,7 @@ class ChatBox extends StatelessWidget {
                                     crossAxisAlignment: message.image != null
                                         ? CrossAxisAlignment.start
                                         : CrossAxisAlignment.end,
-                                    children: [
+                                    children: <Widget>[
                                       if (message.image != null)
                                         GestureDetector(
                                           onTap: () {
@@ -86,13 +86,15 @@ class ChatBox extends StatelessWidget {
                                                 builder:
                                                     (BuildContext context) =>
                                                         ImagesViewerScreen(
-                                                  urls: [message.image!],
+                                                  urls: <dynamic>[
+                                                    message.image!
+                                                  ],
                                                 ),
                                               ),
                                             );
                                           },
                                           child: Stack(
-                                            children: [
+                                            children: <Widget>[
                                               if (message.isRawImage ?? false)
                                                 ClipRRect(
                                                   borderRadius:
@@ -149,23 +151,21 @@ class ChatBox extends StatelessWidget {
                         ),
                       ),
                     ),
-              if (message.timestamp != null)
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Text(TimeFormat.formatString(message.timestamp)),
-                ),
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Text(TimeFormat.formatString(message.timestamp)),
+              ),
             ],
           )
         : Column(
-            children: [
+            children: <Widget>[
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  if (message.timestamp != null)
-                    Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Text(TimeFormat.formatString(message.timestamp)),
-                    ),
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Text(TimeFormat.formatString(message.timestamp)),
+                  ),
                   message.deleted!.contains('myId')
                       ? Text(
                           'This message was deleted.',
@@ -203,7 +203,7 @@ class ChatBox extends StatelessWidget {
                                     crossAxisAlignment: message.deleted != null
                                         ? CrossAxisAlignment.start
                                         : CrossAxisAlignment.end,
-                                    children: [
+                                    children: <Widget>[
                                       if (message.image != null)
                                         GestureDetector(
                                           onTap: () {
@@ -215,13 +215,15 @@ class ChatBox extends StatelessWidget {
                                                 builder:
                                                     (BuildContext context) =>
                                                         ImagesViewerScreen(
-                                                  urls: [message.image!],
+                                                  urls: <dynamic>[
+                                                    message.image!
+                                                  ],
                                                 ),
                                               ),
                                             );
                                           },
                                           child: Stack(
-                                            children: [
+                                            children: <Widget>[
                                               if (message.isRawImage ?? false)
                                                 ClipRRect(
                                                   borderRadius:

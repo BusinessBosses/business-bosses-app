@@ -8,7 +8,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 import '../../action/action.dart';
-import '../../common/models/my_user.dart';
 import '../../common/widgets/network_image_with_placeholder.dart';
 import '../../common/widgets/safety_model.dart';
 import '../../common/widgets/search/search_bar.dart' as searchBar;
@@ -25,11 +24,11 @@ class ReferScreen extends StatefulWidget {
 }
 
 class _ReferScreenState extends State<ReferScreen> {
-  final List<UserModel> _referrableConnections = [];
+  final List<UserModel> _referrableConnections = <UserModel>[];
   final ProfileController _profileController = Get.find();
   late UserModel _specificUser;
 
-  final List<String> _selectedUsers = [];
+  final List<String> _selectedUsers = <String>[];
 
   bool _isProcessing = false;
   bool _isLoading = false;
@@ -136,7 +135,7 @@ class _ReferScreenState extends State<ReferScreen> {
               itemCount: _referrableConnections.length,
               itemBuilder: (BuildContext context, int i) {
                 return Column(
-                  children: [
+                  children: <Widget>[
                     ListTile(
                       onTap: () {
                         _addRemoveUser(_referrableConnections[i].uid);
@@ -173,8 +172,6 @@ class _ReferScreenState extends State<ReferScreen> {
 
   Future<void> _fetchMyConnections() async {}
 
-  final List<MyUser> _searchedList = [];
-
   void _onSearch(String val) {}
 
   void _onReferringToYourConnections() async {
@@ -183,7 +180,7 @@ class _ReferScreenState extends State<ReferScreen> {
       _isProcessing = true;
     });
     final ApiResponseModel res =
-        await ApiService.post(path: '/referal/refer', body: {
+        await ApiService.post(path: '/referal/refer', body: <String, dynamic>{
       'referredUserUid': _specificUser.uid,
       'referBy': _profileController.myProfile.uid,
       'referTo': _selectedUsers
@@ -202,13 +199,16 @@ class _ReferScreenState extends State<ReferScreen> {
     });
   }
 
+  // ignore: unused_element
   Future<void> _sendNotificationToReferTo(
       List<String> tokens, List<String> receivers) async {}
 
+  // ignore: unused_element
   Future<void> _sendNotificationToMainUser(
       List<String> tokens, List<String> receivers) async {}
 
   Future<void> _createMyReferrals(List<String> referToUsers) async {
+    // ignore: unused_local_variable
     String path = '${Constants.USERS}/${_specificUser.uid}/${Constants.REFERS}';
   }
 

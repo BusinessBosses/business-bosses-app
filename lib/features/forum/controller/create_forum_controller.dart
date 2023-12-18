@@ -35,11 +35,28 @@ class CreateForumController extends GetxController {
   }
 
   bool validateCreatePostData(Map<String, dynamic> data) {
-    if (data['title'].toString().isEmpty ||
-        data['description'].toString().isEmpty) {
+    // if (data['title'].toString().isEmpty ||
+    //     data['description'].toString().isEmpty) {
+    //   return false;
+    // } else {
+    //   return true;
+    // }
+    final String title = data['title'].toString();
+    final String desc = data['description'].toString();
+    final String ytUrl = data['ytUrl'].toString();
+    if (title.isEmpty || desc.isEmpty) {
       return false;
+    } else if (ytUrl != 'null' && ytUrl.isNotEmpty) {
+      // Regular expression to match YouTube video URLs, including YouTube Shorts
+      final RegExp regExp = RegExp(
+          r'^(https?://)?(www\.)?(youtu\.be/|youtube\.com/shorts/)([\w-]+)(\?[^\s]*)?$');
+      if (regExp.hasMatch(ytUrl)) {
+        return true;
+      } else {
+        return false;
+      }
     } else {
-      return true;
+      return true; // Return false if ytUrl is null
     }
   }
 
@@ -84,7 +101,8 @@ class CreateForumController extends GetxController {
   Future<dynamic> uploadUpdatingFile() async {
     /// RAW FILES
     final List<String> rawFiles = updatingImageFileList
-        .where((String element) => !element.contains('http') && element.isNotEmpty)
+        .where(
+            (String element) => !element.contains('http') && element.isNotEmpty)
         .toList();
 
     /// UPLOADED FILE URLS
@@ -138,6 +156,15 @@ class CreateForumController extends GetxController {
           Get.snackbar('Success', 'Post created successfully');
         }
       } else {
+        if (imageFileList.isNotEmpty &&
+            (body['ytUrl'] != null && body['ytUrl'] != '')) {
+          loading(false);
+          update();
+          return showSnackbar(
+              message: 'You cannot add image & YouTube link, please remove one',
+              title: 'OOPS!',
+              error: true);
+        }
         if (await uploadFile() == null) {
           showSnackbar(message: 'Error Uploading image');
         } else {
@@ -157,7 +184,9 @@ class CreateForumController extends GetxController {
       update();
     } else {
       showSnackbar(
-          message: 'Post can\'t be empty', title: 'OOPS!', error: true);
+          message: 'Post can\'t be empty or contain unwanted characters',
+          title: 'OOPS!',
+          error: true);
       return;
     }
   }
@@ -170,11 +199,12 @@ class CreateForumController extends GetxController {
       update();
 
       final List<String> hasNewUpload = updatingImageFileList
-          .where((String element) => !element.contains('http') && element.isNotEmpty)
+          .where((String element) =>
+              !element.contains('http') && element.isNotEmpty)
           .toList();
       if (hasNewUpload.isEmpty) {
         final ApiResponseModel response = await ForumRepository.editForum(
-            {...body, 'images': updatingImageFileList});
+            <String, dynamic>{...body, 'images': updatingImageFileList});
 
         if (response.success) {
           updatingImageFileList.clear();
@@ -213,9 +243,10 @@ class CreateForumController extends GetxController {
               .where((String element) => element.contains('http'))
               .toList();
           //////stopped here
-          final ApiResponseModel response = await ForumRepository.editForum({
+          final ApiResponseModel response =
+              await ForumRepository.editForum(<String, dynamic>{
             ...body,
-            'images': [...alreadyUploadedFileUrls, ...uploadedFiles]
+            'images': <String>[...alreadyUploadedFileUrls, ...uploadedFiles]
           });
 
           if (response.success) {

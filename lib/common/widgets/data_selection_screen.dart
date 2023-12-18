@@ -25,11 +25,11 @@ class DataSelectionScreen extends StatefulWidget {
 }
 
 class _DataSelectionScreenState extends State<DataSelectionScreen> {
-  List<MyTitle> _categories = [];
+  List<MyTitle> _categories = <MyTitle>[];
 
-  List<Industry> _industries = [];
-  List<String> _searchableData = [];
-  List<String> listData = [];
+  List<Industry> _industries = <Industry>[];
+  List<String> _searchableData = <String>[];
+  List<String> listData = <String>[];
   String _title = '';
   // bool _isInit = false;
   bool _isLoading = true;
@@ -109,7 +109,7 @@ class _DataSelectionScreenState extends State<DataSelectionScreen> {
         title: Text(_title),
       ),
       body: Column(
-        children: [
+        children: <Widget>[
           !widget.hasSearchBar
               ? Container()
               : Container(
@@ -183,14 +183,14 @@ class _DataSelectionScreenState extends State<DataSelectionScreen> {
 
   void toStringList(List<dynamic> list) {
     if (widget.analyser == Analyser.category) {
-      List<String> data = [];
+      List<String> data = <String>[];
       for (int i = 0; i < list.length; i++) {
         MyTitle cat = list[i];
         data.add(cat.title!);
       }
       listData = data;
     } else {
-      List<String> data = [];
+      List<String> data = <String>[];
       for (int i = 0; i < list.length; i++) {
         Industry industry = list[i];
         data.add(industry.industry!);

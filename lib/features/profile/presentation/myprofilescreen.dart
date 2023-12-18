@@ -13,6 +13,7 @@ import '../../../navigation/routes.dart';
 import '../../marketplace/controllers/market_controller.dart';
 import '../../marketplace/models/market_model.dart';
 import '../../marketplace/widgets/marketplace_item.dart';
+import '../../marketplace/widgets/service_item.dart';
 import '../widgets/my_profile_header.dart';
 
 bool isExpanded = false;
@@ -31,7 +32,7 @@ class MyProfileScreen extends StatefulWidget {
 
 class _MyProfileScreenState extends State<MyProfileScreen> {
   final ProfileController profileController = Get.find();
-  final MarketController marketController = Get.put(MarketController());
+  final MarketController marketController = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +44,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
           appBar: AppBar(
             automaticallyImplyLeading: false,
             title: Text('@${profileController.myProfile.username}'),
-            actions: [
+            actions: <Widget>[
               IconButton(
                   icon: SvgPicture.asset(
                     'assets/svgs/settings.svg',
@@ -59,7 +60,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
             height: MediaQuery.of(context).size.height,
             width: MediaQuery.of(context).size.width,
             child: Stack(
-              children: [
+              children: <Widget>[
                 Container(
                   height: MediaQuery.of(context).size.height,
                   width: MediaQuery.of(context).size.width,
@@ -85,7 +86,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                           ? 2
                           : 3,
                       child: Column(
-                        children: [
+                        children: <Widget>[
                           // if (_publicUser.uid !=
                           //     'FirebaseAuth.instance.currentUser.uid') ...{
                           OutlineButtonHeader(
@@ -111,7 +112,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                           market.userId ==
                                           profileController.myProfile.uid)
                                       .isEmpty
-                                  ? [
+                                  ? <Widget>[
                                       const Tab(
                                         text: 'About',
                                       ),
@@ -119,7 +120,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                         text: 'Posts',
                                       ),
                                     ]
-                                  : [
+                                  : <Widget>[
                                       const Tab(
                                         text: 'About',
                                       ),
@@ -146,14 +147,14 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                             market.userId ==
                                             profileController.myProfile.uid)
                                         .isEmpty
-                                    ? [
+                                    ? <Widget>[
                                         SingleChildScrollView(
                                           child: Column(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.start,
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.start,
-                                            children: [
+                                            children: <Widget>[
                                               const SizedBox(
                                                 height: 30,
                                               ),
@@ -171,14 +172,14 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                               profileController.isLoading.value,
                                         ),
                                       ]
-                                    : [
+                                    : <Widget>[
                                         SingleChildScrollView(
                                           child: Column(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.start,
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.start,
-                                            children: [
+                                            children: <Widget>[
                                               const SizedBox(
                                                 height: 30,
                                               ),
@@ -197,57 +198,47 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                         ),
                                         SingleChildScrollView(
                                           child: Column(
-                                            children: [
-                                              GetBuilder<MarketController>(
-                                                builder: (MarketController
-                                                    marketController) {
-                                                  return Obx(() {
-                                                    if (marketController
-                                                        .loading.value) {
-                                                      return const Center(
-                                                          child:
-                                                              CircularProgressIndicator());
-                                                    } else if (marketController
-                                                        .error.value) {
-                                                      return const SafetyModel(
+                                            children: <Widget>[
+                                              Obx(() {
+                                                return marketController.markets
+                                                        .where((MarketModel
+                                                                market) =>
+                                                            market.userId ==
+                                                            profileController
+                                                                .myProfile.uid)
+                                                        .isEmpty
+                                                    ? const SafetyModel(
                                                         isLoading: false,
-                                                        title:
-                                                            'Error While Loading Data',
-                                                        subTitle:
-                                                            'Try Reloading Again',
                                                         icon: Icon(
                                                           Icons.warning,
-                                                          size: 60,
+                                                          color: Colors.grey,
+                                                          size: 80.0,
                                                         ),
-                                                      );
-                                                    } else {
-                                                      return marketController
-                                                              .markets
-                                                              .where((MarketModel
-                                                                      market) =>
-                                                                  market
-                                                                      .userId ==
-                                                                  profileController
-                                                                      .myProfile
-                                                                      .uid)
-                                                              .isEmpty
-                                                          ? const SafetyModel(
-                                                              isLoading: false,
-                                                              icon: Icon(
-                                                                Icons.warning,
-                                                                color:
-                                                                    Colors.grey,
-                                                                size: 80.0,
-                                                              ),
-                                                              title:
-                                                                  'This user has no items in store',
-                                                              // subTitle: '',
-                                                            )
-                                                          : ListView.builder(
-                                                              shrinkWrap: true,
-                                                              physics:
-                                                                  const NeverScrollableScrollPhysics(),
-                                                              itemCount: marketController
+                                                        title:
+                                                            'This user has no items in store',
+                                                        // subTitle: '',
+                                                      )
+                                                    : ListView.builder(
+                                                        shrinkWrap: true,
+                                                        physics:
+                                                            const NeverScrollableScrollPhysics(),
+                                                        itemCount: marketController
+                                                            .markets
+                                                            .where((MarketModel
+                                                                    market) =>
+                                                                market.userId ==
+                                                                profileController
+                                                                    .myProfile
+                                                                    .uid)
+                                                            .length,
+                                                        itemBuilder:
+                                                            (BuildContext
+                                                                    context,
+                                                                int index) {
+                                                          final List<
+                                                                  MarketModel>
+                                                              filteredMarkets =
+                                                              marketController
                                                                   .markets
                                                                   .where((MarketModel
                                                                           market) =>
@@ -256,35 +247,33 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                                                       profileController
                                                                           .myProfile
                                                                           .uid)
-                                                                  .length,
-                                                              itemBuilder:
-                                                                  (BuildContext
-                                                                          context,
-                                                                      int index) {
-                                                                final List<
-                                                                        MarketModel>
-                                                                    filteredMarkets =
-                                                                    marketController
-                                                                        .markets
-                                                                        .where((MarketModel
-                                                                                market) =>
-                                                                            market.userId ==
-                                                                            profileController.myProfile.uid)
-                                                                        .toList();
-                                                                final MarketModel
-                                                                    market =
-                                                                    filteredMarkets[
-                                                                        index];
+                                                                  .toList();
+                                                          final MarketModel
+                                                              market =
+                                                              filteredMarkets[
+                                                                  index];
 
-                                                                return MarketTile(
+                                                          return market
+                                                                  .isProduct
+                                                              ? MarketTile(
                                                                   post: market,
+                                                                  controller:
+                                                                      marketController,
+                                                                  key: ValueKey(
+                                                                      market
+                                                                          .marketId),
+                                                                )
+                                                              : ServiceTile(
+                                                                  post: market,
+                                                                  controller:
+                                                                      marketController,
+                                                                  key: ValueKey(
+                                                                      market
+                                                                          .marketId),
                                                                 );
-                                                              },
-                                                            );
-                                                    }
-                                                  });
-                                                },
-                                              ),
+                                                        },
+                                                      );
+                                              }),
                                               const SizedBox(
                                                 height: 100,
                                               )

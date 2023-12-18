@@ -19,12 +19,9 @@ class ReferralsDetailsScreen extends StatefulWidget {
 class _ReferralsDetailsScreenState extends State<ReferralsDetailsScreen> {
   final ScrollController _controller = ScrollController();
 
-  List<MyRefers> _referrals = [];
-  List<String> _userUids = [];
+  List<MyRefers> _referrals = <MyRefers>[];
 
-  final List<MyUser> _users = [];
-
-  final int _loadedItemsCount = 0;
+  final List<MyUser> _users = <MyUser>[];
 
   bool _isInit = false;
   final bool _isLoadingNext = false;
@@ -36,7 +33,6 @@ class _ReferralsDetailsScreenState extends State<ReferralsDetailsScreen> {
       _controller.addListener(_scrollListener);
       _referrals = ModalRoute.of(context)?.settings.arguments as List<MyRefers>;
       if (_referrals.isEmpty) navigateTo(context);
-      _userUids = MyRefers.uniqueUserUidList(referralsList: _referrals);
       _loadNextConnections();
       _isInit = true;
     }
@@ -61,14 +57,14 @@ class _ReferralsDetailsScreenState extends State<ReferralsDetailsScreen> {
       body: _users.isEmpty
           ? const SafetyModel(isLoading: true)
           : Stack(
-              children: [
+              children: <Widget>[
                 ListView.builder(
                   padding: const EdgeInsets.only(bottom: 48.0),
                   controller: _controller,
                   itemCount: _users.length,
                   itemBuilder: (BuildContext context, int i) {
                     return Column(
-                      children: [
+                      children: <Widget>[
                         ListTile(
                           onTap: () async {
                             var result = await navigateTo(

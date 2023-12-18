@@ -19,7 +19,7 @@ PreferredSizeWidget SearchAppBar({
         width: 24.0,
       ),
     ),
-    actions: [
+    actions: <Widget>[
       IconButton(
         onPressed: onClose,
         icon: const Icon(Icons.close),

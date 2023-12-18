@@ -14,12 +14,12 @@ class MyProfileHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: [
+      children: <Widget>[
         Padding(
           padding: const EdgeInsets.only(left: 16.0, right: 16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+            children: <Widget>[
               UserProfileTile(
                 myProfile: myProfile,
               ),
@@ -30,12 +30,12 @@ class MyProfileHeader extends StatelessWidget {
                 alignment: Alignment.center,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
+                  children: <Widget>[
                     Expanded(
                         child: CustomChildButton(
                       onPressed: () {
                         Get.toNamed(Routes.allconnectionsscreen,
-                            arguments: {'uid': myProfile.uid, 'pageIndex': 0});
+                            arguments: <String, Object>{'uid': myProfile.uid, 'pageIndex': 0});
                         // return navigateTo(
                         //   context,
                         //   routeName: AllConnectionsScreen.routeName,
@@ -49,7 +49,7 @@ class MyProfileHeader extends StatelessWidget {
                         child: CustomChildButton(
                       onPressed: () {
                         Get.toNamed(Routes.allconnectionsscreen,
-                            arguments: {'uid': myProfile.uid, 'pageIndex': 1});
+                            arguments: <String, Object>{'uid': myProfile.uid, 'pageIndex': 1});
                         // Get.toNamed(Routes.allconnectionsscreen);
                         // navigateTo(
                         //   context,
@@ -105,7 +105,7 @@ class MyProfileHeader extends StatelessWidget {
   Widget LRCL(context, String value, String caption) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
+      children: <Widget>[
         Text(
           value,
           style: Theme.of(context)
