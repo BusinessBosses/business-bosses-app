@@ -11,7 +11,7 @@ class ForumRepository {
   static Future<ApiResponseModel> getForumMembers(
       int page, String industryId) async {
     final ApiResponseModel response = await ApiService.get(
-        path: 'industry/get-joined-users/$industryId?size=100&page=$page');
+        path: 'industry/get-joined-users/$industryId?size=1000&page=$page');
     return response;
   }
 
