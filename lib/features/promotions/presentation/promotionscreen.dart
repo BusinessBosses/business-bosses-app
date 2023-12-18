@@ -156,14 +156,14 @@ class _PromotionScreenState extends State<PromotionScreen> {
                             width: 20,
                           ),
                           const SizedBox(width: 5),
-                          const Text(
-                            'for each friend.',
-                            style: TextStyle(
-                              fontSize: 15,
-                              color: textColor,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
+                          // const Text(
+                          //   'for each friend.',
+                          //   style: TextStyle(
+                          //     fontSize: 15,
+                          //     color: textColor,
+                          //     fontWeight: FontWeight.w700,
+                          //   ),
+                          // ),
                         ],
                       ),
                     ),

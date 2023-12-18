@@ -1,8 +1,12 @@
+import 'dart:io';
+
+import 'package:business_bosses_v2/common/widgets/buttons/custom_button.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import '../../action/action.dart';
 import '../../common/dialogs/snackbar.dart';
@@ -23,6 +27,7 @@ class ReviewPayment extends StatefulWidget {
 }
 
 class _ReviewPaymentState extends State<ReviewPayment> {
+  bool _isProcessing = false;
   ProfileController profileController = Get.find();
 
   ///intialize the payment
@@ -45,19 +50,19 @@ class _ReviewPaymentState extends State<ReviewPayment> {
     setState(() {});
   }
 
-  void sendPaymentData(Map data) async {
+  void sendapplePaymentData(Map data) async {
     Map<String, dynamic> paymentData = <String, dynamic>{
       'price': argument['price'],
       'plan': argument['plan'],
-      'token': data['token'],
     };
 
     final ApiResponseModel response =
-        await ApiService.post(path: 'subscription/payment', body: paymentData);
+        await ApiService.post(path: 'apple-sub', body: paymentData);
 
     if (response.success) {
       Get.toNamed(Routes.subscriptionconfirmation);
     } else {
+      print(response);
       showSnackbar(
           title: 'OOPS!',
           message: 'An error occurred, please try again!',
@@ -153,16 +158,18 @@ class _ReviewPaymentState extends State<ReviewPayment> {
       body: SingleChildScrollView(
         child: Stack(
           children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(
-                left: 30,
-                top: 35,
-              ),
-              child: SvgPicture.asset(
-                'assets/svgs/dottedline.svg',
-                height: 300,
-              ),
-            ),
+            Platform.isIOS
+                ? Container()
+                : Padding(
+                    padding: const EdgeInsets.only(
+                      left: 30,
+                      top: 35,
+                    ),
+                    child: SvgPicture.asset(
+                      'assets/svgs/dottedline.svg',
+                      height: 300,
+                    ),
+                  ),
             Container(
               height: 20,
               color: backgroundcolorinterface,
@@ -309,50 +316,93 @@ class _ReviewPaymentState extends State<ReviewPayment> {
                   const SizedBox(
                     height: 35,
                   ),
-                  const Row(
-                    children: <Widget>[
-                      Padding(
-                        padding: EdgeInsets.only(left: 8.0),
-                        child: CircleAvatar(
-                          radius: 14,
-                          backgroundColor: Color(0xFFF01C29),
-                          child: CircleAvatar(
-                            radius: 6,
-                            backgroundColor: Colors.white,
-                          ),
+                  Platform.isIOS
+                      ? Container()
+                      : const Row(
+                          children: <Widget>[
+                            Padding(
+                              padding: EdgeInsets.only(left: 8.0),
+                              child: CircleAvatar(
+                                radius: 14,
+                                backgroundColor: Color(0xFFF01C29),
+                                child: CircleAvatar(
+                                  radius: 6,
+                                  backgroundColor: Colors.white,
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            TextWidget(
+                              text: 'Select a Payment Option',
+                              size: 18,
+                              fontWeight: FontWeight.w700,
+                            )
+                          ],
                         ),
-                      ),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      TextWidget(
-                        text: 'Select a Payment Option',
-                        size: 18,
-                        fontWeight: FontWeight.w700,
-                      )
-                    ],
-                  ),
                   const SizedBox(
                     height: 10,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 10.0, right: 20),
-                    child: Column(
-                      children: options
-                          .map(
-                            (Map<String, dynamic> options) => PaymentOptionCard(
-                              option: options,
-                              activeoption: initPlan,
-                              onTap: (String newoption) {
+                  Platform.isIOS
+                      ? Padding(
+                          padding: const EdgeInsets.only(left: 8.0, right: 20),
+                          child: CustomButton(
+                              label: 'Subscribe now',
+                              onPressed: () async {
+                                argument;
                                 setState(() {
-                                  initPlan = newoption;
+                                  _isProcessing = true;
                                 });
+                                try {
+                                  await Purchases.purchaseProduct(argument
+                                          .toString()
+                                          .contains('annually')
+                                      ? 'xyz.codexia.businessbosses.annual'
+                                      : 'xyz.codexia.businessbosses.monthly');
+                                  Map<String, dynamic> data = <String, dynamic>{
+                                    'price': argument['price'],
+                                    'plan': argument['plan'],
+                                  };
+                                  sendapplePaymentData(data);
+                                } catch (e) {
+                                  showSnackbar(
+                                    title: 'OOPS!',
+                                    message:
+                                        'An error occurred while making payment, please try again!',
+                                    error: true,
+                                  );
+                                  setState(() {
+                                    _isProcessing = false;
+                                  });
+                                }
                               },
-                            ),
-                          )
-                          .toList(),
-                    ),
-                  ),
+                              isProcessing: _isProcessing,
+                              buttonType: ButtonType.elevated,
+                              child: Container()),
+                        )
+                      : Container(),
+                  Platform.isIOS
+                      ? Container()
+                      : Padding(
+                          padding: const EdgeInsets.only(left: 10.0, right: 20),
+                          child: Column(
+                            children: options
+                                .map(
+                                  (Map<String, dynamic> options) =>
+                                      PaymentOptionCard(
+                                    option: options,
+                                    activeoption: initPlan,
+                                    onTap: (String newoption) {
+                                      setState(() {
+                                        initPlan = newoption;
+                                      });
+                                    },
+                                  ),
+                                )
+                                .toList(),
+                          ),
+                        ),
                   Padding(
                     padding: const EdgeInsets.only(left: 10, right: 20),
                     child: Column(

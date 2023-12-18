@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../../utils/theme/theme.dart';
@@ -110,6 +111,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
 
   @override
   Widget build(BuildContext context) {
+    Purchases.logIn(profileController.myProfile.uid.toString());
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -223,7 +225,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
                                       ),
                                       Padding(
                                         padding: const EdgeInsets.only(
-                                            top: 60.0, left: 30),
+                                            top: 40.0, left: 30),
                                         child: Column(
                                           mainAxisAlignment:
                                               MainAxisAlignment.start,
@@ -236,7 +238,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
                                                   fontSize: 16,
                                                   fontWeight: FontWeight.bold),
                                             ),
-                                            const SizedBox(height: 30),
+                                            const SizedBox(height: 20),
                                             Row(
                                               children: <Widget>[
                                                 SvgPicture.asset(

@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:math';
 import 'dart:developer' as dartdeveloper;
 import 'package:async/async.dart';
+import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/features/authentication/presentation/code_verification_screen.dart';
 import 'package:business_bosses_v2/features/authentication/presentation/forgot_password_verification.dart';
 import 'package:business_bosses_v2/features/authentication/repository/auth_repository.dart';
@@ -11,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:sendgrid_mailer/sendgrid_mailer.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 import '../../../navigation/routes.dart';
@@ -26,7 +28,9 @@ class AuthController extends GetxController {
 
   final ApiService _apiService = ApiService();
 
-  String? _authCred, _password;
+  int randomNumber = Random().nextInt(9000) + 1000;
+
+  String? _authCred, _password, _authusername;
 
   static bool isValidEmail(String email) {
     if (email.isEmpty) return false;
@@ -41,6 +45,11 @@ class AuthController extends GetxController {
     } else {
       return true;
     }
+  }
+
+  Future<void> saveToSharedPreferences(String authCred) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('_authCred', authCred);
   }
 
   /// SEND OTP TO USER EMAIL FOR VERIFICATION
@@ -164,6 +173,7 @@ class AuthController extends GetxController {
   Future<void> appleAuthentication() async {
     final String rawNonce = generateNonce();
     final String nonce = sha256ofString(rawNonce);
+    SharedPreferences prefs = await SharedPreferences.getInstance();
 
     try {
       final AuthorizationCredentialAppleID appleCredential =
@@ -175,10 +185,27 @@ class AuthController extends GetxController {
         nonce: nonce,
       );
 
-      _authCred = appleCredential.email;
-      _password = 'password';
+      _authCred = appleCredential.email ?? prefs.getString('_authCred');
+      _authusername =
+          '${appleCredential.givenName} ${appleCredential.familyName}';
 
       if (appleCredential.email != null) {
+        saveToSharedPreferences(_authCred!);
+        dynamic user = await _handleRegister();
+        if (user['success'] == false) {
+          Get.snackbar('Error', user['error']);
+        } else {
+          Get.snackbar('Success', 'Authentication completed');
+          await logEvents('signup', 'email');
+          Get.toNamed(
+            Routes.updateProfile,
+            arguments: UserModel(
+              username: _authusername!,
+              email: _authCred!,
+            ),
+          );
+        }
+      } else {
         await logEvents('login', 'Apple SignIn');
         dynamic user = await _handleLogin();
         if (user['success'] == false) {
@@ -186,8 +213,6 @@ class AuthController extends GetxController {
         } else {
           Get.offAndToNamed(Routes.home);
         }
-      } else {
-        Get.snackbar('Error', 'Couldn\'t authenticate with Apple');
       }
 
       // print(appleCredential.email);
@@ -225,13 +250,24 @@ class AuthController extends GetxController {
   }
 
   Future<dynamic> _handleLogin() async {
-    if (emailValidatorExists(_authCred, isUnique: false)) {
-      dartdeveloper.log('exists');
-      Get.snackbar('Account Exists',
-          'An account already exists for your Apple ID try logging in instead');
+    dynamic user = await _apiService.googleLogin(
+      _authCred!,
+      _password ?? DateTime.now().millisecondsSinceEpoch.toString(),
+    );
+    return user;
+  }
+
+  Future<dynamic> _handleRegister() async {
+    if (emailValidatorExists(_authCred!, isUnique: false)) {
+      _handleLogin();
     } else {
-      dynamic user = await _apiService.login(_authCred!, _password!);
+      dynamic user = await _apiService.register(
+          _authCred!,
+          _password ?? DateTime.now().millisecondsSinceEpoch.toString(),
+          _authusername!,
+          "");
       return user;
+      // }
     }
   }
 
