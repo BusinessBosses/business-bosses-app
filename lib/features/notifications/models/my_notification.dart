@@ -3,7 +3,6 @@ import 'dart:convert';
 
 import 'package:business_bosses_v2/common/models/user_model.dart';
 
-
 class MyNotification {
   String notificationId;
   String? dataId;
@@ -16,6 +15,7 @@ class MyNotification {
   String? notificationType;
   String? username;
   UserModel? user;
+  String? image;
   MyNotification({
     required this.notificationId,
     this.dataId,
@@ -28,6 +28,7 @@ class MyNotification {
     this.notificationType,
     this.username,
     this.user,
+    this.image,
   });
 
   MyNotification copyWith({
@@ -42,6 +43,7 @@ class MyNotification {
     String? notificationType,
     String? username,
     UserModel? user,
+    String? image,
   }) {
     return MyNotification(
       notificationId: notificationId ?? this.notificationId,
@@ -49,6 +51,7 @@ class MyNotification {
       senderUid: senderUid ?? this.senderUid,
       message: message ?? this.message,
       title: title ?? this.title,
+      image: image ?? this.image,
       timestamp: timestamp ?? this.timestamp,
       receiverUid: receiverUid ?? this.receiverUid,
       isRead: isRead ?? this.isRead,
@@ -70,6 +73,7 @@ class MyNotification {
       'isRead': isRead,
       'notificationType': notificationType,
       'username': username,
+      'image': image,
       'user': user?.toMap(),
     };
   }
@@ -88,6 +92,7 @@ class MyNotification {
           ? map['notificationType'] as String
           : null,
       username: map['username'] != null ? map['username'] as String : null,
+      image: map['image'] != null ? map['image'] as String : null,
       user: map['user'] != null
           ? UserModel.fromMap(map['user'] as Map<String, dynamic>)
           : null,
@@ -101,7 +106,7 @@ class MyNotification {
 
   @override
   String toString() {
-    return 'MyNotification(notificationId: $notificationId, dataId: $dataId, senderUid: $senderUid, message: $message, title: $title, timestamp: $timestamp, receiverUid: $receiverUid, isRead: $isRead, notificationType: $notificationType, username: $username, user: $user)';
+    return 'MyNotification(notificationId: $notificationId, dataId: $dataId, senderUid: $senderUid, message: $message, title: $title, timestamp: $timestamp, receiverUid: $receiverUid, isRead: $isRead, notificationType: $notificationType, username: $username, image: $image, user: $user)';
   }
 
   @override
@@ -118,6 +123,7 @@ class MyNotification {
         other.isRead == isRead &&
         other.notificationType == notificationType &&
         other.username == username &&
+        other.image == image &&
         other.user == user;
   }
 
@@ -133,6 +139,7 @@ class MyNotification {
         isRead.hashCode ^
         notificationType.hashCode ^
         username.hashCode ^
+        image.hashCode ^
         user.hashCode;
   }
 }
