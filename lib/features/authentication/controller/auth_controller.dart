@@ -6,7 +6,6 @@ import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/features/authentication/presentation/code_verification_screen.dart';
 import 'package:business_bosses_v2/features/authentication/presentation/forgot_password_verification.dart';
 import 'package:business_bosses_v2/features/authentication/repository/auth_repository.dart';
-import 'package:business_bosses_v2/utils/constants/constants.dart';
 import 'package:crypto/crypto.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
@@ -194,18 +193,7 @@ class AuthController extends GetxController {
         saveToSharedPreferences(_authCred!);
         dynamic user = await _handleRegister();
         if (user['success'] == false) {
-          if (user['error']
-              .toString()
-              .contains('user already exists with this email address')) {
-            dynamic user = await _handleLogin();
-            if (user['success'] == false) {
-              Get.snackbar('Error', user['error']);
-            } else {
-              Get.offAndToNamed(Routes.home);
-            }
-          } else {
-            Get.snackbar('Error', user['error']);
-          }
+          Get.snackbar('Error', user['error']);
         } else {
           Get.snackbar('Success', 'Authentication completed');
           await logEvents('signup', 'email');
@@ -270,13 +258,17 @@ class AuthController extends GetxController {
   }
 
   Future<dynamic> _handleRegister() async {
-    dynamic user = await _apiService.register(
-        _authCred!,
-        _password ?? DateTime.now().millisecondsSinceEpoch.toString(),
-        _authusername!,
-        "");
-    return user;
-    // }
+    if (emailValidatorExists(_authCred!, isUnique: false)) {
+      _handleLogin();
+    } else {
+      dynamic user = await _apiService.register(
+          _authCred!,
+          _password ?? DateTime.now().millisecondsSinceEpoch.toString(),
+          _authusername!,
+          "");
+      return user;
+      // }
+    }
   }
 
   logEvents(dynamic event, dynamic method) async {
