@@ -55,7 +55,6 @@ void main() async {
           Routes.chat,
         );
       } else {
-        print('me 1');
         Navigator.pushNamed(
           navigatorKey.currentState!.context,
           Routes.notifications,
@@ -76,7 +75,6 @@ void main() async {
           Routes.chat,
         );
       } else {
-        print('me 2');
         Navigator.pushNamed(
           navigatorKey.currentState!.context,
           Routes.notifications,
