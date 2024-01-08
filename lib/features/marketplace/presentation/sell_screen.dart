@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:photo_manager/photo_manager.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../../action/action.dart';
 import '../../../common/dialogs/snackbar.dart';
 import '../../../common/models/comment_model.dart';
@@ -30,6 +31,7 @@ class CreateSellingitemScreen extends StatefulWidget {
   /// String if to update;
   final MarketModel? market;
   final bool isUpd;
+
   // CreateSellingitemScreen();
   @override
   _CreateSellingitemScreenState createState() =>
@@ -65,11 +67,20 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
   final TextEditingController descriptionController = TextEditingController();
   final TextEditingController _priceController = TextEditingController();
   final TextEditingController _discountController = TextEditingController();
+  String? defaultcountry;
+  Future<String?>? getCountryValue() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _selectedLocation = prefs.getString('country') ?? _market!.location;
+    });
+    return _selectedLocation;
+  }
 
   @override
   void initState() {
-    // TODO: implement initState
+    getCountryValue();
     super.initState();
+
     _isUpdating = widget.isUpd;
     if (widget.isUpd) {
       _market = widget.market;
@@ -78,7 +89,6 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
     _priceController.text = _market?.price ?? '';
     _discountController.text = _market?.discount.toString() ?? '';
     _selectedCategory = _market?.category;
-    _selectedLocation = _market?.location;
     _fileProcessing = <bool>[];
   }
 
@@ -256,11 +266,10 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
                         icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
                       ),
                       centerTitle: true,
-                      // ignore: prefer_const_constructors
-                      title: Text(
+                      title: const Text(
                         'Select Location',
                         textAlign: TextAlign.center,
-                        style: const TextStyle(fontSize: 20),
+                        style: TextStyle(fontSize: 20),
                       ),
                     ),
                     initialSelection: _selectedLocation,
@@ -282,10 +291,17 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
                         ),
                       );
                     },
-                    onChanged: (CountryCode? code) {
+                    onChanged: (CountryCode? code) async {
                       setState(() {
                         _selectedLocation = code!.name!;
                       });
+
+                      try {
+                        SharedPreferences marketplaceCountry =
+                            await SharedPreferences.getInstance();
+                        await marketplaceCountry.setString(
+                            'country', code!.name!);
+                      } catch (e) {}
                     },
                     useSafeArea: false,
                   ),
