@@ -464,9 +464,9 @@ class HomeController extends GetxController {
           // _createPostController.onDeletePost(postId);
         } else {
           mixedPosts[postIndex]['data'].reposts!.add(userId);
-          mixedPosts[postIndex]['data']['timestamp'] =
-              DateTime.now().millisecondsSinceEpoch.toString();
-          mixedPosts[postIndex]['data']['oldtimestamp'] = timestamp;
+          // mixedPosts[postIndex]['data']['timestamp'] =
+          //     DateTime.now().millisecondsSinceEpoch.toString();
+          // mixedPosts[postIndex]['data']['oldtimestamp'] = timestamp;
         }
       }
 
@@ -486,9 +486,9 @@ class HomeController extends GetxController {
               .removeWhere((element) => element == userId);
         } else {
           sponsoredPosts[spIndex]['data'].reposts!.add(userId);
-          mixedPosts[postIndex]['data']['timestamp'] =
-              DateTime.now().millisecondsSinceEpoch.toString();
-          mixedPosts[postIndex]['data']['oldtimestamp'] = timestamp;
+          // mixedPosts[postIndex]['data']['timestamp'] =
+          //     DateTime.now().millisecondsSinceEpoch.toString();
+          // mixedPosts[postIndex]['data']['oldtimestamp'] = timestamp;
         }
       }
     } else {
@@ -505,9 +505,9 @@ class HomeController extends GetxController {
               .removeWhere((element) => element == userId);
         } else {
           mixedPosts[postIndex]['data'].reposts!.add(userId);
-          mixedPosts[postIndex]['data']['timestamp'] =
-              DateTime.now().millisecondsSinceEpoch.toString();
-          mixedPosts[postIndex]['data']['oldtimestamp'] = timestamp;
+          // mixedPosts[postIndex]['data']['timestamp'] =
+          //     DateTime.now().millisecondsSinceEpoch.toString();
+          // mixedPosts[postIndex]['data']['oldtimestamp'] = timestamp;
         }
       }
     }
