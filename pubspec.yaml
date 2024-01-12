@@ -89,6 +89,7 @@ dependencies:
   flutter_speed_dial: ^7.0.0
   purchases_flutter: ^6.5.0
   native_device_orientation: ^1.2.1
+  ios_open_subscriptions_settings: ^0.0.4
 
   
  
