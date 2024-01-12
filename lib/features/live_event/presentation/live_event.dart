@@ -6,11 +6,11 @@ import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder
 import 'package:business_bosses_v2/features/live_event/controller/live_event_controller.dart';
 import 'package:business_bosses_v2/features/live_event/models/events_model.dart';
 import 'package:business_bosses_v2/features/live_event/widgets/call_room.dart';
-import 'package:business_bosses_v2/features/live_event/widgets/event_item.dart';
+import 'package:business_bosses_v2/features/live_event/widgets/event_call.dart';
+import 'package:business_bosses_v2/features/live_event/widgets/my_events.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:flutter_svg/svg.dart';
@@ -62,6 +62,16 @@ class _LiveEventState extends State<LiveEvent> {
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 20),
               ),
+              actions: <Widget>[
+                IconButton(
+                  onPressed: () {
+                    Get.to(() => MyEvents(
+                          joined: liveController.joined,
+                        ));
+                  },
+                  icon: const Icon(Icons.calendar_month),
+                ),
+              ],
             ),
             body: liveController.loading.value
                 ? const Center(child: CircularProgressIndicator())
@@ -457,76 +467,5 @@ class _LiveEventState extends State<LiveEvent> {
   String formatTime(DateTime dateTime) {
     final String formattedTime = DateFormat('h:mm a').format(dateTime);
     return formattedTime;
-  }
-}
-
-class EventCall extends StatefulWidget {
-  const EventCall({super.key, this.ongoing = false, this.full = false});
-  final bool ongoing;
-  final bool full;
-
-  @override
-  State<EventCall> createState() => _EventCallState();
-}
-
-class _EventCallState extends State<EventCall> {
-  final LiveController liveEventController = Get.put(LiveController());
-
-  @override
-  Widget build(BuildContext context) {
-    if (widget.full) {
-      return liveEventController.events.isNotEmpty
-          ? Obx(
-              () => ListView.builder(
-                itemCount: liveEventController.events.length,
-                itemBuilder: (BuildContext context, int index) {
-                  EventModel event = liveEventController.events[index];
-                  return EventItem(
-                    event: event,
-                    ongoing: liveEventController.ongoing.contains(event)
-                        ? true
-                        : false,
-                  );
-                },
-              ),
-            )
-          : const Center(
-              child: Text('No Event Available!'),
-            );
-    } else {
-      return !widget.ongoing
-          ? liveEventController.upcoming.isNotEmpty
-              ? Obx(
-                  () => ListView.builder(
-                    itemCount: liveEventController.upcoming.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      EventModel event = liveEventController.upcoming[index];
-                      return EventItem(
-                        event: event,
-                        ongoing: false,
-                      );
-                    },
-                  ),
-                )
-              : const Center(
-                  child: Text('No Live Event is Upcoming'),
-                )
-          : liveEventController.ongoing.isNotEmpty
-              ? Obx(
-                  () => ListView.builder(
-                    itemCount: liveEventController.ongoing.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      EventModel event = liveEventController.ongoing[index];
-                      return EventItem(
-                        event: event,
-                        ongoing: true,
-                      );
-                    },
-                  ),
-                )
-              : const Center(
-                  child: Text('No Live Event is Ongoing'),
-                );
-    }
   }
 }
