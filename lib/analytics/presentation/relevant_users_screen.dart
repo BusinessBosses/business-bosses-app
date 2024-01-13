@@ -43,6 +43,12 @@ class _RelevantUsersScreenState extends State<RelevantUsersScreen> {
           .where((element) => element.category.toString() == _filtertitle)
           .toList();
 
+      void _refreshScreen() {
+        setState(() {
+          _filtertitle = "";
+        });
+      }
+
       filteredConnections.sort((UserModel a, UserModel b) {
         // Sorting logic based on photoUrl when _filtertitle is empty
 
@@ -184,9 +190,7 @@ class _RelevantUsersScreenState extends State<RelevantUsersScreen> {
                                       child: MCustomButton(
                                         buttonType: ButtonType.outlinegrey,
                                         onPressed: () {
-                                          setState(() {
-                                            _filtertitle = "";
-                                          });
+                                          _refreshScreen();
                                           Get.back();
                                         },
                                         height: 40,
