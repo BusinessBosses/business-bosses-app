@@ -444,8 +444,8 @@ class HomeController extends GetxController {
   }
 
   /// REPOST AND UNDO REPOST FUNCTION
-  void postRepost(String userId, String postId, String type, int timestamp,
-      String receiverUid) {
+  Future<void> postRepost(String userId, String postId, String type,
+      int timestamp, String receiverUid) async {
     if (type == 'post') {
       //Non-sponsored posts
       final int postIndex = mixedPosts.indexWhere((Map<String, dynamic> post) =>
@@ -512,21 +512,27 @@ class HomeController extends GetxController {
       }
     }
     update();
-    if (profileController.myProfile.uid != receiverUid) {
-      socket.emit('repost', {
-        'postId': postId,
-        'userId': userId,
-        'type': type,
-        'timestamp': DateTime.now().millisecondsSinceEpoch,
-        'receiverUid': receiverUid,
-      });
-    } else {
-      socket.emit('repost', {
-        'postId': postId,
-        'userId': userId,
-        'timestamp': DateTime.now().millisecondsSinceEpoch,
-        'type': type,
-      });
+
+    // Prepare the data for the repost request
+    Map<String, dynamic> repostData = {
+      'id': 1,
+      'postId': postId,
+      'userId': userId,
+      'oldtimestamp': timestamp,
+    };
+
+    try {
+      ApiResponseModel response =
+          await ApiService.post(path: 'post/create-repost', body: repostData);
+
+      // Handle the response if needed
+      if (response == 200) {
+        print("Repost successful");
+      } else {
+        print("Repost failed with status code: ${response}");
+      }
+    } catch (e) {
+      print("Error during repost API request: $e");
     }
   }
 

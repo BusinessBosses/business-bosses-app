@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:business_bosses_v2/features/home/widgets/sellingpopup.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:country_list_pick/country_list_pick.dart';
@@ -58,6 +60,7 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
   String? discount;
   String? _selectedCategory;
   String? _selectedLocation;
+  String? _selectedCurrency;
   String? filterCode;
   String? filterLocation;
   String? filterCategory;
@@ -76,9 +79,18 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
     return _selectedLocation;
   }
 
+  Future<String?>? getCountryCurrency() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _selectedCurrency = prefs.getString('currency') ?? "\$";
+    });
+    return _selectedCurrency;
+  }
+
   @override
   void initState() {
     getCountryValue();
+    getCountryCurrency();
     super.initState();
 
     _isUpdating = widget.isUpd;
@@ -125,8 +137,12 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
                   child: Row(
                     children: [
                       Expanded(
+                        flex: 1,
+                        child: Text(""),
+                      ),
+                      Expanded(
                         flex:
-                            2, // Adjust the flex value to control the relative sizes
+                            7, // Adjust the flex value to control the relative sizes
                         child: Stack(children: [
                           TextFormField(
                             controller: _priceController,
@@ -135,7 +151,7 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
                             keyboardType: TextInputType.text,
                             maxLength: 15,
                             decoration: inputDecoration.copyWith(
-                              hintText: 'Enter Price in USD (Example \$10)',
+                              hintText: 'Enter Price',
                             ),
                           )
                         ]),
@@ -145,7 +161,7 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
                       ),
                       Expanded(
                         flex:
-                            1, // Adjust the flex value to control the relative sizes
+                            4, // Adjust the flex value to control the relative sizes
                         child: Stack(
                           children: [
                             TextFormField(
@@ -293,7 +309,7 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
                     },
                     onChanged: (CountryCode? code) async {
                       setState(() {
-                        _selectedLocation = code!.name!;
+                        _selectedLocation = code!.name;
                       });
 
                       try {
@@ -301,6 +317,8 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
                             await SharedPreferences.getInstance();
                         await marketplaceCountry.setString(
                             'country', code!.name!);
+                        await marketplaceCountry.setString(
+                            'currency', code.code!);
                       } catch (e) {}
                     },
                     useSafeArea: false,
