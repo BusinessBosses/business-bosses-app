@@ -89,6 +89,9 @@ class HomeController extends GetxController {
         'likes': psts[i]['likes']
             .map((dynamic like) => like['userId'].toString())
             .toList(),
+        'reposts': psts[i]['reposts']
+            .map((dynamic repost) => repost['userId'].toString())
+            .toList(),
         'coins': psts[i]['coins']
             .map((dynamic coin) => coin['userId'].toString())
             .toList()
@@ -106,6 +109,9 @@ class HomeController extends GetxController {
       promotedPosts.add(PostModel.fromMap({
         ...psts[i],
         'likes': psts[i]['likes']
+            .map((dynamic like) => like['userId'].toString())
+            .toList(),
+        'reposts': psts[i]['reposts']
             .map((dynamic like) => like['userId'].toString())
             .toList(),
         'coins': psts[i]['coins']
@@ -455,7 +461,7 @@ class HomeController extends GetxController {
           post['data'].postId == postId);
       if (postIndex != -1) {
         final bool checkReposted =
-            mixedPosts[postIndex]['data'].reposts!.contains(userId);
+            mixedPosts[postIndex]['data'].reposts?.contains(userId);
 
         if (checkReposted) {
           mixedPosts[postIndex]['data']
@@ -463,7 +469,7 @@ class HomeController extends GetxController {
               .removeWhere((element) => element == userId);
           // _createPostController.onDeletePost(postId);
         } else {
-          mixedPosts[postIndex]['data'].reposts!.add(userId);
+          mixedPosts[postIndex]['data'].reposts?.add(userId);
           // mixedPosts[postIndex]['data']['timestamp'] =
           //     DateTime.now().millisecondsSinceEpoch.toString();
           // mixedPosts[postIndex]['data']['oldtimestamp'] = timestamp;
@@ -491,33 +497,12 @@ class HomeController extends GetxController {
           // mixedPosts[postIndex]['data']['oldtimestamp'] = timestamp;
         }
       }
-    } else {
-      final int postIndex = mixedPosts.indexWhere((Map<String, dynamic> post) =>
-          post['shouldCount'] == null &&
-          post['isForum'] &&
-          post['data'].forumId == postId);
-      if (postIndex != -1) {
-        final bool checkReposts =
-            mixedPosts[postIndex]['data'].reposts!.contains(userId);
-        if (checkReposts) {
-          mixedPosts[postIndex]['data']
-              .reposts!
-              .removeWhere((element) => element == userId);
-        } else {
-          mixedPosts[postIndex]['data'].reposts!.add(userId);
-          // mixedPosts[postIndex]['data']['timestamp'] =
-          //     DateTime.now().millisecondsSinceEpoch.toString();
-          // mixedPosts[postIndex]['data']['oldtimestamp'] = timestamp;
-        }
-      }
     }
     update();
 
     // Prepare the data for the repost request
     Map<String, dynamic> repostData = {
-      'id': 1,
       'postId': postId,
-      'userId': userId,
       'oldtimestamp': timestamp,
     };
 
@@ -526,13 +511,13 @@ class HomeController extends GetxController {
           await ApiService.post(path: 'post/create-repost', body: repostData);
 
       // Handle the response if needed
-      if (response == 200) {
-        print("Repost successful");
+      if (response.success) {
+        print('Repost successful');
       } else {
-        print("Repost failed with status code: ${response}");
+        print('Repost failed with status code: $response');
       }
     } catch (e) {
-      print("Error during repost API request: $e");
+      print('Error during repost API request: $e');
     }
   }
 
@@ -543,6 +528,7 @@ class HomeController extends GetxController {
       ...newPost,
       'coins': <String>[],
       'likes': <String>[],
+      'reposts': <String>[],
       'comments': <CommentModel>[],
       'user': {
         'username': profileController.myProfile.username,
@@ -752,6 +738,7 @@ class HomeController extends GetxController {
         ...data['newPost'],
         'coins': <String>[],
         'likes': <String>[],
+        'reposts': <String>[],
         'comments': <CommentModel>[],
         'user': data['user']
       });

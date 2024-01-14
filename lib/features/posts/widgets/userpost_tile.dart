@@ -1018,22 +1018,18 @@ class _PostTileState extends State<PostTile> {
                                                   Navigator.pop(context);
                                                   index == 0
                                                       ? _sharePost()
-                                                      : () async {
-                                                          widget.controller
-                                                              .postRepost(
-                                                                  profileController
-                                                                      .myProfile
-                                                                      .uid,
-                                                                  widget.post
-                                                                      .postId,
-                                                                  'post',
-                                                                  widget.post
-                                                                      .timestamp,
-                                                                  widget
-                                                                      .post
-                                                                      .user!
-                                                                      .uid);
-                                                        };
+                                                      : widget.controller
+                                                          .postRepost(
+                                                              profileController
+                                                                  .myProfile
+                                                                  .uid,
+                                                              widget
+                                                                  .post.postId,
+                                                              'post',
+                                                              widget.post
+                                                                  .timestamp,
+                                                              widget.post.user!
+                                                                  .uid);
                                                 },
                                                 minVerticalPadding: 0,
                                                 contentPadding:
