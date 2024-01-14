@@ -219,6 +219,56 @@ class _PostTileState extends State<PostTile> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
+                if (widget.post.reposts?.length != null &&
+                    widget.post.reposts?.length != 0) ...[
+                  Padding(
+                    padding: const EdgeInsets.only(left: 15.0, top: 10),
+                    child: Row(
+                      children: [
+                        SvgPicture.asset(
+                          'assets/svgs/repost.svg',
+                          height: 13,
+                        ),
+                        const SizedBox(
+                          width: 5,
+                        ),
+                        widget.post.reposts?.contains(
+                                    profileController.myProfile.uid) !=
+                                true
+                            ? Row(
+                                children: [
+                                  const Text(
+                                    'You Reposted',
+                                    style: TextStyle(fontSize: 12),
+                                  ),
+                                  const SizedBox(
+                                    width: 5,
+                                  ),
+                                  Container(
+                                    width: 3.0,
+                                    height: 3.0,
+                                    decoration: const BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    width: 5,
+                                  ),
+                                ],
+                              )
+                            : Container(),
+                        GestureDetector(
+                          onTap: () {},
+                          child: Text(
+                            '${widget.post.reposts?.length.toString()} Reposts',
+                            style: TextStyle(fontSize: 12),
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                ],
                 ListTile(
                   contentPadding: const EdgeInsets.only(left: 15, right: 0),
                   leading: GestureDetector(
@@ -811,7 +861,101 @@ class _PostTileState extends State<PostTile> {
                               child: Row(
                               children: [
                                 GestureDetector(
-                                  onTap: () => _sharePost(),
+                                  onTap: () {
+                                    showModalBottomSheet(
+                                        context: context,
+                                        shape: const RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.vertical(
+                                            top: Radius.circular(25.0),
+                                          ),
+                                        ),
+                                        builder: (context) {
+                                          return SizedBox(
+                                            height: 250,
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(15.0),
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: <Widget>[
+                                                  Expanded(
+                                                    // Set a specific height
+                                                    child: ListView.separated(
+                                                      itemCount: 2,
+                                                      separatorBuilder:
+                                                          (BuildContext context,
+                                                                  int index) =>
+                                                              const Divider(),
+                                                      itemBuilder:
+                                                          (BuildContext context,
+                                                              int index) {
+                                                        return ListTile(
+                                                          onTap: () {
+                                                            Navigator.pop(
+                                                                context);
+                                                            index == 0
+                                                                ? _sharePost()
+                                                                : () async {
+                                                                    widget.controller.postRepost(
+                                                                        profileController
+                                                                            .myProfile
+                                                                            .uid,
+                                                                        widget
+                                                                            .post
+                                                                            .postId,
+                                                                        'post',
+                                                                        widget
+                                                                            .post
+                                                                            .timestamp,
+                                                                        widget
+                                                                            .post
+                                                                            .user!
+                                                                            .uid);
+                                                                  };
+                                                          },
+                                                          minVerticalPadding: 0,
+                                                          contentPadding:
+                                                              const EdgeInsets
+                                                                  .only(
+                                                                  left: 10),
+                                                          leading:
+                                                              SvgPicture.asset(
+                                                            index == 0
+                                                                ? 'assets/svgs/share.svg'
+                                                                : 'assets/svgs/repost.svg',
+                                                            height: index == 0
+                                                                ? 18
+                                                                : 25,
+                                                            color: textColor
+                                                                .withOpacity(1),
+                                                          ),
+                                                          title: Text(
+                                                            index == 0
+                                                                ? 'Share Post'
+                                                                : widget.post.reposts?.contains(profileController
+                                                                            .myProfile
+                                                                            .uid) ==
+                                                                        true
+                                                                    ? 'Undo Repost'
+                                                                    : 'Repost',
+                                                            style: const TextStyle(
+                                                                fontSize: 18,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w700),
+                                                          ),
+                                                        );
+                                                      },
+                                                    ),
+                                                  )
+                                                ],
+                                              ),
+                                            ),
+                                          );
+                                        });
+                                  },
                                   child: SvgPicture.asset(
                                     'assets/svgs/share.svg',
                                     height: 15.0,
@@ -822,8 +966,12 @@ class _PostTileState extends State<PostTile> {
                                 Padding(
                                   padding: const EdgeInsets.only(right: 15),
                                   child: Text(
-                                    TimeFormat.formatString(
-                                        widget.post.timestamp),
+                                    widget.post.oldtimestamp != null ||
+                                            widget.post.oldtimestamp == 1
+                                        ? TimeFormat.formatString(
+                                            widget.post.oldtimestamp)
+                                        : TimeFormat.formatString(
+                                            widget.post.timestamp),
                                     style: Theme.of(context)
                                         .textTheme
                                         .bodyMedium
@@ -837,7 +985,93 @@ class _PostTileState extends State<PostTile> {
                     ],
                     if (widget.post.livedata == null) ...<Widget>[
                       GestureDetector(
-                        onTap: () => _sharePost(),
+                        onTap: () {
+                          showModalBottomSheet(
+                              context: context,
+                              shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.vertical(
+                                  top: Radius.circular(25.0),
+                                ),
+                              ),
+                              builder: (context) {
+                                return SizedBox(
+                                  height: 250,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(15.0),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: <Widget>[
+                                        Expanded(
+                                          // Set a specific height
+                                          child: ListView.separated(
+                                            itemCount: 2,
+                                            separatorBuilder:
+                                                (BuildContext context,
+                                                        int index) =>
+                                                    const Divider(),
+                                            itemBuilder: (BuildContext context,
+                                                int index) {
+                                              return ListTile(
+                                                onTap: () {
+                                                  Navigator.pop(context);
+                                                  index == 0
+                                                      ? _sharePost()
+                                                      : () async {
+                                                          widget.controller
+                                                              .postRepost(
+                                                                  profileController
+                                                                      .myProfile
+                                                                      .uid,
+                                                                  widget.post
+                                                                      .postId,
+                                                                  'post',
+                                                                  widget.post
+                                                                      .timestamp,
+                                                                  widget
+                                                                      .post
+                                                                      .user!
+                                                                      .uid);
+                                                        };
+                                                },
+                                                minVerticalPadding: 0,
+                                                contentPadding:
+                                                    const EdgeInsets.only(
+                                                        left: 10),
+                                                leading: SvgPicture.asset(
+                                                  index == 0
+                                                      ? 'assets/svgs/share.svg'
+                                                      : 'assets/svgs/repost.svg',
+                                                  height: index == 0 ? 18 : 25,
+                                                  color:
+                                                      textColor.withOpacity(1),
+                                                ),
+                                                title: Text(
+                                                  index == 0
+                                                      ? 'Share Post'
+                                                      : widget.post.reposts?.contains(
+                                                                  profileController
+                                                                      .myProfile
+                                                                      .uid) ==
+                                                              true
+                                                          ? 'Undo Repost'
+                                                          : 'Repost',
+                                                  style: const TextStyle(
+                                                      fontSize: 18,
+                                                      fontWeight:
+                                                          FontWeight.w700),
+                                                ),
+                                              );
+                                            },
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              });
+                        },
                         child: SvgPicture.asset(
                           'assets/svgs/share.svg',
                           height: 15.0,
@@ -848,7 +1082,11 @@ class _PostTileState extends State<PostTile> {
                       Padding(
                         padding: const EdgeInsets.only(right: 15),
                         child: Text(
-                          TimeFormat.formatString(widget.post.timestamp),
+                          widget.post.oldtimestamp != null ||
+                                  widget.post.oldtimestamp == 1
+                              ? TimeFormat.formatString(
+                                  widget.post.oldtimestamp)
+                              : TimeFormat.formatString(widget.post.timestamp),
                           style:
                               Theme.of(context).textTheme.bodyMedium?.copyWith(
                                     color: textColor.withOpacity(0.4),

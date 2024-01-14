@@ -335,8 +335,6 @@ class _EventItemState extends State<EventItem> {
                                 ),
                               ),
                               onPressed: () async {
-                                await liveController.attendEvent(widget.event);
-                                setState(() {});
                                 Get.dialog(
                                   AlertDialog(
                                     title: const Text(''),
@@ -365,6 +363,8 @@ class _EventItemState extends State<EventItem> {
                                     ],
                                   ),
                                 );
+                                await liveController.attendEvent(widget.event);
+                                setState(() {});
                               },
                               child: const Text(
                                 'Attend',

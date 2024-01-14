@@ -21,26 +21,28 @@ class _MyEventsState extends State<MyEvents> {
         centerTitle: true,
         title: const Text('My Events'),
       ),
-      body: Column(
-        children: <Widget>[
-          const SizedBox(
-            height: 10,
-          ),
-          if (widget.joined!.isNotEmpty)
-            Expanded(
-              child: ListView.builder(
-                itemCount: liveController.upcoming.length,
-                itemBuilder: (BuildContext context, int index) {
-                  EventModel event = liveController.upcoming[index];
-                  return EventItem(
-                    event: event,
-                    ongoing: false,
-                  );
-                },
+      body: widget.joined!.isNotEmpty
+          ? Column(
+              children: [
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: liveController.upcoming.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      EventModel event = liveController.upcoming[index];
+                      return EventItem(
+                        event: event,
+                        ongoing: false,
+                      );
+                    },
+                  ),
+                ),
+              ],
+            )
+          : const Center(
+              child: Text(
+                'You Have Not Chose To Attend Any Event!',
               ),
             ),
-        ],
-      ),
     );
   }
 }

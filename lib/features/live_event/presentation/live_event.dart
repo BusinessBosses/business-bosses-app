@@ -16,7 +16,6 @@ import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:lottie/lottie.dart';
 import 'package:timezone/data/latest.dart' as tzdata;
 
 import '../../../action/action.dart';
@@ -34,6 +33,34 @@ class _LiveEventState extends State<LiveEvent> {
   TextEditingController joinEvent = TextEditingController();
   final ScrollController scrollController = ScrollController();
   final ProfileController profileController = Get.find();
+  bool _isSearching = false;
+
+  List<Widget> get mActions {
+    return <Widget>[
+      IconButton(
+        icon: _isSearching
+            ? const Icon(Icons.close)
+            : SvgPicture.asset(
+                'assets/svgs/search.svg',
+              ),
+        onPressed: () {
+          // if (_isSearching) {
+          _isSearching = !_isSearching;
+          // }
+          setState(() {});
+          ;
+        },
+      ),
+      IconButton(
+        onPressed: () {
+          Get.to(() => MyEvents(
+                joined: liveEventController.joined,
+              ));
+        },
+        icon: const Icon(Icons.calendar_month),
+      ),
+    ];
+  }
 
   @override
   void initState() {
@@ -50,6 +77,7 @@ class _LiveEventState extends State<LiveEvent> {
         return Scaffold(
             backgroundColor: Colors.white,
             appBar: AppBar(
+              automaticallyImplyLeading: false,
               leading: IconButton(
                 onPressed: () {
                   Get.offNamed(Routes.home);
@@ -57,21 +85,71 @@ class _LiveEventState extends State<LiveEvent> {
                 icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
               ),
               centerTitle: true,
-              title: const Text(
-                'Live Events',
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 20),
-              ),
-              actions: <Widget>[
-                IconButton(
-                  onPressed: () {
-                    Get.to(() => MyEvents(
-                          joined: liveController.joined,
-                        ));
-                  },
-                  icon: const Icon(Icons.calendar_month),
-                ),
-              ],
+              title: _isSearching
+                  ? Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Expanded(
+                          child: TextField(
+                            controller: joinEvent,
+                            decoration: const InputDecoration(
+                              hintText: 'Find Event By ID',
+                              filled: true,
+                              fillColor: backgroundColor,
+                              border: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Color.fromRGBO(224, 224, 224, 1),
+                                ),
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(12),
+                                ),
+                              ),
+                              contentPadding: EdgeInsets.only(
+                                left: 10,
+                                right: 10,
+                                top: 0,
+                                bottom: 0,
+                              ),
+                            ),
+                            enableSuggestions: true, // Enable pasting
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        ElevatedButton(
+                          onPressed: () {
+                            if (joinEvent.text.isEmpty) {
+                              showSnackBar(
+                                context,
+                                message: 'Please enter a title',
+                              );
+                              return;
+                            }
+                            joinLive(context, joinEvent.text);
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor:
+                                const Color.fromRGBO(242, 28, 41, 1),
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 15,
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16.0),
+                            ),
+                          ),
+                          child: SvgPicture.asset(
+                            'assets/svgs/search.svg',
+                            color: Colors.white,
+                            width: 20,
+                          ),
+                        ),
+                      ],
+                    )
+                  : const Text(
+                      'Live Events',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 20),
+                    ),
+              actions: mActions,
             ),
             body: liveController.loading.value
                 ? const Center(child: CircularProgressIndicator())
@@ -152,77 +230,6 @@ class _LiveEventState extends State<LiveEvent> {
                                   ),
                                 ],
                               ),
-                              Container(
-                                margin: const EdgeInsets.only(
-                                  top: 10,
-                                  right: 15,
-                                  left: 15,
-                                ),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: <Widget>[
-                                    Expanded(
-                                      child: TextField(
-                                        controller: joinEvent,
-                                        decoration: const InputDecoration(
-                                          hintText: 'Find Event By ID',
-                                          filled: true,
-                                          fillColor: backgroundColor,
-                                          border: OutlineInputBorder(
-                                            borderSide: BorderSide(
-                                              color: Color.fromRGBO(
-                                                  224, 224, 224, 1),
-                                            ),
-                                            borderRadius: BorderRadius.all(
-                                              Radius.circular(12),
-                                            ),
-                                          ),
-                                          contentPadding: EdgeInsets.only(
-                                            left: 10,
-                                            right: 10,
-                                            top: 0,
-                                            bottom: 0,
-                                          ),
-                                        ),
-                                        enableSuggestions:
-                                            true, // Enable pasting
-                                      ),
-                                    ),
-                                    const SizedBox(width: 10),
-                                    ElevatedButton(
-                                      onPressed: () {
-                                        if (joinEvent.text.isEmpty) {
-                                          showSnackBar(
-                                            context,
-                                            message: 'Please enter a title',
-                                          );
-                                          return;
-                                        }
-                                        joinLive(context, joinEvent.text);
-                                      },
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor: const Color.fromRGBO(
-                                            242, 28, 41, 1),
-                                        padding: const EdgeInsets.symmetric(
-                                          horizontal: 35,
-                                          vertical: 15,
-                                        ),
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(16.0),
-                                        ),
-                                      ),
-                                      child: const Text(
-                                        'Search',
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
                               const SizedBox(height: 10),
                             ],
                           ),
@@ -239,9 +246,9 @@ class _LiveEventState extends State<LiveEvent> {
                             child: TabBar(
                               tabs: <Widget>[
                                 Tab(
-                                  child: Lottie.asset(
-                                    'assets/anim/liveevent.json',
-                                    height: 25,
+                                  child: SvgPicture.asset(
+                                    'assets/svgs/liveevent.svg',
+                                    width: 15,
                                   ),
                                 ),
                                 const Tab(text: 'Ongoing'),
