@@ -31,7 +31,9 @@ class PostLikeCommentItem extends StatefulWidget {
 }
 
 class _PostLikeCommentItemState extends State<PostLikeCommentItem> {
-  bool _isLoadingLikes = true, _isLoadingComments = true;
+  bool _isLoadingLikes = true,
+      _isLoadingComments = true,
+      _isLoadingReposts = true;
   final CommentController _commentController = Get.put(CommentController());
   final HomeController _homeController = Get.find();
 
@@ -39,6 +41,7 @@ class _PostLikeCommentItemState extends State<PostLikeCommentItem> {
   void initState() {
     _loadCommentWithDetails();
     _loadLikesWithDetails(widget.post.postId);
+    _loadRepostsWithDetails(widget.post.postId);
     super.initState();
   }
 
@@ -296,7 +299,7 @@ class _PostLikeCommentItemState extends State<PostLikeCommentItem> {
                               ),
                         _reposters.isEmpty
                             ? SafetyModel(
-                                isLoading: _isLoadingLikes,
+                                isLoading: _isLoadingReposts,
                                 icon: const Icon(
                                   Icons.favorite,
                                   size: 0.0,
@@ -366,6 +369,7 @@ class _PostLikeCommentItemState extends State<PostLikeCommentItem> {
         _users.add(UserModel.fromMap(response.data['rows'][i]['user']));
       }
     }
+    print(response);
     // for (dynamic l in widget.post.likes ?? []) {
     //   final Map<String, dynamic> response = await ProfileController.loadData(l);
     //   _users.add(
@@ -386,12 +390,13 @@ class _PostLikeCommentItemState extends State<PostLikeCommentItem> {
 
   Future<void> _loadRepostsWithDetails(String postId) async {
     final ApiResponseModel response =
-        await ApiService.get(path: 'reposts/post/$postId');
+        await ApiService.get(path: 'post/reposts/$postId');
     if (response.success) {
       for (int i = 0; i < response.data['rows'].length; i++) {
         _reposters.add(UserModel.fromMap(response.data['rows'][i]['user']));
       }
     }
+    print(response);
     // for (dynamic l in widget.post.likes ?? []) {
     //   final Map<String, dynamic> response = await ProfileController.loadData(l);
     //   _users.add(
@@ -403,7 +408,7 @@ class _PostLikeCommentItemState extends State<PostLikeCommentItem> {
     // }
     if (mounted) {
       setState(() {
-        _isLoadingLikes = false;
+        _isLoadingReposts = false;
       });
     }
   }

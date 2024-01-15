@@ -233,7 +233,7 @@ class _PostTileState extends State<PostTile> {
                           width: 5,
                         ),
                         widget.post.reposts?.contains(
-                                    profileController.myProfile.uid) !=
+                                    profileController.myProfile.uid) ==
                                 true
                             ? Row(
                                 children: [
@@ -918,7 +918,7 @@ class _PostTileState extends State<PostTile> {
                                                           minVerticalPadding: 0,
                                                           contentPadding:
                                                               const EdgeInsets
-                                                                  .only(
+                                                                      .only(
                                                                   left: 10),
                                                           leading:
                                                               SvgPicture.asset(
