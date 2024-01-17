@@ -11,6 +11,7 @@ class LiveController extends GetxController {
   RxList<EventModel> events = RxList<EventModel>(<EventModel>[]);
   RxList<EventModel> upcoming = RxList<EventModel>(<EventModel>[]);
   RxList<EventModel> ongoing = RxList<EventModel>(<EventModel>[]);
+  RxList<EventModel> joined = RxList<EventModel>(<EventModel>[]);
   RxBool loading = RxBool(false);
 
   void initEvents() async {
@@ -20,6 +21,7 @@ class LiveController extends GetxController {
     events.clear();
     upcoming.clear();
     ongoing.clear();
+    joined.clear();
 
     if (response.success) {
       DateTime now = DateTime.now();
@@ -40,6 +42,12 @@ class LiveController extends GetxController {
           // Event has already started and is ongoing
           ongoing.add(event);
         }
+      }
+      final ApiResponseModel responses =
+          await ApiService.get(path: 'event/get-user-events');
+      List<dynamic> rowss = responses.data;
+      for (dynamic row in rowss) {
+        joined.add(EventModel.fromMap(row));
       }
       events.clear();
       events.addAll(ongoing);
@@ -64,6 +72,19 @@ class LiveController extends GetxController {
     }
 
     return foundEvent;
+  }
+
+  Future<void> attendEvent(EventModel event) async {
+    final ApiResponseModel response = await ApiService.put(
+        path: 'event/join-leave-event/${event.id}', body: <String, dynamic>{});
+    if (response.success) {
+      if (joined.any((EventModel eventt) => eventt.id == event.id)) {
+        joined.removeWhere((EventModel eventt) => eventt.id == event.id);
+      } else {
+        joined.add(event);
+      }
+    }
+    update();
   }
 
   Future<void> createEvent(Map<String, dynamic> data) async {

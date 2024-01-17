@@ -29,17 +29,18 @@ class NotificationItem extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             CircleAvatar(
-                radius: 48 / 2,
-                backgroundColor: primaryColorLT.withOpacity(0.1),
-                child: myNotification.title.contains('New Message')
-                    ? SvgPicture.asset(
-                        'assets/svgs/message.svg',
-                        color: primaryColorLT,
-                      )
-                    : SvgPicture.asset(
-                        'assets/svgs/notification.svg',
-                        color: primaryColorLT,
-                      )),
+              radius: 48 / 2,
+              backgroundColor: primaryColorLT.withOpacity(0.1),
+              child: myNotification.title.contains('New Message')
+                  ? SvgPicture.asset(
+                      'assets/svgs/message.svg',
+                      color: primaryColorLT,
+                    )
+                  : SvgPicture.asset(
+                      'assets/svgs/notification.svg',
+                      color: primaryColorLT,
+                    ),
+            ),
             const SizedBox(width: 16.0),
             Expanded(
               child: Column(

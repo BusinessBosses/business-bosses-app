@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:business_bosses_v2/features/home/widgets/sellingpopup.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:country_list_pick/country_list_pick.dart';
@@ -8,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:photo_manager/photo_manager.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../../action/action.dart';
 import '../../../common/dialogs/snackbar.dart';
 import '../../../common/models/comment_model.dart';
@@ -30,6 +33,7 @@ class CreateSellingitemScreen extends StatefulWidget {
   /// String if to update;
   final MarketModel? market;
   final bool isUpd;
+
   // CreateSellingitemScreen();
   @override
   _CreateSellingitemScreenState createState() =>
@@ -56,6 +60,7 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
   String? discount;
   String? _selectedCategory;
   String? _selectedLocation;
+  String? _selectedCurrency;
   String? filterCode;
   String? filterLocation;
   String? filterCategory;
@@ -65,11 +70,29 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
   final TextEditingController descriptionController = TextEditingController();
   final TextEditingController _priceController = TextEditingController();
   final TextEditingController _discountController = TextEditingController();
+  String? defaultcountry;
+  Future<String?>? getCountryValue() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _selectedLocation = prefs.getString('country') ?? _market!.location;
+    });
+    return _selectedLocation;
+  }
+
+  Future<String?>? getCountryCurrency() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _selectedCurrency = prefs.getString('currency') ?? "\$";
+    });
+    return _selectedCurrency;
+  }
 
   @override
   void initState() {
-    // TODO: implement initState
+    getCountryValue();
+    getCountryCurrency();
     super.initState();
+
     _isUpdating = widget.isUpd;
     if (widget.isUpd) {
       _market = widget.market;
@@ -78,7 +101,6 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
     _priceController.text = _market?.price ?? '';
     _discountController.text = _market?.discount.toString() ?? '';
     _selectedCategory = _market?.category;
-    _selectedLocation = _market?.location;
     _fileProcessing = <bool>[];
   }
 
@@ -115,8 +137,12 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
                   child: Row(
                     children: [
                       Expanded(
+                        flex: 1,
+                        child: Text(""),
+                      ),
+                      Expanded(
                         flex:
-                            2, // Adjust the flex value to control the relative sizes
+                            7, // Adjust the flex value to control the relative sizes
                         child: Stack(children: [
                           TextFormField(
                             controller: _priceController,
@@ -125,7 +151,7 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
                             keyboardType: TextInputType.text,
                             maxLength: 15,
                             decoration: inputDecoration.copyWith(
-                              hintText: 'Enter Price in USD (Example \$10)',
+                              hintText: 'Enter Price',
                             ),
                           )
                         ]),
@@ -135,7 +161,7 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
                       ),
                       Expanded(
                         flex:
-                            1, // Adjust the flex value to control the relative sizes
+                            4, // Adjust the flex value to control the relative sizes
                         child: Stack(
                           children: [
                             TextFormField(
@@ -256,11 +282,10 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
                         icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
                       ),
                       centerTitle: true,
-                      // ignore: prefer_const_constructors
-                      title: Text(
+                      title: const Text(
                         'Select Location',
                         textAlign: TextAlign.center,
-                        style: const TextStyle(fontSize: 20),
+                        style: TextStyle(fontSize: 20),
                       ),
                     ),
                     initialSelection: _selectedLocation,
@@ -282,10 +307,19 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
                         ),
                       );
                     },
-                    onChanged: (CountryCode? code) {
+                    onChanged: (CountryCode? code) async {
                       setState(() {
-                        _selectedLocation = code!.name!;
+                        _selectedLocation = code!.name;
                       });
+
+                      try {
+                        SharedPreferences marketplaceCountry =
+                            await SharedPreferences.getInstance();
+                        await marketplaceCountry.setString(
+                            'country', code!.name!);
+                        await marketplaceCountry.setString(
+                            'currency', code.code!);
+                      } catch (e) {}
                     },
                     useSafeArea: false,
                   ),
