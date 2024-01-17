@@ -319,36 +319,27 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                                             return Column(
                                               children: [
                                                 const BossOfWeekProfileTile(),
-                                                GestureDetector(
-                                                  onTap: () => Navigator.push(
-                                                      context,
-                                                      MaterialPageRoute(
-                                                        builder: (BuildContext
-                                                                context) =>
-                                                            const LiveEvent(),
-                                                      )),
-                                                  child: Container(
-                                                      decoration:
-                                                          const BoxDecoration(
-                                                        color: Color.fromARGB(
-                                                            255, 26, 26, 26),
-                                                      ),
-                                                      margin:
-                                                          const EdgeInsets.only(
-                                                              bottom: 6),
-                                                      child: Row(
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .center, // Adjust alignment as needed
-                                                        children: [
-                                                          Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .all(15.0),
-                                                            child: Lottie.asset(
-                                                              'assets/anim/liveevent.json',
-                                                              height: 25,
-                                                            ),
+                                                Container(
+                                                    decoration:
+                                                        const BoxDecoration(
+                                                      color: Color.fromARGB(
+                                                          255, 26, 26, 26),
+                                                    ),
+                                                    margin:
+                                                        const EdgeInsets.only(
+                                                            bottom: 6),
+                                                    child: Row(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .center, // Adjust alignment as needed
+                                                      children: [
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(15.0),
+                                                          child: Lottie.asset(
+                                                            'assets/anim/liveevent.json',
+                                                            height: 25,
                                                           ),
                                                           Expanded(
                                                             child: Padding(
@@ -410,7 +401,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                                                         ],
                                                       )),
                                                 ),
-                                              ],
+
                                             );
                                           } else {
                                             final Map<String, dynamic>
