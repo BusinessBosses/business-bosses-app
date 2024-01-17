@@ -9,7 +9,6 @@ import 'package:business_bosses_v2/features/forum/models/forum_model.dart';
 import 'package:business_bosses_v2/features/forum/models/industry.dart';
 import 'package:business_bosses_v2/features/home/repository/home_repository.dart';
 import 'package:business_bosses_v2/features/marketplace/models/market_model.dart';
-import 'package:business_bosses_v2/features/posts/controllers/create_post_controller.dart';
 import 'package:business_bosses_v2/features/posts/models/post_model.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
@@ -27,7 +26,6 @@ class HomeController extends GetxController {
   // final PostsController _postsController = Get.find();
   late final ProfileController profileController;
   late final ChatController _chatController;
-  late final CreatePostController _createPostController;
   // final MarketController _marketController = Get.put(MarketController());
   // final CommunitiesController _communitiesController =
   //     Get.put(CommunitiesController());
@@ -89,9 +87,6 @@ class HomeController extends GetxController {
         'likes': psts[i]['likes']
             .map((dynamic like) => like['userId'].toString())
             .toList(),
-        'reposts': psts[i]['reposts']
-            .map((dynamic repost) => repost['userId'].toString())
-            .toList(),
         'coins': psts[i]['coins']
             .map((dynamic coin) => coin['userId'].toString())
             .toList()
@@ -109,9 +104,6 @@ class HomeController extends GetxController {
       promotedPosts.add(PostModel.fromMap({
         ...psts[i],
         'likes': psts[i]['likes']
-            .map((dynamic like) => like['userId'].toString())
-            .toList(),
-        'reposts': psts[i]['reposts']
             .map((dynamic like) => like['userId'].toString())
             .toList(),
         'coins': psts[i]['coins']
@@ -449,78 +441,6 @@ class HomeController extends GetxController {
     }
   }
 
-  /// REPOST AND UNDO REPOST FUNCTION
-  Future<void> postRepost(String userId, String postId, String type,
-      int timestamp, String receiverUid) async {
-    if (type == 'post') {
-      //Non-sponsored posts
-      final int postIndex = mixedPosts.indexWhere((Map<String, dynamic> post) =>
-          post['shouldCount'] == null &&
-          !post['isForum'] &&
-          !post['isSponsored'] &&
-          post['data'].postId == postId);
-      if (postIndex != -1) {
-        final bool checkReposted =
-            mixedPosts[postIndex]['data'].reposts?.contains(userId);
-
-        if (checkReposted) {
-          mixedPosts[postIndex]['data']
-              .reposts!
-              .removeWhere((element) => element == userId);
-          // _createPostController.onDeletePost(postId);
-        } else {
-          mixedPosts[postIndex]['data'].reposts?.add(userId);
-          // mixedPosts[postIndex]['data']['timestamp'] =
-          //     DateTime.now().millisecondsSinceEpoch.toString();
-          // mixedPosts[postIndex]['data']['oldtimestamp'] = timestamp;
-        }
-      }
-
-      //Sponsored posts
-      final int spIndex = sponsoredPosts.indexWhere(
-          (Map<String, dynamic> post) =>
-              post['shouldCount'] == null &&
-              !post['isForum'] &&
-              post['isSponsored'] &&
-              post['data'].postId == postId);
-      if (spIndex != -1) {
-        final bool checkReposts =
-            sponsoredPosts[spIndex]['data'].reposts!.contains(userId);
-        if (checkReposts) {
-          sponsoredPosts[spIndex]['data']
-              .reposts!
-              .removeWhere((element) => element == userId);
-        } else {
-          sponsoredPosts[spIndex]['data'].reposts!.add(userId);
-          // mixedPosts[postIndex]['data']['timestamp'] =
-          //     DateTime.now().millisecondsSinceEpoch.toString();
-          // mixedPosts[postIndex]['data']['oldtimestamp'] = timestamp;
-        }
-      }
-    }
-    update();
-
-    // Prepare the data for the repost request
-    Map<String, dynamic> repostData = {
-      'postId': postId,
-      'oldtimestamp': timestamp,
-    };
-
-    try {
-      ApiResponseModel response =
-          await ApiService.post(path: 'post/create-repost', body: repostData);
-
-      // Handle the response if needed
-      if (response.success) {
-        print('Repost successful');
-      } else {
-        print('Repost failed with status code: $response');
-      }
-    } catch (e) {
-      print('Error during repost API request: $e');
-    }
-  }
-
   /// ADD NEW POST TO STATE
   void addNewPost(
       Map<String, dynamic> newPost, ProfileController profileController) async {
@@ -528,7 +448,6 @@ class HomeController extends GetxController {
       ...newPost,
       'coins': <String>[],
       'likes': <String>[],
-      'reposts': <String>[],
       'comments': <CommentModel>[],
       'user': {
         'username': profileController.myProfile.username,
@@ -738,7 +657,6 @@ class HomeController extends GetxController {
         ...data['newPost'],
         'coins': <String>[],
         'likes': <String>[],
-        'reposts': <String>[],
         'comments': <CommentModel>[],
         'user': data['user']
       });
@@ -952,7 +870,6 @@ class HomeController extends GetxController {
   void onInit() {
     profileController = Get.put(ProfileController());
     _chatController = Get.put(ChatController());
-    // _createPostController = Get.put(CreatePostController());
     initSocket();
     loadData();
     super.onInit();

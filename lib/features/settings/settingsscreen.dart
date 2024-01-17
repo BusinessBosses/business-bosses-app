@@ -10,7 +10,6 @@ import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:ios_open_subscriptions_settings/ios_open_subscriptions_settings.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/services.dart' show rootBundle;
@@ -64,19 +63,18 @@ class _SettingsScreenState extends State<SettingsScreen> {
     // });
   }
 
-  // void getCustomerInfo() async {
-  //   try {
-  //     // CustomerInfo purchaserInfo = await Purchases.getCustomerInfo();
-  //     IosOpenSubscriptionsSettings.openSubscriptionsSettings;
-  //     // String managementURL = purchaserInfo.managementURL!;
-  //     // await launch(managementURL);
-  //   } catch (e) {
-  //     showSnackbar(
-  //         title: 'OOPS!',
-  //         message: 'An error occurred, please try again!',
-  //         error: true);
-  //   }
-  // }
+  void getCustomerInfo() async {
+    try {
+      CustomerInfo purchaserInfo = await Purchases.getCustomerInfo();
+      String managementURL = purchaserInfo.managementURL!;
+      await launch(managementURL);
+    } catch (e) {
+      showSnackbar(
+          title: 'OOPS!',
+          message: 'An error occurred, please try again!',
+          error: true);
+    }
+  }
 
   String version = '';
 
@@ -305,8 +303,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                                   ? cancelSubscription(
                                                       profileController
                                                           .myProfile.uid)
-                                                  : IosOpenSubscriptionsSettings
-                                                      .openSubscriptionsSettings;
+                                                  : getCustomerInfo();
                                               setState(() {
                                                 _isProcessing = false;
                                               });

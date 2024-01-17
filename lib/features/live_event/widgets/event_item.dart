@@ -16,26 +16,18 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import '../../../action/action.dart';
-import 'package:add_2_calendar/add_2_calendar.dart';
 
-class EventItem extends StatefulWidget {
+class EventItem extends StatelessWidget {
   final EventModel event;
   final bool ongoing;
+  final ProfileController profileController = Get.find();
+  final LiveController liveController = Get.find();
 
-  const EventItem({
+  EventItem({
     Key? key,
     required this.event,
     this.ongoing = false,
   }) : super(key: key);
-
-  @override
-  State<EventItem> createState() => _EventItemState();
-}
-
-class _EventItemState extends State<EventItem> {
-  final ProfileController profileController = Get.find();
-
-  final LiveController liveController = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -43,8 +35,8 @@ class _EventItemState extends State<EventItem> {
     final DateFormat timeFormat = DateFormat('h:mm a');
 
 // Convert the event start and end times to the local time zone
-    final DateTime localStartTime = widget.event.startAt!.toLocal();
-    final DateTime localEndTime = widget.event.endAt!.toLocal();
+    final DateTime localStartTime = event.startAt!.toLocal();
+    final DateTime localEndTime = event.endAt!.toLocal();
 
     final String formattedDate = dateFormat.format(localStartTime);
 
@@ -52,16 +44,16 @@ class _EventItemState extends State<EventItem> {
     final String formattedEndTime = timeFormat.format(localEndTime);
 
     Map<String, dynamic> dataa = <String, dynamic>{
-      'id': widget.event.id,
-      'title': widget.event.title,
-      'roomId': widget.event.roomId,
+      'id': event.id,
+      'title': event.title,
+      'roomId': event.roomId,
       'date': formattedDate,
       'starttime': formattedStartTime,
-      'host': widget.event.user!.name,
-      'photourl': widget.event.user!.photoUrl,
-      'startat': widget.event.startAt.toString(),
-      'endat': widget.event.endAt.toString(),
-      'image': widget.event.image,
+      'host': event.user!.name,
+      'photourl': event.user!.photoUrl,
+      'startat': event.startAt.toString(),
+      'endat': event.endAt.toString(),
+      'image': event.image,
     };
 
     String? jsonData = jsonEncode(dataa);
@@ -109,8 +101,8 @@ class _EventItemState extends State<EventItem> {
                       fontSize: 18.0, fontWeight: FontWeight.w700),
                   onTap: () => Get.toNamed(Routes.createPost, arguments: {
                         'sharemessage':
-                            'Hey there! Join this event on $formattedDate  $formattedStartTime with Room ID: ${widget.event.roomId}',
-                        'title': widget.event.title,
+                            'Hey there! Join this event on $formattedDate  $formattedStartTime with Room ID: ${event.roomId}',
+                        'title': event.title,
                         'livedata': jsonData,
                       })),
               SpeedDialChild(
@@ -130,7 +122,7 @@ class _EventItemState extends State<EventItem> {
                     fontSize: 18.0, fontWeight: FontWeight.w700),
                 onTap: () {
                   String message =
-                      'Hey there! Join this event on $formattedDate  $formattedStartTime with Room ID: ${widget.event.roomId}  https://businessbosses.onelink.me/xLWk/36a2ff16';
+                      'Hey there! Join this event on $formattedDate  $formattedStartTime with Room ID: ${event.roomId}  https://businessbosses.onelink.me/xLWk/36a2ff16';
                   socialShare(message);
                 },
               ),
@@ -147,10 +139,10 @@ class _EventItemState extends State<EventItem> {
                   labelStyle: const TextStyle(
                       fontSize: 18.0, fontWeight: FontWeight.w700),
                   onTap: () {
-                    Add2Calendar.addEvent2Cal(Event(
-                        title: widget.event.title ?? '',
-                        startDate: localStartTime,
-                        endDate: localEndTime));
+                    // Add2Calendar.addEvent2Cal(Event(
+                    //     title: event.title ?? "",
+                    //     startDate: event.startAt!,
+                    //     endDate: event.endAt!));
                   }),
             ],
           ),
@@ -175,11 +167,11 @@ class _EventItemState extends State<EventItem> {
                       children: <Widget>[
                         Padding(
                           padding: EdgeInsets.only(
-                            top: widget.event.user?.uid ==
+                            top: event.user?.uid ==
                                     profileController.myProfile.uid
                                 ? 0.0
                                 : 15,
-                            bottom: widget.event.user?.uid ==
+                            bottom: event.user?.uid ==
                                     profileController.myProfile.uid
                                 ? 0.0
                                 : 15,
@@ -187,7 +179,7 @@ class _EventItemState extends State<EventItem> {
                           child: Align(
                             alignment: Alignment.topLeft,
                             child: Text(
-                              'ID: ${widget.event.roomId!}',
+                              'ID: ${event.roomId!}',
                               textAlign: TextAlign.left,
                               style: const TextStyle(
                                 fontWeight: FontWeight.bold,
@@ -196,15 +188,14 @@ class _EventItemState extends State<EventItem> {
                             ),
                           ),
                         ),
-                        if (widget.event.user?.uid ==
-                            profileController.myProfile.uid)
+                        if (event.user?.uid == profileController.myProfile.uid)
                           _buildPopupMenuButton(context),
                       ],
                     ),
                     Align(
                       alignment: Alignment.topLeft,
                       child: Text(
-                        widget.event.title!,
+                        event.title!,
                         style: const TextStyle(
                           fontWeight: FontWeight.w700,
                           fontSize: 16,
@@ -219,7 +210,7 @@ class _EventItemState extends State<EventItem> {
                           width: 4,
                         ),
                         NetworkImageWithPlaceHolder(
-                          imageUrl: widget.event.user?.photoUrl,
+                          imageUrl: event.user?.photoUrl,
                           height: 16,
                           width: 16,
                         ),
@@ -227,8 +218,7 @@ class _EventItemState extends State<EventItem> {
                           width: 4,
                         ),
                         Text(
-                          widget.event.user?.name ??
-                              widget.event.user!.username,
+                          event.user?.name ?? event.user!.username,
                           style: const TextStyle(
                             fontWeight: FontWeight.w700,
                           ),
@@ -279,7 +269,7 @@ class _EventItemState extends State<EventItem> {
                           ),
                         ),
                         const Spacer(),
-                        if (widget.ongoing)
+                        if (ongoing)
                           Padding(
                             padding: const EdgeInsets.only(right: 15.0),
                             child: ElevatedButton(
@@ -293,106 +283,27 @@ class _EventItemState extends State<EventItem> {
                                 ),
                               ),
                               onPressed: () {
-                                if (widget.event.user?.uid ==
+                                if (event.user?.uid ==
                                     profileController.myProfile.uid) {
                                   jumpToLivePage(
                                     context,
-                                    title: widget.event.title!,
-                                    roomID: widget.event.roomId!,
+                                    title: event.title!,
+                                    roomID: event.roomId!,
                                     isHost: true,
-                                    image: widget.event.image,
+                                    image: event.image,
                                   );
                                 } else {
                                   jumpToLivePage(
                                     context,
-                                    title: widget.event.title!,
-                                    roomID: widget.event.roomId!,
+                                    title: event.title!,
+                                    roomID: event.roomId!,
                                     isHost: false,
-                                    image: widget.event.image,
+                                    image: event.image,
                                   );
                                 }
                               },
                               child: const Text(
                                 'Join',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ),
-                          )
-                        else if (!liveController.joined.any(
-                            (EventModel event) => event.id == widget.event.id))
-                          Padding(
-                            padding: const EdgeInsets.only(right: 15.0),
-                            child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.white,
-                                foregroundColor: Colors.red,
-                                minimumSize: const Size(55, 32),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(
-                                      12), // Set the border radius
-                                ),
-                              ),
-                              onPressed: () async {
-                                Get.dialog(
-                                  AlertDialog(
-                                    title: const Text(''),
-                                    content: const Text(
-                                        'Do you also want to add the event to your calender?'),
-                                    actions: <Widget>[
-                                      TextButton(
-                                        onPressed: () {
-                                          // Close the dialog
-                                          Get.back();
-                                        },
-                                        child: const Text('No'),
-                                      ),
-                                      TextButton(
-                                        onPressed: () async {
-                                          Add2Calendar.addEvent2Cal(
-                                            Event(
-                                                title: widget.event.title ?? '',
-                                                startDate: localStartTime,
-                                                endDate: localEndTime),
-                                          );
-                                          Get.back();
-                                        },
-                                        child: const Text('Yes'),
-                                      ),
-                                    ],
-                                  ),
-                                );
-                                await liveController.attendEvent(widget.event);
-                                setState(() {});
-                              },
-                              child: const Text(
-                                'Attend',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ),
-                          )
-                        else
-                          Padding(
-                            padding: const EdgeInsets.only(right: 15.0),
-                            child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.white,
-                                foregroundColor: Colors.red,
-                                minimumSize: const Size(55, 32),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(
-                                      12), // Set the border radius
-                                ),
-                              ),
-                              onPressed: () async {
-                                await liveController.attendEvent(widget.event);
-                                setState(() {});
-                              },
-                              child: const Text(
-                                'Ignore',
                                 style: TextStyle(
                                   fontWeight: FontWeight.w500,
                                 ),
@@ -427,12 +338,12 @@ class _EventItemState extends State<EventItem> {
         size: 16,
       ),
       itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
-        if (widget.event.user?.uid == profileController.myProfile.uid)
+        if (event.user?.uid == profileController.myProfile.uid)
           const PopupMenuItem<String>(
             value: 'edit',
             child: Text('Edit'),
           ),
-        if (widget.event.user?.uid == profileController.myProfile.uid)
+        if (event.user?.uid == profileController.myProfile.uid)
           const PopupMenuItem<String>(
             value: 'delete',
             child: Text('Delete'),
@@ -445,12 +356,12 @@ class _EventItemState extends State<EventItem> {
             // ignore: always_specify_types
             MaterialPageRoute(
               builder: (BuildContext context) => CreateEvent(
-                event: widget.event,
+                event: event,
               ),
             ),
           );
         } else if (value == 'delete') {
-          _showDeleteConfirmationDialog(context, widget.event.id!);
+          _showDeleteConfirmationDialog(context, event.id!);
         }
       },
     );

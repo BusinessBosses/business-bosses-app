@@ -17,14 +17,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.3.7"
-  add_2_calendar:
-    dependency: "direct main"
-    description:
-      name: add_2_calendar
-      sha256: dbcd0bf296fbbe00861a6f101af8cdb3c163a8c3ff5d3c99a4b081c2f37c724f
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.2.5"
   analyzer:
     dependency: transitive
     description:
@@ -821,14 +813,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.17.0"
-  ios_open_subscriptions_settings:
-    dependency: "direct main"
-    description:
-      name: ios_open_subscriptions_settings
-      sha256: "9ec8b1b87587287930f6968dcbc6cdfc3c9ad2f09c13a97818dfb525ddde8cce"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.0.4"
   jiffy:
     dependency: "direct main"
     description:
@@ -926,13 +910,13 @@ packages:
     source: hosted
     version: "1.0.4"
   native_device_orientation:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: native_device_orientation
-      sha256: "744a03030fad5a332a54833cd34f1e2ee51ae9acf477b4ef85bacc8823af9937"
+      sha256: c0b52f6bb2310dc5d5efc71e48644ad029f77d8ce007f91f635e9a00ddfbd5d5
       url: "https://pub.dev"
     source: hosted
-    version: "1.2.1"
+    version: "1.2.0"
   nested:
     dependency: transitive
     description:
