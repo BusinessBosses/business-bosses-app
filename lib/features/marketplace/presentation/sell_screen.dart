@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:business_bosses_v2/features/home/widgets/sellingpopup.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:country_list_pick/country_list_pick.dart';
@@ -16,6 +14,7 @@ import '../../../common/dialogs/snackbar.dart';
 import '../../../common/models/comment_model.dart';
 import '../../../common/widgets/buttons/my_outlined_button.dart';
 import '../../../common/widgets/gallery_screen.dart';
+import '../../../utils/constants/constants.dart';
 import '../../../utils/theme/theme.dart';
 import '../../forum/widgets/field_container.dart';
 import '../../posts/widgets/preview.dart';
@@ -33,7 +32,6 @@ class CreateSellingitemScreen extends StatefulWidget {
   /// String if to update;
   final MarketModel? market;
   final bool isUpd;
-
   // CreateSellingitemScreen();
   @override
   _CreateSellingitemScreenState createState() =>
@@ -55,12 +53,282 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
 
   MarketModel? _market;
 
+  Map<String, String> currencyValues = {
+    'Afghanistan': 'AFN',
+    'Albania': 'ALL',
+    'Algeria': 'DZD',
+    'AmericanSamoa': 'USD',
+    'Andorra': 'EUR',
+    'Angola': 'AOA',
+    'Anguilla': 'XCD',
+    'Antarctica': '',
+    'Antigua and Barbuda': 'XCD',
+    'Argentina': 'ARS',
+    'Armenia': 'AMD',
+    'Aruba': 'AWG',
+    'Australia': 'AUD',
+    'Austria': 'EUR',
+    'Azerbaijan': 'AZN',
+    'Bahamas (The)': 'BSD',
+    'Bahrain': 'BHD',
+    'Bangladesh': 'BDT',
+    'Barbados': 'BBD',
+    'Belarus': 'BYN',
+    'Belgium': 'EUR',
+    'Belize': 'BZD',
+    'Benin': 'XOF',
+    'Bermuda': 'BMD',
+    'Bhutan': 'BTN',
+    'Bhutan (Indian Rupee)': 'INR',
+    'Bolivia, Plurinational State of': 'BOB',
+    'Bolivia (Plurinational State of) (Mvdol)': 'BOV',
+    'Bonaire, Sint Eustatius and Saba': 'USD',
+    'Bosnia and Herzegovina': 'BAM',
+    'Botswana': 'BWP',
+    'Bouvet Island': 'NOK',
+    'Brazil': 'BRL',
+    'British Indian Ocean Territory': 'USD',
+    'Brunei Darussalam': 'BND',
+    'Bulgaria': 'BGN',
+    'Burkina Faso': 'XOF',
+    'Burundi': 'BIF',
+    'Cabo Verde': 'CVE',
+    'Cambodia': 'KHR',
+    'Cameroon': 'XAF',
+    'Canada': 'CAD',
+    'Cayman Islands (The)': 'KYD',
+    'Central African Republic': 'XAF',
+    'Chad': 'XAF',
+    'Chile (Unidad de Fomento)': 'CLF',
+    'Chile (Chilean Peso)': 'CLP',
+    'China': 'CNY',
+    'Christmas Island': 'AUD',
+    'Cocos (Keeling) Islands': 'AUD',
+    'Colombia': 'COP',
+    'Colombia': 'COU',
+    'Comoros': 'KMF',
+    'Congo, The Democratic Republic of the Congo': 'CDF',
+    'Congo': 'XAF',
+    'Cook Islands': 'NZD',
+    'Costa Rica': 'CRC',
+    'Croatia': 'EUR',
+    'Cuba': 'CUC',
+    'Cuba': 'CUP',
+    'Curaçao': 'ANG',
+    'Cyprus': 'EUR',
+    'Czech Republic': 'CZK',
+    "Cote d'Ivoire": 'XOF',
+    'Denmark': 'DKK',
+    'Djibouti': 'DJF',
+    'Dominica': 'XCD',
+    'Dominican Republic (The)': 'DOP',
+    'Ecuador': 'USD',
+    'Egypt': 'EGP',
+    'El Salvador': 'SVC',
+    'El Salvador': 'USD',
+    'Equatorial Guinea': 'XAF',
+    'Eritrea': 'ERN',
+    'Estonia': 'EUR',
+    'Ethiopia': 'ETB',
+    'European Union': 'EUR',
+    'Falkland Islands (Malvinas)': 'FKP',
+    'Faroe Islands': 'DKK',
+    'Fiji': 'FJD',
+    'Finland': 'EUR',
+    'France': 'EUR',
+    'French Guiana': 'EUR',
+    'French Polynesia': 'XPF',
+    'French Southern Territories': 'EUR',
+    'Gabon': 'XAF',
+    'Gambia (The)': 'GMD',
+    'Georgia': 'GEL',
+    'Germany': 'EUR',
+    'Ghana': 'GHS',
+    'Gibraltar': 'GIP',
+    'Greece': 'EUR',
+    'Greenland': 'DKK',
+    'Grenada': 'XCD',
+    'Guadeloupe': 'EUR',
+    'Guam': 'USD',
+    'Guatemala': 'GTQ',
+    'Guernsey': 'GBP',
+    'Guinea': 'GNF',
+    'Guinea-Bissau': 'XOF',
+    'Guyana': 'GYD',
+    'Haiti': 'HTG',
+    'Haiti': 'USD',
+    'Heard Island and McDonald Islands': 'AUD',
+    'Holy See (Vatican City State)': 'EUR',
+    'Honduras': 'HNL',
+    'Hong Kong': 'HKD',
+    'Hungary': 'HUF',
+    'Iceland': 'ISK',
+    'India': 'INR',
+    'Indonesia': 'IDR',
+    'Iran, Islamic Republic of Persian Gulf': 'IRR',
+    'Iraq': 'IQD',
+    'Ireland': 'EUR',
+    'Isle of Man': 'GBP',
+    'Israel': 'ILS',
+    'Italy': 'EUR',
+    'Jamaica': 'JMD',
+    'Japan': 'JPY',
+    'Jersey': 'GBP',
+    'Jordan': 'JOD',
+    'Kazakhstan': 'KZT',
+    'Kenya': 'KES',
+    'Kiribati': 'AUD',
+    'Korea, Democratic People’s Republic of Korea)': 'KPW',
+    'Korea, Republic of South Korea': 'KRW',
+    'Kuwait': 'KWD',
+    'Kyrgyzstan': 'KGS',
+    'Laos': 'LAK',
+    'Latvia': 'EUR',
+    'Lebanon': 'LBP',
+    'Lesotho (Loti)': 'LSL',
+    'Lesotho (Rand)': 'ZAR',
+    'Liberia': 'LRD',
+    'Libyan Arab Jamahiriya': 'LYD',
+    'Liechtenstein': 'CHF',
+    'Lithuania': 'EUR',
+    'Luxembourg': 'EUR',
+    'Macao': 'MOP',
+    'Madagascar': 'MGA',
+    'Malawi': 'MWK',
+    'Malaysia': 'MYR',
+    'Maldives': 'MVR',
+    'Mali': 'XOF',
+    'Malta': 'EUR',
+    'Marshall Islands (The)': 'USD',
+    'Martinique': 'EUR',
+    'Mauritania': 'MRU',
+    'Mauritius': 'MUR',
+    'Mayotte': 'EUR',
+    'Member Countries of the African Development Bank Group': 'XUA',
+    'Mexico (Mexican Peso)': 'MXN',
+    'Mexico (Mexican Unidad de Inversion - UDI)': 'MXV',
+    'Micronesia, Federated States of Micronesia': 'USD',
+    'Moldova': 'MDL',
+    'Monaco': 'EUR',
+    'Mongolia': 'MNT',
+    'Montenegro': 'EUR',
+    'Montserrat': 'XCD',
+    'Morocco': 'MAD',
+    'Mozambique': 'MZN',
+    'Myanmar': 'MMK',
+    'Namibia': 'NAD',
+    'Namibia': 'ZAR',
+    'Nauru': 'AUD',
+    'Nepal': 'NPR',
+    'Netherlands (The)': 'EUR',
+    'New Caledonia': 'XPF',
+    'New Zealand': 'NZD',
+    'Nicaragua': 'NIO',
+    'Niger (The)': 'XOF',
+    'Nigeria': 'NGN',
+    'Niue': 'NZD',
+    'Norfolk Island': 'AUD',
+    'Northern Mariana Islands (The)': 'USD',
+    'Norway': 'NOK',
+    'Oman': 'OMR',
+    'Pakistan': 'PKR',
+    'Palau': 'USD',
+    'Palestinian Territory, Occupied, State of': '',
+    'Panama': 'PAB',
+    'Panama': 'USD',
+    'Papua New Guinea': 'PGK',
+    'Paraguay': 'PYG',
+    'Peru': 'PEN',
+    'Philippines (The)': 'PHP',
+    'Pitcairn': 'NZD',
+    'Poland': 'PLN',
+    'Portugal': 'EUR',
+    'Puerto Rico': 'USD',
+    'Qatar': 'QAR',
+    'Republic of North Macedonia': 'MKD',
+    'Romania': 'RON',
+    'Russian Federation (The)': 'RUB',
+    'Rwanda': 'RWF',
+    'Réunion': 'EUR',
+    'Saint Barthélemy': 'EUR',
+    'Saint Helena, Ascension and Tristan da Cunha': 'SHP',
+    'Saint Kitts and Nevis': 'XCD',
+    'Saint Lucia': 'XCD',
+    'Saint Martin (French Part)': 'EUR',
+    'Saint Pierre and Miquelon': 'EUR',
+    'Saint Vincent and the Grenadines': 'XCD',
+    'Samoa': 'WST',
+    'San Marino': 'EUR',
+    'Sao Tome and Principe': 'STN',
+    'Saudi Arabia': 'SAR',
+    'Senegal': 'XOF',
+    'Serbia': 'RSD',
+    'Seychelles': 'SCR',
+    'Sierra Leone': 'SLE',
+    'Singapore': 'SGD',
+    'Sint Maarten (Dutch Part)': 'ANG',
+    'Sistema Unitario de Compensacion Regional de Pagos "Sucre"': 'XSU',
+    'Slovakia': 'EUR',
+    'Slovenia': 'EUR',
+    'Solomon Islands': 'SBD',
+    'Somalia': 'SOS',
+    'South Africa': 'ZAR',
+    'South Georgia and the South Sandwich Islands': '',
+    'South Sudan': 'SSP',
+    'Spain': 'EUR',
+    'Sri Lanka': 'LKR',
+    'Sudan (The)': 'SDG',
+    'Suriname': 'SRD',
+    'Svalbard and Jan Mayen': 'NOK',
+    'Swaziland': 'SZL',
+    'Sweden': 'SEK',
+    'Switzerland (WIR Euro)': 'CHE',
+    'Switzerland (Swiss Franc)': 'CHF',
+    'Switzerland (WIR Franc)': 'CHW',
+    'Syrian Arab Republic': 'SYP',
+    'Taiwan (Province of China)': 'TWD',
+    'Tajikistan': 'TJS',
+    'Tanzania, United Republic of Tanzania': 'TZS',
+    'Thailand': 'THB',
+    'Timor-Leste': 'USD',
+    'Togo': 'XOF',
+    'Tokelau': 'NZD',
+    'Tonga': 'TOP',
+    'Trinidad and Tobago': 'TTD',
+    'Tunisia': 'TND',
+    'Turkey': 'TRY',
+    'Turkmenistan': 'TMT',
+    'Turks and Caicos Islands': 'USD',
+    'Tuvalu': 'AUD',
+    'Uganda': 'UGX',
+    'Ukraine': 'UAH',
+    'United Arab Emirates (The)': 'AED',
+    'United Kingdom': 'GBP',
+    'United States': 'USD',
+    'United States of America (The)': 'USD',
+    'United States of America (The) (US Dollar Next day)': 'USN',
+    'Uruguay (Uruguay Peso en Unidades Indexadas - URUIURUI)': 'UYI',
+    'Uruguay (Peso Uruguayo)': 'UYU',
+    'Uzbekistan': 'UZS',
+    'Vanuatu': 'VUV',
+    'Venezuela, Bolivarian Republic of Venezuela': 'VEF',
+    'Venezuela (Bolivarian Republic of)': 'VED',
+    'Vietnam': 'VND',
+    'Virgin Islands, British': 'USD',
+    'Virgin Islands, U.S.': 'USD',
+    'Wallis and Futuna': 'XPF',
+    'Western Sahara': 'MAD',
+    'Yemen': 'YER',
+    'Zambia': 'ZMW',
+    'Zimbabwe': 'ZWL',
+    'Aland Islands': 'EUR',
+  };
+
   String? description;
   String? price;
   String? discount;
   String? _selectedCategory;
   String? _selectedLocation;
-  String? _selectedCurrency;
   String? filterCode;
   String? filterLocation;
   String? filterCategory;
@@ -79,20 +347,10 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
     return _selectedLocation;
   }
 
-  Future<String?>? getCountryCurrency() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() {
-      _selectedCurrency = prefs.getString('currency') ?? "\$";
-    });
-    return _selectedCurrency;
-  }
-
   @override
   void initState() {
     getCountryValue();
-    getCountryCurrency();
     super.initState();
-
     _isUpdating = widget.isUpd;
     if (widget.isUpd) {
       _market = widget.market;
@@ -101,6 +359,7 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
     _priceController.text = _market?.price ?? '';
     _discountController.text = _market?.discount.toString() ?? '';
     _selectedCategory = _market?.category;
+    _selectedLocation = _market?.location;
     _fileProcessing = <bool>[];
   }
 
@@ -135,14 +394,26 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
                 Padding(
                   padding: const EdgeInsets.only(left: 16.0, right: 16),
                   child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Expanded(
                         flex: 1,
-                        child: Text(""),
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                              top: 18.0), // Adjust the value as needed
+                          child: Text(
+                            '${currencyValues[_selectedLocation]}' ?? 'USD',
+                            style: const TextStyle(fontWeight: FontWeight.w700),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 5,
                       ),
                       Expanded(
                         flex:
-                            7, // Adjust the flex value to control the relative sizes
+                            2, // Adjust the flex value to control the relative sizes
                         child: Stack(children: [
                           TextFormField(
                             controller: _priceController,
@@ -151,7 +422,7 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
                             keyboardType: TextInputType.text,
                             maxLength: 15,
                             decoration: inputDecoration.copyWith(
-                              hintText: 'Enter Price',
+                              hintText: 'Enter Price in USD (Example \$10)',
                             ),
                           )
                         ]),
@@ -161,7 +432,7 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
                       ),
                       Expanded(
                         flex:
-                            4, // Adjust the flex value to control the relative sizes
+                            1, // Adjust the flex value to control the relative sizes
                         child: Stack(
                           children: [
                             TextFormField(
@@ -282,10 +553,11 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
                         icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
                       ),
                       centerTitle: true,
-                      title: const Text(
+                      // ignore: prefer_const_constructors
+                      title: Text(
                         'Select Location',
                         textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 20),
+                        style: const TextStyle(fontSize: 20),
                       ),
                     ),
                     initialSelection: _selectedLocation,
@@ -307,19 +579,10 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
                         ),
                       );
                     },
-                    onChanged: (CountryCode? code) async {
+                    onChanged: (CountryCode? code) {
                       setState(() {
-                        _selectedLocation = code!.name;
+                        _selectedLocation = code!.name!;
                       });
-
-                      try {
-                        SharedPreferences marketplaceCountry =
-                            await SharedPreferences.getInstance();
-                        await marketplaceCountry.setString(
-                            'country', code!.name!);
-                        await marketplaceCountry.setString(
-                            'currency', code.code!);
-                      } catch (e) {}
                     },
                     useSafeArea: false,
                   ),
@@ -539,7 +802,7 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
         'category': _selectedCategory,
         'location': _selectedLocation,
         'description': description,
-        'price': price,
+        'price': (currencyValues[_selectedLocation] ?? '') + price.toString(),
         'discount': discount,
         'timestamp': DateTime.now().millisecondsSinceEpoch,
       }, _shouldPromote);
@@ -549,7 +812,8 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
         'category': _selectedCategory,
         'location': _selectedLocation,
         'description': descriptionController.text,
-        'price': _priceController.text,
+        'price': (currencyValues[_selectedLocation] ?? 'USD') +
+            _priceController.text,
         'promote': _market?.promote,
         'approved': _market?.approved,
         'likes': _market?.likes,
@@ -567,7 +831,8 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
             'category': _selectedCategory,
             'location': _selectedLocation,
             'description': descriptionController.text,
-            'price': _priceController.text,
+            'price': (currencyValues[_selectedLocation] ?? 'USD') +
+                _priceController.text,
             'discount': _discountController.text,
             'images': _market?.images,
           });

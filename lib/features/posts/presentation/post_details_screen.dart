@@ -43,6 +43,14 @@ class PostDetailsScreen extends StatelessWidget {
     ProfileController profileController = Get.find();
     // ignore: unused_local_variable
     HomeController controller = Get.find();
+
+    Future<void> repost() async {
+      controller.postRepost(profileController.myProfile.uid, post.postId,
+          'post', post.timestamp, post.user!.uid);
+    }
+
+    ;
+
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
@@ -73,6 +81,56 @@ class PostDetailsScreen extends StatelessWidget {
                     const SizedBox(
                       height: 10,
                     ),
+                    if (post.reposts?.length != null &&
+                        post.reposts?.length != 0) ...[
+                      Padding(
+                        padding: const EdgeInsets.only(left: 15.0, top: 10),
+                        child: Row(
+                          children: [
+                            SvgPicture.asset(
+                              'assets/svgs/repost.svg',
+                              height: 13,
+                            ),
+                            const SizedBox(
+                              width: 5,
+                            ),
+                            post.reposts?.contains(
+                                        profileController.myProfile.uid) ==
+                                    true
+                                ? Row(
+                                    children: [
+                                      const Text(
+                                        'You Reposted',
+                                        style: TextStyle(fontSize: 12),
+                                      ),
+                                      const SizedBox(
+                                        width: 5,
+                                      ),
+                                      Container(
+                                        width: 3.0,
+                                        height: 3.0,
+                                        decoration: const BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        width: 5,
+                                      ),
+                                    ],
+                                  )
+                                : Container(),
+                            GestureDetector(
+                              onTap: () {},
+                              child: Text(
+                                '${post.reposts?.length.toString()} Reposts',
+                                style: TextStyle(fontSize: 12),
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
                     Padding(
                       padding: const EdgeInsets.only(left: 15),
                       child: CreatePostUserTile(
@@ -158,9 +216,11 @@ class PostDetailsScreen extends StatelessWidget {
                               : null,
                     ),
                     PostInteractionsWidget(
-                        post: post,
-                        profileController: profileController,
-                        sharePost: _sharePost),
+                      post: post,
+                      profileController: profileController,
+                      sharePost: _sharePost,
+                      repost: repost,
+                    ),
                     const SizedBox(
                       width: double.infinity,
                       height: 1,

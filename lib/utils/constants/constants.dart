@@ -106,8 +106,6 @@ class Constants {
   /// STORAGE CONSTANTS
   static const String ACCESS_TOKEN = 'accessToken';
   static const String USER_ID = 'uid';
-
-  /// COUNTRY CONSTANTS
 }
 
 enum PasswordField { password, confirmPassword }
