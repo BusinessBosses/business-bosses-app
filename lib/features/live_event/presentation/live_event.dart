@@ -16,6 +16,7 @@ import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:lottie/lottie.dart';
 import 'package:timezone/data/latest.dart' as tzdata;
 
 import '../../../action/action.dart';
@@ -77,7 +78,6 @@ class _LiveEventState extends State<LiveEvent> {
         return Scaffold(
             backgroundColor: Colors.white,
             appBar: AppBar(
-              automaticallyImplyLeading: false,
               leading: IconButton(
                 onPressed: () {
                   Get.offNamed(Routes.home);
@@ -246,9 +246,9 @@ class _LiveEventState extends State<LiveEvent> {
                             child: TabBar(
                               tabs: <Widget>[
                                 Tab(
-                                  child: SvgPicture.asset(
-                                    'assets/svgs/liveevent.svg',
-                                    width: 15,
+                                  child: Lottie.asset(
+                                    'assets/anim/liveevent.json',
+                                    height: 25,
                                   ),
                                 ),
                                 const Tab(text: 'Ongoing'),

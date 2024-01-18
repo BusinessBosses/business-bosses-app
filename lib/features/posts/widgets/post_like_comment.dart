@@ -48,50 +48,27 @@ class _PostLikeCommentItemState extends State<PostLikeCommentItem> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length:
-          widget.post.reposts != null && widget.post.reposts!.isEmpty ? 2 : 3,
+      length: 2,
       child: Scaffold(
         body: Column(
           children: <Widget>[
             Material(
               color: Colors.grey.withOpacity(0.1),
               child: TabBar(
-                tabs:
-                    widget.post.reposts != null && widget.post.reposts!.isEmpty
-                        ? <Widget>[
-                            Tab(
-                              child: Text(
-                                'Comments',
-                                style: Theme.of(context).textTheme.bodyLarge,
-                              ),
-                            ),
-                            Tab(
-                              child: Text(
-                                'Likes',
-                                style: Theme.of(context).textTheme.bodyLarge,
-                              ),
-                            ),
-                          ]
-                        : <Widget>[
-                            Tab(
-                              child: Text(
-                                'Comments',
-                                style: Theme.of(context).textTheme.bodyLarge,
-                              ),
-                            ),
-                            Tab(
-                              child: Text(
-                                'Likes',
-                                style: Theme.of(context).textTheme.bodyLarge,
-                              ),
-                            ),
-                            Tab(
-                              child: Text(
-                                'Reposts',
-                                style: Theme.of(context).textTheme.bodyLarge,
-                              ),
-                            ),
-                          ],
+                tabs: <Widget>[
+                  Tab(
+                    child: Text(
+                      'Comments',
+                      style: Theme.of(context).textTheme.bodyLarge,
+                    ),
+                  ),
+                  Tab(
+                    child: Text(
+                      'Likes',
+                      style: Theme.of(context).textTheme.bodyLarge,
+                    ),
+                  ),
+                ],
               ),
             ),
             Expanded(

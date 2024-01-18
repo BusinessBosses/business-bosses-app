@@ -652,11 +652,10 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                                                         },
                                                                         minVerticalPadding:
                                                                             0,
-                                                                        contentPadding:
-                                                                            const EdgeInsets.only(
-                                                                          left:
-                                                                              10,
-                                                                        ),
+                                                                        contentPadding: const EdgeInsets
+                                                                            .only(
+                                                                            left:
+                                                                                10,),
                                                                         leading:
                                                                             SvgPicture.asset(
                                                                           index == 0
@@ -749,7 +748,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                                         Container(
                                                           margin:
                                                               const EdgeInsets
-                                                                      .only(
+                                                                  .only(
                                                                   top: 25,
                                                                   right: 20,
                                                                   left: 35),
@@ -788,7 +787,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                                           child: Padding(
                                                             padding:
                                                                 const EdgeInsets
-                                                                        .only(
+                                                                    .only(
                                                                     right: 35),
                                                             child: Text(
                                                               _marketController
@@ -821,7 +820,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                                               Padding(
                                                                 padding:
                                                                     const EdgeInsets
-                                                                            .only(
+                                                                        .only(
                                                                         right:
                                                                             2,
                                                                         top: 5),
@@ -843,9 +842,11 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                                                       ));
                                                                 },
                                                                 child: Padding(
-                                                                  padding: const EdgeInsets
+                                                                  padding:
+                                                                      const EdgeInsets
                                                                           .only(
-                                                                      top: 5.0),
+                                                                          top:
+                                                                              5.0),
                                                                   child:
                                                                       RichText(
                                                                     text:
@@ -873,7 +874,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                                               Padding(
                                                                 padding:
                                                                     const EdgeInsets
-                                                                            .only(
+                                                                        .only(
                                                                         left: 8,
                                                                         top: 5,
                                                                         right:
@@ -899,7 +900,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                                                           postCount);
                                                                   return Padding(
                                                                     padding: const EdgeInsets
-                                                                            .only(
+                                                                        .only(
                                                                         top:
                                                                             5.0),
                                                                     child:
@@ -1166,7 +1167,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                                         Container(
                                                           constraints:
                                                               const BoxConstraints
-                                                                      .expand(
+                                                                  .expand(
                                                                   height: 50),
                                                           child: const TabBar(
                                                             tabs: <Widget>[

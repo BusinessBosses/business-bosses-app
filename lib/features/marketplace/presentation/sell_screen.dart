@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:business_bosses_v2/features/home/widgets/sellingpopup.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:country_list_pick/country_list_pick.dart';
@@ -34,7 +32,6 @@ class CreateSellingitemScreen extends StatefulWidget {
   /// String if to update;
   final MarketModel? market;
   final bool isUpd;
-
   // CreateSellingitemScreen();
   @override
   _CreateSellingitemScreenState createState() =>
@@ -354,7 +351,6 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
   void initState() {
     getCountryValue();
     super.initState();
-
     _isUpdating = widget.isUpd;
     if (widget.isUpd) {
       _market = widget.market;
@@ -363,6 +359,7 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
     _priceController.text = _market?.price ?? '';
     _discountController.text = _market?.discount.toString() ?? '';
     _selectedCategory = _market?.category;
+    _selectedLocation = _market?.location;
     _fileProcessing = <bool>[];
   }
 
@@ -416,7 +413,7 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
                       ),
                       Expanded(
                         flex:
-                            7, // Adjust the flex value to control the relative sizes
+                            2, // Adjust the flex value to control the relative sizes
                         child: Stack(children: [
                           TextFormField(
                             controller: _priceController,
@@ -425,7 +422,7 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
                             keyboardType: TextInputType.text,
                             maxLength: 15,
                             decoration: inputDecoration.copyWith(
-                              hintText: 'Enter Price',
+                              hintText: 'Enter Price in USD (Example \$10)',
                             ),
                           )
                         ]),
@@ -435,7 +432,7 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
                       ),
                       Expanded(
                         flex:
-                            4, // Adjust the flex value to control the relative sizes
+                            1, // Adjust the flex value to control the relative sizes
                         child: Stack(
                           children: [
                             TextFormField(
@@ -556,10 +553,11 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
                         icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
                       ),
                       centerTitle: true,
-                      title: const Text(
+                      // ignore: prefer_const_constructors
+                      title: Text(
                         'Select Location',
                         textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 20),
+                        style: const TextStyle(fontSize: 20),
                       ),
                     ),
                     initialSelection: _selectedLocation,
@@ -581,19 +579,10 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
                         ),
                       );
                     },
-                    onChanged: (CountryCode? code) async {
+                    onChanged: (CountryCode? code) {
                       setState(() {
-                        _selectedLocation = code!.name;
+                        _selectedLocation = code!.name!;
                       });
-
-                      try {
-                        SharedPreferences marketplaceCountry =
-                            await SharedPreferences.getInstance();
-                        await marketplaceCountry.setString(
-                            'country', code!.name!);
-                        await marketplaceCountry.setString(
-                            'currency', code.code!);
-                      } catch (e) {}
                     },
                     useSafeArea: false,
                   ),
