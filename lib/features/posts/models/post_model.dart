@@ -8,8 +8,10 @@ class PostModel {
   final String title;
   final List<String>? images;
   final int timestamp;
+  int? oldtimestamp;
   final List<String>? likes;
   final List<String>? coins;
+  final List<String>? reposts;
   final List<CommentModel>? comments;
   final UserModel? user;
   final String? videoUrl;
@@ -26,8 +28,10 @@ class PostModel {
     required this.title,
     this.images,
     required this.timestamp,
+    this.oldtimestamp = 1,
     this.likes,
     this.coins,
+    this.reposts,
     this.comments,
     this.user,
     this.videoUrl,
@@ -46,8 +50,10 @@ class PostModel {
     String? title,
     List<String>? images,
     int? timestamp,
+    int? oldtimestamp,
     List<String>? likes,
     List<String>? coins,
+    List<String>? reposts,
     List<CommentModel>? comments,
     UserModel? user,
     String? videoUrl,
@@ -65,8 +71,10 @@ class PostModel {
       title: title ?? this.title,
       images: images ?? this.images,
       timestamp: timestamp ?? this.timestamp,
+      oldtimestamp: oldtimestamp ?? this.oldtimestamp,
       likes: likes ?? this.likes,
       coins: coins ?? this.coins,
+      reposts: reposts ?? this.reposts,
       comments: comments ?? this.comments,
       user: user ?? this.user,
       videoUrl: videoUrl ?? this.videoUrl,
@@ -87,8 +95,10 @@ class PostModel {
       'title': title,
       'images': images,
       'timestamp': timestamp,
+      'oldtimestamp': oldtimestamp,
       'likes': likes,
       'coins': coins,
+      'reposts': reposts,
       'comments': comments?.map((CommentModel x) => x.toMap()).toList(),
       'user': user?.toMap(),
       'videoUrl': videoUrl,
@@ -117,8 +127,12 @@ class PostModel {
                   .toList()
           : null,
       timestamp: int.parse(map['timestamp'].toString()),
+      oldtimestamp:
+          map['oldtimestamp'] != null ? map['oldtimestamp'] as int : null,
       likes: map['likes'] != null ? List<String>.from((map['likes'])) : null,
       coins: map['coins'] != null ? List<String>.from((map['coins'])) : null,
+      reposts:
+          map['reposts'] != null ? List<String>.from((map['reposts'])) : null,
       comments: List.from(map['comments'])
           .map((e) => CommentModel.fromMap(e as Map<String, dynamic>))
           .toList(),
