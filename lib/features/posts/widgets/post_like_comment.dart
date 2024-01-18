@@ -31,7 +31,9 @@ class PostLikeCommentItem extends StatefulWidget {
 }
 
 class _PostLikeCommentItemState extends State<PostLikeCommentItem> {
-  bool _isLoadingLikes = true, _isLoadingComments = true;
+  bool _isLoadingLikes = true,
+      _isLoadingComments = true,
+      _isLoadingReposts = true;
   final CommentController _commentController = Get.put(CommentController());
   final HomeController _homeController = Get.find();
 
@@ -39,6 +41,7 @@ class _PostLikeCommentItemState extends State<PostLikeCommentItem> {
   void initState() {
     _loadCommentWithDetails();
     _loadLikesWithDetails(widget.post.postId);
+    _loadRepostsWithDetails(widget.post.postId);
     super.initState();
   }
 
@@ -70,104 +73,254 @@ class _PostLikeCommentItemState extends State<PostLikeCommentItem> {
             ),
             Expanded(
               child: TabBarView(
-                children: <Widget>[
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Expanded(
-                        child: _commentController.comments.isEmpty
+                children: widget.post.reposts != null &&
+                        widget.post.reposts!.isEmpty
+                    ? <Widget>[
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Expanded(
+                              child: _commentController.comments.isEmpty
+                                  ? SafetyModel(
+                                      isLoading: _isLoadingComments,
+                                      icon: SvgPicture.asset(
+                                        'assets/svgs/comment.svg',
+                                        height: 80.0,
+                                        color: hintColor,
+                                      ),
+                                      title: 'There is no comment for now',
+                                      subTitle: 'Be the first one to comment!',
+                                    )
+                                  : ListView.builder(
+                                      reverse: true,
+                                      itemBuilder:
+                                          (BuildContext context, int i) {
+                                        final int j =
+                                            _commentController.comments.length -
+                                                1 -
+                                                i; // reverse index
+                                        return CommentItem(
+                                            _commentController.comments[j]);
+                                      },
+                                      itemCount:
+                                          _commentController.comments.length,
+                                    ),
+                            ),
+                            WriteAComment(
+                              onCommentSend: (CommentModel comment) {
+                                widget.onComment(comment);
+                                ApiService.post(
+                                    path: 'comments',
+                                    body: <String, dynamic>{
+                                      ...comment.toMap(),
+                                      'receiverUid': widget.post.user?.uid
+                                    });
+                                setState(() {
+                                  _commentController.comments.add(comment);
+                                });
+                                _homeController.comment(
+                                  widget.post.postId,
+                                  comment,
+                                  'post',
+                                );
+                              },
+                              postId: widget.post.postId,
+                            )
+                          ],
+                        ),
+                        _users.isEmpty
                             ? SafetyModel(
-                                isLoading: _isLoadingComments,
-                                icon: SvgPicture.asset(
-                                  'assets/svgs/comment.svg',
-                                  height: 80.0,
+                                isLoading: _isLoadingLikes,
+                                icon: const Icon(
+                                  Icons.favorite,
+                                  size: 80.0,
                                   color: hintColor,
                                 ),
-                                title: 'There is no comment for now',
-                                subTitle: 'Be the first one to comment!',
+                                title: 'There is no like for now',
+                                subTitle: 'Be the first one to like!',
                               )
                             : ListView.builder(
-                                reverse: true,
+                                itemCount: _users.length,
                                 itemBuilder: (BuildContext context, int i) {
-                                  final int j =
-                                      _commentController.comments.length -
-                                          1 -
-                                          i; // reverse index
-                                  return CommentItem(
-                                      _commentController.comments[j]);
+                                  return ListTile(
+                                    onTap: () {
+                                      Get.toNamed(Routes.publicProfile,
+                                          arguments: _users[i]);
+                                    },
+                                    leading: UserAvatarWithBadge(
+                                      user: _users[i],
+                                      height: 48.0,
+                                      width: 48.0,
+                                      radius: 30.0,
+                                      placeHolder: Icons.person,
+                                    ),
+                                    title: _users[i].isSubscribed == true
+                                        ? Row(
+                                            children: <Widget>[
+                                              Text(_users[i].name!),
+                                              const SizedBox(width: 5),
+                                              SvgPicture.asset(
+                                                'assets/svgs/premiumbadge.svg',
+                                                height: 9,
+                                                color: primaryColorLT,
+                                              )
+                                            ],
+                                          )
+                                        : Text(_users[i].name!),
+                                    subtitle: Text(
+                                      '${_users[i].bio}',
+                                      maxLines: 1,
+                                    ),
+                                  );
                                 },
-                                itemCount: _commentController.comments.length,
-                              ),
-                      ),
-                      WriteAComment(
-                        onCommentSend: (CommentModel comment) {
-                          widget.onComment(comment);
-                          ApiService.post(
-                              path: 'comments',
-                              body: <String, dynamic>{
-                                ...comment.toMap(),
-                                'receiverUid': widget.post.user?.uid
-                              });
-                          setState(() {
-                            _commentController.comments.add(comment);
-                          });
-                          _homeController.comment(
-                            widget.post.postId,
-                            comment,
-                            'post',
-                          );
-                        },
-                        postId: widget.post.postId,
-                      )
-                    ],
-                  ),
-                  _users.isEmpty
-                      ? SafetyModel(
-                          isLoading: _isLoadingLikes,
-                          icon: const Icon(
-                            Icons.favorite,
-                            size: 80.0,
-                            color: hintColor,
-                          ),
-                          title: 'There is no like for now',
-                          subTitle: 'Be the first one to like!',
-                        )
-                      : ListView.builder(
-                          itemCount: _users.length,
-                          itemBuilder: (BuildContext context, int i) {
-                            return ListTile(
-                              onTap: () {
-                                Get.toNamed(Routes.publicProfile,
-                                    arguments: _users[i]);
-                              },
-                              leading: UserAvatarWithBadge(
-                                user: _users[i],
-                                height: 48.0,
-                                width: 48.0,
-                                radius: 30.0,
-                                placeHolder: Icons.person,
-                              ),
-                              title: _users[i].isSubscribed == true
-                                  ? Row(
-                                      children: <Widget>[
-                                        Text(_users[i].name!),
-                                        const SizedBox(width: 5),
-                                        SvgPicture.asset(
-                                          'assets/svgs/premiumbadge.svg',
-                                          height: 9,
-                                          color: primaryColorLT,
-                                        )
-                                      ],
+                              )
+                      ]
+                    : <Widget>[
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Expanded(
+                              child: _commentController.comments.isEmpty
+                                  ? SafetyModel(
+                                      isLoading: _isLoadingComments,
+                                      icon: SvgPicture.asset(
+                                        'assets/svgs/comment.svg',
+                                        height: 80.0,
+                                        color: hintColor,
+                                      ),
+                                      title: 'There is no comment for now',
+                                      subTitle: 'Be the first one to comment!',
                                     )
-                                  : Text(_users[i].name!),
-                              subtitle: Text(
-                                '${_users[i].bio}',
-                                maxLines: 1,
+                                  : ListView.builder(
+                                      reverse: true,
+                                      itemBuilder:
+                                          (BuildContext context, int i) {
+                                        final int j =
+                                            _commentController.comments.length -
+                                                1 -
+                                                i; // reverse index
+                                        return CommentItem(
+                                            _commentController.comments[j]);
+                                      },
+                                      itemCount:
+                                          _commentController.comments.length,
+                                    ),
+                            ),
+                            WriteAComment(
+                              onCommentSend: (CommentModel comment) {
+                                widget.onComment(comment);
+                                ApiService.post(
+                                    path: 'comments',
+                                    body: <String, dynamic>{
+                                      ...comment.toMap(),
+                                      'receiverUid': widget.post.user?.uid
+                                    });
+                                setState(() {
+                                  _commentController.comments.add(comment);
+                                });
+                                _homeController.comment(
+                                  widget.post.postId,
+                                  comment,
+                                  'post',
+                                );
+                              },
+                              postId: widget.post.postId,
+                            )
+                          ],
+                        ),
+                        _users.isEmpty
+                            ? SafetyModel(
+                                isLoading: _isLoadingLikes,
+                                icon: const Icon(
+                                  Icons.favorite,
+                                  size: 80.0,
+                                  color: hintColor,
+                                ),
+                                title: 'There is no like for now',
+                                subTitle: 'Be the first one to like!',
+                              )
+                            : ListView.builder(
+                                itemCount: _users.length,
+                                itemBuilder: (BuildContext context, int i) {
+                                  return ListTile(
+                                    onTap: () {
+                                      Get.toNamed(Routes.publicProfile,
+                                          arguments: _users[i]);
+                                    },
+                                    leading: UserAvatarWithBadge(
+                                      user: _users[i],
+                                      height: 48.0,
+                                      width: 48.0,
+                                      radius: 30.0,
+                                      placeHolder: Icons.person,
+                                    ),
+                                    title: _users[i].isSubscribed == true
+                                        ? Row(
+                                            children: <Widget>[
+                                              Text(_users[i].name!),
+                                              const SizedBox(width: 5),
+                                              SvgPicture.asset(
+                                                'assets/svgs/premiumbadge.svg',
+                                                height: 9,
+                                                color: primaryColorLT,
+                                              )
+                                            ],
+                                          )
+                                        : Text(_users[i].name!),
+                                    subtitle: Text(
+                                      '${_users[i].bio}',
+                                      maxLines: 1,
+                                    ),
+                                  );
+                                },
                               ),
-                            );
-                          },
-                        )
-                ],
+                        _reposters.isEmpty
+                            ? SafetyModel(
+                                isLoading: _isLoadingReposts,
+                                icon: const Icon(
+                                  Icons.favorite,
+                                  size: 0.0,
+                                  color: hintColor,
+                                ),
+                                title: 'There are no reposts for now',
+                                subTitle: 'Be the first one to repost!',
+                              )
+                            : ListView.builder(
+                                itemCount: _reposters.length,
+                                itemBuilder: (BuildContext context, int i) {
+                                  return ListTile(
+                                    onTap: () {
+                                      Get.toNamed(Routes.publicProfile,
+                                          arguments: _reposters[i]);
+                                    },
+                                    leading: UserAvatarWithBadge(
+                                      user: _reposters[i],
+                                      height: 48.0,
+                                      width: 48.0,
+                                      radius: 30.0,
+                                      placeHolder: Icons.person,
+                                    ),
+                                    title: _reposters[i].isSubscribed == true
+                                        ? Row(
+                                            children: <Widget>[
+                                              Text(_users[i].name!),
+                                              const SizedBox(width: 5),
+                                              SvgPicture.asset(
+                                                'assets/svgs/premiumbadge.svg',
+                                                height: 9,
+                                                color: primaryColorLT,
+                                              )
+                                            ],
+                                          )
+                                        : Text(_reposters[i].name!),
+                                    subtitle: Text(
+                                      '${_reposters[i].bio}',
+                                      maxLines: 1,
+                                    ),
+                                  );
+                                },
+                              )
+                      ],
               ),
             ),
           ],
@@ -193,6 +346,7 @@ class _PostLikeCommentItemState extends State<PostLikeCommentItem> {
         _users.add(UserModel.fromMap(response.data['rows'][i]['user']));
       }
     }
+    print(response);
     // for (dynamic l in widget.post.likes ?? []) {
     //   final Map<String, dynamic> response = await ProfileController.loadData(l);
     //   _users.add(
@@ -205,6 +359,33 @@ class _PostLikeCommentItemState extends State<PostLikeCommentItem> {
     if (mounted) {
       setState(() {
         _isLoadingLikes = false;
+      });
+    }
+  }
+
+  final List<UserModel> _reposters = <UserModel>[];
+
+  Future<void> _loadRepostsWithDetails(String postId) async {
+    final ApiResponseModel response =
+        await ApiService.get(path: 'post/reposts/$postId');
+    if (response.success) {
+      for (int i = 0; i < response.data['rows'].length; i++) {
+        _reposters.add(UserModel.fromMap(response.data['rows'][i]['user']));
+      }
+    }
+    print(response);
+    // for (dynamic l in widget.post.likes ?? []) {
+    //   final Map<String, dynamic> response = await ProfileController.loadData(l);
+    //   _users.add(
+    //     UserModel(
+    //         uid: l,
+    //         name: response['user']['name'] ?? response['user']['username'],
+    //         bio: response['user']['bio']),
+    //   );
+    // }
+    if (mounted) {
+      setState(() {
+        _isLoadingReposts = false;
       });
     }
   }
