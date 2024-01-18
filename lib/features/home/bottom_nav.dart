@@ -1,5 +1,6 @@
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/common/widgets/text_widget.dart';
+import 'package:business_bosses_v2/features/live_event/presentation/live_event.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
@@ -134,6 +135,7 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
                 children: const <Widget>[
                   HomeScreen(),
                   AllCommunitiesScreen(),
+                  LiveEvent(),
                   MarketplaceScreen(),
                   MyProfileScreen(),
                 ],
@@ -189,28 +191,39 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
                                   isActive: _activeIndex == 1,
                                 ),
                               ),
-                              Container(
-                                width: 72.0,
-                                height: double.infinity,
-                                color: Colors.white,
+                              Expanded(
+                                flex: 10,
+                                child: BottomTabButton(
+                                  icon: 'assets/svgs/liveevent.svg',
+                                  onTap: () {
+                                    _onChangePage(2);
+                                  },
+                                  label: 'Live Events',
+                                  isActive: _activeIndex == 2,
+                                ),
                               ),
+                              // Container(
+                              //   width: 72.0,
+                              //   height: double.infinity,
+                              //   color: Colors.white,
+                              // ),
                               Expanded(
                                 flex: 10,
                                 child: BottomTabButton(
                                   label: 'Marketplace',
                                   icon: 'assets/svgs/marketplace.svg',
                                   onTap: () {
-                                    _onChangePage(2);
+                                    _onChangePage(3);
                                   },
-                                  isActive: _activeIndex == 2,
+                                  isActive: _activeIndex == 3,
                                 ),
                               ),
                               Expanded(
                                 flex: 10,
                                 child: BottomTabButton(
                                   icon: 'assets/svgs/profilebottom.svg',
-                                  onTap: () => _onChangePage(3),
-                                  isActive: _activeIndex == 3,
+                                  onTap: () => _onChangePage(4),
+                                  isActive: _activeIndex == 4,
                                   label: 'Profile',
                                 ),
                               ),

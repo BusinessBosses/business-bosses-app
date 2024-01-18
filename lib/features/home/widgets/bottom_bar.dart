@@ -69,25 +69,42 @@ class BottomBar extends StatelessWidget {
                           isActive: activeIndex == 1,
                         ),
                       ),
-                      Container(
-                        width: 72.0,
-                        height: double.infinity,
-                        color: Colors.white,
+                      Expanded(
+                        flex: 10,
+                        child: BottomTabButton(
+                          icon: 'assets/svgs/liveevent.svg',
+                          label: 'Live Events',
+                          onTap: () {
+                            if (activeIndex == 2) return;
+
+                            if (activeIndex == 0) {
+                              Get.toNamed(Routes.liveEvents);
+                            } else {
+                              Get.offAndToNamed(Routes.liveEvents);
+                            }
+                          },
+                          isActive: activeIndex == 2,
+                        ),
                       ),
+                      // Container(
+                      //   width: 72.0,
+                      //   height: double.infinity,
+                      //   color: Colors.white,
+                      // ),
                       Expanded(
                         flex: 10,
                         child: BottomTabButton(
                           label: 'Marketplace',
                           icon: 'assets/svgs/marketplace.svg',
                           onTap: () {
-                            if (activeIndex == 2) return;
+                            if (activeIndex == 3) return;
                             if (activeIndex == 0) {
                               Get.toNamed(Routes.marketPlace);
                             } else {
                               Get.offAndToNamed(Routes.marketPlace);
                             }
                           },
-                          isActive: activeIndex == 2,
+                          isActive: activeIndex == 3,
                         ),
                       ),
                       Expanded(
@@ -95,14 +112,14 @@ class BottomBar extends StatelessWidget {
                         child: BottomTabButton(
                           icon: '',
                           onTap: () {
-                            if (activeIndex == 3) return;
+                            if (activeIndex == 4) return;
                             if (activeIndex == 0) {
                               Get.toNamed(Routes.myProfile);
                             } else {
                               Get.offAndToNamed(Routes.myProfile);
                             }
                           },
-                          isActive: activeIndex == 3,
+                          isActive: activeIndex == 4,
                           label: 'Profile',
                         ),
                       ),
@@ -112,11 +129,12 @@ class BottomBar extends StatelessWidget {
               ],
             ),
             Align(
-              alignment: Alignment.center,
+              alignment: Alignment.topRight,
               child: Stack(children: [
                 Positioned(
                   left: 0,
                   right: 0,
+                  bottom: 50,
                   child: Container(
                     width: 50,
                     height: 50,
