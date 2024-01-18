@@ -88,9 +88,7 @@ dependencies:
   zego_uikit_prebuilt_live_audio_room: ^2.11.3
   flutter_speed_dial: ^7.0.0
   purchases_flutter: ^6.5.0
-
-  
- 
+  add_2_calendar: ^2.2.5
 
 dev_dependencies:
   flutter_launcher_icons: ^0.13.1
