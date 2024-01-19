@@ -474,10 +474,10 @@ packages:
     dependency: "direct dev"
     description:
       name: flutter_lints
-      sha256: a25a15ebbdfc33ab1cd26c63a6ee519df92338a9c10f122adda92938253bef04
+      sha256: e2a421b7e59244faef694ba7b30562e489c2b489866e505074eb005cd7060db7
       url: "https://pub.dev"
     source: hosted
-    version: "2.0.3"
+    version: "3.0.1"
   flutter_localizations:
     dependency: transitive
     description: flutter
@@ -865,10 +865,10 @@ packages:
     dependency: transitive
     description:
       name: lints
-      sha256: "0a217c6c989d21039f1498c3ed9f3ed71b354e69873f13a8dfc3c9fe76f1b452"
+      sha256: cbf8d4b858bb0134ef3ef87841abdf8d63bfc255c266b7bf6b39daa1085c4290
       url: "https://pub.dev"
     source: hosted
-    version: "2.1.1"
+    version: "3.0.0"
   logging:
     dependency: transitive
     description:
@@ -1330,6 +1330,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.9.1"
+  sprintf:
+    dependency: transitive
+    description:
+      name: sprintf
+      sha256: "1fc9ffe69d4df602376b52949af107d8f5703b77cda567c4d7d86a0693120f23"
+      url: "https://pub.dev"
+    source: hosted
+    version: "7.0.0"
   sqflite:
     dependency: transitive
     description:
@@ -1574,10 +1582,10 @@ packages:
     dependency: "direct main"
     description:
       name: uuid
-      sha256: "648e103079f7c64a36dc7d39369cabb358d377078a051d6ae2ad3aa539519313"
+      sha256: "22c94e5ad1e75f9934b766b53c742572ee2677c56bc871d850a57dad0f82127f"
       url: "https://pub.dev"
     source: hosted
-    version: "3.0.7"
+    version: "4.2.2"
   value_layout_builder:
     dependency: transitive
     description:
@@ -1786,6 +1794,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "8.1.2"
+  zego_callkit:
+    dependency: transitive
+    description:
+      name: zego_callkit
+      sha256: "02b090716fad750fb01b58e75b75e420e8dbf85e44a2c0ecc11f350f902ab689"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0+2"
   zego_express_engine:
     dependency: transitive
     description:
@@ -1798,10 +1814,10 @@ packages:
     dependency: transitive
     description:
       name: zego_plugin_adapter
-      sha256: "2b42cece3afcb6ea5dd54c97ac794b1a86f0f5a7e6250273891891962a2c26ea"
+      sha256: "851e28879cd4cfe8109a64c6657b34db795bdccc3f99c1859a744af6074f4a39"
       url: "https://pub.dev"
     source: hosted
-    version: "2.10.0"
+    version: "2.11.2"
   zego_uikit:
     dependency: transitive
     description:
@@ -1838,10 +1854,10 @@ packages:
     dependency: transitive
     description:
       name: zego_zpns
-      sha256: cce47c72492ca99a60bcf88f33865a549b606ba00f24485516f4e000511b7b71
+      sha256: aa36973378588a3bac860ca88bcbb77ecc5dde491d0cb72f599fa1c27850deb0
       url: "https://pub.dev"
     source: hosted
-    version: "2.5.1-alpha"
+    version: "2.6.0+1"
 sdks:
   dart: ">=3.0.0 <4.0.0"
   flutter: ">=3.10.0"
