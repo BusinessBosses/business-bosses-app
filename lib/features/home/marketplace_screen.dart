@@ -652,10 +652,11 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                                                         },
                                                                         minVerticalPadding:
                                                                             0,
-                                                                        contentPadding: const EdgeInsets
-                                                                            .only(
-                                                                            left:
-                                                                                10,),
+                                                                        contentPadding:
+                                                                            const EdgeInsets.only(
+                                                                          left:
+                                                                              10,
+                                                                        ),
                                                                         leading:
                                                                             SvgPicture.asset(
                                                                           index == 0
@@ -1210,7 +1211,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                     ),
                   ),
                   const BottomBar(
-                    activeIndex: 2,
+                    activeIndex: 3,
                   )
                 ],
               ),
