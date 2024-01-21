@@ -1,12 +1,18 @@
 // ignore_for_file: public_member_api_docs, always_specify_types
 
+import 'dart:io';
+
 import 'package:business_bosses_v2/common/widgets/safety_model.dart';
 import 'package:business_bosses_v2/features/forum/controller/bossup_controller.dart';
 import 'package:business_bosses_v2/features/home/controller/commumities_controller.dart';
 import 'package:business_bosses_v2/features/home/widgets/bottom_bar.dart';
+import 'package:business_bosses_v2/features/live_event/controller/live_event_controller.dart';
 import 'package:business_bosses_v2/features/live_event/presentation/live_event.dart';
+import 'package:business_bosses_v2/features/marketplace/presentation/sell_services.dart';
+import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:text_scroll/text_scroll.dart';
@@ -38,6 +44,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   final ProfileController _profileController = Get.find();
+  final LiveController liveEventController = Get.put(LiveController());
   late IO.Socket socket;
 
   // int currentTimestamp = DateTime.now().millisecondsSinceEpoch;
@@ -220,6 +227,106 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                   );
                 }),
               ),
+              floatingActionButton: !controller.loading.value
+                  ? Align(
+                      alignment: Alignment.topRight,
+                      child: Stack(children: [
+                        Positioned(
+                          right: 0,
+                          bottom: 50,
+                          child: Container(
+                            width: 50,
+                            height: Platform.isIOS ? 50 : 100,
+                            alignment: Alignment.center,
+                            child: FloatingActionButton(
+                              child: const Icon(Icons.add),
+                              onPressed: () {
+                                showModalBottomSheet(
+                                    context: context,
+                                    shape: const RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.vertical(
+                                        top: Radius.circular(25.0),
+                                      ),
+                                    ),
+                                    builder: (context) {
+                                      return SizedBox(
+                                        height: 250,
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(15.0),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: <Widget>[
+                                              Expanded(
+                                                // Set a specific height
+                                                child: ListView.separated(
+                                                  itemCount: 3,
+                                                  separatorBuilder:
+                                                      (BuildContext context,
+                                                              int index) =>
+                                                          const Divider(),
+                                                  itemBuilder:
+                                                      (BuildContext context,
+                                                          int index) {
+                                                    return ListTile(
+                                                      onTap: () {
+                                                        Navigator.pop(context);
+                                                        index == 0
+                                                            ? Get.toNamed(Routes
+                                                                .createPost)
+                                                            : index == 1
+                                                                ? sellProduct(
+                                                                    context)
+                                                                : Get.toNamed(Routes
+                                                                    .createevent);
+                                                      },
+                                                      minVerticalPadding: 0,
+                                                      contentPadding:
+                                                          const EdgeInsets.only(
+                                                              left: 10),
+                                                      leading: SvgPicture.asset(
+                                                        index == 0
+                                                            ? 'assets/svgs/text.svg'
+                                                            : index == 1
+                                                                ? 'assets/svgs/sellicon.svg'
+                                                                : 'assets/svgs/liveevent.svg',
+                                                        height: index == 0
+                                                            ? 25
+                                                            : index == 1
+                                                                ? 30
+                                                                : 22,
+                                                        color: textColor
+                                                            .withOpacity(1),
+                                                      ),
+                                                      title: Text(
+                                                        index == 0
+                                                            ? 'Create a Post'
+                                                            : index == 1
+                                                                ? 'Sell your product & service'
+                                                                : 'Create a Live Event',
+                                                        style: const TextStyle(
+                                                            fontSize: 18,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w700),
+                                                      ),
+                                                    );
+                                                  },
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      );
+                                    });
+                              },
+                            ),
+                          ),
+                        ),
+                      ]),
+                    )
+                  : Container(),
               body: controller.loading.value
                   ? Center(
                       child: Padding(
@@ -319,91 +426,96 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                                             return Column(
                                               children: [
                                                 const BossOfWeekProfileTile(),
-                                                Container(
-                                                    decoration:
-                                                        const BoxDecoration(
-                                                      color: Color.fromARGB(
-                                                          255, 26, 26, 26),
-                                                    ),
-                                                    margin:
-                                                        const EdgeInsets.only(
-                                                            bottom: 6),
-                                                    child: Row(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .center, // Adjust alignment as needed
-                                                      children: [
-                                                        Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(15.0),
-                                                          child: Lottie.asset(
-                                                            'assets/anim/liveevent.json',
-                                                            height: 25,
-                                                          ),
+                                                liveEventController
+                                                        .ongoing.isNotEmpty
+                                                    ? Container(
+                                                        decoration:
+                                                            const BoxDecoration(
+                                                          color: Color.fromARGB(
+                                                              255, 26, 26, 26),
                                                         ),
-                                                        Expanded(
-                                                          child: Container(
-                                                            child:
-                                                                const TextScroll(
-                                                              '     Live Events - Create or Start listening to live events from bosses.           ',
-                                                              mode:
-                                                                  TextScrollMode
-                                                                      .bouncing,
-                                                              style: TextStyle(
-                                                                  color: Colors
-                                                                      .white,
-                                                                  fontSize: 15),
-                                                              velocity:
-                                                                  Velocity(
-                                                                pixelsPerSecond:
-                                                                    Offset(
-                                                                        30, 0),
+                                                        margin: const EdgeInsets
+                                                            .only(bottom: 6),
+                                                        child: Row(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .center, // Adjust alignment as needed
+                                                          children: [
+                                                            Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .all(
+                                                                      15.0),
+                                                              child:
+                                                                  Lottie.asset(
+                                                                'assets/anim/liveevent.json',
+                                                                height: 25,
                                                               ),
                                                             ),
-                                                          ),
-                                                        ),
-                                                        Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .only(
-                                                                    right:
-                                                                        15.0),
-                                                            child:
-                                                                ElevatedButton(
-                                                              style:
-                                                                  ButtonStyle(
-                                                                backgroundColor:
-                                                                    MaterialStateProperty.all<
+                                                            Expanded(
+                                                              child: Container(
+                                                                child:
+                                                                    const TextScroll(
+                                                                  '     Live Events - Create or Start listening to live events from bosses.           ',
+                                                                  mode: TextScrollMode
+                                                                      .bouncing,
+                                                                  style: TextStyle(
+                                                                      color: Colors
+                                                                          .white,
+                                                                      fontSize:
+                                                                          15),
+                                                                  velocity:
+                                                                      Velocity(
+                                                                    pixelsPerSecond:
+                                                                        Offset(
+                                                                            30,
+                                                                            0),
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                            Padding(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                        .only(
+                                                                        right:
+                                                                            15.0),
+                                                                child:
+                                                                    ElevatedButton(
+                                                                  style:
+                                                                      ButtonStyle(
+                                                                    backgroundColor: MaterialStateProperty.all<
                                                                             Color>(
                                                                         Colors
                                                                             .grey
                                                                             .shade300),
-                                                              ),
-                                                              onPressed: () =>
-                                                                  Navigator
-                                                                      .push(
-                                                                context,
-                                                                MaterialPageRoute(
-                                                                  builder: (BuildContext
-                                                                          context) =>
-                                                                      const LiveEvent(),
-                                                                ),
-                                                              ),
-                                                              child: const Text(
-                                                                'Live Events',
-                                                                style:
-                                                                    TextStyle(
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                  color: Colors
-                                                                      .black,
-                                                                ),
-                                                              ),
-                                                            )),
-                                                      ],
-                                                    )),
+                                                                  ),
+                                                                  onPressed: () =>
+                                                                      Navigator
+                                                                          .push(
+                                                                    context,
+                                                                    MaterialPageRoute(
+                                                                      builder: (BuildContext
+                                                                              context) =>
+                                                                          const LiveEvent(),
+                                                                    ),
+                                                                  ),
+                                                                  child:
+                                                                      const Text(
+                                                                    'Live Events',
+                                                                    style:
+                                                                        TextStyle(
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold,
+                                                                      color: Colors
+                                                                          .black,
+                                                                    ),
+                                                                  ),
+                                                                )),
+                                                          ],
+                                                        ))
+                                                    : Container()
                                               ],
                                             );
                                           } else {
@@ -729,6 +841,69 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
         },
       ),
     );
+  }
+
+  void sellProduct(BuildContext context) {
+    showModalBottomSheet(
+        context: context,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(
+            top: Radius.circular(25.0),
+          ),
+        ),
+        builder: (BuildContext context) {
+          return SizedBox(
+            height: 200,
+            child: Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Expanded(
+                    // Set a specific height
+                    child: ListView.separated(
+                      itemCount: 2,
+                      separatorBuilder: (BuildContext context, int index) =>
+                          const Divider(),
+                      itemBuilder: (BuildContext context, int index) {
+                        return ListTile(
+                          onTap: () {
+                            Navigator.pop(context);
+                            index == 0
+                                ? Get.toNamed(Routes.sellscreen)
+                                : Get.to(() =>
+                                    const CreateServiceScreen(isUpd: false));
+                          },
+                          minVerticalPadding: 0,
+                          contentPadding: const EdgeInsets.only(left: 10),
+                          leading: SvgPicture.asset(
+                            index == 0
+                                ? 'assets/svgs/sellicon.svg'
+                                : 'assets/svgs/sellicon.svg',
+                            height: index == 0
+                                ? 25
+                                : index == 1
+                                    ? 30
+                                    : 22,
+                            color: textColor.withOpacity(1),
+                          ),
+                          title: Text(
+                            index == 0
+                                ? 'Sell your product'
+                                : 'Sell your service',
+                            style: const TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.w700),
+                          ),
+                        );
+                      },
+                    ),
+                  )
+                ],
+              ),
+            ),
+          );
+        });
   }
 
   Future<void> loadData() async {

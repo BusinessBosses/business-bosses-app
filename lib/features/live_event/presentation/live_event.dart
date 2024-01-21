@@ -3,6 +3,7 @@
 import 'dart:math';
 
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
+import 'package:business_bosses_v2/features/home/widgets/bottom_bar.dart';
 import 'package:business_bosses_v2/features/live_event/controller/live_event_controller.dart';
 import 'package:business_bosses_v2/features/live_event/models/events_model.dart';
 import 'package:business_bosses_v2/features/live_event/widgets/call_room.dart';
@@ -152,135 +153,146 @@ class _LiveEventState extends State<LiveEvent> {
               actions: mActions,
             ),
             body: liveController.loading.value
-                ? const Center(child: CircularProgressIndicator())
-                : NestedScrollView(
-                    controller: scrollController,
-                    headerSliverBuilder: (
-                      BuildContext context,
-                      bool innerBoxIsScrolled,
-                    ) {
-                      return <Widget>[
-                        SliverStickyHeader(
-                          sticky: true,
-                          header: Column(
-                            children: <Widget>[
-                              Stack(
-                                children: <Widget>[
-                                  Container(
-                                    margin: const EdgeInsets.only(
-                                      top: 10,
-                                      right: 15,
-                                      left: 15,
-                                    ),
-                                    height: 150,
-                                    width: double.infinity,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(15.0),
-                                      image: const DecorationImage(
-                                        image: AssetImage(
-                                            'assets/images/live_event.png'),
-                                        fit: BoxFit.cover,
+                ? const Stack(children: [
+                    Center(child: CircularProgressIndicator()),
+                    BottomBar(
+                      activeIndex: 2,
+                    )
+                  ])
+                : Stack(children: [
+                    NestedScrollView(
+                      controller: scrollController,
+                      headerSliverBuilder: (
+                        BuildContext context,
+                        bool innerBoxIsScrolled,
+                      ) {
+                        return <Widget>[
+                          SliverStickyHeader(
+                            sticky: true,
+                            header: Column(
+                              children: <Widget>[
+                                Stack(
+                                  children: <Widget>[
+                                    Container(
+                                      margin: const EdgeInsets.only(
+                                        top: 10,
+                                        right: 15,
+                                        left: 15,
                                       ),
-                                    ),
-                                  ),
-                                  const Positioned(
-                                    top: 50,
-                                    right: 35,
-                                    child: Text(
-                                      'Share your thoughts with bosses\n We want to listen as it happens',
-                                      textAlign: TextAlign.right,
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.white,
-                                      ),
-                                      softWrap: true,
-                                    ),
-                                  ),
-                                  Positioned(
-                                    bottom: 10,
-                                    right: 35,
-                                    child: ElevatedButton(
-                                      onPressed: () => Navigator.push(
-                                        context,
-                                        // ignore: always_specify_types
-                                        MaterialPageRoute(
-                                          builder: (BuildContext context) =>
-                                              const CreateEvent(),
+                                      height: 150,
+                                      width: double.infinity,
+                                      decoration: BoxDecoration(
+                                        borderRadius:
+                                            BorderRadius.circular(15.0),
+                                        image: const DecorationImage(
+                                          image: AssetImage(
+                                              'assets/images/live_event.png'),
+                                          fit: BoxFit.cover,
                                         ),
                                       ),
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor: Colors.white,
-                                        padding: const EdgeInsets.symmetric(
-                                          horizontal: 20,
-                                          vertical: 10,
-                                        ),
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(25.0),
-                                        ),
-                                      ),
-                                      child: const Text(
-                                        'Create Live Event',
+                                    ),
+                                    const Positioned(
+                                      top: 50,
+                                      right: 35,
+                                      child: Text(
+                                        'Share your thoughts with bosses\n We want to listen as it happens',
+                                        textAlign: TextAlign.right,
                                         style: TextStyle(
-                                          color: Colors.red,
                                           fontWeight: FontWeight.bold,
+                                          color: Colors.white,
+                                        ),
+                                        softWrap: true,
+                                      ),
+                                    ),
+                                    Positioned(
+                                      bottom: 10,
+                                      right: 35,
+                                      child: ElevatedButton(
+                                        onPressed: () => Navigator.push(
+                                          context,
+                                          // ignore: always_specify_types
+                                          MaterialPageRoute(
+                                            builder: (BuildContext context) =>
+                                                const CreateEvent(),
+                                          ),
+                                        ),
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: Colors.white,
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: 20,
+                                            vertical: 10,
+                                          ),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(25.0),
+                                          ),
+                                        ),
+                                        child: const Text(
+                                          'Create Live Event',
+                                          style: TextStyle(
+                                            color: Colors.red,
+                                            fontWeight: FontWeight.bold,
+                                          ),
                                         ),
                                       ),
                                     ),
+                                  ],
+                                ),
+                                const SizedBox(height: 10),
+                              ],
+                            ),
+                          ),
+                        ];
+                      },
+                      body: DefaultTabController(
+                        length: 3, // Number of tabs
+                        child: Column(
+                          children: <Widget>[
+                            Container(
+                              constraints:
+                                  const BoxConstraints.expand(height: 50),
+                              child: TabBar(
+                                tabs: <Widget>[
+                                  Tab(
+                                    child: Lottie.asset(
+                                      'assets/anim/liveevent.json',
+                                      height: 25,
+                                    ),
+                                  ),
+                                  const Tab(text: 'Ongoing'),
+                                  const Tab(text: 'Upcoming'),
+                                ],
+                              ),
+                            ),
+                            const Expanded(
+                              child: TabBarView(
+                                children: <Widget>[
+                                  // Content of Tab 1
+                                  EventCall(
+                                    full: true,
+                                  ),
+
+                                  // Content of Tab 2
+                                  EventCall(
+                                    ongoing: true,
+                                  ),
+
+                                  // Content of Tab 3
+
+                                  EventCall(
+                                    ongoing: false,
                                   ),
                                 ],
                               ),
-                              const SizedBox(height: 10),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
-                      ];
-                    },
-                    body: DefaultTabController(
-                      length: 3, // Number of tabs
-                      child: Column(
-                        children: <Widget>[
-                          Container(
-                            constraints:
-                                const BoxConstraints.expand(height: 50),
-                            child: TabBar(
-                              tabs: <Widget>[
-                                Tab(
-                                  child: Lottie.asset(
-                                    'assets/anim/liveevent.json',
-                                    height: 25,
-                                  ),
-                                ),
-                                const Tab(text: 'Ongoing'),
-                                const Tab(text: 'Upcoming'),
-                              ],
-                            ),
-                          ),
-                          const Expanded(
-                            child: TabBarView(
-                              children: <Widget>[
-                                // Content of Tab 1
-                                EventCall(
-                                  full: true,
-                                ),
-
-                                // Content of Tab 2
-                                EventCall(
-                                  ongoing: true,
-                                ),
-
-                                // Content of Tab 3
-
-                                EventCall(
-                                  ongoing: false,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
                       ),
                     ),
-                  ));
+                    const BottomBar(
+                      activeIndex: 2,
+                    )
+                  ]));
       },
     );
   }
