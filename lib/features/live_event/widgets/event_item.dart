@@ -16,7 +16,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import '../../../action/action.dart';
-import 'package:add_2_calendar/add_2_calendar.dart';
+// import 'package:add_2_calendar/add_2_calendar.dart';
 
 class EventItem extends StatefulWidget {
   final EventModel event;
@@ -147,10 +147,10 @@ class _EventItemState extends State<EventItem> {
                   labelStyle: const TextStyle(
                       fontSize: 18.0, fontWeight: FontWeight.w700),
                   onTap: () {
-                    Add2Calendar.addEvent2Cal(Event(
-                        title: widget.event.title ?? '',
-                        startDate: localStartTime,
-                        endDate: localEndTime));
+                    // Add2Calendar.addEvent2Cal(Event(
+                    //     title: widget.event.title ?? '',
+                    //     startDate: localStartTime,
+                    //     endDate: localEndTime));
                   }),
             ],
           ),
@@ -350,12 +350,12 @@ class _EventItemState extends State<EventItem> {
                                       ),
                                       TextButton(
                                         onPressed: () async {
-                                          Add2Calendar.addEvent2Cal(
-                                            Event(
-                                                title: widget.event.title ?? '',
-                                                startDate: localStartTime,
-                                                endDate: localEndTime),
-                                          );
+                                          // Add2Calendar.addEvent2Cal(
+                                          //   Event(
+                                          //       title: widget.event.title ?? '',
+                                          //       startDate: localStartTime,
+                                          //       endDate: localEndTime),
+                                          // );
                                           Get.back();
                                         },
                                         child: const Text('Yes'),
