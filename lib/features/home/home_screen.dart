@@ -225,101 +225,106 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                   );
                 }),
               ),
-              floatingActionButton: Align(
-                alignment: Alignment.topRight,
-                child: Stack(children: [
-                  Positioned(
-                    right: 0,
-                    bottom: 50,
-                    child: Container(
-                      width: 50,
-                      height: 50,
-                      alignment: Alignment.center,
-                      child: FloatingActionButton(
-                        child: const Icon(Icons.add),
-                        onPressed: () {
-                          showModalBottomSheet(
-                              context: context,
-                              shape: const RoundedRectangleBorder(
-                                borderRadius: BorderRadius.vertical(
-                                  top: Radius.circular(25.0),
-                                ),
-                              ),
-                              builder: (context) {
-                                return SizedBox(
-                                  height: 250,
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(15.0),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: <Widget>[
-                                        Expanded(
-                                          // Set a specific height
-                                          child: ListView.separated(
-                                            itemCount: 3,
-                                            separatorBuilder:
-                                                (BuildContext context,
-                                                        int index) =>
-                                                    const Divider(),
-                                            itemBuilder: (BuildContext context,
-                                                int index) {
-                                              return ListTile(
-                                                onTap: () {
-                                                  Navigator.pop(context);
-                                                  index == 0
-                                                      ? Get.toNamed(
-                                                          Routes.createPost)
-                                                      : index == 1
-                                                          ? sellProduct(context)
-                                                          : Get.toNamed(Routes
-                                                              .createevent);
-                                                },
-                                                minVerticalPadding: 0,
-                                                contentPadding:
-                                                    const EdgeInsets.only(
-                                                        left: 10),
-                                                leading: SvgPicture.asset(
-                                                  index == 0
-                                                      ? 'assets/svgs/text.svg'
-                                                      : index == 1
-                                                          ? 'assets/svgs/sellicon.svg'
-                                                          : 'assets/svgs/liveevent.svg',
-                                                  height: index == 0
-                                                      ? 25
-                                                      : index == 1
-                                                          ? 30
-                                                          : 22,
-                                                  color:
-                                                      textColor.withOpacity(1),
-                                                ),
-                                                title: Text(
-                                                  index == 0
-                                                      ? 'Create a Post'
-                                                      : index == 1
-                                                          ? 'Sell your product & service'
-                                                          : 'Create a Live Event',
-                                                  style: const TextStyle(
-                                                      fontSize: 18,
-                                                      fontWeight:
-                                                          FontWeight.w700),
-                                                ),
-                                              );
-                                            },
-                                          ),
-                                        )
-                                      ],
+              floatingActionButton: !controller.loading.value
+                  ? Align(
+                      alignment: Alignment.topRight,
+                      child: Stack(children: [
+                        Positioned(
+                          right: 0,
+                          bottom: 50,
+                          child: Container(
+                            width: 50,
+                            height: 50,
+                            alignment: Alignment.center,
+                            child: FloatingActionButton(
+                              child: const Icon(Icons.add),
+                              onPressed: () {
+                                showModalBottomSheet(
+                                    context: context,
+                                    shape: const RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.vertical(
+                                        top: Radius.circular(25.0),
+                                      ),
                                     ),
-                                  ),
-                                );
-                              });
-                        },
-                      ),
-                    ),
-                  ),
-                ]),
-              ),
+                                    builder: (context) {
+                                      return SizedBox(
+                                        height: 250,
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(15.0),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: <Widget>[
+                                              Expanded(
+                                                // Set a specific height
+                                                child: ListView.separated(
+                                                  itemCount: 3,
+                                                  separatorBuilder:
+                                                      (BuildContext context,
+                                                              int index) =>
+                                                          const Divider(),
+                                                  itemBuilder:
+                                                      (BuildContext context,
+                                                          int index) {
+                                                    return ListTile(
+                                                      onTap: () {
+                                                        Navigator.pop(context);
+                                                        index == 0
+                                                            ? Get.toNamed(Routes
+                                                                .createPost)
+                                                            : index == 1
+                                                                ? sellProduct(
+                                                                    context)
+                                                                : Get.toNamed(Routes
+                                                                    .createevent);
+                                                      },
+                                                      minVerticalPadding: 0,
+                                                      contentPadding:
+                                                          const EdgeInsets.only(
+                                                              left: 10),
+                                                      leading: SvgPicture.asset(
+                                                        index == 0
+                                                            ? 'assets/svgs/text.svg'
+                                                            : index == 1
+                                                                ? 'assets/svgs/sellicon.svg'
+                                                                : 'assets/svgs/liveevent.svg',
+                                                        height: index == 0
+                                                            ? 25
+                                                            : index == 1
+                                                                ? 30
+                                                                : 22,
+                                                        color: textColor
+                                                            .withOpacity(1),
+                                                      ),
+                                                      title: Text(
+                                                        index == 0
+                                                            ? 'Create a Post'
+                                                            : index == 1
+                                                                ? 'Sell your product & service'
+                                                                : 'Create a Live Event',
+                                                        style: const TextStyle(
+                                                            fontSize: 18,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w700),
+                                                      ),
+                                                    );
+                                                  },
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      );
+                                    });
+                              },
+                            ),
+                          ),
+                        ),
+                      ]),
+                    )
+                  : Container(),
               body: controller.loading.value
                   ? Center(
                       child: Padding(
