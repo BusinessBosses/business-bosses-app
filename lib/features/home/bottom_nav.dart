@@ -343,13 +343,9 @@ class BottomTabButton extends StatelessWidget {
                               child: NetworkImageWithPlaceHolder(
                                 imageUrl:
                                     profileController.myProfile.photoUrl ?? '',
-                                height: 30.0,
-                                width: 30.0,
                                 radius: radius,
-                                cacheHeight: 30,
-                                cacheWidth: 30,
                                 placeHolder: Icons.person,
-                                iconSize: 64.0,
+                                iconSize: 22.0,
                                 fit: BoxFit.cover,
                               ),
                             ),
