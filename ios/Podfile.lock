@@ -231,10 +231,10 @@ PODS:
     - Flutter
     - FlutterMacOS
   - PromisesObjC (2.3.1)
-  - purchases_flutter (6.16.0):
+  - purchases_flutter (6.16.1):
     - Flutter
-    - PurchasesHybridCommon (= 8.11.0)
-  - PurchasesHybridCommon (8.11.0):
+    - PurchasesHybridCommon (= 8.11.1)
+  - PurchasesHybridCommon (8.11.1):
     - RevenueCat (= 4.32.0)
     - RevenueCatUI (= 4.32.0)
   - RevenueCat (4.32.0)
@@ -296,6 +296,7 @@ PODS:
     - Flutter
   - video_player_avfoundation (0.0.1):
     - Flutter
+    - FlutterMacOS
   - video_thumbnail (0.0.1):
     - Flutter
     - libwebp
@@ -307,15 +308,17 @@ PODS:
     - Flutter
   - zego_express_engine (3.12.4):
     - Flutter
+  - zego_uikit (0.0.1):
+    - Flutter
   - zego_uikit_signaling_plugin (0.0.1):
     - Flutter
-  - zego_zim (2.12.1):
+  - zego_zim (2.13.1):
     - Flutter
-    - ZIM (= 2.12.1)
+    - ZIM (= 2.13.1)
   - zego_zpns (2.6.0):
     - Flutter
     - ZPNs (= 2.6.0)
-  - ZIM (2.12.1)
+  - ZIM (2.13.1)
   - ZIPFoundation (0.9.16)
   - ZPNs (2.6.0)
 
@@ -350,12 +353,13 @@ DEPENDENCIES:
   - stripe_ios (from `.symlinks/plugins/stripe_ios/ios`)
   - uni_links (from `.symlinks/plugins/uni_links/ios`)
   - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
-  - video_player_avfoundation (from `.symlinks/plugins/video_player_avfoundation/ios`)
+  - video_player_avfoundation (from `.symlinks/plugins/video_player_avfoundation/darwin`)
   - video_thumbnail (from `.symlinks/plugins/video_thumbnail/ios`)
   - wakelock_plus (from `.symlinks/plugins/wakelock_plus/ios`)
   - webview_flutter_wkwebview (from `.symlinks/plugins/webview_flutter_wkwebview/ios`)
   - zego_callkit (from `.symlinks/plugins/zego_callkit/ios`)
   - zego_express_engine (from `.symlinks/plugins/zego_express_engine/ios`)
+  - zego_uikit (from `.symlinks/plugins/zego_uikit/ios`)
   - zego_uikit_signaling_plugin (from `.symlinks/plugins/zego_uikit_signaling_plugin/ios`)
   - zego_zim (from `.symlinks/plugins/zego_zim/ios`)
   - zego_zpns (from `.symlinks/plugins/zego_zpns/ios`)
@@ -466,7 +470,7 @@ EXTERNAL SOURCES:
   url_launcher_ios:
     :path: ".symlinks/plugins/url_launcher_ios/ios"
   video_player_avfoundation:
-    :path: ".symlinks/plugins/video_player_avfoundation/ios"
+    :path: ".symlinks/plugins/video_player_avfoundation/darwin"
   video_thumbnail:
     :path: ".symlinks/plugins/video_thumbnail/ios"
   wakelock_plus:
@@ -477,6 +481,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/zego_callkit/ios"
   zego_express_engine:
     :path: ".symlinks/plugins/zego_express_engine/ios"
+  zego_uikit:
+    :path: ".symlinks/plugins/zego_uikit/ios"
   zego_uikit_signaling_plugin:
     :path: ".symlinks/plugins/zego_uikit_signaling_plugin/ios"
   zego_zim:
@@ -495,7 +501,7 @@ SPEC CHECKSUMS:
   FBAudienceNetwork: 03e273f66b70756be7d060927111af97b7641b06
   FBSDKCoreKit: 5e4dd478947ab1bcc887e8cfadeae0727af1a942
   FBSDKCoreKit_Basics: cd7b5f5d1e8868c26706917919d058999ca672c3
-  file_picker: ce3938a0df3cc1ef404671531facef740d03f920
+  file_picker: 15fd9539e4eb735dc54bae8c0534a7a9511a03de
   Firebase: 414ad272f8d02dfbf12662a9d43f4bba9bec2a06
   firebase_analytics: b3d6dd14c61549a29abb10e9843446a4d8bb53eb
   firebase_core: 0af4a2b24f62071f9bf283691c0ee41556dcb3f5
@@ -507,7 +513,7 @@ SPEC CHECKSUMS:
   FirebaseDynamicLinks: c37307441c53838d66a9650dabca9e0459502527
   FirebaseInstallations: 558b1da7d65afeb996fd5c814332f013234ece4e
   FirebaseMessaging: 9bc34a98d2e0237e1b121915120d4d48ddcf301e
-  Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
+  Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
   flutter_inappwebview: 3d32228f1304635e7c028b0d4252937730bbc6cf
   flutter_logs: 5d0dca26963e0f30b11a995a764744ef77d5d428
   flutter_native_splash: 52501b97d1c0a5f898d687f1646226c1f93c56ef
@@ -532,8 +538,8 @@ SPEC CHECKSUMS:
   permission_handler_apple: e76247795d700c14ea09e3a2d8855d41ee80a2e6
   photo_manager: 4f6810b7dfc4feb03b461ac1a70dacf91fba7604
   PromisesObjC: c50d2056b5253dadbd6c2bea79b0674bd5a52fa4
-  purchases_flutter: 12eb0a77ebf28a16b04ee72f2e1f6b77235bf97e
-  PurchasesHybridCommon: 0b331c2a81b5425cda70edd4331cef98fc435ab1
+  purchases_flutter: 4048b4d0052cf452faa5d85e3aa3907a7929032c
+  PurchasesHybridCommon: db0f4063a1e77fd255318c4a2f05d26eff6f150a
   RevenueCat: 2d99a5ebabd33955c3a38dfdfa9d3efe77c5db0c
   RevenueCatUI: fa6b619083afb967facc20ecdc7ae53a4c512d10
   SDWebImage: fc8f2d48bbfd72ef39d70e981bd24a3f3be53fec
@@ -553,16 +559,17 @@ SPEC CHECKSUMS:
   SwiftyGif: 93a1cc87bf3a51916001cf8f3d63835fb64c819f
   uni_links: d97da20c7701486ba192624d99bffaaffcfc298a
   url_launcher_ios: bbd758c6e7f9fd7b5b1d4cde34d2b95fcce5e812
-  video_player_avfoundation: 81e49bb3d9fb63dccf9fa0f6d877dc3ddbeac126
+  video_player_avfoundation: e9e6f9cae7d7a6d9b43519b0aab382bca60fcfd1
   video_thumbnail: c4e2a3c539e247d4de13cd545344fd2d26ffafd1
   wakelock_plus: 8b09852c8876491e4b6d179e17dfe2a0b5f60d47
   webview_flutter_wkwebview: 4f3e50f7273d31e5500066ed267e3ae4309c5ae4
   zego_callkit: 72593f46ed01779c4cee6bc65d2e0e1cde86b42c
   zego_express_engine: 0484b5b1a4d97b5f317aae53613d6d6cde1c1528
+  zego_uikit: 596cd6edd0e5162a9a1d1f7fec5a79fa8899fb7b
   zego_uikit_signaling_plugin: 7fdfcd9f796b591c9cb8770609f4fa85178aa40e
-  zego_zim: 18c136e1c0a3680120fd0ed747414891fde73ce6
+  zego_zim: 3c1f75261a04903702b618564ae438d911c64228
   zego_zpns: 282d9f9926ea5dff87efbafae8cf33fdada41f4f
-  ZIM: 57ce22334b15f918ec13ce88e9632d3ebe36d5ba
+  ZIM: c146d4e52574e10cea06965bdc98d394421a701d
   ZIPFoundation: d170fa8e270b2a32bef9dcdcabff5b8f1a5deced
   ZPNs: 73bad0046a74e37315201053f9a0e7ac625d9436
 
