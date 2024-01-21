@@ -1,5 +1,7 @@
 // ignore_for_file: public_member_api_docs, always_specify_types
 
+import 'dart:io';
+
 import 'package:business_bosses_v2/common/widgets/safety_model.dart';
 import 'package:business_bosses_v2/features/forum/controller/bossup_controller.dart';
 import 'package:business_bosses_v2/features/home/controller/commumities_controller.dart';
@@ -234,7 +236,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                           bottom: 50,
                           child: Container(
                             width: 50,
-                            height: 50,
+                            height: Platform.isIOS ? 50 : 100,
                             alignment: Alignment.center,
                             child: FloatingActionButton(
                               child: const Icon(Icons.add),
