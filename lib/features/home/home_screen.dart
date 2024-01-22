@@ -11,6 +11,7 @@ import 'package:business_bosses_v2/features/live_event/presentation/live_event.d
 import 'package:business_bosses_v2/features/marketplace/presentation/sell_services.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -46,6 +47,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   final ProfileController _profileController = Get.find();
   final LiveController liveEventController = Get.put(LiveController());
   late IO.Socket socket;
+  bool isScrolled = true;
 
   // int currentTimestamp = DateTime.now().millisecondsSinceEpoch;
   // final GetStorage sandBox = GetStorage();
@@ -228,105 +230,125 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                 }),
               ),
               floatingActionButton: !controller.loading.value
-                  ? Align(
-                      alignment: Alignment.topRight,
-                      child: Stack(children: [
-                        Positioned(
-                          right: 0,
-                          bottom: 50,
-                          child: Container(
-                            width: 50,
-                            height: Platform.isIOS ? 50 : 100,
-                            alignment: Alignment.center,
-                            child: FloatingActionButton(
-                              child: const Icon(Icons.add),
-                              onPressed: () {
-                                showModalBottomSheet(
-                                    context: context,
-                                    shape: const RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.vertical(
-                                        top: Radius.circular(25.0),
-                                      ),
-                                    ),
-                                    builder: (context) {
-                                      return SizedBox(
-                                        height: 250,
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(15.0),
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: <Widget>[
-                                              Expanded(
-                                                // Set a specific height
-                                                child: ListView.separated(
-                                                  itemCount: 3,
-                                                  separatorBuilder:
-                                                      (BuildContext context,
-                                                              int index) =>
-                                                          const Divider(),
-                                                  itemBuilder:
-                                                      (BuildContext context,
-                                                          int index) {
-                                                    return ListTile(
-                                                      onTap: () {
-                                                        Navigator.pop(context);
-                                                        index == 0
-                                                            ? Get.toNamed(Routes
-                                                                .createPost)
-                                                            : index == 1
-                                                                ? sellProduct(
-                                                                    context)
-                                                                : Get.toNamed(Routes
-                                                                    .createevent);
-                                                      },
-                                                      minVerticalPadding: 0,
-                                                      contentPadding:
-                                                          const EdgeInsets.only(
-                                                              left: 10),
-                                                      leading: SvgPicture.asset(
-                                                        index == 0
-                                                            ? 'assets/svgs/text.svg'
-                                                            : index == 1
-                                                                ? 'assets/svgs/sellicon.svg'
-                                                                : 'assets/svgs/liveevent.svg',
-                                                        height: index == 0
-                                                            ? 25
-                                                            : index == 1
-                                                                ? 30
-                                                                : 22,
-                                                        color: textColor
-                                                            .withOpacity(1),
-                                                      ),
-                                                      title: Text(
-                                                        index == 0
-                                                            ? 'Create a Post'
-                                                            : index == 1
-                                                                ? 'Sell your product & service'
-                                                                : 'Create a Live Event',
-                                                        style: const TextStyle(
-                                                            fontSize: 18,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .w700),
-                                                      ),
-                                                    );
-                                                  },
+                  ? Padding(
+                      padding:
+                          EdgeInsets.only(bottom: Platform.isIOS ? 50 : 100),
+                      child: FloatingActionButton.extended(
+                        onPressed: () {
+                          showModalBottomSheet(
+                              context: context,
+                              shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.vertical(
+                                  top: Radius.circular(25.0),
+                                ),
+                              ),
+                              builder: (context) {
+                                return SizedBox(
+                                  height: 250,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(15.0),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: <Widget>[
+                                        Expanded(
+                                          // Set a specific height
+                                          child: ListView.separated(
+                                            itemCount: 3,
+                                            separatorBuilder:
+                                                (BuildContext context,
+                                                        int index) =>
+                                                    const Divider(),
+                                            itemBuilder: (BuildContext context,
+                                                int index) {
+                                              return ListTile(
+                                                onTap: () {
+                                                  Navigator.pop(context);
+                                                  index == 0
+                                                      ? Get.toNamed(
+                                                          Routes.createPost)
+                                                      : index == 1
+                                                          ? sellProduct(context)
+                                                          : Get.toNamed(Routes
+                                                              .createevent);
+                                                },
+                                                minVerticalPadding: 0,
+                                                contentPadding:
+                                                    const EdgeInsets.only(
+                                                        left: 10),
+                                                leading: SvgPicture.asset(
+                                                  index == 0
+                                                      ? 'assets/svgs/text.svg'
+                                                      : index == 1
+                                                          ? 'assets/svgs/sellicon.svg'
+                                                          : 'assets/svgs/liveevent.svg',
+                                                  height: index == 0
+                                                      ? 25
+                                                      : index == 1
+                                                          ? 30
+                                                          : 22,
+                                                  color:
+                                                      textColor.withOpacity(1),
                                                 ),
-                                              )
-                                            ],
+                                                title: Text(
+                                                  index == 0
+                                                      ? 'Create a Post'
+                                                      : index == 1
+                                                          ? 'Sell your product & service'
+                                                          : 'Create a Live Event',
+                                                  style: const TextStyle(
+                                                      fontSize: 18,
+                                                      fontWeight:
+                                                          FontWeight.w700),
+                                                ),
+                                              );
+                                            },
                                           ),
-                                        ),
-                                      );
-                                    });
-                              },
-                            ),
-                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              });
+                        },
+                        label: const Text(
+                          'Post',
+                          style: TextStyle(
+                              fontWeight: FontWeight.w700, fontSize: 18),
                         ),
-                      ]),
+                        icon: const Icon(Icons.add),
+                        shape: isScrolled
+                            ? RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(100))
+                            : CircleBorder(),
+                        isExtended: isScrolled,
+                        backgroundColor: Colors.black.withAlpha(200),
+                      ),
                     )
                   : Container(),
+              // !controller.loading.value
+              // ? Align(
+              //     alignment: Alignment.topRight,
+              //     child: Stack(children: [
+              //       Positioned(
+              //         right: 0,
+              //         bottom: 50,
+              //         child: Container(
+              //           width: 50,
+              //           height: Platform.isIOS ? 50 : 100,
+              //           alignment: Alignment.center,
+              //           child: FloatingActionButton(
+              //             child: const Icon(Icons.add),
+              //             onPressed: () {
+
+              //             },
+              //           ),
+              //         ),
+              //       ),
+              //     ]),
+              //   )
+              // : Container(),
               body: controller.loading.value
                   ? Center(
                       child: Padding(
@@ -416,161 +438,315 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                                     color: Colors.white,
                                     child: RefreshIndicator(
                                       onRefresh: refreshData,
-                                      child: ListView.builder(
-                                        controller: _scrollController,
-                                        shrinkWrap: true,
-                                        itemCount: controller.mixedPosts.length,
-                                        itemBuilder:
-                                            (BuildContext context, int index) {
-                                          if (index == 0) {
-                                            return Column(
-                                              children: [
-                                                const BossOfWeekProfileTile(),
-                                                liveEventController
-                                                        .ongoing.isNotEmpty
-                                                    ? Container(
-                                                        decoration:
-                                                            const BoxDecoration(
-                                                          color: Color.fromARGB(
-                                                              255, 26, 26, 26),
-                                                        ),
-                                                        margin: const EdgeInsets
-                                                            .only(bottom: 6),
-                                                        child: Row(
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .center, // Adjust alignment as needed
-                                                          children: [
-                                                            Padding(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .all(
-                                                                      15.0),
-                                                              child:
-                                                                  Lottie.asset(
-                                                                'assets/anim/liveevent.json',
-                                                                height: 25,
+                                      child: NotificationListener<
+                                          ScrollNotification>(
+                                        onNotification: (notification) {
+                                          if (notification
+                                              is ScrollStartNotification) {
+                                            // Scrolling started
+                                            setState(() {
+                                              isScrolled = false;
+                                            });
+                                          } else if (notification
+                                              is ScrollEndNotification) {
+                                            // Scrolling stopped
+                                            setState(() {
+                                              isScrolled = true;
+                                            });
+                                          }
+                                          return true;
+                                        },
+                                        child: ListView.builder(
+                                          controller: _scrollController,
+                                          shrinkWrap: true,
+                                          itemCount:
+                                              controller.mixedPosts.length,
+                                          itemBuilder: (BuildContext context,
+                                              int index) {
+                                            if (index == 0) {
+                                              return Column(
+                                                children: [
+                                                  const BossOfWeekProfileTile(),
+                                                  liveEventController
+                                                          .ongoing.isNotEmpty
+                                                      ? Container(
+                                                          decoration:
+                                                              const BoxDecoration(
+                                                            color:
+                                                                Color.fromARGB(
+                                                                    255,
+                                                                    26,
+                                                                    26,
+                                                                    26),
+                                                          ),
+                                                          margin:
+                                                              const EdgeInsets
+                                                                  .only(
+                                                                  bottom: 6),
+                                                          child: Row(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .center, // Adjust alignment as needed
+                                                            children: [
+                                                              Padding(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                        .all(
+                                                                        15.0),
+                                                                child: Lottie
+                                                                    .asset(
+                                                                  'assets/anim/liveevent.json',
+                                                                  height: 25,
+                                                                ),
                                                               ),
-                                                            ),
-                                                            Expanded(
-                                                              child: Container(
+                                                              Expanded(
                                                                 child:
-                                                                    const TextScroll(
-                                                                  '     Live Events - Create or Start listening to live events from bosses.           ',
-                                                                  mode: TextScrollMode
-                                                                      .bouncing,
-                                                                  style: TextStyle(
-                                                                      color: Colors
-                                                                          .white,
-                                                                      fontSize:
-                                                                          15),
-                                                                  velocity:
-                                                                      Velocity(
-                                                                    pixelsPerSecond:
-                                                                        Offset(
-                                                                            30,
-                                                                            0),
+                                                                    Container(
+                                                                  child:
+                                                                      const TextScroll(
+                                                                    '     Live Events - Create or Start listening to live events from bosses.           ',
+                                                                    mode: TextScrollMode
+                                                                        .bouncing,
+                                                                    style: TextStyle(
+                                                                        color: Colors
+                                                                            .white,
+                                                                        fontSize:
+                                                                            15),
+                                                                    velocity:
+                                                                        Velocity(
+                                                                      pixelsPerSecond:
+                                                                          Offset(
+                                                                              30,
+                                                                              0),
+                                                                    ),
                                                                   ),
                                                                 ),
                                                               ),
-                                                            ),
-                                                            Padding(
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                        .only(
-                                                                        right:
-                                                                            15.0),
-                                                                child:
-                                                                    ElevatedButton(
-                                                                  style:
-                                                                      ButtonStyle(
-                                                                    backgroundColor: MaterialStateProperty.all<
-                                                                            Color>(
-                                                                        Colors
-                                                                            .grey
-                                                                            .shade300),
-                                                                  ),
-                                                                  onPressed: () =>
-                                                                      Navigator
-                                                                          .push(
-                                                                    context,
-                                                                    MaterialPageRoute(
-                                                                      builder: (BuildContext
-                                                                              context) =>
-                                                                          const LiveEvent(),
-                                                                    ),
-                                                                  ),
+                                                              Padding(
+                                                                  padding:
+                                                                      const EdgeInsets
+                                                                          .only(
+                                                                          right:
+                                                                              15.0),
                                                                   child:
-                                                                      const Text(
-                                                                    'Live Events',
+                                                                      ElevatedButton(
                                                                     style:
-                                                                        TextStyle(
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .bold,
-                                                                      color: Colors
-                                                                          .black,
+                                                                        ButtonStyle(
+                                                                      backgroundColor: MaterialStateProperty.all<
+                                                                              Color>(
+                                                                          Colors
+                                                                              .grey
+                                                                              .shade300),
                                                                     ),
-                                                                  ),
-                                                                )),
-                                                          ],
-                                                        ))
-                                                    : Container()
-                                              ],
-                                            );
-                                          } else {
-                                            final Map<String, dynamic>
-                                                mixedPost =
-                                                controller.mixedPosts[index];
-
-                                            if (mixedPost['isForum']) {
-                                              // Handle ForumModel
-                                              final ForumModel forumModel =
-                                                  mixedPost['data']
-                                                      as ForumModel;
-                                              final bool hasIncrementedView =
-                                                  controller
-                                                      .itemsWithIncrementedViews
-                                                      .contains(
-                                                          forumModel.forumId);
-                                              return VisibilityDetector(
-                                                key: Key(index.toString()),
-                                                onVisibilityChanged:
-                                                    (VisibilityInfo info) {
-                                                  if (info.visibleFraction ==
-                                                          1.0 &&
-                                                      !hasIncrementedView) {
-                                                    controller.updateForumViews(
-                                                        forumModel);
-                                                    setState(() {
-                                                      controller
-                                                          .itemsWithIncrementedViews
-                                                          .add(forumModel
-                                                              .forumId); // Set the flag to prevent further increments
-                                                    });
-                                                  }
-                                                },
-                                                child: ForumItem(
-                                                  forum: forumModel,
-                                                  controller: controller,
-                                                ),
+                                                                    onPressed: () =>
+                                                                        Navigator
+                                                                            .push(
+                                                                      context,
+                                                                      MaterialPageRoute(
+                                                                        builder:
+                                                                            (BuildContext context) =>
+                                                                                const LiveEvent(),
+                                                                      ),
+                                                                    ),
+                                                                    child:
+                                                                        const Text(
+                                                                      'Live Events',
+                                                                      style:
+                                                                          TextStyle(
+                                                                        fontWeight:
+                                                                            FontWeight.bold,
+                                                                        color: Colors
+                                                                            .black,
+                                                                      ),
+                                                                    ),
+                                                                  )),
+                                                            ],
+                                                          ))
+                                                      : Container()
+                                                ],
                                               );
-                                            } else if (mixedPost[
-                                                'isSponsored']) {
-                                              // Handle Sponsored PostModel
-                                              final int sponsoredIndex =
-                                                  (index / 3).floor();
-                                              if (sponsoredIndex <
-                                                  controller
-                                                      .sponsoredPosts.length) {
-                                                final PostModel promotedPosts =
-                                                    controller.sponsoredPosts[
-                                                        sponsoredIndex]['data'];
+                                            } else {
+                                              final Map<String, dynamic>
+                                                  mixedPost =
+                                                  controller.mixedPosts[index];
+
+                                              if (mixedPost['isForum']) {
+                                                // Handle ForumModel
+                                                final ForumModel forumModel =
+                                                    mixedPost['data']
+                                                        as ForumModel;
                                                 final bool hasIncrementedView =
                                                     controller
                                                         .itemsWithIncrementedViews
-                                                        .contains(promotedPosts
-                                                            .postId);
+                                                        .contains(
+                                                            forumModel.forumId);
+                                                return VisibilityDetector(
+                                                  key: Key(index.toString()),
+                                                  onVisibilityChanged:
+                                                      (VisibilityInfo info) {
+                                                    if (info.visibleFraction ==
+                                                            1.0 &&
+                                                        !hasIncrementedView) {
+                                                      controller
+                                                          .updateForumViews(
+                                                              forumModel);
+                                                      setState(() {
+                                                        controller
+                                                            .itemsWithIncrementedViews
+                                                            .add(forumModel
+                                                                .forumId); // Set the flag to prevent further increments
+                                                      });
+                                                    }
+                                                  },
+                                                  child: ForumItem(
+                                                    forum: forumModel,
+                                                    controller: controller,
+                                                  ),
+                                                );
+                                              } else if (mixedPost[
+                                                  'isSponsored']) {
+                                                // Handle Sponsored PostModel
+                                                final int sponsoredIndex =
+                                                    (index / 3).floor();
+                                                if (sponsoredIndex <
+                                                    controller.sponsoredPosts
+                                                        .length) {
+                                                  final PostModel
+                                                      promotedPosts =
+                                                      controller.sponsoredPosts[
+                                                              sponsoredIndex]
+                                                          ['data'];
+                                                  final bool
+                                                      hasIncrementedView =
+                                                      controller
+                                                          .itemsWithIncrementedViews
+                                                          .contains(
+                                                              promotedPosts
+                                                                  .postId);
+                                                  return VisibilityDetector(
+                                                    key: Key(index.toString()),
+                                                    onVisibilityChanged:
+                                                        (VisibilityInfo info) {
+                                                      if (info.visibleFraction ==
+                                                              1.0 &&
+                                                          !hasIncrementedView) {
+                                                        controller.updateViews(
+                                                            promotedPosts);
+                                                        setState(() {
+                                                          controller
+                                                              .itemsWithIncrementedViews
+                                                              .add(promotedPosts
+                                                                  .postId); // Set the flag to prevent further increments
+                                                        });
+                                                      }
+                                                    },
+                                                    child: PostTile(
+                                                      controller: controller,
+                                                      post: promotedPosts,
+                                                      onPageChange: (int page) {
+                                                        if (widget
+                                                                .onPageChange !=
+                                                            null) {
+                                                          widget.onPageChange!(
+                                                              page);
+                                                        }
+                                                      },
+                                                    ),
+                                                  );
+                                                } else {
+                                                  // Handle case where there are no more sponsored posts
+                                                  return const SizedBox(); // You can return an empty widget or something else
+                                                }
+                                              } else if (index % 4 == 0) {
+                                                // Display Sponsored Post after every 3 non-sponsored posts
+                                                final int sponsoredIndex =
+                                                    (index / 4).floor();
+                                                if (sponsoredIndex <
+                                                    controller.sponsoredPosts
+                                                        .length) {
+                                                  final PostModel
+                                                      promotedPosts =
+                                                      controller.sponsoredPosts[
+                                                              sponsoredIndex]
+                                                          ['data'] as PostModel;
+                                                  final bool
+                                                      hasIncrementedView =
+                                                      controller
+                                                          .itemsWithIncrementedViews
+                                                          .contains(
+                                                              promotedPosts
+                                                                  .postId);
+                                                  return VisibilityDetector(
+                                                    key: Key(index.toString()),
+                                                    onVisibilityChanged:
+                                                        (VisibilityInfo info) {
+                                                      if (info.visibleFraction ==
+                                                              1.0 &&
+                                                          !hasIncrementedView) {
+                                                        controller.updateViews(
+                                                            promotedPosts);
+                                                        setState(() {
+                                                          controller
+                                                              .itemsWithIncrementedViews
+                                                              .add(promotedPosts
+                                                                  .postId);
+                                                        });
+                                                      }
+                                                    },
+                                                    child: Column(
+                                                      children: [
+                                                        // Sponsored Post
+                                                        PostTile(
+                                                          controller:
+                                                              controller,
+                                                          post: promotedPosts,
+                                                          onPageChange:
+                                                              (int page) {
+                                                            if (widget
+                                                                    .onPageChange !=
+                                                                null) {
+                                                              widget.onPageChange!(
+                                                                  page);
+                                                            }
+                                                          },
+                                                        ),
+                                                        // Non-promoted posts
+                                                        // Adjust the height based on your design
+                                                        PostTile(
+                                                          controller:
+                                                              controller,
+                                                          post:
+                                                              mixedPost['data']
+                                                                  as PostModel,
+                                                          onPageChange:
+                                                              (int page) {
+                                                            if (widget
+                                                                    .onPageChange !=
+                                                                null) {
+                                                              widget.onPageChange!(
+                                                                  page);
+                                                            }
+                                                          },
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  );
+                                                } else {
+                                                  // Handle case where there are no more sponsored posts
+                                                  return const SizedBox(); // You can return an empty widget or something else
+                                                }
+                                              } else {
+                                                // Handle regular non-promoted PostModel
+                                                final PostModel
+                                                    nonPromotedPostModel =
+                                                    mixedPost['data']
+                                                        as PostModel;
+                                                final bool hasIncrementedView =
+                                                    controller
+                                                        .itemsWithIncrementedViews
+                                                        .contains(
+                                                            nonPromotedPostModel
+                                                                .postId);
                                                 return VisibilityDetector(
                                                   key: Key(index.toString()),
                                                   onVisibilityChanged:
@@ -579,18 +755,19 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                                                             1.0 &&
                                                         !hasIncrementedView) {
                                                       controller.updateViews(
-                                                          promotedPosts);
+                                                          nonPromotedPostModel);
                                                       setState(() {
                                                         controller
                                                             .itemsWithIncrementedViews
-                                                            .add(promotedPosts
-                                                                .postId); // Set the flag to prevent further increments
+                                                            .add(
+                                                                nonPromotedPostModel
+                                                                    .postId);
                                                       });
                                                     }
                                                   },
                                                   child: PostTile(
                                                     controller: controller,
-                                                    post: promotedPosts,
+                                                    post: nonPromotedPostModel,
                                                     onPageChange: (int page) {
                                                       if (widget.onPageChange !=
                                                           null) {
@@ -600,127 +777,10 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                                                     },
                                                   ),
                                                 );
-                                              } else {
-                                                // Handle case where there are no more sponsored posts
-                                                return const SizedBox(); // You can return an empty widget or something else
                                               }
-                                            } else if (index % 4 == 0) {
-                                              // Display Sponsored Post after every 3 non-sponsored posts
-                                              final int sponsoredIndex =
-                                                  (index / 4).floor();
-                                              if (sponsoredIndex <
-                                                  controller
-                                                      .sponsoredPosts.length) {
-                                                final PostModel promotedPosts =
-                                                    controller.sponsoredPosts[
-                                                            sponsoredIndex]
-                                                        ['data'] as PostModel;
-                                                final bool hasIncrementedView =
-                                                    controller
-                                                        .itemsWithIncrementedViews
-                                                        .contains(promotedPosts
-                                                            .postId);
-                                                return VisibilityDetector(
-                                                  key: Key(index.toString()),
-                                                  onVisibilityChanged:
-                                                      (VisibilityInfo info) {
-                                                    if (info.visibleFraction ==
-                                                            1.0 &&
-                                                        !hasIncrementedView) {
-                                                      controller.updateViews(
-                                                          promotedPosts);
-                                                      setState(() {
-                                                        controller
-                                                            .itemsWithIncrementedViews
-                                                            .add(promotedPosts
-                                                                .postId);
-                                                      });
-                                                    }
-                                                  },
-                                                  child: Column(
-                                                    children: [
-                                                      // Sponsored Post
-                                                      PostTile(
-                                                        controller: controller,
-                                                        post: promotedPosts,
-                                                        onPageChange:
-                                                            (int page) {
-                                                          if (widget
-                                                                  .onPageChange !=
-                                                              null) {
-                                                            widget.onPageChange!(
-                                                                page);
-                                                          }
-                                                        },
-                                                      ),
-                                                      // Non-promoted posts
-                                                      // Adjust the height based on your design
-                                                      PostTile(
-                                                        controller: controller,
-                                                        post: mixedPost['data']
-                                                            as PostModel,
-                                                        onPageChange:
-                                                            (int page) {
-                                                          if (widget
-                                                                  .onPageChange !=
-                                                              null) {
-                                                            widget.onPageChange!(
-                                                                page);
-                                                          }
-                                                        },
-                                                      ),
-                                                    ],
-                                                  ),
-                                                );
-                                              } else {
-                                                // Handle case where there are no more sponsored posts
-                                                return const SizedBox(); // You can return an empty widget or something else
-                                              }
-                                            } else {
-                                              // Handle regular non-promoted PostModel
-                                              final PostModel
-                                                  nonPromotedPostModel =
-                                                  mixedPost['data']
-                                                      as PostModel;
-                                              final bool hasIncrementedView =
-                                                  controller
-                                                      .itemsWithIncrementedViews
-                                                      .contains(
-                                                          nonPromotedPostModel
-                                                              .postId);
-                                              return VisibilityDetector(
-                                                key: Key(index.toString()),
-                                                onVisibilityChanged:
-                                                    (VisibilityInfo info) {
-                                                  if (info.visibleFraction ==
-                                                          1.0 &&
-                                                      !hasIncrementedView) {
-                                                    controller.updateViews(
-                                                        nonPromotedPostModel);
-                                                    setState(() {
-                                                      controller
-                                                          .itemsWithIncrementedViews
-                                                          .add(
-                                                              nonPromotedPostModel
-                                                                  .postId);
-                                                    });
-                                                  }
-                                                },
-                                                child: PostTile(
-                                                  controller: controller,
-                                                  post: nonPromotedPostModel,
-                                                  onPageChange: (int page) {
-                                                    if (widget.onPageChange !=
-                                                        null) {
-                                                      widget
-                                                          .onPageChange!(page);
-                                                    }
-                                                  },
-                                                ),
-                                              );
                                             }
-                                          }
-                                        },
+                                          },
+                                        ),
                                       ),
                                     ),
                                   ),
