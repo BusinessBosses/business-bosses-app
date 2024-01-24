@@ -16,6 +16,10 @@ class Homeappbar extends StatelessWidget {
   final bool hasBadge;
   final String coinsCount;
   final bool hasUnreadNotification;
+  static final GlobalKey<NavigatorState> searchkey =
+      GlobalKey<NavigatorState>();
+  static final GlobalKey<NavigatorState> notificationkey =
+      GlobalKey<NavigatorState>();
 
   /// HOME SCREEN APP BAR
   @override
@@ -31,6 +35,7 @@ class Homeappbar extends StatelessWidget {
           height: 42,
           width: double.infinity,
           child: TextFormField(
+            key: searchkey,
             style: const TextStyle(fontSize: 20),
             decoration: inputDecoration.copyWith(
               border: OutlineInputBorder(
@@ -149,6 +154,7 @@ class Homeappbar extends StatelessWidget {
               width: 10,
             ),
             InkWell(
+              key: notificationkey,
               child: SizedBox(
                 width: 55,
                 height: 55,

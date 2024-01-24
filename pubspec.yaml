@@ -91,6 +91,7 @@ dependencies:
   purchases_flutter: ^6.5.0
   add_2_calendar: ^2.2.5
   zego_uikit_signaling_plugin: ^2.7.4
+  tutorial_coach_mark: ^1.2.11
 
 
 dev_dependencies:

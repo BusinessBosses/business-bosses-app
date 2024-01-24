@@ -34,6 +34,14 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
   bool _isSearching = false;
   Industry industry = Industry();
 
+  final GlobalKey<NavigatorState> bhomePageKey = GlobalKey<NavigatorState>();
+  final GlobalKey<NavigatorState> bbossupPageKey = GlobalKey<NavigatorState>();
+  final GlobalKey<NavigatorState> bliveEventPageKey =
+      GlobalKey<NavigatorState>();
+  final GlobalKey<NavigatorState> bmarketPlacePageKey =
+      GlobalKey<NavigatorState>();
+  final GlobalKey<NavigatorState> bprofilePageKey = GlobalKey<NavigatorState>();
+
   final CommunitiesController _communitiesController =
       Get.put(CommunitiesController());
   late final TabController _searchTabController;
@@ -348,8 +356,13 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
                                   ))),
                   ),
                 ),
-                const BottomBar(
+                BottomBar(
                   activeIndex: 1,
+                  homePageKey: bhomePageKey,
+                  bossupPageKey: bbossupPageKey,
+                  liveEventPageKey: bliveEventPageKey,
+                  marketPlacePageKey: bmarketPlacePageKey,
+                  profilePageKey: bprofilePageKey,
                 )
               ],
             ),

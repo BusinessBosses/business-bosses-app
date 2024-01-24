@@ -34,6 +34,14 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
   final ProfileController profileController = Get.find();
   final MarketController marketController = Get.find();
 
+  final GlobalKey<NavigatorState> phomePageKey = GlobalKey<NavigatorState>();
+  final GlobalKey<NavigatorState> pbossupPageKey = GlobalKey<NavigatorState>();
+  final GlobalKey<NavigatorState> pliveEventPageKey =
+      GlobalKey<NavigatorState>();
+  final GlobalKey<NavigatorState> pmarketPlacePageKey =
+      GlobalKey<NavigatorState>();
+  final GlobalKey<NavigatorState> pprofilePageKey = GlobalKey<NavigatorState>();
+
   @override
   Widget build(BuildContext context) {
     // ignore: no_leading_underscores_for_local_identifiers
@@ -287,8 +295,13 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                     ),
                   ),
                 ),
-                const BottomBar(
-                  activeIndex: 4,
+                BottomBar(
+                  activeIndex: 0,
+                  homePageKey: phomePageKey,
+                  bossupPageKey: pbossupPageKey,
+                  liveEventPageKey: pliveEventPageKey,
+                  marketPlacePageKey: pmarketPlacePageKey,
+                  profilePageKey: pprofilePageKey,
                 )
               ],
             ),
