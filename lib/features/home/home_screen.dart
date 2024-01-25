@@ -16,6 +16,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:text_scroll/text_scroll.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 import 'package:upgrader/upgrader.dart';
@@ -59,7 +60,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       Get.put(CommunitiesController());
   final BossUpController bossUpController = Get.put(BossUpController());
 
-  final GlobalKey bottomTabButtonKey = GlobalKey();
+  final GlobalKey postButtonKey = GlobalKey();
 
   final GlobalKey<NavigatorState> hhomePageKey = GlobalKey<NavigatorState>();
   final GlobalKey<NavigatorState> hbossupPageKey = GlobalKey<NavigatorState>();
@@ -74,8 +75,17 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     super.initState();
 
     WidgetsBinding.instance.addObserver(this);
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? tutorialShown = prefs.getString('tutorialShown');
+      showTutorial();
+      if (tutorialShown == null || tutorialShown.isEmpty) {
+        showTutorial();
+        await prefs.setString('tutorialShown', 'true');
+      }
+    });
     final HomeController homeController = Get.find();
-    // showTutorial();
+
     _scrollController.addListener(() {
       if (_scrollController.position.pixels >=
               _scrollController.position.maxScrollExtent - 300 &&
@@ -233,14 +243,22 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
         TargetFocus(identify: 'Hometarget', keyTarget: hhomePageKey, contents: [
       TargetContent(
           align: ContentAlign.top,
-          child: const Column(
+          child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
+              // Image.asset(
+              //   'assets/images/test.gif',
+              //   height: 500.0,
+              //   width: 500.0,
+              // ),
               // Lottie.asset(
               //   'assets/anim/liveevent.json',
               //   height: 85,
               // ),
+              SizedBox(
+                height: 20,
+              ),
               Text(
                 'Content Feed',
                 style: TextStyle(
@@ -269,7 +287,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                 ),
               ),
               SizedBox(
-                height: 200,
+                height: 20,
               )
             ],
           ))
@@ -319,6 +337,101 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                     padding: EdgeInsets.only(top: 5.0),
                     child: Text(
                       '- Enter Boss Up Challenge for a chance to become \"Boss of the week\"',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 15,
+                          fontWeight: FontWeight.w700),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 200,
+                  )
+                ],
+              ))
+        ]));
+    targets.add(TargetFocus(
+        identify: 'Liveventtarget',
+        keyTarget: hliveEventPageKey,
+        contents: [
+          TargetContent(
+              align: ContentAlign.top,
+              child: const Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  // Lottie.asset(
+                  //   'assets/anim/liveevent.json',
+                  //   height: 85,
+                  // ),
+                  Text(
+                    'Live Events',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                        fontSize: 25.0),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 10.0),
+                    child: Text(
+                      '- Create live events with description, date, and time.',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 15,
+                          fontWeight: FontWeight.w700),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 5.0),
+                    child: Text(
+                      '- Participants can attend, share and save live events.',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 15,
+                          fontWeight: FontWeight.w700),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 200,
+                  )
+                ],
+              ))
+        ]));
+
+    targets.add(TargetFocus(
+        identify: 'marketplacetarget',
+        keyTarget: hmarketPlacePageKey,
+        contents: [
+          TargetContent(
+              align: ContentAlign.top,
+              child: const Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  // Lottie.asset(
+                  //   'assets/anim/liveevent.json',
+                  //   height: 85,
+                  // ),
+                  Text(
+                    'Marketplace',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                        fontSize: 25.0),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 10.0),
+                    child: Text(
+                      '- Sell your products and services',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 15,
+                          fontWeight: FontWeight.w700),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 5.0),
+                    child: Text(
+                      '- Selling is easy, you can add price, description, photos.',
                       style: TextStyle(
                           color: Colors.white,
                           fontSize: 15,
@@ -381,8 +494,8 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
         ]));
 
     targets.add(TargetFocus(
-        identify: "Target 3",
-        keyTarget: hliveEventPageKey,
+        identify: 'Createbuttontarget',
+        keyTarget: postButtonKey,
         contents: [
           TargetContent(
               align: ContentAlign.top,
@@ -394,6 +507,57 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                   //   'assets/anim/liveevent.json',
                   //   height: 85,
                   // ),
+                  Text(
+                    'Create',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                        fontSize: 25.0),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 10.0),
+                    child: Text(
+                      '- Create Posts',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 15,
+                          fontWeight: FontWeight.w700),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 5.0),
+                    child: Text(
+                      '- Post polls and surveys to gather feedback and use the feedback to improve your business offerings.',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 15,
+                          fontWeight: FontWeight.w700),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 200,
+                  )
+                ],
+              ))
+        ]));
+
+    targets.add(TargetFocus(
+        identify: 'connecttarget',
+        keyTarget: connectbuttonkey,
+        contents: [
+          TargetContent(
+              align: ContentAlign.bottom,
+              child: const Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  // Lottie.asset(
+                  //   'assets/anim/liveevent.json',
+                  //   height: 85,
+                  // ),
+                  SizedBox(
+                    height: 100,
+                  ),
                   Text(
                     'Networking & Referrals',
                     style: TextStyle(
@@ -441,9 +605,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                           fontWeight: FontWeight.w700),
                     ),
                   ),
-                  SizedBox(
-                    height: 200,
-                  )
                 ],
               ))
         ]));
@@ -612,7 +773,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                                 );
                               });
                         },
-                        key: bottomTabButtonKey,
+                        key: postButtonKey,
                         label: const Text(
                           'Post',
                           style: TextStyle(

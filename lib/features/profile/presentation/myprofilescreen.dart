@@ -296,7 +296,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                   ),
                 ),
                 BottomBar(
-                  activeIndex: 0,
+                  activeIndex: 4,
                   homePageKey: phomePageKey,
                   bossupPageKey: pbossupPageKey,
                   liveEventPageKey: pliveEventPageKey,

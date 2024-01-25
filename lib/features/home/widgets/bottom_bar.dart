@@ -122,9 +122,7 @@ class BottomBar extends StatelessWidget {
                         flex: 10,
                         key: profilePageKey,
                         child: BottomTabButton(
-                          // key: profilebuttonkey,
                           icon: '',
-
                           onTap: () {
                             if (activeIndex == 4) return;
                             if (activeIndex == 0) {
