@@ -5,44 +5,46 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class MyEvents extends StatefulWidget {
-  final List<EventModel>? joined;
-  const MyEvents({super.key, this.joined});
+  const MyEvents({super.key});
 
   @override
   State<MyEvents> createState() => _MyEventsState();
 }
 
 class _MyEventsState extends State<MyEvents> {
-  final LiveController liveController = Get.find();
+  final LiveController liveController = Get.put(LiveController());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: const Text('My Events'),
-      ),
-      body: widget.joined!.isNotEmpty
-          ? Column(
-              children: [
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: liveController.upcoming.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      EventModel event = liveController.upcoming[index];
-                      return EventItem(
-                        event: event,
-                        ongoing: false,
-                      );
-                    },
-                  ),
-                ),
-              ],
-            )
-          : const Center(
-              child: Text(
-                'You Have Not Chose To Attend Any Event!',
-              ),
-            ),
-    );
+        appBar: AppBar(
+          centerTitle: true,
+          title: const Text('My Events'),
+        ),
+        body: Obx(
+          () => liveController.loading.value
+              ? const Center(child: CircularProgressIndicator())
+              : liveController.joined.isNotEmpty
+                  ? Column(
+                      children: [
+                        Expanded(
+                          child: ListView.builder(
+                            itemCount: liveController.joined.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              EventModel event = liveController.upcoming[index];
+                              return EventItem(
+                                event: event,
+                                ongoing: false,
+                              );
+                            },
+                          ),
+                        ),
+                      ],
+                    )
+                  : const Center(
+                      child: Text(
+                        'You Have Not Chose To Attend Any Event!',
+                      ),
+                    ),
+        ));
   }
 }

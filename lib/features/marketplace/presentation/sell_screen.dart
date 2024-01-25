@@ -16,7 +16,6 @@ import '../../../common/dialogs/snackbar.dart';
 import '../../../common/models/comment_model.dart';
 import '../../../common/widgets/buttons/my_outlined_button.dart';
 import '../../../common/widgets/gallery_screen.dart';
-import '../../../utils/constants/constants.dart';
 import '../../../utils/theme/theme.dart';
 import '../../forum/widgets/field_container.dart';
 import '../../posts/widgets/preview.dart';
@@ -37,6 +36,7 @@ class CreateSellingitemScreen extends StatefulWidget {
 
   // CreateSellingitemScreen();
   @override
+  // ignore: library_private_types_in_public_api
   _CreateSellingitemScreenState createState() =>
       _CreateSellingitemScreenState();
 }
@@ -56,7 +56,7 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
 
   MarketModel? _market;
 
-  Map<String, String> currencyValues = {
+  Map<String, String> currencyValues = <String, String>{
     'Afghanistan': 'AFN',
     'Albania': 'ALL',
     'Algeria': 'DZD',
