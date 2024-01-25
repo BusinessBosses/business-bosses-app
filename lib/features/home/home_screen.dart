@@ -75,15 +75,14 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     super.initState();
 
     WidgetsBinding.instance.addObserver(this);
-    // WidgetsBinding.instance.addPostFrameCallback((_) async {
-    //   SharedPreferences prefs = await SharedPreferences.getInstance();
-    //   String? tutorialShown = prefs.getString('tutorialShown');
-    //   showTutorial();
-    //   if (tutorialShown == null || tutorialShown.isEmpty) {
-    //     showTutorial();
-    //     await prefs.setString('tutorialShown', 'true');
-    //   }
-    // });
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? tutorialShown = prefs.getString('tutorialShown');
+      if (tutorialShown == null || tutorialShown.isEmpty) {
+        showTutorial();
+        await prefs.setString('tutorialShown', 'true');
+      }
+    });
     final HomeController homeController = Get.find();
 
     _scrollController.addListener(() {
@@ -692,7 +691,8 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
               ),
               floatingActionButton: !controller.loading.value
                   ? Padding(
-                      padding: const EdgeInsets.only(bottom: 50),
+                      padding:
+                          EdgeInsets.only(bottom: Platform.isIOS ? 50 : 80),
                       child: FloatingActionButton.extended(
                         onPressed: () {
                           showModalBottomSheet(
