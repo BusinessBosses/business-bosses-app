@@ -151,7 +151,7 @@ class PostModel {
     );
   }
 
-  setViews(int newViews) {
+  void setViews(int newViews) {
     views = newViews;
   }
 }

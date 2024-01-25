@@ -35,9 +35,9 @@ dependencies:
   country_picker: ^2.0.20
   crypto: ^3.0.3
   cupertino_icons: ^1.0.2
-  detectable_text_field: ^2.1.0
+  detectable_text_field: ^2.0.4
   facebook_app_events: ^0.19.0
-  file_picker: 
+  file_picker: ^5.5.0
   firebase_analytics: ^10.2.1
   firebase_core: ^2.10.0
   firebase_dynamic_links: ^5.1.1
@@ -73,24 +73,22 @@ dependencies:
   sign_in_with_apple: ^5.0.0
   social_share: ^2.3.1
   socket_io_client: ^2.0.2
-  syncfusion_flutter_charts: ^22.2.12
+  syncfusion_flutter_charts: ^23.1.40
   text_scroll: ^0.2.0
   timezone: ^0.9.2
   uni_links: ^0.5.1
   upgrader: ^8.1.0
   url_launcher: ^6.0.6
-  uuid: ^4.2.2
+  uuid: ^3.0.7
   video_player: ^2.7.2
   video_thumbnail: ^0.5.3
   visibility_detector: ^0.4.0+2
   webview_flutter: ^4.4.1
   youtube_player_flutter: ^8.1.2
   zego_uikit_prebuilt_live_audio_room: ^2.11.3
-  zego_express_engine: ^3.12.4
   flutter_speed_dial: ^7.0.0
   purchases_flutter: ^6.5.0
   add_2_calendar: ^2.2.5
-  zego_uikit_signaling_plugin: ^2.7.4
   tutorial_coach_mark: ^1.2.11
 
 
@@ -99,11 +97,10 @@ dev_dependencies:
   flutter_lints: ^2.0.0
   flutter_native_splash: ^2.3.1
 
-  flutter_test: 
+  flutter_test:
     sdk: flutter
 dependency_overrides:
   intl: ^0.17.0-nullsafety.2
-  photo_manager: ^3.0.0-dev.2
 
 flutter_native_splash:
   android: true
