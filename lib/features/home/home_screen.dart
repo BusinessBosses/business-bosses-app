@@ -692,8 +692,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
               ),
               floatingActionButton: !controller.loading.value
                   ? Padding(
-                      padding:
-                          EdgeInsets.only(bottom: Platform.isIOS ? 50 : 100),
+                      padding: const EdgeInsets.only(bottom: 50),
                       child: FloatingActionButton.extended(
                         onPressed: () {
                           showModalBottomSheet(
