@@ -8,9 +8,8 @@ import 'package:business_bosses_v2/features/live_event/controller/live_event_con
 import 'package:business_bosses_v2/features/live_event/models/events_model.dart';
 import 'package:business_bosses_v2/features/live_event/widgets/call_room.dart';
 import 'package:business_bosses_v2/features/live_event/widgets/event_call.dart';
-import 'package:business_bosses_v2/features/live_event/widgets/my_events.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
-import 'package:business_bosses_v2/navigation/routes.dart';
+
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
@@ -50,16 +49,7 @@ class _LiveEventState extends State<LiveEvent> {
           _isSearching = !_isSearching;
           // }
           setState(() {});
-          ;
         },
-      ),
-      IconButton(
-        onPressed: () {
-          Get.to(() => MyEvents(
-                joined: liveEventController.joined,
-              ));
-        },
-        icon: const Icon(Icons.calendar_month),
       ),
     ];
   }
@@ -79,13 +69,7 @@ class _LiveEventState extends State<LiveEvent> {
         return Scaffold(
             backgroundColor: Colors.white,
             appBar: AppBar(
-              leading: IconButton(
-                onPressed: () {
-                  Get.offNamed(Routes.home);
-                },
-                icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
-              ),
-              centerTitle: true,
+              automaticallyImplyLeading: false,
               title: _isSearching
                   ? Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,

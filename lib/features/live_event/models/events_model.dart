@@ -12,6 +12,7 @@ class EventModel {
   final bool? status;
   final UserModel? user;
   final String? image;
+  int? totalAttendees;
   EventModel({
     this.id,
     required this.roomId,
@@ -22,6 +23,7 @@ class EventModel {
     this.status,
     this.user,
     this.image,
+    this.totalAttendees = 0,
   });
 
   EventModel copyWith({
@@ -34,6 +36,7 @@ class EventModel {
     bool? status,
     UserModel? user,
     String? image,
+    int? totalAttendees,
   }) {
     return EventModel(
       id: id ?? this.id,
@@ -45,6 +48,7 @@ class EventModel {
       status: status ?? this.status,
       user: user ?? this.user,
       image: image ?? this.image,
+      totalAttendees: totalAttendees ?? this.totalAttendees,
     );
   }
 
@@ -59,6 +63,7 @@ class EventModel {
       'status': status,
       'user': user,
       'image': image,
+      'totalAttendees': totalAttendees,
     };
   }
 
@@ -78,6 +83,12 @@ class EventModel {
           ? UserModel.fromMap(map['user'] as Map<String, dynamic>)
           : null,
       image: map['image'] != null ? map['image'] as String : null,
+      totalAttendees:
+          map['totalAttendees'] != null ? map['totalAttendees'] as int : null,
     );
+  }
+
+  void setAttendCount(int newViews) {
+    totalAttendees = newViews;
   }
 }
