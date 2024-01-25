@@ -8,6 +8,8 @@ import 'dart:convert';
 
 import '../../features/posts/widgets/my_container.dart';
 import '../../utils/theme/theme.dart';
+import 'package:business_bosses_v2/features/posts/widgets/youtube_display.dart';
+import 'package:business_bosses_v2/features/posts/widgets/yt_player.dart';
 
 class ExplorebusinessbossesScreen extends StatefulWidget {
   static const String routeName = '/explorebusinessbossesscreen';
@@ -23,6 +25,7 @@ class _ExplorebusinessbossesScreenState
     extends State<ExplorebusinessbossesScreen> {
   String? description;
   bool isLoading = false;
+  String youtubeUrl = "https://www.youtube.com/watch?v=3gm6eBtWfi4";
 
   @override
   void initState() {
@@ -106,18 +109,40 @@ class _ExplorebusinessbossesScreenState
                       'Description',
                       style: bodyText2,
                     )
-                  : Linkify(
-                      onOpen: (LinkableElement link) async {
-                        if (await canLaunchUrl(Uri.parse(link.url))) {
-                          await launchUrl(Uri.parse(link.url));
-                        } else {
-                          showSnackbar(
-                              message: 'Could not launch URL: ${link.url}');
-                        }
-                      },
-                      text: description!,
-                      style: bodyText2,
-                      linkStyle: const TextStyle(color: Colors.blue),
+                  : Container(
+                      child: Column(
+                        children: [
+                          GestureDetector(
+                              onTap: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (BuildContext context) =>
+                                        YoutubeVideo(
+                                      youtubeUrl,
+                                    ),
+                                  ),
+                                );
+                              },
+                              child: YoutubeDisplay(youtubeUrl ?? "")),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          Linkify(
+                            onOpen: (LinkableElement link) async {
+                              if (await canLaunchUrl(Uri.parse(link.url))) {
+                                await launchUrl(Uri.parse(link.url));
+                              } else {
+                                showSnackbar(
+                                    message:
+                                        'Could not launch URL: ${link.url}');
+                              }
+                            },
+                            text: description!,
+                            style: bodyText2,
+                            linkStyle: const TextStyle(color: Colors.blue),
+                          ),
+                        ],
+                      ),
                     ),
         ),
       ),

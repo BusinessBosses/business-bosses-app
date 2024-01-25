@@ -36,6 +36,14 @@ class _LiveEventState extends State<LiveEvent> {
   final ProfileController profileController = Get.find();
   bool _isSearching = false;
 
+  final GlobalKey<NavigatorState> lhomePageKey = GlobalKey<NavigatorState>();
+  final GlobalKey<NavigatorState> lbossupPageKey = GlobalKey<NavigatorState>();
+  final GlobalKey<NavigatorState> lliveEventPageKey =
+      GlobalKey<NavigatorState>();
+  final GlobalKey<NavigatorState> lmarketPlacePageKey =
+      GlobalKey<NavigatorState>();
+  final GlobalKey<NavigatorState> lprofilePageKey = GlobalKey<NavigatorState>();
+
   List<Widget> get mActions {
     return <Widget>[
       IconButton(
@@ -137,10 +145,15 @@ class _LiveEventState extends State<LiveEvent> {
               actions: mActions,
             ),
             body: liveController.loading.value
-                ? const Stack(children: [
-                    Center(child: CircularProgressIndicator()),
+                ? Stack(children: [
+                    const Center(child: CircularProgressIndicator()),
                     BottomBar(
                       activeIndex: 2,
+                      homePageKey: lhomePageKey,
+                      bossupPageKey: lbossupPageKey,
+                      liveEventPageKey: lliveEventPageKey,
+                      marketPlacePageKey: lmarketPlacePageKey,
+                      profilePageKey: lprofilePageKey,
                     )
                   ])
                 : Stack(children: [
@@ -273,8 +286,13 @@ class _LiveEventState extends State<LiveEvent> {
                         ),
                       ),
                     ),
-                    const BottomBar(
+                    BottomBar(
                       activeIndex: 2,
+                      homePageKey: lhomePageKey,
+                      bossupPageKey: lbossupPageKey,
+                      liveEventPageKey: lliveEventPageKey,
+                      marketPlacePageKey: lmarketPlacePageKey,
+                      profilePageKey: lprofilePageKey,
                     )
                   ]));
       },
