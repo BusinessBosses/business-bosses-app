@@ -75,15 +75,15 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     super.initState();
 
     WidgetsBinding.instance.addObserver(this);
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      String? tutorialShown = prefs.getString('tutorialShown');
-      showTutorial();
-      if (tutorialShown == null || tutorialShown.isEmpty) {
-        showTutorial();
-        await prefs.setString('tutorialShown', 'true');
-      }
-    });
+    // WidgetsBinding.instance.addPostFrameCallback((_) async {
+    //   SharedPreferences prefs = await SharedPreferences.getInstance();
+    //   String? tutorialShown = prefs.getString('tutorialShown');
+    //   showTutorial();
+    //   if (tutorialShown == null || tutorialShown.isEmpty) {
+    //     showTutorial();
+    //     await prefs.setString('tutorialShown', 'true');
+    //   }
+    // });
     final HomeController homeController = Get.find();
 
     _scrollController.addListener(() {
