@@ -1,14 +1,27 @@
 import 'package:business_bosses_v2/features/home/bottom_nav.dart';
+import 'package:business_bosses_v2/features/marketplace/presentation/sell_services.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
-import 'package:business_bosses_v2/features/marketplace/presentation/sell_services.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 class BottomBar extends StatelessWidget {
-  const BottomBar({Key? key, this.activeIndex = 0}) : super(key: key);
+  const BottomBar({
+    Key? key,
+    required this.activeIndex,
+    required this.homePageKey,
+    required this.bossupPageKey,
+    required this.liveEventPageKey,
+    required this.marketPlacePageKey,
+    required this.profilePageKey,
+  }) : super(key: key);
   final int activeIndex;
+  final GlobalKey<NavigatorState> homePageKey;
+  final GlobalKey<NavigatorState> bossupPageKey;
+  final GlobalKey<NavigatorState> liveEventPageKey;
+  final GlobalKey<NavigatorState> marketPlacePageKey;
+  final GlobalKey<NavigatorState> profilePageKey;
 
   @override
   Widget build(BuildContext context) {
@@ -42,18 +55,19 @@ class BottomBar extends StatelessWidget {
                     children: <Widget>[
                       Expanded(
                         flex: 10,
+                        key: homePageKey,
                         child: BottomTabButton(
                           icon: 'assets/svgs/hom.svg',
                           label: 'Home',
                           onTap: () {
                             if (activeIndex == 0) return;
-
-                            Get.offAndToNamed(Routes.home);
+                            Get.toNamed(Routes.home);
                           },
                           isActive: activeIndex == 0,
                         ),
                       ),
                       Expanded(
+                        key: bossupPageKey,
                         flex: 10,
                         child: BottomTabButton(
                           icon: 'assets/svgs/bossup.svg',
@@ -71,6 +85,7 @@ class BottomBar extends StatelessWidget {
                       ),
                       Expanded(
                         flex: 10,
+                        key: liveEventPageKey,
                         child: BottomTabButton(
                           icon: 'assets/svgs/liveevent.svg',
                           label: 'Live Events',
@@ -86,13 +101,9 @@ class BottomBar extends StatelessWidget {
                           isActive: activeIndex == 2,
                         ),
                       ),
-                      // Container(
-                      //   width: 72.0,
-                      //   height: double.infinity,
-                      //   color: Colors.white,
-                      // ),
                       Expanded(
                         flex: 10,
+                        key: marketPlacePageKey,
                         child: BottomTabButton(
                           label: 'Marketplace',
                           icon: 'assets/svgs/marketplace.svg',
@@ -109,8 +120,11 @@ class BottomBar extends StatelessWidget {
                       ),
                       Expanded(
                         flex: 10,
+                        key: profilePageKey,
                         child: BottomTabButton(
+                          // key: profilebuttonkey,
                           icon: '',
+
                           onTap: () {
                             if (activeIndex == 4) return;
                             if (activeIndex == 0) {

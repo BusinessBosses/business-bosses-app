@@ -52,6 +52,14 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
   int pageSize = 20;
   String? filteredCategory;
 
+  final GlobalKey<NavigatorState> mhomePageKey = GlobalKey<NavigatorState>();
+  final GlobalKey<NavigatorState> mbossupPageKey = GlobalKey<NavigatorState>();
+  final GlobalKey<NavigatorState> mliveEventPageKey =
+      GlobalKey<NavigatorState>();
+  final GlobalKey<NavigatorState> mmarketPlacePageKey =
+      GlobalKey<NavigatorState>();
+  final GlobalKey<NavigatorState> mprofilePageKey = GlobalKey<NavigatorState>();
+
   @override
   void initState() {
     super.initState();
@@ -1210,8 +1218,13 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                       ),
                     ),
                   ),
-                  const BottomBar(
+                  BottomBar(
                     activeIndex: 3,
+                    homePageKey: mhomePageKey,
+                    profilePageKey: mprofilePageKey,
+                    bossupPageKey: mbossupPageKey,
+                    liveEventPageKey: mliveEventPageKey,
+                    marketPlacePageKey: mmarketPlacePageKey,
                   )
                 ],
               ),
