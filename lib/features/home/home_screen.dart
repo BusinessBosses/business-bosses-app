@@ -514,7 +514,8 @@ class _HomeScreenState extends State<HomeScreen>
               ))
         ]));
 
-    targets.add(TargetFocus(
+    targets.add(
+      TargetFocus(
         identify: 'Createbuttontarget',
         keyTarget: postButtonKey,
         contents: [
@@ -560,7 +561,9 @@ class _HomeScreenState extends State<HomeScreen>
                   )
                 ],
               ))
-        ]));
+        ],
+      ),
+    );
 
     targets.add(TargetFocus(
         identify: 'connecttarget',
