@@ -1,11 +1,13 @@
 import 'package:business_bosses_v2/features/home/widgets/bottom_bar.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/features/profile/widgets/profileinfodisplay.dart';
+import 'package:business_bosses_v2/features/live_event/controller/live_event_controller.dart';
 import 'package:business_bosses_v2/features/profile/widgets/profilepostsdisplay.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:business_bosses_v2/features/live_event/widgets/my_events.dart';
 import 'package:get/get.dart';
 import '../../../common/widgets/safety_model.dart';
 import '../../../common/widgets/tiles/outlinebuttonheader.dart';
@@ -33,6 +35,15 @@ class MyProfileScreen extends StatefulWidget {
 class _MyProfileScreenState extends State<MyProfileScreen> {
   final ProfileController profileController = Get.find();
   final MarketController marketController = Get.find();
+  final LiveController liveEventController = Get.put(LiveController());
+
+  final GlobalKey<NavigatorState> phomePageKey = GlobalKey<NavigatorState>();
+  final GlobalKey<NavigatorState> pbossupPageKey = GlobalKey<NavigatorState>();
+  final GlobalKey<NavigatorState> pliveEventPageKey =
+      GlobalKey<NavigatorState>();
+  final GlobalKey<NavigatorState> pmarketPlacePageKey =
+      GlobalKey<NavigatorState>();
+  final GlobalKey<NavigatorState> pprofilePageKey = GlobalKey<NavigatorState>();
 
   @override
   Widget build(BuildContext context) {
@@ -45,6 +56,12 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
             automaticallyImplyLeading: false,
             title: Text('@${profileController.myProfile.username}'),
             actions: <Widget>[
+              IconButton(
+                onPressed: () {
+                  Get.to(() => const MyEvents());
+                },
+                icon: const Icon(Icons.calendar_month),
+              ),
               IconButton(
                   icon: SvgPicture.asset(
                     'assets/svgs/settings.svg',
@@ -287,8 +304,13 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                     ),
                   ),
                 ),
-                const BottomBar(
+                BottomBar(
                   activeIndex: 4,
+                  homePageKey: phomePageKey,
+                  bossupPageKey: pbossupPageKey,
+                  liveEventPageKey: pliveEventPageKey,
+                  marketPlacePageKey: pmarketPlacePageKey,
+                  profilePageKey: pprofilePageKey,
                 )
               ],
             ),

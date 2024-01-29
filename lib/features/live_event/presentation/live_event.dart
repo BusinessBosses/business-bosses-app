@@ -8,9 +8,8 @@ import 'package:business_bosses_v2/features/live_event/controller/live_event_con
 import 'package:business_bosses_v2/features/live_event/models/events_model.dart';
 import 'package:business_bosses_v2/features/live_event/widgets/call_room.dart';
 import 'package:business_bosses_v2/features/live_event/widgets/event_call.dart';
-import 'package:business_bosses_v2/features/live_event/widgets/my_events.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
-import 'package:business_bosses_v2/navigation/routes.dart';
+
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
@@ -37,6 +36,14 @@ class _LiveEventState extends State<LiveEvent> {
   final ProfileController profileController = Get.find();
   bool _isSearching = false;
 
+  final GlobalKey<NavigatorState> lhomePageKey = GlobalKey<NavigatorState>();
+  final GlobalKey<NavigatorState> lbossupPageKey = GlobalKey<NavigatorState>();
+  final GlobalKey<NavigatorState> lliveEventPageKey =
+      GlobalKey<NavigatorState>();
+  final GlobalKey<NavigatorState> lmarketPlacePageKey =
+      GlobalKey<NavigatorState>();
+  final GlobalKey<NavigatorState> lprofilePageKey = GlobalKey<NavigatorState>();
+
   List<Widget> get mActions {
     return <Widget>[
       IconButton(
@@ -50,16 +57,7 @@ class _LiveEventState extends State<LiveEvent> {
           _isSearching = !_isSearching;
           // }
           setState(() {});
-          ;
         },
-      ),
-      IconButton(
-        onPressed: () {
-          Get.to(() => MyEvents(
-                joined: liveEventController.joined,
-              ));
-        },
-        icon: const Icon(Icons.calendar_month),
       ),
     ];
   }
@@ -79,13 +77,7 @@ class _LiveEventState extends State<LiveEvent> {
         return Scaffold(
             backgroundColor: Colors.white,
             appBar: AppBar(
-              leading: IconButton(
-                onPressed: () {
-                  Get.offNamed(Routes.home);
-                },
-                icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
-              ),
-              centerTitle: true,
+              automaticallyImplyLeading: false,
               title: _isSearching
                   ? Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -153,10 +145,15 @@ class _LiveEventState extends State<LiveEvent> {
               actions: mActions,
             ),
             body: liveController.loading.value
-                ? const Stack(children: [
-                    Center(child: CircularProgressIndicator()),
+                ? Stack(children: [
+                    const Center(child: CircularProgressIndicator()),
                     BottomBar(
                       activeIndex: 2,
+                      homePageKey: lhomePageKey,
+                      bossupPageKey: lbossupPageKey,
+                      liveEventPageKey: lliveEventPageKey,
+                      marketPlacePageKey: lmarketPlacePageKey,
+                      profilePageKey: lprofilePageKey,
                     )
                   ])
                 : Stack(children: [
@@ -289,8 +286,13 @@ class _LiveEventState extends State<LiveEvent> {
                         ),
                       ),
                     ),
-                    const BottomBar(
+                    BottomBar(
                       activeIndex: 2,
+                      homePageKey: lhomePageKey,
+                      bossupPageKey: lbossupPageKey,
+                      liveEventPageKey: lliveEventPageKey,
+                      marketPlacePageKey: lmarketPlacePageKey,
+                      profilePageKey: lprofilePageKey,
                     )
                   ]));
       },
