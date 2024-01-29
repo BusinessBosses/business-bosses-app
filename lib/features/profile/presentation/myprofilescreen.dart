@@ -63,14 +63,15 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                 icon: const Icon(Icons.calendar_month),
               ),
               IconButton(
-                  icon: SvgPicture.asset(
-                    'assets/svgs/settings.svg',
-                    height: 24.0,
-                  ),
-                  onPressed: () {
-                    // Navigator.pushNamed(context, '/settingsScreen');
-                    Get.toNamed(Routes.settings);
-                  })
+                icon: SvgPicture.asset(
+                  'assets/svgs/settings.svg',
+                  height: 24.0,
+                ),
+                onPressed: () {
+                  // Navigator.pushNamed(context, '/settingsScreen');
+                  Get.toNamed(Routes.settings);
+                },
+              )
             ],
           ),
           body: SizedBox(

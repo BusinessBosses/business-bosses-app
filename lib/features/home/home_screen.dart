@@ -242,7 +242,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
         TargetFocus(identify: 'Hometarget', keyTarget: hhomePageKey, contents: [
       TargetContent(
           align: ContentAlign.top,
-          child: Column(
+          child: const Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
@@ -492,7 +492,8 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
               ))
         ]));
 
-    targets.add(TargetFocus(
+    targets.add(
+      TargetFocus(
         identify: 'Createbuttontarget',
         keyTarget: postButtonKey,
         contents: [
@@ -538,7 +539,9 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                   )
                 ],
               ))
-        ]));
+        ],
+      ),
+    );
 
     targets.add(TargetFocus(
         identify: 'connecttarget',
@@ -692,7 +695,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
               floatingActionButton: !controller.loading.value
                   ? Padding(
                       padding:
-                          EdgeInsets.only(bottom: Platform.isIOS ? 50 : 80),
+                          EdgeInsets.only(bottom: Platform.isIOS ? 50 : 85),
                       child: FloatingActionButton.extended(
                         onPressed: () {
                           showModalBottomSheet(
