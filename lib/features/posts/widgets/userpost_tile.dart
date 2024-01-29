@@ -957,9 +957,9 @@ class _PostTileState extends State<PostTile> {
                                         });
                                   },
                                   child: SvgPicture.asset(
-                                    'assets/svgs/share.svg',
-                                    height: 15.0,
-                                    width: 15.0,
+                                    'assets/svgs/repost.svg',
+                                    height: 18.0,
+                                    width: 18.0,
                                   ),
                                 ),
                                 const Spacer(),
@@ -1069,9 +1069,9 @@ class _PostTileState extends State<PostTile> {
                               });
                         },
                         child: SvgPicture.asset(
-                          'assets/svgs/share.svg',
-                          height: 15.0,
-                          width: 15.0,
+                          'assets/svgs/repost.svg',
+                          height: 18.0,
+                          width: 18.0,
                         ),
                       ),
                       const Spacer(),

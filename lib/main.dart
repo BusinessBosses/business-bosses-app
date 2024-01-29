@@ -145,7 +145,7 @@ void processDeepLink(Uri uri) {
       if (success) {
         Navigator.pushNamed(
           navigatorKey.currentState!.context,
-          Routes.home,
+          Routes.bottomnavscreen,
         );
       }
     }
@@ -192,8 +192,9 @@ class MyApp extends StatelessWidget {
               AnalyticsServices.getAnalyticObserver()
             ],
             navigatorKey: navigatorKey,
-            initialRoute:
-                userId == '' || userId == null ? Routes.login : Routes.home,
+            initialRoute: userId == '' || userId == null
+                ? Routes.login
+                : Routes.bottomnavscreen,
 
             // initialRoute: Routes.updateProfile,
             getPages: Nav.routes,

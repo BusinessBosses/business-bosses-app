@@ -337,7 +337,7 @@ class _RelevantUsersScreenState extends State<RelevantUsersScreen> {
   }
 
   Widget _safetyModal(UserModel user) {
-    if ((user.category?.isEmpty ?? true) && (user.industry?.isEmpty ?? true)) {
+    if (user.category?.isEmpty == true || user.industry?.isEmpty == true) {
       return SafetyModel(
         icon: const Icon(
           Icons.info_outline,
@@ -346,7 +346,7 @@ class _RelevantUsersScreenState extends State<RelevantUsersScreen> {
         ),
         isLoading: !_isLoading,
         title: 'You may have incomplete profile!',
-        subTitle: 'You don\'t have category or industry yet',
+        subTitle: 'You don\'t have a category or industry yet',
         clickableText: 'Complete profile',
         onTap: () async {
           await Get.toNamed(Routes.updateProfile,
@@ -361,8 +361,8 @@ class _RelevantUsersScreenState extends State<RelevantUsersScreen> {
         height: 80.0,
       ),
       isLoading: !_isLoading,
-      title: 'You\'ve no matched users for now',
-      subTitle: 'All relevant users will be displayed here!',
+      title: 'No matching results for searched title',
+      subTitle: 'All filtered results will be displayed here!',
     );
   }
 }

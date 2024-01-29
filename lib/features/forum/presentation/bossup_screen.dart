@@ -98,7 +98,7 @@ class _BossUpSectionState extends State<BossUpSection> {
                       color: backgroundcolorinterface,
                       child: Stack(children: <Widget>[
                         Padding(
-                            padding: const EdgeInsets.only(left: 20, top: 25),
+                            padding: const EdgeInsets.only(left: 15, top: 25),
                             child: GestureDetector(
                               onTap: (() {
                                 showDialog(
@@ -130,7 +130,7 @@ class _BossUpSectionState extends State<BossUpSection> {
                             Align(
                                 alignment: Alignment.centerRight,
                                 child: Padding(
-                                  padding: const EdgeInsets.only(right: 20),
+                                  padding: const EdgeInsets.only(right: 15),
                                   child: ElevatedButton(
                                     style: ElevatedButton.styleFrom(
                                         minimumSize: const Size(150, 45)),
@@ -191,7 +191,7 @@ class _BossUpSectionState extends State<BossUpSection> {
                                 children: <Widget>[
                                   Container(
                                     margin: const EdgeInsets.only(
-                                        top: 10, right: 20, left: 20),
+                                        top: 10, right: 15, left: 15),
                                     height: 150,
                                     width: double.infinity,
                                     child: ClipRRect(
@@ -206,7 +206,7 @@ class _BossUpSectionState extends State<BossUpSection> {
                                         children: <Widget>[
                                           Container(
                                             margin: const EdgeInsets.only(
-                                                top: 25, right: 20, left: 35),
+                                                top: 25, right: 15, left: 30),
                                             height: 86,
                                             width: 142,
                                             child: ClipRRect(
@@ -238,7 +238,7 @@ class _BossUpSectionState extends State<BossUpSection> {
                                           Expanded(
                                             child: Padding(
                                               padding: const EdgeInsets.only(
-                                                  right: 35),
+                                                  right: 30),
                                               child: Text(
                                                 widget.industry.description
                                                         ?.trim() ??
@@ -256,7 +256,7 @@ class _BossUpSectionState extends State<BossUpSection> {
                                       ),
                                       Padding(
                                         padding: const EdgeInsets.only(
-                                            left: 32, right: 20.0),
+                                            left: 27, right: 15.0),
                                         child: Row(
                                           children: <Widget>[
                                             Row(
@@ -389,8 +389,8 @@ class _BossUpSectionState extends State<BossUpSection> {
                                     },
                                     child: Padding(
                                       padding: const EdgeInsets.only(
-                                        right: 20,
-                                        left: 20,
+                                        right: 15,
+                                        left: 15,
                                         bottom: 10,
                                       ),
                                       child: Container(
@@ -554,71 +554,65 @@ class _BossUpSectionState extends State<BossUpSection> {
               )
             ];
           },
-          body: Padding(
-            padding: const EdgeInsets.only(bottom: 30),
-            child: controller.loading.value
-                ? SafetyModel(
-                    isLoading: controller.loading.value,
-                    title: '',
-                  )
-                : controller.error.value
-                    ? SafetyModel(
-                        isLoading: false,
-                        title: 'Something went wrong',
-                        clickableText: 'Reload',
-                        onTap: () async {
-                          await controller.fetchForums();
-                        },
-                      )
-                    : !controller.loading.value &&
-                            !controller.error.value &&
-                            controller.forums.isEmpty
-                        ? const SafetyModel(
-                            isLoading: false,
-                            title: 'No post',
-                            subTitle: 'This industry has no post',
-                          )
-                        : RefreshIndicator(
-                            onRefresh: refreshData,
-                            child: ListView.builder(
-                                itemCount: controller.forums.length,
+          body: controller.loading.value
+              ? SafetyModel(
+                  isLoading: controller.loading.value,
+                  title: '',
+                )
+              : controller.error.value
+                  ? SafetyModel(
+                      isLoading: false,
+                      title: 'Something went wrong',
+                      clickableText: 'Reload',
+                      onTap: () async {
+                        await controller.fetchForums();
+                      },
+                    )
+                  : !controller.loading.value &&
+                          !controller.error.value &&
+                          controller.forums.isEmpty
+                      ? const SafetyModel(
+                          isLoading: false,
+                          title: 'No post',
+                          subTitle: 'This industry has no post',
+                        )
+                      : RefreshIndicator(
+                          onRefresh: refreshData,
+                          child: ListView.builder(
+                              itemCount: controller.forums.length,
 
-                                // <-- this will disable scroll
+                              // <-- this will disable scroll
 
-                                //controller: differentController,
+                              //controller: differentController,
 
-                                itemBuilder: (BuildContext context, int i) {
-                                  return VisibilityDetector(
-                                    key: Key(i.toString()),
-                                    onVisibilityChanged: (VisibilityInfo info) {
-                                      final bool hasIncrementedView =
-                                          hmeController
-                                              .itemsWithIncrementedViews
-                                              .contains(
-                                                  controller.forums[i].forumId);
-                                      if (info.visibleFraction == 1.0 &&
-                                          !hasIncrementedView) {
-                                        controller.updateForumViews(
-                                            controller.forums[i]);
-                                        setState(() {
-                                          hmeController
-                                              .itemsWithIncrementedViews
-                                              .add(controller.forums[i]
-                                                  .forumId); // Set the flag to prevent further increments
-                                        });
-                                      }
-                                    },
-                                    child: ForumItem(
-                                      forum: controller.forums[i],
-                                      key: ValueKey(
-                                          controller.forums[i].forumId),
-                                      controller: controller,
-                                      isBossUp: true,
-                                    ),
-                                  );
-                                }),
-                          ),
-          ),
+                              itemBuilder: (BuildContext context, int i) {
+                                return VisibilityDetector(
+                                  key: Key(i.toString()),
+                                  onVisibilityChanged: (VisibilityInfo info) {
+                                    final bool hasIncrementedView =
+                                        hmeController.itemsWithIncrementedViews
+                                            .contains(
+                                                controller.forums[i].forumId);
+                                    if (info.visibleFraction == 1.0 &&
+                                        !hasIncrementedView) {
+                                      controller.updateForumViews(
+                                          controller.forums[i]);
+                                      setState(() {
+                                        hmeController.itemsWithIncrementedViews
+                                            .add(controller.forums[i]
+                                                .forumId); // Set the flag to prevent further increments
+                                      });
+                                    }
+                                  },
+                                  child: ForumItem(
+                                    forum: controller.forums[i],
+                                    key: ValueKey(controller.forums[i].forumId),
+                                    controller: controller,
+                                    isBossUp: true,
+                                  ),
+                                );
+                              }),
+                        ),
         );
       }
     });

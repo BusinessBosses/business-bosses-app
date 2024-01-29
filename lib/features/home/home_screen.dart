@@ -3,9 +3,12 @@
 import 'dart:io';
 
 import 'package:business_bosses_v2/common/widgets/safety_model.dart';
+import 'package:business_bosses_v2/features/bottomnavigationscreen.dart';
+
 import 'package:business_bosses_v2/features/forum/controller/bossup_controller.dart';
 import 'package:business_bosses_v2/features/home/controller/commumities_controller.dart';
-import 'package:business_bosses_v2/features/home/widgets/bottom_bar.dart';
+import 'package:business_bosses_v2/features/home/sellProduct.dart';
+
 import 'package:business_bosses_v2/features/live_event/controller/live_event_controller.dart';
 import 'package:business_bosses_v2/features/live_event/presentation/live_event.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/sell_services.dart';
@@ -45,12 +48,14 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
+class _HomeScreenState extends State<HomeScreen>
+    with AutomaticKeepAliveClientMixin<HomeScreen>, WidgetsBindingObserver {
   final ProfileController _profileController = Get.find();
   final LiveController liveEventController = Get.put(LiveController());
   late IO.Socket socket;
   bool isScrolled = true;
   List<TargetFocus> targets = [];
+  bool get wantKeepAlive => true;
 
   // int currentTimestamp = DateTime.now().millisecondsSinceEpoch;
   // final GetStorage sandBox = GetStorage();
@@ -60,21 +65,14 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       Get.put(CommunitiesController());
   final BossUpController bossUpController = Get.put(BossUpController());
 
-  final GlobalKey postButtonKey = GlobalKey();
-
-  final GlobalKey<NavigatorState> hhomePageKey = GlobalKey<NavigatorState>();
-  final GlobalKey<NavigatorState> hbossupPageKey = GlobalKey<NavigatorState>();
-  final GlobalKey<NavigatorState> hliveEventPageKey =
-      GlobalKey<NavigatorState>();
-  final GlobalKey<NavigatorState> hmarketPlacePageKey =
-      GlobalKey<NavigatorState>();
-  final GlobalKey<NavigatorState> hprofilePageKey = GlobalKey<NavigatorState>();
+  final GlobalKey<NavigatorState> postButtonKey = GlobalKey<NavigatorState>();
 
   @override
   void initState() {
     super.initState();
 
     WidgetsBinding.instance.addObserver(this);
+
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String? tutorialShown = prefs.getString('tutorialShown');
@@ -145,7 +143,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
         contents: [
           TargetContent(
               align: ContentAlign.bottom,
-              child: const Column(
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
@@ -153,17 +151,39 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                   //   'assets/anim/liveevent.json',
                   //   height: 85,
                   // ),
+
                   SizedBox(
                     height: 200,
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Row(
+                        children: [
+                          Text(
+                            'Tap higlighted areas to skip',
+                            style: TextStyle(
+                                color: Colors.white.withAlpha(150),
+                                fontSize: 15),
+                          ),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          SvgPicture.asset(
+                            'assets/svgs/up.svg',
+                            height: 20,
+                            color: Colors.white,
+                          )
+                        ],
+                      ),
+                    ),
                   ),
-                  Text(
+                  const Text(
                     'Search',
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
                         fontSize: 25.0),
                   ),
-                  Padding(
+                  const Padding(
                     padding: EdgeInsets.only(top: 10.0),
                     child: Text(
                       '- Find users and posts through the homepage search',
@@ -173,7 +193,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                           fontWeight: FontWeight.w700),
                     ),
                   ),
-                  Padding(
+                  const Padding(
                     padding: EdgeInsets.only(top: 5.0),
                     child: Text(
                       '- Find groups and topics through the community search',
@@ -238,62 +258,64 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
               ))
         ]));
 
-    targets.add(
-        TargetFocus(identify: 'Hometarget', keyTarget: hhomePageKey, contents: [
-      TargetContent(
-          align: ContentAlign.top,
-          child: const Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              // Image.asset(
-              //   'assets/images/test.gif',
-              //   height: 500.0,
-              //   width: 500.0,
-              // ),
-              // Lottie.asset(
-              //   'assets/anim/liveevent.json',
-              //   height: 85,
-              // ),
-              SizedBox(
-                height: 20,
-              ),
-              Text(
-                'Content Feed',
-                style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                    fontSize: 25.0),
-              ),
-              Padding(
-                padding: EdgeInsets.only(top: 10.0),
-                child: Text(
-                  '- Engage with content from posts and topics you\'re interested in',
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 15,
-                      fontWeight: FontWeight.w700),
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(top: 5.0),
-                child: Text(
-                  '- Create and post relevant content for an opportunity to get discovered',
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 15,
-                      fontWeight: FontWeight.w700),
-                ),
-              ),
-              SizedBox(
-                height: 20,
-              )
-            ],
-          ))
-    ]));
+    targets.add(TargetFocus(
+        identify: 'Hometarget',
+        keyTarget: BottomNavigationScreen.homekey,
+        contents: [
+          TargetContent(
+              align: ContentAlign.top,
+              child: const Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  // Image.asset(
+                  //   'assets/images/test.gif',
+                  //   height: 500.0,
+                  //   width: 500.0,
+                  // ),
+                  // Lottie.asset(
+                  //   'assets/anim/liveevent.json',
+                  //   height: 85,
+                  // ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Text(
+                    'Content Feed',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                        fontSize: 25.0),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 10.0),
+                    child: Text(
+                      '- Engage with content from posts and topics you\'re inrterested in',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 15,
+                          fontWeight: FontWeight.w700),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 5.0),
+                    child: Text(
+                      '- Create and post relevant content for an opportunity to get discovered',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 15,
+                          fontWeight: FontWeight.w700),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 200,
+                  )
+                ],
+              ))
+        ]));
     targets.add(TargetFocus(
         identify: 'Bossuptarget',
-        keyTarget: hbossupPageKey,
+        keyTarget: BottomNavigationScreen.bossupkey,
         contents: [
           TargetContent(
               align: ContentAlign.top,
@@ -350,7 +372,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
         ]));
     targets.add(TargetFocus(
         identify: 'Liveventtarget',
-        keyTarget: hliveEventPageKey,
+        keyTarget: BottomNavigationScreen.eventskey,
         contents: [
           TargetContent(
               align: ContentAlign.top,
@@ -398,7 +420,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
 
     targets.add(TargetFocus(
         identify: 'marketplacetarget',
-        keyTarget: hmarketPlacePageKey,
+        keyTarget: BottomNavigationScreen.marketplacekey,
         contents: [
           TargetContent(
               align: ContentAlign.top,
@@ -446,7 +468,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
 
     targets.add(TargetFocus(
         identify: 'Profiletarget',
-        keyTarget: hprofilePageKey,
+        keyTarget: BottomNavigationScreen.profilekey,
         contents: [
           TargetContent(
               align: ContentAlign.top,
@@ -693,139 +715,131 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                 }),
               ),
               floatingActionButton: !controller.loading.value
-                  ? Padding(
-                      padding:
-                          EdgeInsets.only(bottom: Platform.isIOS ? 50 : 85),
-                      child: FloatingActionButton.extended(
-                        onPressed: () {
-                          showModalBottomSheet(
-                              context: context,
-                              shape: const RoundedRectangleBorder(
-                                borderRadius: BorderRadius.vertical(
-                                  top: Radius.circular(25.0),
-                                ),
+                  ? FloatingActionButton.extended(
+                      onPressed: () {
+                        showModalBottomSheet(
+                            context: context,
+                            shape: const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.vertical(
+                                top: Radius.circular(25.0),
                               ),
-                              builder: (context) {
-                                return SizedBox(
-                                  height: 250,
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(15.0),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: <Widget>[
-                                        Expanded(
-                                          // Set a specific height
-                                          child: ListView.separated(
-                                            itemCount: 3,
-                                            separatorBuilder:
-                                                (BuildContext context,
-                                                        int index) =>
-                                                    const Divider(),
-                                            itemBuilder: (BuildContext context,
-                                                int index) {
-                                              return ListTile(
-                                                onTap: () {
-                                                  Navigator.pop(context);
-                                                  index == 0
-                                                      ? Get.toNamed(
-                                                          Routes.createPost)
-                                                      : index == 1
-                                                          ? sellProduct(context)
-                                                          : Get.toNamed(Routes
-                                                              .createevent);
-                                                },
-                                                minVerticalPadding: 0,
-                                                contentPadding:
-                                                    const EdgeInsets.only(
-                                                        left: 10),
-                                                leading: SvgPicture.asset(
-                                                  index == 0
-                                                      ? 'assets/svgs/text.svg'
-                                                      : index == 1
-                                                          ? 'assets/svgs/sellicon.svg'
-                                                          : 'assets/svgs/liveevent.svg',
-                                                  height: index == 0
-                                                      ? 25
-                                                      : index == 1
-                                                          ? 30
-                                                          : 22,
-                                                  color:
-                                                      textColor.withOpacity(1),
-                                                ),
-                                                title: Text(
-                                                  index == 0
-                                                      ? 'Create a Post'
-                                                      : index == 1
-                                                          ? 'Sell your product & service'
-                                                          : 'Create a Live Event',
-                                                  style: const TextStyle(
-                                                      fontSize: 18,
-                                                      fontWeight:
-                                                          FontWeight.w700),
-                                                ),
-                                              );
-                                            },
-                                          ),
-                                        )
-                                      ],
-                                    ),
+                            ),
+                            builder: (context) {
+                              return SizedBox(
+                                height: 250,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(15.0),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: <Widget>[
+                                      Expanded(
+                                        // Set a specific height
+                                        child: ListView.separated(
+                                          itemCount: 3,
+                                          separatorBuilder:
+                                              (BuildContext context,
+                                                      int index) =>
+                                                  const Divider(),
+                                          itemBuilder: (BuildContext context,
+                                              int index) {
+                                            return ListTile(
+                                              onTap: () {
+                                                Navigator.pop(context);
+                                                index == 0
+                                                    ? Get.toNamed(
+                                                        Routes.createPost)
+                                                    : index == 1
+                                                        ? sellProduct(context)
+                                                        : Get.toNamed(
+                                                            Routes.createevent);
+                                              },
+                                              minVerticalPadding: 0,
+                                              contentPadding:
+                                                  const EdgeInsets.only(
+                                                      left: 10),
+                                              leading: SvgPicture.asset(
+                                                index == 0
+                                                    ? 'assets/svgs/text.svg'
+                                                    : index == 1
+                                                        ? 'assets/svgs/sellicon.svg'
+                                                        : 'assets/svgs/liveevent.svg',
+                                                height: index == 0
+                                                    ? 25
+                                                    : index == 1
+                                                        ? 30
+                                                        : 22,
+                                                color: textColor.withOpacity(1),
+                                              ),
+                                              title: Text(
+                                                index == 0
+                                                    ? 'Create a Post'
+                                                    : index == 1
+                                                        ? 'Sell your product & service'
+                                                        : 'Create a Live Event',
+                                                style: const TextStyle(
+                                                    fontSize: 18,
+                                                    fontWeight:
+                                                        FontWeight.w700),
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                      )
+                                    ],
                                   ),
-                                );
-                              });
-                        },
-                        key: postButtonKey,
-                        label: const Text(
-                          'Post',
-                          style: TextStyle(
-                              fontWeight: FontWeight.w700, fontSize: 18),
-                        ),
-                        icon: const Icon(Icons.add),
-                        shape: isScrolled
-                            ? RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(100))
-                            : CircleBorder(),
-                        isExtended: isScrolled,
-                        backgroundColor: primaryColorLT,
+                                ),
+                              );
+                            });
+                      },
+                      key: postButtonKey,
+                      label: const Text(
+                        'Post',
+                        style: TextStyle(
+                            fontWeight: FontWeight.w700, fontSize: 18),
                       ),
+                      icon: const Icon(Icons.add),
+                      shape: isScrolled
+                          ? RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(100))
+                          : CircleBorder(),
+                      isExtended: isScrolled,
+                      backgroundColor: primaryColorLT,
                     )
                   : Container(),
               body: controller.loading.value
                   ? Center(
-                      child: Padding(
-                        padding: const EdgeInsets.only(bottom: 50.0),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Stack(
-                              children: [
-                                Positioned.fill(
-                                  child: Align(
-                                    alignment: Alignment.center,
-                                    child: Image.asset(
-                                      'assets/app/app_logo_2.png',
-                                      height: 40,
-                                      width: 40,
-                                    ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Stack(
+                            children: [
+                              Positioned.fill(
+                                child: Align(
+                                  alignment: Alignment.center,
+                                  child: Image.asset(
+                                    'assets/app/app_logo_2.png',
+                                    height: 40,
+                                    width: 40,
                                   ),
                                 ),
-                                const SizedBox(
-                                  width: 45,
-                                  height: 45,
-                                  child: CircularProgressIndicator(),
-                                ),
-                              ],
-                            ),
-                            const Padding(
-                              padding: EdgeInsets.only(top: 20.0),
-                              child: Text(
-                                'Start, Grow and Promote Your Business Globally',
-                                style: TextStyle(fontSize: 16),
                               ),
-                            )
-                          ],
-                        ),
+                              const SizedBox(
+                                width: 45,
+                                height: 45,
+                                child: CircularProgressIndicator(),
+                              ),
+                            ],
+                          ),
+                          const Padding(
+                            padding: EdgeInsets.only(top: 20.0),
+                            child: Text(
+                              'Start, Grow and Promote Your Business Globally',
+                              style: TextStyle(fontSize: 16),
+                            ),
+                          )
+                        ],
                       ),
                     )
                   : controller.noConnection.value
@@ -1226,14 +1240,14 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                                       ),
                                     ),
                                   ),
-                                  BottomBar(
-                                    activeIndex: 0,
-                                    profilePageKey: hprofilePageKey,
-                                    marketPlacePageKey: hmarketPlacePageKey,
-                                    bossupPageKey: hbossupPageKey,
-                                    homePageKey: hhomePageKey,
-                                    liveEventPageKey: hliveEventPageKey,
-                                  ),
+                                  // BottomBar(
+                                  //   activeIndex: 0,
+                                  //   profilePageKey: hprofilePageKey,
+                                  //   marketPlacePageKey: hmarketPlacePageKey,
+                                  //   bossupPageKey: hbossupPageKey,
+                                  //   homePageKey: hhomePageKey,
+                                  //   liveEventPageKey: hliveEventPageKey,
+                                  // ),
                                 ],
                               ),
                             ),
@@ -1242,69 +1256,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
         },
       ),
     );
-  }
-
-  void sellProduct(BuildContext context) {
-    showModalBottomSheet(
-        context: context,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(
-            top: Radius.circular(25.0),
-          ),
-        ),
-        builder: (BuildContext context) {
-          return SizedBox(
-            height: 200,
-            child: Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  Expanded(
-                    // Set a specific height
-                    child: ListView.separated(
-                      itemCount: 2,
-                      separatorBuilder: (BuildContext context, int index) =>
-                          const Divider(),
-                      itemBuilder: (BuildContext context, int index) {
-                        return ListTile(
-                          onTap: () {
-                            Navigator.pop(context);
-                            index == 0
-                                ? Get.toNamed(Routes.sellscreen)
-                                : Get.to(() =>
-                                    const CreateServiceScreen(isUpd: false));
-                          },
-                          minVerticalPadding: 0,
-                          contentPadding: const EdgeInsets.only(left: 10),
-                          leading: SvgPicture.asset(
-                            index == 0
-                                ? 'assets/svgs/sellicon.svg'
-                                : 'assets/svgs/sellicon.svg',
-                            height: index == 0
-                                ? 25
-                                : index == 1
-                                    ? 30
-                                    : 22,
-                            color: textColor.withOpacity(1),
-                          ),
-                          title: Text(
-                            index == 0
-                                ? 'Sell your product'
-                                : 'Sell your service',
-                            style: const TextStyle(
-                                fontSize: 18, fontWeight: FontWeight.w700),
-                          ),
-                        );
-                      },
-                    ),
-                  )
-                ],
-              ),
-            ),
-          );
-        });
   }
 
   Future<void> loadData() async {

@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:business_bosses_v2/features/home/sellProduct.dart';
 import 'package:business_bosses_v2/features/home/widgets/bottom_bar.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/features/profile/widgets/profileinfodisplay.dart';
@@ -36,14 +39,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
   final ProfileController profileController = Get.find();
   final MarketController marketController = Get.find();
   final LiveController liveEventController = Get.put(LiveController());
-
-  final GlobalKey<NavigatorState> phomePageKey = GlobalKey<NavigatorState>();
-  final GlobalKey<NavigatorState> pbossupPageKey = GlobalKey<NavigatorState>();
-  final GlobalKey<NavigatorState> pliveEventPageKey =
-      GlobalKey<NavigatorState>();
-  final GlobalKey<NavigatorState> pmarketPlacePageKey =
-      GlobalKey<NavigatorState>();
-  final GlobalKey<NavigatorState> pprofilePageKey = GlobalKey<NavigatorState>();
+  bool isScrolled = true;
 
   @override
   Widget build(BuildContext context) {
@@ -52,6 +48,89 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
       builder: (ProfileController profileController) {
         return Scaffold(
           backgroundColor: Colors.white,
+          floatingActionButton: FloatingActionButton.extended(
+            onPressed: () {
+              showModalBottomSheet(
+                  context: context,
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.vertical(
+                      top: Radius.circular(25.0),
+                    ),
+                  ),
+                  builder: (context) {
+                    return SizedBox(
+                      height: 250,
+                      child: Padding(
+                        padding: const EdgeInsets.all(15.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            Expanded(
+                              // Set a specific height
+                              child: ListView.separated(
+                                itemCount: 3,
+                                separatorBuilder:
+                                    (BuildContext context, int index) =>
+                                        const Divider(),
+                                itemBuilder: (BuildContext context, int index) {
+                                  return ListTile(
+                                    onTap: () {
+                                      Navigator.pop(context);
+                                      index == 0
+                                          ? Get.toNamed(Routes.createPost)
+                                          : index == 1
+                                              ? sellProduct(context)
+                                              : Get.toNamed(Routes.createevent);
+                                    },
+                                    minVerticalPadding: 0,
+                                    contentPadding:
+                                        const EdgeInsets.only(left: 10),
+                                    leading: SvgPicture.asset(
+                                      index == 0
+                                          ? 'assets/svgs/text.svg'
+                                          : index == 1
+                                              ? 'assets/svgs/sellicon.svg'
+                                              : 'assets/svgs/liveevent.svg',
+                                      height: index == 0
+                                          ? 25
+                                          : index == 1
+                                              ? 30
+                                              : 22,
+                                      color: textColor.withOpacity(1),
+                                    ),
+                                    title: Text(
+                                      index == 0
+                                          ? 'Create a Post'
+                                          : index == 1
+                                              ? 'Sell your product & service'
+                                              : 'Create a Live Event',
+                                      style: const TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.w700),
+                                    ),
+                                  );
+                                },
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    );
+                  });
+            },
+            label: const Text(
+              'Post',
+              style: TextStyle(fontWeight: FontWeight.w700, fontSize: 18),
+            ),
+            icon: const Icon(Icons.add),
+            shape: isScrolled
+                ? RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(100))
+                : CircleBorder(),
+            isExtended: isScrolled,
+            backgroundColor: primaryColorLT,
+          ),
           appBar: AppBar(
             automaticallyImplyLeading: false,
             title: Text('@${profileController.myProfile.username}'),
@@ -166,53 +245,133 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                             profileController.myProfile.uid)
                                         .isEmpty
                                     ? <Widget>[
-                                        SingleChildScrollView(
-                                          child: Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.start,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: <Widget>[
-                                              const SizedBox(
-                                                height: 30,
-                                              ),
-                                              profileinfodisplay(context,
-                                                  profileController.myProfile),
-                                            ],
+                                        NotificationListener<
+                                            ScrollNotification>(
+                                          onNotification: (notification) {
+                                            if (notification
+                                                is ScrollStartNotification) {
+                                              // Scrolling started
+                                              setState(() {
+                                                isScrolled = false;
+                                              });
+                                            } else if (notification
+                                                is ScrollEndNotification) {
+                                              // Scrolling stopped
+                                              setState(() {
+                                                isScrolled = true;
+                                              });
+                                            }
+                                            return true;
+                                          },
+                                          child: SingleChildScrollView(
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: <Widget>[
+                                                const SizedBox(
+                                                  height: 30,
+                                                ),
+                                                profileinfodisplay(
+                                                    context,
+                                                    profileController
+                                                        .myProfile),
+                                              ],
+                                            ),
                                           ),
                                         ),
-                                        profilepostsdisplay(
-                                          ispublicposts: false,
-                                          context,
-                                          profileController.myProfile,
-                                          profileController.posts,
-                                          loading:
-                                              profileController.isLoading.value,
+                                        NotificationListener<
+                                            ScrollNotification>(
+                                          onNotification: (notification) {
+                                            if (notification
+                                                is ScrollStartNotification) {
+                                              // Scrolling started
+                                              setState(() {
+                                                isScrolled = false;
+                                              });
+                                            } else if (notification
+                                                is ScrollEndNotification) {
+                                              // Scrolling stopped
+                                              setState(() {
+                                                isScrolled = true;
+                                              });
+                                            }
+                                            return true;
+                                          },
+                                          child: profilepostsdisplay(
+                                            ispublicposts: false,
+                                            context,
+                                            profileController.myProfile,
+                                            profileController.posts,
+                                            loading: profileController
+                                                .isLoading.value,
+                                          ),
                                         ),
                                       ]
                                     : <Widget>[
-                                        SingleChildScrollView(
-                                          child: Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.start,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: <Widget>[
-                                              const SizedBox(
-                                                height: 30,
-                                              ),
-                                              profileinfodisplay(context,
-                                                  profileController.myProfile),
-                                            ],
+                                        NotificationListener<
+                                            ScrollNotification>(
+                                          onNotification: (notification) {
+                                            if (notification
+                                                is ScrollStartNotification) {
+                                              // Scrolling started
+                                              setState(() {
+                                                isScrolled = false;
+                                              });
+                                            } else if (notification
+                                                is ScrollEndNotification) {
+                                              // Scrolling stopped
+                                              setState(() {
+                                                isScrolled = true;
+                                              });
+                                            }
+                                            return true;
+                                          },
+                                          child: SingleChildScrollView(
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: <Widget>[
+                                                const SizedBox(
+                                                  height: 30,
+                                                ),
+                                                profileinfodisplay(
+                                                    context,
+                                                    profileController
+                                                        .myProfile),
+                                              ],
+                                            ),
                                           ),
                                         ),
-                                        profilepostsdisplay(
-                                          ispublicposts: false,
-                                          context,
-                                          profileController.myProfile,
-                                          profileController.posts,
-                                          loading:
-                                              profileController.isLoading.value,
+                                        NotificationListener<
+                                            ScrollNotification>(
+                                          onNotification: (notification) {
+                                            if (notification
+                                                is ScrollStartNotification) {
+                                              // Scrolling started
+                                              setState(() {
+                                                isScrolled = false;
+                                              });
+                                            } else if (notification
+                                                is ScrollEndNotification) {
+                                              // Scrolling stopped
+                                              setState(() {
+                                                isScrolled = true;
+                                              });
+                                            }
+                                            return true;
+                                          },
+                                          child: profilepostsdisplay(
+                                            ispublicposts: false,
+                                            context,
+                                            profileController.myProfile,
+                                            profileController.posts,
+                                            loading: profileController
+                                                .isLoading.value,
+                                          ),
                                         ),
                                         SingleChildScrollView(
                                           child: Column(
@@ -236,60 +395,84 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                                             'This user has no items in store',
                                                         // subTitle: '',
                                                       )
-                                                    : ListView.builder(
-                                                        shrinkWrap: true,
-                                                        physics:
-                                                            const NeverScrollableScrollPhysics(),
-                                                        itemCount: marketController
-                                                            .markets
-                                                            .where((MarketModel
-                                                                    market) =>
-                                                                market.userId ==
-                                                                profileController
-                                                                    .myProfile
-                                                                    .uid)
-                                                            .length,
-                                                        itemBuilder:
-                                                            (BuildContext
-                                                                    context,
-                                                                int index) {
-                                                          final List<
-                                                                  MarketModel>
-                                                              filteredMarkets =
-                                                              marketController
-                                                                  .markets
-                                                                  .where((MarketModel
-                                                                          market) =>
-                                                                      market
-                                                                          .userId ==
-                                                                      profileController
-                                                                          .myProfile
-                                                                          .uid)
-                                                                  .toList();
-                                                          final MarketModel
-                                                              market =
-                                                              filteredMarkets[
-                                                                  index];
-
-                                                          return market
-                                                                  .isProduct
-                                                              ? MarketTile(
-                                                                  post: market,
-                                                                  controller:
-                                                                      marketController,
-                                                                  key: ValueKey(
-                                                                      market
-                                                                          .marketId),
-                                                                )
-                                                              : ServiceTile(
-                                                                  post: market,
-                                                                  controller:
-                                                                      marketController,
-                                                                  key: ValueKey(
-                                                                      market
-                                                                          .marketId),
-                                                                );
+                                                    : NotificationListener<
+                                                        ScrollNotification>(
+                                                        onNotification:
+                                                            (notification) {
+                                                          if (notification
+                                                              is ScrollStartNotification) {
+                                                            // Scrolling started
+                                                            setState(() {
+                                                              isScrolled =
+                                                                  false;
+                                                            });
+                                                          } else if (notification
+                                                              is ScrollEndNotification) {
+                                                            // Scrolling stopped
+                                                            setState(() {
+                                                              isScrolled = true;
+                                                            });
+                                                          }
+                                                          return true;
                                                         },
+                                                        child: ListView.builder(
+                                                          shrinkWrap: true,
+                                                          physics:
+                                                              const NeverScrollableScrollPhysics(),
+                                                          itemCount: marketController
+                                                              .markets
+                                                              .where((MarketModel
+                                                                      market) =>
+                                                                  market
+                                                                      .userId ==
+                                                                  profileController
+                                                                      .myProfile
+                                                                      .uid)
+                                                              .length,
+                                                          itemBuilder:
+                                                              (BuildContext
+                                                                      context,
+                                                                  int index) {
+                                                            final List<
+                                                                    MarketModel>
+                                                                filteredMarkets =
+                                                                marketController
+                                                                    .markets
+                                                                    .where((MarketModel
+                                                                            market) =>
+                                                                        market
+                                                                            .userId ==
+                                                                        profileController
+                                                                            .myProfile
+                                                                            .uid)
+                                                                    .toList();
+                                                            final MarketModel
+                                                                market =
+                                                                filteredMarkets[
+                                                                    index];
+
+                                                            return market
+                                                                    .isProduct
+                                                                ? MarketTile(
+                                                                    post:
+                                                                        market,
+                                                                    controller:
+                                                                        marketController,
+                                                                    key: ValueKey(
+                                                                        market
+                                                                            .marketId),
+                                                                  )
+                                                                : ServiceTile(
+                                                                    post:
+                                                                        market,
+                                                                    controller:
+                                                                        marketController,
+                                                                    key: ValueKey(
+                                                                        market
+                                                                            .marketId),
+                                                                  );
+                                                          },
+                                                        ),
                                                       );
                                               }),
                                               const SizedBox(
@@ -305,14 +488,14 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                     ),
                   ),
                 ),
-                BottomBar(
-                  activeIndex: 4,
-                  homePageKey: phomePageKey,
-                  bossupPageKey: pbossupPageKey,
-                  liveEventPageKey: pliveEventPageKey,
-                  marketPlacePageKey: pmarketPlacePageKey,
-                  profilePageKey: pprofilePageKey,
-                )
+                // BottomBar(
+                //   activeIndex: 4,
+                //   homePageKey: phomePageKey,
+                //   bossupPageKey: pbossupPageKey,
+                //   liveEventPageKey: pliveEventPageKey,
+                //   marketPlacePageKey: pmarketPlacePageKey,
+                //   profilePageKey: pprofilePageKey,
+                // )
               ],
             ),
           ),
