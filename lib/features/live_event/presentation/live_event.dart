@@ -1,15 +1,14 @@
 // ignore_for_file: public_member_api_docs
 
-import 'dart:io';
 import 'dart:math';
 
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/features/home/sellProduct.dart';
-import 'package:business_bosses_v2/features/home/widgets/bottom_bar.dart';
 import 'package:business_bosses_v2/features/live_event/controller/live_event_controller.dart';
 import 'package:business_bosses_v2/features/live_event/models/events_model.dart';
 import 'package:business_bosses_v2/features/live_event/widgets/call_room.dart';
 import 'package:business_bosses_v2/features/live_event/widgets/event_call.dart';
+import 'package:business_bosses_v2/features/live_event/widgets/my_events.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 
@@ -56,6 +55,12 @@ class _LiveEventState extends State<LiveEvent>
           // }
           setState(() {});
         },
+      ),
+      IconButton(
+        onPressed: () {
+          Get.to(() => const MyEvents());
+        },
+        icon: const Icon(Icons.calendar_month),
       ),
     ];
   }
