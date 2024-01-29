@@ -121,7 +121,7 @@ class _AllForumScreenState extends State<AllForumScreen> {
                                       },
                                       child: Padding(
                                         padding:
-                                            const EdgeInsets.only(left: 20.0),
+                                            const EdgeInsets.only(left: 15.0),
                                         child: Row(
                                           children: <Widget>[
                                             const Text(
@@ -146,7 +146,7 @@ class _AllForumScreenState extends State<AllForumScreen> {
                                         alignment: Alignment.centerRight,
                                         child: Padding(
                                           padding:
-                                              const EdgeInsets.only(right: 20),
+                                              const EdgeInsets.only(right: 15),
                                           child: ElevatedButton(
                                             style: ElevatedButton.styleFrom(
                                                 minimumSize:
@@ -201,7 +201,7 @@ class _AllForumScreenState extends State<AllForumScreen> {
                                   children: <Widget>[
                                     Container(
                                       margin: const EdgeInsets.only(
-                                          top: 10, right: 20, left: 20),
+                                          top: 10, right: 15, left: 15),
                                       height: 150,
                                       width: double.infinity,
                                       child: ClipRRect(
@@ -217,7 +217,7 @@ class _AllForumScreenState extends State<AllForumScreen> {
                                           children: <Widget>[
                                             Container(
                                               margin: const EdgeInsets.only(
-                                                  top: 25, right: 20, left: 35),
+                                                  top: 25, right: 15, left: 30),
                                               height: 86,
                                               width: 142,
                                               child: ClipRRect(
@@ -249,7 +249,7 @@ class _AllForumScreenState extends State<AllForumScreen> {
                                             Expanded(
                                                 child: Padding(
                                               padding: const EdgeInsets.only(
-                                                  right: 35),
+                                                  right: 30),
                                               child: Text(
                                                 industry.description ??
                                                     'Industry Description',
@@ -265,7 +265,7 @@ class _AllForumScreenState extends State<AllForumScreen> {
                                         ),
                                         Padding(
                                           padding: const EdgeInsets.only(
-                                              left: 32, right: 20),
+                                              left: 27, right: 15),
                                           child: Row(
                                             children: <Widget>[
                                               Row(
