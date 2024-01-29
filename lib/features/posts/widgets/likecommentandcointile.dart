@@ -194,7 +194,7 @@ class PostInteractionsWidget extends StatelessWidget {
                           });
                     },
                     child: SvgPicture.asset(
-                      'assets/svgs/share.svg',
+                      'assets/svgs/repost.svg',
                       height: 15.0,
                       width: 15.0,
                     ),
