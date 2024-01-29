@@ -75,6 +75,33 @@
             android:scheme="https"
             android:host="app.main" />
         </intent-filter>
+
+        <intent-filter>
+            <action android:name="android.intent.action.VIEW"/>
+            <category android:name="android.intent.category.DEFAULT"/>
+            <category android:name="android.intent.category.BROWSABLE"/>
+            <data
+                android:host="app.post"
+                android:scheme="myapp"/>
+        </intent-filter>
+
+        <intent-filter>
+            <action android:name="android.intent.action.VIEW"/>
+            <category android:name="android.intent.category.DEFAULT"/>
+            <category android:name="android.intent.category.BROWSABLE"/>
+            <data
+                android:host="app.refer"
+                android:scheme="myapp"/>
+        </intent-filter>
+
+        <!--  This is for Deep Links --> 
+        <intent-filter>
+            <action android:name="android.intent.action.VIEW" />
+            <category android:name="android.intent.category.DEFAULT" /> 
+            <category android:name="android.intent.category.BROWSABLE" /> 
+            <!-- Accepts URIs that begin with YOUR_SCHEME://YOUR_HOST --> 
+            <data android:scheme="blog" android:host="deeplink.example" /> 
+        </intent-filter>
         </activity>
 
 

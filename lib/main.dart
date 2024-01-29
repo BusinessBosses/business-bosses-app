@@ -19,7 +19,6 @@ import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uni_links/uni_links.dart';
 
-final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 final _configuration =
     PurchasesConfiguration('appl_fpKOUqIrKWZpOCQbxcYdfiIMgjj');
 
@@ -31,6 +30,7 @@ void main() async {
   await dotenv.load();
   await Firebase.initializeApp();
   await initUniLinks();
+  // await firebaseInitUniLinks();
   AnalyticsServices();
   Stripe.publishableKey =
       'pk_live_51MAcspEGsMsi6baUVnDR3Vlfh14vm73Oz9Z4LwYcvzOTdd6AvRRHrGCkpIoYmTfe2iSXm7ju2RQtO4UYJTvodFPR008RO7V1j3';
@@ -50,14 +50,11 @@ void main() async {
     if (message != null && message.notification != null) {
       String? title = message.notification!.title?.toLowerCase();
       if (title != null && title.contains('new message')) {
-        Navigator.pushNamed(
-          navigatorKey.currentState!.context,
+        Get.toNamed(
           Routes.chat,
         );
       } else {
-        print('me 1');
-        Navigator.pushNamed(
-          navigatorKey.currentState!.context,
+        Get.toNamed(
           Routes.notifications,
         );
       }
@@ -71,14 +68,11 @@ void main() async {
     if (message != null && message.notification != null) {
       String? title = message.notification!.title?.toLowerCase();
       if (title != null && title.contains('new message')) {
-        Navigator.pushNamed(
-          navigatorKey.currentState!.context,
+        Get.toNamed(
           Routes.chat,
         );
       } else {
-        print('me 2');
-        Navigator.pushNamed(
-          navigatorKey.currentState!.context,
+        Get.toNamed(
           Routes.notifications,
         );
       }
@@ -91,26 +85,44 @@ void main() async {
   FlutterNativeSplash.remove();
 }
 
-/// INITIALIZE DEEP LINKING
+// / INITIALIZE DEEP LINKING
 Future<void> initUniLinks() async {
   try {
     final String? initialLink = await getInitialLink();
     if (initialLink != null) {
       processDeepLink(Uri.parse(initialLink));
+      processPostDeeplink(Uri.parse(initialLink));
     }
   } on PlatformException {}
 
   uriLinkStream.listen((Uri? uri) {
     if (uri != null) {
       processDeepLink(uri);
+      processPostDeeplink(uri);
     } else {
       // print('sdfsadfa');
     }
   }, onError: (err) {
-    // Handle any errors that occur during deep link handling
-    // print('Error initializing UniLinks: $err');
+    print(err);
   });
 }
+
+// Future<void> initUniLinks() async {
+//   try {
+//     final String? initialLink = await getInitialLink();
+//     if (initialLink != null) {
+//       processPostDeeplink(Uri.parse(initialLink));
+//     }
+//   } on PlatformException {}
+
+//   uriLinkStream.listen((Uri? uri) {
+//     if (uri != null) {
+//       processPostDeeplink(uri);
+//     }
+//   }, onError: (err) {
+//     print(err);
+//   });
+// }
 
 /// PROCESS DEEPLINK
 void processDeepLink(Uri uri) {
@@ -122,8 +134,7 @@ void processDeepLink(Uri uri) {
     if (successParam != null) {
       bool success = successParam.toLowerCase() == 'true';
       if (success) {
-        Navigator.pushNamed(
-          navigatorKey.currentState!.context,
+        Get.toNamed(
           Routes.subscriptionconfirmation,
         );
       } else {
@@ -132,8 +143,7 @@ void processDeepLink(Uri uri) {
     }
 
     if (cancelParam != null) {
-      Navigator.pushNamed(
-        navigatorKey.currentState!.context,
+      Get.toNamed(
         Routes.settings,
       );
     }
@@ -143,9 +153,8 @@ void processDeepLink(Uri uri) {
     if (notificationParam != null) {
       bool success = notificationParam.toLowerCase() == 'message';
       if (success) {
-        Navigator.pushNamed(
-          navigatorKey.currentState!.context,
-          Routes.bottomnavscreen,
+        Get.toNamed(
+          Routes.home,
         );
       }
     }
@@ -161,11 +170,25 @@ void processDeepLink(Uri uri) {
   }
 }
 
+/// PROCESS DEEPLINK
+void processPostDeeplink(Uri uri) {
+  log(uri.toString());
+  if (uri.scheme == 'myapp' && uri.host == 'app.post') {
+    Get.toNamed(
+      Routes.home,
+    );
+  } else if (uri.scheme == 'myapp' && uri.host == 'app.refer') {
+    Get.toNamed(
+      Routes.referalsscreen,
+    );
+  }
+}
+
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
 }
 
-/// MAIN APP CLASS
+// / MAIN APP CLASS
 class MyApp extends StatelessWidget {
   /// MAIN APP CONSTRUCTOR
   const MyApp({super.key});
@@ -191,10 +214,9 @@ class MyApp extends StatelessWidget {
             navigatorObservers: <NavigatorObserver>[
               AnalyticsServices.getAnalyticObserver()
             ],
-            navigatorKey: navigatorKey,
-            initialRoute: userId == '' || userId == null
-                ? Routes.login
-                : Routes.bottomnavscreen,
+            // navigatorKey: navigatorKey,
+            initialRoute:
+                userId == '' || userId == null ? Routes.login : Routes.home,
 
             // initialRoute: Routes.updateProfile,
             getPages: Nav.routes,
