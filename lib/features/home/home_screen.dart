@@ -72,7 +72,7 @@ class _HomeScreenState extends State<HomeScreen>
     super.initState();
 
     WidgetsBinding.instance.addObserver(this);
-    showTutorial();
+    // showTutorial();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String? tutorialShown = prefs.getString('tutorialShown');
