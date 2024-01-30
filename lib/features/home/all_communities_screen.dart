@@ -238,16 +238,31 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
                                         : NotificationListener<
                                             ScrollNotification>(
                                             onNotification: (notification) {
-                                              setState(() {
-                                                isScrolled = false;
-                                              });
                                               if (notification
-                                                  is ScrollEndNotification) {
-                                                // Scrolling stopped
-                                                setState(() {
-                                                  isScrolled = true;
-                                                });
+                                                  is ScrollUpdateNotification) {
+                                                if (notification.dragDetails !=
+                                                        null &&
+                                                    notification.dragDetails!
+                                                            .primaryDelta !=
+                                                        null) {
+                                                  double primaryDelta =
+                                                      notification.dragDetails!
+                                                          .primaryDelta!;
+
+                                                  if (primaryDelta > 0) {
+                                                    // Scrolling downward
+                                                    setState(() {
+                                                      isScrolled = true;
+                                                    });
+                                                  } else if (primaryDelta < 0) {
+                                                    // Scrolling upward
+                                                    setState(() {
+                                                      isScrolled = false;
+                                                    });
+                                                  }
+                                                }
                                               }
+
                                               return true;
                                             },
                                             child: BossUpSection(
@@ -281,18 +296,34 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
                                                   onNotification:
                                                       (notification) {
                                                     if (notification
-                                                        is ScrollStartNotification) {
-                                                      // Scrolling started
-                                                      setState(() {
-                                                        isScrolled = false;
-                                                      });
-                                                    } else if (notification
-                                                        is ScrollEndNotification) {
-                                                      // Scrolling stopped
-                                                      setState(() {
-                                                        isScrolled = true;
-                                                      });
+                                                        is ScrollUpdateNotification) {
+                                                      if (notification
+                                                                  .dragDetails !=
+                                                              null &&
+                                                          notification
+                                                                  .dragDetails!
+                                                                  .primaryDelta !=
+                                                              null) {
+                                                        double primaryDelta =
+                                                            notification
+                                                                .dragDetails!
+                                                                .primaryDelta!;
+
+                                                        if (primaryDelta > 0) {
+                                                          // Scrolling downward
+                                                          setState(() {
+                                                            isScrolled = true;
+                                                          });
+                                                        } else if (primaryDelta <
+                                                            0) {
+                                                          // Scrolling upward
+                                                          setState(() {
+                                                            isScrolled = false;
+                                                          });
+                                                        }
+                                                      }
                                                     }
+
                                                     return true;
                                                   },
                                                   child: GridView.builder(
@@ -363,18 +394,34 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
                                                   onNotification:
                                                       (notification) {
                                                     if (notification
-                                                        is ScrollStartNotification) {
-                                                      // Scrolling started
-                                                      setState(() {
-                                                        isScrolled = false;
-                                                      });
-                                                    } else if (notification
-                                                        is ScrollEndNotification) {
-                                                      // Scrolling stopped
-                                                      setState(() {
-                                                        isScrolled = true;
-                                                      });
+                                                        is ScrollUpdateNotification) {
+                                                      if (notification
+                                                                  .dragDetails !=
+                                                              null &&
+                                                          notification
+                                                                  .dragDetails!
+                                                                  .primaryDelta !=
+                                                              null) {
+                                                        double primaryDelta =
+                                                            notification
+                                                                .dragDetails!
+                                                                .primaryDelta!;
+
+                                                        if (primaryDelta > 0) {
+                                                          // Scrolling downward
+                                                          setState(() {
+                                                            isScrolled = true;
+                                                          });
+                                                        } else if (primaryDelta <
+                                                            0) {
+                                                          // Scrolling upward
+                                                          setState(() {
+                                                            isScrolled = false;
+                                                          });
+                                                        }
+                                                      }
                                                     }
+
                                                     return true;
                                                   },
                                                   child: GridView.builder(

@@ -360,18 +360,28 @@ class _LiveEventState extends State<LiveEvent>
                                   NotificationListener<ScrollNotification>(
                                     onNotification: (notification) {
                                       if (notification
-                                          is ScrollStartNotification) {
-                                        // Scrolling started
-                                        setState(() {
-                                          isScrolled = false;
-                                        });
-                                      } else if (notification
-                                          is ScrollEndNotification) {
-                                        // Scrolling stopped
-                                        setState(() {
-                                          isScrolled = true;
-                                        });
+                                          is ScrollUpdateNotification) {
+                                        if (notification.dragDetails != null &&
+                                            notification.dragDetails!
+                                                    .primaryDelta !=
+                                                null) {
+                                          double primaryDelta = notification
+                                              .dragDetails!.primaryDelta!;
+
+                                          if (primaryDelta > 0) {
+                                            // Scrolling downward
+                                            setState(() {
+                                              isScrolled = true;
+                                            });
+                                          } else if (primaryDelta < 0) {
+                                            // Scrolling upward
+                                            setState(() {
+                                              isScrolled = false;
+                                            });
+                                          }
+                                        }
                                       }
+
                                       return true;
                                     },
                                     child: const EventCall(
@@ -383,18 +393,28 @@ class _LiveEventState extends State<LiveEvent>
                                   NotificationListener<ScrollNotification>(
                                     onNotification: (notification) {
                                       if (notification
-                                          is ScrollStartNotification) {
-                                        // Scrolling started
-                                        setState(() {
-                                          isScrolled = false;
-                                        });
-                                      } else if (notification
-                                          is ScrollEndNotification) {
-                                        // Scrolling stopped
-                                        setState(() {
-                                          isScrolled = true;
-                                        });
+                                          is ScrollUpdateNotification) {
+                                        if (notification.dragDetails != null &&
+                                            notification.dragDetails!
+                                                    .primaryDelta !=
+                                                null) {
+                                          double primaryDelta = notification
+                                              .dragDetails!.primaryDelta!;
+
+                                          if (primaryDelta > 0) {
+                                            // Scrolling downward
+                                            setState(() {
+                                              isScrolled = true;
+                                            });
+                                          } else if (primaryDelta < 0) {
+                                            // Scrolling upward
+                                            setState(() {
+                                              isScrolled = false;
+                                            });
+                                          }
+                                        }
                                       }
+
                                       return true;
                                     },
                                     child: const EventCall(
@@ -407,18 +427,28 @@ class _LiveEventState extends State<LiveEvent>
                                   NotificationListener<ScrollNotification>(
                                     onNotification: (notification) {
                                       if (notification
-                                          is ScrollStartNotification) {
-                                        // Scrolling started
-                                        setState(() {
-                                          isScrolled = false;
-                                        });
-                                      } else if (notification
-                                          is ScrollEndNotification) {
-                                        // Scrolling stopped
-                                        setState(() {
-                                          isScrolled = true;
-                                        });
+                                          is ScrollUpdateNotification) {
+                                        if (notification.dragDetails != null &&
+                                            notification.dragDetails!
+                                                    .primaryDelta !=
+                                                null) {
+                                          double primaryDelta = notification
+                                              .dragDetails!.primaryDelta!;
+
+                                          if (primaryDelta > 0) {
+                                            // Scrolling downward
+                                            setState(() {
+                                              isScrolled = true;
+                                            });
+                                          } else if (primaryDelta < 0) {
+                                            // Scrolling upward
+                                            setState(() {
+                                              isScrolled = false;
+                                            });
+                                          }
+                                        }
                                       }
+
                                       return true;
                                     },
                                     child: const EventCall(
