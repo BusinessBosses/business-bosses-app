@@ -72,7 +72,7 @@ class _HomeScreenState extends State<HomeScreen>
     super.initState();
 
     WidgetsBinding.instance.addObserver(this);
-
+    // showTutorial();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String? tutorialShown = prefs.getString('tutorialShown');
@@ -898,18 +898,29 @@ class _HomeScreenState extends State<HomeScreen>
                                           ScrollNotification>(
                                         onNotification: (notification) {
                                           if (notification
-                                              is ScrollStartNotification) {
-                                            // Scrolling started
-                                            setState(() {
-                                              isScrolled = false;
-                                            });
-                                          } else if (notification
-                                              is ScrollEndNotification) {
-                                            // Scrolling stopped
-                                            setState(() {
-                                              isScrolled = true;
-                                            });
+                                              is ScrollUpdateNotification) {
+                                            if (notification.dragDetails !=
+                                                    null &&
+                                                notification.dragDetails!
+                                                        .primaryDelta !=
+                                                    null) {
+                                              double primaryDelta = notification
+                                                  .dragDetails!.primaryDelta!;
+
+                                              if (primaryDelta > 0) {
+                                                // Scrolling downward
+                                                setState(() {
+                                                  isScrolled = true;
+                                                });
+                                              } else if (primaryDelta < 0) {
+                                                // Scrolling upward
+                                                setState(() {
+                                                  isScrolled = false;
+                                                });
+                                              }
+                                            }
                                           }
+
                                           return true;
                                         },
                                         child: ListView.builder(
@@ -1276,9 +1287,36 @@ class _HomeScreenState extends State<HomeScreen>
     TutorialCoachMark(
       targets: targets, // List<TargetFocus>
       colorShadow: Colors.black, // DEFAULT Colors.black
-      alignSkip: Alignment.center,
-      textSkip: "",
-      // paddingFocus: 10,
+      alignSkip: const AlignmentDirectional(0.95, -0.6),
+      skipWidget: Container(
+        decoration: BoxDecoration(
+          color: primaryColorLT,
+          borderRadius:
+              BorderRadius.circular(50.0), // Adjust the radius as needed
+        ),
+        padding:
+            const EdgeInsets.only(left: 15, right: 15, top: 10, bottom: 10),
+        child: const Row(
+          mainAxisSize: MainAxisSize.min, // Set to 'min' to wrap the content
+          children: [
+            Text(
+              'Close',
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w700),
+            ),
+            Icon(
+              Icons.close_rounded,
+              color: Colors.white,
+            ),
+          ],
+        ),
+      ),
+
+      textStyleSkip: const TextStyle(
+          fontSize: 20, fontWeight: FontWeight.w700, color: primaryColorLT),
+      paddingFocus: 2,
       opacityShadow: 0.9,
       onClickTarget: (target) {
         print(target);
