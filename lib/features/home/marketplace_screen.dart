@@ -1432,14 +1432,9 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                       }),
                     ),
                   ),
-                  // BottomBar(
-                  //   activeIndex: 3,
-                  //   homePageKey: mhomePageKey,
-                  //   profilePageKey: mprofilePageKey,
-                  //   bossupPageKey: mbossupPageKey,
-                  //   liveEventPageKey: mliveEventPageKey,
-                  //   marketPlacePageKey: mmarketPlacePageKey,
-                  // )
+                  const BottomBar(
+                    activeIndex: 3,
+                  )
                 ],
               ),
             ),

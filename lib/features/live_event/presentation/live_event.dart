@@ -4,6 +4,7 @@ import 'dart:math';
 
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/features/home/sellProduct.dart';
+import 'package:business_bosses_v2/features/home/widgets/bottom_bar.dart';
 import 'package:business_bosses_v2/features/live_event/controller/live_event_controller.dart';
 import 'package:business_bosses_v2/features/live_event/models/events_model.dart';
 import 'package:business_bosses_v2/features/live_event/widgets/call_room.dart';
@@ -237,16 +238,11 @@ class _LiveEventState extends State<LiveEvent>
                   )
                 : Container(),
             body: liveController.loading.value
-                ? Stack(children: [
-                    const Center(child: CircularProgressIndicator()),
-                    // BottomBar(
-                    //   activeIndex: 2,
-                    //   homePageKey: lhomePageKey,
-                    //   bossupPageKey: lbossupPageKey,
-                    //   liveEventPageKey: lliveEventPageKey,
-                    //   marketPlacePageKey: lmarketPlacePageKey,
-                    //   profilePageKey: lprofilePageKey,
-                    // )
+                ? Stack(children: const [
+                    Center(child: CircularProgressIndicator()),
+                    BottomBar(
+                      activeIndex: 2,
+                    )
                   ])
                 : Stack(children: [
                     NestedScrollView(
@@ -462,14 +458,9 @@ class _LiveEventState extends State<LiveEvent>
                         ),
                       ),
                     ),
-                    // BottomBar(
-                    //   activeIndex: 2,
-                    //   homePageKey: lhomePageKey,
-                    //   bossupPageKey: lbossupPageKey,
-                    //   liveEventPageKey: lliveEventPageKey,
-                    //   marketPlacePageKey: lmarketPlacePageKey,
-                    //   profilePageKey: lprofilePageKey,
-                    // )
+                    const BottomBar(
+                      activeIndex: 2,
+                    )
                   ]));
       },
     );

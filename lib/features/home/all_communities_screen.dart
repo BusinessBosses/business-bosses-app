@@ -539,14 +539,9 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
                                   ],
                                 ))),
                 ),
-                // BottomBar(
-                //   activeIndex: 1,
-                //   homePageKey: bhomePageKey,
-                //   bossupPageKey: bbossupPageKey,
-                //   liveEventPageKey: bliveEventPageKey,
-                //   marketPlacePageKey: bmarketPlacePageKey,
-                //   profilePageKey: bprofilePageKey,
-                // )
+                const BottomBar(
+                  activeIndex: 1,
+                )
               ],
             ),
           ),

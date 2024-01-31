@@ -154,7 +154,7 @@ void processDeepLink(Uri uri) {
       bool success = notificationParam.toLowerCase() == 'message';
       if (success) {
         Get.toNamed(
-          Routes.bottomnavscreen,
+          Routes.home,
         );
       }
     }
@@ -215,9 +215,8 @@ class MyApp extends StatelessWidget {
               AnalyticsServices.getAnalyticObserver()
             ],
             // navigatorKey: navigatorKey,
-            initialRoute: userId == '' || userId == null
-                ? Routes.login
-                : Routes.bottomnavscreen,
+            initialRoute:
+                userId == '' || userId == null ? Routes.login : Routes.home,
 
             // initialRoute: Routes.updateProfile,
             getPages: Nav.routes,

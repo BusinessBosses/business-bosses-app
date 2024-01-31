@@ -555,14 +555,9 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                     ),
                   ),
                 ),
-                // BottomBar(
-                //   activeIndex: 4,
-                //   homePageKey: phomePageKey,
-                //   bossupPageKey: pbossupPageKey,
-                //   liveEventPageKey: pliveEventPageKey,
-                //   marketPlacePageKey: pmarketPlacePageKey,
-                //   profilePageKey: pprofilePageKey,
-                // )
+                const BottomBar(
+                  activeIndex: 4,
+                )
               ],
             ),
           ),
