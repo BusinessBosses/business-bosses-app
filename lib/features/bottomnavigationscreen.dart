@@ -9,6 +9,7 @@ import 'package:business_bosses_v2/features/profile/controller/profile_controlle
 import 'package:business_bosses_v2/features/profile/presentation/myprofilescreen.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
@@ -51,23 +52,25 @@ class _BottomNavigationExampleState extends State<BottomNavigationScreen> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge,
+        overlays: [SystemUiOverlay.bottom]);
     Get.put(ProfileController());
     Get.put(HomeController());
     return Scaffold(
       body: PageView(
         controller: _pageController,
-        physics: NeverScrollableScrollPhysics(),
+        physics: const NeverScrollableScrollPhysics(),
         children: _pages,
       ),
       bottomNavigationBar: Stack(children: [
         Padding(
-          padding: EdgeInsets.only(top: 20.0),
+          padding: const EdgeInsets.only(top: 20.0),
           child: Row(
             children: [
               Expanded(
                 child: Text(
                   "d",
-                  style: TextStyle(color: Colors.white),
+                  style: const TextStyle(color: Colors.white),
                   textAlign: TextAlign.center,
                   key: BottomNavigationScreen.homekey,
                 ),
@@ -75,7 +78,7 @@ class _BottomNavigationExampleState extends State<BottomNavigationScreen> {
               Expanded(
                 child: Text(
                   "d",
-                  style: TextStyle(color: Colors.white),
+                  style: const TextStyle(color: Colors.white),
                   textAlign: TextAlign.center,
                   key: BottomNavigationScreen.bossupkey,
                 ),
@@ -84,7 +87,7 @@ class _BottomNavigationExampleState extends State<BottomNavigationScreen> {
                 child: Text(
                   "d",
                   key: BottomNavigationScreen.eventskey,
-                  style: TextStyle(color: Colors.white),
+                  style: const TextStyle(color: Colors.white),
                   textAlign: TextAlign.center,
                 ),
               ),
@@ -92,7 +95,7 @@ class _BottomNavigationExampleState extends State<BottomNavigationScreen> {
                 child: Text(
                   "d",
                   key: BottomNavigationScreen.marketplacekey,
-                  style: TextStyle(color: Colors.white),
+                  style: const TextStyle(color: Colors.white),
                   textAlign: TextAlign.center,
                 ),
               ),
@@ -100,7 +103,7 @@ class _BottomNavigationExampleState extends State<BottomNavigationScreen> {
                 child: Text(
                   "d",
                   key: BottomNavigationScreen.profilekey,
-                  style: TextStyle(color: Colors.white),
+                  style: const TextStyle(color: Colors.white),
                   textAlign: TextAlign.center,
                 ),
               ),
@@ -110,7 +113,7 @@ class _BottomNavigationExampleState extends State<BottomNavigationScreen> {
         BottomNavigationBar(
           backgroundColor: Colors.white,
           currentIndex: _selectedPageIndex,
-          onTap: (selectedPageIndex) {
+          onTap: (int selectedPageIndex) {
             setState(() {
               _selectedPageIndex = selectedPageIndex;
               _pageController.jumpToPage(selectedPageIndex);
@@ -127,7 +130,7 @@ class _BottomNavigationExampleState extends State<BottomNavigationScreen> {
                 'assets/svgs/hom.svg',
                 height: 21,
               ),
-              label: "Home",
+              label: 'Home',
               activeIcon: SvgPicture.asset(
                 'assets/svgs/hom.svg',
                 height: 21,
@@ -140,7 +143,7 @@ class _BottomNavigationExampleState extends State<BottomNavigationScreen> {
                 height: 22,
                 color: Colors.grey,
               ),
-              label: "Boss Up",
+              label: 'Boss Up',
               activeIcon: SvgPicture.asset(
                 'assets/svgs/bossup.svg',
                 height: 22,
@@ -165,7 +168,7 @@ class _BottomNavigationExampleState extends State<BottomNavigationScreen> {
                 'assets/svgs/marketplace.svg',
                 height: 23,
               ),
-              label: "Marketplace",
+              label: 'Marketplace',
               activeIcon: SvgPicture.asset(
                 'assets/svgs/marketplace.svg',
                 color: primaryColorLT,
@@ -188,7 +191,7 @@ class _BottomNavigationExampleState extends State<BottomNavigationScreen> {
                   ),
                 ),
               ),
-              label: "Profile",
+              label: 'Profile',
             ),
           ],
         ),
