@@ -1,4 +1,8 @@
 {
-  "flutterSdkVersion": "3.13.2",
+<<<<<<< HEAD
+  "flutterSdkVersion": "3.16.5",
+=======
+  "flutterSdkVersion": "3.13.5",
+>>>>>>> cd0f1069a520f74557aac1bf40d823e425a886a4
   "flavors": {}
 }

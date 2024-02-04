@@ -57,15 +57,21 @@ class _EventItemState extends State<EventItem> {
       'roomId': widget.event.roomId,
       'date': formattedDate,
       'starttime': formattedStartTime,
-      'host': widget.event.user!.name,
-      'photourl': widget.event.user!.photoUrl,
+      'host': widget.event.user?.name,
+      'photourl': widget.event.user?.photoUrl,
       'startat': widget.event.startAt.toString(),
       'endat': widget.event.endAt.toString(),
       'image': widget.event.image,
     };
 
     String? jsonData = jsonEncode(dataa);
-
+    int? attendCount = widget.event.totalAttendees;
+    String? attendMessage = 'Be the first to attend!';
+    if (attendCount == 1) {
+      attendMessage = '1 person is attending';
+    } else if (attendCount! > 1) {
+      attendMessage = '$attendCount people are attending';
+    }
     return Padding(
       padding: const EdgeInsets.only(left: 15),
       child: Row(
@@ -74,7 +80,7 @@ class _EventItemState extends State<EventItem> {
           SpeedDial(
             backgroundColor: backgroundcolorinterface,
             icon: Icons.share,
-            buttonSize: Size(40, 40),
+            buttonSize: const Size(40, 40),
             iconTheme: const IconThemeData(color: Colors.black),
             activeIcon: Icons.close,
             spacing: 3,
@@ -226,17 +232,24 @@ class _EventItemState extends State<EventItem> {
                         const SizedBox(
                           width: 4,
                         ),
-                        Text(
-                          widget.event.user?.name ??
-                              widget.event.user!.username,
-                          style: const TextStyle(
-                            fontWeight: FontWeight.w700,
+                        if (widget.event.user != null)
+                          Text(
+                            widget.event.user?.name ??
+                                widget.event.user!.username,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.w700,
+                            ),
                           ),
-                        ),
                       ],
                     ),
                     const SizedBox(
                       height: 10,
+                    ),
+                    Align(
+                      alignment: Alignment.topLeft,
+                      child: Text(
+                        attendMessage,
+                      ),
                     ),
                     Row(
                       children: <Widget>[
@@ -379,8 +392,8 @@ class _EventItemState extends State<EventItem> {
                             padding: const EdgeInsets.only(right: 15.0),
                             child: ElevatedButton(
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.white,
-                                foregroundColor: Colors.red,
+                                backgroundColor: Colors.grey,
+                                foregroundColor: Colors.white,
                                 minimumSize: const Size(55, 32),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(
@@ -392,8 +405,9 @@ class _EventItemState extends State<EventItem> {
                                 setState(() {});
                               },
                               child: const Text(
-                                'Ignore',
+                                'Attending',
                                 style: TextStyle(
+                                  fontSize: 10,
                                   fontWeight: FontWeight.w500,
                                 ),
                               ),

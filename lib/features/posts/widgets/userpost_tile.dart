@@ -957,17 +957,21 @@ class _PostTileState extends State<PostTile> {
                                         });
                                   },
                                   child: SvgPicture.asset(
-                                    'assets/svgs/share.svg',
-                                    height: 15.0,
-                                    width: 15.0,
+                                    'assets/svgs/repost.svg',
+                                    height: 18.0,
+                                    width: 18.0,
                                   ),
                                 ),
                                 const Spacer(),
                                 Padding(
                                   padding: const EdgeInsets.only(right: 15),
                                   child: Text(
-                                    TimeFormat.formatString(
-                                        widget.post.timestamp),
+                                    widget.post.oldtimestamp != null ||
+                                            widget.post.oldtimestamp == 1
+                                        ? TimeFormat.formatString(
+                                            widget.post.oldtimestamp)
+                                        : TimeFormat.formatString(
+                                            widget.post.timestamp),
                                     style: Theme.of(context)
                                         .textTheme
                                         .bodyMedium
@@ -981,18 +985,104 @@ class _PostTileState extends State<PostTile> {
                     ],
                     if (widget.post.livedata == null) ...<Widget>[
                       GestureDetector(
-                        onTap: () => _sharePost(),
+                        onTap: () {
+                          showModalBottomSheet(
+                              context: context,
+                              shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.vertical(
+                                  top: Radius.circular(25.0),
+                                ),
+                              ),
+                              builder: (context) {
+                                return SizedBox(
+                                  height: 250,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(15.0),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: <Widget>[
+                                        Expanded(
+                                          // Set a specific height
+                                          child: ListView.separated(
+                                            itemCount: 2,
+                                            separatorBuilder:
+                                                (BuildContext context,
+                                                        int index) =>
+                                                    const Divider(),
+                                            itemBuilder: (BuildContext context,
+                                                int index) {
+                                              return ListTile(
+                                                onTap: () {
+                                                  Navigator.pop(context);
+                                                  index == 0
+                                                      ? _sharePost()
+                                                      : widget.controller
+                                                          .postRepost(
+                                                              profileController
+                                                                  .myProfile
+                                                                  .uid,
+                                                              widget
+                                                                  .post.postId,
+                                                              'post',
+                                                              widget.post
+                                                                  .timestamp,
+                                                              widget.post.user!
+                                                                  .uid);
+                                                },
+                                                minVerticalPadding: 0,
+                                                contentPadding:
+                                                    const EdgeInsets.only(
+                                                        left: 10),
+                                                leading: SvgPicture.asset(
+                                                  index == 0
+                                                      ? 'assets/svgs/share.svg'
+                                                      : 'assets/svgs/repost.svg',
+                                                  height: index == 0 ? 18 : 25,
+                                                  color:
+                                                      textColor.withOpacity(1),
+                                                ),
+                                                title: Text(
+                                                  index == 0
+                                                      ? 'Share Post'
+                                                      : widget.post.reposts?.contains(
+                                                                  profileController
+                                                                      .myProfile
+                                                                      .uid) ==
+                                                              true
+                                                          ? 'Undo Repost'
+                                                          : 'Repost',
+                                                  style: const TextStyle(
+                                                      fontSize: 18,
+                                                      fontWeight:
+                                                          FontWeight.w700),
+                                                ),
+                                              );
+                                            },
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              });
+                        },
                         child: SvgPicture.asset(
-                          'assets/svgs/share.svg',
-                          height: 15.0,
-                          width: 15.0,
+                          'assets/svgs/repost.svg',
+                          height: 18.0,
+                          width: 18.0,
                         ),
                       ),
                       const Spacer(),
                       Padding(
                         padding: const EdgeInsets.only(right: 15),
                         child: Text(
-                          TimeFormat.formatString(widget.post.timestamp),
+                          widget.post.oldtimestamp != null ||
+                                  widget.post.oldtimestamp == 1
+                              ? TimeFormat.formatString(
+                                  widget.post.oldtimestamp)
+                              : TimeFormat.formatString(widget.post.timestamp),
                           style:
                               Theme.of(context).textTheme.bodyMedium?.copyWith(
                                     color: textColor.withOpacity(0.4),

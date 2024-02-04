@@ -80,8 +80,10 @@ class LiveController extends GetxController {
     if (response.success) {
       if (joined.any((EventModel eventt) => eventt.id == event.id)) {
         joined.removeWhere((EventModel eventt) => eventt.id == event.id);
+        event.setAttendCount(event.totalAttendees! - 1);
       } else {
         joined.add(event);
+        event.setAttendCount(event.totalAttendees! + 1);
       }
     }
     update();

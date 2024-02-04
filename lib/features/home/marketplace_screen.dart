@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:business_bosses_v2/features/forum/models/industry.dart';
+import 'package:business_bosses_v2/features/home/sellProduct.dart';
 import 'package:business_bosses_v2/features/home/widgets/bottom_bar.dart';
 import 'package:business_bosses_v2/features/home/widgets/sellingpopup.dart';
 import 'package:business_bosses_v2/features/marketplace/models/market_model.dart';
@@ -39,7 +42,8 @@ class MarketplaceScreen extends StatefulWidget {
   State<MarketplaceScreen> createState() => _MarketplaceScreenState();
 }
 
-class _MarketplaceScreenState extends State<MarketplaceScreen> {
+class _MarketplaceScreenState extends State<MarketplaceScreen>
+    with AutomaticKeepAliveClientMixin<MarketplaceScreen> {
   final ProfileController _profileController = Get.find();
   final MarketController _marketController = Get.find();
   final HomeController hmeController = Get.find();
@@ -47,10 +51,12 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
   String? _selectedLocation;
   final bool _isSearching = false;
   String? filterCode;
+  bool get wantKeepAlive => true;
   String? filterLocation;
   String? filterCategory;
   int pageSize = 20;
   String? filteredCategory;
+  bool isScrolled = true;
 
   @override
   void initState() {
@@ -77,6 +83,96 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
 
     return Scaffold(
       backgroundColor: backgroundcolorinterface,
+      floatingActionButton: !_marketController.loading.value
+          ? Padding(
+              padding: EdgeInsets.only(bottom: Platform.isAndroid ? 80.0 : 0),
+              child: FloatingActionButton.extended(
+                onPressed: () {
+                  showModalBottomSheet(
+                      context: context,
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.vertical(
+                          top: Radius.circular(25.0),
+                        ),
+                      ),
+                      builder: (context) {
+                        return SizedBox(
+                          height: 250,
+                          child: Padding(
+                            padding: const EdgeInsets.all(15.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                Expanded(
+                                  // Set a specific height
+                                  child: ListView.separated(
+                                    itemCount: 3,
+                                    separatorBuilder:
+                                        (BuildContext context, int index) =>
+                                            const Divider(),
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      return ListTile(
+                                        onTap: () {
+                                          Navigator.pop(context);
+                                          index == 0
+                                              ? Get.toNamed(Routes.createPost)
+                                              : index == 1
+                                                  ? sellProduct(context)
+                                                  : Get.toNamed(
+                                                      Routes.createevent);
+                                        },
+                                        minVerticalPadding: 0,
+                                        contentPadding:
+                                            const EdgeInsets.only(left: 10),
+                                        leading: SvgPicture.asset(
+                                          index == 0
+                                              ? 'assets/svgs/text.svg'
+                                              : index == 1
+                                                  ? 'assets/svgs/sellicon.svg'
+                                                  : 'assets/svgs/liveevent.svg',
+                                          height: index == 0
+                                              ? 25
+                                              : index == 1
+                                                  ? 30
+                                                  : 22,
+                                          color: textColor.withOpacity(1),
+                                        ),
+                                        title: Text(
+                                          index == 0
+                                              ? 'Create a Post'
+                                              : index == 1
+                                                  ? 'Sell your product & service'
+                                                  : 'Create a Live Event',
+                                          style: const TextStyle(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.w700),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        );
+                      });
+                },
+                label: const Text(
+                  'Post',
+                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 18),
+                ),
+                icon: const Icon(Icons.add),
+                shape: isScrolled
+                    ? RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(100))
+                    : CircleBorder(),
+                isExtended: isScrolled,
+                backgroundColor: primaryColorLT,
+              ),
+            )
+          : Container(),
       appBar: AppBar(
           automaticallyImplyLeading: false,
           title: const Text('Marketplace'),
@@ -536,312 +632,372 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
               width: MediaQuery.of(context).size.width,
               child: Stack(
                 children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 30.0),
-                    child: Container(
-                      height: MediaQuery.of(context).size.height,
-                      width: MediaQuery.of(context).size.width,
-                      color: Colors.white,
-                      child: NestedScrollView(
-                        headerSliverBuilder:
-                            (BuildContext context, bool innerBoxIsScrolled) {
-                          return <Widget>[
-                            SliverStickyHeader(
-                              sticky: false,
-                              header: Column(
-                                children: <Widget>[
-                                  Container(
-                                    width: double.infinity,
-                                    color: backgroundcolorinterface,
-                                    child: Stack(
-                                      children: <Widget>[
-                                        Padding(
-                                          padding: const EdgeInsets.only(
-                                              left: 20, top: 25),
-                                          child: GestureDetector(
-                                            onTap: (() {
-                                              showDialog(
-                                                context: context,
-                                                builder:
-                                                    (BuildContext context) =>
-                                                        sellingGuide(context),
-                                              );
-                                            }),
-                                            child: Row(
-                                              children: <Widget>[
-                                                const Text(
-                                                  'Guidelines ',
-                                                  style: TextStyle(
-                                                      fontSize: 12,
-                                                      fontWeight:
-                                                          FontWeight.w700),
-                                                ),
-                                                SvgPicture.asset(
-                                                  'assets/svgs/info.svg',
-                                                  height: 20,
-                                                ),
-                                              ],
+                  Container(
+                    height: MediaQuery.of(context).size.height,
+                    width: MediaQuery.of(context).size.width,
+                    color: Colors.white,
+                    child: NestedScrollView(
+                      headerSliverBuilder:
+                          (BuildContext context, bool innerBoxIsScrolled) {
+                        return <Widget>[
+                          SliverStickyHeader(
+                            sticky: false,
+                            header: Column(
+                              children: <Widget>[
+                                Container(
+                                  width: double.infinity,
+                                  color: backgroundcolorinterface,
+                                  child: Stack(
+                                    children: <Widget>[
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                            left: 15, top: 25),
+                                        child: GestureDetector(
+                                          onTap: (() {
+                                            showDialog(
+                                              context: context,
+                                              builder: (BuildContext context) =>
+                                                  sellingGuide(context),
+                                            );
+                                          }),
+                                          child: Row(
+                                            children: <Widget>[
+                                              const Text(
+                                                'Guidelines ',
+                                                style: TextStyle(
+                                                    fontSize: 12,
+                                                    fontWeight:
+                                                        FontWeight.w700),
+                                              ),
+                                              SvgPicture.asset(
+                                                'assets/svgs/info.svg',
+                                                height: 20,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                      Column(children: <Widget>[
+                                        const SizedBox(
+                                          height: 10,
+                                        ),
+                                        Align(
+                                          alignment: Alignment.centerRight,
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(
+                                              right: 15,
+                                            ),
+                                            child: ElevatedButton(
+                                              style: ElevatedButton.styleFrom(
+                                                  minimumSize: const Size(150,
+                                                      45) // put the width and height you want
+                                                  ),
+                                              onPressed: () {
+                                                showModalBottomSheet(
+                                                    context: context,
+                                                    shape:
+                                                        const RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.vertical(
+                                                        top: Radius.circular(
+                                                            25.0),
+                                                      ),
+                                                    ),
+                                                    builder:
+                                                        (BuildContext context) {
+                                                      return SizedBox(
+                                                        height: 200,
+                                                        child: Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(15.0),
+                                                          child: Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            mainAxisSize:
+                                                                MainAxisSize
+                                                                    .min,
+                                                            children: <Widget>[
+                                                              Expanded(
+                                                                // Set a specific height
+                                                                child: ListView
+                                                                    .separated(
+                                                                  itemCount: 2,
+                                                                  separatorBuilder:
+                                                                      (BuildContext context,
+                                                                              int index) =>
+                                                                          const Divider(),
+                                                                  itemBuilder:
+                                                                      (BuildContext
+                                                                              context,
+                                                                          int index) {
+                                                                    return ListTile(
+                                                                      onTap:
+                                                                          () {
+                                                                        Navigator.pop(
+                                                                            context);
+                                                                        index ==
+                                                                                0
+                                                                            ? Get.toNamed(Routes
+                                                                                .sellscreen)
+                                                                            : Get.to(() =>
+                                                                                const CreateServiceScreen(isUpd: false));
+                                                                      },
+                                                                      minVerticalPadding:
+                                                                          0,
+                                                                      contentPadding:
+                                                                          const EdgeInsets
+                                                                              .only(
+                                                                        left:
+                                                                            10,
+                                                                      ),
+                                                                      leading:
+                                                                          SvgPicture
+                                                                              .asset(
+                                                                        index ==
+                                                                                0
+                                                                            ? 'assets/svgs/sellicon.svg'
+                                                                            : 'assets/svgs/sellicon.svg',
+                                                                        height: index ==
+                                                                                0
+                                                                            ? 25
+                                                                            : index == 1
+                                                                                ? 30
+                                                                                : 22,
+                                                                        color: textColor
+                                                                            .withOpacity(1),
+                                                                      ),
+                                                                      title:
+                                                                          Text(
+                                                                        index ==
+                                                                                0
+                                                                            ? 'Sell your product'
+                                                                            : 'Sell your service',
+                                                                        style: const TextStyle(
+                                                                            fontSize:
+                                                                                18,
+                                                                            fontWeight:
+                                                                                FontWeight.w700),
+                                                                      ),
+                                                                    );
+                                                                  },
+                                                                ),
+                                                              )
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      );
+                                                    });
+                                              },
+                                              child: Row(
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: <Widget>[
+                                                  const Text(
+                                                    'Sell',
+                                                    style: TextStyle(
+                                                        fontSize: 15,
+                                                        color: Colors.white,
+                                                        fontWeight:
+                                                            FontWeight.w500),
+                                                  ),
+                                                  const SizedBox(
+                                                    width: 5,
+                                                  ),
+                                                  SvgPicture.asset(
+                                                      'assets/svgs/startatopic.svg')
+                                                ],
+                                              ),
                                             ),
                                           ),
                                         ),
-                                        Column(children: <Widget>[
-                                          const SizedBox(
-                                            height: 10,
+                                        Container(
+                                          decoration: BoxDecoration(
+                                            boxShadow: <BoxShadow>[
+                                              BoxShadow(
+                                                color: Colors.black
+                                                    .withOpacity(0.09),
+                                                blurRadius:
+                                                    100.0, // soften the shadow
+                                                spreadRadius:
+                                                    5, //extend the shadow
+                                              )
+                                            ],
                                           ),
-                                          Align(
-                                            alignment: Alignment.centerRight,
-                                            child: Padding(
-                                              padding: const EdgeInsets.only(
-                                                right: 20,
+                                          child: Stack(
+                                            children: <Widget>[
+                                              Container(
+                                                margin: const EdgeInsets.only(
+                                                    bottom: 10,
+                                                    top: 10,
+                                                    right: 15,
+                                                    left: 15),
+                                                height: 150,
+                                                width: double.infinity,
+                                                child: ClipRRect(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          15.0),
+                                                  child: const ColoredBox(
+                                                      color: Colors.white),
+                                                ),
                                               ),
-                                              child: ElevatedButton(
-                                                style: ElevatedButton.styleFrom(
-                                                    minimumSize: const Size(150,
-                                                        45) // put the width and height you want
-                                                    ),
-                                                onPressed: () {
-                                                  showModalBottomSheet(
-                                                      context: context,
-                                                      shape:
-                                                          const RoundedRectangleBorder(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .vertical(
-                                                          top: Radius.circular(
-                                                              25.0),
-                                                        ),
-                                                      ),
-                                                      builder: (BuildContext
-                                                          context) {
-                                                        return SizedBox(
-                                                          height: 200,
-                                                          child: Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .all(15.0),
-                                                            child: Column(
-                                                              crossAxisAlignment:
-                                                                  CrossAxisAlignment
-                                                                      .start,
-                                                              mainAxisSize:
-                                                                  MainAxisSize
-                                                                      .min,
-                                                              children: <Widget>[
-                                                                Expanded(
-                                                                  // Set a specific height
-                                                                  child: ListView
-                                                                      .separated(
-                                                                    itemCount:
-                                                                        2,
-                                                                    separatorBuilder:
-                                                                        (BuildContext context,
-                                                                                int index) =>
-                                                                            const Divider(),
-                                                                    itemBuilder:
-                                                                        (BuildContext
-                                                                                context,
-                                                                            int index) {
-                                                                      return ListTile(
-                                                                        onTap:
-                                                                            () {
-                                                                          Navigator.pop(
-                                                                              context);
-                                                                          index == 0
-                                                                              ? Get.toNamed(Routes.sellscreen)
-                                                                              : Get.to(() => const CreateServiceScreen(isUpd: false));
-                                                                        },
-                                                                        minVerticalPadding:
-                                                                            0,
-                                                                        contentPadding: const EdgeInsets
-                                                                            .only(
-                                                                            left:
-                                                                                10,),
-                                                                        leading:
-                                                                            SvgPicture.asset(
-                                                                          index == 0
-                                                                              ? 'assets/svgs/sellicon.svg'
-                                                                              : 'assets/svgs/sellicon.svg',
-                                                                          height: index == 0
-                                                                              ? 25
-                                                                              : index == 1
-                                                                                  ? 30
-                                                                                  : 22,
-                                                                          color:
-                                                                              textColor.withOpacity(1),
-                                                                        ),
-                                                                        title:
-                                                                            Text(
-                                                                          index == 0
-                                                                              ? 'Sell your product'
-                                                                              : 'Sell your service',
-                                                                          style: const TextStyle(
-                                                                              fontSize: 18,
-                                                                              fontWeight: FontWeight.w700),
-                                                                        ),
-                                                                      );
-                                                                    },
-                                                                  ),
-                                                                )
-                                                              ],
+                                              Column(
+                                                children: <Widget>[
+                                                  Row(
+                                                    children: <Widget>[
+                                                      Container(
+                                                        margin: const EdgeInsets
+                                                            .only(
+                                                            top: 25,
+                                                            right: 15,
+                                                            left: 30),
+                                                        height: 86,
+                                                        width: 142,
+                                                        child: ClipRRect(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      10.0),
+                                                          child: FittedBox(
+                                                            child:
+                                                                CachedNetworkImage(
+                                                              memCacheWidth:
+                                                                  256,
+                                                              imageUrl:
+                                                                  'https://businessbosses.com.ng/learningImages/marketplace.jpg',
+                                                              placeholder: (BuildContext
+                                                                          context,
+                                                                      String
+                                                                          photo) =>
+                                                                  const CircularProgressIndicator(),
+                                                              errorWidget: (BuildContext
+                                                                          context,
+                                                                      String
+                                                                          photo,
+                                                                      dynamic
+                                                                          error) =>
+                                                                  const Icon(Icons
+                                                                      .error),
                                                             ),
                                                           ),
-                                                        );
-                                                      });
-                                                },
-                                                child: Row(
-                                                  mainAxisSize:
-                                                      MainAxisSize.min,
-                                                  children: <Widget>[
-                                                    const Text(
-                                                      'Sell',
-                                                      style: TextStyle(
-                                                          fontSize: 15,
-                                                          color: Colors.white,
-                                                          fontWeight:
-                                                              FontWeight.w500),
-                                                    ),
-                                                    const SizedBox(
-                                                      width: 5,
-                                                    ),
-                                                    SvgPicture.asset(
-                                                        'assets/svgs/startatopic.svg')
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                          Container(
-                                            decoration: BoxDecoration(
-                                              boxShadow: <BoxShadow>[
-                                                BoxShadow(
-                                                  color: Colors.black
-                                                      .withOpacity(0.09),
-                                                  blurRadius:
-                                                      100.0, // soften the shadow
-                                                  spreadRadius:
-                                                      5, //extend the shadow
-                                                )
-                                              ],
-                                            ),
-                                            child: Stack(
-                                              children: <Widget>[
-                                                Container(
-                                                  margin: const EdgeInsets.only(
-                                                      bottom: 10,
-                                                      top: 10,
-                                                      right: 20,
-                                                      left: 20),
-                                                  height: 150,
-                                                  width: double.infinity,
-                                                  child: ClipRRect(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            15.0),
-                                                    child: const ColoredBox(
-                                                        color: Colors.white),
-                                                  ),
-                                                ),
-                                                Column(
-                                                  children: <Widget>[
-                                                    Row(
-                                                      children: <Widget>[
-                                                        Container(
-                                                          margin:
+                                                        ),
+                                                      ),
+                                                      Expanded(
+                                                        child: Padding(
+                                                          padding:
                                                               const EdgeInsets
                                                                   .only(
-                                                                  top: 25,
-                                                                  right: 20,
-                                                                  left: 35),
-                                                          height: 86,
-                                                          width: 142,
-                                                          child: ClipRRect(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        10.0),
-                                                            child: FittedBox(
-                                                              child:
-                                                                  CachedNetworkImage(
-                                                                memCacheWidth:
-                                                                    256,
-                                                                imageUrl:
-                                                                    'https://businessbosses.com.ng/learningImages/marketplace.jpg',
-                                                                placeholder: (BuildContext
-                                                                            context,
-                                                                        String
-                                                                            photo) =>
-                                                                    const CircularProgressIndicator(),
-                                                                errorWidget: (BuildContext
-                                                                            context,
-                                                                        String
-                                                                            photo,
-                                                                        dynamic
-                                                                            error) =>
-                                                                    const Icon(Icons
-                                                                        .error),
-                                                              ),
+                                                                  right: 30),
+                                                          child: Text(
+                                                            _marketController
+                                                                .marketDescription,
+                                                            style:
+                                                                const TextStyle(
+                                                              fontSize: 15,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w700,
                                                             ),
+                                                            softWrap: true,
+                                                            maxLines: 5,
                                                           ),
                                                         ),
-                                                        Expanded(
-                                                          child: Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .only(
-                                                                    right: 35),
-                                                            child: Text(
-                                                              _marketController
-                                                                  .marketDescription,
-                                                              style:
-                                                                  const TextStyle(
-                                                                fontSize: 15,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w700,
-                                                              ),
-                                                              softWrap: true,
-                                                              maxLines: 5,
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                    Padding(
-                                                      padding:
-                                                          const EdgeInsets.only(
-                                                        left: 32,
-                                                        top: 0,
-                                                        right: 20,
                                                       ),
-                                                      child: Row(
-                                                        children: <Widget>[
-                                                          Row(
-                                                            children: <Widget>[
-                                                              Padding(
+                                                    ],
+                                                  ),
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                      left: 27,
+                                                      top: 0,
+                                                      right: 15,
+                                                    ),
+                                                    child: Row(
+                                                      children: <Widget>[
+                                                        Row(
+                                                          children: <Widget>[
+                                                            Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .only(
+                                                                      right: 2,
+                                                                      top: 5),
+                                                              child: SvgPicture
+                                                                  .asset(
+                                                                'assets/svgs/members.svg',
+                                                                height: 15,
+                                                                color:
+                                                                    primaryColorLT,
+                                                              ),
+                                                            ),
+                                                            GestureDetector(
+                                                              onTap: () {
+                                                                Get.to(() =>
+                                                                    MarketMembersScreen(
+                                                                      users: _marketController
+                                                                          .users,
+                                                                    ));
+                                                              },
+                                                              child: Padding(
                                                                 padding:
                                                                     const EdgeInsets
                                                                         .only(
-                                                                        right:
-                                                                            2,
-                                                                        top: 5),
-                                                                child:
-                                                                    SvgPicture
-                                                                        .asset(
-                                                                  'assets/svgs/members.svg',
-                                                                  height: 15,
-                                                                  color:
-                                                                      primaryColorLT,
+                                                                        top:
+                                                                            5.0),
+                                                                child: RichText(
+                                                                  text:
+                                                                      TextSpan(
+                                                                    children: <InlineSpan>[
+                                                                      TextSpan(
+                                                                          text:
+                                                                              'Members ($formattedUserCount)',
+                                                                          style:
+                                                                              const TextStyle(
+                                                                            fontSize:
+                                                                                12,
+                                                                            fontWeight:
+                                                                                FontWeight.w600,
+                                                                            color:
+                                                                                primaryColorLT,
+                                                                            decoration:
+                                                                                TextDecoration.underline,
+                                                                          )),
+                                                                    ],
+                                                                  ),
                                                                 ),
                                                               ),
-                                                              GestureDetector(
-                                                                onTap: () {
-                                                                  Get.to(() =>
-                                                                      MarketMembersScreen(
-                                                                        users: _marketController
-                                                                            .users,
-                                                                      ));
-                                                                },
-                                                                child: Padding(
+                                                            ),
+                                                          ],
+                                                        ),
+                                                        Row(
+                                                          children: <Widget>[
+                                                            Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .only(
+                                                                      left: 8,
+                                                                      top: 5,
+                                                                      right: 3),
+                                                              child: SvgPicture
+                                                                  .asset(
+                                                                'assets/svgs/marketplace.svg',
+                                                                color:
+                                                                    textColor,
+                                                                height: 15,
+                                                              ),
+                                                            ),
+                                                            Obx(
+                                                              () {
+                                                                int postCount =
+                                                                    _marketController
+                                                                        .products
+                                                                        .length;
+                                                                String
+                                                                    formattedpostCount =
+                                                                    formatCount(
+                                                                        postCount);
+                                                                return Padding(
                                                                   padding:
                                                                       const EdgeInsets
                                                                           .only(
@@ -853,364 +1009,434 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                                                         TextSpan(
                                                                       children: <InlineSpan>[
                                                                         TextSpan(
-                                                                            text:
-                                                                                'Members ($formattedUserCount)',
-                                                                            style:
-                                                                                const TextStyle(
-                                                                              fontSize: 12,
-                                                                              fontWeight: FontWeight.w600,
-                                                                              color: primaryColorLT,
-                                                                              decoration: TextDecoration.underline,
-                                                                            )),
+                                                                          text:
+                                                                              'Listings ($formattedpostCount)',
+                                                                          style:
+                                                                              const TextStyle(
+                                                                            fontSize:
+                                                                                12,
+                                                                            color:
+                                                                                textColor,
+                                                                            fontWeight:
+                                                                                FontWeight.w600,
+                                                                          ),
+                                                                        ),
                                                                       ],
                                                                     ),
                                                                   ),
-                                                                ),
-                                                              ),
-                                                            ],
-                                                          ),
-                                                          Row(
-                                                            children: <Widget>[
-                                                              Padding(
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                        .only(
-                                                                        left: 8,
-                                                                        top: 5,
-                                                                        right:
-                                                                            3),
-                                                                child:
-                                                                    SvgPicture
-                                                                        .asset(
-                                                                  'assets/svgs/marketplace.svg',
-                                                                  color:
-                                                                      textColor,
-                                                                  height: 15,
-                                                                ),
-                                                              ),
-                                                              Obx(
-                                                                () {
-                                                                  int postCount =
-                                                                      _marketController
-                                                                          .products
-                                                                          .length;
-                                                                  String
-                                                                      formattedpostCount =
-                                                                      formatCount(
-                                                                          postCount);
-                                                                  return Padding(
-                                                                    padding: const EdgeInsets
-                                                                        .only(
-                                                                        top:
-                                                                            5.0),
-                                                                    child:
-                                                                        RichText(
-                                                                      text:
-                                                                          TextSpan(
-                                                                        children: <InlineSpan>[
-                                                                          TextSpan(
-                                                                            text:
-                                                                                'Listings ($formattedpostCount)',
-                                                                            style:
-                                                                                const TextStyle(
-                                                                              fontSize: 12,
-                                                                              color: textColor,
-                                                                              fontWeight: FontWeight.w600,
-                                                                            ),
-                                                                          ),
-                                                                        ],
-                                                                      ),
-                                                                    ),
-                                                                  );
-                                                                },
-                                                              ),
-                                                            ],
-                                                          ),
-                                                          const Spacer(),
-                                                          Align(
-                                                              alignment: Alignment
-                                                                  .centerRight,
-                                                              child: Row(
-                                                                crossAxisAlignment:
-                                                                    CrossAxisAlignment
-                                                                        .center,
-                                                                mainAxisAlignment:
-                                                                    MainAxisAlignment
-                                                                        .end,
-                                                                children: <Widget>[
-                                                                  joinedButton(),
-                                                                ],
-                                                              ))
-                                                        ],
-                                                      ),
+                                                                );
+                                                              },
+                                                            ),
+                                                          ],
+                                                        ),
+                                                        const Spacer(),
+                                                        Align(
+                                                            alignment: Alignment
+                                                                .centerRight,
+                                                            child: Row(
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .center,
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .end,
+                                                              children: <Widget>[
+                                                                joinedButton(),
+                                                              ],
+                                                            ))
+                                                      ],
                                                     ),
-                                                    const SizedBox(
-                                                      height: 1,
-                                                    ),
-                                                  ],
-                                                )
-                                              ],
-                                            ),
+                                                  ),
+                                                  const SizedBox(
+                                                    height: 1,
+                                                  ),
+                                                ],
+                                              )
+                                            ],
                                           ),
-                                        ]),
-                                      ],
-                                    ),
+                                        ),
+                                      ]),
+                                    ],
                                   ),
-                                ],
-                              ),
-                            )
-                          ];
-                        },
-                        body: Padding(
-                          padding: const EdgeInsets.only(bottom: 50, top: 0),
-                          child: Obx(() {
-                            if (_marketController.loading.value) {
-                              return const Center(
-                                  child: CircularProgressIndicator());
-                            } else if (_marketController.error.value) {
-                              return const SafetyModel(
-                                isLoading: false,
-                                title: 'Error While Loading Data',
-                                subTitle: 'Try Reloading Again',
-                                icon: Icon(
-                                  Icons.warning,
-                                  size: 60,
                                 ),
-                              );
-                            } else {
-                              return _marketController.products.isEmpty &&
-                                      !_marketController.isfiltered.value
+                              ],
+                            ),
+                          )
+                        ];
+                      },
+                      body: Obx(() {
+                        if (_marketController.loading.value) {
+                          return const Center(
+                              child: CircularProgressIndicator());
+                        } else if (_marketController.error.value) {
+                          return const SafetyModel(
+                            isLoading: false,
+                            title: 'Error While Loading Data',
+                            subTitle: 'Try Reloading Again',
+                            icon: Icon(
+                              Icons.warning,
+                              size: 60,
+                            ),
+                          );
+                        } else {
+                          return _marketController.products.isEmpty &&
+                                  !_marketController.isfiltered.value
+                              ? SafetyModel(
+                                  isLoading: false,
+                                  icon: const Icon(
+                                    Icons.edit,
+                                    color: Colors.grey,
+                                    size: 80.0,
+                                  ),
+                                  title: 'Be the first one to Sell your Item',
+                                  // subTitle: '',
+                                  clickableText: 'Post an item',
+                                  onTap: () {
+                                    Get.to(
+                                      () => const CreateSellingitemScreen(
+                                        isUpd: false,
+                                      ),
+                                    );
+                                  },
+                                )
+                              : _marketController.searchResult.isEmpty &&
+                                      _marketController.isfiltered.value
                                   ? SafetyModel(
                                       isLoading: false,
                                       icon: const Icon(
-                                        Icons.edit,
+                                        Icons.shopping_cart,
                                         color: Colors.grey,
                                         size: 80.0,
                                       ),
                                       title:
-                                          'Be the first one to Sell your Item',
+                                          'No Items Available For This Search',
                                       // subTitle: '',
-                                      clickableText: 'Post an item',
+                                      clickableText: 'View All',
                                       onTap: () {
-                                        Get.to(
-                                          () => const CreateSellingitemScreen(
-                                            isUpd: false,
-                                          ),
+                                        setState(
+                                          () {
+                                            filterLocation = null;
+                                            filterCode = null;
+                                            filterCategory = null;
+                                            _selectedLocation = null;
+                                            _selectedCategory = null;
+                                            _marketController.updateFiltered();
+                                            _marketController.initMarket();
+                                          },
                                         );
                                       },
                                     )
-                                  : _marketController.searchResult.isEmpty &&
-                                          _marketController.isfiltered.value
-                                      ? SafetyModel(
-                                          isLoading: false,
-                                          icon: const Icon(
-                                            Icons.shopping_cart,
-                                            color: Colors.grey,
-                                            size: 80.0,
-                                          ),
-                                          title:
-                                              'No Items Available For This Search',
-                                          // subTitle: '',
-                                          clickableText: 'View All',
-                                          onTap: () {
-                                            setState(
-                                              () {
-                                                filterLocation = null;
-                                                filterCode = null;
-                                                filterCategory = null;
-                                                _selectedLocation = null;
-                                                _selectedCategory = null;
-                                                _marketController
-                                                    .updateFiltered();
-                                                _marketController.initMarket();
-                                              },
-                                            );
-                                          },
-                                        )
-                                      : RefreshIndicator(
-                                          onRefresh: refreshData,
-                                          child: NotificationListener<
+                                  : RefreshIndicator(
+                                      onRefresh: refreshData,
+                                      child: _marketController.isfiltered.value
+                                          ? NotificationListener<
                                               ScrollNotification>(
-                                            onNotification: (ScrollNotification
-                                                scrollInfo) {
-                                              if (scrollInfo.metrics.pixels ==
-                                                  scrollInfo.metrics
-                                                      .maxScrollExtent) {
-                                                // _marketController.loadMore(
-                                                //     pageSize,
-                                                //     _marketController
-                                                //         .paginationPage.value);
-                                                // _marketController
-                                                //     .paginationPage.value++;
-                                              }
-                                              return false;
-                                            },
-                                            child: _marketController
-                                                    .isfiltered.value
-                                                ? ListView.builder(
-                                                    shrinkWrap: true,
-                                                    itemCount: _marketController
-                                                            .isfiltered.value
-                                                        ? _marketController
-                                                            .searchResult.length
-                                                        : _marketController
-                                                                .markets
-                                                                .length +
-                                                            1,
-                                                    itemBuilder:
-                                                        (BuildContext context,
-                                                            int index) {
-                                                      if (index <
-                                                          (_marketController
-                                                                  .isfiltered
-                                                                  .value
-                                                              ? _marketController
-                                                                  .searchResult
-                                                                  .length
-                                                              : _marketController
-                                                                  .markets
-                                                                  .length)) {
-                                                        final MarketModel
-                                                            market =
-                                                            _marketController
-                                                                    .isfiltered
-                                                                    .value
-                                                                ? _marketController
-                                                                        .searchResult[
-                                                                    index]
-                                                                : _marketController
-                                                                        .markets[
-                                                                    index];
-                                                        return VisibilityDetector(
-                                                          key: Key(
-                                                              index.toString()),
-                                                          onVisibilityChanged:
-                                                              (VisibilityInfo
-                                                                  info) {
-                                                            final bool
-                                                                hasIncrementedView =
-                                                                hmeController
-                                                                    .itemsWithIncrementedViews
-                                                                    .contains(_marketController
-                                                                        .markets[
-                                                                            index]
-                                                                        .marketId);
-                                                            if (info.visibleFraction ==
-                                                                    1.0 &&
-                                                                !hasIncrementedView) {
-                                                              _marketController
-                                                                  .updatemarketViews(
-                                                                      _marketController
-                                                                              .markets[
-                                                                          index]);
-                                                              setState(() {
-                                                                hmeController
-                                                                    .itemsWithIncrementedViews
-                                                                    .add(_marketController
-                                                                        .markets[
-                                                                            index]
-                                                                        .marketId); // Set the flag to prevent further increments
-                                                              });
-                                                            }
-                                                          },
-                                                          child:
-                                                              _marketController
+                                              onNotification: (notification) {
+                                                if (notification
+                                                    is ScrollUpdateNotification) {
+                                                  if (notification
+                                                              .dragDetails !=
+                                                          null &&
+                                                      notification.dragDetails!
+                                                              .primaryDelta !=
+                                                          null) {
+                                                    double primaryDelta =
+                                                        notification
+                                                            .dragDetails!
+                                                            .primaryDelta!;
+
+                                                    if (primaryDelta > 0) {
+                                                      // Scrolling downward
+                                                      setState(() {
+                                                        isScrolled = true;
+                                                      });
+                                                    } else if (primaryDelta <
+                                                        0) {
+                                                      // Scrolling upward
+                                                      setState(() {
+                                                        isScrolled = false;
+                                                      });
+                                                    }
+                                                  }
+                                                }
+
+                                                return true;
+                                              },
+                                              child: ListView.builder(
+                                                shrinkWrap: true,
+                                                itemCount: _marketController
+                                                        .isfiltered.value
+                                                    ? _marketController
+                                                        .searchResult.length
+                                                    : _marketController
+                                                            .markets.length +
+                                                        1,
+                                                itemBuilder:
+                                                    (BuildContext context,
+                                                        int index) {
+                                                  if (index <
+                                                      (_marketController
+                                                              .isfiltered.value
+                                                          ? _marketController
+                                                              .searchResult
+                                                              .length
+                                                          : _marketController
+                                                              .markets
+                                                              .length)) {
+                                                    final MarketModel market =
+                                                        _marketController
+                                                                .isfiltered
+                                                                .value
+                                                            ? _marketController
+                                                                    .searchResult[
+                                                                index]
+                                                            : _marketController
+                                                                .markets[index];
+                                                    return VisibilityDetector(
+                                                      key:
+                                                          Key(index.toString()),
+                                                      onVisibilityChanged:
+                                                          (VisibilityInfo
+                                                              info) {
+                                                        final bool
+                                                            hasIncrementedView =
+                                                            hmeController
+                                                                .itemsWithIncrementedViews
+                                                                .contains(_marketController
+                                                                    .markets[
+                                                                        index]
+                                                                    .marketId);
+                                                        if (info.visibleFraction ==
+                                                                1.0 &&
+                                                            !hasIncrementedView) {
+                                                          _marketController
+                                                              .updatemarketViews(
+                                                                  _marketController
+                                                                          .markets[
+                                                                      index]);
+                                                          setState(() {
+                                                            hmeController
+                                                                .itemsWithIncrementedViews
+                                                                .add(_marketController
+                                                                    .markets[
+                                                                        index]
+                                                                    .marketId); // Set the flag to prevent further increments
+                                                          });
+                                                        }
+                                                      },
+                                                      child: _marketController
+                                                              .markets[index]
+                                                              .isProduct
+                                                          ? MarketTile(
+                                                              post: market,
+                                                              controller:
+                                                                  _marketController,
+                                                              key: ValueKey(
+                                                                  _marketController
                                                                       .markets[
                                                                           index]
-                                                                      .isProduct
-                                                                  ? MarketTile(
-                                                                      post:
-                                                                          market,
-                                                                      controller:
-                                                                          _marketController,
-                                                                      key: ValueKey(_marketController
-                                                                          .markets[
-                                                                              index]
-                                                                          .marketId),
-                                                                    )
-                                                                  : ServiceTile(
-                                                                      post:
-                                                                          market,
-                                                                      controller:
-                                                                          _marketController,
-                                                                      key: ValueKey(_marketController
-                                                                          .markets[
-                                                                              index]
-                                                                          .marketId),
-                                                                    ),
-                                                        );
-                                                      } else {
-                                                        // Display a loading indicator at the end of the list
-                                                        if (_marketController
-                                                            .loadingMore
-                                                            .value) {
-                                                          return const Padding(
-                                                            padding:
-                                                                EdgeInsets.all(
-                                                                    8.0),
-                                                            child: Center(
-                                                              child:
-                                                                  CircularProgressIndicator(),
+                                                                      .marketId),
+                                                            )
+                                                          : ServiceTile(
+                                                              post: market,
+                                                              controller:
+                                                                  _marketController,
+                                                              key: ValueKey(
+                                                                  _marketController
+                                                                      .markets[
+                                                                          index]
+                                                                      .marketId),
                                                             ),
-                                                          );
-                                                        } else {
-                                                          return const SizedBox
-                                                              .shrink();
-                                                        }
-                                                      }
-                                                    },
-                                                  )
-                                                : DefaultTabController(
-                                                    length: 3, // Number of tabs
-                                                    child: Column(
-                                                      children: <Widget>[
-                                                        Container(
-                                                          constraints:
-                                                              const BoxConstraints
-                                                                  .expand(
-                                                                  height: 50),
-                                                          child: const TabBar(
-                                                            tabs: <Widget>[
-                                                              Tab(
-                                                                icon: Icon(Icons
-                                                                    .dashboard),
-                                                              ),
-                                                              Tab(
-                                                                  text:
-                                                                      'Products'),
-                                                              Tab(
-                                                                  text:
-                                                                      'Services'),
-                                                            ],
-                                                          ),
+                                                    );
+                                                  } else {
+                                                    // Display a loading indicator at the end of the list
+                                                    if (_marketController
+                                                        .loadingMore.value) {
+                                                      return const Padding(
+                                                        padding:
+                                                            EdgeInsets.all(8.0),
+                                                        child: Center(
+                                                          child:
+                                                              CircularProgressIndicator(),
                                                         ),
-                                                        const Expanded(
-                                                          child: TabBarView(
-                                                            children: <Widget>[
-                                                              // Content of Tab 1
-                                                              MarketsPage(),
-
-                                                              // Content of Tab 2
-                                                              ProductsPage(),
-
-                                                              // Content of Tab 3
-                                                              ServicesPage()
-                                                            ],
-                                                          ),
+                                                      );
+                                                    } else {
+                                                      return const SizedBox
+                                                          .shrink();
+                                                    }
+                                                  }
+                                                },
+                                              ),
+                                            )
+                                          : DefaultTabController(
+                                              length: 3, // Number of tabs
+                                              child: Column(
+                                                children: <Widget>[
+                                                  Container(
+                                                    constraints:
+                                                        const BoxConstraints
+                                                            .expand(height: 50),
+                                                    child: const TabBar(
+                                                      tabs: <Widget>[
+                                                        Tab(
+                                                          icon: Icon(
+                                                              Icons.dashboard),
                                                         ),
+                                                        Tab(text: 'Products'),
+                                                        Tab(text: 'Services'),
                                                       ],
                                                     ),
                                                   ),
-                                          ),
-                                        );
-                            }
-                          }),
-                        ),
-                      ),
+                                                  Expanded(
+                                                    child: TabBarView(
+                                                      children: <Widget>[
+                                                        // Content of Tab 1
+                                                        NotificationListener<
+                                                                ScrollNotification>(
+                                                            onNotification:
+                                                                (notification) {
+                                                              if (notification
+                                                                  is ScrollUpdateNotification) {
+                                                                if (notification
+                                                                            .dragDetails !=
+                                                                        null &&
+                                                                    notification
+                                                                            .dragDetails!
+                                                                            .primaryDelta !=
+                                                                        null) {
+                                                                  double
+                                                                      primaryDelta =
+                                                                      notification
+                                                                          .dragDetails!
+                                                                          .primaryDelta!;
+
+                                                                  if (primaryDelta >
+                                                                      0) {
+                                                                    // Scrolling downward
+                                                                    setState(
+                                                                        () {
+                                                                      isScrolled =
+                                                                          true;
+                                                                    });
+                                                                  } else if (primaryDelta <
+                                                                      0) {
+                                                                    // Scrolling upward
+                                                                    setState(
+                                                                        () {
+                                                                      isScrolled =
+                                                                          false;
+                                                                    });
+                                                                  }
+                                                                }
+                                                              }
+
+                                                              return true;
+                                                            },
+                                                            child:
+                                                                const MarketsPage()),
+
+                                                        // Content of Tab 2
+                                                        NotificationListener<
+                                                                ScrollNotification>(
+                                                            onNotification:
+                                                                (notification) {
+                                                              if (notification
+                                                                  is ScrollUpdateNotification) {
+                                                                if (notification
+                                                                            .dragDetails !=
+                                                                        null &&
+                                                                    notification
+                                                                            .dragDetails!
+                                                                            .primaryDelta !=
+                                                                        null) {
+                                                                  double
+                                                                      primaryDelta =
+                                                                      notification
+                                                                          .dragDetails!
+                                                                          .primaryDelta!;
+
+                                                                  if (primaryDelta >
+                                                                      0) {
+                                                                    // Scrolling downward
+                                                                    setState(
+                                                                        () {
+                                                                      isScrolled =
+                                                                          true;
+                                                                    });
+                                                                  } else if (primaryDelta <
+                                                                      0) {
+                                                                    // Scrolling upward
+                                                                    setState(
+                                                                        () {
+                                                                      isScrolled =
+                                                                          false;
+                                                                    });
+                                                                  }
+                                                                }
+                                                              }
+
+                                                              return true;
+                                                            },
+                                                            child:
+                                                                const ProductsPage()),
+
+                                                        // Content of Tab 3
+                                                        NotificationListener<
+                                                                ScrollNotification>(
+                                                            onNotification:
+                                                                (notification) {
+                                                              if (notification
+                                                                  is ScrollUpdateNotification) {
+                                                                if (notification
+                                                                            .dragDetails !=
+                                                                        null &&
+                                                                    notification
+                                                                            .dragDetails!
+                                                                            .primaryDelta !=
+                                                                        null) {
+                                                                  double
+                                                                      primaryDelta =
+                                                                      notification
+                                                                          .dragDetails!
+                                                                          .primaryDelta!;
+
+                                                                  if (primaryDelta >
+                                                                      0) {
+                                                                    // Scrolling downward
+                                                                    setState(
+                                                                        () {
+                                                                      isScrolled =
+                                                                          true;
+                                                                    });
+                                                                  } else if (primaryDelta <
+                                                                      0) {
+                                                                    // Scrolling upward
+                                                                    setState(
+                                                                        () {
+                                                                      isScrolled =
+                                                                          false;
+                                                                    });
+                                                                  }
+                                                                }
+                                                              }
+
+                                                              return true;
+                                                            },
+                                                            child:
+                                                                const ServicesPage())
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                    );
+                        }
+                      }),
                     ),
                   ),
                   const BottomBar(
-                    activeIndex: 2,
+                    activeIndex: 3,
                   )
                 ],
               ),

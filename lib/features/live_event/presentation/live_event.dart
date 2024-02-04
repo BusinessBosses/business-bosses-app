@@ -1,8 +1,11 @@
 // ignore_for_file: public_member_api_docs
 
+import 'dart:io';
 import 'dart:math';
 
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
+import 'package:business_bosses_v2/features/home/sellProduct.dart';
+import 'package:business_bosses_v2/features/home/widgets/bottom_bar.dart';
 import 'package:business_bosses_v2/features/live_event/controller/live_event_controller.dart';
 import 'package:business_bosses_v2/features/live_event/models/events_model.dart';
 import 'package:business_bosses_v2/features/live_event/widgets/call_room.dart';
@@ -10,6 +13,7 @@ import 'package:business_bosses_v2/features/live_event/widgets/event_call.dart';
 import 'package:business_bosses_v2/features/live_event/widgets/my_events.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
+
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
@@ -29,12 +33,15 @@ class LiveEvent extends StatefulWidget {
   State<LiveEvent> createState() => _LiveEventState();
 }
 
-class _LiveEventState extends State<LiveEvent> {
+class _LiveEventState extends State<LiveEvent>
+    with AutomaticKeepAliveClientMixin<LiveEvent> {
   final LiveController liveEventController = Get.put(LiveController());
   TextEditingController joinEvent = TextEditingController();
   final ScrollController scrollController = ScrollController();
   final ProfileController profileController = Get.find();
   bool _isSearching = false;
+  bool isScrolled = true;
+  bool get wantKeepAlive => true;
 
   List<Widget> get mActions {
     return <Widget>[
@@ -49,14 +56,11 @@ class _LiveEventState extends State<LiveEvent> {
           _isSearching = !_isSearching;
           // }
           setState(() {});
-          ;
         },
       ),
       IconButton(
         onPressed: () {
-          Get.to(() => MyEvents(
-                joined: liveEventController.joined,
-              ));
+          Get.to(() => const MyEvents());
         },
         icon: const Icon(Icons.calendar_month),
       ),
@@ -78,13 +82,7 @@ class _LiveEventState extends State<LiveEvent> {
         return Scaffold(
             backgroundColor: Colors.white,
             appBar: AppBar(
-              leading: IconButton(
-                onPressed: () {
-                  Get.offNamed(Routes.home);
-                },
-                icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
-              ),
-              centerTitle: true,
+              automaticallyImplyLeading: false,
               title: _isSearching
                   ? Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -151,136 +149,328 @@ class _LiveEventState extends State<LiveEvent> {
                     ),
               actions: mActions,
             ),
+            floatingActionButton: !liveController.loading.value
+                ? Padding(
+                    padding:
+                        EdgeInsets.only(bottom: Platform.isAndroid ? 80.0 : 0),
+                    child: FloatingActionButton.extended(
+                      onPressed: () {
+                        showModalBottomSheet(
+                            context: context,
+                            shape: const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.vertical(
+                                top: Radius.circular(25.0),
+                              ),
+                            ),
+                            builder: (context) {
+                              return SizedBox(
+                                height: 250,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(15.0),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: <Widget>[
+                                      Expanded(
+                                        // Set a specific height
+                                        child: ListView.separated(
+                                          itemCount: 3,
+                                          separatorBuilder:
+                                              (BuildContext context,
+                                                      int index) =>
+                                                  const Divider(),
+                                          itemBuilder: (BuildContext context,
+                                              int index) {
+                                            return ListTile(
+                                              onTap: () {
+                                                Navigator.pop(context);
+                                                index == 0
+                                                    ? Get.toNamed(
+                                                        Routes.createPost)
+                                                    : index == 1
+                                                        ? sellProduct(context)
+                                                        : Get.toNamed(
+                                                            Routes.createevent);
+                                              },
+                                              minVerticalPadding: 0,
+                                              contentPadding:
+                                                  const EdgeInsets.only(
+                                                      left: 10),
+                                              leading: SvgPicture.asset(
+                                                index == 0
+                                                    ? 'assets/svgs/text.svg'
+                                                    : index == 1
+                                                        ? 'assets/svgs/sellicon.svg'
+                                                        : 'assets/svgs/liveevent.svg',
+                                                height: index == 0
+                                                    ? 25
+                                                    : index == 1
+                                                        ? 30
+                                                        : 22,
+                                                color: textColor.withOpacity(1),
+                                              ),
+                                              title: Text(
+                                                index == 0
+                                                    ? 'Create a Post'
+                                                    : index == 1
+                                                        ? 'Sell your product & service'
+                                                        : 'Create a Live Event',
+                                                style: const TextStyle(
+                                                    fontSize: 18,
+                                                    fontWeight:
+                                                        FontWeight.w700),
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              );
+                            });
+                      },
+                      label: const Text(
+                        'Post',
+                        style: TextStyle(
+                            fontWeight: FontWeight.w700, fontSize: 18),
+                      ),
+                      icon: const Icon(Icons.add),
+                      shape: isScrolled
+                          ? RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(100))
+                          : CircleBorder(),
+                      isExtended: isScrolled,
+                      backgroundColor: primaryColorLT,
+                    ),
+                  )
+                : Container(),
             body: liveController.loading.value
-                ? const Center(child: CircularProgressIndicator())
-                : NestedScrollView(
-                    controller: scrollController,
-                    headerSliverBuilder: (
-                      BuildContext context,
-                      bool innerBoxIsScrolled,
-                    ) {
-                      return <Widget>[
-                        SliverStickyHeader(
-                          sticky: true,
-                          header: Column(
-                            children: <Widget>[
-                              Stack(
-                                children: <Widget>[
-                                  Container(
-                                    margin: const EdgeInsets.only(
-                                      top: 10,
-                                      right: 15,
-                                      left: 15,
-                                    ),
-                                    height: 150,
-                                    width: double.infinity,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(15.0),
-                                      image: const DecorationImage(
-                                        image: AssetImage(
-                                            'assets/images/live_event.png'),
-                                        fit: BoxFit.cover,
+                ? Stack(children: const [
+                    Center(child: CircularProgressIndicator()),
+                    BottomBar(
+                      activeIndex: 2,
+                    )
+                  ])
+                : Stack(children: [
+                    NestedScrollView(
+                      controller: scrollController,
+                      headerSliverBuilder: (
+                        BuildContext context,
+                        bool innerBoxIsScrolled,
+                      ) {
+                        return <Widget>[
+                          SliverStickyHeader(
+                            sticky: true,
+                            header: Column(
+                              children: <Widget>[
+                                Stack(
+                                  children: <Widget>[
+                                    Container(
+                                      margin: const EdgeInsets.only(
+                                        top: 10,
+                                        right: 15,
+                                        left: 15,
                                       ),
-                                    ),
-                                  ),
-                                  const Positioned(
-                                    top: 50,
-                                    right: 35,
-                                    child: Text(
-                                      'Share your thoughts with bosses\n We want to listen as it happens',
-                                      textAlign: TextAlign.right,
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.white,
-                                      ),
-                                      softWrap: true,
-                                    ),
-                                  ),
-                                  Positioned(
-                                    bottom: 10,
-                                    right: 35,
-                                    child: ElevatedButton(
-                                      onPressed: () => Navigator.push(
-                                        context,
-                                        // ignore: always_specify_types
-                                        MaterialPageRoute(
-                                          builder: (BuildContext context) =>
-                                              const CreateEvent(),
+                                      height: 150,
+                                      width: double.infinity,
+                                      decoration: BoxDecoration(
+                                        borderRadius:
+                                            BorderRadius.circular(15.0),
+                                        image: const DecorationImage(
+                                          image: AssetImage(
+                                              'assets/images/live_event.png'),
+                                          fit: BoxFit.cover,
                                         ),
                                       ),
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor: Colors.white,
-                                        padding: const EdgeInsets.symmetric(
-                                          horizontal: 20,
-                                          vertical: 10,
-                                        ),
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(25.0),
-                                        ),
-                                      ),
-                                      child: const Text(
-                                        'Create Live Event',
+                                    ),
+                                    const Positioned(
+                                      top: 50,
+                                      right: 35,
+                                      child: Text(
+                                        'Share your thoughts with bosses\n We want to listen as it happens',
+                                        textAlign: TextAlign.right,
                                         style: TextStyle(
-                                          color: Colors.red,
                                           fontWeight: FontWeight.bold,
+                                          color: Colors.white,
+                                        ),
+                                        softWrap: true,
+                                      ),
+                                    ),
+                                    Positioned(
+                                      bottom: 10,
+                                      right: 35,
+                                      child: ElevatedButton(
+                                        onPressed: () => Navigator.push(
+                                          context,
+                                          // ignore: always_specify_types
+                                          MaterialPageRoute(
+                                            builder: (BuildContext context) =>
+                                                const CreateEvent(),
+                                          ),
+                                        ),
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: Colors.white,
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: 20,
+                                            vertical: 10,
+                                          ),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(25.0),
+                                          ),
+                                        ),
+                                        child: const Text(
+                                          'Create Live Event',
+                                          style: TextStyle(
+                                            color: Colors.red,
+                                            fontWeight: FontWeight.bold,
+                                          ),
                                         ),
                                       ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 10),
+                              ],
+                            ),
+                          ),
+                        ];
+                      },
+                      body: DefaultTabController(
+                        length: 3, // Number of tabs
+                        child: Column(
+                          children: <Widget>[
+                            Container(
+                              constraints:
+                                  const BoxConstraints.expand(height: 50),
+                              child: TabBar(
+                                tabs: <Widget>[
+                                  Tab(
+                                    child: Lottie.asset(
+                                      'assets/anim/liveevent.json',
+                                      height: 25,
+                                    ),
+                                  ),
+                                  const Tab(text: 'Ongoing'),
+                                  const Tab(text: 'Upcoming'),
+                                ],
+                              ),
+                            ),
+                            Expanded(
+                              child: TabBarView(
+                                children: <Widget>[
+                                  // Content of Tab 1
+                                  NotificationListener<ScrollNotification>(
+                                    onNotification: (notification) {
+                                      if (notification
+                                          is ScrollUpdateNotification) {
+                                        if (notification.dragDetails != null &&
+                                            notification.dragDetails!
+                                                    .primaryDelta !=
+                                                null) {
+                                          double primaryDelta = notification
+                                              .dragDetails!.primaryDelta!;
+
+                                          if (primaryDelta > 0) {
+                                            // Scrolling downward
+                                            setState(() {
+                                              isScrolled = true;
+                                            });
+                                          } else if (primaryDelta < 0) {
+                                            // Scrolling upward
+                                            setState(() {
+                                              isScrolled = false;
+                                            });
+                                          }
+                                        }
+                                      }
+
+                                      return true;
+                                    },
+                                    child: const EventCall(
+                                      full: true,
+                                    ),
+                                  ),
+
+                                  // Content of Tab 2
+                                  NotificationListener<ScrollNotification>(
+                                    onNotification: (notification) {
+                                      if (notification
+                                          is ScrollUpdateNotification) {
+                                        if (notification.dragDetails != null &&
+                                            notification.dragDetails!
+                                                    .primaryDelta !=
+                                                null) {
+                                          double primaryDelta = notification
+                                              .dragDetails!.primaryDelta!;
+
+                                          if (primaryDelta > 0) {
+                                            // Scrolling downward
+                                            setState(() {
+                                              isScrolled = true;
+                                            });
+                                          } else if (primaryDelta < 0) {
+                                            // Scrolling upward
+                                            setState(() {
+                                              isScrolled = false;
+                                            });
+                                          }
+                                        }
+                                      }
+
+                                      return true;
+                                    },
+                                    child: const EventCall(
+                                      ongoing: true,
+                                    ),
+                                  ),
+
+                                  // Content of Tab 3
+
+                                  NotificationListener<ScrollNotification>(
+                                    onNotification: (notification) {
+                                      if (notification
+                                          is ScrollUpdateNotification) {
+                                        if (notification.dragDetails != null &&
+                                            notification.dragDetails!
+                                                    .primaryDelta !=
+                                                null) {
+                                          double primaryDelta = notification
+                                              .dragDetails!.primaryDelta!;
+
+                                          if (primaryDelta > 0) {
+                                            // Scrolling downward
+                                            setState(() {
+                                              isScrolled = true;
+                                            });
+                                          } else if (primaryDelta < 0) {
+                                            // Scrolling upward
+                                            setState(() {
+                                              isScrolled = false;
+                                            });
+                                          }
+                                        }
+                                      }
+
+                                      return true;
+                                    },
+                                    child: const EventCall(
+                                      ongoing: false,
                                     ),
                                   ),
                                 ],
                               ),
-                              const SizedBox(height: 10),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
-                      ];
-                    },
-                    body: DefaultTabController(
-                      length: 3, // Number of tabs
-                      child: Column(
-                        children: <Widget>[
-                          Container(
-                            constraints:
-                                const BoxConstraints.expand(height: 50),
-                            child: TabBar(
-                              tabs: <Widget>[
-                                Tab(
-                                  child: Lottie.asset(
-                                    'assets/anim/liveevent.json',
-                                    height: 25,
-                                  ),
-                                ),
-                                const Tab(text: 'Ongoing'),
-                                const Tab(text: 'Upcoming'),
-                              ],
-                            ),
-                          ),
-                          const Expanded(
-                            child: TabBarView(
-                              children: <Widget>[
-                                // Content of Tab 1
-                                EventCall(
-                                  full: true,
-                                ),
-
-                                // Content of Tab 2
-                                EventCall(
-                                  ongoing: true,
-                                ),
-
-                                // Content of Tab 3
-
-                                EventCall(
-                                  ongoing: false,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
                       ),
                     ),
-                  ));
+                    const BottomBar(
+                      activeIndex: 2,
+                    )
+                  ]));
       },
     );
   }
