@@ -17,7 +17,7 @@ import '../../../utils/theme/theme.dart';
 import '../controller/profile_controller.dart';
 import '../../home/controller/home_controller.dart';
 
-final GlobalKey<NavigatorState> connectbuttonkey = GlobalKey<NavigatorState>();
+// final GlobalKey<NavigatorState> connectbuttonkey = GlobalKey<NavigatorState>();
 
 /// BOSS OF THE WEEK HOMEPAGE TILE
 class BossOfWeekProfileTile extends StatefulWidget {
@@ -490,7 +490,7 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
       child: Row(
         children: <Widget>[
           ElevatedButton(
-            key: connectbuttonkey,
+            // key: connectbuttonkey,
             onPressed: () async {
               connectToUser();
             },

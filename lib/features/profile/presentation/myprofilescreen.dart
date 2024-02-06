@@ -49,8 +49,10 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
         return Scaffold(
           backgroundColor: Colors.white,
           floatingActionButton: Padding(
-            padding: EdgeInsets.only(bottom: Platform.isAndroid ? 80.0 : 0),
-            child: FloatingActionButton.extended(
+            padding:  EdgeInsets.only(bottom: Platform.isIOS ? 50 : 80.0),
+            child: FloatingActionButton(
+              child: Icon(Icons.add),
+            shape: CircleBorder(),
               onPressed: () {
                 showModalBottomSheet(
                     context: context,
@@ -123,16 +125,6 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                       );
                     });
               },
-              label: const Text(
-                'Post',
-                style: TextStyle(fontWeight: FontWeight.w700, fontSize: 18),
-              ),
-              icon: const Icon(Icons.add),
-              shape: isScrolled
-                  ? RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(100))
-                  : CircleBorder(),
-              isExtended: isScrolled,
               backgroundColor: primaryColorLT,
             ),
           ),

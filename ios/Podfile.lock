@@ -499,7 +499,7 @@ SPEC CHECKSUMS:
   FirebaseDynamicLinks: c37307441c53838d66a9650dabca9e0459502527
   FirebaseInstallations: 558b1da7d65afeb996fd5c814332f013234ece4e
   FirebaseMessaging: 9bc34a98d2e0237e1b121915120d4d48ddcf301e
-  Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
+  Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
   flutter_inappwebview: 3d32228f1304635e7c028b0d4252937730bbc6cf
   flutter_logs: 5d0dca26963e0f30b11a995a764744ef77d5d428
   flutter_native_splash: 52501b97d1c0a5f898d687f1646226c1f93c56ef
