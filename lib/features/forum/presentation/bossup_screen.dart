@@ -68,6 +68,7 @@ class _BossUpSectionState extends State<BossUpSection> {
 
   @override
   Widget build(BuildContext context) {
+    
     int userCount = widget.industry.joinedUsers
             ?.where((String element) => element.isNotEmpty)
             .toList()

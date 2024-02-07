@@ -33,15 +33,13 @@ class LiveEvent extends StatefulWidget {
   State<LiveEvent> createState() => _LiveEventState();
 }
 
-class _LiveEventState extends State<LiveEvent>
-    with AutomaticKeepAliveClientMixin<LiveEvent> {
+class _LiveEventState extends State<LiveEvent> {
   final LiveController liveEventController = Get.put(LiveController());
   TextEditingController joinEvent = TextEditingController();
   final ScrollController scrollController = ScrollController();
   final ProfileController profileController = Get.find();
   bool _isSearching = false;
   bool isScrolled = true;
-  bool get wantKeepAlive => true;
 
   List<Widget> get mActions {
     return <Widget>[
@@ -151,9 +149,10 @@ class _LiveEventState extends State<LiveEvent>
             ),
             floatingActionButton: !liveController.loading.value
                 ? Padding(
-                    padding:
-                        EdgeInsets.only(bottom: Platform.isAndroid ? 80.0 : 0),
-                    child: FloatingActionButton.extended(
+                  padding:  EdgeInsets.only(bottom: Platform.isIOS ? 50 :80.0),
+                  child: FloatingActionButton(
+                      child: Icon(Icons.add),
+                      shape: CircleBorder(),
                       onPressed: () {
                         showModalBottomSheet(
                             context: context,
@@ -168,8 +167,7 @@ class _LiveEventState extends State<LiveEvent>
                                 child: Padding(
                                   padding: const EdgeInsets.all(15.0),
                                   child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     mainAxisSize: MainAxisSize.min,
                                     children: <Widget>[
                                       Expanded(
@@ -177,11 +175,10 @@ class _LiveEventState extends State<LiveEvent>
                                         child: ListView.separated(
                                           itemCount: 3,
                                           separatorBuilder:
-                                              (BuildContext context,
-                                                      int index) =>
+                                              (BuildContext context, int index) =>
                                                   const Divider(),
-                                          itemBuilder: (BuildContext context,
-                                              int index) {
+                                          itemBuilder:
+                                              (BuildContext context, int index) {
                                             return ListTile(
                                               onTap: () {
                                                 Navigator.pop(context);
@@ -195,8 +192,7 @@ class _LiveEventState extends State<LiveEvent>
                                               },
                                               minVerticalPadding: 0,
                                               contentPadding:
-                                                  const EdgeInsets.only(
-                                                      left: 10),
+                                                  const EdgeInsets.only(left: 10),
                                               leading: SvgPicture.asset(
                                                 index == 0
                                                     ? 'assets/svgs/text.svg'
@@ -218,8 +214,7 @@ class _LiveEventState extends State<LiveEvent>
                                                         : 'Create a Live Event',
                                                 style: const TextStyle(
                                                     fontSize: 18,
-                                                    fontWeight:
-                                                        FontWeight.w700),
+                                                    fontWeight: FontWeight.w700),
                                               ),
                                             );
                                           },
@@ -231,27 +226,13 @@ class _LiveEventState extends State<LiveEvent>
                               );
                             });
                       },
-                      label: const Text(
-                        'Post',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w700, fontSize: 18),
-                      ),
-                      icon: const Icon(Icons.add),
-                      shape: isScrolled
-                          ? RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(100))
-                          : CircleBorder(),
-                      isExtended: isScrolled,
                       backgroundColor: primaryColorLT,
                     ),
-                  )
+                )
                 : Container(),
             body: liveController.loading.value
-                ? Stack(children: const [
+                ? const Stack(children: [
                     Center(child: CircularProgressIndicator()),
-                    BottomBar(
-                      activeIndex: 2,
-                    )
                   ])
                 : Stack(children: [
                     NestedScrollView(
@@ -358,107 +339,23 @@ class _LiveEventState extends State<LiveEvent>
                                 ],
                               ),
                             ),
-                            Expanded(
+                            const Expanded(
                               child: TabBarView(
                                 children: <Widget>[
                                   // Content of Tab 1
-                                  NotificationListener<ScrollNotification>(
-                                    onNotification: (notification) {
-                                      if (notification
-                                          is ScrollUpdateNotification) {
-                                        if (notification.dragDetails != null &&
-                                            notification.dragDetails!
-                                                    .primaryDelta !=
-                                                null) {
-                                          double primaryDelta = notification
-                                              .dragDetails!.primaryDelta!;
-
-                                          if (primaryDelta > 0) {
-                                            // Scrolling downward
-                                            setState(() {
-                                              isScrolled = true;
-                                            });
-                                          } else if (primaryDelta < 0) {
-                                            // Scrolling upward
-                                            setState(() {
-                                              isScrolled = false;
-                                            });
-                                          }
-                                        }
-                                      }
-
-                                      return true;
-                                    },
-                                    child: const EventCall(
-                                      full: true,
-                                    ),
+                                  EventCall(
+                                    full: true,
                                   ),
 
                                   // Content of Tab 2
-                                  NotificationListener<ScrollNotification>(
-                                    onNotification: (notification) {
-                                      if (notification
-                                          is ScrollUpdateNotification) {
-                                        if (notification.dragDetails != null &&
-                                            notification.dragDetails!
-                                                    .primaryDelta !=
-                                                null) {
-                                          double primaryDelta = notification
-                                              .dragDetails!.primaryDelta!;
-
-                                          if (primaryDelta > 0) {
-                                            // Scrolling downward
-                                            setState(() {
-                                              isScrolled = true;
-                                            });
-                                          } else if (primaryDelta < 0) {
-                                            // Scrolling upward
-                                            setState(() {
-                                              isScrolled = false;
-                                            });
-                                          }
-                                        }
-                                      }
-
-                                      return true;
-                                    },
-                                    child: const EventCall(
-                                      ongoing: true,
-                                    ),
+                                  EventCall(
+                                    ongoing: true,
                                   ),
 
                                   // Content of Tab 3
 
-                                  NotificationListener<ScrollNotification>(
-                                    onNotification: (notification) {
-                                      if (notification
-                                          is ScrollUpdateNotification) {
-                                        if (notification.dragDetails != null &&
-                                            notification.dragDetails!
-                                                    .primaryDelta !=
-                                                null) {
-                                          double primaryDelta = notification
-                                              .dragDetails!.primaryDelta!;
-
-                                          if (primaryDelta > 0) {
-                                            // Scrolling downward
-                                            setState(() {
-                                              isScrolled = true;
-                                            });
-                                          } else if (primaryDelta < 0) {
-                                            // Scrolling upward
-                                            setState(() {
-                                              isScrolled = false;
-                                            });
-                                          }
-                                        }
-                                      }
-
-                                      return true;
-                                    },
-                                    child: const EventCall(
-                                      ongoing: false,
-                                    ),
+                                  EventCall(
+                                    ongoing: false,
                                   ),
                                 ],
                               ),

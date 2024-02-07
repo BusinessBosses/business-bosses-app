@@ -20,15 +20,15 @@ class BottomNavigationScreen extends StatefulWidget {
   _BottomNavigationExampleState createState() =>
       _BottomNavigationExampleState();
 
-  static final GlobalKey<NavigatorState> homekey = GlobalKey<NavigatorState>();
-  static final GlobalKey<NavigatorState> bossupkey =
-      GlobalKey<NavigatorState>();
-  static final GlobalKey<NavigatorState> eventskey =
-      GlobalKey<NavigatorState>();
-  static final GlobalKey<NavigatorState> marketplacekey =
-      GlobalKey<NavigatorState>();
-  static final GlobalKey<NavigatorState> profilekey =
-      GlobalKey<NavigatorState>();
+  // static final GlobalKey<NavigatorState> homekey = GlobalKey<NavigatorState>();
+  // static final GlobalKey<NavigatorState> bossupkey =
+  //     GlobalKey<NavigatorState>();
+  // static final GlobalKey<NavigatorState> eventskey =
+  //     GlobalKey<NavigatorState>();
+  // static final GlobalKey<NavigatorState> marketplacekey =
+  //     GlobalKey<NavigatorState>();
+  // static final GlobalKey<NavigatorState> profilekey =
+  //     GlobalKey<NavigatorState>();
 }
 
 class _BottomNavigationExampleState extends State<BottomNavigationScreen> {
@@ -63,53 +63,53 @@ class _BottomNavigationExampleState extends State<BottomNavigationScreen> {
         children: _pages,
       ),
       bottomNavigationBar: Stack(children: [
-        Padding(
-          padding: const EdgeInsets.only(top: 20.0),
-          child: Row(
-            children: [
-              Expanded(
-                child: Text(
-                  "d",
-                  style: const TextStyle(color: Colors.white),
-                  textAlign: TextAlign.center,
-                  key: BottomNavigationScreen.homekey,
-                ),
-              ),
-              Expanded(
-                child: Text(
-                  "d",
-                  style: const TextStyle(color: Colors.white),
-                  textAlign: TextAlign.center,
-                  key: BottomNavigationScreen.bossupkey,
-                ),
-              ),
-              Expanded(
-                child: Text(
-                  "d",
-                  key: BottomNavigationScreen.eventskey,
-                  style: const TextStyle(color: Colors.white),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-              Expanded(
-                child: Text(
-                  "d",
-                  key: BottomNavigationScreen.marketplacekey,
-                  style: const TextStyle(color: Colors.white),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-              Expanded(
-                child: Text(
-                  "d",
-                  key: BottomNavigationScreen.profilekey,
-                  style: const TextStyle(color: Colors.white),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            ],
-          ),
-        ),
+        // Padding(
+        //   padding: const EdgeInsets.only(top: 20.0),
+        //   child: Row(
+        //     children: [
+        //       Expanded(
+        //         child: Text(
+        //           "d",
+        //           style: const TextStyle(color: Colors.white),
+        //           textAlign: TextAlign.center,
+        //           key: BottomNavigationScreen.homekey,
+        //         ),
+        //       ),
+        //       Expanded(
+        //         child: Text(
+        //           "d",
+        //           style: const TextStyle(color: Colors.white),
+        //           textAlign: TextAlign.center,
+        //           key: BottomNavigationScreen.bossupkey,
+        //         ),
+        //       ),
+        //       Expanded(
+        //         child: Text(
+        //           "d",
+        //           key: BottomNavigationScreen.eventskey,
+        //           style: const TextStyle(color: Colors.white),
+        //           textAlign: TextAlign.center,
+        //         ),
+        //       ),
+        //       Expanded(
+        //         child: Text(
+        //           "d",
+        //           key: BottomNavigationScreen.marketplacekey,
+        //           style: const TextStyle(color: Colors.white),
+        //           textAlign: TextAlign.center,
+        //         ),
+        //       ),
+        //       Expanded(
+        //         child: Text(
+        //           "d",
+        //           key: BottomNavigationScreen.profilekey,
+        //           style: const TextStyle(color: Colors.white),
+        //           textAlign: TextAlign.center,
+        //         ),
+        //       ),
+        //     ],
+        //   ),
+        // ),
         BottomNavigationBar(
           backgroundColor: Colors.white,
           currentIndex: _selectedPageIndex,

@@ -89,7 +89,7 @@ dependencies:
   flutter_speed_dial: ^7.0.0
   purchases_flutter: ^6.5.0
   # add_2_calendar: 
-  tutorial_coach_mark: ^1.2.11
+  # tutorial_coach_mark: ^1.2.11
   zego_uikit_signaling_plugin: ^2.7.4
   zego_express_engine: ^3.12.4
 

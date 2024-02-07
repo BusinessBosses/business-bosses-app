@@ -18,7 +18,7 @@ import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:text_scroll/text_scroll.dart';
-import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
+// import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 import 'package:upgrader/upgrader.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 import '../../utils/constants/constants.dart';
@@ -46,13 +46,12 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen>
-    with AutomaticKeepAliveClientMixin<HomeScreen>, WidgetsBindingObserver {
+    with WidgetsBindingObserver {
   final ProfileController _profileController = Get.find();
   final LiveController liveEventController = Get.put(LiveController());
   late IO.Socket socket;
   bool isScrolled = true;
-  List<TargetFocus> targets = [];
-  bool get wantKeepAlive => true;
+  // List<TargetFocus> targets = [];
 
   // int currentTimestamp = DateTime.now().millisecondsSinceEpoch;
   // final GetStorage sandBox = GetStorage();
@@ -62,7 +61,7 @@ class _HomeScreenState extends State<HomeScreen>
       Get.put(CommunitiesController());
   final BossUpController bossUpController = Get.put(BossUpController());
 
-  final GlobalKey<NavigatorState> postButtonKey = GlobalKey<NavigatorState>();
+  // final GlobalKey<NavigatorState> postButtonKey = GlobalKey<NavigatorState>();
 
   @override
   void initState() {
@@ -74,7 +73,7 @@ class _HomeScreenState extends State<HomeScreen>
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String? tutorialShown = prefs.getString('tutorialShown');
       if (tutorialShown == null || tutorialShown.isEmpty) {
-        showTutorial();
+        // showTutorial();
         await prefs.setString('tutorialShown', 'true');
       }
     });
@@ -134,501 +133,501 @@ class _HomeScreenState extends State<HomeScreen>
     // Initial connection
     connectSocket();
 
-    targets.add(TargetFocus(
-        identify: 'Searchtarget',
-        keyTarget: Homeappbar.searchkey,
-        contents: [
-          TargetContent(
-              align: ContentAlign.bottom,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
-                  // Lottie.asset(
-                  //   'assets/anim/liveevent.json',
-                  //   height: 85,
-                  // ),
+    // targets.add(TargetFocus(
+    //     identify: 'Searchtarget',
+    //     keyTarget: Homeappbar.searchkey,
+    //     contents: [
+    //       TargetContent(
+    //           align: ContentAlign.bottom,
+    //           child: Column(
+    //             crossAxisAlignment: CrossAxisAlignment.start,
+    //             mainAxisAlignment: MainAxisAlignment.start,
+    //             children: <Widget>[
+    //               // Lottie.asset(
+    //               //   'assets/anim/liveevent.json',
+    //               //   height: 85,
+    //               // ),
 
-                  SizedBox(
-                    height: 200,
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Row(
-                        children: [
-                          Text(
-                            'Tap higlighted areas to skip',
-                            style: TextStyle(
-                                color: Colors.white.withAlpha(150),
-                                fontSize: 15),
-                          ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          SvgPicture.asset(
-                            'assets/svgs/up.svg',
-                            height: 20,
-                            color: Colors.white,
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                  const Text(
-                    'Search',
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                        fontSize: 25.0),
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.only(top: 10.0),
-                    child: Text(
-                      '- Find users and posts through the homepage search',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 15,
-                          fontWeight: FontWeight.w700),
-                    ),
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.only(top: 5.0),
-                    child: Text(
-                      '- Find groups and topics through the community search',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 15,
-                          fontWeight: FontWeight.w700),
-                    ),
-                  ),
-                ],
-              ))
-        ]));
+    //               SizedBox(
+    //                 height: 200,
+    //                 child: Align(
+    //                   alignment: Alignment.centerLeft,
+    //                   child: Row(
+    //                     children: [
+    //                       Text(
+    //                         'Tap higlighted areas to skip',
+    //                         style: TextStyle(
+    //                             color: Colors.white.withAlpha(150),
+    //                             fontSize: 15),
+    //                       ),
+    //                       const SizedBox(
+    //                         width: 10,
+    //                       ),
+    //                       SvgPicture.asset(
+    //                         'assets/svgs/up.svg',
+    //                         height: 20,
+    //                         color: Colors.white,
+    //                       )
+    //                     ],
+    //                   ),
+    //                 ),
+    //               ),
+    //               const Text(
+    //                 'Search',
+    //                 style: TextStyle(
+    //                     fontWeight: FontWeight.bold,
+    //                     color: Colors.white,
+    //                     fontSize: 25.0),
+    //               ),
+    //               const Padding(
+    //                 padding: EdgeInsets.only(top: 10.0),
+    //                 child: Text(
+    //                   '- Find users and posts through the homepage search',
+    //                   style: TextStyle(
+    //                       color: Colors.white,
+    //                       fontSize: 15,
+    //                       fontWeight: FontWeight.w700),
+    //                 ),
+    //               ),
+    //               const Padding(
+    //                 padding: EdgeInsets.only(top: 5.0),
+    //                 child: Text(
+    //                   '- Find groups and topics through the community search',
+    //                   style: TextStyle(
+    //                       color: Colors.white,
+    //                       fontSize: 15,
+    //                       fontWeight: FontWeight.w700),
+    //                 ),
+    //               ),
+    //             ],
+    //           ))
+    //     ]));
 
-    targets.add(TargetFocus(
-        identify: 'Notificationtarget',
-        keyTarget: Homeappbar.notificationkey,
-        contents: [
-          TargetContent(
-              align: ContentAlign.bottom,
-              child: const Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
-                  // Lottie.asset(
-                  //   'assets/anim/liveevent.json',
-                  //   height: 85,
-                  // ),
-                  SizedBox(
-                    height: 200,
-                  ),
-                  Text(
-                    'Notifications',
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                        fontSize: 25.0),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 10.0),
-                    child: Text(
-                      '- Receive Daily motivational quotes',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 15,
-                          fontWeight: FontWeight.w700),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 5.0),
-                    child: Text(
-                      '- Receive alerts from your network activities',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 15,
-                          fontWeight: FontWeight.w700),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 200,
-                  )
-                ],
-              ))
-        ]));
+    // targets.add(TargetFocus(
+    //     identify: 'Notificationtarget',
+    //     keyTarget: Homeappbar.notificationkey,
+    //     contents: [
+    //       TargetContent(
+    //           align: ContentAlign.bottom,
+    //           child: const Column(
+    //             crossAxisAlignment: CrossAxisAlignment.start,
+    //             mainAxisAlignment: MainAxisAlignment.start,
+    //             children: <Widget>[
+    //               // Lottie.asset(
+    //               //   'assets/anim/liveevent.json',
+    //               //   height: 85,
+    //               // ),
+    //               SizedBox(
+    //                 height: 200,
+    //               ),
+    //               Text(
+    //                 'Notifications',
+    //                 style: TextStyle(
+    //                     fontWeight: FontWeight.bold,
+    //                     color: Colors.white,
+    //                     fontSize: 25.0),
+    //               ),
+    //               Padding(
+    //                 padding: EdgeInsets.only(top: 10.0),
+    //                 child: Text(
+    //                   '- Receive Daily motivational quotes',
+    //                   style: TextStyle(
+    //                       color: Colors.white,
+    //                       fontSize: 15,
+    //                       fontWeight: FontWeight.w700),
+    //                 ),
+    //               ),
+    //               Padding(
+    //                 padding: EdgeInsets.only(top: 5.0),
+    //                 child: Text(
+    //                   '- Receive alerts from your network activities',
+    //                   style: TextStyle(
+    //                       color: Colors.white,
+    //                       fontSize: 15,
+    //                       fontWeight: FontWeight.w700),
+    //                 ),
+    //               ),
+    //               SizedBox(
+    //                 height: 200,
+    //               )
+    //             ],
+    //           ))
+    //     ]));
 
-    targets.add(TargetFocus(
-        identify: 'Hometarget',
-        keyTarget: BottomNavigationScreen.homekey,
-        contents: [
-          TargetContent(
-              align: ContentAlign.top,
-              child: const Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
-                  // Image.asset(
-                  //   'assets/images/test.gif',
-                  //   height: 500.0,
-                  //   width: 500.0,
-                  // ),
-                  // Lottie.asset(
-                  //   'assets/anim/liveevent.json',
-                  //   height: 85,
-                  // ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Text(
-                    'Content Feed',
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                        fontSize: 25.0),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 10.0),
-                    child: Text(
-                      '- Engage with content from posts and topics you\'re inrterested in',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 15,
-                          fontWeight: FontWeight.w700),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 5.0),
-                    child: Text(
-                      '- Create and post relevant content for an opportunity to get discovered',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 15,
-                          fontWeight: FontWeight.w700),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 200,
-                  )
-                ],
-              ))
-        ]));
-    targets.add(TargetFocus(
-        identify: 'Bossuptarget',
-        keyTarget: BottomNavigationScreen.bossupkey,
-        contents: [
-          TargetContent(
-              align: ContentAlign.top,
-              child: const Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
-                  // Lottie.asset(
-                  //   'assets/anim/liveevent.json',
-                  //   height: 85,
-                  // ),
-                  Text(
-                    'Community',
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                        fontSize: 25.0),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 10.0),
-                    child: Text(
-                      '- Network with new contacts & easily find your industry experts',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 15,
-                          fontWeight: FontWeight.w700),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 5.0),
-                    child: Text(
-                      '- Join groups with topics that support your educational & business goals',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 15,
-                          fontWeight: FontWeight.w700),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 5.0),
-                    child: Text(
-                      '- Enter Boss Up Challenge for a chance to become \"Boss of the week\"',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 15,
-                          fontWeight: FontWeight.w700),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 200,
-                  )
-                ],
-              ))
-        ]));
-    targets.add(TargetFocus(
-        identify: 'Liveventtarget',
-        keyTarget: BottomNavigationScreen.eventskey,
-        contents: [
-          TargetContent(
-              align: ContentAlign.top,
-              child: const Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
-                  // Lottie.asset(
-                  //   'assets/anim/liveevent.json',
-                  //   height: 85,
-                  // ),
-                  Text(
-                    'Live Events',
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                        fontSize: 25.0),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 10.0),
-                    child: Text(
-                      '- Create live events with description, date, and time.',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 15,
-                          fontWeight: FontWeight.w700),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 5.0),
-                    child: Text(
-                      '- Participants can attend, share and save live events.',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 15,
-                          fontWeight: FontWeight.w700),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 200,
-                  )
-                ],
-              ))
-        ]));
+    // targets.add(TargetFocus(
+    //     identify: 'Hometarget',
+    //     // keyTarget: BottomNavigationScreen.homekey,
+    //     contents: [
+    //       TargetContent(
+    //           align: ContentAlign.top,
+    //           child: const Column(
+    //             crossAxisAlignment: CrossAxisAlignment.start,
+    //             mainAxisAlignment: MainAxisAlignment.start,
+    //             children: <Widget>[
+    //               // Image.asset(
+    //               //   'assets/images/test.gif',
+    //               //   height: 500.0,
+    //               //   width: 500.0,
+    //               // ),
+    //               // Lottie.asset(
+    //               //   'assets/anim/liveevent.json',
+    //               //   height: 85,
+    //               // ),
+    //               SizedBox(
+    //                 height: 20,
+    //               ),
+    //               Text(
+    //                 'Content Feed',
+    //                 style: TextStyle(
+    //                     fontWeight: FontWeight.bold,
+    //                     color: Colors.white,
+    //                     fontSize: 25.0),
+    //               ),
+    //               Padding(
+    //                 padding: EdgeInsets.only(top: 10.0),
+    //                 child: Text(
+    //                   '- Engage with content from posts and topics you\'re inrterested in',
+    //                   style: TextStyle(
+    //                       color: Colors.white,
+    //                       fontSize: 15,
+    //                       fontWeight: FontWeight.w700),
+    //                 ),
+    //               ),
+    //               Padding(
+    //                 padding: EdgeInsets.only(top: 5.0),
+    //                 child: Text(
+    //                   '- Create and post relevant content for an opportunity to get discovered',
+    //                   style: TextStyle(
+    //                       color: Colors.white,
+    //                       fontSize: 15,
+    //                       fontWeight: FontWeight.w700),
+    //                 ),
+    //               ),
+    //               SizedBox(
+    //                 height: 200,
+    //               )
+    //             ],
+    //           ))
+    //     ]));
+    // targets.add(TargetFocus(
+    //     identify: 'Bossuptarget',
+    //     // keyTarget: BottomNavigationScreen.bossupkey,
+    //     contents: [
+    //       TargetContent(
+    //           align: ContentAlign.top,
+    //           child: const Column(
+    //             crossAxisAlignment: CrossAxisAlignment.start,
+    //             mainAxisAlignment: MainAxisAlignment.start,
+    //             children: <Widget>[
+    //               // Lottie.asset(
+    //               //   'assets/anim/liveevent.json',
+    //               //   height: 85,
+    //               // ),
+    //               Text(
+    //                 'Community',
+    //                 style: TextStyle(
+    //                     fontWeight: FontWeight.bold,
+    //                     color: Colors.white,
+    //                     fontSize: 25.0),
+    //               ),
+    //               Padding(
+    //                 padding: EdgeInsets.only(top: 10.0),
+    //                 child: Text(
+    //                   '- Network with new contacts & easily find your industry experts',
+    //                   style: TextStyle(
+    //                       color: Colors.white,
+    //                       fontSize: 15,
+    //                       fontWeight: FontWeight.w700),
+    //                 ),
+    //               ),
+    //               Padding(
+    //                 padding: EdgeInsets.only(top: 5.0),
+    //                 child: Text(
+    //                   '- Join groups with topics that support your educational & business goals',
+    //                   style: TextStyle(
+    //                       color: Colors.white,
+    //                       fontSize: 15,
+    //                       fontWeight: FontWeight.w700),
+    //                 ),
+    //               ),
+    //               Padding(
+    //                 padding: EdgeInsets.only(top: 5.0),
+    //                 child: Text(
+    //                   '- Enter Boss Up Challenge for a chance to become \"Boss of the week\"',
+    //                   style: TextStyle(
+    //                       color: Colors.white,
+    //                       fontSize: 15,
+    //                       fontWeight: FontWeight.w700),
+    //                 ),
+    //               ),
+    //               SizedBox(
+    //                 height: 200,
+    //               )
+    //             ],
+    //           ))
+    //     ]));
+    // targets.add(TargetFocus(
+    //     identify: 'Liveventtarget',
+    //     // keyTarget: BottomNavigationScreen.eventskey,
+    //     contents: [
+    //       TargetContent(
+    //           align: ContentAlign.top,
+    //           child: const Column(
+    //             crossAxisAlignment: CrossAxisAlignment.start,
+    //             mainAxisAlignment: MainAxisAlignment.start,
+    //             children: <Widget>[
+    //               // Lottie.asset(
+    //               //   'assets/anim/liveevent.json',
+    //               //   height: 85,
+    //               // ),
+    //               Text(
+    //                 'Live Events',
+    //                 style: TextStyle(
+    //                     fontWeight: FontWeight.bold,
+    //                     color: Colors.white,
+    //                     fontSize: 25.0),
+    //               ),
+    //               Padding(
+    //                 padding: EdgeInsets.only(top: 10.0),
+    //                 child: Text(
+    //                   '- Create live events with description, date, and time.',
+    //                   style: TextStyle(
+    //                       color: Colors.white,
+    //                       fontSize: 15,
+    //                       fontWeight: FontWeight.w700),
+    //                 ),
+    //               ),
+    //               Padding(
+    //                 padding: EdgeInsets.only(top: 5.0),
+    //                 child: Text(
+    //                   '- Participants can attend, share and save live events.',
+    //                   style: TextStyle(
+    //                       color: Colors.white,
+    //                       fontSize: 15,
+    //                       fontWeight: FontWeight.w700),
+    //                 ),
+    //               ),
+    //               SizedBox(
+    //                 height: 200,
+    //               )
+    //             ],
+    //           ))
+    //     ]));
 
-    targets.add(TargetFocus(
-        identify: 'marketplacetarget',
-        keyTarget: BottomNavigationScreen.marketplacekey,
-        contents: [
-          TargetContent(
-              align: ContentAlign.top,
-              child: const Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
-                  // Lottie.asset(
-                  //   'assets/anim/liveevent.json',
-                  //   height: 85,
-                  // ),
-                  Text(
-                    'Marketplace',
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                        fontSize: 25.0),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 10.0),
-                    child: Text(
-                      '- Sell your products and services',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 15,
-                          fontWeight: FontWeight.w700),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 5.0),
-                    child: Text(
-                      '- Selling is easy, you can add price, description, photos.',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 15,
-                          fontWeight: FontWeight.w700),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 200,
-                  )
-                ],
-              ))
-        ]));
+    // targets.add(TargetFocus(
+    //     identify: 'marketplacetarget',
+    //     // keyTarget: BottomNavigationScreen.marketplacekey,
+    //     contents: [
+    //       TargetContent(
+    //           align: ContentAlign.top,
+    //           child: const Column(
+    //             crossAxisAlignment: CrossAxisAlignment.start,
+    //             mainAxisAlignment: MainAxisAlignment.start,
+    //             children: <Widget>[
+    //               // Lottie.asset(
+    //               //   'assets/anim/liveevent.json',
+    //               //   height: 85,
+    //               // ),
+    //               Text(
+    //                 'Marketplace',
+    //                 style: TextStyle(
+    //                     fontWeight: FontWeight.bold,
+    //                     color: Colors.white,
+    //                     fontSize: 25.0),
+    //               ),
+    //               Padding(
+    //                 padding: EdgeInsets.only(top: 10.0),
+    //                 child: Text(
+    //                   '- Sell your products and services',
+    //                   style: TextStyle(
+    //                       color: Colors.white,
+    //                       fontSize: 15,
+    //                       fontWeight: FontWeight.w700),
+    //                 ),
+    //               ),
+    //               Padding(
+    //                 padding: EdgeInsets.only(top: 5.0),
+    //                 child: Text(
+    //                   '- Selling is easy, you can add price, description, photos.',
+    //                   style: TextStyle(
+    //                       color: Colors.white,
+    //                       fontSize: 15,
+    //                       fontWeight: FontWeight.w700),
+    //                 ),
+    //               ),
+    //               SizedBox(
+    //                 height: 200,
+    //               )
+    //             ],
+    //           ))
+    //     ]));
 
-    targets.add(TargetFocus(
-        identify: 'Profiletarget',
-        keyTarget: BottomNavigationScreen.profilekey,
-        contents: [
-          TargetContent(
-              align: ContentAlign.top,
-              child: const Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
-                  // Lottie.asset(
-                  //   'assets/anim/liveevent.json',
-                  //   height: 85,
-                  // ),
-                  Text(
-                    'Profile',
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                        fontSize: 25.0),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 10.0),
-                    child: Text(
-                      '- Keep your bio up to date as a virtual business card',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 15,
-                          fontWeight: FontWeight.w700),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 5.0),
-                    child: Text(
-                      '- Showcase your products or services to find new opportunities',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 15,
-                          fontWeight: FontWeight.w700),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 200,
-                  )
-                ],
-              ))
-        ]));
+    // targets.add(TargetFocus(
+    //     identify: 'Profiletarget',
+    //     // keyTarget: BottomNavigationScreen.profilekey,
+    //     contents: [
+    //       TargetContent(
+    //           align: ContentAlign.top,
+    //           child: const Column(
+    //             crossAxisAlignment: CrossAxisAlignment.start,
+    //             mainAxisAlignment: MainAxisAlignment.start,
+    //             children: <Widget>[
+    //               // Lottie.asset(
+    //               //   'assets/anim/liveevent.json',
+    //               //   height: 85,
+    //               // ),
+    //               Text(
+    //                 'Profile',
+    //                 style: TextStyle(
+    //                     fontWeight: FontWeight.bold,
+    //                     color: Colors.white,
+    //                     fontSize: 25.0),
+    //               ),
+    //               Padding(
+    //                 padding: EdgeInsets.only(top: 10.0),
+    //                 child: Text(
+    //                   '- Keep your bio up to date as a virtual business card',
+    //                   style: TextStyle(
+    //                       color: Colors.white,
+    //                       fontSize: 15,
+    //                       fontWeight: FontWeight.w700),
+    //                 ),
+    //               ),
+    //               Padding(
+    //                 padding: EdgeInsets.only(top: 5.0),
+    //                 child: Text(
+    //                   '- Showcase your products or services to find new opportunities',
+    //                   style: TextStyle(
+    //                       color: Colors.white,
+    //                       fontSize: 15,
+    //                       fontWeight: FontWeight.w700),
+    //                 ),
+    //               ),
+    //               SizedBox(
+    //                 height: 200,
+    //               )
+    //             ],
+    //           ))
+    //     ]));
 
-    targets.add(
-      TargetFocus(
-        identify: 'Createbuttontarget',
-        keyTarget: postButtonKey,
-        contents: [
-          TargetContent(
-              align: ContentAlign.top,
-              child: const Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
-                  // Lottie.asset(
-                  //   'assets/anim/liveevent.json',
-                  //   height: 85,
-                  // ),
-                  Text(
-                    'Create',
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                        fontSize: 25.0),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 10.0),
-                    child: Text(
-                      '- Create Posts',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 15,
-                          fontWeight: FontWeight.w700),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 5.0),
-                    child: Text(
-                      '- Post polls and surveys to gather feedback and use the feedback to improve your business offerings.',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 15,
-                          fontWeight: FontWeight.w700),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 200,
-                  )
-                ],
-              ))
-        ],
-      ),
-    );
+    // targets.add(
+    //   TargetFocus(
+    //     identify: 'Createbuttontarget',
+    //     keyTarget: postButtonKey,
+    //     contents: [
+    //       TargetContent(
+    //           align: ContentAlign.top,
+    //           child: const Column(
+    //             crossAxisAlignment: CrossAxisAlignment.start,
+    //             mainAxisAlignment: MainAxisAlignment.start,
+    //             children: <Widget>[
+    //               // Lottie.asset(
+    //               //   'assets/anim/liveevent.json',
+    //               //   height: 85,
+    //               // ),
+    //               Text(
+    //                 'Create',
+    //                 style: TextStyle(
+    //                     fontWeight: FontWeight.bold,
+    //                     color: Colors.white,
+    //                     fontSize: 25.0),
+    //               ),
+    //               Padding(
+    //                 padding: EdgeInsets.only(top: 10.0),
+    //                 child: Text(
+    //                   '- Create Posts',
+    //                   style: TextStyle(
+    //                       color: Colors.white,
+    //                       fontSize: 15,
+    //                       fontWeight: FontWeight.w700),
+    //                 ),
+    //               ),
+    //               Padding(
+    //                 padding: EdgeInsets.only(top: 5.0),
+    //                 child: Text(
+    //                   '- Post polls and surveys to gather feedback and use the feedback to improve your business offerings.',
+    //                   style: TextStyle(
+    //                       color: Colors.white,
+    //                       fontSize: 15,
+    //                       fontWeight: FontWeight.w700),
+    //                 ),
+    //               ),
+    //               SizedBox(
+    //                 height: 200,
+    //               )
+    //             ],
+    //           ))
+    //     ],
+    //   ),
+    // );
 
-    targets.add(TargetFocus(
-        identify: 'connecttarget',
-        keyTarget: connectbuttonkey,
-        contents: [
-          TargetContent(
-              align: ContentAlign.bottom,
-              child: const Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
-                  // Lottie.asset(
-                  //   'assets/anim/liveevent.json',
-                  //   height: 85,
-                  // ),
-                  SizedBox(
-                    height: 100,
-                  ),
-                  Text(
-                    'Networking & Referrals',
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                        fontSize: 25.0),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 10.0),
-                    child: Text(
-                      '- Get Connected & connections from entrepreneurs around the globe',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 15,
-                          fontWeight: FontWeight.w700),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 5.0),
-                    child: Text(
-                      '- Invite contacts for a quick & easy way to grow your network & get free promotion',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 15,
-                          fontWeight: FontWeight.w700),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 5.0),
-                    child: Text(
-                      '- 1 to 1 chat to follow up meaningful conversations',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 15,
-                          fontWeight: FontWeight.w700),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 5.0),
-                    child: Text(
-                      '- Give and receive Business referrals',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 15,
-                          fontWeight: FontWeight.w700),
-                    ),
-                  ),
-                ],
-              ))
-        ]));
+    // targets.add(TargetFocus(
+    //     identify: 'connecttarget',
+    //     keyTarget: connectbuttonkey,
+    //     contents: [
+    //       TargetContent(
+    //           align: ContentAlign.bottom,
+    //           child: const Column(
+    //             crossAxisAlignment: CrossAxisAlignment.start,
+    //             mainAxisAlignment: MainAxisAlignment.start,
+    //             children: <Widget>[
+    //               // Lottie.asset(
+    //               //   'assets/anim/liveevent.json',
+    //               //   height: 85,
+    //               // ),
+    //               SizedBox(
+    //                 height: 100,
+    //               ),
+    //               Text(
+    //                 'Networking & Referrals',
+    //                 style: TextStyle(
+    //                     fontWeight: FontWeight.bold,
+    //                     color: Colors.white,
+    //                     fontSize: 25.0),
+    //               ),
+    //               Padding(
+    //                 padding: EdgeInsets.only(top: 10.0),
+    //                 child: Text(
+    //                   '- Get Connected & connections from entrepreneurs around the globe',
+    //                   style: TextStyle(
+    //                       color: Colors.white,
+    //                       fontSize: 15,
+    //                       fontWeight: FontWeight.w700),
+    //                 ),
+    //               ),
+    //               Padding(
+    //                 padding: EdgeInsets.only(top: 5.0),
+    //                 child: Text(
+    //                   '- Invite contacts for a quick & easy way to grow your network & get free promotion',
+    //                   style: TextStyle(
+    //                       color: Colors.white,
+    //                       fontSize: 15,
+    //                       fontWeight: FontWeight.w700),
+    //                 ),
+    //               ),
+    //               Padding(
+    //                 padding: EdgeInsets.only(top: 5.0),
+    //                 child: Text(
+    //                   '- 1 to 1 chat to follow up meaningful conversations',
+    //                   style: TextStyle(
+    //                       color: Colors.white,
+    //                       fontSize: 15,
+    //                       fontWeight: FontWeight.w700),
+    //                 ),
+    //               ),
+    //               Padding(
+    //                 padding: EdgeInsets.only(top: 5.0),
+    //                 child: Text(
+    //                   '- Give and receive Business referrals',
+    //                   style: TextStyle(
+    //                       color: Colors.white,
+    //                       fontSize: 15,
+    //                       fontWeight: FontWeight.w700),
+    //                 ),
+    //               ),
+    //             ],
+    //           ))
+    //     ]));
   }
 
   @override
@@ -713,9 +712,10 @@ class _HomeScreenState extends State<HomeScreen>
               ),
               floatingActionButton: !controller.loading.value
                   ? Padding(
-                      padding: EdgeInsets.only(
-                          bottom: Platform.isAndroid ? 80.0 : 0),
-                      child: FloatingActionButton.extended(
+                    padding: EdgeInsets.only(bottom: Platform.isIOS? 50.0 : 80),
+                    child: FloatingActionButton(
+                        child: Icon(Icons.add),
+                        shape: CircleBorder(),
                         onPressed: () {
                           showModalBottomSheet(
                               context: context,
@@ -752,8 +752,8 @@ class _HomeScreenState extends State<HomeScreen>
                                                           Routes.createPost)
                                                       : index == 1
                                                           ? sellProduct(context)
-                                                          : Get.toNamed(Routes
-                                                              .createevent);
+                                                          : Get.toNamed(
+                                                              Routes.createevent);
                                                 },
                                                 minVerticalPadding: 0,
                                                 contentPadding:
@@ -770,8 +770,7 @@ class _HomeScreenState extends State<HomeScreen>
                                                       : index == 1
                                                           ? 30
                                                           : 22,
-                                                  color:
-                                                      textColor.withOpacity(1),
+                                                  color: textColor.withOpacity(1),
                                                 ),
                                                 title: Text(
                                                   index == 0
@@ -794,21 +793,10 @@ class _HomeScreenState extends State<HomeScreen>
                                 );
                               });
                         },
-                        key: postButtonKey,
-                        label: const Text(
-                          'Post',
-                          style: TextStyle(
-                              fontWeight: FontWeight.w700, fontSize: 18),
-                        ),
-                        icon: const Icon(Icons.add),
-                        shape: isScrolled
-                            ? RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(100))
-                            : CircleBorder(),
-                        isExtended: isScrolled,
+                        // key: postButtonKey,
                         backgroundColor: primaryColorLT,
                       ),
-                    )
+                  )
                   : Container(),
               body: controller.loading.value
                   ? Center(
@@ -1280,59 +1268,59 @@ class _HomeScreenState extends State<HomeScreen>
     await loadData(); // Trigger data reload
   }
 
-  void showTutorial() {
-    TutorialCoachMark(
-      targets: targets, // List<TargetFocus>
-      colorShadow: Colors.black, // DEFAULT Colors.black
-      alignSkip: const AlignmentDirectional(0.95, -0.6),
-      skipWidget: Container(
-        decoration: BoxDecoration(
-          color: primaryColorLT,
-          borderRadius:
-              BorderRadius.circular(50.0), // Adjust the radius as needed
-        ),
-        padding:
-            const EdgeInsets.only(left: 15, right: 15, top: 10, bottom: 10),
-        child: const Row(
-          mainAxisSize: MainAxisSize.min, // Set to 'min' to wrap the content
-          children: [
-            Text(
-              'Close',
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 18,
-                  fontWeight: FontWeight.w700),
-            ),
-            Icon(
-              Icons.close_rounded,
-              color: Colors.white,
-            ),
-          ],
-        ),
-      ),
+  // void showTutorial() {
+  //   TutorialCoachMark(
+  //     targets: targets, // List<TargetFocus>
+  //     colorShadow: Colors.black, // DEFAULT Colors.black
+  //     alignSkip: const AlignmentDirectional(0.95, -0.6),
+  //     skipWidget: Container(
+  //       decoration: BoxDecoration(
+  //         color: primaryColorLT,
+  //         borderRadius:
+  //             BorderRadius.circular(50.0), // Adjust the radius as needed
+  //       ),
+  //       padding:
+  //           const EdgeInsets.only(left: 15, right: 15, top: 10, bottom: 10),
+  //       child: const Row(
+  //         mainAxisSize: MainAxisSize.min, // Set to 'min' to wrap the content
+  //         children: [
+  //           Text(
+  //             'Close',
+  //             style: TextStyle(
+  //                 color: Colors.white,
+  //                 fontSize: 18,
+  //                 fontWeight: FontWeight.w700),
+  //           ),
+  //           Icon(
+  //             Icons.close_rounded,
+  //             color: Colors.white,
+  //           ),
+  //         ],
+  //       ),
+  //     ),
 
-      textStyleSkip: const TextStyle(
-          fontSize: 20, fontWeight: FontWeight.w700, color: primaryColorLT),
-      paddingFocus: 2,
-      opacityShadow: 0.9,
-      onClickTarget: (target) {
-        print(target);
-      },
-      onClickTargetWithTapPosition: (target, tapDetails) {
-        print("target: $target");
-        print(
-            "clicked at position local: ${tapDetails.localPosition} - global: ${tapDetails.globalPosition}");
-      },
-      onClickOverlay: (target) {
-        print(target);
-      },
-      onSkip: () {
-        print("skip");
-        return true;
-      },
-      onFinish: () {
-        print("finish");
-      },
-    ).show(context: context);
-  }
+  //     textStyleSkip: const TextStyle(
+  //         fontSize: 20, fontWeight: FontWeight.w700, color: primaryColorLT),
+  //     paddingFocus: 2,
+  //     opacityShadow: 0.9,
+  //     onClickTarget: (target) {
+  //       print(target);
+  //     },
+  //     onClickTargetWithTapPosition: (target, tapDetails) {
+  //       print("target: $target");
+  //       print(
+  //           "clicked at position local: ${tapDetails.localPosition} - global: ${tapDetails.globalPosition}");
+  //     },
+  //     onClickOverlay: (target) {
+  //       print(target);
+  //     },
+  //     onSkip: () {
+  //       print("skip");
+  //       return true;
+  //     },
+  //     onFinish: () {
+  //       print("finish");
+  //     },
+  //   ).show(context: context);
+  // }
 }
