@@ -42,8 +42,7 @@ class MarketplaceScreen extends StatefulWidget {
   State<MarketplaceScreen> createState() => _MarketplaceScreenState();
 }
 
-class _MarketplaceScreenState extends State<MarketplaceScreen>
-     {
+class _MarketplaceScreenState extends State<MarketplaceScreen> {
   final ProfileController _profileController = Get.find();
   final MarketController _marketController = Get.find();
   final HomeController hmeController = Get.find();

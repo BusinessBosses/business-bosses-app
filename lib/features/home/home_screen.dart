@@ -45,8 +45,7 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen>
-    with WidgetsBindingObserver {
+class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   final ProfileController _profileController = Get.find();
   final LiveController liveEventController = Get.put(LiveController());
   late IO.Socket socket;
@@ -712,8 +711,10 @@ class _HomeScreenState extends State<HomeScreen>
               ),
               floatingActionButton: !controller.loading.value
                   ? Padding(
-                    padding: EdgeInsets.only(bottom: Platform.isIOS? 50.0 : 80),
-                    child: FloatingActionButton(
+                      padding:
+                          EdgeInsets.only(bottom: Platform.isIOS ? 50.0 : 80),
+                      child: FloatingActionButton(
+                        heroTag: "homeButton",
                         child: Icon(Icons.add),
                         shape: CircleBorder(),
                         onPressed: () {
@@ -752,8 +753,8 @@ class _HomeScreenState extends State<HomeScreen>
                                                           Routes.createPost)
                                                       : index == 1
                                                           ? sellProduct(context)
-                                                          : Get.toNamed(
-                                                              Routes.createevent);
+                                                          : Get.toNamed(Routes
+                                                              .createevent);
                                                 },
                                                 minVerticalPadding: 0,
                                                 contentPadding:
@@ -770,7 +771,8 @@ class _HomeScreenState extends State<HomeScreen>
                                                       : index == 1
                                                           ? 30
                                                           : 22,
-                                                  color: textColor.withOpacity(1),
+                                                  color:
+                                                      textColor.withOpacity(1),
                                                 ),
                                                 title: Text(
                                                   index == 0
@@ -796,7 +798,7 @@ class _HomeScreenState extends State<HomeScreen>
                         // key: postButtonKey,
                         backgroundColor: primaryColorLT,
                       ),
-                  )
+                    )
                   : Container(),
               body: controller.loading.value
                   ? Center(

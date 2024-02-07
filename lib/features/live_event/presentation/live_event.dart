@@ -149,8 +149,10 @@ class _LiveEventState extends State<LiveEvent> {
             ),
             floatingActionButton: !liveController.loading.value
                 ? Padding(
-                  padding:  EdgeInsets.only(bottom: Platform.isIOS ? 50 :80.0),
-                  child: FloatingActionButton(
+                    padding:
+                        EdgeInsets.only(bottom: Platform.isIOS ? 50 : 80.0),
+                    child: FloatingActionButton(
+                      heroTag: "liveEventBtn",
                       child: Icon(Icons.add),
                       shape: CircleBorder(),
                       onPressed: () {
@@ -167,7 +169,8 @@ class _LiveEventState extends State<LiveEvent> {
                                 child: Padding(
                                   padding: const EdgeInsets.all(15.0),
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     mainAxisSize: MainAxisSize.min,
                                     children: <Widget>[
                                       Expanded(
@@ -175,10 +178,11 @@ class _LiveEventState extends State<LiveEvent> {
                                         child: ListView.separated(
                                           itemCount: 3,
                                           separatorBuilder:
-                                              (BuildContext context, int index) =>
+                                              (BuildContext context,
+                                                      int index) =>
                                                   const Divider(),
-                                          itemBuilder:
-                                              (BuildContext context, int index) {
+                                          itemBuilder: (BuildContext context,
+                                              int index) {
                                             return ListTile(
                                               onTap: () {
                                                 Navigator.pop(context);
@@ -192,7 +196,8 @@ class _LiveEventState extends State<LiveEvent> {
                                               },
                                               minVerticalPadding: 0,
                                               contentPadding:
-                                                  const EdgeInsets.only(left: 10),
+                                                  const EdgeInsets.only(
+                                                      left: 10),
                                               leading: SvgPicture.asset(
                                                 index == 0
                                                     ? 'assets/svgs/text.svg'
@@ -214,7 +219,8 @@ class _LiveEventState extends State<LiveEvent> {
                                                         : 'Create a Live Event',
                                                 style: const TextStyle(
                                                     fontSize: 18,
-                                                    fontWeight: FontWeight.w700),
+                                                    fontWeight:
+                                                        FontWeight.w700),
                                               ),
                                             );
                                           },
@@ -228,7 +234,7 @@ class _LiveEventState extends State<LiveEvent> {
                       },
                       backgroundColor: primaryColorLT,
                     ),
-                )
+                  )
                 : Container(),
             body: liveController.loading.value
                 ? const Stack(children: [

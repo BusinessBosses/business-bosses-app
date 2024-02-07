@@ -49,10 +49,11 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
         return Scaffold(
           backgroundColor: Colors.white,
           floatingActionButton: Padding(
-            padding:  EdgeInsets.only(bottom: Platform.isIOS ? 50 : 80.0),
+            padding: EdgeInsets.only(bottom: Platform.isIOS ? 50 : 80.0),
             child: FloatingActionButton(
+              heroTag: "myProfileButton",
               child: Icon(Icons.add),
-            shape: CircleBorder(),
+              shape: CircleBorder(),
               onPressed: () {
                 showModalBottomSheet(
                     context: context,
