@@ -152,7 +152,7 @@ class _ExplorebusinessbossesScreenState
                           fontSize: 14.0,
                         ),
                       ),
-                      Image.asset('assets/images/one.png'),
+                      Image.asset('assets/images/exploreone.png'),
                       Text(
                         'Content Feed',
                         style: bodyText1.copyWith(
@@ -200,7 +200,7 @@ class _ExplorebusinessbossesScreenState
                       const SizedBox(
                         height: 8,
                       ),
-                      Image.asset('assets/images/four.png'),
+                      Image.asset('assets/images/explorefour.png'),
                       Text(
                         'Analyser',
                         style: bodyText1.copyWith(
