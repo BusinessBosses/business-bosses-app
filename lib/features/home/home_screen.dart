@@ -8,6 +8,7 @@ import 'package:business_bosses_v2/features/forum/controller/bossup_controller.d
 import 'package:business_bosses_v2/features/home/controller/commumities_controller.dart';
 import 'package:business_bosses_v2/features/home/sellProduct.dart';
 import 'package:business_bosses_v2/features/home/widgets/bottom_bar.dart';
+import 'package:business_bosses_v2/features/home/widgets/floatingbutton.dart';
 import 'package:business_bosses_v2/features/live_event/controller/live_event_controller.dart';
 import 'package:business_bosses_v2/features/live_event/presentation/live_event.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
@@ -710,94 +711,91 @@ class _HomeScreenState extends State<HomeScreen>
                   );
                 }),
               ),
-              floatingActionButton: !controller.loading.value
-                  ? Padding(
-                    padding: EdgeInsets.only(bottom: Platform.isIOS? 50.0 : 80),
-                    child: FloatingActionButton(
-                        child: Icon(Icons.add),
-                        shape: CircleBorder(),
-                        onPressed: () {
-                          showModalBottomSheet(
-                              context: context,
-                              shape: const RoundedRectangleBorder(
-                                borderRadius: BorderRadius.vertical(
-                                  top: Radius.circular(25.0),
-                                ),
-                              ),
-                              builder: (context) {
-                                return SizedBox(
-                                  height: 250,
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(15.0),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: <Widget>[
-                                        Expanded(
-                                          // Set a specific height
-                                          child: ListView.separated(
-                                            itemCount: 3,
-                                            separatorBuilder:
-                                                (BuildContext context,
-                                                        int index) =>
-                                                    const Divider(),
-                                            itemBuilder: (BuildContext context,
-                                                int index) {
-                                              return ListTile(
-                                                onTap: () {
-                                                  Navigator.pop(context);
-                                                  index == 0
-                                                      ? Get.toNamed(
-                                                          Routes.createPost)
-                                                      : index == 1
-                                                          ? sellProduct(context)
-                                                          : Get.toNamed(
-                                                              Routes.createevent);
-                                                },
-                                                minVerticalPadding: 0,
-                                                contentPadding:
-                                                    const EdgeInsets.only(
-                                                        left: 10),
-                                                leading: SvgPicture.asset(
-                                                  index == 0
-                                                      ? 'assets/svgs/text.svg'
-                                                      : index == 1
-                                                          ? 'assets/svgs/sellicon.svg'
-                                                          : 'assets/svgs/liveevent.svg',
-                                                  height: index == 0
-                                                      ? 25
-                                                      : index == 1
-                                                          ? 30
-                                                          : 22,
-                                                  color: textColor.withOpacity(1),
-                                                ),
-                                                title: Text(
-                                                  index == 0
-                                                      ? 'Create a Post'
-                                                      : index == 1
-                                                          ? 'Sell your product & service'
-                                                          : 'Create a Live Event',
-                                                  style: const TextStyle(
-                                                      fontSize: 18,
-                                                      fontWeight:
-                                                          FontWeight.w700),
-                                                ),
-                                              );
-                                            },
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                );
-                              });
-                        },
-                        // key: postButtonKey,
-                        backgroundColor: primaryColorLT,
-                      ),
-                  )
-                  : Container(),
+              // floatingActionButton: !controller.loading.value
+              //     ? FloatingActionButton(
+              //         child: Icon(Icons.add),
+              //         shape: CircleBorder(),
+              //         onPressed: () {
+              //           showModalBottomSheet(
+              //               context: context,
+              //               shape: const RoundedRectangleBorder(
+              //                 borderRadius: BorderRadius.vertical(
+              //                   top: Radius.circular(25.0),
+              //                 ),
+              //               ),
+              //               builder: (context) {
+              //                 return SizedBox(
+              //                   height: 250,
+              //                   child: Padding(
+              //                     padding: const EdgeInsets.all(15.0),
+              //                     child: Column(
+              //                       crossAxisAlignment:
+              //                           CrossAxisAlignment.start,
+              //                       mainAxisSize: MainAxisSize.min,
+              //                       children: <Widget>[
+              //                         Expanded(
+              //                           // Set a specific height
+              //                           child: ListView.separated(
+              //                             itemCount: 3,
+              //                             separatorBuilder:
+              //                                 (BuildContext context,
+              //                                         int index) =>
+              //                                     const Divider(),
+              //                             itemBuilder: (BuildContext context,
+              //                                 int index) {
+              //                               return ListTile(
+              //                                 onTap: () {
+              //                                   Navigator.pop(context);
+              //                                   index == 0
+              //                                       ? Get.toNamed(
+              //                                           Routes.createPost)
+              //                                       : index == 1
+              //                                           ? sellProduct(context)
+              //                                           : Get.toNamed(
+              //                                               Routes.createevent);
+              //                                 },
+              //                                 minVerticalPadding: 0,
+              //                                 contentPadding:
+              //                                     const EdgeInsets.only(
+              //                                         left: 10),
+              //                                 leading: SvgPicture.asset(
+              //                                   index == 0
+              //                                       ? 'assets/svgs/text.svg'
+              //                                       : index == 1
+              //                                           ? 'assets/svgs/sellicon.svg'
+              //                                           : 'assets/svgs/liveevent.svg',
+              //                                   height: index == 0
+              //                                       ? 25
+              //                                       : index == 1
+              //                                           ? 30
+              //                                           : 22,
+              //                                   color: textColor.withOpacity(1),
+              //                                 ),
+              //                                 title: Text(
+              //                                   index == 0
+              //                                       ? 'Create a Post'
+              //                                       : index == 1
+              //                                           ? 'Sell your product & service'
+              //                                           : 'Create a Live Event',
+              //                                   style: const TextStyle(
+              //                                       fontSize: 18,
+              //                                       fontWeight:
+              //                                           FontWeight.w700),
+              //                                 ),
+              //                               );
+              //                             },
+              //                           ),
+              //                         )
+              //                       ],
+              //                     ),
+              //                   ),
+              //                 );
+              //               });
+              //         },
+              //         // key: postButtonKey,
+              //         backgroundColor: primaryColorLT,
+              //       )
+              //     : Container(),
               body: controller.loading.value
                   ? Center(
                       child: Column(
@@ -1244,6 +1242,7 @@ class _HomeScreenState extends State<HomeScreen>
                                   const BottomBar(
                                     activeIndex: 0,
                                   ),
+                                  const Floatingbutton(),
                                 ],
                               ),
                             ),

@@ -95,7 +95,7 @@ class _EventItemState extends State<EventItem> {
             overlayOpacity: 0.8,
             useRotationAnimation: true,
             tooltip: 'Open Speed Dial',
-            heroTag: 'speed-dial-hero-tag',
+            // heroTag: 'speed-dial-hero-tag',
             elevation: 0.0,
             animationCurve: Curves.elasticInOut,
             isOpenOnStart: false,

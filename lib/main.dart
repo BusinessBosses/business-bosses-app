@@ -175,7 +175,7 @@ void processPostDeeplink(Uri uri) {
   log(uri.toString());
   if (uri.scheme == 'myapp' && uri.host == 'app.post') {
     Get.toNamed(
-      Routes.bottomnavscreen,
+      Routes.home,
     );
   } else if (uri.scheme == 'myapp' && uri.host == 'app.refer') {
     Get.toNamed(
