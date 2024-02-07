@@ -1242,7 +1242,7 @@ class _HomeScreenState extends State<HomeScreen>
                                   const BottomBar(
                                     activeIndex: 0,
                                   ),
-                                  const Floatingbutton(),
+                                  Floatingbutton(activeIndex: 0,),
                                 ],
                               ),
                             ),

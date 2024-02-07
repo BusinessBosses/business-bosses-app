@@ -167,7 +167,7 @@ class _ExplorebusinessbossesScreenState
                           fontSize: 14.0,
                         ),
                       ),
-                      Image.asset('assets/images/two.png'),
+                      Image.asset('assets/images/explore2.png'),
                       Text(
                         'Networking & Referrals',
                         style: bodyText1.copyWith(
@@ -182,7 +182,7 @@ class _ExplorebusinessbossesScreenState
                           fontSize: 14.0,
                         ),
                       ),
-                      Image.asset('assets/images/three.png'),
+                      Image.asset('assets/images/explore3.png'),
                       Text(
                         'Community',
                         style: bodyText1.copyWith(
@@ -215,7 +215,7 @@ class _ExplorebusinessbossesScreenState
                           fontSize: 14.0,
                         ),
                       ),
-                      Image.asset('assets/images/five.png'),
+                      Image.asset('assets/images/explore5.png'),
                        const SizedBox(
                         height: 8,
                       ),
@@ -233,7 +233,7 @@ class _ExplorebusinessbossesScreenState
                           fontSize: 14.0,
                         ),
                       ),
-                      Image.asset('assets/images/five.png'),
+                      Image.asset('assets/images/explore6.png'),
                       Text(
                         'Marketplace',
                         style: bodyText1.copyWith(
@@ -248,7 +248,7 @@ class _ExplorebusinessbossesScreenState
                           fontSize: 14.0,
                         ),
                       ),
-                      Image.asset('assets/images/five.png'),
+                      Image.asset('assets/images/explore7.png'),
                       Text(
                         'Live Event',
                         style: bodyText1.copyWith(
@@ -263,7 +263,7 @@ class _ExplorebusinessbossesScreenState
                           fontSize: 14.0,
                         ),
                       ),
-                      Image.asset('assets/images/five.png'),
+                      Image.asset('assets/images/explore8.png'),
                        Text(
                         'Polls & Survey',
                         style: bodyText1.copyWith(
@@ -278,7 +278,7 @@ class _ExplorebusinessbossesScreenState
                           fontSize: 14.0,
                         ),
                       ),
-                      Image.asset('assets/images/five.png'),
+                      Image.asset('assets/images/explore9.png'),
                     ],
                   ),
                           ],

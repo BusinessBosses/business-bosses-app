@@ -5,6 +5,7 @@ import 'package:business_bosses_v2/features/forum/widgets/forum_item.dart';
 import 'package:business_bosses_v2/features/home/controller/commumities_controller.dart';
 import 'package:business_bosses_v2/features/home/sellProduct.dart';
 import 'package:business_bosses_v2/features/home/widgets/bottom_bar.dart';
+import 'package:business_bosses_v2/features/home/widgets/floatingbutton.dart';
 import 'package:business_bosses_v2/features/home/widgets/industriessearch.dart';
 import 'package:business_bosses_v2/utils/constants/constants.dart';
 import 'package:flutter/material.dart';
@@ -33,13 +34,10 @@ class AllCommunitiesScreen extends StatefulWidget {
 }
 
 class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
-    with
-        
-        TickerProviderStateMixin {
+    with TickerProviderStateMixin {
   bool _isSearching = false;
   Industry industry = Industry();
   bool isScrolled = true;
- 
 
   final CommunitiesController _communitiesController =
       Get.put(CommunitiesController());
@@ -76,7 +74,6 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
     return GetBuilder<CommunitiesController>(
       builder: (CommunitiesController controller) {
         return Scaffold(
-          
           body: SizedBox(
             height: MediaQuery.of(context).size.height,
             width: MediaQuery.of(context).size.width,
@@ -150,10 +147,10 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
                                             child: CircularProgressIndicator(),
                                           )
                                         : BossUpSection(
-                                          industry: controller
-                                              .getCategoryIndustries(Constants
-                                                  .BOSS_UP_CHALLENGE_CATEGORY_ID)[0],
-                                        ),
+                                            industry: controller
+                                                .getCategoryIndustries(Constants
+                                                    .BOSS_UP_CHALLENGE_CATEGORY_ID)[0],
+                                          ),
                                     // content of Tab 2
                                     Padding(
                                       padding: const EdgeInsets.only(
@@ -175,46 +172,44 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
                                                   },
                                                 )
                                               : GridView.builder(
-                                                itemCount: controller
-                                                    .getCategoryIndustries(
-                                                        Constants
-                                                            .LEARNINGID)
-                                                    .length,
-                                                itemBuilder:
-                                                    (BuildContext context,
-                                                        int index) {
-                                                  return CustomTile(
-                                                    label: controller
-                                                        .getCategoryIndustries(
-                                                            Constants
-                                                                .LEARNINGID)[
-                                                            index]
-                                                        .industry!,
-                                                    photo: controller
-                                                        .getCategoryIndustries(
-                                                            Constants
-                                                                .LEARNINGID)[
-                                                            index]
-                                                        .photo!,
-                                                    onTap: () {
-                                                      Get.toNamed(
-                                                        Routes
-                                                            .allforumscreen,
-                                                        arguments: controller
-                                                            .getCategoryIndustries(
-                                                                Constants
-                                                                    .LEARNINGID)[index],
-                                                      );
-                                                    },
-                                                  );
-                                                },
-                                                gridDelegate:
-                                                    const SliverGridDelegateWithFixedCrossAxisCount(
-                                                  mainAxisSpacing: 10.0,
-                                                  crossAxisSpacing: 15.0,
-                                                  crossAxisCount: 2,
+                                                  itemCount: controller
+                                                      .getCategoryIndustries(
+                                                          Constants.LEARNINGID)
+                                                      .length,
+                                                  itemBuilder:
+                                                      (BuildContext context,
+                                                          int index) {
+                                                    return CustomTile(
+                                                      label: controller
+                                                          .getCategoryIndustries(
+                                                              Constants
+                                                                  .LEARNINGID)[
+                                                              index]
+                                                          .industry!,
+                                                      photo: controller
+                                                          .getCategoryIndustries(
+                                                              Constants
+                                                                  .LEARNINGID)[
+                                                              index]
+                                                          .photo!,
+                                                      onTap: () {
+                                                        Get.toNamed(
+                                                          Routes.allforumscreen,
+                                                          arguments: controller
+                                                              .getCategoryIndustries(
+                                                                  Constants
+                                                                      .LEARNINGID)[index],
+                                                        );
+                                                      },
+                                                    );
+                                                  },
+                                                  gridDelegate:
+                                                      const SliverGridDelegateWithFixedCrossAxisCount(
+                                                    mainAxisSpacing: 10.0,
+                                                    crossAxisSpacing: 15.0,
+                                                    crossAxisCount: 2,
+                                                  ),
                                                 ),
-                                              ),
                                     ),
                                     // content of Tab 3
                                     Padding(
@@ -237,45 +232,45 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
                                                   },
                                                 )
                                               : GridView.builder(
-                                                itemCount: controller
-                                                    .getCategoryIndustries(
-                                                        Constants
-                                                            .OPPORTUNITIESID)
-                                                    .length,
-                                                itemBuilder:
-                                                    (BuildContext context,
-                                                        int index) {
-                                                  return CustomTile(
-                                                    label: controller
-                                                        .getCategoryIndustries(
-                                                            Constants
-                                                                .OPPORTUNITIESID)[
-                                                            index]
-                                                        .industry!,
-                                                    photo: controller
-                                                        .getCategoryIndustries(
-                                                            Constants
-                                                                .OPPORTUNITIESID)[
-                                                            index]
-                                                        .photo!,
-                                                    onTap: () {
-                                                      Get.toNamed(
-                                                          Routes
-                                                              .allforumscreen,
-                                                          arguments: controller
-                                                              .getCategoryIndustries(
-                                                                  Constants
-                                                                      .OPPORTUNITIESID)[index]);
-                                                    },
-                                                  );
-                                                },
-                                                gridDelegate:
-                                                    const SliverGridDelegateWithFixedCrossAxisCount(
-                                                  mainAxisSpacing: 10.0,
-                                                  crossAxisSpacing: 15.0,
-                                                  crossAxisCount: 2,
+                                                  itemCount: controller
+                                                      .getCategoryIndustries(
+                                                          Constants
+                                                              .OPPORTUNITIESID)
+                                                      .length,
+                                                  itemBuilder:
+                                                      (BuildContext context,
+                                                          int index) {
+                                                    return CustomTile(
+                                                      label: controller
+                                                          .getCategoryIndustries(
+                                                              Constants
+                                                                  .OPPORTUNITIESID)[
+                                                              index]
+                                                          .industry!,
+                                                      photo: controller
+                                                          .getCategoryIndustries(
+                                                              Constants
+                                                                  .OPPORTUNITIESID)[
+                                                              index]
+                                                          .photo!,
+                                                      onTap: () {
+                                                        Get.toNamed(
+                                                            Routes
+                                                                .allforumscreen,
+                                                            arguments: controller
+                                                                .getCategoryIndustries(
+                                                                    Constants
+                                                                        .OPPORTUNITIESID)[index]);
+                                                      },
+                                                    );
+                                                  },
+                                                  gridDelegate:
+                                                      const SliverGridDelegateWithFixedCrossAxisCount(
+                                                    mainAxisSpacing: 10.0,
+                                                    crossAxisSpacing: 15.0,
+                                                    crossAxisCount: 2,
+                                                  ),
                                                 ),
-                                              ),
                                     ),
                                   ],
                                 )
@@ -352,7 +347,8 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
                 ),
                 const BottomBar(
                   activeIndex: 1,
-                )
+                ),
+              
               ],
             ),
           ),

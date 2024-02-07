@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:business_bosses_v2/features/home/widgets/floatingbutton.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -35,6 +36,8 @@ class _BossUpSectionState extends State<BossUpSection> {
   final ProfileController _myProfile = Get.find();
   final HomeController hmeController = Get.find();
 
+  bool showFloatingButton = false;
+
   String formatCount(int count) {
     if (count >= 1000) {
       double countInK = count / 1000;
@@ -67,8 +70,26 @@ class _BossUpSectionState extends State<BossUpSection> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    scrollController.addListener(() {
+      double percentageScrolled =
+          scrollController.offset / scrollController.position.maxScrollExtent;
+
+      if (percentageScrolled >= 0.3) {
+        setState(() {
+          showFloatingButton = true;
+        });
+      } else {
+        setState(() {
+          showFloatingButton = false;
+        });
+      }
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    
     int userCount = widget.industry.joinedUsers
             ?.where((String element) => element.isNotEmpty)
             .toList()
@@ -83,383 +104,401 @@ class _BossUpSectionState extends State<BossUpSection> {
           child: CircularProgressIndicator(),
         );
       } else {
-        return NestedScrollView(
-          controller: scrollController,
-          headerSliverBuilder: (
-            BuildContext context,
-            bool innerBoxIsScrolled,
-          ) {
-            return <Widget>[
-              SliverStickyHeader(
-                sticky: false,
-                header: Column(
-                  children: <Widget>[
-                    Container(
-                      width: double.infinity,
-                      color: backgroundcolorinterface,
-                      child: Stack(children: <Widget>[
-                        Padding(
-                            padding: const EdgeInsets.only(left: 15, top: 25),
-                            child: GestureDetector(
-                              onTap: (() {
-                                showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) =>
-                                      const BossUpChallangePopUpcopy(),
-                                );
-                              }),
-                              child: Row(
-                                children: <Widget>[
-                                  const Text(
-                                    'About ',
-                                    style: TextStyle(
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w700),
-                                  ),
-                                  SvgPicture.asset(
-                                    'assets/svgs/info.svg',
-                                    height: 20,
-                                  ),
-                                ],
-                              ),
-                            )),
-                        Column(
-                          children: <Widget>[
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            Align(
-                                alignment: Alignment.centerRight,
-                                child: Padding(
-                                  padding: const EdgeInsets.only(right: 15),
-                                  child: ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                        minimumSize: const Size(150, 45)),
-                                    onPressed: () {
-                                      int now =
-                                          DateTime.now().millisecondsSinceEpoch;
-                                      int previousStamp = _myProfile.myProfile
-                                              .bossOfTheWeekTimeStamp ??
-                                          0;
-                                      if ((previousStamp + 1209600000) > now) {
-                                        const SnackBar snackBar = SnackBar(
-                                          duration: Duration(seconds: 4),
-                                          content: Text(
-                                              'You may have posted in Boss Up Challenge'
-                                              ' in the past 12 weeks. You Can only post once in 12 weeks.'),
-                                        );
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(snackBar);
-                                      } else {
-                                        Get.toNamed(Routes.createBossUp,
-                                            arguments: <String, Object?>{
-                                              'isBossUp': true,
-                                              'industryId':
-                                                  widget.industry.industryId
-                                            });
-                                      }
-                                    },
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: <Widget>[
-                                        const Text(
-                                          'Enter Challenge',
-                                          style: TextStyle(
-                                              fontSize: 15,
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.w500),
-                                        ),
-                                        const SizedBox(
-                                          width: 5,
-                                        ),
-                                        SvgPicture.asset(
-                                            'assets/svgs/startatopic.svg')
-                                      ],
+        return Stack(children: [
+          NestedScrollView(
+            controller: scrollController,
+            headerSliverBuilder: (
+              BuildContext context,
+              bool innerBoxIsScrolled,
+            ) {
+              return <Widget>[
+                SliverStickyHeader(
+                  sticky: false,
+                  header: Column(
+                    children: <Widget>[
+                      Container(
+                        width: double.infinity,
+                        color: backgroundcolorinterface,
+                        child: Stack(children: <Widget>[
+                          Padding(
+                              padding: const EdgeInsets.only(left: 15, top: 25),
+                              child: GestureDetector(
+                                onTap: (() {
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) =>
+                                        const BossUpChallangePopUpcopy(),
+                                  );
+                                }),
+                                child: Row(
+                                  children: <Widget>[
+                                    const Text(
+                                      'About ',
+                                      style: TextStyle(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w700),
                                     ),
-                                  ),
-                                )),
-                            Container(
-                              decoration: BoxDecoration(
-                                boxShadow: <BoxShadow>[
-                                  BoxShadow(
-                                    color: Colors.black.withOpacity(0.09),
-                                    blurRadius: 100.0, // soften the shadow
-                                    spreadRadius: 5, //extend the shadow
-                                  )
-                                ],
-                              ),
-                              child: Stack(
-                                children: <Widget>[
-                                  Container(
-                                    margin: const EdgeInsets.only(
-                                        top: 10, right: 15, left: 15),
-                                    height: 150,
-                                    width: double.infinity,
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(15.0),
-                                      child:
-                                          const ColoredBox(color: Colors.white),
+                                    SvgPicture.asset(
+                                      'assets/svgs/info.svg',
+                                      height: 20,
                                     ),
-                                  ),
-                                  Column(
-                                    children: <Widget>[
-                                      Row(
+                                  ],
+                                ),
+                              )),
+                          Column(
+                            children: <Widget>[
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              Align(
+                                  alignment: Alignment.centerRight,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(right: 15),
+                                    child: ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                          minimumSize: const Size(150, 45)),
+                                      onPressed: () {
+                                        int now = DateTime.now()
+                                            .millisecondsSinceEpoch;
+                                        int previousStamp = _myProfile.myProfile
+                                                .bossOfTheWeekTimeStamp ??
+                                            0;
+                                        if ((previousStamp + 1209600000) >
+                                            now) {
+                                          const SnackBar snackBar = SnackBar(
+                                            duration: Duration(seconds: 4),
+                                            content: Text(
+                                                'You may have posted in Boss Up Challenge'
+                                                ' in the past 12 weeks. You Can only post once in 12 weeks.'),
+                                          );
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(snackBar);
+                                        } else {
+                                          Get.toNamed(Routes.createBossUp,
+                                              arguments: <String, Object?>{
+                                                'isBossUp': true,
+                                                'industryId':
+                                                    widget.industry.industryId
+                                              });
+                                        }
+                                      },
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
                                         children: <Widget>[
-                                          Container(
-                                            margin: const EdgeInsets.only(
-                                                top: 25, right: 15, left: 30),
-                                            height: 86,
-                                            width: 142,
-                                            child: ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(10.0),
-                                              child: FittedBox(
-                                                fit: BoxFit.fill,
-                                                child: CachedNetworkImage(
-                                                  imageUrl:
-                                                      widget.industry.photo!,
-                                                  memCacheHeight: 256,
-                                                  memCacheWidth: 256,
-                                                  placeholder: (BuildContext
-                                                              context,
-                                                          String photo) =>
-                                                      const CircularProgressIndicator(),
-                                                  errorWidget:
-                                                      // ignore: always_specify_types
-                                                      (BuildContext context,
-                                                              // ignore: always_specify_types
-                                                              String photo,
-                                                              dynamic error) =>
-                                                          const Icon(
-                                                              Icons.error),
-                                                ),
-                                              ),
-                                            ),
+                                          const Text(
+                                            'Enter Challenge',
+                                            style: TextStyle(
+                                                fontSize: 15,
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.w500),
                                           ),
-                                          Expanded(
-                                            child: Padding(
-                                              padding: const EdgeInsets.only(
-                                                  right: 30),
-                                              child: Text(
-                                                widget.industry.description
-                                                        ?.trim() ??
-                                                    'Industry Description',
-                                                style: const TextStyle(
-                                                  fontSize: 15,
-                                                  fontWeight: FontWeight.w700,
-                                                ),
-                                                softWrap: true,
-                                                maxLines: 5,
-                                              ),
-                                            ),
+                                          const SizedBox(
+                                            width: 5,
                                           ),
+                                          SvgPicture.asset(
+                                              'assets/svgs/startatopic.svg')
                                         ],
                                       ),
-                                      Padding(
-                                        padding: const EdgeInsets.only(
-                                            left: 27, right: 15.0),
-                                        child: Row(
+                                    ),
+                                  )),
+                              Container(
+                                decoration: BoxDecoration(
+                                  boxShadow: <BoxShadow>[
+                                    BoxShadow(
+                                      color: Colors.black.withOpacity(0.09),
+                                      blurRadius: 100.0, // soften the shadow
+                                      spreadRadius: 5, //extend the shadow
+                                    )
+                                  ],
+                                ),
+                                child: Stack(
+                                  children: <Widget>[
+                                    Container(
+                                      margin: const EdgeInsets.only(
+                                          top: 10, right: 15, left: 15),
+                                      height: 150,
+                                      width: double.infinity,
+                                      child: ClipRRect(
+                                        borderRadius:
+                                            BorderRadius.circular(15.0),
+                                        child: const ColoredBox(
+                                            color: Colors.white),
+                                      ),
+                                    ),
+                                    Column(
+                                      children: <Widget>[
+                                        Row(
                                           children: <Widget>[
-                                            Row(
-                                              children: <Widget>[
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          right: 2, top: 5),
-                                                  child: SvgPicture.asset(
-                                                    'assets/svgs/members.svg',
-                                                    height: 15,
-                                                    color: primaryColorLT,
+                                            Container(
+                                              margin: const EdgeInsets.only(
+                                                  top: 25, right: 15, left: 30),
+                                              height: 86,
+                                              width: 142,
+                                              child: ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(10.0),
+                                                child: FittedBox(
+                                                  fit: BoxFit.fill,
+                                                  child: CachedNetworkImage(
+                                                    imageUrl:
+                                                        widget.industry.photo!,
+                                                    memCacheHeight: 256,
+                                                    memCacheWidth: 256,
+                                                    placeholder: (BuildContext
+                                                                context,
+                                                            String photo) =>
+                                                        const CircularProgressIndicator(),
+                                                    errorWidget:
+                                                        // ignore: always_specify_types
+                                                        (BuildContext context,
+                                                                // ignore: always_specify_types
+                                                                String photo,
+                                                                dynamic
+                                                                    error) =>
+                                                            const Icon(
+                                                                Icons.error),
                                                   ),
                                                 ),
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          top: 5.0),
-                                                  child: RichText(
-                                                    text: TextSpan(
-                                                      children: <InlineSpan>[
-                                                        TextSpan(
-                                                          text: widget.industry
-                                                                      .joinedUsers ==
-                                                                  null
-                                                              ? 'Members (0)'
-                                                              : 'Members ($formattedUserCount)',
-                                                          style:
-                                                              const TextStyle(
-                                                            fontSize: 12,
-                                                            fontWeight:
-                                                                FontWeight.w600,
-                                                            color:
-                                                                primaryColorLT,
-                                                            decoration:
-                                                                TextDecoration
-                                                                    .underline,
-                                                          ),
-                                                          recognizer:
-                                                              TapGestureRecognizer()
-                                                                ..onTap = () {
-                                                                  Get.toNamed(
-                                                                    Routes
-                                                                        .specificuserlistscreen,
-                                                                    arguments: widget
-                                                                        .industry
-                                                                        .industryId,
-                                                                  );
-                                                                },
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                            Row(
-                                              children: <Widget>[
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          left: 8.0,
-                                                          top: 5,
-                                                          right: 2),
-                                                  child: SvgPicture.asset(
-                                                    'assets/svgs/entries.svg',
-                                                    color: textColor,
-                                                    height: 11.5,
-                                                  ),
-                                                ),
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          top: 5.0),
-                                                  child: RichText(
-                                                    text: TextSpan(
-                                                      children: <InlineSpan>[
-                                                        TextSpan(
-                                                          text:
-                                                              'Entries ($formattedpostCount) ',
-                                                          style:
-                                                              const TextStyle(
-                                                            fontSize: 12,
-                                                            color: textColor,
-                                                            fontWeight:
-                                                                FontWeight.w600,
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                            const Spacer(),
-                                            Align(
-                                              alignment: Alignment.centerRight,
-                                              child: JoinedButton(
-                                                widget.industry.joinedUsers
-                                                        ?.contains(_myProfile
-                                                            .myProfile.uid) ??
-                                                    false,
-                                                () {
-                                                  toggleJoinAndLeaveIndustry(
-                                                      controller);
-                                                },
                                               ),
-                                            )
+                                            ),
+                                            Expanded(
+                                              child: Padding(
+                                                padding: const EdgeInsets.only(
+                                                    right: 30),
+                                                child: Text(
+                                                  widget.industry.description
+                                                          ?.trim() ??
+                                                      'Industry Description',
+                                                  style: const TextStyle(
+                                                    fontSize: 15,
+                                                    fontWeight: FontWeight.w700,
+                                                  ),
+                                                  softWrap: true,
+                                                  maxLines: 5,
+                                                ),
+                                              ),
+                                            ),
                                           ],
                                         ),
-                                      )
-                                    ],
-                                  )
-                                ],
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                              left: 27, right: 15.0),
+                                          child: Row(
+                                            children: <Widget>[
+                                              Row(
+                                                children: <Widget>[
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            right: 2, top: 5),
+                                                    child: SvgPicture.asset(
+                                                      'assets/svgs/members.svg',
+                                                      height: 15,
+                                                      color: primaryColorLT,
+                                                    ),
+                                                  ),
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            top: 5.0),
+                                                    child: RichText(
+                                                      text: TextSpan(
+                                                        children: <InlineSpan>[
+                                                          TextSpan(
+                                                            text: widget.industry
+                                                                        .joinedUsers ==
+                                                                    null
+                                                                ? 'Members (0)'
+                                                                : 'Members ($formattedUserCount)',
+                                                            style:
+                                                                const TextStyle(
+                                                              fontSize: 12,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w600,
+                                                              color:
+                                                                  primaryColorLT,
+                                                              decoration:
+                                                                  TextDecoration
+                                                                      .underline,
+                                                            ),
+                                                            recognizer:
+                                                                TapGestureRecognizer()
+                                                                  ..onTap = () {
+                                                                    Get.toNamed(
+                                                                      Routes
+                                                                          .specificuserlistscreen,
+                                                                      arguments: widget
+                                                                          .industry
+                                                                          .industryId,
+                                                                    );
+                                                                  },
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                              Row(
+                                                children: <Widget>[
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            left: 8.0,
+                                                            top: 5,
+                                                            right: 2),
+                                                    child: SvgPicture.asset(
+                                                      'assets/svgs/entries.svg',
+                                                      color: textColor,
+                                                      height: 11.5,
+                                                    ),
+                                                  ),
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            top: 5.0),
+                                                    child: RichText(
+                                                      text: TextSpan(
+                                                        children: <InlineSpan>[
+                                                          TextSpan(
+                                                            text:
+                                                                'Entries ($formattedpostCount) ',
+                                                            style:
+                                                                const TextStyle(
+                                                              fontSize: 12,
+                                                              color: textColor,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w600,
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                              const Spacer(),
+                                              Align(
+                                                alignment:
+                                                    Alignment.centerRight,
+                                                child: JoinedButton(
+                                                  widget.industry.joinedUsers
+                                                          ?.contains(_myProfile
+                                                              .myProfile.uid) ??
+                                                      false,
+                                                  () {
+                                                    toggleJoinAndLeaveIndustry(
+                                                        controller);
+                                                  },
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        )
+                                      ],
+                                    )
+                                  ],
+                                ),
                               ),
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            hmeController.bossUp != null &&
-                                    hmeController.bossUp!.isNotEmpty
-                                ? GestureDetector(
-                                    onTap: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (BuildContext context) =>
-                                                const Bossuppartner()),
-                                      );
-                                    },
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(
-                                        right: 15,
-                                        left: 15,
-                                        bottom: 10,
-                                      ),
-                                      child: Container(
-                                        height: 40,
-                                        decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius:
-                                              BorderRadius.circular(10),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              hmeController.bossUp != null &&
+                                      hmeController.bossUp!.isNotEmpty
+                                  ? GestureDetector(
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (BuildContext context) =>
+                                                  const Bossuppartner()),
+                                        );
+                                      },
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(
+                                          right: 15,
+                                          left: 15,
+                                          bottom: 10,
                                         ),
                                         child: Container(
-                                            decoration: BoxDecoration(
-                                              color: const Color(0xFFFFFFFF)
-                                                  .withAlpha(150),
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                              // boxShadow: [
-                                              //   BoxShadow(
-                                              //     color:
-                                              //         Colors.white.withOpacity(1),
-                                              //     spreadRadius: 20,
-                                              //     blurRadius: 500,
-                                              //     offset: const Offset(0, 3),
-                                              //   ),
-                                              // ],
-                                            ),
-                                            child: Row(
-                                              children: <Widget>[
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                    left: 10,
-                                                  ),
-                                                  child: GestureDetector(
-                                                    onTap: () async {
-                                                      if (await canLaunchUrl(Uri
-                                                          .parse(hmeController
-                                                              .bossUpLink))) {
-                                                        await launchUrl(Uri
+                                          height: 40,
+                                          decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                          ),
+                                          child: Container(
+                                              decoration: BoxDecoration(
+                                                color: const Color(0xFFFFFFFF)
+                                                    .withAlpha(150),
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                                // boxShadow: [
+                                                //   BoxShadow(
+                                                //     color:
+                                                //         Colors.white.withOpacity(1),
+                                                //     spreadRadius: 20,
+                                                //     blurRadius: 500,
+                                                //     offset: const Offset(0, 3),
+                                                //   ),
+                                                // ],
+                                              ),
+                                              child: Row(
+                                                children: <Widget>[
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                      left: 10,
+                                                    ),
+                                                    child: GestureDetector(
+                                                      onTap: () async {
+                                                        if (await canLaunchUrl(Uri
                                                             .parse(hmeController
-                                                                .bossUpLink));
-                                                      }
-                                                    },
-                                                    child: Center(
-                                                      child: Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .all(2),
-                                                        child: Text(
-                                                          hmeController
-                                                              .bossUpTitle
-                                                              .toString(),
-                                                          style:
-                                                              const TextStyle(
-                                                                  fontSize: 13),
+                                                                .bossUpLink))) {
+                                                          await launchUrl(Uri
+                                                              .parse(hmeController
+                                                                  .bossUpLink));
+                                                        }
+                                                      },
+                                                      child: Center(
+                                                        child: Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(2),
+                                                          child: Text(
+                                                            hmeController
+                                                                .bossUpTitle
+                                                                .toString(),
+                                                            style:
+                                                                const TextStyle(
+                                                                    fontSize:
+                                                                        13),
+                                                          ),
                                                         ),
                                                       ),
                                                     ),
                                                   ),
-                                                ),
-                                                const SizedBox(width: 10),
-                                                Platform.isIOS
-                                                    ? Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .only(
-                                                                left: 0.0,
-                                                                bottom: 4),
-                                                        child: Text(
+                                                  const SizedBox(width: 10),
+                                                  Platform.isIOS
+                                                      ? Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .only(
+                                                                  left: 0.0,
+                                                                  bottom: 4),
+                                                          child: Text(
+                                                            '|',
+                                                            style: TextStyle(
+                                                              fontSize: 20,
+                                                              color: textColor
+                                                                  .withOpacity(
+                                                                      0.5),
+                                                            ),
+                                                          ),
+                                                        )
+                                                      : Text(
                                                           '|',
                                                           style: TextStyle(
                                                             fontSize: 20,
@@ -468,153 +507,151 @@ class _BossUpSectionState extends State<BossUpSection> {
                                                                     0.5),
                                                           ),
                                                         ),
-                                                      )
-                                                    : Text(
-                                                        '|',
-                                                        style: TextStyle(
-                                                          fontSize: 20,
-                                                          color: textColor
-                                                              .withOpacity(0.5),
-                                                        ),
-                                                      ),
-                                                const SizedBox(width: 10),
-                                                Platform.isIOS
-                                                    ? Expanded(
-                                                        child: Text(
-                                                          hmeController.bossUp !=
-                                                                      null &&
-                                                                  hmeController
-                                                                      .bossUp!
-                                                                      .isNotEmpty
-                                                              ? hmeController
-                                                                          .bossUp!
-                                                                          .last[
-                                                                      'companyName'] ??
-                                                                  ''
-                                                              : '',
-                                                          style:
-                                                              const TextStyle(
-                                                            fontSize: 15,
-                                                            fontWeight:
-                                                                FontWeight.bold,
+                                                  const SizedBox(width: 10),
+                                                  Platform.isIOS
+                                                      ? Expanded(
+                                                          child: Text(
+                                                            hmeController.bossUp !=
+                                                                        null &&
+                                                                    hmeController
+                                                                        .bossUp!
+                                                                        .isNotEmpty
+                                                                ? hmeController
+                                                                        .bossUp!
+                                                                        .last['companyName'] ??
+                                                                    ''
+                                                                : '',
+                                                            style:
+                                                                const TextStyle(
+                                                              fontSize: 15,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                            ),
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .ellipsis,
+                                                            maxLines: 1,
                                                           ),
-                                                          overflow: TextOverflow
-                                                              .ellipsis,
-                                                          maxLines: 1,
-                                                        ),
-                                                      )
-                                                    : Expanded(
-                                                        child: Text(
-                                                          hmeController.bossUp !=
-                                                                      null &&
-                                                                  hmeController
-                                                                      .bossUp!
-                                                                      .isNotEmpty
-                                                              ? hmeController
-                                                                          .bossUp!
-                                                                          .last[
-                                                                      'companyName'] ??
-                                                                  ''
-                                                              : '',
-                                                          style:
-                                                              const TextStyle(
-                                                            fontSize: 15,
-                                                            fontWeight:
-                                                                FontWeight.bold,
+                                                        )
+                                                      : Expanded(
+                                                          child: Text(
+                                                            hmeController.bossUp !=
+                                                                        null &&
+                                                                    hmeController
+                                                                        .bossUp!
+                                                                        .isNotEmpty
+                                                                ? hmeController
+                                                                        .bossUp!
+                                                                        .last['companyName'] ??
+                                                                    ''
+                                                                : '',
+                                                            style:
+                                                                const TextStyle(
+                                                              fontSize: 15,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                            ),
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .ellipsis,
+                                                            maxLines: 1,
                                                           ),
-                                                          overflow: TextOverflow
-                                                              .ellipsis,
-                                                          maxLines: 1,
                                                         ),
-                                                      ),
-                                                const SizedBox(
-                                                  width: 15,
-                                                ),
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                    right: 10.0,
+                                                  const SizedBox(
+                                                    width: 15,
                                                   ),
-                                                  child: SvgPicture.asset(
-                                                    'assets/svgs/nexticon.svg',
-                                                    color: textColor,
-                                                  ),
-                                                )
-                                              ],
-                                            )),
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                      right: 10.0,
+                                                    ),
+                                                    child: SvgPicture.asset(
+                                                      'assets/svgs/nexticon.svg',
+                                                      color: textColor,
+                                                    ),
+                                                  )
+                                                ],
+                                              )),
+                                        ),
                                       ),
-                                    ),
-                                  )
-                                : const SizedBox(),
-                          ],
-                        ),
-                      ]),
-                    )
-                  ],
-                ),
-              )
-            ];
-          },
-          body: controller.loading.value
-              ? SafetyModel(
-                  isLoading: controller.loading.value,
-                  title: '',
+                                    )
+                                  : const SizedBox(),
+                            ],
+                          ),
+                        ]),
+                      )
+                    ],
+                  ),
                 )
-              : controller.error.value
-                  ? SafetyModel(
-                      isLoading: false,
-                      title: 'Something went wrong',
-                      clickableText: 'Reload',
-                      onTap: () async {
-                        await controller.fetchForums();
-                      },
-                    )
-                  : !controller.loading.value &&
-                          !controller.error.value &&
-                          controller.forums.isEmpty
-                      ? const SafetyModel(
-                          isLoading: false,
-                          title: 'No post',
-                          subTitle: 'This industry has no post',
-                        )
-                      : RefreshIndicator(
-                          onRefresh: refreshData,
-                          child: ListView.builder(
-                              itemCount: controller.forums.length,
+              ];
+            },
+            body: controller.loading.value
+                ? SafetyModel(
+                    isLoading: controller.loading.value,
+                    title: '',
+                  )
+                : controller.error.value
+                    ? SafetyModel(
+                        isLoading: false,
+                        title: 'Something went wrong',
+                        clickableText: 'Reload',
+                        onTap: () async {
+                          await controller.fetchForums();
+                        },
+                      )
+                    : !controller.loading.value &&
+                            !controller.error.value &&
+                            controller.forums.isEmpty
+                        ? const SafetyModel(
+                            isLoading: false,
+                            title: 'No post',
+                            subTitle: 'This industry has no post',
+                          )
+                        : RefreshIndicator(
+                            onRefresh: refreshData,
+                            child: ListView.builder(
+                                itemCount: controller.forums.length,
 
-                              // <-- this will disable scroll
+                                // <-- this will disable scroll
 
-                              //controller: differentController,
+                                //controller: differentController,
 
-                              itemBuilder: (BuildContext context, int i) {
-                                return VisibilityDetector(
-                                  key: Key(i.toString()),
-                                  onVisibilityChanged: (VisibilityInfo info) {
-                                    final bool hasIncrementedView =
-                                        hmeController.itemsWithIncrementedViews
-                                            .contains(
-                                                controller.forums[i].forumId);
-                                    if (info.visibleFraction == 1.0 &&
-                                        !hasIncrementedView) {
-                                      controller.updateForumViews(
-                                          controller.forums[i]);
-                                      setState(() {
-                                        hmeController.itemsWithIncrementedViews
-                                            .add(controller.forums[i]
-                                                .forumId); // Set the flag to prevent further increments
-                                      });
-                                    }
-                                  },
-                                  child: ForumItem(
-                                    forum: controller.forums[i],
-                                    key: ValueKey(controller.forums[i].forumId),
-                                    controller: controller,
-                                    isBossUp: true,
-                                  ),
-                                );
-                              }),
-                        ),
-        );
+                                itemBuilder: (BuildContext context, int i) {
+                                  return VisibilityDetector(
+                                    key: Key(i.toString()),
+                                    onVisibilityChanged: (VisibilityInfo info) {
+                                      final bool hasIncrementedView =
+                                          hmeController
+                                              .itemsWithIncrementedViews
+                                              .contains(
+                                                  controller.forums[i].forumId);
+                                      if (info.visibleFraction == 1.0 &&
+                                          !hasIncrementedView) {
+                                        controller.updateForumViews(
+                                            controller.forums[i]);
+                                        setState(() {
+                                          hmeController
+                                              .itemsWithIncrementedViews
+                                              .add(controller.forums[i]
+                                                  .forumId); // Set the flag to prevent further increments
+                                        });
+                                      }
+                                    },
+                                    child: ForumItem(
+                                      forum: controller.forums[i],
+                                      key: ValueKey(
+                                          controller.forums[i].forumId),
+                                      controller: controller,
+                                      isBossUp: true,
+                                    ),
+                                  );
+                                }),
+                          ),
+          ),
+          showFloatingButton ? Floatingbutton(activeIndex: 1) : Container()
+        ]);
       }
     });
   }
