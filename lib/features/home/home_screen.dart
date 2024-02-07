@@ -1241,7 +1241,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                                   const BottomBar(
                                     activeIndex: 0,
                                   ),
-                                  const Floatingbutton(),
+                                  Floatingbutton(activeIndex: 0,),
                                 ],
                               ),
                             ),

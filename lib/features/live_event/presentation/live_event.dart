@@ -6,6 +6,7 @@ import 'dart:math';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/features/home/sellProduct.dart';
 import 'package:business_bosses_v2/features/home/widgets/bottom_bar.dart';
+import 'package:business_bosses_v2/features/home/widgets/floatingbutton.dart';
 import 'package:business_bosses_v2/features/live_event/controller/live_event_controller.dart';
 import 'package:business_bosses_v2/features/live_event/models/events_model.dart';
 import 'package:business_bosses_v2/features/live_event/widgets/call_room.dart';
@@ -40,6 +41,7 @@ class _LiveEventState extends State<LiveEvent> {
   final ProfileController profileController = Get.find();
   bool _isSearching = false;
   bool isScrolled = true;
+  bool showFloatingButton = false;
 
   List<Widget> get mActions {
     return <Widget>[
@@ -69,6 +71,20 @@ class _LiveEventState extends State<LiveEvent> {
   void initState() {
     tzdata.initializeTimeZones(); // Initialize time zones
     super.initState();
+    scrollController.addListener(() {
+      double percentageScrolled =
+          scrollController.offset / scrollController.position.maxScrollExtent;
+
+      if (percentageScrolled >= 0.8) {
+        setState(() {
+          showFloatingButton = true;
+        });
+      } else {
+        setState(() {
+          showFloatingButton = false;
+        });
+      }
+    });
   }
 
   DateTime selectedDateTime = DateTime.now();
@@ -366,7 +382,12 @@ class _LiveEventState extends State<LiveEvent> {
                     ),
                     const BottomBar(
                       activeIndex: 2,
-                    )
+                    ),
+                    showFloatingButton
+                        ? Floatingbutton(
+                            activeIndex: 2,
+                          )
+                        : Container(),
                   ]));
       },
     );

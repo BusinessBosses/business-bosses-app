@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:business_bosses_v2/features/forum/models/industry.dart';
 import 'package:business_bosses_v2/features/home/sellProduct.dart';
 import 'package:business_bosses_v2/features/home/widgets/bottom_bar.dart';
+import 'package:business_bosses_v2/features/home/widgets/floatingbutton.dart';
 import 'package:business_bosses_v2/features/home/widgets/sellingpopup.dart';
 import 'package:business_bosses_v2/features/marketplace/models/market_model.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/market_members.dart';
@@ -55,10 +56,26 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
   int pageSize = 20;
   String? filteredCategory;
   bool isScrolled = true;
+  final ScrollController _scrollController = ScrollController();
+  bool showFloatingButton = false;
 
   @override
   void initState() {
     super.initState();
+    _scrollController.addListener(() {
+      double percentageScrolled =
+          _scrollController.offset / _scrollController.position.maxScrollExtent;
+
+      if (percentageScrolled >= 0.3) {
+        setState(() {
+          showFloatingButton = true;
+        });
+      } else {
+        setState(() {
+          showFloatingButton = false;
+        });
+      }
+    });
   }
 
   String formatCount(int count) {
@@ -72,6 +89,12 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
     } else {
       return count.toString();
     }
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
   }
 
   @override
@@ -545,6 +568,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                     width: MediaQuery.of(context).size.width,
                     color: Colors.white,
                     child: NestedScrollView(
+                      controller: _scrollController,
                       headerSliverBuilder:
                           (BuildContext context, bool innerBoxIsScrolled) {
                         return <Widget>[
@@ -1195,143 +1219,17 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                                       ],
                                                     ),
                                                   ),
-                                                  Expanded(
+                                                  const Expanded(
                                                     child: TabBarView(
                                                       children: <Widget>[
                                                         // Content of Tab 1
-                                                        NotificationListener<
-                                                                ScrollNotification>(
-                                                            onNotification:
-                                                                (notification) {
-                                                              if (notification
-                                                                  is ScrollUpdateNotification) {
-                                                                if (notification
-                                                                            .dragDetails !=
-                                                                        null &&
-                                                                    notification
-                                                                            .dragDetails!
-                                                                            .primaryDelta !=
-                                                                        null) {
-                                                                  double
-                                                                      primaryDelta =
-                                                                      notification
-                                                                          .dragDetails!
-                                                                          .primaryDelta!;
-
-                                                                  if (primaryDelta >
-                                                                      0) {
-                                                                    // Scrolling downward
-                                                                    setState(
-                                                                        () {
-                                                                      isScrolled =
-                                                                          true;
-                                                                    });
-                                                                  } else if (primaryDelta <
-                                                                      0) {
-                                                                    // Scrolling upward
-                                                                    setState(
-                                                                        () {
-                                                                      isScrolled =
-                                                                          false;
-                                                                    });
-                                                                  }
-                                                                }
-                                                              }
-
-                                                              return true;
-                                                            },
-                                                            child:
-                                                                const MarketsPage()),
+                                                        MarketsPage(),
 
                                                         // Content of Tab 2
-                                                        NotificationListener<
-                                                                ScrollNotification>(
-                                                            onNotification:
-                                                                (notification) {
-                                                              if (notification
-                                                                  is ScrollUpdateNotification) {
-                                                                if (notification
-                                                                            .dragDetails !=
-                                                                        null &&
-                                                                    notification
-                                                                            .dragDetails!
-                                                                            .primaryDelta !=
-                                                                        null) {
-                                                                  double
-                                                                      primaryDelta =
-                                                                      notification
-                                                                          .dragDetails!
-                                                                          .primaryDelta!;
-
-                                                                  if (primaryDelta >
-                                                                      0) {
-                                                                    // Scrolling downward
-                                                                    setState(
-                                                                        () {
-                                                                      isScrolled =
-                                                                          true;
-                                                                    });
-                                                                  } else if (primaryDelta <
-                                                                      0) {
-                                                                    // Scrolling upward
-                                                                    setState(
-                                                                        () {
-                                                                      isScrolled =
-                                                                          false;
-                                                                    });
-                                                                  }
-                                                                }
-                                                              }
-
-                                                              return true;
-                                                            },
-                                                            child:
-                                                                const ProductsPage()),
+                                                        ProductsPage(),
 
                                                         // Content of Tab 3
-                                                        NotificationListener<
-                                                                ScrollNotification>(
-                                                            onNotification:
-                                                                (notification) {
-                                                              if (notification
-                                                                  is ScrollUpdateNotification) {
-                                                                if (notification
-                                                                            .dragDetails !=
-                                                                        null &&
-                                                                    notification
-                                                                            .dragDetails!
-                                                                            .primaryDelta !=
-                                                                        null) {
-                                                                  double
-                                                                      primaryDelta =
-                                                                      notification
-                                                                          .dragDetails!
-                                                                          .primaryDelta!;
-
-                                                                  if (primaryDelta >
-                                                                      0) {
-                                                                    // Scrolling downward
-                                                                    setState(
-                                                                        () {
-                                                                      isScrolled =
-                                                                          true;
-                                                                    });
-                                                                  } else if (primaryDelta <
-                                                                      0) {
-                                                                    // Scrolling upward
-                                                                    setState(
-                                                                        () {
-                                                                      isScrolled =
-                                                                          false;
-                                                                    });
-                                                                  }
-                                                                }
-                                                              }
-
-                                                              return true;
-                                                            },
-                                                            child:
-                                                                const ServicesPage())
+                                                        ServicesPage()
                                                       ],
                                                     ),
                                                   ),
@@ -1345,7 +1243,12 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                   ),
                   const BottomBar(
                     activeIndex: 3,
-                  )
+                  ),
+                  showFloatingButton
+                      ? Floatingbutton(
+                          activeIndex: 3,
+                        )
+                      : Container(),
                 ],
               ),
             ),
