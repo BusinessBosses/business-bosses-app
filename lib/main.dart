@@ -8,11 +8,13 @@ import 'package:business_bosses_v2/utils/constants/constants.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
@@ -21,7 +23,8 @@ import 'package:uni_links/uni_links.dart';
 
 final _configuration =
     PurchasesConfiguration('appl_fpKOUqIrKWZpOCQbxcYdfiIMgjj');
-
+bool _initialURILinkHandled = false;
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey();
 void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
@@ -29,7 +32,6 @@ void main() async {
   await GetStorage.init();
   await dotenv.load();
   await Firebase.initializeApp();
-  await initUniLinks();
   // await firebaseInitUniLinks();
   AnalyticsServices();
   Stripe.publishableKey =
@@ -82,6 +84,7 @@ void main() async {
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
   runApp(const MyApp());
+  await initUniLinks();
   FlutterNativeSplash.remove();
 }
 
@@ -99,30 +102,11 @@ Future<void> initUniLinks() async {
     if (uri != null) {
       processDeepLink(uri);
       processPostDeeplink(uri);
-    } else {
-      // print('sdfsadfa');
-    }
+    } else {}
   }, onError: (err) {
     print(err);
   });
 }
-
-// Future<void> initUniLinks() async {
-//   try {
-//     final String? initialLink = await getInitialLink();
-//     if (initialLink != null) {
-//       processPostDeeplink(Uri.parse(initialLink));
-//     }
-//   } on PlatformException {}
-
-//   uriLinkStream.listen((Uri? uri) {
-//     if (uri != null) {
-//       processPostDeeplink(uri);
-//     }
-//   }, onError: (err) {
-//     print(err);
-//   });
-// }
 
 /// PROCESS DEEPLINK
 void processDeepLink(Uri uri) {
@@ -164,23 +148,26 @@ void processDeepLink(Uri uri) {
       bool success = notificationParam.toLowerCase() == 'message';
       if (success) {
         // showAboutDialog(context: Get.context!);
-        // Get.toNamed(Routes.login);
+        Get.toNamed(Routes.login);
       }
     }
   }
 }
 
-/// PROCESS DEEPLINK
 void processPostDeeplink(Uri uri) {
   log(uri.toString());
+  Fluttertoast.showToast(
+    msg: "Welcome back to BusinessBosses",
+    toastLength: Toast.LENGTH_SHORT,
+    gravity: ToastGravity.BOTTOM,
+    timeInSecForIosWeb: 1,
+    backgroundColor: Colors.green,
+    textColor: Colors.white,
+  );
   if (uri.scheme == 'myapp' && uri.host == 'app.post') {
-    Get.toNamed(
-      Routes.home,
-    );
-  } else if (uri.scheme == 'myapp' && uri.host == 'app.refer') {
-    Get.toNamed(
-      Routes.referalsscreen,
-    );
+    navigatorKey.currentState?.pushNamed(Routes.home);
+  } else {
+    navigatorKey.currentState?.pushNamed(Routes.referscreen);
   }
 }
 
@@ -188,11 +175,14 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
 }
 
-// / MAIN APP CLASS
-class MyApp extends StatelessWidget {
-  /// MAIN APP CONSTRUCTOR
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(
@@ -201,7 +191,7 @@ class MyApp extends StatelessWidget {
         statusBarIconBrightness: Brightness.dark,
       ),
     );
-    // ignore: always_specify_types
+
     return FutureBuilder(
       future: SharedPreferences.getInstance(),
       builder:
@@ -210,19 +200,19 @@ class MyApp extends StatelessWidget {
         if (snapshot.hasData) {
           final String? userId = data!.getString(Constants.USER_ID);
 
-          return GetMaterialApp(
-            navigatorObservers: <NavigatorObserver>[
-              AnalyticsServices.getAnalyticObserver()
-            ],
-            // navigatorKey: navigatorKey,
-            initialRoute:
-                userId == '' || userId == null ? Routes.login : Routes.home,
+          String initialRoute =
+              userId == '' || userId == null ? Routes.login : Routes.home;
 
-            // initialRoute: Routes.updateProfile,
-            getPages: Nav.routes,
+          return GetMaterialApp(
+            key: navigatorKey, // Set the GlobalKey
+            navigatorObservers: <NavigatorObserver>[
+              AnalyticsServices.getAnalyticObserver(),
+            ],
             debugShowCheckedModeBanner: false,
             theme: appTheme,
             title: 'Business Bosses',
+            initialRoute: initialRoute,
+            getPages: routes,
           );
         } else {
           return Container();

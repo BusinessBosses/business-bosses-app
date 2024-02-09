@@ -6,7 +6,8 @@ class Routes {
     return login;
   }
 
-  static const String home = '/homeScreen';
+  // static const String home = '/homeScreen';
+  static const String home = '/';
   static const String allCommunitiesScreen = '/bossupScreen';
   static const String login = '/loginScreen';
   static const String registration = '/registerScreen';
