@@ -2,7 +2,6 @@ import 'package:business_bosses_v2/features/live_event/controller/live_event_con
 import 'package:business_bosses_v2/features/live_event/models/events_model.dart';
 import 'package:business_bosses_v2/features/live_event/presentation/live_event.dart';
 import 'package:business_bosses_v2/features/live_event/widgets/event_item.dart';
-import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -19,7 +18,6 @@ class _MyEventsState extends State<MyEvents> {
   final LiveController liveController = Get.put(LiveController());
   @override
   Widget build(BuildContext context) {
-    String ? previousScreen = Get.previousRoute;
     return Scaffold(
         appBar: AppBar(
           leading: IconButton(
@@ -68,60 +66,11 @@ class _MyEventsState extends State<MyEvents> {
                         ),
                       ],
                     )
-                  : previousScreen == '/myProfileScreen'
-                      ? Center(
-                          child: Column(
-                             mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const Text(
-                                'You Have Not Chosen To Attend Any Event!',
-                              ),
-                              const SizedBox(height: 10,),
-                              Stack(
-                                children: <Widget>[
-                                  Container(
-                                    decoration: BoxDecoration(
-                                      color: backgroundcolorinterface,
-                                      borderRadius: BorderRadius.circular(20),
-                                    ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Wrap(
-                                        crossAxisAlignment: WrapCrossAlignment.center,
-                                        children: <Widget>[
-                                          GestureDetector(
-                                            onTap: () {
-                                              Get.to(() => const LiveEvent());
-                                            },
-                                            child: const Text(
-                                              'Go to Events',
-                                              style: TextStyle(
-                                                color: primaryColorLT,
-                                                fontSize: 13,
-                                                fontWeight: FontWeight.w700,
-                                              ),
-                                            ),
-                                          ),
-                                          const SizedBox(
-                                            width: 10,
-                                          ),
-                                          SvgPicture.asset(
-                                              'assets/svgs/nexticon.svg'),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        )
-                      : const Center(
-                          child: Text(
-                            'You Have Not Chosen To Attend Any Event!',
-                          ),
-                        ),
-        
+                  : const Center(
+                      child: Text(
+                        'You Have Not Chose To Attend Any Event!',
+                      ),
+                    ),
         ));
   }
 }
