@@ -87,6 +87,7 @@ class CreatePostController extends GetxController {
       String videoUrl = result.videoUrl;
       String thumbnailUrl = result.thumbnailUrl;
 
+      // ignore: unnecessary_null_comparison
       if (videoUrl == null) {
         showSnackbar(message: 'Error Uploading video');
         return null;
@@ -134,6 +135,36 @@ class CreatePostController extends GetxController {
     }
 
     return null;
+  }
+
+  Future<void> onEditPoll(
+      PostModel? post, String title, List<String> options) async {
+    loading(true);
+    update();
+    if (validateCreatePostData(post!.toMap())) {
+      final ApiResponseModel response = await ApiService.put(
+        path: 'post/update-post/${post.postId}',
+        body: <String, dynamic>{'title': title, 'options': options},
+      );
+
+      if (response.success) {
+        final ProfileController profileController = Get.find();
+        final HomeController homeController = Get.find();
+        PostModel modelizedPost = PostModel.fromMap(<String, dynamic>{
+          ...post.toMap(),
+          ...response.data,
+        });
+        homeController.updatePost(modelizedPost);
+        profileController.updatePost(modelizedPost);
+        Get.back();
+        showSnackbar(message: 'Poll updated successfully!', title: 'Success');
+      } else {
+        showSnackbar(
+            message: 'Failed to editing poll.', title: 'O0PS!', error: true);
+      }
+    }
+    loading(false);
+    update();
   }
 
   /// CREATE POST CONTROLLER (REGISTER NEW POST TO REMOTE DATA SOURCE)

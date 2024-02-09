@@ -1,11 +1,7 @@
-import 'dart:io';
-
 import 'package:business_bosses_v2/features/forum/presentation/bossup_screen.dart';
 import 'package:business_bosses_v2/features/forum/widgets/forum_item.dart';
 import 'package:business_bosses_v2/features/home/controller/commumities_controller.dart';
-import 'package:business_bosses_v2/features/home/sellProduct.dart';
 import 'package:business_bosses_v2/features/home/widgets/bottom_bar.dart';
-import 'package:business_bosses_v2/features/home/widgets/floatingbutton.dart';
 import 'package:business_bosses_v2/features/home/widgets/industriessearch.dart';
 import 'package:business_bosses_v2/utils/constants/constants.dart';
 import 'package:flutter/material.dart';
@@ -348,7 +344,6 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
                 const BottomBar(
                   activeIndex: 1,
                 ),
-              
               ],
             ),
           ),

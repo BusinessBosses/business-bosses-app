@@ -1,4 +1,4 @@
-import 'dart:io';
+// ignore_for_file: equal_keys_in_map
 
 import 'package:business_bosses_v2/features/home/widgets/sellingpopup.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
@@ -415,8 +415,7 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
                           keyboardType: TextInputType.text,
                           maxLength: 3,
                           decoration: inputDecoration.copyWith(
-                            hintText:
-                                '${currencyValues[_selectedLocation]}' ?? 'USD',
+                            hintText: '${currencyValues[_selectedLocation]}',
                           ),
                         ),
                         // child: Padding(

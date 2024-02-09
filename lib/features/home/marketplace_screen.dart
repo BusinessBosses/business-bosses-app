@@ -1,7 +1,4 @@
-import 'dart:io';
-
 import 'package:business_bosses_v2/features/forum/models/industry.dart';
-import 'package:business_bosses_v2/features/home/sellProduct.dart';
 import 'package:business_bosses_v2/features/home/widgets/bottom_bar.dart';
 import 'package:business_bosses_v2/features/home/widgets/floatingbutton.dart';
 import 'package:business_bosses_v2/features/home/widgets/sellingpopup.dart';

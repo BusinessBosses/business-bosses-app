@@ -27,6 +27,7 @@ class HomeController extends GetxController {
   // final PostsController _postsController = Get.find();
   late final ProfileController profileController;
   late final ChatController _chatController;
+  // ignore: unused_field
   late final CreatePostController _createPostController;
   // final MarketController _marketController = Get.put(MarketController());
   // final CommunitiesController _communitiesController =
@@ -75,6 +76,13 @@ class HomeController extends GetxController {
 
   void addMarketMembers(RxList<UserModel> data) {
     marketMembers = data;
+  }
+
+  void pollVote(PostModel post, String selectedOption) {
+    ApiService.post(path: 'pollvote', body: {
+      'postId': post.postId,
+      'selectedOption': selectedOption,
+    });
   }
 
   /// PROCESS RAW API DATA, MODELIZE AND SAVE TO STATE

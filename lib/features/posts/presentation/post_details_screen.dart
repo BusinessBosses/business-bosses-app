@@ -4,6 +4,7 @@ import 'package:business_bosses_v2/features/home/controller/home_controller.dart
 import 'package:business_bosses_v2/features/posts/widgets/likecommentandcointile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
+import 'package:flutter_polls/flutter_polls.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
@@ -22,15 +23,18 @@ import '../widgets/create_post_user_tile.dart';
 import 'boost_post_screen.dart';
 
 // ignore: public_member_api_docs
-class PostDetailsScreen extends StatelessWidget {
+class PostDetailsScreen extends StatefulWidget {
   // final PostModel post;
-  PostDetailsScreen({Key? key}) : super(key: key);
+  const PostDetailsScreen({Key? key}) : super(key: key);
 
+  @override
+  State<PostDetailsScreen> createState() => _PostDetailsScreenState();
+}
+
+class _PostDetailsScreenState extends State<PostDetailsScreen> {
   PostModel post = Get.arguments;
 
   // ignore: public_member_api_docs
-  // static const String routeName = '/post-details-screen';
-
   @override
   Widget build(BuildContext context) {
     // if (Get.arguments == null) {
@@ -43,13 +47,27 @@ class PostDetailsScreen extends StatelessWidget {
     ProfileController profileController = Get.find();
     // ignore: unused_local_variable
     HomeController controller = Get.find();
+    Map<String, int> voteCounts = countVotes(post);
+    bool hasVoted = userHasVoted(post, profileController);
+    String? selectedVote = userSelectedOption(post, profileController);
+// Create PollOption list based on the vote counts
+    List<PollOption> pollOptions = List.generate(
+      post.options != null ? post.options!.length : 0,
+      (int index) {
+        String option = post.options![index];
+        int votes = voteCounts[option] ?? 0;
 
+        return PollOption(
+          id: option,
+          title: Text(option),
+          votes: votes,
+        );
+      },
+    );
     Future<void> repost() async {
       controller.postRepost(profileController.myProfile.uid, post.postId,
           'post', post.timestamp, post.user!.uid);
     }
-
-    ;
 
     return Scaffold(
         backgroundColor: Colors.white,
@@ -190,6 +208,43 @@ class PostDetailsScreen extends StatelessWidget {
                     const SizedBox(
                       height: 10,
                     ),
+                    if (post.isPolled!)
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                        child: FlutterPolls(
+                          pollId: post.postId,
+                          onVoted:
+                              (PollOption pollOption, int newTotalVotes) async {
+                            controller.pollVote(post, pollOption.id!);
+                            setState(() {
+                              hasVoted = true;
+                              selectedVote = pollOption.id;
+                            });
+                            return true;
+                          },
+                          pollTitle: const Align(
+                            alignment: Alignment.topLeft,
+                            child: Text(
+                              '',
+                              style: TextStyle(
+                                fontSize: 0,
+                              ),
+                            ),
+                          ),
+                          hasVoted: hasVoted,
+                          userVotedOptionId: selectedVote,
+                          pollOptionsSplashColor: Colors.white,
+                          votedProgressColor: Colors.grey.withOpacity(0.3),
+                          votedBackgroundColor: Colors.grey.withOpacity(0.2),
+                          pollOptions: pollOptions,
+                          votedCheckmark: const Icon(
+                            Icons.check_circle,
+                            color: Colors.black,
+                            weight: 18,
+                            size: 18,
+                          ),
+                        ),
+                      ),
                     Padding(
                       padding: const EdgeInsets.only(left: 15, right: 15),
                       child: post.videoUrl != null && post.videoUrl!.isNotEmpty
@@ -344,5 +399,41 @@ class PostDetailsScreen extends StatelessWidget {
         'https://businessbosses.onelink.me/xLWk/36a2ff16';
     logEvent(post.postId, 'post');
     socialShare(message);
+  }
+
+  bool userHasVoted(PostModel post, ProfileController profileController) {
+    String userId = profileController.myProfile.uid;
+    return post.isPolled! &&
+        post.pollvotes != null &&
+        post.pollvotes!
+            .any((Map<String, dynamic> vote) => vote['userId'] == userId);
+  }
+
+// Get the selected option if the user has voted
+  String? userSelectedOption(
+      PostModel post, ProfileController profileController) {
+    String userId = profileController.myProfile.uid;
+    if (post.isPolled! && post.pollvotes != null) {
+      Map<String, dynamic>? userVote = post.pollvotes!.firstWhere(
+        (Map<String, dynamic> vote) => vote['userId'] == userId,
+      );
+
+      // ignore: unnecessary_null_comparison
+      return userVote != null ? userVote['selectedOption'] : null;
+    }
+    return null;
+  }
+
+  Map<String, int> countVotes(PostModel post) {
+    Map<String, int> voteCounts = <String, int>{};
+
+    if (post.isPolled! && post.pollvotes != null) {
+      for (Map<String, dynamic> vote in post.pollvotes!) {
+        String selectedOption = vote['selectedOption'];
+        voteCounts[selectedOption] = (voteCounts[selectedOption] ?? 0) + 1;
+      }
+    }
+
+    return voteCounts;
   }
 }

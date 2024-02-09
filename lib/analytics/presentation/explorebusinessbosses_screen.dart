@@ -1,13 +1,9 @@
-import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:http/http.dart' as http;
-import 'package:url_launcher/url_launcher.dart';
 import 'dart:convert';
 
-import '../../features/posts/widgets/my_container.dart';
 import '../../utils/theme/theme.dart';
 import 'package:business_bosses_v2/features/posts/widgets/youtube_display.dart';
 import 'package:business_bosses_v2/features/posts/widgets/yt_player.dart';
@@ -92,7 +88,7 @@ class _ExplorebusinessbossesScreenState
         ),
       ),
       body: SingleChildScrollView(
-        child:  Column(
+        child: Column(
           children: [
             const SizedBox(
               width: double.infinity,
@@ -100,40 +96,39 @@ class _ExplorebusinessbossesScreenState
               child: ColoredBox(color: backgroundcolorinterface),
             ),
             Padding(
-               padding: const EdgeInsets.only(top: 20, left: 20, right: 20),
-                        child: Column(
-                          children: [
-                            GestureDetector(
-                                onTap: () {
-                                  Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                      builder: (BuildContext context) =>
-                                          YoutubeVideo(
-                                        youtubeUrl,
-                                      ),
-                                    ),
-                                  );
-                                },
-                                child: YoutubeDisplay(youtubeUrl ?? "")),
-                            const SizedBox(
-                              height: 20,
+              padding: const EdgeInsets.only(top: 20, left: 20, right: 20),
+              child: Column(
+                children: <Widget>[
+                  GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (BuildContext context) => YoutubeVideo(
+                              youtubeUrl,
                             ),
-                            // Linkify(
-                            //   onOpen: (LinkableElement link) async {
-                            //     if (await canLaunchUrl(Uri.parse(link.url))) {
-                            //       await launchUrl(Uri.parse(link.url));
-                            //     } else {
-                            //       showSnackbar(
-                            //           message:
-                            //               'Could not launch URL: ${link.url}');
-                            //     }
-                            //   },
-                            //   text: description!,
-                            //   style: bodyText2,
-                            //   linkStyle: const TextStyle(color: Colors.blue),
-                            // ),
+                          ),
+                        );
+                      },
+                      child: YoutubeDisplay(youtubeUrl)),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  // Linkify(
+                  //   onOpen: (LinkableElement link) async {
+                  //     if (await canLaunchUrl(Uri.parse(link.url))) {
+                  //       await launchUrl(Uri.parse(link.url));
+                  //     } else {
+                  //       showSnackbar(
+                  //           message:
+                  //               'Could not launch URL: ${link.url}');
+                  //     }
+                  //   },
+                  //   text: description!,
+                  //   style: bodyText2,
+                  //   linkStyle: const TextStyle(color: Colors.blue),
+                  // ),
 
-                              Column(
+                  Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -190,7 +185,7 @@ class _ExplorebusinessbossesScreenState
                           fontSize: 14.0,
                         ),
                       ),
-                       Text(
+                      Text(
                         '• Network with new contacts & easily find your industry experts\n• Join groups with topics that support your educational & business goals\n• Enter Boss Up Challenge for a chance to become "Boss of the week"',
                         style: bodyText1.copyWith(
                           fontWeight: FontWeight.normal,
@@ -216,7 +211,7 @@ class _ExplorebusinessbossesScreenState
                         ),
                       ),
                       Image.asset('assets/images/explore5.png'),
-                       const SizedBox(
+                      const SizedBox(
                         height: 8,
                       ),
                       Text(
@@ -264,7 +259,7 @@ class _ExplorebusinessbossesScreenState
                         ),
                       ),
                       Image.asset('assets/images/explore8.png'),
-                       Text(
+                      Text(
                         'Polls & Survey',
                         style: bodyText1.copyWith(
                           fontWeight: FontWeight.bold,
@@ -281,9 +276,9 @@ class _ExplorebusinessbossesScreenState
                       Image.asset('assets/images/explore9.png'),
                     ],
                   ),
-                          ],
-                        ),
-                      ),
+                ],
+              ),
+            ),
           ],
         ),
       ),

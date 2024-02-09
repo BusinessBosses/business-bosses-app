@@ -46,6 +46,7 @@ class ProfilePictureDisplay extends StatelessWidget {
   }
 
   Widget buildProfilePicture() {
+    // ignore: unnecessary_null_comparison
     if (photoUrl != null && photoUrl.isNotEmpty) {
       return NetworkImageWithPlaceHolder(
         imageUrl: photoUrl,

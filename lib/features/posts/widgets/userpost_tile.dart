@@ -6,6 +6,7 @@ import 'package:business_bosses_v2/features/live_event/presentation/create_event
 import 'package:business_bosses_v2/features/live_event/widgets/call_room.dart';
 import 'package:business_bosses_v2/features/posts/controllers/create_post_controller.dart';
 import 'package:business_bosses_v2/features/posts/models/post_model.dart';
+import 'package:business_bosses_v2/features/posts/presentation/create_poll_screen.dart';
 import 'package:business_bosses_v2/features/posts/widgets/post_images.dart';
 import 'package:business_bosses_v2/features/posts/widgets/post_like_comment.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
@@ -15,6 +16,7 @@ import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
 import 'package:detectable_text_field/widgets/detectable_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_polls/flutter_polls.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
@@ -55,6 +57,7 @@ class _PostTileState extends State<PostTile> {
   bool hide = false;
   final ProfileController profileController = Get.find();
   final HomeController homeController = Get.find();
+  String? selectedValue;
 
   Future<void> connect(String userId) async {
     // ignore: unused_local_variable
@@ -129,7 +132,24 @@ class _PostTileState extends State<PostTile> {
   @override
   Widget build(BuildContext context) {
     String? title, roomid, date, starttime, host, photourl, startat, endat;
+    // Get the vote counts for each option
+    Map<String, int> voteCounts = countVotes(widget.post);
+    bool hasVoted = userHasVoted(widget.post, profileController);
+    String? selectedVote = userSelectedOption(widget.post, profileController);
+// Create PollOption list based on the vote counts
+    List<PollOption> pollOptions = List.generate(
+      widget.post.options != null ? widget.post.options!.length : 0,
+      (int index) {
+        String option = widget.post.options![index];
+        int votes = voteCounts[option] ?? 0;
 
+        return PollOption(
+          id: option,
+          title: Text(option),
+          votes: votes,
+        );
+      },
+    );
     if (widget.post.livedata != null) {
       try {
         final jsonData = jsonDecode(widget.post.livedata!.toString());
@@ -220,11 +240,11 @@ class _PostTileState extends State<PostTile> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 if (widget.post.reposts?.length != null &&
-                    widget.post.reposts?.length != 0) ...[
+                    widget.post.reposts!.isNotEmpty) ...<Widget>[
                   Padding(
                     padding: const EdgeInsets.only(left: 15.0, top: 10),
                     child: Row(
-                      children: [
+                      children: <Widget>[
                         SvgPicture.asset(
                           'assets/svgs/repost.svg',
                           height: 13,
@@ -236,7 +256,7 @@ class _PostTileState extends State<PostTile> {
                                     profileController.myProfile.uid) ==
                                 true
                             ? Row(
-                                children: [
+                                children: <Widget>[
                                   const Text(
                                     'You Reposted',
                                     style: TextStyle(fontSize: 12),
@@ -262,7 +282,7 @@ class _PostTileState extends State<PostTile> {
                           onTap: () {},
                           child: Text(
                             '${widget.post.reposts?.length.toString()} Reposts',
-                            style: TextStyle(fontSize: 12),
+                            style: const TextStyle(fontSize: 12),
                           ),
                         ),
                       ],
@@ -406,12 +426,18 @@ class _PostTileState extends State<PostTile> {
                                   ),
                                   onSelected: (String val) {
                                     if (val == 'Edit') {
-                                      Get.to(() => CreatePostScreen(
-                                            postId: widget.post.postId,
-                                            post: widget.post.title,
-                                            postDetail: widget.post,
-                                            images: widget.post.images,
-                                          ));
+                                      if (widget.post.isPolled!) {
+                                        Get.to(() => CreatePollScreen(
+                                              postDetail: widget.post,
+                                            ));
+                                      } else {
+                                        Get.to(() => CreatePostScreen(
+                                              postId: widget.post.postId,
+                                              post: widget.post.title,
+                                              postDetail: widget.post,
+                                              images: widget.post.images,
+                                            ));
+                                      }
                                     } else if (val == 'updateevent') {
                                       Get.to(() => CreateEvent(
                                             event: event,
@@ -555,6 +581,43 @@ class _PostTileState extends State<PostTile> {
                                 await launchUrlString(url);
                               },
                             ),
+                            if (widget.post.isPolled!)
+                              FlutterPolls(
+                                pollId: widget.post.postId,
+                                onVoted: (PollOption pollOption,
+                                    int newTotalVotes) async {
+                                  homeController.pollVote(
+                                      widget.post, pollOption.id!);
+                                  setState(() {
+                                    hasVoted = true;
+                                    selectedVote = pollOption.id;
+                                  });
+                                  return true;
+                                },
+                                pollTitle: const Align(
+                                  alignment: Alignment.topLeft,
+                                  child: Text(
+                                    '',
+                                    style: TextStyle(
+                                      fontSize: 0,
+                                    ),
+                                  ),
+                                ),
+                                hasVoted: hasVoted,
+                                userVotedOptionId: selectedVote,
+                                pollOptionsSplashColor: Colors.white,
+                                votedProgressColor:
+                                    Colors.grey.withOpacity(0.3),
+                                votedBackgroundColor:
+                                    Colors.grey.withOpacity(0.2),
+                                pollOptions: pollOptions,
+                                votedCheckmark: const Icon(
+                                  Icons.check_circle,
+                                  color: Colors.black,
+                                  weight: 18,
+                                  size: 18,
+                                ),
+                              ),
                             const SizedBox(height: 10),
                           ],
                         ),
@@ -576,27 +639,46 @@ class _PostTileState extends State<PostTile> {
                               ),
                               // You can also add other properties like boxShadow for a more realistic effect
                             ),
-                            child: Stack(children: [
+                            child: Stack(children: <Widget>[
                               Padding(
                                 padding: const EdgeInsets.all(10.0),
-                                child: Container(
-                                  child: Column(
-                                    children: <Widget>[
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: <Widget>[
-                                          Container(
-                                            decoration: BoxDecoration(
-                                              color: Colors.white.withAlpha(70),
-                                              borderRadius:
-                                                  BorderRadius.circular(5),
-                                            ),
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.all(5.0),
-                                              child: Row(
-                                                children: <Widget>[
+                                child: Column(
+                                  children: <Widget>[
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: <Widget>[
+                                        Container(
+                                          decoration: BoxDecoration(
+                                            color: Colors.white.withAlpha(70),
+                                            borderRadius:
+                                                BorderRadius.circular(5),
+                                          ),
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(5.0),
+                                            child: Row(
+                                              children: <Widget>[
+                                                (DateTime.now().isAfter(DateTime
+                                                            .parse(startat ??
+                                                                '2023-11-07T10:45:00.000Z')) &&
+                                                        DateTime.now().isBefore(
+                                                            DateTime.parse(endat ??
+                                                                DateTime.now()
+                                                                    .toIso8601String())))
+                                                    ? Lottie.asset(
+                                                        'assets/anim/liveeventwhite.json',
+                                                        height: 12,
+                                                      )
+                                                    : SvgPicture.asset(
+                                                        'assets/svgs/liveeventt.svg',
+                                                        height: 12,
+                                                        // ignore: deprecated_member_use
+                                                        color: Colors.white,
+                                                      ),
+                                                const SizedBox(
+                                                  width: 5,
+                                                ),
+                                                Text(
                                                   (DateTime.now().isAfter(DateTime
                                                               .parse(startat ??
                                                                   '2023-11-07T10:45:00.000Z')) &&
@@ -604,105 +686,82 @@ class _PostTileState extends State<PostTile> {
                                                               DateTime.parse(endat ??
                                                                   DateTime.now()
                                                                       .toIso8601String())))
-                                                      ? Lottie.asset(
-                                                          'assets/anim/liveeventwhite.json',
-                                                          height: 12,
-                                                        )
-                                                      : SvgPicture.asset(
-                                                          'assets/svgs/liveeventt.svg',
-                                                          height: 12,
-                                                          // ignore: deprecated_member_use
-                                                          color: Colors.white,
-                                                        ),
-                                                  const SizedBox(
-                                                    width: 5,
+                                                      ? 'Ongoing Live Event'
+                                                      : DateTime.now().isAfter(
+                                                              DateTime.parse(
+                                                                  startat ??
+                                                                      '2023-11-07T10:45:00.000Z'))
+                                                          ? 'Ended event'
+                                                          : 'Upcoming Live event',
+                                                  style: const TextStyle(
+                                                    color: Colors.white,
                                                   ),
-                                                  Text(
-                                                    (DateTime.now().isAfter(
-                                                                DateTime.parse(
-                                                                    startat ??
-                                                                        '2023-11-07T10:45:00.000Z')) &&
-                                                            DateTime.now().isBefore(
-                                                                DateTime.parse(endat ??
-                                                                    DateTime.now()
-                                                                        .toIso8601String())))
-                                                        ? 'Ongoing Live Event'
-                                                        : DateTime.now().isAfter(
-                                                                DateTime.parse(
-                                                                    startat ??
-                                                                        '2023-11-07T10:45:00.000Z'))
-                                                            ? 'Ended event'
-                                                            : 'Upcoming Live event',
-                                                    style: const TextStyle(
-                                                      color: Colors.white,
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
+                                                ),
+                                              ],
                                             ),
                                           ),
-                                          Text(
-                                            'ID: $roomid',
-                                            style: const TextStyle(
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.w900),
-                                          )
-                                        ],
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Text(
-                                          '$title',
+                                        ),
+                                        Text(
+                                          'ID: $roomid',
                                           style: const TextStyle(
                                               color: Colors.white,
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.w700),
-                                        ),
-                                      ),
-                                      Center(
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: <Widget>[
-                                            NetworkImageWithPlaceHolder(
-                                              imageUrl: '$photourl',
-                                              height: 25,
-                                              width: 25,
-                                            ),
-                                            const SizedBox(
-                                              width: 10,
-                                            ),
-                                            Text(
-                                              '$host',
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.w500,
-                                                  color: Colors.white
-                                                      .withAlpha(200)),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      Text(
-                                        DateTime.now().isAfter(DateTime.parse(
-                                                endat ??
-                                                    DateTime.now()
-                                                        .toIso8601String()))
-                                            ? 'Ended'
-                                            : DateTime.now().isAfter(DateTime
-                                                        .parse(startat ??
-                                                            '2023-11-07T10:45:00.000Z')) &&
-                                                    DateTime.now().isBefore(
-                                                        DateTime.parse(endat ??
-                                                            DateTime.now()
-                                                                .toIso8601String()))
-                                                ? 'Happening now'
-                                                : '$date, $starttime',
+                                              fontWeight: FontWeight.w900),
+                                        )
+                                      ],
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(
+                                        '$title',
                                         style: const TextStyle(
-                                            fontWeight: FontWeight.w700,
-                                            color: Colors.white),
+                                            color: Colors.white,
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.w700),
                                       ),
-                                    ],
-                                  ),
+                                    ),
+                                    Center(
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: <Widget>[
+                                          NetworkImageWithPlaceHolder(
+                                            imageUrl: '$photourl',
+                                            height: 25,
+                                            width: 25,
+                                          ),
+                                          const SizedBox(
+                                            width: 10,
+                                          ),
+                                          Text(
+                                            '$host',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.w500,
+                                                color: Colors.white
+                                                    .withAlpha(200)),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Text(
+                                      DateTime.now().isAfter(DateTime.parse(
+                                              endat ??
+                                                  DateTime.now()
+                                                      .toIso8601String()))
+                                          ? 'Ended'
+                                          : DateTime.now().isAfter(
+                                                      DateTime.parse(startat ??
+                                                          '2023-11-07T10:45:00.000Z')) &&
+                                                  DateTime.now().isBefore(
+                                                      DateTime.parse(endat ??
+                                                          DateTime.now()
+                                                              .toIso8601String()))
+                                              ? 'Happening now'
+                                              : '$date, $starttime',
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.w700,
+                                          color: Colors.white),
+                                    ),
+                                  ],
                                 ),
                               ),
                             ]),
@@ -859,7 +918,7 @@ class _PostTileState extends State<PostTile> {
                             ))
                           : Expanded(
                               child: Row(
-                              children: [
+                              children: <Widget>[
                                 GestureDetector(
                                   onTap: () {
                                     showModalBottomSheet(
@@ -869,7 +928,7 @@ class _PostTileState extends State<PostTile> {
                                             top: Radius.circular(25.0),
                                           ),
                                         ),
-                                        builder: (context) {
+                                        builder: (BuildContext context) {
                                           return SizedBox(
                                             height: 250,
                                             child: Padding(
@@ -993,7 +1052,7 @@ class _PostTileState extends State<PostTile> {
                                   top: Radius.circular(25.0),
                                 ),
                               ),
-                              builder: (context) {
+                              builder: (BuildContext context) {
                                 return SizedBox(
                                   height: 250,
                                   child: Padding(
@@ -1284,4 +1343,40 @@ double leadingWidth(PostModel p) {
     w = w + 42;
   }
   return w;
+}
+
+bool userHasVoted(PostModel post, ProfileController profileController) {
+  String userId = profileController.myProfile.uid;
+  return post.isPolled! &&
+      post.pollvotes != null &&
+      post.pollvotes!
+          .any((Map<String, dynamic> vote) => vote['userId'] == userId);
+}
+
+// Get the selected option if the user has voted
+String? userSelectedOption(
+    PostModel post, ProfileController profileController) {
+  String userId = profileController.myProfile.uid;
+  if (post.isPolled! && post.pollvotes != null) {
+    Map<String, dynamic>? userVote = post.pollvotes!.firstWhere(
+      (Map<String, dynamic> vote) => vote['userId'] == userId,
+    );
+
+    // ignore: unnecessary_null_comparison
+    return userVote != null ? userVote['selectedOption'] : null;
+  }
+  return null;
+}
+
+Map<String, int> countVotes(PostModel post) {
+  Map<String, int> voteCounts = <String, int>{};
+
+  if (post.isPolled! && post.pollvotes != null) {
+    for (Map<String, dynamic> vote in post.pollvotes!) {
+      String selectedOption = vote['selectedOption'];
+      voteCounts[selectedOption] = (voteCounts[selectedOption] ?? 0) + 1;
+    }
+  }
+
+  return voteCounts;
 }

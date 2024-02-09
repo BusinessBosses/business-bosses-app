@@ -10,11 +10,13 @@ class TextInput extends StatelessWidget {
       {Key? key,
       required this.onDetectionTyped,
       required this.titleController,
-      required this.onDetectionFinished})
+      required this.onDetectionFinished,
+      this.isPost = true})
       : super(key: key);
   final Function(String) onDetectionTyped;
   final TextEditingController titleController;
   final VoidCallback onDetectionFinished;
+  final bool isPost;
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +51,9 @@ class TextInput extends StatelessWidget {
                   //   _postTitle = val;
                   // },
                   decoration: InputDecoration(
-                    hintText: 'What’s on your mind?',
+                    hintText: isPost
+                        ? 'What’s on your mind?'
+                        : 'Ask your question here',
                     border: InputBorder.none,
                     hintStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
                           color: textColor.withOpacity(0.2),

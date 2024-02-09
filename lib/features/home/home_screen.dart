@@ -1,20 +1,14 @@
 // ignore_for_file: public_member_api_docs, always_specify_types
 
-import 'dart:io';
-
 import 'package:business_bosses_v2/common/widgets/safety_model.dart';
-import 'package:business_bosses_v2/features/bottomnavigationscreen.dart';
 import 'package:business_bosses_v2/features/forum/controller/bossup_controller.dart';
 import 'package:business_bosses_v2/features/home/controller/commumities_controller.dart';
-import 'package:business_bosses_v2/features/home/sellProduct.dart';
 import 'package:business_bosses_v2/features/home/widgets/bottom_bar.dart';
 import 'package:business_bosses_v2/features/home/widgets/floatingbutton.dart';
 import 'package:business_bosses_v2/features/live_event/controller/live_event_controller.dart';
 import 'package:business_bosses_v2/features/live_event/presentation/live_event.dart';
-import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -46,8 +40,7 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen>
-    with WidgetsBindingObserver {
+class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   final ProfileController _profileController = Get.find();
   final LiveController liveEventController = Get.put(LiveController());
   late IO.Socket socket;
@@ -1242,7 +1235,9 @@ class _HomeScreenState extends State<HomeScreen>
                                   const BottomBar(
                                     activeIndex: 0,
                                   ),
-                                  Floatingbutton(activeIndex: 0,),
+                                  Floatingbutton(
+                                    activeIndex: 0,
+                                  ),
                                 ],
                               ),
                             ),
