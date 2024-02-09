@@ -153,7 +153,7 @@ class _RelevantUsersScreenState extends State<RelevantUsersScreen> {
                                     ),
                                     child: ListTile(
                                       leading: _filtertitle.isNotEmpty
-                                          ? Text(_filtertitle!)
+                                          ? Text(_filtertitle)
                                           : Text(
                                               'Category or profession',
                                               style: bodyText2.copyWith(
@@ -219,7 +219,7 @@ class _RelevantUsersScreenState extends State<RelevantUsersScreen> {
                 child:
                     CircularProgressIndicator(), // Circular Progress Indicator
               )
-            : _filtertitle!.isNotEmpty
+            : _filtertitle.isNotEmpty
                 ? filteredConnectionsbytitle.isEmpty
                     ? _safetyModal(_user)
                     : StaggeredGridView.countBuilder(
@@ -227,11 +227,11 @@ class _RelevantUsersScreenState extends State<RelevantUsersScreen> {
                         crossAxisCount: 2,
                         crossAxisSpacing: 8.0,
                         mainAxisSpacing: 8.0,
-                        itemCount: _filtertitle!.isNotEmpty
+                        itemCount: _filtertitle.isNotEmpty
                             ? filteredConnectionsbytitle.length
                             : filteredConnections.length,
                         itemBuilder: (BuildContext context, int index) {
-                          bool checkConnected = _filtertitle!.isNotEmpty
+                          bool checkConnected = _filtertitle.isNotEmpty
                               ? profileController.myProfile.connecteds !=
                                       null &&
                                   profileController.myProfile.connecteds!
@@ -246,12 +246,12 @@ class _RelevantUsersScreenState extends State<RelevantUsersScreen> {
                                   );
 
                           return ConnectionGridTile(
-                            user: _filtertitle!.isNotEmpty
+                            user: _filtertitle.isNotEmpty
                                 ? filteredConnectionsbytitle[index]
                                 : filteredConnections[index],
                             status: checkConnected,
                             onChangeConnectionStatus: () {
-                              _filtertitle!.isNotEmpty
+                              _filtertitle.isNotEmpty
                                   ? controller.connectToUser(
                                       filteredConnectionsbytitle[index])
                                   : controller.connectToUser(
@@ -269,11 +269,11 @@ class _RelevantUsersScreenState extends State<RelevantUsersScreen> {
                         crossAxisCount: 2,
                         crossAxisSpacing: 8.0,
                         mainAxisSpacing: 8.0,
-                        itemCount: _filtertitle!.isNotEmpty
+                        itemCount: _filtertitle.isNotEmpty
                             ? filteredConnectionsbytitle.length
                             : filteredConnections.length,
                         itemBuilder: (BuildContext context, int index) {
-                          bool checkConnected = _filtertitle!.isNotEmpty
+                          bool checkConnected = _filtertitle.isNotEmpty
                               ? profileController.myProfile.connecteds !=
                                       null &&
                                   profileController.myProfile.connecteds!
@@ -288,12 +288,12 @@ class _RelevantUsersScreenState extends State<RelevantUsersScreen> {
                                   );
 
                           return ConnectionGridTile(
-                            user: _filtertitle!.isNotEmpty
+                            user: _filtertitle.isNotEmpty
                                 ? filteredConnectionsbytitle[index]
                                 : filteredConnections[index],
                             status: checkConnected,
                             onChangeConnectionStatus: () {
-                              _filtertitle!.isNotEmpty
+                              _filtertitle.isNotEmpty
                                   ? controller.connectToUser(
                                       filteredConnectionsbytitle[index])
                                   : controller.connectToUser(

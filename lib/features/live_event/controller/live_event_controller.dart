@@ -47,7 +47,16 @@ class LiveController extends GetxController {
           await ApiService.get(path: 'event/get-user-events');
       List<dynamic> rowss = responses.data;
       for (dynamic row in rowss) {
-        joined.add(EventModel.fromMap(row));
+        EventModel joinedEvent = EventModel.fromMap(row);
+        events.add(joinedEvent);
+
+        DateTime joinedStartAt = joinedEvent.startAt!;
+        DateTime joinedEndAt = joinedEvent.endAt!;
+
+        if (joinedStartAt.isAtSameMomentAs(today) || joinedEndAt.isAfter(now)) {
+          // Event starts today or in the future, it's an upcoming event
+          joined.add(joinedEvent);
+        }
       }
       events.clear();
       events.addAll(ongoing);

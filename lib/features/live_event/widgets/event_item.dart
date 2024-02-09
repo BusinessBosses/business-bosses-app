@@ -65,11 +65,11 @@ class _EventItemState extends State<EventItem> {
     };
 
     String? jsonData = jsonEncode(dataa);
-    int? attendCount = widget.event.totalAttendees;
+    int? attendCount = widget.event.totalAttendees ?? 0;
     String? attendMessage = 'Be the first to attend!';
     if (attendCount == 1) {
       attendMessage = '1 person is attending';
-    } else if (attendCount! > 1) {
+    } else if (attendCount > 1) {
       attendMessage = '$attendCount people are attending';
     }
     return Padding(
@@ -95,30 +95,34 @@ class _EventItemState extends State<EventItem> {
             overlayOpacity: 0.8,
             useRotationAnimation: true,
             tooltip: 'Open Speed Dial',
-            // heroTag: 'speed-dial-hero-tag',
+            heroTag: 'speed-dial-hero-tag-${widget.event.id}-2',
             elevation: 0.0,
             animationCurve: Curves.elasticInOut,
             isOpenOnStart: false,
             shape: const CircleBorder(),
             children: [
               SpeedDialChild(
-                  child: Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: SvgPicture.asset(
-                      'assets/svgs/text.svg',
-                      color: Colors.white,
-                    ),
+                child: Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: SvgPicture.asset(
+                    'assets/svgs/text.svg',
+                    color: Colors.white,
                   ),
-                  backgroundColor: Colors.red,
-                  label: 'Post on Business Bosses',
-                  labelStyle: const TextStyle(
-                      fontSize: 18.0, fontWeight: FontWeight.w700),
-                  onTap: () => Get.toNamed(Routes.createPost, arguments: {
-                        'sharemessage':
-                            'Hey there! Join this event on $formattedDate  $formattedStartTime with Room ID: ${widget.event.roomId}',
-                        'title': widget.event.title,
-                        'livedata': jsonData,
-                      })),
+                ),
+                backgroundColor: Colors.red,
+                label: 'Post on Business Bosses',
+                labelStyle: const TextStyle(
+                    fontSize: 18.0, fontWeight: FontWeight.w700),
+                onTap: () => Get.toNamed(
+                  Routes.createPost,
+                  arguments: <String, String?>{
+                    'sharemessage':
+                        'Hey there! Join this event on $formattedDate  $formattedStartTime with Room ID: ${widget.event.roomId}',
+                    'title': widget.event.title,
+                    'livedata': jsonData,
+                  },
+                ),
+              ),
               SpeedDialChild(
                 child: Padding(
                   padding: const EdgeInsets.all(14.0),

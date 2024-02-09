@@ -23,6 +23,9 @@ class PostModel {
   final dynamic promotionDuration;
   final String? plan;
   final bool? approved;
+  final bool? isPolled;
+  final List<dynamic>? options;
+  final List<Map<String, dynamic>>? pollvotes;
   PostModel({
     required this.postId,
     required this.title,
@@ -43,29 +46,34 @@ class PostModel {
     required this.promotionDuration,
     this.plan,
     this.approved,
+    this.isPolled = false,
+    this.options,
+    this.pollvotes,
   });
 
-  PostModel copyWith({
-    String? postId,
-    String? title,
-    List<String>? images,
-    int? timestamp,
-    int? oldtimestamp,
-    List<String>? likes,
-    List<String>? coins,
-    List<String>? reposts,
-    List<CommentModel>? comments,
-    UserModel? user,
-    String? videoUrl,
-    String? ytUrl,
-    String? livedata,
-    bool? isRanked,
-    int? views,
-    bool? promote,
-    dynamic promotionDuration,
-    String? plan,
-    bool? approved,
-  }) {
+  PostModel copyWith(
+      {String? postId,
+      String? title,
+      List<String>? images,
+      int? timestamp,
+      int? oldtimestamp,
+      List<String>? likes,
+      List<String>? coins,
+      List<String>? reposts,
+      List<CommentModel>? comments,
+      UserModel? user,
+      String? videoUrl,
+      String? ytUrl,
+      String? livedata,
+      bool? isRanked,
+      int? views,
+      bool? promote,
+      dynamic promotionDuration,
+      String? plan,
+      bool? approved,
+      bool? isPolled,
+      List<dynamic>? options,
+      List<Map<String, dynamic>>? pollvotes}) {
     return PostModel(
       postId: postId ?? this.postId,
       title: title ?? this.title,
@@ -86,6 +94,9 @@ class PostModel {
       promotionDuration: promotionDuration ?? this.promotionDuration,
       plan: plan ?? this.plan,
       approved: approved ?? this.approved,
+      isPolled: isPolled ?? this.isPolled,
+      options: options ?? this.options,
+      pollvotes: pollvotes ?? this.pollvotes,
     );
   }
 
@@ -110,6 +121,9 @@ class PostModel {
       'promotionDuration': promotionDuration,
       'plan': plan,
       'approved': approved,
+      'isPolled': isPolled,
+      'options': options,
+      'pollvotes': pollvotes,
     };
   }
 
@@ -148,6 +162,11 @@ class PostModel {
       promotionDuration: map['promotionDuration'] as dynamic,
       plan: map['plan'] != null ? map['plan'] as String : null,
       approved: map['approved'] != null ? map['approved'] as bool : null,
+      isPolled: map['isPolled'] != null ? map['isPolled'] as bool : null,
+      options: map['options'] != null ? map['options'] as List<dynamic> : null,
+      pollvotes: map['pollvotes'] != null
+          ? List<Map<String, dynamic>>.from(map['pollvotes'])
+          : null,
     );
   }
 
