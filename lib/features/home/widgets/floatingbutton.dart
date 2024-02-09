@@ -194,7 +194,7 @@ class Floatingbutton extends StatelessWidget {
                         });
       },
       child: Padding(
-        padding: const EdgeInsets.only(bottom: 90, right: 20),
+        padding: const EdgeInsets.only(bottom: 90, right: 15),
         child: Align(
           alignment: Alignment.bottomRight,
           child: Container(
