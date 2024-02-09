@@ -20,17 +20,8 @@ class _MyEventsState extends State<MyEvents> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          leading: IconButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            icon: SvgPicture.asset('assets/svgs/backbutton.svg'),),
           centerTitle: true,
-          title: const Text(
-            'My Events',
-            textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 20),
-          ),
+          title: const Text('My Events'),
           actions: <Widget>[
             widget.toHome != null && widget.toHome == true
                 ? IconButton(
