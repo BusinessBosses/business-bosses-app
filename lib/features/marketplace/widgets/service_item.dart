@@ -798,7 +798,7 @@ class _ServiceTileState extends State<ServiceTile> {
   void _sharePost() {
     String message =
         'Have a look at ${_post.user!.username}\'s post on Business Bosses\n'
-        'https://businessbosses.onelink.me/xLWk/36a2ff16';
+        'https://vm.businessbosses.co.uk/share/post';
     logEvent(_post.marketId, 'marketplace');
     socialShare(message);
   }
