@@ -841,7 +841,7 @@ class _ForumItemState extends State<ForumItem> {
   void _sharePost() {
     String message =
         'Have a look at ${widget.forum.user?.username ?? 'Business Bosses'}\'s post on Business Bosses\n'
-        'https://businessbosses.onelink.me/xLWk/36a2ff16';
+        'https://vm.businessbosses.co.uk/share/post';
     logEvent(widget.forum.forumId, 'forum');
     socialShare(message);
   }
