@@ -58,209 +58,206 @@ import '../features/forum/presentation/create_bossup_screen.dart';
 import '../features/settings/delete_account_screen.dart';
 
 ///NAV INITIALIZATIONS
-class Nav {
-  /// ROUTE LISTS
-  static List<GetPage> routes = [
-    GetPage(
-      name: Routes.login,
-      page: () => const LoginScreen(),
+var routes = [
+  GetPage(
+    name: Routes.login,
+    page: () => const LoginScreen(),
+  ),
+  GetPage(
+    name: Routes.registration,
+    page: () => RegisterScreen(),
+  ),
+  GetPage(
+    name: Routes.createPost,
+    page: () => const CreatePostScreen(),
+  ),
+  GetPage(
+    name: Routes.myProfile,
+    page: () => const MyProfileScreen(),
+  ),
+  GetPage(
+    name: Routes.bossuppartner,
+    page: () => const Bossuppartner(),
+  ),
+  GetPage(
+    name: Routes.home,
+    page: () => const HomeScreen(),
+    binding: BindingsBuilder.put(() => HomeController()),
+  ),
+  // GetPage(
+  //   name: Routes.bottomNavigation,
+  //   page: () => const BottomNavScreen(0, true),
+  //   // binding: BindingsBuilder(
+  //   //   () {
+  //   //     Get.put(ProfileController());
+  //   //     Get.put(ChatController());
+  //   //     Get.put(PostsController());
+  //   //     Get.put(HomeController());
+  //   //   },
+  //   // ),
+  // ),
+  GetPage(
+    name: Routes.notifications,
+    page: () => const NotificationsScreen(),
+    binding: BindingsBuilder.put(() => NotificationController()),
+  ),
+  GetPage(
+    name: Routes.promotionscreen,
+    page: () => const PromotionScreen(),
+  ),
+  GetPage(
+    name: Routes.analysescreen,
+    page: () => const AnalyserScreen(),
+  ),
+  GetPage(
+    name: Routes.settings,
+    page: () => const SettingsScreen(),
+  ),
+  GetPage(
+    name: Routes.updateProfile,
+    page: () => const UpdateProfileScreen(),
+  ),
+  GetPage(
+    name: Routes.resetPassword,
+    page: () => const ForgotPasswordScreen(),
+  ),
+  GetPage(
+    name: Routes.chat,
+    page: () => const ChatScreen(),
+  ),
+  GetPage(
+    name: Routes.publicProfile,
+    page: () => PublicProfileScreen(),
+  ),
+  GetPage(
+    name: Routes.referscreen,
+    page: () => const ReferScreen(),
+  ),
+  GetPage(
+    name: Routes.transactionConfirmation,
+    page: () => const Confirmation(),
+  ),
+  GetPage(
+    name: Routes.allconnectionsscreen,
+    page: () => AllConnectionsScreen(),
+  ),
+  GetPage(
+    name: Routes.allforumscreen,
+    page: () => const AllForumScreen(),
+    binding: BindingsBuilder.put(() => ForumController()),
+  ),
+  GetPage(
+    name: Routes.marketPlace,
+    page: () => const MarketplaceScreen(),
+    binding: BindingsBuilder.put(() => MarketController()),
+  ),
+  GetPage(
+    name: Routes.allCommunitiesScreen,
+    page: () => const AllCommunitiesScreen(),
+    bindings: [
+      BindingsBuilder.put(() => BossUpController()),
+      BindingsBuilder.put(() => CommunitiesController()),
+    ],
+    // binding: BindingsBuilder.put(() => BossUpController()),
+  ),
+  GetPage(
+    name: Routes.referalsscreen,
+    page: () => const ReferalsScreen(),
+    binding: BindingsBuilder.put(() => ReferralsController()),
+  ),
+  GetPage(
+    name: Routes.changePassword,
+    page: () => const ChangePasswordScreen(),
+  ),
+  GetPage(
+    name: Routes.deleteAccount,
+    page: () => const DeleteAccountScreen(),
+  ),
+  GetPage(
+    name: Routes.createForum,
+    page: () => const CreateForumScreen(),
+    binding: BindingsBuilder.put(() => CreateForumController()),
+  ),
+  GetPage(
+    name: Routes.createBossUp,
+    page: () => const CreateBossUpScreen(),
+    binding: BindingsBuilder.put(() => CreateBossUpController()),
+  ),
+  GetPage(
+    name: Routes.postDetails,
+    page: () => PostDetailsScreen(),
+  ),
+  GetPage(
+    name: Routes.specificuserlistscreen,
+    page: () => const SpecificUserListScreen(),
+  ),
+  GetPage(
+    name: Routes.completesearchingscreen,
+    page: () => const CompleteSearchingScreen(),
+    binding: BindingsBuilder.put(() => CompleteSearchController()),
+  ),
+  GetPage(
+    name: Routes.communityrulesscreen,
+    page: () => const CommunityRulesScreen(),
+  ),
+  GetPage(
+    name: Routes.rankingscreen,
+    page: () => const MyRankingScreen(),
+  ),
+  GetPage(
+      name: Routes.relevantusersscreen,
+      page: () => const RelevantUsersScreen(),
+      binding: BindingsBuilder.put(() => CompleteSearchController())),
+  GetPage(
+    name: Routes.profileanalysescreen,
+    page: () => const ProfileAnalyseScreen(),
+  ),
+  GetPage(
+    name: Routes.inviteafriendscreen,
+    page: () => const InviteAFriendTermsAndConditions(),
+  ),
+  GetPage(
+    name: Routes.premiumscreen,
+    page: () => const PremiumScreen(),
+  ),
+  GetPage(
+    name: Routes.explorebusinessbossesscreen,
+    page: () => const ExplorebusinessbossesScreen(),
+  ),
+  GetPage(
+    name: Routes.renewconfirmation,
+    page: () => const Renewconfirmation(),
+  ),
+  GetPage(
+    name: Routes.subscriptionconfirmation,
+    page: () => const SubscriptionConfirmation(),
+  ),
+  GetPage(
+    name: Routes.reviewpayment,
+    page: () => const ReviewPayment(),
+  ),
+  GetPage(
+    name: Routes.liveEvents,
+    page: () => const LiveEvent(),
+  ),
+  GetPage(
+    name: Routes.confirmcreateevent,
+    page: () => const ConfirmCreateEvent(
+      roomID: '',
     ),
-    GetPage(
-      name: Routes.registration,
-      page: () => RegisterScreen(),
+  ),
+  GetPage(
+    name: Routes.createevent,
+    page: () => const CreateEvent(),
+  ),
+  GetPage(
+    name: Routes.sellscreen,
+    page: () => const CreateSellingitemScreen(
+      isUpd: false,
     ),
-    GetPage(
-      name: Routes.createPost,
-      page: () => const CreatePostScreen(),
-    ),
-    GetPage(
-      name: Routes.myProfile,
-      page: () => const MyProfileScreen(),
-    ),
-    GetPage(
-      name: Routes.bossuppartner,
-      page: () => const Bossuppartner(),
-    ),
-    GetPage(
-      name: Routes.home,
-      page: () => const HomeScreen(),
-      binding: BindingsBuilder.put(() => HomeController()),
-    ),
-    // GetPage(
-    //   name: Routes.bottomNavigation,
-    //   page: () => const BottomNavScreen(0, true),
-    //   // binding: BindingsBuilder(
-    //   //   () {
-    //   //     Get.put(ProfileController());
-    //   //     Get.put(ChatController());
-    //   //     Get.put(PostsController());
-    //   //     Get.put(HomeController());
-    //   //   },
-    //   // ),
-    // ),
-    GetPage(
-      name: Routes.notifications,
-      page: () => const NotificationsScreen(),
-      binding: BindingsBuilder.put(() => NotificationController()),
-    ),
-    GetPage(
-      name: Routes.promotionscreen,
-      page: () => const PromotionScreen(),
-    ),
-    GetPage(
-      name: Routes.analysescreen,
-      page: () => const AnalyserScreen(),
-    ),
-    GetPage(
-      name: Routes.settings,
-      page: () => const SettingsScreen(),
-    ),
-    GetPage(
-      name: Routes.updateProfile,
-      page: () => const UpdateProfileScreen(),
-    ),
-    GetPage(
-      name: Routes.resetPassword,
-      page: () => const ForgotPasswordScreen(),
-    ),
-    GetPage(
-      name: Routes.chat,
-      page: () => const ChatScreen(),
-    ),
-    GetPage(
-      name: Routes.publicProfile,
-      page: () => PublicProfileScreen(),
-    ),
-    GetPage(
-      name: Routes.referscreen,
-      page: () => const ReferScreen(),
-    ),
-    GetPage(
-      name: Routes.transactionConfirmation,
-      page: () => const Confirmation(),
-    ),
-    GetPage(
-      name: Routes.allconnectionsscreen,
-      page: () => AllConnectionsScreen(),
-    ),
-    GetPage(
-      name: Routes.allforumscreen,
-      page: () => const AllForumScreen(),
-      binding: BindingsBuilder.put(() => ForumController()),
-    ),
-    GetPage(
-      name: Routes.marketPlace,
-      page: () => const MarketplaceScreen(),
-      binding: BindingsBuilder.put(() => MarketController()),
-    ),
-    GetPage(
-      name: Routes.allCommunitiesScreen,
-      page: () => const AllCommunitiesScreen(),
-      bindings: [
-        BindingsBuilder.put(() => BossUpController()),
-        BindingsBuilder.put(() => CommunitiesController()),
-      ],
-      // binding: BindingsBuilder.put(() => BossUpController()),
-    ),
-    GetPage(
-      name: Routes.referalsscreen,
-      page: () => const ReferalsScreen(),
-      binding: BindingsBuilder.put(() => ReferralsController()),
-    ),
-    GetPage(
-      name: Routes.changePassword,
-      page: () => const ChangePasswordScreen(),
-    ),
-    GetPage(
-      name: Routes.deleteAccount,
-      page: () => const DeleteAccountScreen(),
-    ),
-    GetPage(
-      name: Routes.createForum,
-      page: () => const CreateForumScreen(),
-      binding: BindingsBuilder.put(() => CreateForumController()),
-    ),
-    GetPage(
-      name: Routes.createBossUp,
-      page: () => const CreateBossUpScreen(),
-      binding: BindingsBuilder.put(() => CreateBossUpController()),
-    ),
-    GetPage(
-      name: Routes.postDetails,
-      page: () => PostDetailsScreen(),
-    ),
-    GetPage(
-      name: Routes.specificuserlistscreen,
-      page: () => const SpecificUserListScreen(),
-    ),
-    GetPage(
-      name: Routes.completesearchingscreen,
-      page: () => const CompleteSearchingScreen(),
-      binding: BindingsBuilder.put(() => CompleteSearchController()),
-    ),
-    GetPage(
-      name: Routes.communityrulesscreen,
-      page: () => const CommunityRulesScreen(),
-    ),
-    GetPage(
-      name: Routes.rankingscreen,
-      page: () => const MyRankingScreen(),
-    ),
-    GetPage(
-        name: Routes.relevantusersscreen,
-        page: () => const RelevantUsersScreen(),
-        binding: BindingsBuilder.put(() => CompleteSearchController())),
-    GetPage(
-      name: Routes.profileanalysescreen,
-      page: () => const ProfileAnalyseScreen(),
-    ),
-    GetPage(
-      name: Routes.inviteafriendscreen,
-      page: () => const InviteAFriendTermsAndConditions(),
-    ),
-    GetPage(
-      name: Routes.premiumscreen,
-      page: () => const PremiumScreen(),
-    ),
-    GetPage(
-      name: Routes.explorebusinessbossesscreen,
-      page: () => const ExplorebusinessbossesScreen(),
-    ),
-    GetPage(
-      name: Routes.renewconfirmation,
-      page: () => const Renewconfirmation(),
-    ),
-    GetPage(
-      name: Routes.subscriptionconfirmation,
-      page: () => const SubscriptionConfirmation(),
-    ),
-    GetPage(
-      name: Routes.reviewpayment,
-      page: () => const ReviewPayment(),
-    ),
-    GetPage(
-      name: Routes.liveEvents,
-      page: () => const LiveEvent(),
-    ),
-    GetPage(
-      name: Routes.confirmcreateevent,
-      page: () => const ConfirmCreateEvent(
-        roomID: '',
-      ),
-    ),
-    GetPage(
-      name: Routes.createevent,
-      page: () => const CreateEvent(),
-    ),
-    GetPage(
-      name: Routes.sellscreen,
-      page: () => const CreateSellingitemScreen(
-        isUpd: false,
-      ),
-    ),
-    GetPage(
-      name: Routes.bottomnavscreen,
-      page: () => const BottomNavigationScreen(),
-    ),
-  ];
-}
+  ),
+  GetPage(
+    name: Routes.bottomnavscreen,
+    page: () => const BottomNavigationScreen(),
+  ),
+];
