@@ -1,5 +1,4 @@
 import 'package:business_bosses_v2/features/home/sellProduct.dart';
-import 'package:business_bosses_v2/features/live_event/presentation/live_event.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/sell_services.dart';
 import 'package:business_bosses_v2/features/posts/presentation/create_poll_screen.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
@@ -18,7 +17,6 @@ class Floatingbutton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-     String? previousScreen = Get.previousRoute;
     final ProfileController myProfile = Get.find();
     int now = DateTime.now().millisecondsSinceEpoch;
     int previousStamp = myProfile.myProfile.bossOfTheWeekTimeStamp ?? 0;
@@ -206,61 +204,15 @@ class Floatingbutton extends StatelessWidget {
             ),
             width: 50,
             height: 50,
-            child: previousScreen == '/myProfileScreen'
-                      ? Center(
-                          child: Column(
-                             mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const Text(
-                                'You Have Not Chosen To Attend Any Event!',
-                              ),
-                              const SizedBox(height: 10,),
-                              Stack(
-                                children: <Widget>[
-                                  Container(
-                                    decoration: BoxDecoration(
-                                      color: backgroundcolorinterface,
-                                      borderRadius: BorderRadius.circular(20),
-                                    ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Wrap(
-                                        crossAxisAlignment: WrapCrossAlignment.center,
-                                        children: <Widget>[
-                                          GestureDetector(
-                                            onTap: () {
-                                              Get.to(() => const LiveEvent());
-                                            },
-                                            child: const Text(
-                                              'Go to Events',
-                                              style: TextStyle(
-                                                color: primaryColorLT,
-                                                fontSize: 13,
-                                                fontWeight: FontWeight.w700,
-                                              ),
-                                            ),
-                                          ),
-                                          const SizedBox(
-                                            width: 10,
-                                          ),
-                                          SvgPicture.asset(
-                                              'assets/svgs/nexticon.svg'),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        )
-                      : const Center(
-                          child: Text(
-                            'You Have Not Chosen To Attend Any Event!',
-                          ),
-                        ),
-        )))
-      );
-  
+            child: const Center(
+              child: Icon(
+                Icons.add,
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }
