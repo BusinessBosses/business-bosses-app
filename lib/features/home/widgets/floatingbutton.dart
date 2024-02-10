@@ -69,7 +69,7 @@ class Floatingbutton extends StatelessWidget {
                                   contentPadding:
                                       const EdgeInsets.only(left: 10),
                                   leading: index == 3
-                                      ? const Icon(Icons.poll)
+                                      ? const Icon(Icons.poll, color: Colors.black,)
                                       : SvgPicture.asset(
                                           index == 0
                                               ? 'assets/svgs/text.svg'
@@ -194,7 +194,7 @@ class Floatingbutton extends StatelessWidget {
                         });
       },
       child: Padding(
-        padding: const EdgeInsets.only(bottom: 90, right: 20),
+        padding: const EdgeInsets.only(bottom: 90, right: 15),
         child: Align(
           alignment: Alignment.bottomRight,
           child: Container(
