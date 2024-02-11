@@ -67,7 +67,7 @@ class Floatingbutton extends StatelessWidget {
                                   contentPadding:
                                       const EdgeInsets.only(left: 10),
                                   leading: index == 3
-                                      ? const Icon(Icons.poll)
+                                      ? const Icon(Icons.poll, color: Colors.black,)
                                       : SvgPicture.asset(
                                           index == 0
                                               ? 'assets/svgs/text.svg'
