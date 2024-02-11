@@ -1360,13 +1360,9 @@ String? userSelectedOption(
   if (post.isPolled! && post.pollvotes != null && post.pollvotes!.isNotEmpty) {
     Map<String, dynamic>? userVote = post.pollvotes!.firstWhere(
       (Map<String, dynamic> vote) => vote['userId'] == userId,
-      orElse: () => null as Map<String,
-          dynamic>, // Return null when the user's vote is not found
     );
-    if (userVote != null) {
-      return userVote['selectedOption'];
+    return userVote['selectedOption'];
     }
-  }
   return null;
 }
 
