@@ -1357,13 +1357,15 @@ bool userHasVoted(PostModel post, ProfileController profileController) {
 String? userSelectedOption(
     PostModel post, ProfileController profileController) {
   String userId = profileController.myProfile.uid;
-  if (post.isPolled! && post.pollvotes != null) {
+  if (post.isPolled! && post.pollvotes != null && post.pollvotes!.isNotEmpty) {
     Map<String, dynamic>? userVote = post.pollvotes!.firstWhere(
       (Map<String, dynamic> vote) => vote['userId'] == userId,
+      orElse: () => null as Map<String,
+          dynamic>, // Return null when the user's vote is not found
     );
-
-    // ignore: unnecessary_null_comparison
-    return userVote != null ? userVote['selectedOption'] : null;
+    if (userVote != null) {
+      return userVote['selectedOption'];
+    }
   }
   return null;
 }
