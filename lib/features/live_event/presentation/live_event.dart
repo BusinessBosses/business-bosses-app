@@ -342,11 +342,9 @@ class _LiveEventState extends State<LiveEvent> {
                               child: TabBar(
                                 tabs: <Widget>[
                                   Tab(
-                                    child: Lottie.asset(
-                                      'assets/anim/liveevent.json',
-                                      height: 25,
+                                    child:SvgPicture.asset('assets/svgs/liveevent.svg', height: 18,),
                                     ),
-                                  ),
+                                  
                                   const Tab(text: 'Ongoing'),
                                   const Tab(text: 'Upcoming'),
                                 ],
@@ -382,7 +380,7 @@ class _LiveEventState extends State<LiveEvent> {
                     ),
                     showFloatingButton
                         ? const Floatingbutton(
-                            activeIndex: 2,
+                   
                           )
                         : Container(),
                   ]));

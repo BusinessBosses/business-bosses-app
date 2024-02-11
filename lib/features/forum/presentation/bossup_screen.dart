@@ -650,7 +650,7 @@ class _BossUpSectionState extends State<BossUpSection> {
                                 }),
                           ),
           ),
-          showFloatingButton ? Floatingbutton(activeIndex: 1) : Container()
+          showFloatingButton ? Floatingbutton() : Container()
         ]);
       }
     });
