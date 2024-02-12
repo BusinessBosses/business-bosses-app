@@ -60,7 +60,10 @@ Widget profilepostsdisplay(
                           profileController.updatePostViews(
                               posts[i], posts[i].views!);
                         }
-                        Get.toNamed(Routes.postDetails, arguments: posts[i]);
+                        if ((profileController.myProfile.uid ==
+                            posts[i].user?.uid)) {
+                          Get.toNamed(Routes.postDetails, arguments: posts[i]);
+                        }
                       },
                       // onDeletePost:
                       //     _onDeletePost,
@@ -79,7 +82,10 @@ Widget profilepostsdisplay(
                           profileController.updatePostViews(
                               posts[i], posts[i].views!);
                         }
-                        Get.toNamed(Routes.postDetails, arguments: posts[i]);
+                        if ((profileController.myProfile.uid ==
+                            posts[i].user?.uid)) {
+                          Get.toNamed(Routes.postDetails, arguments: posts[i]);
+                        }
                       },
                       // onDeletePost:
                       //     _onDeletePost,

@@ -171,6 +171,20 @@ class ProfileController extends GetxController {
     update();
   }
 
+  //ADD NEW REPOST TO PERSON PROFILE
+  void addRePost(
+    Map<String, dynamic> newPost,
+  ) async {
+    PostModel modelizedNewPost = PostModel.fromMap(<String, dynamic>{
+      ...newPost,
+      'coins': <String>[],
+      'likes': <String>[],
+      'comments': <CommentModel>[],
+    });
+    posts.insert(0, modelizedNewPost);
+    update();
+  }
+
   void removePost(String postId) {
     final int postIndex =
         posts.indexWhere((PostModel element) => element.postId == postId);

@@ -1,6 +1,8 @@
+import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/posts/controllers/create_post_controller.dart';
 import 'package:business_bosses_v2/features/posts/models/post_model.dart';
 import 'package:business_bosses_v2/features/posts/presentation/boost_post_screen.dart';
+import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:get/get.dart';
@@ -21,6 +23,8 @@ class PostGridItem extends StatelessWidget {
   // final Function(String postId)? onDeletePost;
   final bool hasMore;
   final Function? onTap;
+  final ProfileController _profileController = Get.find();
+  final HomeController _homeController = Get.find();
 
   PostGridItem({
     Key? key,
@@ -67,6 +71,35 @@ class PostGridItem extends StatelessWidget {
         ),
       ),
     );
+
+    return items;
+  }
+
+  List<PopupMenuEntry<String>> getRepostItems() {
+    List<PopupMenuEntry<String>> items = [];
+
+    items.add(
+      const PopupMenuItem<String>(
+        value: 'Share',
+        child: Text(
+          'Share Post',
+          style: bodyText2,
+        ),
+      ),
+    );
+    items.add(const PopupMenuDivider(height: 0.0));
+
+    items.add(
+      const PopupMenuItem<String>(
+        value: 'Undo',
+        child: Text(
+          'Undo Repost',
+          style: bodyText2,
+        ),
+      ),
+    );
+
+    // items.add(const PopupMenuDivider(height: 0.0));
 
     return items;
   }
@@ -169,7 +202,8 @@ class PostGridItem extends StatelessWidget {
                   ),
                 ),
               ),
-            if (hasMore)
+            if (hasMore &&
+                (_profileController.myProfile.uid == post.user?.uid)) ...[
               Positioned(
                 top: 10.0,
                 right: 10.0,
@@ -209,6 +243,35 @@ class PostGridItem extends StatelessWidget {
                   ),
                 ),
               )
+            ] else ...[
+              Positioned(
+                top: 10.0,
+                right: 10.0,
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.black26,
+                    borderRadius: BorderRadius.circular(30.0),
+                  ),
+                  height: 26.0,
+                  width: 26.0,
+                  child: MyPopupMenuButton(
+                    popupItems: getRepostItems(),
+                    icon: const Icon(
+                      Icons.more_vert,
+                      color: Colors.white,
+                      size: 16.0,
+                    ),
+                    onSelected: (String val) {
+                      if (val == 'Share') {
+                        _sharePost();
+                      } else if (val == 'Undo') {
+                        _repost();
+                      }
+                    },
+                  ),
+                ),
+              )
+            ]
           ],
         ),
       ),
@@ -250,5 +313,18 @@ class PostGridItem extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Future<void> _repost() async {
+    _homeController.postRepost(_profileController.myProfile.uid, post.postId,
+        'post', post.timestamp, post.user!.uid);
+  }
+
+  void _sharePost() {
+    String message =
+        'Have a look at ${post.user!.username}\'s post on Business Bosses\n'
+        'https://vm.businessbosses.co.uk/share/post';
+    logEvent(post.postId, '===========>>>>>>>>>>>myProfile');
+    socialShare(message);
   }
 }
