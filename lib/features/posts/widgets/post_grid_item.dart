@@ -243,7 +243,7 @@ class PostGridItem extends StatelessWidget {
                   ),
                 ),
               )
-            ] else ...[
+            ] else if (hasMore) ...[
               Positioned(
                 top: 10.0,
                 right: 10.0,
