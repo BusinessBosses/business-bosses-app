@@ -11,9 +11,7 @@ import '../../../utils/theme/theme.dart';
 class Floatingbutton extends StatelessWidget {
   const Floatingbutton({
     Key? key,
-    required this.activeIndex,
   }) : super(key: key);
-  final int activeIndex;
 
   @override
   Widget build(BuildContext context) {
@@ -22,8 +20,8 @@ class Floatingbutton extends StatelessWidget {
     int previousStamp = myProfile.myProfile.bossOfTheWeekTimeStamp ?? 0;
     return GestureDetector(
       onTap: () {
-        activeIndex == 0
-            ? showModalBottomSheet(
+        
+             showModalBottomSheet(
                 context: context,
                 shape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.vertical(
@@ -69,7 +67,7 @@ class Floatingbutton extends StatelessWidget {
                                   contentPadding:
                                       const EdgeInsets.only(left: 10),
                                   leading: index == 3
-                                      ? const Icon(Icons.poll)
+                                      ? const Icon(Icons.poll, color: Colors.black,)
                                       : SvgPicture.asset(
                                           index == 0
                                               ? 'assets/svgs/text.svg'
@@ -106,95 +104,11 @@ class Floatingbutton extends StatelessWidget {
                       ),
                     ),
                   );
-                })
-            : activeIndex == 1
-                ? (previousStamp + 1209600000) > now
-                    ? () {
-                        const SnackBar snackBar = SnackBar(
-                          duration: Duration(seconds: 4),
-                          content: Text(
-                            'You may have posted in Boss Up Challenge '
-                            'in the past 12 weeks. You can only post once in 12 weeks.',
-                          ),
-                        );
-                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                      }()
-                    : Get.toNamed(Routes.createBossUp,
-                        arguments: <String, Object?>{
-                            'isBossUp': true,
-                            'industryId': '-MsUOGcOT9oRXGakCcJv',
-                          })
-                : activeIndex == 2
-                    ? Get.toNamed(Routes.createevent)
-                    : showModalBottomSheet(
-                        context: context,
-                        shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.vertical(
-                            top: Radius.circular(25.0),
-                          ),
-                        ),
-                        builder: (BuildContext context) {
-                          return SizedBox(
-                            height: 200,
-                            child: Padding(
-                              padding: const EdgeInsets.all(15.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisSize: MainAxisSize.min,
-                                children: <Widget>[
-                                  Expanded(
-                                    // Set a specific height
-                                    child: ListView.separated(
-                                      itemCount: 2,
-                                      separatorBuilder:
-                                          (BuildContext context, int index) =>
-                                              const Divider(),
-                                      itemBuilder:
-                                          (BuildContext context, int index) {
-                                        return ListTile(
-                                          onTap: () {
-                                            Navigator.pop(context);
-                                            index == 0
-                                                ? Get.toNamed(Routes.sellscreen)
-                                                : Get.to(() =>
-                                                    const CreateServiceScreen(
-                                                        isUpd: false));
-                                          },
-                                          minVerticalPadding: 0,
-                                          contentPadding: const EdgeInsets.only(
-                                            left: 10,
-                                          ),
-                                          leading: SvgPicture.asset(
-                                            index == 0
-                                                ? 'assets/svgs/sellicon.svg'
-                                                : 'assets/svgs/sellicon.svg',
-                                            height: index == 0
-                                                ? 25
-                                                : index == 1
-                                                    ? 30
-                                                    : 22,
-                                            color: textColor.withOpacity(1),
-                                          ),
-                                          title: Text(
-                                            index == 0
-                                                ? 'Sell your product'
-                                                : 'Sell your service',
-                                            style: const TextStyle(
-                                                fontSize: 18,
-                                                fontWeight: FontWeight.w700),
-                                          ),
-                                        );
-                                      },
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                          );
-                        });
+                });
+            
       },
       child: Padding(
-        padding: const EdgeInsets.only(bottom: 90, right: 20),
+        padding: const EdgeInsets.only(bottom: 90, right: 15),
         child: Align(
           alignment: Alignment.bottomRight,
           child: Container(

@@ -1236,7 +1236,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                                     activeIndex: 0,
                                   ),
                                   Floatingbutton(
-                                    activeIndex: 0,
+                             
                                   ),
                                 ],
                               ),

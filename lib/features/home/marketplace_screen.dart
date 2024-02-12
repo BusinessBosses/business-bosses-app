@@ -1243,7 +1243,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                   ),
                   showFloatingButton
                       ? Floatingbutton(
-                          activeIndex: 3,
+                     
                         )
                       : Container(),
                 ],

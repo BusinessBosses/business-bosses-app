@@ -177,7 +177,7 @@ class _EventItemState extends State<EventItem> {
                 borderRadius: BorderRadius.all(Radius.circular(15)),
               ),
               child: Padding(
-                padding: const EdgeInsets.only(left: 15.0),
+                padding: const EdgeInsets.only(left: 15.0, bottom: 7),
                 child: Column(
                   children: <Widget>[
                     Row(
@@ -206,6 +206,13 @@ class _EventItemState extends State<EventItem> {
                             ),
                           ),
                         ),
+                        Padding(
+                          padding: const EdgeInsets.only(right: 15.0),
+                          child: Text(
+                            attendMessage,
+                            style: const TextStyle(fontSize: 13),
+                          ),
+                        ),
                         if (widget.event.user?.uid ==
                             profileController.myProfile.uid)
                           _buildPopupMenuButton(context),
@@ -230,8 +237,8 @@ class _EventItemState extends State<EventItem> {
                         ),
                         NetworkImageWithPlaceHolder(
                           imageUrl: widget.event.user?.photoUrl,
-                          height: 16,
-                          width: 16,
+                          height: 20,
+                          width: 20,
                         ),
                         const SizedBox(
                           width: 4,
@@ -249,53 +256,68 @@ class _EventItemState extends State<EventItem> {
                     const SizedBox(
                       height: 10,
                     ),
-                    Align(
-                      alignment: Alignment.topLeft,
-                      child: Text(
-                        attendMessage,
-                      ),
-                    ),
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        Align(
-                          alignment: Alignment.topLeft,
+                        Expanded(
                           child: Container(
                             padding: const EdgeInsets.all(10),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(8),
                               color: const Color.fromRGBO(224, 224, 224, 1),
                             ),
-                            child: Row(
-                              children: <Widget>[
-                                const Icon(
-                                  Icons.calendar_month,
-                                  size: 10,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: <Widget>[
+                                    const Icon(
+                                      Icons.calendar_month,
+                                      size: 10,
+                                    ),
+                                    const SizedBox(
+                                      width: 6,
+                                    ),
+                                    Text(
+                                      formattedDate.toString(),
+                                      style: const TextStyle(
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      width: 2,
+                                    ),
+                                  ],
                                 ),
-                                const SizedBox(
-                                  width: 6,
-                                ),
-                                Text(
-                                  formattedDate.toString(),
-                                  style: const TextStyle(
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w700,
-                                  ),
-                                ),
-                                const SizedBox(
-                                  width: 2,
-                                ),
-                                Text(
-                                  '$formattedStartTime - $formattedEndTime',
-                                  style: const TextStyle(
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w700,
-                                  ),
+                                Row(
+                                  children: <Widget>[
+                                    const Icon(
+                                      Icons.access_time,
+                                      size: 10,
+                                    ),
+                                    const SizedBox(
+                                      width: 6,
+                                    ),
+                                    Text(
+                                      '$formattedStartTime - $formattedEndTime',
+                                      style: const TextStyle(
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      width: 2,
+                                    ),
+                                  ],
                                 ),
                               ],
                             ),
                           ),
                         ),
-                        const Spacer(),
+                        const SizedBox(width: 15,),
+                       
                         if (widget.ongoing)
                           Padding(
                             padding: const EdgeInsets.only(right: 15.0),
