@@ -1354,16 +1354,23 @@ bool userHasVoted(PostModel post, ProfileController profileController) {
 }
 
 // Get the selected option if the user has voted
-String? userSelectedOption(
-    PostModel post, ProfileController profileController) {
+String? userSelectedOption(PostModel post, ProfileController profileController) {
   String userId = profileController.myProfile.uid;
-  if (post.isPolled! && post.pollvotes != null && post.pollvotes!.isNotEmpty) {
-    Map<String, dynamic>? userVote = post.pollvotes!.firstWhere(
-      (Map<String, dynamic> vote) => vote['userId'] == userId,
+  
+  // Check if the post is a poll and if pollvotes exist and is not empty
+  if (post.isPolled == true && post.pollvotes != null && post.pollvotes!.isNotEmpty) {
+    // Find the vote corresponding to the user ID
+    Map<String, dynamic>? userVote = post.pollvotes!.firstWhereOrNull(
+      (vote) => vote['userId'] == userId,
     );
-    return userVote['selectedOption'];
+
+    // Check if userVote is not null and contains the 'selectedOption' key
+    if (userVote != null && userVote.containsKey('selectedOption')) {
+      return userVote['selectedOption'] as String?;
     }
-  return null;
+  }
+
+  return null; // Return null if the user's selected option is not found or if it's not a poll
 }
 
 Map<String, int> countVotes(PostModel post) {
