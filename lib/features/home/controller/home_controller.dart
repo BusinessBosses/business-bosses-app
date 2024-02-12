@@ -1,5 +1,8 @@
 // ignore_for_file: library_prefixes, public_member_api_docs, always_specify_types, always_declare_return_types, avoid_print
 
+import 'dart:convert';
+
+import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/common/models/comment_model.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
@@ -457,6 +460,79 @@ class HomeController extends GetxController {
     }
   }
 
+  // /// REPOST AND UNDO REPOST FUNCTION
+  // Future<void> postRepost(String userId, String postId, String type,
+  //     int timestamp, String receiverUid) async {
+  //   if (type == 'post') {
+  //     //Non-sponsored posts
+  //     final int postIndex = mixedPosts.indexWhere((Map<String, dynamic> post) =>
+  //         post['shouldCount'] == null &&
+  //         !post['isForum'] &&
+  //         !post['isSponsored'] &&
+  //         post['data'].postId == postId);
+  //     if (postIndex != -1) {
+  //       final bool checkReposted =
+  //           mixedPosts[postIndex]['data'].reposts?.contains(userId);
+
+  //       if (checkReposted) {
+  //         mixedPosts[postIndex]['data']
+  //             .reposts!
+  //             .removeWhere((element) => element == userId);
+  //         // _createPostController.onDeletePost(postId);
+  //       } else {
+  //         mixedPosts[postIndex]['data'].reposts?.add(userId);
+  //         // mixedPosts[postIndex]['data']['timestamp'] =
+  //         //     DateTime.now().millisecondsSinceEpoch.toString();
+  //         // mixedPosts[postIndex]['data']['oldtimestamp'] = timestamp;
+  //       }
+  //     }
+  //         // profileController.addNewPost(response.data);
+
+  //     //Sponsored posts
+  //     final int spIndex = sponsoredPosts.indexWhere(
+  //         (Map<String, dynamic> post) =>
+  //             post['shouldCount'] == null &&
+  //             !post['isForum'] &&
+  //             post['isSponsored'] &&
+  //             post['data'].postId == postId);
+  //     if (spIndex != -1) {
+  //       final bool checkReposts =
+  //           sponsoredPosts[spIndex]['data'].reposts!.contains(userId);
+  //       if (checkReposts) {
+  //         sponsoredPosts[spIndex]['data']
+  //             .reposts!
+  //             .removeWhere((element) => element == userId);
+  //       } else {
+  //         sponsoredPosts[spIndex]['data'].reposts!.add(userId);
+  //         // mixedPosts[postIndex]['data']['timestamp'] =
+  //         //     DateTime.now().millisecondsSinceEpoch.toString();
+  //         // mixedPosts[postIndex]['data']['oldtimestamp'] = timestamp;
+  //       }
+  //     }
+  //   }
+  //   update();
+
+  //   // Prepare the data for the repost request
+  //   Map<String, dynamic> repostData = {
+  //     'postId': postId,
+  //     'oldtimestamp': timestamp,
+  //   };
+
+  //   try {
+  //     ApiResponseModel response =
+  //         await ApiService.post(path: 'post/create-repost', body: repostData);
+
+  //     // Handle the response if needed
+  //     if (response.success) {
+  //       print('Repost successful');
+  //     } else {
+  //       print('Repost failed with status code: $response');
+  //     }
+  //   } catch (e) {
+  //     print('Error during repost API request: $e');
+  //   }
+  // }
+
   /// REPOST AND UNDO REPOST FUNCTION
   Future<void> postRepost(String userId, String postId, String type,
       int timestamp, String receiverUid) async {
@@ -475,12 +551,16 @@ class HomeController extends GetxController {
           mixedPosts[postIndex]['data']
               .reposts!
               .removeWhere((element) => element == userId);
-          // _createPostController.onDeletePost(postId);
+          showSnackbar(
+              title: 'Success!',
+              message: 'Post successfully unreposted',
+              error: false);
         } else {
           mixedPosts[postIndex]['data'].reposts?.add(userId);
-          // mixedPosts[postIndex]['data']['timestamp'] =
-          //     DateTime.now().millisecondsSinceEpoch.toString();
-          // mixedPosts[postIndex]['data']['oldtimestamp'] = timestamp;
+          showSnackbar(
+              title: 'Success!',
+              message: 'Post successfully reposted',
+              error: false);
         }
       }
 
@@ -498,11 +578,16 @@ class HomeController extends GetxController {
           sponsoredPosts[spIndex]['data']
               .reposts!
               .removeWhere((element) => element == userId);
+          showSnackbar(
+              title: 'Success!',
+              message: 'Post successfully unreposted',
+              error: false);
         } else {
           sponsoredPosts[spIndex]['data'].reposts!.add(userId);
-          // mixedPosts[postIndex]['data']['timestamp'] =
-          //     DateTime.now().millisecondsSinceEpoch.toString();
-          // mixedPosts[postIndex]['data']['oldtimestamp'] = timestamp;
+          showSnackbar(
+              title: 'Success!',
+              message: 'Post successfully reposted',
+              error: false);
         }
       }
     }
@@ -517,10 +602,16 @@ class HomeController extends GetxController {
     try {
       ApiResponseModel response =
           await ApiService.post(path: 'post/create-repost', body: repostData);
-
+      //if repost is deleted this is the response "repost":{"success":true,"message":"reposted post deleted"}
       // Handle the response if needed
       if (response.success) {
         print('Repost successful');
+        var reposted = response.data['repost']['reposted'];
+        if (reposted) {
+          profileController.addRePost(response.data);
+        } else {
+          profileController.removePost(response.data["postId"]);
+        }
       } else {
         print('Repost failed with status code: $response');
       }
