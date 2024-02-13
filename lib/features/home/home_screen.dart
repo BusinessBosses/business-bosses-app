@@ -838,6 +838,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                             marketController.initUsers();
                             _communitiesController.fetchIndustries();
                             bossUpController.fetchForums();
+                            liveEventController.initEvents();
                           },
                           icon: const Icon(
                             Icons.warning,
@@ -858,6 +859,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                                 marketController.initUsers();
                                 _communitiesController.fetchIndustries();
                                 bossUpController.fetchForums();
+                                liveEventController.initEvents();
                               },
                               icon: const Icon(
                                 Icons.warning,
@@ -1235,9 +1237,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                                   const BottomBar(
                                     activeIndex: 0,
                                   ),
-                                  Floatingbutton(
-                             
-                                  ),
+                                  Floatingbutton(),
                                 ],
                               ),
                             ),

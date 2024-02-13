@@ -22,7 +22,7 @@ void showSnackBar(BuildContext context, {String message = Constants.STGW}) {
 Future<dynamic> navigateTo(
   BuildContext context, {
   String? routeName,
-  var arguments,
+  dynamic arguments,
   bool isRemoveUntil = false,
 }) async {
   // print("=====>>>> $routeName");
@@ -39,7 +39,7 @@ Future<dynamic> navigateTo(
 }
 
 Future<dynamic> navigateWithReplaceTo(BuildContext context,
-    {required String routeName, var arguments}) async {
+    {required String routeName, dynamic arguments}) async {
   return await Navigator.of(context)
       .pushReplacementNamed(routeName, arguments: arguments);
 }
@@ -89,7 +89,7 @@ Future<void> socialShare(String message) async {
   }
 }
 
-logEvent(dynamic id, dynamic type) async {
+void logEvent(dynamic id, dynamic type) async {
   await FirebaseAnalytics.instance.logEvent(
     name: 'share',
     parameters: <String, dynamic>{
