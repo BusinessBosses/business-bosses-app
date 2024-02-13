@@ -29,6 +29,13 @@ class _AttendanceListState extends State<AttendanceList> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Event Attendance List'),
+        leading: IconButton(
+          onPressed: () {
+            liveController.usersLoading(true);
+            Get.back();
+          },
+          icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
+        ),
       ),
       body: Obx(() {
         return liveController.usersLoading.value
@@ -50,13 +57,6 @@ class _AttendanceListState extends State<AttendanceList> {
                           radius: 30.0,
                           placeHolder: Icons.person,
                         ),
-                        // NetworkImageWithPlaceHolder(
-                        //   imageUrl: _users[i].photoUrl,
-                        //   height: 48.0,
-                        //   width: 48.0,
-                        //   radius: 30.0,
-                        //   placeHolder: Icons.person,
-                        // ),
                         title: user.isSubscribed == true
                             ? Row(
                                 children: <Widget>[

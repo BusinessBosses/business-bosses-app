@@ -131,7 +131,9 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
             actions: <Widget>[
               IconButton(
                 onPressed: () {
-                  Get.to(() => const MyEvents());
+                  Get.to(() => const MyEvents(
+                        toHome: true,
+                      ));
                 },
                 icon: const Icon(Icons.calendar_month),
               ),
@@ -141,7 +143,6 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                   height: 24.0,
                 ),
                 onPressed: () {
-                  // Navigator.pushNamed(context, '/settingsScreen');
                   Get.toNamed(Routes.settings);
                 },
               )
