@@ -31,7 +31,7 @@ class PostModel {
     required this.title,
     this.images,
     required this.timestamp,
-    this.oldtimestamp = 1,
+    this.oldtimestamp = 0,
     this.likes,
     this.coins,
     this.reposts,

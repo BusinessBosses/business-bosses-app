@@ -581,6 +581,7 @@ class _PostTileState extends State<PostTile> {
                                 await launchUrlString(url);
                               },
                             ),
+                        
                             if (widget.post.isPolled!)
                               FlutterPolls(
                                 pollId: widget.post.postId,
@@ -1026,7 +1027,7 @@ class _PostTileState extends State<PostTile> {
                                   padding: const EdgeInsets.only(right: 15),
                                   child: Text(
                                     widget.post.oldtimestamp != null ||
-                                            widget.post.oldtimestamp == 1
+                                            widget.post.oldtimestamp == 0
                                         ? TimeFormat.formatString(
                                             widget.post.oldtimestamp)
                                         : TimeFormat.formatString(
@@ -1137,9 +1138,10 @@ class _PostTileState extends State<PostTile> {
                       Padding(
                         padding: const EdgeInsets.only(right: 15),
                         child: Text(
-                          widget.post.oldtimestamp != null ||
-                                  widget.post.oldtimestamp == 1
-                              ? TimeFormat.formatString(
+                         
+                                  widget.post.oldtimestamp != 0
+                              ? 
+                              TimeFormat.formatString(
                                   widget.post.oldtimestamp)
                               : TimeFormat.formatString(widget.post.timestamp),
                           style:
