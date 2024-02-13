@@ -972,7 +972,7 @@ class _PostTileState extends State<PostTile> {
                                                                         widget
                                                                             .post
                                                                             .user!
-                                                                            .uid);
+                                                                            .uid, widget.post.oldtimestamp);
                                                                   };
                                                           },
                                                           minVerticalPadding: 0,
@@ -1089,7 +1089,7 @@ class _PostTileState extends State<PostTile> {
                                                               widget.post
                                                                   .timestamp,
                                                               widget.post.user!
-                                                                  .uid);
+                                                                  .uid, widget.post.oldtimestamp);
                                                 },
                                                 minVerticalPadding: 0,
                                                 contentPadding:

@@ -535,7 +535,7 @@ class HomeController extends GetxController {
 
   /// REPOST AND UNDO REPOST FUNCTION
   Future<void> postRepost(String userId, String postId, String type,
-      int timestamp, String receiverUid) async {
+      int timestamp, String receiverUid, int ? oldtimestamp) async {
     if (type == 'post') {
       //Non-sponsored posts
       final int postIndex = mixedPosts.indexWhere((Map<String, dynamic> post) =>
@@ -604,6 +604,10 @@ class HomeController extends GetxController {
       'timestamp': DateTime.now().millisecondsSinceEpoch,
     };
 
+      Map<String, dynamic> timestampDataoldpost = {
+      'timestamp': DateTime.now().millisecondsSinceEpoch,
+    };
+
     try {
       ApiResponseModel response =
           await ApiService.post(path: 'post/create-repost', body: repostData);
@@ -616,7 +620,7 @@ class HomeController extends GetxController {
         if (reposted) {
           profileController.addRePost(response.data);
           final ApiResponseModel timeresponse = await ApiService.put(
-              path: 'post/update-post/${postId}', body: timestampData);
+              path: 'post/update-post/${postId}', body: oldtimestamp == 0 ? timestampData : timestampDataoldpost);
               if(timeresponse.success){
                 print('true');
               }else{
