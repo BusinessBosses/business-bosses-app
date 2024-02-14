@@ -122,9 +122,9 @@ class ProfileController extends GetxController {
           'likes': psts[i]['likes']
               .map((like) => like['userId'].toString())
               .toList(),
-          'reposts': psts[i]['reposts']
-              .map((repost) => repost['userId'].toString())
-              .toList(),
+          // 'reposts': psts[i]['reposts']
+          //     .map((repost) => repost['userId'].toString())
+          //     .toList(),
           // 'pollvotes': psts[i]['pollvotes']
           //     .map((pollvote) => pollvote['userId'].toString())
           //     .toList(),
