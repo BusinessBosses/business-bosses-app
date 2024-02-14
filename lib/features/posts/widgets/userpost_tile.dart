@@ -1026,8 +1026,7 @@ class _PostTileState extends State<PostTile> {
                                 Padding(
                                   padding: const EdgeInsets.only(right: 15),
                                   child: Text(
-                                    widget.post.oldtimestamp != null ||
-                                            widget.post.oldtimestamp == 0
+                                            widget.post.oldtimestamp != 0
                                         ? TimeFormat.formatString(
                                             widget.post.oldtimestamp)
                                         : TimeFormat.formatString(
