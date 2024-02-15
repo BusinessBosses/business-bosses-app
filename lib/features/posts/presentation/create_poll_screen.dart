@@ -300,16 +300,17 @@ class _CreatePollScreenState extends State<CreatePollScreen> {
   void _removeOption(int index) {
     if (optionsValues.length > 1) {
       setState(() {
-        optionsValues.removeAt(index);
-        dynamicTextFields.removeAt(index);
-        _updateIndexes(index);
-      });
-    }
-  }
+        optionsValues.removeAt(
+            index); // Remove the corresponding option from optionsValues
+        dynamicTextFields
+            .removeAt(index); // Remove the corresponding text field widget
 
-  void _updateIndexes(int startIndex) {
-    for (int i = startIndex; i < dynamicTextFields.length; i++) {
-      dynamicTextFields[i] = _buildOptionRow(i);
+        // Update the indexes of subsequent options
+        for (int i = index; i < dynamicTextFields.length; i++) {
+          dynamicTextFields[i] = _buildOptionRow(
+              i); // Rebuild the text field widget with updated index
+        }
+      });
     }
   }
 
@@ -323,7 +324,7 @@ class _CreatePollScreenState extends State<CreatePollScreen> {
       optionsValues.add('');
       dynamicTextFields.add(
         Row(
-          children: [
+          children: <Widget>[
             Expanded(
               child: Container(
                 margin: const EdgeInsets.only(bottom: 9),
