@@ -66,7 +66,7 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
     );
     Future<void> repost() async {
       controller.postRepost(profileController.myProfile.uid, post.postId,
-          'post', post.timestamp, post.user!.uid);
+          'post', post.timestamp, post.user!.uid, post.oldtimestamp);
     }
 
     return Scaffold(

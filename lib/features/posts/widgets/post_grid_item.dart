@@ -317,7 +317,7 @@ class PostGridItem extends StatelessWidget {
 
   Future<void> _repost() async {
     _homeController.postRepost(_profileController.myProfile.uid, post.postId,
-        'post', post.timestamp, post.user!.uid);
+        'post', post.timestamp, post.user!.uid, post.oldtimestamp);
   }
 
   void _sharePost() {
