@@ -127,7 +127,7 @@ class HomeController extends GetxController {
             .map((dynamic like) => like['userId'].toString())
             .toList(),
         'reposts': psts[i]['reposts']
-            .map((dynamic like) => like['userId'].toString())
+            .map((dynamic repost) => repost['userId'].toString())
             .toList(),
         'coins': psts[i]['coins']
             .map((dynamic coin) => coin['userId'].toString())
