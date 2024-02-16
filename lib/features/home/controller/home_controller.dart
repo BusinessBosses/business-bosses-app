@@ -123,7 +123,7 @@ class HomeController extends GetxController {
             .map((dynamic like) => like['userId'].toString())
             .toList(),
         'reposts': psts[i]['reposts']
-            .map((dynamic like) => like['userId'].toString())
+            .map((dynamic repost) => repost['userId'].toString())
             .toList(),
         'coins': psts[i]['coins']
             .map((dynamic coin) => coin['userId'].toString())
@@ -535,7 +535,7 @@ class HomeController extends GetxController {
 
   /// REPOST AND UNDO REPOST FUNCTION
   Future<void> postRepost(String userId, String postId, String type,
-      int timestamp, String receiverUid, int ? oldtimestamp) async {
+      int timestamp, String receiverUid, int? oldtimestamp) async {
     if (type == 'post') {
       //Non-sponsored posts
       final int postIndex = mixedPosts.indexWhere((Map<String, dynamic> post) =>
@@ -600,11 +600,11 @@ class HomeController extends GetxController {
     };
 
     Map<String, dynamic> timestampData = {
-      'oldtimestamp' : timestamp,
+      'oldtimestamp': timestamp,
       'timestamp': DateTime.now().millisecondsSinceEpoch,
     };
 
-      Map<String, dynamic> timestampDataoldpost = {
+    Map<String, dynamic> timestampDataoldpost = {
       'timestamp': DateTime.now().millisecondsSinceEpoch,
     };
 
@@ -620,12 +620,13 @@ class HomeController extends GetxController {
         if (reposted) {
           profileController.addRePost(response.data);
           final ApiResponseModel timeresponse = await ApiService.put(
-              path: 'post/update-post/${postId}', body: oldtimestamp == 0 ? timestampData : timestampDataoldpost);
-              if(timeresponse.success){
-                print('true');
-              }else{
-                print('false');
-              }
+              path: 'post/update-post/${postId}',
+              body: oldtimestamp == 0 ? timestampData : timestampDataoldpost);
+          if (timeresponse.success) {
+            print('true');
+          } else {
+            print('false');
+          }
         } else {
           profileController.removePost(response.data["postId"]);
         }
