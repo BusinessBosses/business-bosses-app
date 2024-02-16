@@ -142,15 +142,6 @@ void processDeepLink(Uri uri) {
         );
       }
     }
-  } else if (uri.scheme == 'https' && uri.host == 'app.main') {
-    String? notificationParam = uri.queryParameters['type'];
-    if (notificationParam != null) {
-      bool success = notificationParam.toLowerCase() == 'message';
-      if (success) {
-        // showAboutDialog(context: Get.context!);
-        Get.toNamed(Routes.login);
-      }
-    }
   }
 }
 
