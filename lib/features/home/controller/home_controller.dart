@@ -9,6 +9,7 @@ import 'package:business_bosses_v2/features/chat/controllers/chat_controller.dar
 import 'package:business_bosses_v2/features/forum/models/forum_model.dart';
 import 'package:business_bosses_v2/features/forum/models/industry.dart';
 import 'package:business_bosses_v2/features/home/repository/home_repository.dart';
+import 'package:business_bosses_v2/features/live_event/models/events_model.dart';
 import 'package:business_bosses_v2/features/marketplace/models/market_model.dart';
 import 'package:business_bosses_v2/features/posts/controllers/create_post_controller.dart';
 import 'package:business_bosses_v2/features/posts/models/post_model.dart';
@@ -56,6 +57,7 @@ class HomeController extends GetxController {
   String bossUpTitle = 'Boss Up By';
   String bossUpLink = '';
   RxList<MarketModel> markets = RxList<MarketModel>(<MarketModel>[]);
+  RxList<EventModel> events = RxList<EventModel>(<EventModel>[]);
   RxList<UserModel> marketMembers = RxList<UserModel>(<UserModel>[]);
   Set<dynamic> itemsWithIncrementedViews = {};
 
@@ -69,6 +71,10 @@ class HomeController extends GetxController {
 
   void addMarkets(RxList<MarketModel> data) {
     markets = data;
+  }
+
+  void addEvents(RxList<EventModel> data) {
+    events = data;
   }
 
   void addBossupMembers(List<UserModel> data) {
@@ -533,7 +539,7 @@ class HomeController extends GetxController {
 
   /// REPOST AND UNDO REPOST FUNCTION
   Future<void> postRepost(String userId, String postId, String type,
-      int timestamp, String receiverUid, int ? oldtimestamp) async {
+      int timestamp, String receiverUid, int? oldtimestamp) async {
     if (type == 'post') {
       //Non-sponsored posts
       final int postIndex = mixedPosts.indexWhere((Map<String, dynamic> post) =>
@@ -598,11 +604,11 @@ class HomeController extends GetxController {
     };
 
     Map<String, dynamic> timestampData = {
-      'oldtimestamp' : timestamp,
+      'oldtimestamp': timestamp,
       'timestamp': DateTime.now().millisecondsSinceEpoch,
     };
 
-      Map<String, dynamic> timestampDataoldpost = {
+    Map<String, dynamic> timestampDataoldpost = {
       'timestamp': DateTime.now().millisecondsSinceEpoch,
     };
 
@@ -618,12 +624,13 @@ class HomeController extends GetxController {
         if (reposted) {
           profileController.addRePost(response.data);
           final ApiResponseModel timeresponse = await ApiService.put(
-              path: 'post/update-post/${postId}', body: oldtimestamp == 0 ? timestampData : timestampDataoldpost);
-              if(timeresponse.success){
-                print('true');
-              }else{
-                print('false');
-              }
+              path: 'post/update-post/${postId}',
+              body: oldtimestamp == 0 ? timestampData : timestampDataoldpost);
+          if (timeresponse.success) {
+            print('true');
+          } else {
+            print('false');
+          }
         } else {
           profileController.removePost(response.data["postId"]);
         }

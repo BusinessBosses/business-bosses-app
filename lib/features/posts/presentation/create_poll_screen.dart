@@ -63,7 +63,7 @@ class _CreatePollScreenState extends State<CreatePollScreen> {
           widget.postDetail!.options!.isNotEmpty) {
         // Clear the dynamicTextFields list before populating
         dynamicTextFields.clear();
-
+        optionsValues.clear();
         for (int i = 0; i < widget.postDetail!.options!.length; i++) {
           optionsValues.add(widget.postDetail!.options![i]);
 
