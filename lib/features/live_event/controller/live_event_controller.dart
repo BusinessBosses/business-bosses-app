@@ -70,7 +70,7 @@ class LiveController extends GetxController {
       for (dynamic row in rowss) {
         EventModel joinedEvent = EventModel.fromMap(row);
         events.add(joinedEvent);
-
+        homeController.myEvents.add(joinedEvent);
         DateTime joinedStartAt = joinedEvent.startAt!;
         DateTime joinedEndAt = joinedEvent.endAt!;
 

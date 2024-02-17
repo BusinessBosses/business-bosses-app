@@ -58,6 +58,7 @@ class HomeController extends GetxController {
   String bossUpLink = '';
   RxList<MarketModel> markets = RxList<MarketModel>(<MarketModel>[]);
   RxList<EventModel> events = RxList<EventModel>(<EventModel>[]);
+  RxList<EventModel> myEvents = RxList<EventModel>(<EventModel>[]);
   RxList<UserModel> marketMembers = RxList<UserModel>(<UserModel>[]);
   Set<dynamic> itemsWithIncrementedViews = {};
 
@@ -75,6 +76,10 @@ class HomeController extends GetxController {
 
   void addEvents(RxList<EventModel> data) {
     events = data;
+  }
+
+  void addMyEvents(RxList<EventModel> data) {
+    myEvents = data;
   }
 
   void addBossupMembers(List<UserModel> data) {
