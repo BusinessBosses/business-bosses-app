@@ -4,6 +4,7 @@ import 'package:business_bosses_v2/features/home/controller/home_controller.dart
 import 'package:business_bosses_v2/features/live_event/models/events_model.dart';
 import 'package:business_bosses_v2/features/live_event/presentation/create_event.dart';
 import 'package:business_bosses_v2/features/live_event/widgets/call_room.dart';
+import 'package:business_bosses_v2/features/live_event/presentation/attendance_list.dart';
 import 'package:business_bosses_v2/features/posts/controllers/create_post_controller.dart';
 import 'package:business_bosses_v2/features/posts/models/post_model.dart';
 import 'package:business_bosses_v2/features/posts/presentation/create_poll_screen.dart';
@@ -770,7 +771,29 @@ class _PostTileState extends State<PostTile> {
                                       currentEventId: eventId!,
                                     ),
                                     isJoinedEvent()
-                                        ? const SizedBox()
+                                        ? ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor: Colors.grey,
+                                              foregroundColor: Colors.white,
+                                              minimumSize: const Size(55, 32),
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(
+                                                    12), // Set the border radius
+                                              ),
+                                            ),
+                                            onPressed: () async {
+                                              Get.to(() => AttendanceList(
+                                                    eventId: eventId!,
+                                                  ));
+                                            },
+                                            child: const Text(
+                                              'Attending',
+                                              style: TextStyle(
+                                                fontSize: 10,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                          )
                                         : ElevatedButton(
                                             onPressed: () {
                                               setState(() {
