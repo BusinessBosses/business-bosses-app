@@ -413,15 +413,23 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
   String? userSelectedOption(
       PostModel post, ProfileController profileController) {
     String userId = profileController.myProfile.uid;
-    if (post.isPolled! && post.pollvotes != null) {
-      Map<String, dynamic>? userVote = post.pollvotes!.firstWhere(
+
+    // Check if the post is a poll and if pollvotes exist and is not empty
+    if (post.isPolled == true &&
+        post.pollvotes != null &&
+        post.pollvotes!.isNotEmpty) {
+      // Find the vote corresponding to the user ID
+      Map<String, dynamic>? userVote = post.pollvotes!.firstWhereOrNull(
         (Map<String, dynamic> vote) => vote['userId'] == userId,
       );
 
-      // ignore: unnecessary_null_comparison
-      return userVote != null ? userVote['selectedOption'] : null;
+      // Check if userVote is not null and contains the 'selectedOption' key
+      if (userVote != null && userVote.containsKey('selectedOption')) {
+        return userVote['selectedOption'] as String?;
+      }
     }
-    return null;
+
+    return null; // Return null if the user's selected option is not found or if it's not a poll
   }
 
   Map<String, int> countVotes(PostModel post) {

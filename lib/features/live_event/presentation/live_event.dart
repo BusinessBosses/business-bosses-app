@@ -18,7 +18,6 @@ import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:lottie/lottie.dart';
 import 'package:timezone/data/latest.dart' as tzdata;
 
 import '../../../action/action.dart';
@@ -342,9 +341,11 @@ class _LiveEventState extends State<LiveEvent> {
                               child: TabBar(
                                 tabs: <Widget>[
                                   Tab(
-                                    child:SvgPicture.asset('assets/svgs/liveevent.svg', height: 18,),
+                                    child: SvgPicture.asset(
+                                      'assets/svgs/liveevent.svg',
+                                      height: 18,
                                     ),
-                                  
+                                  ),
                                   const Tab(text: 'Ongoing'),
                                   const Tab(text: 'Upcoming'),
                                 ],
@@ -378,11 +379,7 @@ class _LiveEventState extends State<LiveEvent> {
                     const BottomBar(
                       activeIndex: 2,
                     ),
-                    showFloatingButton
-                        ? const Floatingbutton(
-                   
-                          )
-                        : Container(),
+                    showFloatingButton ? const Floatingbutton() : Container(),
                   ]));
       },
     );

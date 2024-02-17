@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/features/live_event/controller/live_event_controller.dart';
 import 'package:business_bosses_v2/features/live_event/models/events_model.dart';
+import 'package:business_bosses_v2/features/live_event/presentation/attendance_list.dart';
 import 'package:business_bosses_v2/features/live_event/presentation/create_event.dart';
 import 'package:business_bosses_v2/features/live_event/widgets/call_room.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
@@ -316,8 +317,9 @@ class _EventItemState extends State<EventItem> {
                             ),
                           ),
                         ),
-                        const SizedBox(width: 15,),
-                       
+                        const SizedBox(
+                          width: 15,
+                        ),
                         if (widget.ongoing)
                           Padding(
                             padding: const EdgeInsets.only(right: 15.0),
@@ -427,8 +429,9 @@ class _EventItemState extends State<EventItem> {
                                 ),
                               ),
                               onPressed: () async {
-                                await liveController.attendEvent(widget.event);
-                                setState(() {});
+                                Get.to(() => AttendanceList(
+                                      eventId: widget.event.id!,
+                                    ));
                               },
                               child: const Text(
                                 'Attending',

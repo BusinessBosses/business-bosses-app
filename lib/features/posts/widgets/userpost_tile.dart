@@ -4,9 +4,11 @@ import 'package:business_bosses_v2/features/home/controller/home_controller.dart
 import 'package:business_bosses_v2/features/live_event/models/events_model.dart';
 import 'package:business_bosses_v2/features/live_event/presentation/create_event.dart';
 import 'package:business_bosses_v2/features/live_event/widgets/call_room.dart';
+import 'package:business_bosses_v2/features/live_event/presentation/attendance_list.dart';
 import 'package:business_bosses_v2/features/posts/controllers/create_post_controller.dart';
 import 'package:business_bosses_v2/features/posts/models/post_model.dart';
 import 'package:business_bosses_v2/features/posts/presentation/create_poll_screen.dart';
+import 'package:business_bosses_v2/features/posts/widgets/attendance_count.dart';
 import 'package:business_bosses_v2/features/posts/widgets/post_images.dart';
 import 'package:business_bosses_v2/features/posts/widgets/post_like_comment.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
@@ -132,6 +134,7 @@ class _PostTileState extends State<PostTile> {
   @override
   Widget build(BuildContext context) {
     String? title, roomid, date, starttime, host, photourl, startat, endat;
+    int? eventId;
     // Get the vote counts for each option
     Map<String, int> voteCounts = countVotes(widget.post);
     bool hasVoted = userHasVoted(widget.post, profileController);
@@ -153,9 +156,10 @@ class _PostTileState extends State<PostTile> {
     if (widget.post.livedata != null) {
       try {
         final jsonData = jsonDecode(widget.post.livedata!.toString());
-
+        eventId = jsonData['id'];
         title = jsonData['title'];
         roomid = jsonData['roomId'];
+
         date = jsonData['date'];
         starttime = jsonData['starttime'];
         host = jsonData['host'];
@@ -581,7 +585,6 @@ class _PostTileState extends State<PostTile> {
                                 await launchUrlString(url);
                               },
                             ),
-                        
                             if (widget.post.isPolled!)
                               FlutterPolls(
                                 pollId: widget.post.postId,
@@ -759,9 +762,46 @@ class _PostTileState extends State<PostTile> {
                                               ? 'Happening now'
                                               : '$date, $starttime',
                                       style: const TextStyle(
-                                          fontWeight: FontWeight.w700,
-                                          color: Colors.white),
+                                        fontWeight: FontWeight.w700,
+                                        color: Colors.white,
+                                      ),
                                     ),
+                                    AttendeesCountWidget(
+                                      events: homeController.events,
+                                      currentEventId: eventId!,
+                                    ),
+                                    isJoinedEvent()
+                                        ? ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor: Colors.grey,
+                                              foregroundColor: Colors.white,
+                                              minimumSize: const Size(55, 32),
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(
+                                                    12), // Set the border radius
+                                              ),
+                                            ),
+                                            onPressed: () async {
+                                              Get.to(() => AttendanceList(
+                                                    eventId: eventId!,
+                                                  ));
+                                            },
+                                            child: const Text(
+                                              'Attending',
+                                              style: TextStyle(
+                                                fontSize: 10,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                          )
+                                        : ElevatedButton(
+                                            onPressed: () {
+                                              setState(() {
+                                                eventId = eventId! + 1;
+                                              });
+                                            },
+                                            child: const Text('Attend'),
+                                          ),
                                   ],
                                 ),
                               ),
@@ -972,7 +1012,10 @@ class _PostTileState extends State<PostTile> {
                                                                         widget
                                                                             .post
                                                                             .user!
-                                                                            .uid, widget.post.oldtimestamp);
+                                                                            .uid,
+                                                                        widget
+                                                                            .post
+                                                                            .oldtimestamp);
                                                                   };
                                                           },
                                                           minVerticalPadding: 0,
@@ -1026,7 +1069,7 @@ class _PostTileState extends State<PostTile> {
                                 Padding(
                                   padding: const EdgeInsets.only(right: 15),
                                   child: Text(
-                                            widget.post.oldtimestamp != 0
+                                    widget.post.oldtimestamp != 0
                                         ? TimeFormat.formatString(
                                             widget.post.oldtimestamp)
                                         : TimeFormat.formatString(
@@ -1088,7 +1131,9 @@ class _PostTileState extends State<PostTile> {
                                                               widget.post
                                                                   .timestamp,
                                                               widget.post.user!
-                                                                  .uid, widget.post.oldtimestamp);
+                                                                  .uid,
+                                                              widget.post
+                                                                  .oldtimestamp);
                                                 },
                                                 minVerticalPadding: 0,
                                                 contentPadding:
@@ -1137,10 +1182,8 @@ class _PostTileState extends State<PostTile> {
                       Padding(
                         padding: const EdgeInsets.only(right: 15),
                         child: Text(
-                         
-                                  widget.post.oldtimestamp != 0
-                              ? 
-                              TimeFormat.formatString(
+                          widget.post.oldtimestamp != 0
+                              ? TimeFormat.formatString(
                                   widget.post.oldtimestamp)
                               : TimeFormat.formatString(widget.post.timestamp),
                           style:
@@ -1335,6 +1378,21 @@ class _PostTileState extends State<PostTile> {
       ),
     );
   }
+
+  bool isJoinedEvent() {
+    // Find the current event in events list
+    if (widget.post.livedata != null) {
+      final dynamic jsonData = jsonDecode(widget.post.livedata!.toString());
+      int eventId = jsonData['id'];
+      for (EventModel event in homeController.myEvents) {
+        if (event.id == eventId) {
+          return true; // Exit the loop once the event is found
+        }
+      }
+    }
+    // If the event is not found, set currentEvent to null
+    return false;
+  }
 }
 
 double leadingWidth(PostModel p) {
@@ -1365,7 +1423,7 @@ String? userSelectedOption(
       post.pollvotes!.isNotEmpty) {
     // Find the vote corresponding to the user ID
     Map<String, dynamic>? userVote = post.pollvotes!.firstWhereOrNull(
-      (vote) => vote['userId'] == userId,
+      (Map<String, dynamic> vote) => vote['userId'] == userId,
     );
 
     // Check if userVote is not null and contains the 'selectedOption' key

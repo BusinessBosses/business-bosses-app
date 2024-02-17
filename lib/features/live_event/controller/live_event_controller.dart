@@ -1,6 +1,8 @@
 // ignore_for_file: public_member_api_docs
 
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
+import 'package:business_bosses_v2/common/models/user_model.dart';
+import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:get/get.dart';
 
@@ -13,6 +15,25 @@ class LiveController extends GetxController {
   RxList<EventModel> ongoing = RxList<EventModel>(<EventModel>[]);
   RxList<EventModel> joined = RxList<EventModel>(<EventModel>[]);
   RxBool loading = RxBool(false);
+  RxBool usersLoading = RxBool(true);
+  RxBool usersError = RxBool(false);
+  RxList<UserModel> attendUsers = RxList<UserModel>(<UserModel>[]);
+  final HomeController homeController = Get.find();
+
+  Future<void> initUsers(int eventId) async {
+    attendUsers.clear();
+    final ApiResponseModel response =
+        await ApiService.get(path: 'event/event-users/$eventId');
+    if (response.success) {
+      List<dynamic> rows = response.data;
+      for (dynamic row in rows) {
+        UserModel user = UserModel.fromMap(row);
+        attendUsers.add(user);
+      }
+    }
+    usersLoading(false);
+    update();
+  }
 
   void initEvents() async {
     loading(true);
@@ -49,7 +70,7 @@ class LiveController extends GetxController {
       for (dynamic row in rowss) {
         EventModel joinedEvent = EventModel.fromMap(row);
         events.add(joinedEvent);
-
+        homeController.myEvents.add(joinedEvent);
         DateTime joinedStartAt = joinedEvent.startAt!;
         DateTime joinedEndAt = joinedEvent.endAt!;
 
@@ -58,11 +79,13 @@ class LiveController extends GetxController {
           joined.add(joinedEvent);
         }
       }
+      homeController.addEvents(events);
       events.clear();
       events.addAll(ongoing);
       events.addAll(upcoming);
       // Sort the events based on startAt
-      events.sort((a, b) => a.startAt!.compareTo(b.startAt!));
+      events.sort(
+          (EventModel a, EventModel b) => a.startAt!.compareTo(b.startAt!));
     }
 
     loading(false);
@@ -186,8 +209,8 @@ class LiveController extends GetxController {
             updatedEvent.startAt!.isAfter(now)) {
           // Updated event starts today, it's an upcoming event
           // Find the index where the updated event should be inserted based on startAt
-          int index = upcoming.indexWhere(
-              (event) => event.startAt!.isAfter(updatedEvent.startAt!));
+          int index = upcoming.indexWhere((EventModel event) =>
+              event.startAt!.isAfter(updatedEvent.startAt!));
 
           if (index == -1) {
             // If the index is -1, it means the updated event should be placed at the end

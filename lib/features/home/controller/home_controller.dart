@@ -1,7 +1,5 @@
 // ignore_for_file: library_prefixes, public_member_api_docs, always_specify_types, always_declare_return_types, avoid_print
 
-import 'dart:convert';
-
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/common/models/comment_model.dart';
@@ -11,6 +9,7 @@ import 'package:business_bosses_v2/features/chat/controllers/chat_controller.dar
 import 'package:business_bosses_v2/features/forum/models/forum_model.dart';
 import 'package:business_bosses_v2/features/forum/models/industry.dart';
 import 'package:business_bosses_v2/features/home/repository/home_repository.dart';
+import 'package:business_bosses_v2/features/live_event/models/events_model.dart';
 import 'package:business_bosses_v2/features/marketplace/models/market_model.dart';
 import 'package:business_bosses_v2/features/posts/controllers/create_post_controller.dart';
 import 'package:business_bosses_v2/features/posts/models/post_model.dart';
@@ -58,6 +57,8 @@ class HomeController extends GetxController {
   String bossUpTitle = 'Boss Up By';
   String bossUpLink = '';
   RxList<MarketModel> markets = RxList<MarketModel>(<MarketModel>[]);
+  RxList<EventModel> events = RxList<EventModel>(<EventModel>[]);
+  RxList<EventModel> myEvents = RxList<EventModel>(<EventModel>[]);
   RxList<UserModel> marketMembers = RxList<UserModel>(<UserModel>[]);
   Set<dynamic> itemsWithIncrementedViews = {};
 
@@ -71,6 +72,14 @@ class HomeController extends GetxController {
 
   void addMarkets(RxList<MarketModel> data) {
     markets = data;
+  }
+
+  void addEvents(RxList<EventModel> data) {
+    events = data;
+  }
+
+  void addMyEvents(RxList<EventModel> data) {
+    myEvents = data;
   }
 
   void addBossupMembers(List<UserModel> data) {

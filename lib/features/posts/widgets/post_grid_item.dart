@@ -2,6 +2,7 @@ import 'package:business_bosses_v2/features/home/controller/home_controller.dart
 import 'package:business_bosses_v2/features/posts/controllers/create_post_controller.dart';
 import 'package:business_bosses_v2/features/posts/models/post_model.dart';
 import 'package:business_bosses_v2/features/posts/presentation/boost_post_screen.dart';
+import 'package:business_bosses_v2/features/posts/presentation/create_poll_screen.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
@@ -223,12 +224,18 @@ class PostGridItem extends StatelessWidget {
                     ),
                     onSelected: (String val) {
                       if (val == 'Edit') {
-                        Get.to(() => CreatePostScreen(
-                              postId: post.postId,
-                              post: post.title,
-                              postDetail: post,
-                              images: post.images,
-                            ));
+                        if (post.isPolled != null && post.isPolled == true) {
+                          Get.to(() => CreatePollScreen(
+                                postDetail: post,
+                              ));
+                        } else {
+                          Get.to(() => CreatePostScreen(
+                                postId: post.postId,
+                                post: post.title,
+                                postDetail: post,
+                                images: post.images,
+                              ));
+                        }
                       } else if (val == 'Delete') {
                         _showDialog(context);
                       } else if (val == 'Boost') {
