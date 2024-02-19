@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:business_bosses_v2/navigation/navigation.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
@@ -22,7 +23,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uni_links/uni_links.dart';
 
 final _configuration =
-    PurchasesConfiguration('appl_fpKOUqIrKWZpOCQbxcYdfiIMgjj');
+   Platform.isIOS ? PurchasesConfiguration('appl_fpKOUqIrKWZpOCQbxcYdfiIMgjj') : PurchasesConfiguration('goog_qVanRlWurUpdIwIedERNnNDBVaE');
 bool _initialURILinkHandled = false;
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey();
 void main() async {
