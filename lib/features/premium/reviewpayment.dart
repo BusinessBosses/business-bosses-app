@@ -70,25 +70,6 @@ class _ReviewPaymentState extends State<ReviewPayment> {
     }
   }
 
-  void sendgooglePaymentData(Map data) async {
-    Map<String, dynamic> paymentData = <String, dynamic>{
-      'price': argument['price'],
-      'plan': argument['plan'],
-    };
-
-    final ApiResponseModel response =
-        await ApiService.post(path: 'google-sub', body: paymentData);
-
-    if (response.success) {
-      Get.toNamed(Routes.subscriptionconfirmation);
-    } else {
-      print(response);
-      showSnackbar(
-          title: 'OOPS!',
-          message: 'An error occurred, please try again!',
-          error: true);
-    }
-  }
 
   ///intialize the payment
   Future<void> makePayPallPayment(String plan) async {
@@ -418,7 +399,7 @@ class _ReviewPaymentState extends State<ReviewPayment> {
                               'price': argument['price'],
                               'plan': argument['plan'],
                             };
-                            sendgooglePaymentData(data);
+                            sendapplePaymentData(data);
                           } catch (e) {
                             showSnackbar(
                               title: 'OOPS!',
