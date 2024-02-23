@@ -766,10 +766,11 @@ class _PostTileState extends State<PostTile> {
                                         color: Colors.white,
                                       ),
                                     ),
-                                    AttendeesCountWidget(
-                                      events: homeController.events,
-                                      currentEventId: eventId!,
-                                    ),
+                                    if (eventId != null)
+                                      AttendeesCountWidget(
+                                        events: homeController.events,
+                                        currentEventId: eventId!,
+                                      ),
                                     isJoinedEvent()
                                         ? ElevatedButton(
                                             style: ElevatedButton.styleFrom(
@@ -1383,7 +1384,7 @@ class _PostTileState extends State<PostTile> {
     // Find the current event in events list
     if (widget.post.livedata != null) {
       final dynamic jsonData = jsonDecode(widget.post.livedata!.toString());
-      int eventId = jsonData['id'];
+      int? eventId = jsonData['id'];
       for (EventModel event in homeController.myEvents) {
         if (event.id == eventId) {
           return true; // Exit the loop once the event is found

@@ -2,7 +2,6 @@ import 'package:business_bosses_v2/common/widgets/buttons/my_outlined_button.dar
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:business_bosses_v2/features/forum/controller/create_forum_controller.dart';
 import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
 import 'package:detectable_text_field/widgets/detectable_text_field.dart';
 import '../../../action/action.dart';
@@ -171,7 +170,8 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                     itemCount: videoLinks.length + 1,
                     itemBuilder: (BuildContext context, int index) {
                       if (index < videoLinks.length) {
-                        return buildVideoLinkContainer(videoLinks[index], index);
+                        return buildVideoLinkContainer(
+                            videoLinks[index], index);
                       } else {
                         return buildAddButton();
                       }
@@ -305,57 +305,55 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                 const SizedBox(
                   height: 50,
                 ),
-                Container(
-                  child: Row(
-                    children: <Widget>[
-                      SvgPicture.asset('assets/svgs/rocket.svg'),
-                      const SizedBox(width: 15),
-                      const Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text(
-                              'Boost this listing?',
-                              style: TextStyle(
-                                fontWeight: FontWeight.w600,
-                                fontSize: 18,
-                              ),
-                            ),
-                            Text(
-                              'Reach a wider audience and get more views',
-                              style: TextStyle(
-                                fontWeight: FontWeight.w600,
-                                fontSize: 11,
-                                color: Color(0xFF777777),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Row(
+                Row(
+                  children: <Widget>[
+                    SvgPicture.asset('assets/svgs/rocket.svg'),
+                    const SizedBox(width: 15),
+                    const Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          const Text(
-                            'No',
+                          Text(
+                            'Boost this listing?',
                             style: TextStyle(
-                                fontSize: 8, fontWeight: FontWeight.w700),
+                              fontWeight: FontWeight.w600,
+                              fontSize: 18,
+                            ),
                           ),
-                          Switch(
-                            value: _shouldPromote,
-                            onChanged: (bool value) {
-                              setState(() {
-                                _shouldPromote = value;
-                              });
-                            },
-                          ),
-                          const Text(
-                            'Yes',
+                          Text(
+                            'Reach a wider audience and get more views',
                             style: TextStyle(
-                                fontSize: 8, fontWeight: FontWeight.w700),
+                              fontWeight: FontWeight.w600,
+                              fontSize: 11,
+                              color: Color(0xFF777777),
+                            ),
                           ),
                         ],
                       ),
-                    ],
-                  ),
+                    ),
+                    Row(
+                      children: <Widget>[
+                        const Text(
+                          'No',
+                          style: TextStyle(
+                              fontSize: 8, fontWeight: FontWeight.w700),
+                        ),
+                        Switch(
+                          value: _shouldPromote,
+                          onChanged: (bool value) {
+                            setState(() {
+                              _shouldPromote = value;
+                            });
+                          },
+                        ),
+                        const Text(
+                          'Yes',
+                          style: TextStyle(
+                              fontSize: 8, fontWeight: FontWeight.w700),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
                 const SizedBox(
                   height: 20,
