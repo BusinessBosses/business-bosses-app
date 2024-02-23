@@ -32,7 +32,7 @@ class _CreatePollScreenState extends State<CreatePollScreen> {
   dynamic _overlayEntry;
   final TextEditingController _titleCtrl = TextEditingController();
   List<Widget> dynamicTextFields = <Widget>[];
-  int optionCode = 1;
+  int optionCode = 2;
   // final TextEditingController _ytCtrl = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -73,6 +73,13 @@ class _CreatePollScreenState extends State<CreatePollScreen> {
         // Set the optionCode to the correct value
         optionCode = widget.postDetail!.options!.length + 1;
       }
+    } else {
+      // Add two options by default
+      optionsValues.addAll(<String>['', '']);
+      dynamicTextFields.addAll(<Widget>[
+        _buildOptionRow(0),
+        _buildOptionRow(1),
+      ]);
     }
   }
 
@@ -104,7 +111,7 @@ class _CreatePollScreenState extends State<CreatePollScreen> {
             ),
           ),
         ),
-        _buildRemoveOptionButton(index),
+        _buildRemoveOptionButton(index), // Pass index here
       ],
     );
   }
@@ -165,27 +172,6 @@ class _CreatePollScreenState extends State<CreatePollScreen> {
                           const SizedBox(
                             height: 10,
                           ),
-                          if (widget.postDetail == null)
-                            Container(
-                              margin: const EdgeInsets.only(bottom: 9),
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 9),
-                              decoration: const BoxDecoration(
-                                color: backgroundColor,
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(15),
-                                ),
-                              ),
-                              child: TextFormField(
-                                onChanged: (String value) {
-                                  optionsValues[0] = value;
-                                },
-                                decoration: const InputDecoration(
-                                  hintText: 'Option 1',
-                                  border: InputBorder.none,
-                                ),
-                              ),
-                            ),
                           Column(
                             children: dynamicTextFields,
                           ),
@@ -249,19 +235,25 @@ class _CreatePollScreenState extends State<CreatePollScreen> {
                         onPressed: () async {
                           _formKey.currentState!.save();
                           if (!_formKey.currentState!.validate()) return;
+                          // print(optionsValues);
+                          // return;
 
-                          /// Otherwise, create the post
+                          /// Otherwise, create the po st
+                          List<String> nonEmptyOptions = optionsValues
+                              .where(
+                                  (String option) => option.trim().isNotEmpty)
+                              .toList();
                           if (widget.postDetail == null) {
                             await controller.createPost(<String, dynamic>{
                               'isPolled': true,
-                              'options': optionsValues,
+                              'options': nonEmptyOptions,
                               'title': _titleCtrl.text.trim(),
                               'timestamp':
                                   DateTime.now().millisecondsSinceEpoch,
                             }, _profileController);
                           } else {
                             await controller.onEditPoll(widget.postDetail,
-                                _titleCtrl.text.trim(), optionsValues);
+                                _titleCtrl.text.trim(), nonEmptyOptions);
                           }
                         },
                         isProcessing: controller.loading.value,
@@ -298,57 +290,38 @@ class _CreatePollScreenState extends State<CreatePollScreen> {
   }
 
   void _removeOption(int index) {
-    if (optionsValues.length > 1) {
+    if (optionsValues.isNotEmpty &&
+        index >= 0 &&
+        index < optionsValues.length) {
       setState(() {
         optionsValues.removeAt(
             index); // Remove the corresponding option from optionsValues
         dynamicTextFields
             .removeAt(index); // Remove the corresponding text field widget
+        optionCode = optionCode > 0
+            ? optionCode - 1
+            : 0; // Ensure optionCode doesn't go below 0
 
         // Update the indexes of subsequent options
-        for (int i = index; i < dynamicTextFields.length; i++) {
-          dynamicTextFields[i] = _buildOptionRow(
-              i); // Rebuild the text field widget with updated index
-        }
+        // for (int i = index; i < dynamicTextFields.length; i++) {
+        //   dynamicTextFields[i] = _buildOptionRow(
+        //       i); // Rebuild the text field widget with updated index
+        // }
       });
     }
   }
 
   void _addOption() {
     setState(() {
-      optionCode++;
-      if (optionCode > 4) {
+      if (optionCode >= 4) {
         Get.snackbar('Error', 'You can only add 4 options!');
         return;
       }
-      optionsValues.add('');
+      optionCode++;
+      optionsValues.insert(
+          optionCode - 1, ''); // Insert an empty string at the correct index
       dynamicTextFields.add(
-        Row(
-          children: <Widget>[
-            Expanded(
-              child: Container(
-                margin: const EdgeInsets.only(bottom: 9),
-                padding: const EdgeInsets.symmetric(horizontal: 9),
-                decoration: const BoxDecoration(
-                  color: backgroundColor,
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(15),
-                  ),
-                ),
-                child: TextFormField(
-                  onChanged: (String value) {
-                    optionsValues[optionCode - 1] = value;
-                  },
-                  decoration: InputDecoration(
-                    hintText: 'Option ${optionCode.toString()}',
-                    border: InputBorder.none,
-                  ),
-                ),
-              ),
-            ),
-            _buildRemoveOptionButton(optionCode - 1),
-          ],
-        ),
+        _buildOptionRow(optionCode - 1),
       );
     });
   }

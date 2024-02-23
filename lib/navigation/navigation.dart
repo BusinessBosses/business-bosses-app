@@ -4,6 +4,7 @@ import 'package:business_bosses_v2/analytics/presentation/explorebusinessbosses_
 import 'package:business_bosses_v2/features/bottomnavigationscreen.dart';
 import 'package:business_bosses_v2/features/connects/controller/referrals_controller.dart';
 import 'package:business_bosses_v2/features/connects/presentation/referals_screen.dart';
+import 'package:business_bosses_v2/features/courses/presentation/createcourse.dart';
 import 'package:business_bosses_v2/features/forum/controller/bossup_controller.dart';
 import 'package:business_bosses_v2/features/home/all_communities_screen.dart';
 import 'package:business_bosses_v2/features/home/controller/commumities_controller.dart';
@@ -259,5 +260,9 @@ var routes = [
   GetPage(
     name: Routes.bottomnavscreen,
     page: () => const BottomNavigationScreen(),
+  ),
+  GetPage(
+    name: Routes.createcourse,
+    page: () => const CreateCourseScreen(),
   ),
 ];

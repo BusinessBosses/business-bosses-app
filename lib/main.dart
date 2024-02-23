@@ -149,7 +149,7 @@ void processDeepLink(Uri uri) {
 void processPostDeeplink(Uri uri) {
   log(uri.toString());
   Fluttertoast.showToast(
-    msg: "Welcome back to BusinessBosses",
+    msg: 'Welcome back to BusinessBosses',
     toastLength: Toast.LENGTH_SHORT,
     gravity: ToastGravity.BOTTOM,
     timeInSecForIosWeb: 1,
