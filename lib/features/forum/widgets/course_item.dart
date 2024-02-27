@@ -23,7 +23,7 @@ class _CourseItemState extends State<CourseItem> {
           children: [
             Padding(
               padding: const EdgeInsets.all(15.0),
-              child: Column(
+              child: const Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
