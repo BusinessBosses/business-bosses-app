@@ -98,7 +98,6 @@ class HomeController extends GetxController {
   }
 
   Future<void> attendEvent(EventModel event) async {
-    print('Try: ${event.id}');
     final ApiResponseModel response = await ApiService.put(
         path: 'event/join-leave-event/${event.id}', body: <String, dynamic>{});
     if (response.success) {

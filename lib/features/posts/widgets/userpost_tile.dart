@@ -803,8 +803,8 @@ class _PostTileState extends State<PostTile> {
                                               await homeController
                                                   .attendEvent(event);
                                               if (liveController != null) {
-                                                await liveController
-                                                    .attendEvent(event);
+                                                liveController.joined
+                                                    .add(event);
                                               }
                                               setState(() {});
                                             },
