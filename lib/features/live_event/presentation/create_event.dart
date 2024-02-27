@@ -394,7 +394,9 @@ class _CreateEventState extends State<CreateEvent> {
                           isUpdate: false,
                         ));
                   } else {
-                    await liveEventController.createEvent(data);
+                    dynamic id = await liveEventController.createEvent(data);
+                    data['id'] = id;
+                    jsonData = jsonEncode(dataa);
                     Get.off(() => ConfirmCreateEvent(
                           roomID: roomID!,
                           time: '$formattedDate  $formattedStartTime ',

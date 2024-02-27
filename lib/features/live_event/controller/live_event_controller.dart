@@ -121,7 +121,7 @@ class LiveController extends GetxController {
     update();
   }
 
-  Future<void> createEvent(Map<String, dynamic> data) async {
+  Future<dynamic> createEvent(Map<String, dynamic> data) async {
     final ApiResponseModel response =
         await ApiService.post(path: 'event', body: data);
     if (response.success) {
@@ -172,6 +172,7 @@ class LiveController extends GetxController {
           ongoing.insert(index, newEvent);
         }
       }
+      return response.data['id'];
     } else {
       showSnackbar(
         title: 'OOPS!',
