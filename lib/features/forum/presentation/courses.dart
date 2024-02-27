@@ -220,7 +220,7 @@ class _CoursesPageState extends State<CoursesPage> {
                   ),
                   Stack(children: [
                     Container(
-                      height: 180,
+                      height: 160,
                       width: MediaQuery.of(context).size.width,
                       child: FittedBox(
                         fit: BoxFit.fill,
@@ -242,9 +242,73 @@ class _CoursesPageState extends State<CoursesPage> {
                       ),
                     ),
                     Container(
-                      height: 180,
-                      color: Colors.black.withAlpha(200),
-                    ),
+                        height: 160,
+                        color: Colors.black.withAlpha(200),
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                              left: 15.0, top: 25, bottom: 15, right: 30),
+                          child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                SizedBox(
+                                  height: 86,
+                                  width: 142,
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                    child: FittedBox(
+                                      fit: BoxFit.fill,
+                                      child: CachedNetworkImage(
+                                        imageUrl: industry.photo ??
+                                            'https://businessbosses.com.ng/learningImages/events.jpg',
+                                        memCacheHeight: 256,
+                                        memCacheWidth: 256,
+                                        placeholder: (BuildContext context,
+                                                String photo) =>
+                                            const CircularProgressIndicator(),
+                                        errorWidget:
+                                            // ignore: always_specify_types
+                                            (BuildContext context,
+                                                    // ignore: always_specify_types
+                                                    String photo,
+                                                    Object error) =>
+                                                const Icon(Icons.error),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  width: 20,
+                                ),
+                                Expanded(
+                                    child: Text(
+                                  industry.description ??
+                                      'Industry Description',
+                                  style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w700),
+                                  softWrap: true,
+                                  maxLines: 5,
+                                )),
+                              ]),
+                        )),
+                    Positioned(
+                        right: 15,
+                        top: 10,
+                        child: Container(
+                          height: 38,
+                          width: 38,
+                          decoration: BoxDecoration(
+                              color: Colors.black.withAlpha(100),
+                              borderRadius: BorderRadius.circular(50)),
+                          child: Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: SvgPicture.asset(
+                              'assets/svgs/preferences.svg',
+                              height: 10,
+                            ),
+                          ),
+                        ))
                   ])
                 ],
               ),
