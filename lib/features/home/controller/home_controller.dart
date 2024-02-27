@@ -97,6 +97,22 @@ class HomeController extends GetxController {
     });
   }
 
+  Future<void> attendEvent(EventModel event) async {
+    print('Try: ${event.id}');
+    final ApiResponseModel response = await ApiService.put(
+        path: 'event/join-leave-event/${event.id}', body: <String, dynamic>{});
+    if (response.success) {
+      if (myEvents.any((EventModel eventt) => eventt.id == event.id)) {
+        myEvents.removeWhere((EventModel eventt) => eventt.id == event.id);
+        event.setAttendCount(event.totalAttendees! - 1);
+      } else {
+        myEvents.add(event);
+        event.setAttendCount(event.totalAttendees! + 1);
+      }
+    }
+    update();
+  }
+
   /// PROCESS RAW API DATA, MODELIZE AND SAVE TO STATE
   RxList<PostModel> processPostsToState(dynamic post) {
     RxList<PostModel> posts = RxList<PostModel>(<PostModel>[]);
