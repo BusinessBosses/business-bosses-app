@@ -1,4 +1,5 @@
 import 'package:business_bosses_v2/common/widgets/buttons/my_outlined_button.dart';
+import 'package:business_bosses_v2/features/courses/models/video_link_data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -18,9 +19,15 @@ class CreateCourseScreen extends StatefulWidget {
 
 class _CreateCourseScreenState extends State<CreateCourseScreen> {
   int optionCode = 1;
+  String? title;
+  String? description;
 
   @override
   void initState() {
+    if (videoLinks.isEmpty) {
+      VideoLinkData videolin = VideoLinkData(url: '');
+      videoLinks.add(videolin);
+    }
     super.initState();
   }
 
@@ -58,7 +65,9 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                 const SizedBox(height: 16.0),
                 TextFormField(
                     onChanged: (String val) {
-                      // title = val;
+                      setState(() {
+                        title = val;
+                      });
                     },
                     textInputAction: TextInputAction.next,
                     keyboardType: TextInputType.text,
@@ -77,7 +86,9 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                   maxLines: 5,
                   basicStyle: Theme.of(context).textTheme.bodyMedium,
                   onChanged: (String val) {
-                    // description = val;
+                    setState(() {
+                      description = val;
+                    });
                   },
                   decoration:
                       inputDecoration.copyWith(hintText: 'Describe the Course'),
@@ -90,93 +101,95 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                 const SizedBox(
                   height: 10,
                 ),
-                Container(
-                  margin: const EdgeInsets.only(bottom: 10),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(15),
-                    ),
-                  ),
-                  child: Column(
-                    children: <Widget>[
-                      TextFormField(
-                        onChanged: (String value) {
-                          // Handle text field changes
-                        },
-                        decoration: const InputDecoration(
-                          border: UnderlineInputBorder(),
-                          hintText: 'https://',
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Row(
-                            children: <Widget>[
-                              SvgPicture.asset('assets/svgs/subtitlesicon.svg'),
-                              const SizedBox(
-                                width: 20,
-                              ),
-                              const Text('Subtitles / Closed Captions')
-                            ],
-                          ),
-                          Switch(
-                            value: _hasSubtitles,
-                            onChanged: (bool value) {
-                              setState(() {
-                                _hasSubtitles = value;
-                              });
-                            },
-                          ),
-                        ],
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Row(
-                            children: <Widget>[
-                              SvgPicture.asset(
-                                  'assets/svgs/transcriptsicon.svg'),
-                              const SizedBox(
-                                width: 20,
-                              ),
-                              const Text('Transcript'),
-                            ],
-                          ),
-                          Switch(
-                            value: _hasTranscript,
-                            onChanged: (bool value) {
-                              setState(() {
-                                _hasTranscript = value;
-                              });
-                            },
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                  child: ListView.builder(
-                    shrinkWrap: true, // Add this line
-                    physics:
-                        const NeverScrollableScrollPhysics(), // Add this line
-                    itemCount: videoLinks.length + 1,
-                    itemBuilder: (BuildContext context, int index) {
-                      if (index < videoLinks.length) {
-                        return buildVideoLinkContainer(
-                            videoLinks[index], index);
-                      } else {
-                        return buildAddButton();
-                      }
-                    },
-                  ),
+                // Container(
+                //   margin: const EdgeInsets.only(bottom: 10),
+                //   padding:
+                //       const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+                //   decoration: const BoxDecoration(
+                //     color: Colors.white,
+                //     borderRadius: BorderRadius.all(
+                //       Radius.circular(15),
+                //     ),
+                //   ),
+                //   child: Column(
+                //     children: <Widget>[
+                //       TextFormField(
+                //         onChanged: (String value) {
+                //           // Create a new VideoLinkData object from the entered URL
+                //           VideoLinkData newVideoLink =
+                //               VideoLinkData(url: value);
+                //           // Replace the existing video link at index 0 with the new one
+                //           videoLinks[0] = newVideoLink;
+                //           setState(() {});
+                //         },
+                //         decoration: const InputDecoration(
+                //           border: UnderlineInputBorder(),
+                //           hintText: 'https://',
+                //         ),
+                //       ),
+                //       const SizedBox(
+                //         height: 10,
+                //       ),
+                //       Row(
+                //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //         children: <Widget>[
+                //           Row(
+                //             children: <Widget>[
+                //               SvgPicture.asset('assets/svgs/subtitlesicon.svg'),
+                //               const SizedBox(
+                //                 width: 20,
+                //               ),
+                //               const Text('Subtitles / Closed Captions')
+                //             ],
+                //           ),
+                //           Switch(
+                //             value: _hasSubtitles,
+                //             onChanged: (bool value) {
+                //               setState(() {
+                //                 _hasSubtitles = value;
+                //               });
+                //             },
+                //           ),
+                //         ],
+                //       ),
+                //       Row(
+                //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //         children: <Widget>[
+                //           Row(
+                //             children: <Widget>[
+                //               SvgPicture.asset(
+                //                   'assets/svgs/transcriptsicon.svg'),
+                //               const SizedBox(
+                //                 width: 20,
+                //               ),
+                //               const Text('Transcript'),
+                //             ],
+                //           ),
+                //           Switch(
+                //             value: _hasTranscript,
+                //             onChanged: (bool value) {
+                //               setState(() {
+                //                 _hasTranscript = value;
+                //               });
+                //             },
+                //           ),
+                //         ],
+                //       ),
+                //     ],
+                //   ),
+                // ),
+                ListView.builder(
+                  shrinkWrap: true, // Add this line
+                  physics:
+                      const NeverScrollableScrollPhysics(), // Add this line
+                  itemCount: videoLinks.length + 1,
+                  itemBuilder: (BuildContext context, int index) {
+                    if (index < videoLinks.length) {
+                      return buildVideoLinkContainer(videoLinks[index], index);
+                    } else {
+                      return buildAddButton();
+                    }
+                  },
                 ),
 
                 const SizedBox(
@@ -205,7 +218,8 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                           Container(
                             alignment: Alignment.center,
                             child: SvgPicture.asset(
-                                'assets/svgs/fileresources.svg'),
+                              'assets/svgs/fileresources.svg',
+                            ),
                           ),
                         ]),
                   ),
@@ -361,7 +375,9 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                 Padding(
                   padding: const EdgeInsets.only(bottom: 50.0),
                   child: MCustomButton(
-                    onPressed: () async {},
+                    onPressed: () async {
+                      print(videoLinks[1].url);
+                    },
                     label: 'Post',
                     // isProcessing: _isProcessing,
                     buttonType: ButtonType.elevated,
@@ -392,7 +408,13 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
               Expanded(
                 child: TextFormField(
                   onChanged: (String value) {
-                    // Handle text field changes
+                    // Create a new VideoLinkData object from the entered URL
+                    VideoLinkData newVideoLink = VideoLinkData(url: value);
+                    // Replace the existing video link at index 0 with the new one
+                    videoLinks.isNotEmpty
+                        ? videoLinks[index] = newVideoLink
+                        : videoLinks.add(newVideoLink);
+                    setState(() {});
                   },
                   decoration: const InputDecoration(
                     border: UnderlineInputBorder(),
@@ -403,16 +425,17 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
               const SizedBox(
                 width: 20,
               ),
-              GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      videoLinks.removeAt(index);
-                    });
-                  },
-                  child: SvgPicture.asset(
-                    'assets/svgs/close.svg',
-                    height: 20,
-                  ))
+              if (index != 0)
+                GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        videoLinks.removeAt(index);
+                      });
+                    },
+                    child: SvgPicture.asset(
+                      'assets/svgs/close.svg',
+                      height: 20,
+                    ))
             ],
           ),
           const SizedBox(
@@ -471,7 +494,7 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
     return GestureDetector(
       onTap: () {
         setState(() {
-          videoLinks.length != 3
+          videoLinks.length != 4
               ? videoLinks.add(VideoLinkData())
               : Get.snackbar('Error', 'You can only add 4 video links!');
           ;
@@ -506,9 +529,4 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
       ),
     );
   }
-}
-
-class VideoLinkData {
-  bool hasSubtitles = false;
-  bool hasTranscript = false;
 }
