@@ -1,5 +1,6 @@
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/features/forum/models/industry.dart';
+import 'package:business_bosses_v2/features/forum/widgets/course_item.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
@@ -315,6 +316,12 @@ class _CoursesPageState extends State<CoursesPage> {
             )
           ];
         },
-        body: Container());
+        body: ListView.builder(
+          itemCount: 6,
+          itemBuilder: (BuildContext context, int i) {
+            return CourseItem();
+          }
+           ,
+        ));
   }
 }
