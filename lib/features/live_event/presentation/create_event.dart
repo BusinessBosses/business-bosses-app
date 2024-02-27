@@ -395,7 +395,7 @@ class _CreateEventState extends State<CreateEvent> {
                         ));
                   } else {
                     dynamic id = await liveEventController.createEvent(data);
-                    data['id'] = id;
+                    dataa['id'] = id;
                     jsonData = jsonEncode(dataa);
                     Get.off(() => ConfirmCreateEvent(
                           roomID: roomID!,

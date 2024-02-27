@@ -112,9 +112,12 @@ class LiveController extends GetxController {
     if (response.success) {
       if (joined.any((EventModel eventt) => eventt.id == event.id)) {
         joined.removeWhere((EventModel eventt) => eventt.id == event.id);
+        homeController.myEvents
+            .removeWhere((EventModel eventt) => eventt.id == event.id);
         event.setAttendCount(event.totalAttendees! - 1);
       } else {
         joined.add(event);
+        homeController.myEvents.add(event);
         event.setAttendCount(event.totalAttendees! + 1);
       }
     }
@@ -142,6 +145,7 @@ class LiveController extends GetxController {
         // Insert the new event at the correct position
         events.insert(index, newEvent);
       }
+      homeController.events.add(newEvent);
 
       DateTime now = DateTime.now();
       DateTime today = DateTime(now.year, now.month, now.day);
