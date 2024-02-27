@@ -215,29 +215,37 @@ class _CoursesPageState extends State<CoursesPage> {
                       ],
                     ),
                   ),
-                  const SizedBox(height: 10,),
-                  Container(
-                    height: 180,
-                    width: MediaQuery.of(context).size.width,
-                    child: FittedBox(
-                      fit: BoxFit.fill,
-                      child: CachedNetworkImage(
-                        imageUrl: industry.photo ??
-                            'https://businessbosses.com.ng/learningImages/events.jpg',
-                        memCacheHeight: 256,
-                        memCacheWidth: 256,
-                        placeholder: (BuildContext context, String photo) =>
-                            const CircularProgressIndicator(),
-                        errorWidget:
-                            // ignore: always_specify_types
-                            (BuildContext context,
-                                    // ignore: always_specify_types
-                                    String photo,
-                                    Object error) =>
-                                const Icon(Icons.error),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Stack(children: [
+                    Container(
+                      height: 180,
+                      width: MediaQuery.of(context).size.width,
+                      child: FittedBox(
+                        fit: BoxFit.fill,
+                        child: CachedNetworkImage(
+                          imageUrl: industry.photo ??
+                              'https://businessbosses.com.ng/learningImages/events.jpg',
+                          memCacheHeight: 256,
+                          memCacheWidth: 256,
+                          placeholder: (BuildContext context, String photo) =>
+                              const CircularProgressIndicator(),
+                          errorWidget:
+                              // ignore: always_specify_types
+                              (BuildContext context,
+                                      // ignore: always_specify_types
+                                      String photo,
+                                      Object error) =>
+                                  const Icon(Icons.error),
+                        ),
                       ),
                     ),
-                  )
+                    Container(
+                      height: 180,
+                      color: Colors.black.withAlpha(200),
+                    ),
+                  ])
                 ],
               ),
             )
