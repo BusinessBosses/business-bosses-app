@@ -1,4 +1,6 @@
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
+import 'package:business_bosses_v2/features/posts/widgets/youtube_display.dart';
+import 'package:business_bosses_v2/features/posts/widgets/yt_player.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -14,6 +16,7 @@ class CourseItem extends StatefulWidget {
 }
 
 class _CourseItemState extends State<CourseItem> {
+  String ytUrl =  "https://www.youtube.com/watch?v=3gm6eBtWfi4";
   ProfileController profileController = Get.find();
   @override
   Widget build(BuildContext context) {
@@ -28,31 +31,57 @@ class _CourseItemState extends State<CourseItem> {
                 child: Row(
                   children: [
                     SizedBox(
-                      height: 86,
-                      width: 142,
+                      height: 100,
+                      width: 180,
                       child: ClipRRect(
-                        borderRadius: BorderRadius.circular(10.0),
+                        borderRadius: BorderRadius.circular(12.0),
                         child: FittedBox(
                           fit: BoxFit.fill,
-                          child: CachedNetworkImage(
-                            imageUrl:
-                                'https://businessbosses.com.ng/learningImages/events.jpg',
-                            memCacheHeight: 256,
-                            memCacheWidth: 256,
-                            placeholder: (BuildContext context, String photo) =>
-                                const CircularProgressIndicator(),
-                            errorWidget:
-                                // ignore: always_specify_types
-                                (BuildContext context,
-                                        // ignore: always_specify_types
-                                        String photo,
-                                        Object error) =>
-                                    const Icon(Icons.error),
+                          child: Stack(
+                            children: <Widget>[
+                              GestureDetector(
+                                  onTap: () {
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                        builder: (BuildContext context) =>
+                                            YoutubeVideo(
+                                          ytUrl!,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  child: YoutubeDisplay(ytUrl!)),
+                              Positioned(
+                                top: 0,
+                                bottom: 0,
+                                right: 0,
+                                left: 0,
+                                child: GestureDetector(
+                                  onTap: () {
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                        builder: (BuildContext context) =>
+                                            YoutubeVideo(
+                                          ytUrl!,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  child: Icon(
+                                    Icons.play_circle_outlined,
+                                    color: Colors.black.withOpacity(0.5),
+                                    size: 70,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ),
                     ),
-                    const SizedBox(width: 20,),
+                    const SizedBox(
+                      width: 20,
+                    ),
                     Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -101,7 +130,7 @@ class _CourseItemState extends State<CourseItem> {
             ],
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal:15.0),
+            padding: const EdgeInsets.symmetric(horizontal: 15.0),
             child: Row(
               children: [
                 Container(
