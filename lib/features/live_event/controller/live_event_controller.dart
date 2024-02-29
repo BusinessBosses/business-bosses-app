@@ -66,7 +66,7 @@ class LiveController extends GetxController {
       }
       final ApiResponseModel responses =
           await ApiService.get(path: 'event/get-user-events');
-      List<dynamic> rowss = responses.data;
+      List<dynamic> rowss = responses.data['rows'];
       for (dynamic row in rowss) {
         EventModel joinedEvent = EventModel.fromMap(row);
         events.add(joinedEvent);

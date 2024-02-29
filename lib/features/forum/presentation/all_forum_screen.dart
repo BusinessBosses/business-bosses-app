@@ -61,21 +61,21 @@ class _AllForumScreenState extends State<AllForumScreen> {
             ),
           ),
           body: DefaultTabController(
-            length: 2,
+            length: 1,
             child: Column(
               children: <Widget>[
-                Container(
-                  color: Colors.white,
-                  constraints: const BoxConstraints.expand(height: 50),
-                  child: const TabBar(
-                    tabs: <Widget>[
-                      Tab(
-                        text: 'Topics',
-                      ),
-                      Tab(text: 'Courses'),
-                    ],
-                  ),
-                ),
+                // Container(
+                //   color: Colors.white,
+                //   constraints: const BoxConstraints.expand(height: 50),
+                //   child: const TabBar(
+                //     tabs: <Widget>[
+                //       Tab(
+                //         text: 'Topics',
+                //       ),
+                //       Tab(text: 'Courses'),
+                //     ],
+                //   ),
+                // ),
                 Expanded(
         child: TabBarView(
           children: <Widget>[
@@ -84,9 +84,9 @@ class _AllForumScreenState extends State<AllForumScreen> {
               child: const TopicsPage()
             ),
             // View for 'Courses' tab
-            Container(
-              child: const CoursesPage(),
-            ),
+            // Container(
+            //   child: const CoursesPage(),
+            // ),
           ],
         ),
       ),
