@@ -319,7 +319,7 @@ class _CoursesPageState extends State<CoursesPage> {
         body: ListView.builder(
           itemCount: 6,
           itemBuilder: (BuildContext context, int i) {
-            return CourseItem();
+            return const CourseItem();
           }
            ,
         ));
