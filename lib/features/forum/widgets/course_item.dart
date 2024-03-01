@@ -1,9 +1,11 @@
 // ignore_for_file: always_specify_types
 
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
+import 'package:business_bosses_v2/features/forum/presentation/expanded_course_screen.dart';
 import 'package:business_bosses_v2/features/posts/widgets/youtube_display.dart';
 import 'package:business_bosses_v2/features/posts/widgets/yt_player.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
+import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -33,78 +35,86 @@ class _CourseItemState extends State<CourseItem> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Container(
-                  height: 90,
-                  width: 160,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(12.0),
-                    child: FittedBox(
-                      fit: BoxFit.fill,
-                      child: Stack(
-                        children: <Widget>[
-                          GestureDetector(
-                              onTap: () {
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (BuildContext context) =>
-                                        YoutubeVideo(
-                                      ytUrl!,
-                                    ),
-                                  ),
-                                );
-                              },
-                              child: YoutubeDisplay(ytUrl!)),
-                          Positioned(
-                            top: 0,
-                            bottom: 0,
-                            right: 0,
-                            left: 0,
-                            child: GestureDetector(
-                              onTap: () {},
-                              child: Icon(
-                                Icons.play_circle_outlined,
-                                color: Colors.black.withOpacity(0.5),
-                                size: 70,
+                Stack(children: [
+                  Container(
+                    height: 90,
+                    width: 160,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(12.0),
+                      child: FittedBox(
+                        fit: BoxFit.fill,
+                        child: Stack(
+                          children: <Widget>[
+                            GestureDetector(
+                                onTap: () {
+                                 
+                                },
+                                child: YoutubeDisplay(ytUrl!)),
+                            Positioned(
+                              top: 0,
+                              bottom: 0,
+                              right: 0,
+                              left: 0,
+                              child: GestureDetector(
+                                onTap: () {},
+                                child: Icon(
+                                  Icons.play_circle_outlined,
+                                  color: Colors.black.withOpacity(0.5),
+                                  size: 70,
+                                ),
                               ),
                             ),
-                          ),
-                          Positioned(
-                              bottom: 12,
-                              right: 12,
-                              child: Container(
-                                decoration: BoxDecoration(
-                                    color: Colors.black.withAlpha(150),
-                                    borderRadius: BorderRadius.circular(10)),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      SvgPicture.asset(
-                                        'assets/svgs/coursebundle.svg',
-                                        height: 20,
-                                      ),
-                                      const SizedBox(
-                                        width: 5,
-                                      ),
-                                      const Text(
-                                        '7 Videos',
-                                        style: TextStyle(
-                                            fontSize: 20,
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.w700),
-                                      ),
-                                    ],
+                            Positioned(
+                                bottom: 12,
+                                right: 12,
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      color: Colors.black.withAlpha(150),
+                                      borderRadius: BorderRadius.circular(10)),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        SvgPicture.asset(
+                                          'assets/svgs/coursebundle.svg',
+                                          height: 20,
+                                        ),
+                                        const SizedBox(
+                                          width: 5,
+                                        ),
+                                        const Text(
+                                          '7 Videos',
+                                          style: TextStyle(
+                                              fontSize: 20,
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w700),
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                ),
-                              )),
-                        ],
+                                )),
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                ),
+                  GestureDetector(
+                    onTap: () {
+                      Get.toNamed(Routes.expandedcoursescreen);
+                    },
+                    child: Container(
+                      height: 90,
+                      width: 160,
+                      decoration: BoxDecoration(
+                          color: Colors.transparent,
+                          borderRadius: BorderRadius.circular(12.0)),
+                    ),
+                  )
+                ]),
                 const SizedBox(
                   width: 10,
                 ),
@@ -148,7 +158,7 @@ class _CourseItemState extends State<CourseItem> {
                                             '',
                                     radius: radius,
                                     placeHolder: Icons.person,
-                                    iconSize: 18.0,
+                                    iconSize: 15.0,
                                     fit: BoxFit.cover,
                                   ),
                                 ),
@@ -179,7 +189,6 @@ class _CourseItemState extends State<CourseItem> {
               ],
             ),
           ),
-         
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 15.0),
             child: Row(
