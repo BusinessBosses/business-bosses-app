@@ -4,7 +4,7 @@ import 'package:business_bosses_v2/common/models/comment_model.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 
 class CourseModel {
-  final String forumId;
+  final int id;
   final String industryId;
   final String? description;
   final String? title;
@@ -21,8 +21,9 @@ class CourseModel {
   final String? courseType;
   final String? paymentMethod;
   final String? transcript;
+  final List<String>? youtubeUrls;
   CourseModel({
-    required this.forumId,
+    required this.id,
     required this.industryId,
     required this.userId,
     this.description,
@@ -39,10 +40,11 @@ class CourseModel {
     this.courseType,
     this.paymentMethod,
     this.transcript,
+    this.youtubeUrls,
   });
 
   CourseModel copyWith({
-    String? forumId,
+    int? id,
     String? industryId,
     String? description,
     String? title,
@@ -59,9 +61,10 @@ class CourseModel {
     String? courseType,
     String? paymentMethod,
     String? transcript,
+    List<String>? youtubeUrls,
   }) {
     return CourseModel(
-      forumId: forumId ?? this.forumId,
+      id: id ?? this.id,
       industryId: industryId ?? this.industryId,
       description: description ?? this.description,
       userId: userId ?? this.userId,
@@ -78,12 +81,13 @@ class CourseModel {
       courseType: courseType ?? this.courseType,
       paymentMethod: paymentMethod ?? this.paymentMethod,
       transcript: transcript ?? this.transcript,
+      youtubeUrls: youtubeUrls ?? this.youtubeUrls,
     );
   }
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      'forumId': forumId,
+      'id': id,
       'industryId': industryId,
       'description': description,
       'title': title,
@@ -100,12 +104,13 @@ class CourseModel {
       'courseType': courseType,
       'paymentMethod': paymentMethod,
       'transcript': transcript,
+      'youtubeUrls': youtubeUrls,
     };
   }
 
   factory CourseModel.fromMap(Map<String, dynamic> map) {
     return CourseModel(
-      forumId: map['forumId'] as String,
+      id: map['id'] as int,
       industryId: map['industryId'] as String,
       description:
           map['description'] != null ? map['description'] as String : null,
@@ -143,6 +148,16 @@ class CourseModel {
       views: map['views'] != null ? map['views'] as int : 0,
       isPromoted: map['isPromoted'] ?? false,
       isApproved: map['isApproved'] ?? false,
+      youtubeUrls: map['youtubeUrls'] != null && map['youtubeUrls'] != ''
+          ? List<String>.from((map['youtubeUrls']))
+                  .where((String element) => element.isNotEmpty)
+                  .toList()
+                  .isEmpty
+              ? null
+              : List<String>.from((map['youtubeUrls']))
+                  .where((String element) => element.isNotEmpty)
+                  .toList()
+          : null,
     );
   }
 

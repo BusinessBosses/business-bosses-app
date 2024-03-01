@@ -1,5 +1,8 @@
 import 'package:business_bosses_v2/common/widgets/buttons/my_outlined_button.dart';
+import 'package:business_bosses_v2/features/courses/controller/course_controller.dart';
 import 'package:business_bosses_v2/features/courses/models/video_link_data.dart';
+import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -10,8 +13,10 @@ import '../../../utils/theme/theme.dart';
 
 class CreateCourseScreen extends StatefulWidget {
   static const String routeName = '/create-course-screen';
+  final String industryId;
 
-  const CreateCourseScreen({Key? key}) : super(key: key);
+  const CreateCourseScreen({Key? key, required this.industryId})
+      : super(key: key);
 
   @override
   State<CreateCourseScreen> createState() => _CreateCourseScreenState();
@@ -21,6 +26,8 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
   int optionCode = 1;
   String? title;
   String? description;
+  final CourseController courseController = Get.put(CourseController());
+  final ProfileController profileController = Get.find();
 
   @override
   void initState() {
@@ -31,11 +38,13 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
     super.initState();
   }
 
+  List<String> selectedFileNames = <String>[];
+
   bool _hasSubtitles = false;
   bool _hasTranscript = false;
   bool _shouldPromote = false;
   bool _paidCourse = false;
-  int? _courseprice = 1000;
+  int? _courseprice;
   List<VideoLinkData> videoLinks = <VideoLinkData>[];
 
   @override
@@ -193,10 +202,22 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                 ),
 
                 const SizedBox(
-                  height: 50,
+                  height: 30,
                 ),
                 InkWell(
-                  onTap: (() {}),
+                  onTap: (() async {
+                    final FilePickerResult? result =
+                        await FilePicker.platform.pickFiles(
+                      allowMultiple: true, // Allow multiple file selection
+                    );
+                    if (result != null) {
+                      result.files
+                          .map((PlatformFile file) => setState(() {
+                                selectedFileNames.add(file.name);
+                              }))
+                          .toList();
+                    }
+                  }),
                   child: Container(
                     height: 55,
                     padding: const EdgeInsets.symmetric(
@@ -224,6 +245,25 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                         ]),
                   ),
                 ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: selectedFileNames
+                      .map(
+                        (String fileName) => Container(
+                          margin: const EdgeInsets.symmetric(vertical: 6),
+                          padding: const EdgeInsets.all(6),
+                          color: Colors.white,
+                          child: Row(
+                            children: <Widget>[
+                              const Icon(Icons.insert_drive_file),
+                              const SizedBox(width: 8),
+                              Text(fileName),
+                            ],
+                          ),
+                        ),
+                      )
+                      .toList(),
+                ),
                 //  Padding(
                 //   padding: const EdgeInsets.all(12.0),
                 //   child: widget.isUpd
@@ -231,7 +271,7 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                 //       : Preview(controller: createMarketController),
                 // ),
                 const SizedBox(
-                  height: 50,
+                  height: 30,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -253,6 +293,9 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                           onChanged: (bool value) {
                             setState(() {
                               _paidCourse = value;
+                              if (!_paidCourse) {
+                                _courseprice = null;
+                              }
                             });
                           },
                         ),
@@ -315,9 +358,8 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                     ),
                   ),
                 ),
-
                 const SizedBox(
-                  height: 50,
+                  height: 30,
                 ),
                 Row(
                   children: <Widget>[
@@ -376,7 +418,48 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                   padding: const EdgeInsets.only(bottom: 50.0),
                   child: MCustomButton(
                     onPressed: () async {
-                      print(videoLinks[1].url);
+                      if (title == null || title == '') {
+                        Get.snackbar(
+                          'Error',
+                          'Title cannot be empty!',
+                          backgroundColor: Colors.redAccent,
+                          colorText: Colors.white,
+                        );
+                        return;
+                      }
+                      if (description == null || description == '') {
+                        Get.snackbar(
+                          'Error',
+                          'Description cannot be empty!',
+                          backgroundColor: Colors.redAccent,
+                          colorText: Colors.white,
+                        );
+                        return;
+                      }
+                      if (!_validateVideoLinks()) {
+                        Get.snackbar(
+                          'Error',
+                          'Please enter valid URLs for video links!',
+                          backgroundColor: Colors.redAccent,
+                          colorText: Colors.white,
+                        );
+                        return;
+                      }
+                      Map<String, dynamic> course = <String, dynamic>{
+                        'title': title,
+                        'industryId': widget.industryId,
+                        'description': description,
+                        'userId': profileController.myProfile.uid,
+                        'timestamp': DateTime.now().millisecondsSinceEpoch,
+                        'price': _courseprice,
+                        'isPromoted': false,
+                        'isActive': true,
+                        'isApproved': false,
+                        'subtitle': false,
+                        'courseType': _paidCourse ? 'paid' : 'free',
+                        'youtubeUrls': _extractYoutubeUrls(),
+                      };
+                      courseController.createCourse(course);
                     },
                     label: 'Post',
                     // isProcessing: _isProcessing,
@@ -488,6 +571,36 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
         ],
       ),
     );
+  }
+
+  // Function to validate a URL using regular expressions
+  bool _isValidUrl(String url) {
+    // Regular expression to match URLs with optional HTTP/HTTPS protocol
+    final RegExp urlRegExp = RegExp(
+      r'^(https?://)?([a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)+)(:\d+)?(/([^\s/]+)*)*(\?[\w\-.~!@$&*+=:?\\%]*[^\s/])?$',
+      caseSensitive: false,
+      multiLine: false,
+    );
+    return urlRegExp.hasMatch(url);
+  }
+
+  List<String> _extractYoutubeUrls() {
+    List<String> youtubeUrls = [];
+    for (dynamic videoLink in videoLinks) {
+      if (_isValidUrl(videoLink.url)) {
+        youtubeUrls.add(videoLink.url);
+      }
+    }
+    return youtubeUrls;
+  }
+
+  bool _validateVideoLinks() {
+    for (dynamic videoLink in videoLinks) {
+      if (!_isValidUrl(videoLink.url)) {
+        return false; // Return false if any URL is invalid
+      }
+    }
+    return true; // Return true if all URLs are valid
   }
 
   Widget buildAddButton() {

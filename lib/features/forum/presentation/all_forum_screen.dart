@@ -61,35 +61,35 @@ class _AllForumScreenState extends State<AllForumScreen> {
             ),
           ),
           body: DefaultTabController(
-            length: 1,
+            length: 2,
             child: Column(
               children: <Widget>[
-                // Container(
-                //   color: Colors.white,
-                //   constraints: const BoxConstraints.expand(height: 50),
-                //   child: const TabBar(
-                //     tabs: <Widget>[
-                //       Tab(
-                //         text: 'Topics',
-                //       ),
-                //       Tab(text: 'Courses'),
-                //     ],
-                //   ),
-                // ),
+                Container(
+                  color: Colors.white,
+                  constraints: const BoxConstraints.expand(height: 50),
+                  child: const TabBar(
+                    tabs: <Widget>[
+                      Tab(
+                        text: 'Topics',
+                      ),
+                      Tab(text: 'Courses'),
+                    ],
+                  ),
+                ),
                 Expanded(
-        child: TabBarView(
-          children: <Widget>[
-            // View for 'Topics' tab
-            Container(
-              child: const TopicsPage()
-            ),
-            // View for 'Courses' tab
-            // Container(
-            //   child: const CoursesPage(),
-            // ),
-          ],
-        ),
-      ),
+                  child: TabBarView(
+                    children: <Widget>[
+                      // View for 'Topics' tab
+                      Container(child: const TopicsPage()),
+                      // View for 'Courses' tab
+                      Container(
+                        child: CoursesPage(
+                          industryId: industry.industryId!,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ],
             ),
           ),

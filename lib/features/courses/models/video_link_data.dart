@@ -14,4 +14,17 @@ class VideoLinkData {
       : url = map['url'] ?? '',
         hasSubtitles = map['hasSubtitles'] ?? false,
         hasTranscript = map['hasTranscript'] ?? false;
+
+  Map<String, dynamic> toMap() {
+    return {
+      'url': url,
+      'hasSubtitles': hasSubtitles,
+      'hasTranscript': hasTranscript,
+    };
+  }
+
+  @override
+  String toString() {
+    return 'VideoLinkData{url: $url, hasSubtitles: $hasSubtitles, hasTranscript: $hasTranscript}';
+  }
 }
