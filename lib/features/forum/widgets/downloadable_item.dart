@@ -26,16 +26,31 @@ class _DownloadableItemState extends State<DownloadableItem> {
     return Row(
       children: [
         Container(
-          height: 200,
-          width: 150,
+          height: 120,
+          width: 100,
           decoration:  const BoxDecoration(
             color: backgroundcolorinterface,
             borderRadius: BorderRadius.all(Radius.circular(15)),
           ),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Image.asset('assets/images/pdf.png'),
-              Text('data')
+              SizedBox(
+                height: 10,
+              ),
+              Container(
+                padding: EdgeInsets.all(7),
+                width: 30,
+                height: 30,
+                decoration: BoxDecoration(
+                  color: Colors.black12,
+                  borderRadius: BorderRadius.circular(50)
+                ),
+                child: SvgPicture.asset('assets/svgs/download.svg',),
+
+              )
             ],
           ),
 

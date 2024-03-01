@@ -48,93 +48,141 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
             style: TextStyle(fontSize: 20),
           ),
         ),
-        body: Column(
-          children: [
-            YoutubeDisplay(ytUrl!),
-            Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Text('Course Title'),
-                    ],
-                  ),
-                  Text('Course Description'),
-                  Row(
-                    children: [
-                      SizedBox(
-                        height: 20.0,
-                        width: 20.0,
-                        child: Align(
-                          alignment: Alignment.topLeft,
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(1000),
-                            child: NetworkImageWithPlaceHolder(
-                              imageUrl:
-                                  profileController.myProfile.photoUrl ?? '',
-                              radius: radius,
-                              placeHolder: Icons.person,
-                              iconSize: 15.0,
-                              fit: BoxFit.cover,
+        body: Stack(children: [
+          Column(
+            children: [
+              YoutubeDisplay(ytUrl!),
+              Padding(
+                padding: const EdgeInsets.all(15.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Text('Course Title'),
+                      ],
+                    ),
+                    Text('Course Description'),
+                    Row(
+                      children: [
+                        SizedBox(
+                          height: 20.0,
+                          width: 20.0,
+                          child: Align(
+                            alignment: Alignment.topLeft,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(1000),
+                              child: NetworkImageWithPlaceHolder(
+                                imageUrl:
+                                    profileController.myProfile.photoUrl ?? '',
+                                radius: radius,
+                                placeHolder: Icons.person,
+                                iconSize: 15.0,
+                                fit: BoxFit.cover,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                      const SizedBox(
-                        width: 5,
-                      ),
-                      const Text(
-                        overflow:
-                            TextOverflow.ellipsis, // or TextOverflow.ellipsis
-                        maxLines: 1,
-                        'Person Name',
-                        style: TextStyle(fontWeight: FontWeight.w700),
-                      ),
-                      const Icon(
-                        Icons.star,
-                        color: Color.fromRGBO(255, 202, 40, 1),
-                        size: 16,
-                      ),
-                      const Text(
-                        ' 4.7 ratings',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 13,
+                        const SizedBox(
+                          width: 5,
                         ),
-                      ),
-                      TextButton.icon(
-                        onPressed: () async {},
-                        icon: const Icon(Icons.remove_red_eye_outlined,
-                            size: 19, color: Colors.black),
-                        label: Text(
-                          '0 Views',
-                          style:
-                              Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                    fontWeight: FontWeight.w700,
-                                    color: textColor.withOpacity(0.8),
-                                  ),
+                        const Text(
+                          overflow:
+                              TextOverflow.ellipsis, // or TextOverflow.ellipsis
+                          maxLines: 1,
+                          'Person Name',
+                          style: TextStyle(fontWeight: FontWeight.w700),
                         ),
-                      ),
-                    ],
-                  ),
-                  ElevatedButton(onPressed: () {}, child: Text('Buy Course')),
-                  Text('Downloadable Resources'),
+                        const Icon(
+                          Icons.star,
+                          color: Color.fromRGBO(255, 202, 40, 1),
+                          size: 16,
+                        ),
+                        const Text(
+                          ' 4.7 ratings',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 13,
+                          ),
+                        ),
+                        TextButton.icon(
+                          onPressed: () async {},
+                          icon: const Icon(Icons.remove_red_eye_outlined,
+                              size: 19, color: Colors.black),
+                          label: Text(
+                            '0 Views',
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.copyWith(
+                                  fontWeight: FontWeight.w700,
+                                  color: textColor.withOpacity(0.8),
+                                ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    ElevatedButton(onPressed: () {}, child: Text('Buy Course')),
+                    Text('Downloadable Resources'),
+                    Container(
+                      height: 200,
+                      child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: 5,
+                          itemBuilder: (BuildContext context, int index) {
+                            return const DownloadableItem(); // Assuming DownloadableItem is a widget class
+                          }),
+                    )
+                  ],
+                ),
+              )
+            ],
+          ),
+          Positioned(
+              bottom: 0,
+              child: Column(
+                children: [
                   Container(
-                    height: 200,
-                    child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: 5,
-                        itemBuilder: (BuildContext context, int index) {
-                          return const DownloadableItem(); // Assuming DownloadableItem is a widget class
-                        }),
-                  )
+                    height: 1,
+                    width:  MediaQuery.of(context).size.width,
+                    color: backgroundcolorinterface,
+                    
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                    Row(
+                      children: [
+                        IconButton(
+                          icon: SvgPicture.asset('assets/svgs/comment.svg'),
+                          onPressed: () {},
+                        ),
+                        Text('Comment')
+                      ],
+                    ),
+                  
+                    Row(
+                      children: [
+                        IconButton(
+                          icon: SvgPicture.asset('assets/svgs/comment.svg'),
+                          onPressed: () {},
+                        ),
+                        Text('Rate')
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        IconButton(
+                          icon: SvgPicture.asset('assets/svgs/comment.svg'),
+                          onPressed: () {},
+                        ),
+                        Text('Share')
+                      ],
+                    ),
+                  ]),
                 ],
-              ),
-            )
-          ],
-        ));
+              ))
+        ]));
   }
 }
