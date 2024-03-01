@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
+import 'package:business_bosses_v2/features/live_event/controller/live_event_controller.dart';
 import 'package:business_bosses_v2/features/live_event/models/events_model.dart';
 import 'package:business_bosses_v2/features/live_event/presentation/create_event.dart';
 import 'package:business_bosses_v2/features/live_event/widgets/call_room.dart';
@@ -59,6 +60,7 @@ class _PostTileState extends State<PostTile> {
   bool hide = false;
   final ProfileController profileController = Get.find();
   final HomeController homeController = Get.find();
+  final LiveController liveController = Get.put(LiveController());
   String? selectedValue;
 
   Future<void> connect(String userId) async {
@@ -170,6 +172,7 @@ class _PostTileState extends State<PostTile> {
     } else {}
 
     EventModel event = EventModel(
+      id: eventId,
       title: title,
       roomId: roomid ?? '',
       startAt: DateTime.parse(startat ?? '2023-11-07T10:45:00.000Z'),
@@ -769,7 +772,7 @@ class _PostTileState extends State<PostTile> {
                                     if (eventId != null)
                                       AttendeesCountWidget(
                                         events: homeController.events,
-                                        currentEventId: eventId!,
+                                        currentEventId: eventId,
                                       ),
                                     isJoinedEvent()
                                         ? ElevatedButton(
@@ -796,10 +799,12 @@ class _PostTileState extends State<PostTile> {
                                             ),
                                           )
                                         : ElevatedButton(
-                                            onPressed: () {
-                                              setState(() {
-                                                eventId = eventId! + 1;
-                                              });
+                                            onPressed: () async {
+                                              await homeController
+                                                  .attendEvent(event);
+                                              liveController.joined.add(event);
+
+                                              setState(() {});
                                             },
                                             child: const Text('Attend'),
                                           ),

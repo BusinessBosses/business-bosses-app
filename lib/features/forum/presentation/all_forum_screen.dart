@@ -77,19 +77,19 @@ class _AllForumScreenState extends State<AllForumScreen> {
                   ),
                 ),
                 Expanded(
-        child: TabBarView(
-          children: <Widget>[
-            // View for 'Topics' tab
-            Container(
-              child: const TopicsPage()
-            ),
-            // View for 'Courses' tab
-            Container(
-              child: const CoursesPage(),
-            ),
-          ],
-        ),
-      ),
+                  child: TabBarView(
+                    children: <Widget>[
+                      // View for 'Topics' tab
+                      Container(child: const TopicsPage()),
+                      // View for 'Courses' tab
+                      Container(
+                        child: CoursesPage(
+                          industryId: industry.industryId!,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ],
             ),
           ),
