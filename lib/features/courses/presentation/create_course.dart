@@ -524,28 +524,28 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
           const SizedBox(
             height: 10,
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Row(
-                children: <Widget>[
-                  SvgPicture.asset('assets/svgs/subtitlesicon.svg'),
-                  const SizedBox(
-                    width: 20,
-                  ),
-                  const Text('Subtitles / Closed Captions')
-                ],
-              ),
-              Switch(
-                value: videoLinkData.hasSubtitles,
-                onChanged: (bool value) {
-                  setState(() {
-                    videoLinkData.hasSubtitles = value;
-                  });
-                },
-              ),
-            ],
-          ),
+          // Row(
+          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //   children: <Widget>[
+          //     Row(
+          //       children: <Widget>[
+          //         SvgPicture.asset('assets/svgs/subtitlesicon.svg'),
+          //         const SizedBox(
+          //           width: 20,
+          //         ),
+          //         const Text('Subtitles / Closed Captions')
+          //       ],
+          //     ),
+          //     Switch(
+          //       value: videoLinkData.hasSubtitles,
+          //       onChanged: (bool value) {
+          //         setState(() {
+          //           videoLinkData.hasSubtitles = value;
+          //         });
+          //       },
+          //     ),
+          //   ],
+          // ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
