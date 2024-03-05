@@ -60,4 +60,5 @@ class Routes {
   static const String sellscreen = '/sellscreen';
   static const String bottomnavscreen = '/bottomnavscreen';
   static const String createcourse = '/createcourse';
+  static const String expandedcoursescreen = '/expandedcoursescreen';
 }
