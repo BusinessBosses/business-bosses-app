@@ -275,7 +275,7 @@ class MyStickyHeader extends StatelessWidget {
                         color: backgroundcolorinterface,
                         borderRadius: BorderRadius.circular(15),
                       ),
-                      height: 200,
+                     
                       width: MediaQuery.sizeOf(context).width,
                       child: Padding(
                         padding: const EdgeInsets.all(10.0),
@@ -283,7 +283,11 @@ class MyStickyHeader extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text('Video Transcript'),
-                            Text('Video Transcript content'),
+                            
+                            Padding(
+                              padding: const EdgeInsets.symmetric(vertical:20.0),
+                              child: Text('Video Transcript Text here iuhuh uhiuh hiuhuhiuhiiu gu giuiukg'),
+                            ),
                           ],
                         ),
                       ),
