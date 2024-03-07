@@ -459,7 +459,7 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                         'courseType': _paidCourse ? 'paid' : 'free',
                         'youtubeUrls': _extractYoutubeUrls(),
                       };
-                      courseController.createCourse(course);
+                      await courseController.createCourse(course);
                     },
                     label: 'Post',
                     // isProcessing: _isProcessing,

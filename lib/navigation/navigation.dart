@@ -5,6 +5,7 @@ import 'package:business_bosses_v2/features/bottomnavigationscreen.dart';
 import 'package:business_bosses_v2/features/connects/controller/referrals_controller.dart';
 import 'package:business_bosses_v2/features/connects/presentation/referals_screen.dart';
 import 'package:business_bosses_v2/features/forum/controller/bossup_controller.dart';
+import 'package:business_bosses_v2/features/courses/presentation/expanded_course_screen.dart';
 import 'package:business_bosses_v2/features/home/all_communities_screen.dart';
 import 'package:business_bosses_v2/features/home/controller/commumities_controller.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
@@ -49,6 +50,7 @@ import 'package:business_bosses_v2/features/search/controller/search_controller.
 import 'package:business_bosses_v2/features/search/presentation/complete_searching_screen.dart';
 import 'package:business_bosses_v2/features/settings/invite_a_friendscreen.dart';
 import 'package:business_bosses_v2/features/settings/settingsscreen.dart';
+import 'package:business_bosses_v2/features/withdrawal/withdrawalscreen.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/features/premium/premiumscreen.dart';
 import 'package:business_bosses_v2/features/premium/reviewpayment.dart';
@@ -259,5 +261,9 @@ var routes = [
   GetPage(
     name: Routes.bottomnavscreen,
     page: () => const BottomNavigationScreen(),
+  ),
+  GetPage(
+    name: Routes.withdrawalscreen,
+    page: () => const WithdrawalScreen(),
   ),
 ];

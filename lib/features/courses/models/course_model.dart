@@ -4,7 +4,7 @@ import 'package:business_bosses_v2/common/models/comment_model.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 
 class CourseModel {
-  final int id;
+  final String id;
   final String industryId;
   final String? description;
   final String? title;
@@ -17,6 +17,7 @@ class CourseModel {
   final UserModel? user;
   int? views = 0;
   final bool? isPromoted;
+  final double? averageRating;
   final bool? isApproved;
   final String? courseType;
   final String? paymentMethod;
@@ -28,6 +29,7 @@ class CourseModel {
     required this.userId,
     this.description,
     this.title,
+    this.averageRating = 0.0,
     this.documents,
     this.timestamp,
     this.views = 0,
@@ -44,7 +46,7 @@ class CourseModel {
   });
 
   CourseModel copyWith({
-    int? id,
+    String? id,
     String? industryId,
     String? description,
     String? title,
@@ -56,6 +58,7 @@ class CourseModel {
     bool? isPromoted,
     int? views,
     String? price,
+    double? averageRating,
     dynamic promotionDuration,
     bool? isApproved,
     String? courseType,
@@ -73,6 +76,7 @@ class CourseModel {
       timestamp: timestamp ?? this.timestamp,
       comments: comments ?? this.comments,
       user: user ?? this.user,
+      averageRating: averageRating ?? this.averageRating,
       views: views ?? this.views,
       isPromoted: isPromoted ?? this.isPromoted,
       price: price ?? this.price,
@@ -91,6 +95,7 @@ class CourseModel {
       'industryId': industryId,
       'description': description,
       'title': title,
+      'averageRating': averageRating,
       'userId': userId,
       'documents': documents,
       'timestamp': timestamp,
@@ -110,7 +115,7 @@ class CourseModel {
 
   factory CourseModel.fromMap(Map<String, dynamic> map) {
     return CourseModel(
-      id: map['id'] as int,
+      id: map['id'] as String,
       industryId: map['industryId'] as String,
       description:
           map['description'] != null ? map['description'] as String : null,
@@ -119,6 +124,11 @@ class CourseModel {
       price: map['price'] != null ? map['price'] as String : null,
       courseType:
           map['courseType'] != null ? map['courseType'] as String : null,
+      averageRating: map['averageRating'] != null
+          ? (map['averageRating'] is int
+              ? (map['averageRating'] as int).toDouble()
+              : map['averageRating'] as double)
+          : null,
       paymentMethod:
           map['paymentMethod'] != null ? map['paymentMethod'] as String : null,
       transcript:

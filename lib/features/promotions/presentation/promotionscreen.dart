@@ -108,7 +108,7 @@ class _PromotionScreenState extends State<PromotionScreen> {
             Container(
                 width: MediaQuery.of(context).size.width,
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 120, vertical: 50),
+                    const EdgeInsets.symmetric(horizontal: 120, vertical: 30),
                 decoration: const BoxDecoration(
                   color: Colors.white,
                 ),
@@ -117,283 +117,342 @@ class _PromotionScreenState extends State<PromotionScreen> {
                     Image.asset('assets/images/invitepicture.png')
                   ],
                 )),
-            Container(
-                width: MediaQuery.of(context).size.width,
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                ),
-                child: Column(
-                  children: <Widget>[
-                    const Text(
-                      'Earn Coins!',
-                      style:
-                          TextStyle(fontWeight: FontWeight.w700, fontSize: 20),
-                    ),
-                    const Text(
-                      'Invite Friends',
-                      style: TextStyle(
-                          fontSize: 25,
-                          color: primaryColorLT,
-                          fontWeight: FontWeight.w700),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 20, right: 20),
-                      child: Wrap(
-                        alignment: WrapAlignment.center,
-                        children: <Widget>[
-                          const Text(
-                            'to join Business Bosses and get 20',
-                            style: TextStyle(
-                              fontSize: 15,
-                              color: textColor,
-                              fontWeight: FontWeight.w700,
-                            ),
+            GestureDetector(
+              onTap: () {
+                Get.toNamed(Routes.premiumscreen);
+              },
+              child: Column(
+                children: <Widget>[
+                  Container(
+                      decoration: BoxDecoration(
+                        boxShadow: <BoxShadow>[
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.09),
+                            blurRadius: 500.0,
+                            spreadRadius: 0.0,
                           ),
-                          const SizedBox(width: 5),
-                          SvgPicture.asset(
-                            'assets/svgs/coin.svg',
-                            height: 20,
-                            width: 20,
-                          ),
-                          const SizedBox(width: 5),
-                          // const Text(
-                          //   'for each friend.',
-                          //   style: TextStyle(
-                          //     fontSize: 15,
-                          //     color: textColor,
-                          //     fontWeight: FontWeight.w700,
-                          //   ),
-                          // ),
                         ],
                       ),
-                    ),
-                    const SizedBox(
-                      height: 3,
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        Get.toNamed(Routes.premiumscreen);
-                      },
-                      child: Column(
-                        children: <Widget>[
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Container(
+                      child: !profileController.myProfile.isSubscribed
+                          ? Container(
                               decoration: BoxDecoration(
-                                boxShadow: <BoxShadow>[
-                                  BoxShadow(
-                                    color: Colors.black.withOpacity(0.09),
-                                    blurRadius: 500.0,
-                                    spreadRadius: 0.0,
-                                  ),
-                                ],
+                                color: backgroundColor,
+                                borderRadius: BorderRadius.circular(100.0),
                               ),
-                              child: !profileController.myProfile.isSubscribed
-                                  ? Container(
-                                      decoration: BoxDecoration(
-                                        color: backgroundColor,
-                                        borderRadius:
-                                            BorderRadius.circular(100.0),
-                                      ),
-                                      child: IntrinsicWidth(
-                                        child: Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              vertical: 8, horizontal: 15),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: <Widget>[
-                                              const Text(
-                                                'Subscribe to Premium',
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.w700,
-                                                  fontSize: 15,
-                                                  color: textColor,
-                                                ),
-                                              ),
-                                              const SizedBox(
-                                                width: 15,
-                                              ),
-                                              SvgPicture.asset(
-                                                'assets/svgs/nextbutton.svg',
-                                                color: primaryColorLT,
-                                              ),
-                                            ],
-                                          ),
+                              child: IntrinsicWidth(
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 8, horizontal: 15),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: <Widget>[
+                                      const Text(
+                                        'Subscribe to Premium',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w700,
+                                          fontSize: 15,
+                                          color: textColor,
                                         ),
                                       ),
-                                    )
-                                  : Container()),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    )
-                  ],
-                )),
-            const SizedBox(
-              width: double.infinity,
-              height: 1.5,
-              child: ColoredBox(color: backgroundcolorinterface),
-            ),
-            InkWell(
-              onTap: () {
-                Clipboard.setData(ClipboardData(text: _referralId))
-                    .then((value) {
-                  showSnackBar(context,
-                      message: 'Your reference id is copied to clipboard.');
-                });
-              },
-              child: Ink(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text(
-                          'Invite Id:',
-                          textAlign: TextAlign.center,
-                          style:
-                              Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                    fontWeight: FontWeight.normal,
-                                    fontSize: 12,
+                                      const SizedBox(
+                                        width: 15,
+                                      ),
+                                      SvgPicture.asset(
+                                        'assets/svgs/nextbutton.svg',
+                                        color: primaryColorLT,
+                                      ),
+                                    ],
                                   ),
-                        ),
-                        Text(
-                          '$_referralId ',
-                          textAlign: TextAlign.center,
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyLarge
-                              ?.copyWith(
-                                  fontWeight: FontWeight.normal, fontSize: 12),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(
-                      width: 20,
-                    ),
-                    // ignore: unnecessary_null_comparison
-                    _referralId == null
-                        ? const Icon(
-                            Icons.content_copy,
-                            size: 20.0,
-                            color: Colors.white,
-                          )
-                        : const Icon(
-                            Icons.content_copy,
-                            size: 20.0,
-                          ),
-                    const SizedBox(
-                      width: 20,
-                    ),
-                    const SizedBox(width: 8.0),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                          backgroundColor: backgroundcolorinterface,
-                          minimumSize: const Size(
-                              150, 45) // put the width and height you want
-                          ),
-                      onPressed: () {
-                        _shareWithFriends();
-                      },
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          // ignore: unnecessary_null_comparison
-                          _referralId == null
-                              ? const Text(
-                                  'Create InviteId',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 15),
-                                )
-                              : const Text(
-                                  'Invite',
-                                  style: TextStyle(
-                                      fontSize: 15,
-                                      color: textColor,
-                                      fontWeight: FontWeight.w500),
                                 ),
+                              ),
+                            )
+                          : Container()),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              child: Row(
+                children: [
+                  Expanded(
+                    flex: 3,
+                    child: Container(
+                      height: 120,
+                      decoration: BoxDecoration(
+                          color: const Color.fromRGBO(122, 122, 121, 10),
+                          borderRadius: BorderRadius.circular(15)),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Text(
+                            'Add BB Coins',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w700,
+                                fontSize: 16),
+                          ),
                           const SizedBox(
                             width: 5,
                           ),
-                          SvgPicture.asset(
-                            'assets/svgs/invite.svg',
-                            color: textColor,
-                          )
+                          SvgPicture.asset('assets/svgs/startatopic.svg')
                         ],
                       ),
                     ),
-                  ],
-                ),
-              ),
-            ),
-            const SizedBox(
-              width: double.infinity,
-              height: 1.5,
-              child: ColoredBox(color: backgroundcolorinterface),
-            ),
-            GestureDetector(
-              onTap: () {},
-              child: Container(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 20.0, vertical: 23.0),
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Text(
-                      'Accepted Invitation:',
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                            fontWeight: FontWeight.normal,
-                            fontSize: 15,
-                          ),
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  Expanded(
+                    flex: 2,
+                    child: GestureDetector(
+                      onTap: (){
+                      Get.toNamed(Routes.withdrawalscreen);
+                    },
+                      child: Container(
+                        height: 120,
+                        decoration: BoxDecoration(
+                            border: Border.all(
+                                color: const Color.fromRGBO(122, 122, 121, 200),
+                                width: 2),
+                            borderRadius: BorderRadius.circular(15)),
+                        child:  Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Text(
+                                  'Withdraw',
+                                  style: TextStyle(
+                                      color: textColor, fontWeight: FontWeight.w700),
+                                ),
+                                Text(
+                                  '5720 Coins = \$2.32',
+                                  style: TextStyle(
+                                      color: textColor.withAlpha(80), fontWeight: FontWeight.w400, fontSize: 12),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
-                    Text(
-                      '${_profileController.myProfile.invitations ?? 0}',
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                            fontWeight: FontWeight.normal,
-                          ),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-            ),
-            const SizedBox(
-              width: double.infinity,
-              height: 1.5,
-              child: ColoredBox(color: backgroundcolorinterface),
             ),
             const SizedBox(
               height: 20,
             ),
-            GestureDetector(
-              onTap: () {
-                Get.toNamed(Routes.marketPlace);
-              },
-              child: const Text(
-                'Sell your product or service',
-                style: TextStyle(
-                  fontWeight: FontWeight.w700,
-                  decoration: TextDecoration.underline,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15.0),
+              child: Container(
+                decoration: BoxDecoration(
+                    border: Border.all(
+                        color: const Color.fromRGBO(122, 122, 121, 200),
+                        width: 2),
+                    borderRadius: BorderRadius.circular(15)),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(15.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            'Earn Coins!',
+                            style: TextStyle(
+                                fontWeight: FontWeight.w700, fontSize: 18),
+                          ),
+                          Row(
+                            children: [
+                              const Text(
+                                'Invite friends to join Business Bosses and get 20',
+                                style: TextStyle(
+                                  fontSize: 13,
+                                  color: textColor,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                              const SizedBox(width: 5),
+                              SvgPicture.asset(
+                                'assets/svgs/coin.svg',
+                                height: 20,
+                                width: 20,
+                              ),
+                            ],
+                          ),
+                          InkWell(
+                            onTap: () {
+                              Clipboard.setData(
+                                      ClipboardData(text: _referralId))
+                                  .then((value) {
+                                showSnackBar(context,
+                                    message:
+                                        'Your reference id is copied to clipboard.');
+                              });
+                            },
+                            child: Ink(
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 15.0),
+                              decoration: const BoxDecoration(
+                                color: Colors.white,
+                              ),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: <Widget>[
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      Text(
+                                        'Invite Id:',
+                                        textAlign: TextAlign.center,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyLarge
+                                            ?.copyWith(
+                                              fontWeight: FontWeight.normal,
+                                              fontSize: 12,
+                                            ),
+                                      ),
+                                      Text(
+                                        '$_referralId ',
+                                        textAlign: TextAlign.center,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyLarge
+                                            ?.copyWith(
+                                                fontWeight: FontWeight.normal,
+                                                fontSize: 12),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(
+                                    width: 20,
+                                  ),
+                                  // ignore: unnecessary_null_comparison
+                                  _referralId == null
+                                      ? const Icon(
+                                          Icons.content_copy,
+                                          size: 20.0,
+                                          color: Colors.white,
+                                        )
+                                      : const Icon(
+                                          Icons.content_copy,
+                                          size: 20.0,
+                                        ),
+                                  const SizedBox(
+                                    width: 20,
+                                  ),
+                                  const SizedBox(width: 8.0),
+                                  ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                        backgroundColor:
+                                            backgroundcolorinterface,
+                                        minimumSize: const Size(120,
+                                            45) // put the width and height you want
+                                        ),
+                                    onPressed: () {
+                                      _shareWithFriends();
+                                    },
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: <Widget>[
+                                        // ignore: unnecessary_null_comparison
+                                        _referralId == null
+                                            ? const Text(
+                                                'Create InviteId',
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontWeight: FontWeight.w600,
+                                                    fontSize: 15),
+                                              )
+                                            : const Text(
+                                                'Invite',
+                                                style: TextStyle(
+                                                    fontSize: 15,
+                                                    color: textColor,
+                                                    fontWeight:
+                                                        FontWeight.w500),
+                                              ),
+                                        const SizedBox(
+                                          width: 5,
+                                        ),
+                                        SvgPicture.asset(
+                                          'assets/svgs/invite.svg',
+                                          color: textColor,
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () {},
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 10.0),
+                              decoration: const BoxDecoration(
+                                color: Colors.white,
+                              ),
+                              child: Expanded(
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: <Widget>[
+                                    Text(
+                                      'Accepted Invitation:',
+                                      textAlign: TextAlign.center,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyLarge
+                                          ?.copyWith(
+                                            fontWeight: FontWeight.normal,
+                                            fontSize: 15,
+                                          ),
+                                    ),
+                                    Text(
+                                      '${_profileController.myProfile.invitations ?? 0}',
+                                      textAlign: TextAlign.center,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyLarge
+                                          ?.copyWith(
+                                            fontWeight: FontWeight.normal,
+                                          ),
+                                    ),
+                                    Text(
+                                      ' (+220 Coins)',
+                                      textAlign: TextAlign.center,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyLarge
+                                          ?.copyWith(
+                                            fontWeight: FontWeight.normal,
+                                          ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
-            const SizedBox(height: 74.0),
           ],
         ),
       ),
