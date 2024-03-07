@@ -121,7 +121,10 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
                         ),
                       ],
                     ),
-                    ElevatedButton(onPressed: () {}, child: Text('Buy Course')),
+                    ElevatedButton(
+                      onPressed: () {},
+                      child: Text('Buy Course'),
+                    ),
                     Text('Downloadable Resources'),
                     Container(
                       height: 200,
