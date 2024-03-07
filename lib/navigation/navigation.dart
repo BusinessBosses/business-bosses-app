@@ -5,6 +5,7 @@ import 'package:business_bosses_v2/features/bottomnavigationscreen.dart';
 import 'package:business_bosses_v2/features/connects/controller/referrals_controller.dart';
 import 'package:business_bosses_v2/features/connects/presentation/referals_screen.dart';
 import 'package:business_bosses_v2/features/forum/controller/bossup_controller.dart';
+import 'package:business_bosses_v2/features/courses/presentation/expanded_course_screen.dart';
 import 'package:business_bosses_v2/features/home/all_communities_screen.dart';
 import 'package:business_bosses_v2/features/home/controller/commumities_controller.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
