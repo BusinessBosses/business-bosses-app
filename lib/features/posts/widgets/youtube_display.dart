@@ -5,8 +5,10 @@ import 'package:visibility_detector/visibility_detector.dart';
 
 class YoutubeDisplay extends StatefulWidget {
   final String youtubeUrl;
+  final BorderRadiusGeometry ? corner;
 
-  const YoutubeDisplay(this.youtubeUrl, {super.key});
+  const YoutubeDisplay(this.youtubeUrl, {this.corner, Key? key}) : super(key: key);
+
 
   @override
   _YoutubeDisplayState createState() => _YoutubeDisplayState();
@@ -19,6 +21,7 @@ class _YoutubeDisplayState extends State<YoutubeDisplay> {
   late TextEditingController _seekToController;
   final bool _isPlayerReady = false;
   late String videoId;
+
 
   @override
   void initState() {
@@ -65,7 +68,7 @@ class _YoutubeDisplayState extends State<YoutubeDisplay> {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(50), // Adjust the radius as needed
+        borderRadius: widget.corner ?? BorderRadius.circular(50) , // Adjust the radius as needed
         color: Colors.blue,
       ),
       height: 200,
@@ -82,7 +85,7 @@ class _YoutubeDisplayState extends State<YoutubeDisplay> {
         },
         child: ClipRRect(
           // Use ClipRRect to round the player
-          borderRadius:
+          borderRadius: widget.corner ??
               BorderRadius.circular(10), // Adjust the radius as needed
           child: YoutubePlayerBuilder(
             onExitFullScreen: () {

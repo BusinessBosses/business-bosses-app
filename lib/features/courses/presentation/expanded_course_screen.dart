@@ -99,7 +99,7 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
                         ),
                         Text(
                           widget.course.averageRating.toString(),
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 13,
                           ),
