@@ -207,32 +207,37 @@ class _PromotionScreenState extends State<PromotionScreen> {
                   ),
                   Expanded(
                     flex: 2,
-                    child: Container(
-                      height: 120,
-                      decoration: BoxDecoration(
-                          border: Border.all(
-                              color: const Color.fromRGBO(122, 122, 121, 200),
-                              width: 2),
-                          borderRadius: BorderRadius.circular(15)),
-                      child:  Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const Text(
-                                'Withdraw',
-                                style: TextStyle(
-                                    color: textColor, fontWeight: FontWeight.w700),
-                              ),
-                              Text(
-                                '5720 Coins = \$2.32',
-                                style: TextStyle(
-                                    color: textColor.withAlpha(80), fontWeight: FontWeight.w400, fontSize: 12),
-                              ),
-                            ],
-                          ),
-                        ],
+                    child: GestureDetector(
+                      onTap: (){
+                      Get.toNamed(Routes.withdrawalscreen);
+                    },
+                      child: Container(
+                        height: 120,
+                        decoration: BoxDecoration(
+                            border: Border.all(
+                                color: const Color.fromRGBO(122, 122, 121, 200),
+                                width: 2),
+                            borderRadius: BorderRadius.circular(15)),
+                        child:  Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Text(
+                                  'Withdraw',
+                                  style: TextStyle(
+                                      color: textColor, fontWeight: FontWeight.w700),
+                                ),
+                                Text(
+                                  '5720 Coins = \$2.32',
+                                  style: TextStyle(
+                                      color: textColor.withAlpha(80), fontWeight: FontWeight.w400, fontSize: 12),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
