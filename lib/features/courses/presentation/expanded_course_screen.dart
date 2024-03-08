@@ -1,6 +1,6 @@
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/features/courses/models/course_model.dart';
-import 'package:business_bosses_v2/features/forum/widgets/course_item.dart';
+import 'package:business_bosses_v2/features/courses/presentation/course_item.dart';
 import 'package:business_bosses_v2/features/forum/widgets/downloadable_item.dart';
 import 'package:business_bosses_v2/features/posts/widgets/my_container.dart';
 import 'package:business_bosses_v2/features/posts/widgets/youtube_display.dart';
@@ -139,7 +139,7 @@ class MyStickyHeader extends StatelessWidget {
                               borderRadius: BorderRadius.circular(1000),
                               child: NetworkImageWithPlaceHolder(
                                 imageUrl:
-                                    profileController.myProfile.photoUrl ?? '',
+                                   course.user?.photoUrl ?? '',
                                 radius: radius,
                                 placeHolder: Icons.person,
                                 iconSize: 15.0,
