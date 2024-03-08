@@ -4,6 +4,7 @@ import 'package:business_bosses_v2/analytics/presentation/explorebusinessbosses_
 import 'package:business_bosses_v2/features/bottomnavigationscreen.dart';
 import 'package:business_bosses_v2/features/connects/controller/referrals_controller.dart';
 import 'package:business_bosses_v2/features/connects/presentation/referals_screen.dart';
+import 'package:business_bosses_v2/features/courses/presentation/course_history.dart';
 import 'package:business_bosses_v2/features/forum/controller/bossup_controller.dart';
 import 'package:business_bosses_v2/features/courses/presentation/expanded_course_screen.dart';
 import 'package:business_bosses_v2/features/home/all_communities_screen.dart';
@@ -265,5 +266,9 @@ var routes = [
   GetPage(
     name: Routes.withdrawalscreen,
     page: () => const WithdrawalScreen(),
+  ),
+  GetPage(
+    name: Routes.coursehistoryscreen,
+    page: () => const CourseHistory(),
   ),
 ];
