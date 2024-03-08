@@ -31,7 +31,7 @@ class _BuyCoinsListItemState extends State<BuyCoinsListItem> {
       child: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(vertical:15.0, horizontal: 10),
+            padding: const EdgeInsets.symmetric(vertical:15.0, horizontal: 20),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
             children:[

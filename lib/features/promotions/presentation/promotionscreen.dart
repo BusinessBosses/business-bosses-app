@@ -184,6 +184,9 @@ class _PromotionScreenState extends State<PromotionScreen> {
                     child: GestureDetector(
                       onTap: () {
                         showModalBottomSheet(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20)
+                          ),
                           backgroundColor: Colors.white,
                             context: context,
                             builder: (BuildContext context) {
@@ -192,7 +195,7 @@ class _PromotionScreenState extends State<PromotionScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Padding(
-                                    padding: const EdgeInsets.all(10.0),
+                                    padding: const EdgeInsets.symmetric(vertical:40.0,horizontal: 20),
                                     child: Column(
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
@@ -201,18 +204,28 @@ class _PromotionScreenState extends State<PromotionScreen> {
                                       ],
                                     ),
                                   ),
-                                  SizedBox(
-                                    height: 20,
-                                  ),
+                                  
                                   Container(
                                     
                                     child: Expanded(
-                                      child: ListView.builder(
-                                        itemCount: 5,
-                                        itemBuilder: (BuildContext context, int i) {
-                                          return const BuyCoinsListItem();
-                                          
-                                        },
+                                      child: Column(
+                                        children: [
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(horizontal:10.0),
+                                          child: Container(color: backgroundcolorinterface,height: 1,),
+                                        ),
+                                          Container(
+                                            child: Expanded(
+                                              child: ListView.builder(
+                                                itemCount: 5,
+                                                itemBuilder: (BuildContext context, int i) {
+                                                  return const BuyCoinsListItem();
+                                                  
+                                                },
+                                              ),
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                     ),
                                   ),
