@@ -1,9 +1,11 @@
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
+import 'package:business_bosses_v2/features/promotions/widgets/buycoinslist_item.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:zego_uikit_prebuilt_live_audio_room/zego_uikit_prebuilt_live_audio_room.dart';
 
 import '../../../action/action.dart';
 import '../../../navigation/routes.dart';
@@ -179,26 +181,79 @@ class _PromotionScreenState extends State<PromotionScreen> {
                 children: [
                   Expanded(
                     flex: 3,
-                    child: Container(
-                      height: 120,
-                      decoration: BoxDecoration(
-                          color: const Color.fromRGBO(122, 122, 121, 10),
-                          borderRadius: BorderRadius.circular(15)),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Text(
-                            'Add BB Coins',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w700,
-                                fontSize: 16),
+                    child: GestureDetector(
+                      onTap: () {
+                        showModalBottomSheet(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20)
                           ),
-                          const SizedBox(
-                            width: 5,
-                          ),
-                          SvgPicture.asset('assets/svgs/startatopic.svg')
-                        ],
+                          backgroundColor: Colors.white,
+                            context: context,
+                            builder: (BuildContext context) {
+                              return Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(vertical:40.0,horizontal: 20),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        const Text('Buy more BB Coins', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),),
+                                        Text('Promotional Text')
+                                      ],
+                                    ),
+                                  ),
+                                  
+                                  Container(
+                                    
+                                    child: Expanded(
+                                      child: Column(
+                                        children: [
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(horizontal:10.0),
+                                          child: Container(color: backgroundcolorinterface,height: 1,),
+                                        ),
+                                          Container(
+                                            child: Expanded(
+                                              child: ListView.builder(
+                                                itemCount: 5,
+                                                itemBuilder: (BuildContext context, int i) {
+                                                  return const BuyCoinsListItem();
+                                                  
+                                                },
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              );
+                            });
+                      },
+                      child: Container(
+                        height: 120,
+                        decoration: BoxDecoration(
+                            color: const Color.fromRGBO(122, 122, 121, 10),
+                            borderRadius: BorderRadius.circular(15)),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Text(
+                              'Add BB Coins',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 16),
+                            ),
+                            const SizedBox(
+                              width: 5,
+                            ),
+                            SvgPicture.asset('assets/svgs/startatopic.svg')
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -208,9 +263,9 @@ class _PromotionScreenState extends State<PromotionScreen> {
                   Expanded(
                     flex: 2,
                     child: GestureDetector(
-                      onTap: (){
-                      Get.toNamed(Routes.withdrawalscreen);
-                    },
+                      onTap: () {
+                        Get.toNamed(Routes.withdrawalscreen);
+                      },
                       child: Container(
                         height: 120,
                         decoration: BoxDecoration(
@@ -218,7 +273,7 @@ class _PromotionScreenState extends State<PromotionScreen> {
                                 color: const Color.fromRGBO(122, 122, 121, 200),
                                 width: 2),
                             borderRadius: BorderRadius.circular(15)),
-                        child:  Row(
+                        child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Column(
@@ -227,12 +282,15 @@ class _PromotionScreenState extends State<PromotionScreen> {
                                 const Text(
                                   'Withdraw',
                                   style: TextStyle(
-                                      color: textColor, fontWeight: FontWeight.w700),
+                                      color: textColor,
+                                      fontWeight: FontWeight.w700),
                                 ),
                                 Text(
                                   '5720 Coins = \$2.32',
                                   style: TextStyle(
-                                      color: textColor.withAlpha(80), fontWeight: FontWeight.w400, fontSize: 12),
+                                      color: textColor.withAlpha(80),
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 12),
                                 ),
                               ],
                             ),
@@ -400,8 +458,8 @@ class _PromotionScreenState extends State<PromotionScreen> {
                           GestureDetector(
                             onTap: () {},
                             child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                vertical: 10.0),
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 10.0),
                               decoration: const BoxDecoration(
                                 color: Colors.white,
                               ),

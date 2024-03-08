@@ -1,12 +1,19 @@
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/features/courses/models/course_model.dart';
+import 'package:business_bosses_v2/features/courses/presentation/course_item.dart';
 import 'package:business_bosses_v2/features/forum/widgets/downloadable_item.dart';
+import 'package:business_bosses_v2/features/posts/widgets/my_container.dart';
 import 'package:business_bosses_v2/features/posts/widgets/youtube_display.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+
+import 'package:zego_uikit_prebuilt_live_audio_room/zego_uikit_prebuilt_live_audio_room.dart';
 
 class ExpandedCourseScreen extends StatefulWidget {
   static const String routeName = '/expandedcoursescreen';
@@ -26,31 +33,69 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
   @override
   void initState() {
     super.initState();
+    // Initialize data or perform any other necessary setup
   }
 
   @override
   Widget build(BuildContext context) {
-    ProfileController profileController = Get.find();
+    String ytUrl = 'https://www.youtube.com/watch?v=3gm6eBtWfi4';
+    ScrollController scrollController = ScrollController();
+
     return Scaffold(
-        backgroundColor: Colors.white,
-        appBar: AppBar(
-          leading: IconButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
-          ),
-          centerTitle: true,
-          title: const Text(
-            'Course Title',
-            textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 20),
-          ),
-        ),
-        body: Stack(children: [
-          Column(
+      body: NestedScrollView(
+        controller: scrollController,
+        headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+          return <Widget>[
+            SliverAppBar(
+              leading: IconButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
+              ),
+              centerTitle: true,
+              title: const Text(
+                'Course Title',
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 20),
+              ),
+              expandedHeight: 300.0,
+              collapsedHeight: 300.0,
+              floating: false,
+              pinned: true,
+              flexibleSpace: FlexibleSpaceBar(
+                background: Padding(
+                  padding: const EdgeInsets.only(top: 100.0),
+                  child: YoutubeDisplay(
+                    widget.course.youtubeUrls![0],
+                    corner: BorderRadius.circular(0),
+                  ),
+                ),
+              ),
+            ),
+          ];
+        },
+        body: MyStickyHeader(course: widget.course),
+      ),
+    );
+  }
+}
+
+class MyStickyHeader extends StatelessWidget {
+  final CourseModel course;
+
+  MyStickyHeader({required this.course});
+
+  @override
+  Widget build(BuildContext context) {
+    String ytUrl = 'https://www.youtube.com/watch?v=3gm6eBtWfi4';
+    ProfileController profileController = Get.find();
+    return Stack(children: [
+      SingleChildScrollView(
+        child: Container(
+          color: Colors.white,
+          child: Column(
             children: [
-              YoutubeDisplay(widget.course.youtubeUrls![0]),
               Padding(
                 padding: const EdgeInsets.all(15.0),
                 child: Column(
@@ -58,11 +103,31 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(
-                      children: [
-                        Text(widget.course.title!),
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Flexible(
+                          child: Text(
+                            course.title!,
+                            overflow: TextOverflow
+                                .ellipsis, // or TextOverflow.ellipsis
+                            maxLines: 5,
+                            style: TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        const Icon(
+                          Icons.more_horiz,
+                          size: 20,
+                          color: Colors.black,
+                          weight: 100,
+                        )
                       ],
                     ),
-                    Text(widget.course.description!),
+                    Text(
+                      course.description!,
+                      style: TextStyle(fontSize: 15, color: textColor),
+                    ),
                     Row(
                       children: <Widget>[
                         SizedBox(
@@ -73,7 +138,7 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(1000),
                               child: NetworkImageWithPlaceHolder(
-                                imageUrl: widget.course.user?.photoUrl ?? '',
+                                imageUrl: course.user?.photoUrl ?? '',
                                 radius: radius,
                                 placeHolder: Icons.person,
                                 iconSize: 15.0,
@@ -89,8 +154,11 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
                           overflow:
                               TextOverflow.ellipsis, // or TextOverflow.ellipsis
                           maxLines: 1,
-                          widget.course.user?.name ?? widget.course.user!.name!,
+                          course.user?.name ?? course.user!.name!,
                           style: const TextStyle(fontWeight: FontWeight.w700),
+                        ),
+                        SizedBox(
+                          width: 5,
                         ),
                         const Icon(
                           Icons.star,
@@ -98,7 +166,7 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
                           size: 16,
                         ),
                         Text(
-                          widget.course.averageRating.toString(),
+                          course.averageRating.toString(),
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 13,
@@ -109,7 +177,7 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
                           icon: const Icon(Icons.remove_red_eye_outlined,
                               size: 19, color: Colors.black),
                           label: Text(
-                            '${widget.course.views.toString()} ${widget.course.views == 1 ? 'View' : 'Views'}',
+                            '${course.views.toString()} ${course.views == 1 ? 'View' : 'Views'}',
                             style: Theme.of(context)
                                 .textTheme
                                 .bodyMedium
@@ -121,67 +189,203 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
                         ),
                       ],
                     ),
-                    ElevatedButton(
-                      onPressed: () {},
-                      child: Text('Buy Course'),
-                    ),
-                    Text('Downloadable Resources'),
                     Container(
-                      height: 200,
+                      height: 90,
+                      child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: 5,
+                          itemBuilder: (BuildContext context, int index) {
+                            return Row(
+                              children: [
+                                Stack(children: [
+                                  Container(
+                                    height: 90,
+                                    width: 160,
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(12.0),
+                                      child: FittedBox(
+                                        fit: BoxFit.fill,
+                                        child: Stack(
+                                          children: <Widget>[
+                                            GestureDetector(
+                                                onTap: () {},
+                                                child: YoutubeDisplay(ytUrl!)),
+                                            Positioned(
+                                              top: 0,
+                                              bottom: 0,
+                                              right: 0,
+                                              left: 0,
+                                              child: GestureDetector(
+                                                onTap: () {},
+                                                child: Icon(
+                                                  Icons.play_circle_outlined,
+                                                  color: Colors.black
+                                                      .withOpacity(0.5),
+                                                  size: 70,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  InkWell(
+                                    onTap: () {},
+                                    child: Container(
+                                      height: 90,
+                                      width: 160,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                    ),
+                                  ),
+                                ]),
+                                const SizedBox(
+                                  width: 10,
+                                )
+                              ],
+                            );
+                          }),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Center(
+                        child: ElevatedButton(
+                            onPressed: () {},
+                            child: Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: Wrap(
+                                runAlignment: WrapAlignment.center,
+                                crossAxisAlignment: WrapCrossAlignment.center,
+                                children: [
+                                  Text('Buy Course for '),
+                                  SvgPicture.asset('assets/svgs/coin.svg'),
+                                  Text(' 2000')
+                                ],
+                              ),
+                            ))),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Container(
+                      color: backgroundcolorinterface,
+                      height: 1,
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: backgroundcolorinterface,
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      width: MediaQuery.sizeOf(context).width,
+                      child: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('Video Transcript'),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 20.0),
+                              child: Text(
+                                  'Video Transcript Text here iuhuh uhiuh hiuhuhiuhiiu gu giuiukg'),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 30,
+                    ),
+                    const Text(
+                      'Downloadable Resources',
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(
+                      height: 150,
                       child: ListView.builder(
                           scrollDirection: Axis.horizontal,
                           itemCount: 5,
                           itemBuilder: (BuildContext context, int index) {
                             return const DownloadableItem(); // Assuming DownloadableItem is a widget class
                           }),
+                    ),
+                    SizedBox(
+                      height: 100,
                     )
                   ],
                 ),
               )
             ],
           ),
-          Positioned(
-              bottom: 0,
-              child: Column(
-                children: <Widget>[
-                  Container(
-                    height: 1,
-                    width: MediaQuery.of(context).size.width,
-                    color: backgroundcolorinterface,
+        ),
+      ),
+      Positioned(
+        bottom: 0,
+        child: Container(
+          width: MediaQuery.sizeOf(context).width,
+          height: 90,
+          color: Colors.white,
+          child: Column(
+            children: [
+              Container(
+                height: 1,
+                width: MediaQuery.of(context).size.width,
+                color: backgroundcolorinterface,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Wrap(
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    children: [
+                      IconButton(
+                        icon: SvgPicture.asset('assets/svgs/comment.svg'),
+                        onPressed: () {},
+                      ),
+                      Text('Comment'),
+                    ],
                   ),
-                  Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Row(
-                          children: [
-                            IconButton(
-                              icon: SvgPicture.asset('assets/svgs/comment.svg'),
-                              onPressed: () {},
-                            ),
-                            const Text('Comment')
-                          ],
+                  Wrap(
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    children: [
+                      IconButton(
+                        icon: SvgPicture.asset(
+                          'assets/svgs/star.svg',
+                          height: 18,
                         ),
-                        Row(
-                          children: [
-                            IconButton(
-                              icon: SvgPicture.asset('assets/svgs/comment.svg'),
-                              onPressed: () {},
-                            ),
-                            Text('Rate')
-                          ],
+                        onPressed: () {},
+                      ),
+                      Text('Rate'),
+                    ],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(right: 20.0),
+                    child: Wrap(
+                      crossAxisAlignment: WrapCrossAlignment.center,
+                      children: [
+                        IconButton(
+                          icon: SvgPicture.asset(
+                            'assets/svgs/share.svg',
+                            height: 18,
+                          ),
+                          onPressed: () {},
                         ),
-                        Row(
-                          children: [
-                            IconButton(
-                              icon: SvgPicture.asset('assets/svgs/comment.svg'),
-                              onPressed: () {},
-                            ),
-                            Text('Share')
-                          ],
-                        ),
-                      ]),
+                        Text('Share'),
+                      ],
+                    ),
+                  )
                 ],
-              ))
-        ]));
+              ),
+            ],
+          ),
+        ),
+      )
+    ]);
   }
 }
