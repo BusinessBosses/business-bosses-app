@@ -157,7 +157,7 @@ class MyStickyHeader extends StatelessWidget {
                           course.user?.name ?? course.user!.name!,
                           style: const TextStyle(fontWeight: FontWeight.w700),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           width: 5,
                         ),
                         const Icon(
@@ -189,7 +189,7 @@ class MyStickyHeader extends StatelessWidget {
                         ),
                       ],
                     ),
-                    Container(
+                    SizedBox(
                       height: 90,
                       child: ListView.builder(
                           scrollDirection: Axis.horizontal,
@@ -198,7 +198,7 @@ class MyStickyHeader extends StatelessWidget {
                             return Row(
                               children: [
                                 Stack(children: [
-                                  Container(
+                                  SizedBox(
                                     height: 90,
                                     width: 160,
                                     child: ClipRRect(

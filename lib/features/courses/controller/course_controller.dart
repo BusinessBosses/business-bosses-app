@@ -32,6 +32,7 @@ class CourseController extends GetxController {
         await ApiService.post(path: 'courses/create-course', body: course);
 
     if (response.success) {
+      courses.insert(0, CourseModel.fromMap(course));
       Get.back();
       Get.snackbar('Success', 'Course created successfully');
     }
