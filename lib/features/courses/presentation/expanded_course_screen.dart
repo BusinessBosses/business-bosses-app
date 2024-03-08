@@ -143,7 +143,7 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
           Positioned(
               bottom: 0,
               child: Column(
-                children: [
+                children: <Widget>[
                   Container(
                     height: 1,
                     width: MediaQuery.of(context).size.width,
@@ -151,14 +151,14 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
                   ),
                   Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
+                      children: <Widget>[
                         Row(
                           children: [
                             IconButton(
                               icon: SvgPicture.asset('assets/svgs/comment.svg'),
                               onPressed: () {},
                             ),
-                            Text('Comment')
+                            const Text('Comment')
                           ],
                         ),
                         Row(
