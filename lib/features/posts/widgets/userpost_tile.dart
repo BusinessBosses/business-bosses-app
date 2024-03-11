@@ -588,7 +588,9 @@ class _PostTileState extends State<PostTile> {
                                 await launchUrlString(url);
                               },
                             ),
-                            if (widget.post.isPolled!)
+                            if (widget.post.isPolled! &&
+                                (widget.post.options != null &&
+                                    widget.post.options!.isNotEmpty))
                               FlutterPolls(
                                 pollId: widget.post.postId,
                                 onVoted: (PollOption pollOption,

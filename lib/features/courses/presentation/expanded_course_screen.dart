@@ -1,19 +1,10 @@
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/features/courses/models/course_model.dart';
-import 'package:business_bosses_v2/features/courses/presentation/course_item.dart';
 import 'package:business_bosses_v2/features/forum/widgets/downloadable_item.dart';
-import 'package:business_bosses_v2/features/posts/widgets/my_container.dart';
 import 'package:business_bosses_v2/features/posts/widgets/youtube_display.dart';
-import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:get/get.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
-
-import 'package:zego_uikit_prebuilt_live_audio_room/zego_uikit_prebuilt_live_audio_room.dart';
 
 class ExpandedCourseScreen extends StatefulWidget {
   static const String routeName = '/expandedcoursescreen';
@@ -38,7 +29,6 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
 
   @override
   Widget build(BuildContext context) {
-    String ytUrl = 'https://www.youtube.com/watch?v=3gm6eBtWfi4';
     ScrollController scrollController = ScrollController();
 
     return Scaffold(
@@ -54,10 +44,10 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
                 icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
               ),
               centerTitle: true,
-              title: const Text(
-                'Course Title',
+              title: Text(
+                widget.course.title!,
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 20),
+                style: const TextStyle(fontSize: 20),
               ),
               expandedHeight: 300.0,
               collapsedHeight: 300.0,
@@ -84,13 +74,11 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
 class MyStickyHeader extends StatelessWidget {
   final CourseModel course;
 
-  MyStickyHeader({required this.course});
+  const MyStickyHeader({required this.course});
 
   @override
   Widget build(BuildContext context) {
-    String ytUrl = 'https://www.youtube.com/watch?v=3gm6eBtWfi4';
-    ProfileController profileController = Get.find();
-    return Stack(children: [
+    return Stack(children: <Widget>[
       SingleChildScrollView(
         child: Container(
           color: Colors.white,
@@ -112,7 +100,7 @@ class MyStickyHeader extends StatelessWidget {
                             overflow: TextOverflow
                                 .ellipsis, // or TextOverflow.ellipsis
                             maxLines: 5,
-                            style: TextStyle(
+                            style: const TextStyle(
                                 fontSize: 18, fontWeight: FontWeight.bold),
                           ),
                         ),
@@ -126,7 +114,7 @@ class MyStickyHeader extends StatelessWidget {
                     ),
                     Text(
                       course.description!,
-                      style: TextStyle(fontSize: 15, color: textColor),
+                      style: const TextStyle(fontSize: 15, color: textColor),
                     ),
                     Row(
                       children: <Widget>[
@@ -193,7 +181,7 @@ class MyStickyHeader extends StatelessWidget {
                       height: 90,
                       child: ListView.builder(
                           scrollDirection: Axis.horizontal,
-                          itemCount: 5,
+                          itemCount: course.youtubeUrls?.length,
                           itemBuilder: (BuildContext context, int index) {
                             return Row(
                               children: [
@@ -209,7 +197,8 @@ class MyStickyHeader extends StatelessWidget {
                                           children: <Widget>[
                                             GestureDetector(
                                                 onTap: () {},
-                                                child: YoutubeDisplay(ytUrl!)),
+                                                child: YoutubeDisplay(course
+                                                    .youtubeUrls![index])),
                                             Positioned(
                                               top: 0,
                                               bottom: 0,
@@ -252,20 +241,24 @@ class MyStickyHeader extends StatelessWidget {
                       height: 20,
                     ),
                     Center(
-                        child: ElevatedButton(
-                            onPressed: () {},
-                            child: Padding(
-                              padding: const EdgeInsets.all(10.0),
-                              child: Wrap(
-                                runAlignment: WrapAlignment.center,
-                                crossAxisAlignment: WrapCrossAlignment.center,
-                                children: [
-                                  Text('Buy Course for '),
-                                  SvgPicture.asset('assets/svgs/coin.svg'),
-                                  Text(' 2000')
-                                ],
+                      child: course.courseType == 'free'
+                          ? const SizedBox()
+                          : ElevatedButton(
+                              onPressed: () {},
+                              child: Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                child: Wrap(
+                                  runAlignment: WrapAlignment.center,
+                                  crossAxisAlignment: WrapCrossAlignment.center,
+                                  children: [
+                                    const Text('Buy Course for '),
+                                    SvgPicture.asset('assets/svgs/coin.svg'),
+                                    Text(course.price!)
+                                  ],
+                                ),
                               ),
-                            ))),
+                            ),
+                    ),
                     const SizedBox(
                       height: 20,
                     ),
@@ -282,15 +275,14 @@ class MyStickyHeader extends StatelessWidget {
                         borderRadius: BorderRadius.circular(15),
                       ),
                       width: MediaQuery.sizeOf(context).width,
-                      child: Padding(
-                        padding: const EdgeInsets.all(10.0),
+                      child: const Padding(
+                        padding: EdgeInsets.all(10.0),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
+                          children: <Widget>[
                             Text('Video Transcript'),
                             Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(vertical: 20.0),
+                              padding: EdgeInsets.symmetric(vertical: 20.0),
                               child: Text(
                                   'Video Transcript Text here iuhuh uhiuh hiuhuhiuhiiu gu giuiukg'),
                             ),
@@ -298,26 +290,36 @@ class MyStickyHeader extends StatelessWidget {
                         ),
                       ),
                     ),
-                    const SizedBox(
-                      height: 30,
-                    ),
-                    const Text(
-                      'Downloadable Resources',
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(
-                      height: 150,
-                      child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: 5,
-                          itemBuilder: (BuildContext context, int index) {
-                            return const DownloadableItem(); // Assuming DownloadableItem is a widget class
-                          }),
-                    ),
-                    SizedBox(
-                      height: 100,
-                    )
+                    if (course.documents != null &&
+                        course.documents!.isNotEmpty)
+                      const SizedBox(
+                        height: 30,
+                      ),
+                    if (course.documents != null &&
+                        course.documents!.isNotEmpty)
+                      const Text(
+                        'Downloadable Resources',
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.bold),
+                      ),
+                    if (course.documents != null &&
+                        course.documents!.isNotEmpty)
+                      SizedBox(
+                        height: 150,
+                        child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: course.documents?.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              return DownloadableItem(
+                                link: course.documents![index],
+                              ); // Assuming DownloadableItem is a widget class
+                            }),
+                      ),
+                    if (course.documents != null &&
+                        course.documents!.isNotEmpty)
+                      const SizedBox(
+                        height: 100,
+                      )
                   ],
                 ),
               )
@@ -332,7 +334,7 @@ class MyStickyHeader extends StatelessWidget {
           height: 90,
           color: Colors.white,
           child: Column(
-            children: [
+            children: <Widget>[
               Container(
                 height: 1,
                 width: MediaQuery.of(context).size.width,
@@ -348,7 +350,7 @@ class MyStickyHeader extends StatelessWidget {
                         icon: SvgPicture.asset('assets/svgs/comment.svg'),
                         onPressed: () {},
                       ),
-                      Text('Comment'),
+                      const Text('Comment'),
                     ],
                   ),
                   Wrap(
@@ -361,7 +363,7 @@ class MyStickyHeader extends StatelessWidget {
                         ),
                         onPressed: () {},
                       ),
-                      Text('Rate'),
+                      const Text('Rate'),
                     ],
                   ),
                   Padding(
@@ -376,7 +378,7 @@ class MyStickyHeader extends StatelessWidget {
                           ),
                           onPressed: () {},
                         ),
-                        Text('Share'),
+                        const Text('Share'),
                       ],
                     ),
                   )

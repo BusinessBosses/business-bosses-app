@@ -1,19 +1,13 @@
 // ignore_for_file: always_specify_types
 
-import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
-import 'package:business_bosses_v2/features/courses/presentation/expanded_course_screen.dart';
-import 'package:business_bosses_v2/features/posts/widgets/youtube_display.dart';
-import 'package:business_bosses_v2/features/posts/widgets/yt_player.dart';
-import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
-import 'package:business_bosses_v2/navigation/routes.dart';
+import 'package:business_bosses_v2/features/courses/models/course_model.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:get/get.dart';
 
 class DownloadableItem extends StatefulWidget {
-  const DownloadableItem({super.key});
+  final String link;
+  const DownloadableItem({super.key, required this.link});
 
   @override
   // ignore: library_private_types_in_public_api
@@ -37,11 +31,11 @@ class _DownloadableItemState extends State<DownloadableItem> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Image.asset('assets/images/pdf.png'),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               Container(
-                padding: EdgeInsets.all(7),
+                padding: const EdgeInsets.all(7),
                 width: 30,
                 height: 30,
                 decoration: BoxDecoration(
@@ -54,7 +48,7 @@ class _DownloadableItemState extends State<DownloadableItem> {
             ],
           ),
         ),
-        SizedBox(
+        const SizedBox(
           width: 10,
         )
       ],
