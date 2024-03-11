@@ -588,7 +588,9 @@ class _PostTileState extends State<PostTile> {
                                 await launchUrlString(url);
                               },
                             ),
-                            if (widget.post.isPolled!)
+                            if (widget.post.isPolled! &&
+                                (widget.post.options != null &&
+                                    widget.post.options!.isNotEmpty))
                               FlutterPolls(
                                 pollId: widget.post.postId,
                                 onVoted: (PollOption pollOption,
@@ -772,7 +774,7 @@ class _PostTileState extends State<PostTile> {
                                     if (eventId != null)
                                       AttendeesCountWidget(
                                         events: homeController.events,
-                                        currentEventId: eventId!,
+                                        currentEventId: eventId,
                                       ),
                                     isJoinedEvent()
                                         ? ElevatedButton(
@@ -802,10 +804,8 @@ class _PostTileState extends State<PostTile> {
                                             onPressed: () async {
                                               await homeController
                                                   .attendEvent(event);
-                                              if (liveController != null) {
-                                                liveController.joined
-                                                    .add(event);
-                                              }
+                                              liveController.joined.add(event);
+
                                               setState(() {});
                                             },
                                             child: const Text('Attend'),
