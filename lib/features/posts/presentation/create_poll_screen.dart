@@ -240,14 +240,17 @@ class _CreatePollScreenState extends State<CreatePollScreen> {
                         onPressed: () async {
                           _formKey.currentState!.save();
                           if (!_formKey.currentState!.validate()) return;
-                          // print(optionsValues);
-                          // return;
 
                           /// Otherwise, create the po st
                           List<String> nonEmptyOptions = optionsValues
                               .where(
                                   (String option) => option.trim().isNotEmpty)
                               .toList();
+                          if (nonEmptyOptions.length <= 1) {
+                            Get.snackbar('Error',
+                                'You must add atleast 2 options to create a poll!');
+                            return;
+                          }
                           if (widget.postDetail == null) {
                             await controller.createPost(<String, dynamic>{
                               'isPolled': true,
@@ -288,7 +291,7 @@ class _CreatePollScreenState extends State<CreatePollScreen> {
         padding: const EdgeInsets.all(8),
         child: const Icon(
           Icons.close,
-          color: Colors.red,
+          color: Colors.red, //
         ),
       ),
     );
