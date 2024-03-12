@@ -17,10 +17,10 @@ import 'package:zego_uikit_prebuilt_live_audio_room/zego_uikit_prebuilt_live_aud
 
 class ExpandedCourseScreen extends StatefulWidget {
   static const String routeName = '/expandedcoursescreen';
-    final CourseModel course;
-  
+  final CourseModel course;
 
-  const ExpandedCourseScreen({Key? key, required this.course}) : super(key: key);
+  const ExpandedCourseScreen({Key? key, required this.course})
+      : super(key: key);
 
   @override
   _ExpandedCourseScreenState createState() => _ExpandedCourseScreenState();
@@ -65,7 +65,7 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
               pinned: true,
               flexibleSpace: FlexibleSpaceBar(
                 background: Padding(
-                  padding: const EdgeInsets.only(top: 100.0),
+                  padding: const EdgeInsets.only(top: 120.0),
                   child: YoutubeDisplay(
                     widget.course.youtubeUrls![0],
                     corner: BorderRadius.circular(0),
@@ -75,14 +75,14 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
             ),
           ];
         },
-        body:MyStickyHeader(course: widget.course),
+        body: MyStickyHeader(course: widget.course),
       ),
     );
   }
 }
 
 class MyStickyHeader extends StatelessWidget {
- final CourseModel course;
+  final CourseModel course;
 
   MyStickyHeader({required this.course});
 
@@ -138,8 +138,7 @@ class MyStickyHeader extends StatelessWidget {
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(1000),
                               child: NetworkImageWithPlaceHolder(
-                                imageUrl:
-                                   course.user?.photoUrl ?? '',
+                                imageUrl: course.user?.photoUrl ?? '',
                                 radius: radius,
                                 placeHolder: Icons.person,
                                 iconSize: 15.0,
@@ -165,8 +164,8 @@ class MyStickyHeader extends StatelessWidget {
                           Icons.star,
                           color: Color.fromRGBO(255, 202, 40, 1),
                           size: 16,
-                         ),
-                       Text(
+                        ),
+                        Text(
                           course.averageRating.toString(),
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
@@ -252,21 +251,25 @@ class MyStickyHeader extends StatelessWidget {
                     const SizedBox(
                       height: 20,
                     ),
-                    Center(
-                        child: ElevatedButton(
-                            onPressed: () {},
-                            child: Padding(
-                              padding: const EdgeInsets.all(10.0),
-                              child: Wrap(
-                                runAlignment: WrapAlignment.center,
-                                crossAxisAlignment: WrapCrossAlignment.center,
-                                children: [
-                                  Text('Buy Course for '),
-                                  SvgPicture.asset('assets/svgs/coin.svg'),
-                                  Text(' 2000')
-                                ],
-                              ),
-                            ))),
+                    course.courseType == 'free'
+                        ? Container()
+                        : Center(
+                            child: ElevatedButton(
+                                onPressed: () {},
+                                child: Padding(
+                                  padding: const EdgeInsets.all(10.0),
+                                  child: Wrap(
+                                    runAlignment: WrapAlignment.center,
+                                    crossAxisAlignment:
+                                        WrapCrossAlignment.center,
+                                    children: [
+                                      Text('Buy Course for '),
+                                      SvgPicture.asset('assets/svgs/coin.svg'),
+                                      Text(' ${course.price!}')
+                                      
+                                    ],
+                                  ),
+                                ))),
                     const SizedBox(
                       height: 20,
                     ),
@@ -282,7 +285,6 @@ class MyStickyHeader extends StatelessWidget {
                         color: backgroundcolorinterface,
                         borderRadius: BorderRadius.circular(15),
                       ),
-                     
                       width: MediaQuery.sizeOf(context).width,
                       child: Padding(
                         padding: const EdgeInsets.all(10.0),
@@ -290,10 +292,11 @@ class MyStickyHeader extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text('Video Transcript'),
-                            
                             Padding(
-                              padding: const EdgeInsets.symmetric(vertical:20.0),
-                              child: Text('Video Transcript Text here iuhuh uhiuh hiuhuhiuhiiu gu giuiukg'),
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 20.0),
+                              child: Text(
+                                  'Video Transcript Text here iuhuh uhiuh hiuhuhiuhiiu gu giuiukg'),
                             ),
                           ],
                         ),
@@ -316,7 +319,9 @@ class MyStickyHeader extends StatelessWidget {
                             return const DownloadableItem(); // Assuming DownloadableItem is a widget class
                           }),
                     ),
-                    SizedBox(height: 100,)
+                    SizedBox(
+                      height: 100,
+                    )
                   ],
                 ),
               )
@@ -364,7 +369,7 @@ class MyStickyHeader extends StatelessWidget {
                     ],
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(right:20.0),
+                    padding: const EdgeInsets.only(right: 20.0),
                     child: Wrap(
                       crossAxisAlignment: WrapCrossAlignment.center,
                       children: [
@@ -388,19 +393,3 @@ class MyStickyHeader extends StatelessWidget {
     ]);
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

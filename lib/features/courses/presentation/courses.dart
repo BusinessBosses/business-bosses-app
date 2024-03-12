@@ -61,7 +61,9 @@ class _CoursesPageState extends State<CoursesPage> {
                       Row(
                         children: <Widget>[
                           GestureDetector(
-                            onTap: () { Get.toNamed(Routes.coursehistoryscreen);},
+                            onTap: () {
+                              Get.toNamed(Routes.coursehistoryscreen);
+                            },
                             child: Padding(
                               padding: const EdgeInsets.only(left: 15.0),
                               child: Container(
@@ -70,10 +72,7 @@ class _CoursesPageState extends State<CoursesPage> {
                                     borderRadius: BorderRadius.circular(50)),
                                 child: Padding(
                                   padding: const EdgeInsets.only(
-                                      left: 8.0,
-                                      right: 8.0,
-                                      top: 6,
-                                      bottom: 6),
+                                      left: 8.0, right: 8.0, top: 6, bottom: 6),
                                   child: Row(
                                     children: <Widget>[
                                       SizedBox(
@@ -84,8 +83,7 @@ class _CoursesPageState extends State<CoursesPage> {
                                           child: ClipRRect(
                                             borderRadius:
                                                 BorderRadius.circular(1000),
-                                            child:
-                                                NetworkImageWithPlaceHolder(
+                                            child: NetworkImageWithPlaceHolder(
                                               imageUrl: profileController
                                                       .myProfile.photoUrl ??
                                                   '',
@@ -100,67 +98,23 @@ class _CoursesPageState extends State<CoursesPage> {
                                       const SizedBox(
                                         width: 5,
                                       ),
-                                      Container(
-                                        decoration: BoxDecoration(
-                                          color: Colors
-                                              .white, // ash background color
-                                          borderRadius: BorderRadius.circular(
-                                              20), // rounded corners
-                                        ),
-                                        child: GestureDetector(
-                                          child: Wrap(
-                                            children: <Widget>[
-                                              Padding(
-                                                padding:
-                                                    const EdgeInsets.only(
-                                                        left: 8,
-                                                        top: 5,
-                                                        right: 8,
-                                                        bottom: 5),
-                                                child: GestureDetector(
-                                                  onTap: () {
-                                                  
-                                                  },
-                                                  child: Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .center,
-                                                    children: <Widget>[
-                                                      SvgPicture.asset(
-                                                        'assets/svgs/coin.svg',
-                                                        height: 22,
-                                                      ),
-                                                      const SizedBox(
-                                                        width: 5,
-                                                      ),
-                                                      Text(
-                                                        profileController
-                                                            .myProfile
-                                                            .coinscount
-                                                            .toString(),
-                                                        style:
-                                                            const TextStyle(
-                                                          color:
-                                                              Color.fromRGBO(
-                                                                  133,
-                                                                  133,
-                                                                  133,
-                                                                  1),
-                                                          fontSize: 15,
-                                                          fontWeight:
-                                                              FontWeight.w700,
-                                                        ),
-                                                      )
-                                                    ],
-                                                  ),
-                                                ),
-                                              )
-                                            ],
+                                      Row(
+                                        children: [
+                                          const Text(
+                                            'Account History',
+                                            style: TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.w700),
                                           ),
-                                        ),
+                                          const SizedBox(
+                                            width: 10,
+                                          ),
+                                          SvgPicture.asset(
+                                            'assets/svgs/nexticon.svg',
+                                            color: Colors.black,
+                                          )
+                                        ],
                                       ),
                                     ],
                                   ),
@@ -283,19 +237,77 @@ class _CoursesPageState extends State<CoursesPage> {
                   Positioned(
                       right: 15,
                       top: 10,
-                      child: Container(
-                        height: 38,
-                        width: 38,
-                        decoration: BoxDecoration(
-                            color: Colors.black.withAlpha(100),
-                            borderRadius: BorderRadius.circular(50)),
-                        child: Padding(
-                          padding: const EdgeInsets.all(10.0),
-                          child: SvgPicture.asset(
-                            'assets/svgs/preferences.svg',
-                            height: 10,
+                      child: Row(
+                        children: [
+                          InkWell(
+                            onTap: () {
+                              Get.toNamed(Routes.promotionscreen);
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                  color: Colors.black.withAlpha(100),
+                                  borderRadius: BorderRadius.circular(50)),
+                              child: GestureDetector(
+                                child: Wrap(
+                                  children: <Widget>[
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                        left: 6,
+                                        right: 6,
+                                      ),
+                                      child: GestureDetector(
+                                        onTap: () {},
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: <Widget>[
+                                            SvgPicture.asset(
+                                              'assets/svgs/coin.svg',
+                                              height: 22,
+                                            ),
+                                            const SizedBox(
+                                              width: 5,
+                                            ),
+                                            Text(
+                                              profileController
+                                                  .myProfile.coinscount
+                                                  .toString(),
+                                              style: const TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.w700,
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
                           ),
-                        ),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          Container(
+                            height: 38,
+                            width: 38,
+                            decoration: BoxDecoration(
+                                color: Colors.black.withAlpha(100),
+                                borderRadius: BorderRadius.circular(50)),
+                            child: Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: SvgPicture.asset(
+                                'assets/svgs/preferences.svg',
+                                height: 10,
+                              ),
+                            ),
+                          ),
+                        ],
                       ))
                 ])
               ],

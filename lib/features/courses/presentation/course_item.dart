@@ -201,16 +201,16 @@ class _CourseItemState extends State<CourseItem> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
-                        SvgPicture.asset(
+                        widget.course.courseType == 'free' ? Container() : SvgPicture.asset(
                           'assets/svgs/coin.svg',
                           height: 22,
                         ),
-                        const SizedBox(
+                        widget.course.courseType == 'free' ? Container() : const SizedBox(
                           width: 5,
                         ),
                         Text(
                           widget.course.courseType == 'free'
-                              ? 'free'
+                              ? 'Free'
                               : widget.course.price!,
                           style: const TextStyle(
                             color: Color.fromRGBO(133, 133, 133, 1),
