@@ -49,43 +49,61 @@ Widget profilepostsdisplay(
                   .itemsWithIncrementedViews
                   .contains(posts[i].postId);
               return ispublicposts == false
-                  ? PostGridItem(
-                      post: posts[i],
-                      key: ValueKey<String>(posts[i].postId),
-                      onTap: () {
-                        if ((profileController.myProfile.uid ==
-                            posts[i].user?.uid)) {
-                          if (hasIncrementedView == false) {
-                            homeController.itemsWithIncrementedViews
-                                .add(posts[i].postId);
-                            posts[i].setViews(posts[i].views! + 1);
-                            profileController.updatePostViews(
-                                posts[i], posts[i].views!);
-                          }
-                          Get.toNamed(Routes.postDetails, arguments: posts[i]);
-                        }
-                      },
-                      // onDeletePost:
-                      //     _onDeletePost,
-                      // onTap: () => _onPostTap(
-                      //     p.posts[i]),
-                    )
+                  ? posts[i].user!.uid != profileController.myProfile.uid
+                      ? PostGridItem(
+                          post: posts[i],
+                          key: ValueKey<String>(posts[i].postId),
+                          onTap: () {
+                            if (hasIncrementedView == false) {
+                              homeController.itemsWithIncrementedViews
+                                  .add(posts[i].postId);
+                              posts[i].setViews(posts[i].views! + 1);
+                              profileController.updatePostViews(
+                                  posts[i], posts[i].views!);
+                            }
+                            Get.toNamed(Routes.postDetails,
+                                arguments: posts[i]);
+                          },
+                          // onDeletePost:
+                          //     _onDeletePost,
+                          // onTap: () => _onPostTap(
+                          //     p.posts[i]),
+                        )
+                      : PostGridItem(
+                          post: posts[i],
+                          key: ValueKey<String>(posts[i].postId),
+                          onTap: () {
+                            if ((profileController.myProfile.uid ==
+                                posts[i].user?.uid)) {
+                              if (hasIncrementedView == false) {
+                                homeController.itemsWithIncrementedViews
+                                    .add(posts[i].postId);
+                                posts[i].setViews(posts[i].views! + 1);
+                                profileController.updatePostViews(
+                                    posts[i], posts[i].views!);
+                              }
+                              Get.toNamed(Routes.postDetails,
+                                  arguments: posts[i]);
+                            }
+                          },
+                          // onDeletePost:
+                          //     _onDeletePost,
+                          // onTap: () => _onPostTap(
+                          //     p.posts[i]),
+                        )
                   : PostGridItem(
                       hasMore: false,
                       post: posts[i],
                       key: ValueKey<String>(posts[i].postId),
                       onTap: () {
-                        if ((profileController.myProfile.uid ==
-                            posts[i].user?.uid)) {
-                          if (hasIncrementedView == false) {
-                            homeController.itemsWithIncrementedViews
-                                .add(posts[i].postId);
-                            posts[i].setViews(posts[i].views! + 1);
-                            profileController.updatePostViews(
-                                posts[i], posts[i].views!);
-                          }
-                          Get.toNamed(Routes.postDetails, arguments: posts[i]);
+                        if (hasIncrementedView == false) {
+                          homeController.itemsWithIncrementedViews
+                              .add(posts[i].postId);
+                          posts[i].setViews(posts[i].views! + 1);
+                          profileController.updatePostViews(
+                              posts[i], posts[i].views!);
                         }
+                        Get.toNamed(Routes.postDetails, arguments: posts[i]);
                       },
                       // onDeletePost:
                       //     _onDeletePost,
