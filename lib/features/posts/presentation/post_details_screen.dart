@@ -1,6 +1,7 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
+import 'package:business_bosses_v2/features/posts/widgets/PostIntereactions.dart';
 import 'package:business_bosses_v2/features/posts/widgets/likecommentandcointile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
@@ -24,15 +25,27 @@ import 'boost_post_screen.dart';
 
 // ignore: public_member_api_docs
 class PostDetailsScreen extends StatefulWidget {
-  // final PostModel post;
-  const PostDetailsScreen({Key? key}) : super(key: key);
+  final PostModel post;
+  const PostDetailsScreen({Key? key, required this.post}) : super(key: key);
 
   @override
   State<PostDetailsScreen> createState() => _PostDetailsScreenState();
 }
 
 class _PostDetailsScreenState extends State<PostDetailsScreen> {
-  PostModel post = Get.arguments;
+  // PostModel post = Get.arguments;
+
+  // late PostModel post;
+  late ProfileController profileController;
+  late HomeController controller;
+
+  @override
+  void initState() {
+    super.initState();
+    // post = Get.arguments;
+    profileController = Get.find();
+    controller = Get.find();
+  }
 
   // ignore: public_member_api_docs
   @override
@@ -47,14 +60,16 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
     ProfileController profileController = Get.find();
     // ignore: unused_local_variable
     HomeController controller = Get.find();
-    Map<String, int> voteCounts = countVotes(post);
-    bool hasVoted = userHasVoted(post, profileController);
-    String? selectedVote = userSelectedOption(post, profileController);
+    Map<String, int> voteCounts = countVotes(widget.post);
+    bool hasVoted = userHasVoted(widget.post, profileController);
+    String? selectedVote = userSelectedOption(widget.post, profileController);
+    print("=====================postdetials ${widget.post.likes}");
+    ;
 // Create PollOption list based on the vote counts
     List<PollOption> pollOptions = List.generate(
-      post.options != null ? post.options!.length : 0,
+      widget.post.options != null ? widget.post.options!.length : 0,
       (int index) {
-        String option = post.options![index];
+        String option = widget.post.options![index];
         int votes = voteCounts[option] ?? 0;
 
         return PollOption(
@@ -65,8 +80,13 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
       },
     );
     Future<void> repost() async {
-      controller.postRepost(profileController.myProfile.uid, post.postId,
-          'post', post.timestamp, post.user!.uid, post.oldtimestamp);
+      controller.postRepost(
+          profileController.myProfile.uid,
+          widget.post.postId,
+          'post',
+          widget.post.timestamp,
+          widget.post.user!.uid,
+          widget.post.oldtimestamp);
     }
 
     return Scaffold(
@@ -82,7 +102,7 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
           title: const Text('View Post'),
         ),
         // ignore: unnecessary_null_comparison
-        body: post == null
+        body: widget.post == null
             ? const Center(
                 child: CircularProgressIndicator.adaptive(),
               )
@@ -99,8 +119,8 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
                     const SizedBox(
                       height: 10,
                     ),
-                    if (post.reposts?.length != null &&
-                        post.reposts?.length != 0) ...[
+                    if (widget.post.reposts?.length != null &&
+                        widget.post.reposts?.length != 0) ...[
                       Padding(
                         padding: const EdgeInsets.only(left: 15.0, top: 10),
                         child: Row(
@@ -112,7 +132,7 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
                             const SizedBox(
                               width: 5,
                             ),
-                            post.reposts?.contains(
+                            widget.post.reposts?.contains(
                                         profileController.myProfile.uid) ==
                                     true
                                 ? Row(
@@ -141,7 +161,7 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
                             GestureDetector(
                               onTap: () {},
                               child: Text(
-                                '${post.reposts?.length.toString()} Reposts',
+                                '${widget.post.reposts?.length.toString()} Reposts',
                                 style: TextStyle(fontSize: 12),
                               ),
                             ),
@@ -152,7 +172,7 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
                     Padding(
                       padding: const EdgeInsets.only(left: 15),
                       child: CreatePostUserTile(
-                        user: post.user,
+                        user: widget.post.user,
                       ),
                     ),
                     const SizedBox(
@@ -168,7 +188,8 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
                     ),
                     Padding(
                       padding: const EdgeInsets.only(left: 15, bottom: 10),
-                      child: post.promote != null && post.promote == true
+                      child: widget.post.promote != null &&
+                              widget.post.promote == true
                           ? Container(
                               padding: const EdgeInsets.only(
                                   left: 20, right: 20, top: 5, bottom: 5),
@@ -177,7 +198,7 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(5))),
                               child: TextWidget(
-                                text: post.approved!
+                                text: widget.post.approved!
                                     ? 'Ongoing Ad'
                                     : 'Pending Ad',
                                 fontWeight: FontWeight.w700,
@@ -191,9 +212,9 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
                     ),
                     Padding(
                       padding: const EdgeInsets.only(left: 15, right: 15),
-                      child: post.title.isNotEmpty
+                      child: widget.post.title.isNotEmpty
                           ? Linkify(
-                              text: post.title,
+                              text: widget.post.title,
                               style: bodyText1.copyWith(
                                   fontWeight: FontWeight.normal),
                               onOpen: (LinkableElement linkableElement) =>
@@ -208,14 +229,14 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
                     const SizedBox(
                       height: 10,
                     ),
-                    if (post.isPolled!)
+                    if (widget.post.isPolled!)
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 12.0),
                         child: FlutterPolls(
-                          pollId: post.postId,
+                          pollId: widget.post.postId,
                           onVoted:
                               (PollOption pollOption, int newTotalVotes) async {
-                            controller.pollVote(post, pollOption.id!);
+                            controller.pollVote(widget.post, pollOption.id!);
                             setState(() {
                               hasVoted = true;
                               selectedVote = pollOption.id;
@@ -247,15 +268,17 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
                       ),
                     Padding(
                       padding: const EdgeInsets.only(left: 15, right: 15),
-                      child: post.videoUrl != null && post.videoUrl!.isNotEmpty
+                      child: widget.post.videoUrl != null &&
+                              widget.post.videoUrl!.isNotEmpty
                           ? AllImagesItem(
-                              post.images!,
-                              post: post,
-                              text: post.title,
+                              widget.post.images!,
+                              post: widget.post,
+                              text: widget.post.title,
                               isVideo: true,
                               // i: postIndex!,
                             )
-                          : post.images != null && post.images!.isNotEmpty
+                          : widget.post.images != null &&
+                                  widget.post.images!.isNotEmpty
                               ? Container(
                                   height: 200,
                                   decoration: const BoxDecoration(
@@ -265,13 +288,19 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
                                     ),
                                   ),
                                   child: GenericSlider(
-                                    images: post.images!,
+                                    images: widget.post.images!,
                                   ),
                                 )
                               : null,
                     ),
-                    PostInteractionsWidget(
-                      post: post,
+                    // PostInteractionsWidget(
+                    //   post: post,
+                    //   profileController: profileController,
+                    //   sharePost: _sharePost,
+                    //   repost: repost,
+                    // ),
+                    PostInteractions(
+                      post: widget.post,
                       profileController: profileController,
                       sharePost: _sharePost,
                       repost: repost,
@@ -290,9 +319,10 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
                         alignment: Alignment.center,
                         child: Padding(
                             padding: const EdgeInsets.only(right: 0),
-                            child: post.user!.uid ==
+                            child: widget.post.user!.uid ==
                                     profileController.myProfile.uid
-                                ? post.promote != null && post.promote == true
+                                ? widget.post.promote != null &&
+                                        widget.post.promote == true
                                     ? Align(
                                         alignment: Alignment.center,
                                         child: GestureDetector(
@@ -349,7 +379,8 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
                                             MaterialPageRoute(
                                               builder: (BuildContext context) =>
                                                   BoostPost(
-                                                      postId: post.postId),
+                                                      postId:
+                                                          widget.post.postId),
                                             ),
                                           );
                                         },
@@ -395,9 +426,9 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
 
   void _sharePost() {
     String message =
-        'Have a look at ${post.user!.username}\'s post on Business Bosses\n'
+        'Have a look at ${widget.post.user!.username}\'s post on Business Bosses\n'
         'https://vm.businessbosses.co.uk/share/post';
-    logEvent(post.postId, 'post');
+    logEvent(widget.post.postId, 'post');
     socialShare(message);
   }
 
