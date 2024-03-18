@@ -101,7 +101,7 @@ class _CoursesPageState extends State<CoursesPage> {
                                       Row(
                                         children: [
                                           const Text(
-                                            'Account History',
+                                            'Course History',
                                             style: TextStyle(
                                                 color: Colors.black,
                                                 fontSize: 15,
