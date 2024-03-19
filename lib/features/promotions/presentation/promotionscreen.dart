@@ -1,3 +1,4 @@
+import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/features/promotions/widgets/buycoinslist_item.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
@@ -5,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:zego_uikit_prebuilt_live_audio_room/zego_uikit_prebuilt_live_audio_room.dart';
 
 import '../../../action/action.dart';
@@ -25,6 +27,13 @@ class _PromotionScreenState extends State<PromotionScreen> {
   final ProfileController _profileController = Get.find();
   List<String> coinAmounts = ['100', '200', '500', '1000', '10000'];
   List<String> coinPrices = ['0.99', '1.99', '4.99', '9.99', '99.99'];
+  List<String> coinIDs = [
+    '100_bb_coins',
+    '200_bb_coins',
+    '500_bb_coins',
+    '1000_bb_coins',
+    '10000_bb_coins'
+  ];
 
   @override
   void initState() {
@@ -232,7 +241,22 @@ class _PromotionScreenState extends State<PromotionScreen> {
                                                     (BuildContext context,
                                                         int index) {
                                                   return GestureDetector(
-                                                    onTap: () {},
+                                                    onTap: () async {
+                                                      try {
+                                                        await Purchases
+                                                            .purchaseProduct(
+                                                                coinIDs[index]);
+                                                                print('coin increase');
+                                                                /// update coin here
+                                                      } catch (e) {
+                                                        showSnackbar(
+                                                          title: 'OOPS!',
+                                                          message:
+                                                              'An error occurred while making payment, please try again!',
+                                                          error: true,
+                                                        );
+                                                      }
+                                                    },
                                                     child: BuyCoinsListItem(
                                                       coinamount:
                                                           coinAmounts[index],
