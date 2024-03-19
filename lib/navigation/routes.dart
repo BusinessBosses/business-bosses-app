@@ -60,6 +60,6 @@ class Routes {
   static const String bottomnavscreen = '/bottomnavscreen';
   static const String createcourse = '/createcourse';
   static const String expandedcoursescreen = '/expandedcoursescreen';
-  static const String withdrawalscreen = '/withdrawal-screen';
+  static const String CoinHistoryScreen = '/coinhistory-screen';
   static const String coursehistoryscreen = '/coursehistory-screen';
 }

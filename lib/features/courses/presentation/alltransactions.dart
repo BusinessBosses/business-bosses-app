@@ -1,3 +1,4 @@
+import 'package:business_bosses_v2/features/courses/widgets/course_history_item.dart';
 import 'package:flutter/material.dart';
 
 class AllTransactions extends StatefulWidget {
@@ -12,15 +13,12 @@ class _AllTransactionsState extends State<AllTransactions> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Column(children: [
-        ListView.builder(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          itemCount: 5,
-          itemBuilder: (BuildContext context, int i) {
-            return Text('data');
-          },
-        ),
-      ]),
+      child: ListView.builder(
+                itemCount: 5,
+                itemBuilder: (BuildContext context, int i) {
+                  return const CourseHistoryItem();
+                },
+              ),
     );
   }
 }

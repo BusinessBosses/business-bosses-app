@@ -31,50 +31,119 @@ class _CourseHistoryItemState extends State<CourseHistoryItem> {
     return Container(
         decoration: const BoxDecoration(color: Colors.white),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('date'),
+            SizedBox(
+              height: 5,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15.0),
+              child: Text(
+                '22nd Jan 2024',
+                style: TextStyle(
+                    color: textColor.withOpacity(0.4),
+                    fontWeight: FontWeight.w700),
+              ),
+            ),
+            SizedBox(
+              height: 5,
+            ),
             Container(
               height: 1,
               color: backgroundcolorinterface,
             ),
-            Container(
-              padding: EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                  color: backgroundcolorinterface,
-                  borderRadius: BorderRadius.circular(30)),
-              child: Text('Course Sale'),
+            SizedBox(
+              height: 5,
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text('Title'),
-                Wrap(
-                  children: [
-                    Text('+'),
-                    SvgPicture.asset('assets/svgs/coin.svg'),
-                    Text('200'),
-                    Text('(\$200)')
-                  ],
-                ),
-              ],
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15.0),
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 7, vertical: 3),
+                decoration: BoxDecoration(
+                    color: backgroundcolorinterface,
+                    borderRadius: BorderRadius.circular(30)),
+                child: Text('Course Sale'),
+              ),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Wrap(children: [
-                  NetworkImageWithPlaceHolder(
-                    imageUrl: profileController.myProfile.photoUrl ?? '',
-                    radius: radius,
-                    placeHolder: Icons.person,
-                    iconSize: 22.0,
-                    fit: BoxFit.cover,
+            SizedBox(
+              height: 5,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15.0),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  SizedBox(
+                    height: 20,
                   ),
-                  Text('data')
-                ]),
-                Text('2hr ago'),
-
-              ],
-            )
+                  Expanded(
+                    child: Text(
+                      'What does investment ',
+                      style:
+                          TextStyle(fontWeight: FontWeight.w700, fontSize: 18),
+                      maxLines: 2,
+                      overflow:
+                          TextOverflow.ellipsis, // Optional: Handle overflow
+                    ),
+                  ),
+                  SizedBox(
+                    width: 50,
+                  ),
+                  Wrap(
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    children: [
+                      Text('+',
+                          style: TextStyle(
+                              fontWeight: FontWeight.w900, fontSize: 18)),
+                      SvgPicture.asset('assets/svgs/coin.svg'),
+                      Text('200',
+                          style: TextStyle(
+                              fontWeight: FontWeight.w900, fontSize: 18)),
+                      Text('(\$200)',
+                          style: TextStyle(
+                              fontWeight: FontWeight.w700,
+                              fontSize: 18,
+                              color: textColor.withOpacity(0.4)))
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Wrap(
+                      crossAxisAlignment: WrapCrossAlignment.center,
+                      children: [
+                        NetworkImageWithPlaceHolder(
+                          imageUrl: profileController.myProfile.photoUrl ?? '',
+                          radius: 200,
+                          width: 25,
+                          height: 25,
+                          placeHolder: Icons.person,
+                          iconSize: 20.0,
+                          fit: BoxFit.cover,
+                        ),
+                        SizedBox(
+                          width: 5,
+                        ),
+                        Text('data')
+                      ]),
+                  Text(
+                    '2hr ago',
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: textColor.withOpacity(0.4),
+                        ),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(
+              height: 10,
+            ),
           ],
         ));
   }

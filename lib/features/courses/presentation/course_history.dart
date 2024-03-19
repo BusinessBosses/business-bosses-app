@@ -6,6 +6,7 @@ import 'package:business_bosses_v2/features/courses/presentation/alltransactions
 import 'package:business_bosses_v2/features/courses/presentation/expanded_course_screen.dart';
 import 'package:business_bosses_v2/features/courses/presentation/purchases.dart';
 import 'package:business_bosses_v2/features/courses/presentation/sales.dart';
+import 'package:business_bosses_v2/features/courses/widgets/course_history_item.dart';
 import 'package:business_bosses_v2/features/posts/widgets/youtube_display.dart';
 import 'package:business_bosses_v2/features/posts/widgets/yt_player.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
@@ -18,7 +19,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
-
 class CourseHistory extends StatefulWidget {
   const CourseHistory({super.key});
 
@@ -28,26 +28,21 @@ class CourseHistory extends StatefulWidget {
 }
 
 class _CourseHistoryState extends State<CourseHistory> {
-  late TabController _tabController;
   int _currentIndex = 0;
-  String paymentMethodId = '';
-  final Map<int, Widget> _segments = <int, Widget>{
-    0: const Padding(
-      padding: EdgeInsets.all(8),
-      child: Text(
-        'All Transactions',
-        style: TextStyle(fontWeight: FontWeight.bold),
-      ),
-    ),
-    1: const Padding(
-      padding: EdgeInsets.all(8),
-      child: Text('Sales', style: TextStyle(fontWeight: FontWeight.bold)),
-    ),
-    2: const Padding(
-      padding: EdgeInsets.all(8),
-      child: Text('Purchases', style: TextStyle(fontWeight: FontWeight.bold)),
-    )
-  };
+  late PageController _pageController;
+
+  @override
+  void initState() {
+    super.initState();
+    _pageController = PageController(initialPage: _currentIndex);
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -67,50 +62,91 @@ class _CourseHistoryState extends State<CourseHistory> {
         ),
       ),
       body: Container(
-        color: backgroundcolorinterface,
+        color: Colors.white,
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text('Total'),
-            Row(
-              children: [
-                SvgPicture.asset('assets/svgs/coin.svg'),
-                Text('4000'),
-                Text('(\$2000)'),
-              ],
+             Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15.0),
+              child: const Text(
+                'Total',
+                style: TextStyle(fontWeight: FontWeight.w700),
+              ),
             ),
             Padding(
-              padding: const EdgeInsets.only(top: 20.0),
-              child: Align(
-                alignment: Alignment.topCenter,
-                child: CupertinoSlidingSegmentedControl<int>(
-                  padding: const EdgeInsets.all(5),
-                  children: _segments,
-                  onValueChanged: (int? value) {
-                    setState(() {
-                      _currentIndex = value!;
-                    });
-                  },
-                  groupValue: _currentIndex,
+              padding: const EdgeInsets.symmetric(horizontal: 15.0),
+              child: Row(
+                children: [
+                  SvgPicture.asset(
+                    'assets/svgs/coin.svg',
+                    height: 35,
+                  ),
+                  SizedBox(width: 5),
+                  Text(
+                    '4000',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w900,
+                      fontSize: 22,
+                    ),
+                  ),
+                  SizedBox(width: 5),
+                  Text(
+                    '(\$2000)',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w700,
+                      fontSize: 22,
+                      color: Colors.black38,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(height: 5),
+            Container(
+              color: Colors.white,
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                child: Align(
+                  alignment: Alignment.topCenter,
+                  child: CupertinoSlidingSegmentedControl<int>(
+                    backgroundColor: Colors.grey[200]!,
+                    padding: const EdgeInsets.all(5),
+                    children: {
+                      0: Text('All'),
+                      1: Text('Sales'),
+                      2: Text('Purchases'),
+                    },
+                    onValueChanged: (int? value) {
+                      if (value != null) {
+                        setState(() {
+                          _currentIndex = value;
+                          _pageController.animateToPage(
+                            _currentIndex,
+                            duration: Duration(milliseconds: 300),
+                            curve: Curves.ease,
+                          );
+                        });
+                      }
+                    },
+                    groupValue: _currentIndex,
+                  ),
                 ),
               ),
             ),
-            Container(
-              height: 400,
-              child: DefaultTabController(
-                length: 3, // Replace with the number of tabs
-                child: Container(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    child: TabBarView(
-                      controller: _tabController,
-                      children: [
-                        AllTransactions(),
-                        Sales(),
-                        Purchases(),
-                      ],
-                    ),
-                  ),
-                ),
+            Expanded(
+              child: PageView(
+                controller: _pageController,
+                onPageChanged: (int index) {
+                  setState(() {
+                    _currentIndex = index;
+                  });
+                },
+                children: [
+                  AllTransactions(),
+                  Sales(),
+                  Purchases(),
+                ],
               ),
             ),
           ],

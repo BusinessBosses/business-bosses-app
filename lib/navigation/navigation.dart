@@ -51,7 +51,7 @@ import 'package:business_bosses_v2/features/search/controller/search_controller.
 import 'package:business_bosses_v2/features/search/presentation/complete_searching_screen.dart';
 import 'package:business_bosses_v2/features/settings/invite_a_friendscreen.dart';
 import 'package:business_bosses_v2/features/settings/settingsscreen.dart';
-import 'package:business_bosses_v2/features/withdrawal/withdrawalscreen.dart';
+import 'package:business_bosses_v2/features/withdrawal/coinhistoryscreen.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/features/premium/premiumscreen.dart';
 import 'package:business_bosses_v2/features/premium/reviewpayment.dart';
@@ -264,8 +264,8 @@ var routes = [
     page: () => const BottomNavigationScreen(),
   ),
   GetPage(
-    name: Routes.withdrawalscreen,
-    page: () => const WithdrawalScreen(),
+    name: Routes.CoinHistoryScreen,
+    page: () => const CoinHistoryScreen(),
   ),
   GetPage(
     name: Routes.coursehistoryscreen,

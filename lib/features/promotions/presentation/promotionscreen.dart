@@ -23,6 +23,8 @@ class PromotionScreen extends StatefulWidget {
 class _PromotionScreenState extends State<PromotionScreen> {
   late String _referralId;
   final ProfileController _profileController = Get.find();
+  List<String> coinAmounts = ['100', '200', '500', '1000', '10000'];
+  List<String> coinPrices = ['0.99', '1.99', '4.99', '9.99', '99.99'];
 
   @override
   void initState() {
@@ -184,10 +186,9 @@ class _PromotionScreenState extends State<PromotionScreen> {
                     child: GestureDetector(
                       onTap: () {
                         showModalBottomSheet(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20)
-                          ),
-                          backgroundColor: Colors.white,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20)),
+                            backgroundColor: Colors.white,
                             context: context,
                             builder: (BuildContext context) {
                               return Column(
@@ -195,32 +196,50 @@ class _PromotionScreenState extends State<PromotionScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Padding(
-                                    padding: const EdgeInsets.symmetric(vertical:40.0,horizontal: 20),
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 40.0, horizontal: 20),
                                     child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
-                                        const Text('Buy more BB Coins', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),),
+                                        const Text(
+                                          'Buy more BB Coins',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 18),
+                                        ),
                                         Text('Promotional Text')
                                       ],
                                     ),
                                   ),
-                                  
                                   Container(
-                                    
                                     child: Expanded(
                                       child: Column(
                                         children: [
-                                        Padding(
-                                          padding: const EdgeInsets.symmetric(horizontal:10.0),
-                                          child: Container(color: backgroundcolorinterface,height: 1,),
-                                        ),
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 10.0),
+                                            child: Container(
+                                              color: backgroundcolorinterface,
+                                              height: 1,
+                                            ),
+                                          ),
                                           Container(
                                             child: Expanded(
                                               child: ListView.builder(
-                                                itemCount: 5,
-                                                itemBuilder: (BuildContext context, int i) {
-                                                  return const BuyCoinsListItem();
-                                                  
+                                                itemCount: coinAmounts.length,
+                                                itemBuilder:
+                                                    (BuildContext context,
+                                                        int index) {
+                                                  return GestureDetector(
+                                                    onTap: () {},
+                                                    child: BuyCoinsListItem(
+                                                      coinamount:
+                                                          coinAmounts[index],
+                                                      coinprice:
+                                                          coinPrices[index],
+                                                    ),
+                                                  );
                                                 },
                                               ),
                                             ),
@@ -264,7 +283,7 @@ class _PromotionScreenState extends State<PromotionScreen> {
                     flex: 2,
                     child: GestureDetector(
                       onTap: () {
-                        Get.toNamed(Routes.withdrawalscreen);
+                        Get.toNamed(Routes.CoinHistoryScreen);
                       },
                       child: Container(
                         height: 120,
@@ -463,44 +482,42 @@ class _PromotionScreenState extends State<PromotionScreen> {
                               decoration: const BoxDecoration(
                                 color: Colors.white,
                               ),
-                              child: Expanded(
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: <Widget>[
-                                    Text(
-                                      'Accepted Invitation:',
-                                      textAlign: TextAlign.center,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyLarge
-                                          ?.copyWith(
-                                            fontWeight: FontWeight.normal,
-                                            fontSize: 15,
-                                          ),
-                                    ),
-                                    Text(
-                                      '${_profileController.myProfile.invitations ?? 0}',
-                                      textAlign: TextAlign.center,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyLarge
-                                          ?.copyWith(
-                                            fontWeight: FontWeight.normal,
-                                          ),
-                                    ),
-                                    Text(
-                                      ' (+220 Coins)',
-                                      textAlign: TextAlign.center,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyLarge
-                                          ?.copyWith(
-                                            fontWeight: FontWeight.normal,
-                                          ),
-                                    ),
-                                  ],
-                                ),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: <Widget>[
+                                  Text(
+                                    'Accepted Invitation:',
+                                    textAlign: TextAlign.center,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyLarge
+                                        ?.copyWith(
+                                          fontWeight: FontWeight.normal,
+                                          fontSize: 15,
+                                        ),
+                                  ),
+                                  Text(
+                                    '${_profileController.myProfile.invitations ?? 0}',
+                                    textAlign: TextAlign.center,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyLarge
+                                        ?.copyWith(
+                                          fontWeight: FontWeight.normal,
+                                        ),
+                                  ),
+                                  Text(
+                                    ' (+220 Coins)',
+                                    textAlign: TextAlign.center,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyLarge
+                                        ?.copyWith(
+                                          fontWeight: FontWeight.normal,
+                                        ),
+                                  ),
+                                ],
                               ),
                             ),
                           ),
