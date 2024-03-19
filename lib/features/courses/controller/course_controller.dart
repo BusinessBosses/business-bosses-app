@@ -38,6 +38,11 @@ class CourseController extends GetxController {
     }
   }
 
+  Future<void> updateCourseViews(String id, int views) async {
+    Map<String, dynamic> course = {'views': views};
+    await ApiService.put(path: 'courses/update-course/$id', body: course);
+  }
+
   Future<void> initCourses() async {
     loading(true);
     error(false);
