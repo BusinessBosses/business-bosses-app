@@ -34,6 +34,11 @@ class PostDetailsScreen extends StatefulWidget {
 class _PostDetailsScreenState extends State<PostDetailsScreen> {
   PostModel post = Get.arguments;
 
+  @override
+  void initState() {
+    super.initState();
+  }
+
   // ignore: public_member_api_docs
   @override
   Widget build(BuildContext context) {
@@ -173,9 +178,11 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
                               padding: const EdgeInsets.only(
                                   left: 20, right: 20, top: 5, bottom: 5),
                               decoration: const BoxDecoration(
-                                  color: backgroundcolorinterface,
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(5))),
+                                color: backgroundcolorinterface,
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(5),
+                                ),
+                              ),
                               child: TextWidget(
                                 text: post.approved!
                                     ? 'Ongoing Ad'
@@ -412,8 +419,13 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
 // Get the selected option if the user has voted
   String? userSelectedOption(
       PostModel post, ProfileController profileController) {
+    HomeController controller = Get.find();
     String userId = profileController.myProfile.uid;
+    String? selectedVote = controller.getSelectedVote(post.postId);
 
+    if (selectedVote != null) {
+      return selectedVote;
+    }
     // Check if the post is a poll and if pollvotes exist and is not empty
     if (post.isPolled == true &&
         post.pollvotes != null &&

@@ -61,6 +61,7 @@ class HomeController extends GetxController {
   RxList<EventModel> myEvents = RxList<EventModel>(<EventModel>[]);
   RxList<UserModel> marketMembers = RxList<UserModel>(<UserModel>[]);
   Set<dynamic> itemsWithIncrementedViews = {};
+  Map<String, String> votes = {};
 
   void addIndustries(List<Industry> data) {
     industries = data;
@@ -95,6 +96,12 @@ class HomeController extends GetxController {
       'postId': post.postId,
       'selectedOption': selectedOption,
     });
+    votes[post.postId] = selectedOption;
+    update();
+  }
+
+  String? getSelectedVote(String postId) {
+    return votes[postId];
   }
 
   Future<void> attendEvent(EventModel event) async {
