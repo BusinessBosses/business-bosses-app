@@ -47,11 +47,6 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
     controller = Get.find();
   }
 
-  @override
-  void initState() {
-    super.initState();
-  }
-
   // ignore: public_member_api_docs
   @override
   Widget build(BuildContext context) {
@@ -68,8 +63,6 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
     Map<String, int> voteCounts = countVotes(widget.post);
     bool hasVoted = userHasVoted(widget.post, profileController);
     String? selectedVote = userSelectedOption(widget.post, profileController);
-    print("=====================postdetials ${widget.post.likes}");
-    ;
 // Create PollOption list based on the vote counts
     List<PollOption> pollOptions = List.generate(
       widget.post.options != null ? widget.post.options!.length : 0,
@@ -248,6 +241,7 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
                               hasVoted = true;
                               selectedVote = pollOption.id;
                             });
+                            print(controller.votes);
                             return true;
                           },
                           pollTitle: const Align(
@@ -441,6 +435,10 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
 
   bool userHasVoted(PostModel post, ProfileController profileController) {
     String userId = profileController.myProfile.uid;
+    String? selectedVote = controller.getSelectedVote(post.postId);
+    if (selectedVote != null) {
+      return true;
+    }
     return post.isPolled! &&
         post.pollvotes != null &&
         post.pollvotes!
@@ -453,7 +451,6 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
     HomeController controller = Get.find();
     String userId = profileController.myProfile.uid;
     String? selectedVote = controller.getSelectedVote(post.postId);
-
     if (selectedVote != null) {
       return selectedVote;
     }
