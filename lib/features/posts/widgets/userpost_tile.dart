@@ -1414,6 +1414,11 @@ double leadingWidth(PostModel p) {
 
 bool userHasVoted(PostModel post, ProfileController profileController) {
   String userId = profileController.myProfile.uid;
+  HomeController controller = Get.find();
+  String? selectedVote = controller.getSelectedVote(post.postId);
+  if (selectedVote != null) {
+    return true;
+  }
   return post.isPolled! &&
       post.pollvotes != null &&
       post.pollvotes!
