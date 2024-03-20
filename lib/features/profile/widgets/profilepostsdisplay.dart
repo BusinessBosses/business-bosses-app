@@ -153,8 +153,6 @@ Widget profilepostsdisplay(
                 post: posts[i],
                 key: ValueKey<String>(posts[i].postId),
                 onTap: () {
-                  print("===========this is the posts${posts[i]}");
-
                   if (!hasIncrementedView) {
                     homeController.itemsWithIncrementedViews
                         .add(posts[i].postId);
