@@ -25,6 +25,12 @@ class _CoursesPageState extends State<CoursesPage> {
   final ProfileController profileController = Get.find();
   late Industry industry;
   final CourseController courseController = Get.put(CourseController());
+  List<String> preferenceslist = [
+    'Free Courses',
+    'Paid Courses',
+    'Free Course Bundles',
+    'Paid Course Bundles'
+  ];
 
   @override
   void initState() {
@@ -293,17 +299,120 @@ class _CoursesPageState extends State<CoursesPage> {
                           const SizedBox(
                             width: 10,
                           ),
-                          Container(
-                            height: 38,
-                            width: 38,
-                            decoration: BoxDecoration(
-                                color: Colors.black.withAlpha(100),
-                                borderRadius: BorderRadius.circular(50)),
-                            child: Padding(
-                              padding: const EdgeInsets.all(10.0),
-                              child: SvgPicture.asset(
-                                'assets/svgs/preferences.svg',
-                                height: 10,
+                          GestureDetector(
+                            onTap: () {
+                              showModalBottomSheet(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20)),
+                                  backgroundColor: Colors.white,
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 40.0, horizontal: 20),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              const Text(
+                                                'Filter Courses',
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 18),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        Container(
+                                          child: Expanded(
+                                            child: Column(
+                                              children: [
+                                                Padding(
+                                                  padding: const EdgeInsets
+                                                      .symmetric(
+                                                      horizontal: 10.0),
+                                                  child: Container(
+                                                    color:
+                                                        backgroundcolorinterface,
+                                                    height: 1,
+                                                  ),
+                                                ),
+                                                Container(
+                                                  child: Expanded(
+                                                    child: ListView.builder(
+                                                      itemCount: preferenceslist
+                                                          .length,
+                                                      itemBuilder:
+                                                          (BuildContext context,
+                                                              int index) {
+                                                        return GestureDetector(
+                                                          onTap: () {},
+                                                          child: Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .symmetric(
+                                                                    horizontal:
+                                                                        15.0),
+                                                            child: Column(
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .start,
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .center,
+                                                              children: [
+                                                                Padding(
+                                                                  padding: const EdgeInsets
+                                                                      .symmetric(
+                                                                      vertical:
+                                                                          20.0),
+                                                                  child: Text(
+                                                                    preferenceslist[
+                                                                        index],
+                                                                    style: const TextStyle(
+                                                                        fontWeight:
+                                                                            FontWeight.bold),
+                                                                  ),
+                                                                ),
+                                                                Container(
+                                                                  color:
+                                                                      backgroundcolorinterface,
+                                                                  height: 1,
+                                                                )
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        );
+                                                      },
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    );
+                                  });
+                            },
+                            child: Container(
+                              height: 38,
+                              width: 38,
+                              decoration: BoxDecoration(
+                                  color: Colors.black.withAlpha(100),
+                                  borderRadius: BorderRadius.circular(50)),
+                              child: Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                child: SvgPicture.asset(
+                                  'assets/svgs/preferences.svg',
+                                  height: 10,
+                                ),
                               ),
                             ),
                           ),

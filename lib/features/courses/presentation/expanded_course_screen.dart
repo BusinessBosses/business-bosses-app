@@ -189,11 +189,11 @@ class MyStickyHeader extends StatelessWidget {
                         ),
                       ],
                     ),
-                    Container(
+                   course.youtubeUrls!.length > 1 ? Container(
                       height: 90,
                       child: ListView.builder(
                           scrollDirection: Axis.horizontal,
-                          itemCount: 5,
+                          itemCount: course.youtubeUrls!.length - 1,
                           itemBuilder: (BuildContext context, int index) {
                             return Row(
                               children: [
@@ -209,7 +209,7 @@ class MyStickyHeader extends StatelessWidget {
                                           children: <Widget>[
                                             GestureDetector(
                                                 onTap: () {},
-                                                child: YoutubeDisplay(ytUrl!)),
+                                                child: YoutubeDisplay(course.youtubeUrls![index+1])),
                                             Positioned(
                                               top: 0,
                                               bottom: 0,
@@ -247,10 +247,10 @@ class MyStickyHeader extends StatelessWidget {
                               ],
                             );
                           }),
-                    ),
-                    const SizedBox(
+                    ) : Container(),
+                   course.youtubeUrls!.length > 1 ? const SizedBox(
                       height: 20,
-                    ),
+                    ): Container(),
                     course.courseType == 'free'
                         ? Container()
                         : Center(

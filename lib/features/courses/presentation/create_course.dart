@@ -231,7 +231,7 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
                           const Text(
-                            'Add file resources (pdf,docx,doc,xls,etc)',
+                            'Additional Course Materials (pdf,docx,doc,xls,etc)',
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                             ),
@@ -342,16 +342,30 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                             ),
                             onChanged: (int? newValue) {
                               setState(() {
-                                _courseprice = newValue ?? 1000;
+                                if (newValue != null) {
+                                  if (newValue != -1) {
+                                    _courseprice = newValue;
+                                  } else {
+                                    // Handle custom price
+                                    // You can open a dialog or navigate to another screen for entering custom price
+                                  }
+                                }
                               });
                             },
-                            items: <int>[1000, 2000, 5000, 10000]
-                                .map<DropdownMenuItem<int>>((int value) {
-                              return DropdownMenuItem<int>(
-                                value: value,
-                                child: Text('$value coins'),
-                              );
-                            }).toList(),
+                            items: <DropdownMenuItem<int>>[
+                              ...<int>[500,1000, 5000]
+                                  .map<DropdownMenuItem<int>>((int value) {
+                                int dollarValue = value ~/ 100;
+                                return DropdownMenuItem<int>(
+                                  value: value,
+                                  child: Text('$value Coins (\$$dollarValue)'),
+                                );
+                              }).toList(),
+                              DropdownMenuItem<int>(
+                                value: -1,
+                                child: Text('Enter Custom Price'),
+                              ),
+                            ],
                           ),
                         ),
                       ],
@@ -568,6 +582,24 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
               ),
             ],
           ),
+          Visibility(
+              visible: videoLinkData.hasTranscript,
+              child: Container(
+                height: 300,
+                decoration: BoxDecoration(
+                  color: backgroundcolorinterface,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: TextFormField(
+                  decoration: const InputDecoration(
+                    contentPadding: EdgeInsets.all(15),
+                    hintText: 'Add transcript text here',
+                    border: InputBorder.none,
+                  ),
+                  maxLines: null,
+                  keyboardType: TextInputType.multiline,
+                ),
+              ))
         ],
       ),
     );
