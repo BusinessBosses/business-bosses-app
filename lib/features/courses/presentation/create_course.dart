@@ -46,6 +46,7 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
   bool _paidCourse = false;
   int? _courseprice;
   List<VideoLinkData> videoLinks = <VideoLinkData>[];
+  List<VideoLinkData> videoTranscripts = <VideoLinkData>[];
 
   @override
   Widget build(BuildContext context) {
@@ -353,7 +354,7 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                               });
                             },
                             items: <DropdownMenuItem<int>>[
-                              ...<int>[500,1000, 5000]
+                              ...<int>[500, 1000, 5000]
                                   .map<DropdownMenuItem<int>>((int value) {
                                 int dollarValue = value ~/ 100;
                                 return DropdownMenuItem<int>(
@@ -472,6 +473,7 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                         'subtitle': false,
                         'courseType': _paidCourse ? 'paid' : 'free',
                         'youtubeUrls': _extractYoutubeUrls(),
+                        'transcript': _extractTranscripts(),
                       };
                       await courseController.createCourse(course);
                     },
@@ -591,6 +593,11 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: TextFormField(
+                  onChanged: (String value) {
+                    setState(() {
+                      videoLinkData.transcript = value;
+                    });
+                  },
                   decoration: const InputDecoration(
                     contentPadding: EdgeInsets.all(15),
                     hintText: 'Add transcript text here',
@@ -624,6 +631,14 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
       }
     }
     return youtubeUrls;
+  }
+
+  List<String> _extractTranscripts() {
+    List<String> videoTranscripts = [];
+    for (dynamic videoLink in videoLinks) {
+      videoTranscripts.add(videoLink.transcript);
+    }
+    return videoTranscripts;
   }
 
   bool _validateVideoLinks() {

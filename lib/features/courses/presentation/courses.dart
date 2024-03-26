@@ -1,5 +1,6 @@
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/features/courses/controller/course_controller.dart';
+import 'package:business_bosses_v2/features/courses/models/course_model.dart';
 import 'package:business_bosses_v2/features/courses/presentation/create_course.dart';
 import 'package:business_bosses_v2/features/forum/models/industry.dart';
 import 'package:business_bosses_v2/features/courses/presentation/course_item.dart';
@@ -25,11 +26,13 @@ class _CoursesPageState extends State<CoursesPage> {
   final ProfileController profileController = Get.find();
   late Industry industry;
   final CourseController courseController = Get.put(CourseController());
+  String _filtercourses = "";
   List<String> preferenceslist = [
+    'All Courses',
     'Free Courses',
     'Paid Courses',
     'Free Course Bundles',
-    'Paid Course Bundles'
+    'Paid Course Bundles',
   ];
 
   @override
@@ -45,6 +48,12 @@ class _CoursesPageState extends State<CoursesPage> {
 
   @override
   Widget build(BuildContext context) {
+    void _refreshScreen() {
+      setState(() {
+        _filtercourses = "";
+      });
+    }
+
     return NestedScrollView(
       controller: scrollController,
       headerSliverBuilder: (
@@ -167,83 +176,46 @@ class _CoursesPageState extends State<CoursesPage> {
                 const SizedBox(
                   height: 10,
                 ),
-                Stack(children: [
-                  SizedBox(
-                    height: 160,
-                    width: MediaQuery.of(context).size.width,
-                    child: FittedBox(
-                      fit: BoxFit.fill,
-                      child: CachedNetworkImage(
-                        imageUrl: industry.photo ??
-                            'https://businessbosses.com.ng/learningImages/events.jpg',
-                        memCacheHeight: 256,
-                        memCacheWidth: 256,
-                        placeholder: (BuildContext context, String photo) =>
-                            const CircularProgressIndicator(),
-                        errorWidget:
-                            // ignore: always_specify_types
-                            (BuildContext context,
-                                    // ignore: always_specify_types
-                                    String photo,
-                                    Object error) =>
-                                const Icon(Icons.error),
-                      ),
-                    ),
-                  ),
-                  Container(
-                      height: 160,
-                      color: Colors.black.withAlpha(200),
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                            left: 15.0, top: 25, bottom: 15, right: 30),
-                        child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              SizedBox(
-                                height: 86,
-                                width: 142,
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(10.0),
-                                  child: FittedBox(
-                                    fit: BoxFit.fill,
-                                    child: CachedNetworkImage(
-                                      imageUrl: industry.photo ??
-                                          'https://businessbosses.com.ng/learningImages/events.jpg',
-                                      memCacheHeight: 256,
-                                      memCacheWidth: 256,
-                                      placeholder: (BuildContext context,
-                                              String photo) =>
-                                          const CircularProgressIndicator(),
-                                      errorWidget:
-                                          // ignore: always_specify_types
-                                          (BuildContext context,
-                                                  // ignore: always_specify_types
-                                                  String photo,
-                                                  Object error) =>
-                                              const Icon(Icons.error),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(
-                                width: 20,
-                              ),
-                              Expanded(
-                                  child: Text(
-                                industry.description ?? 'Industry Description',
-                                style: const TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w700),
-                                softWrap: true,
-                                maxLines: 5,
-                              )),
-                            ]),
-                      )),
-                  Positioned(
-                      right: 15,
-                      top: 10,
-                      child: Row(
+              ],
+            ),
+          )
+        ];
+      },
+      body: Obx(
+        () {
+          final filteredCourses = courseController.courses.where((course) {
+            if (_filtercourses.isEmpty ||
+                (_filtercourses == 'All Courses' &&
+                    (course.courseType == 'free' ||
+                        course.courseType == 'paid' ||
+                        course.youtubeUrls!.length > 1)) ||
+                (_filtercourses == 'Free Courses' &&
+                    course.courseType == 'free') ||
+                (_filtercourses == 'Paid Courses' &&
+                    course.courseType == 'paid') ||
+                (_filtercourses == 'Free Course Bundles' &&
+                    course.courseType == 'free' &&
+                    course.youtubeUrls!.length > 1) ||
+                (_filtercourses == 'Paid Course Bundles' &&
+                    course.courseType == 'paid' &&
+                    course.youtubeUrls!.length > 1)) {
+              return true;
+            } else {
+              return false;
+            }
+          }).toList();
+
+          return Container(
+            child: Column(
+              children: [
+                Container(
+                  padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                  color: Colors.white,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('Showing ${filteredCourses.length} Courses'),
+                      Row(
                         children: [
                           InkWell(
                             onTap: () {
@@ -252,7 +224,7 @@ class _CoursesPageState extends State<CoursesPage> {
                             child: Container(
                               padding: const EdgeInsets.all(10),
                               decoration: BoxDecoration(
-                                  color: Colors.black.withAlpha(100),
+                                  color: Colors.black.withAlpha(20),
                                   borderRadius: BorderRadius.circular(50)),
                               child: GestureDetector(
                                 child: Wrap(
@@ -282,7 +254,7 @@ class _CoursesPageState extends State<CoursesPage> {
                                                   .myProfile.coinscount
                                                   .toString(),
                                               style: const TextStyle(
-                                                color: Colors.white,
+                                                color: Colors.black,
                                                 fontSize: 15,
                                                 fontWeight: FontWeight.w700,
                                               ),
@@ -313,14 +285,14 @@ class _CoursesPageState extends State<CoursesPage> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        Padding(
-                                          padding: const EdgeInsets.symmetric(
+                                        const Padding(
+                                          padding: EdgeInsets.symmetric(
                                               vertical: 40.0, horizontal: 20),
                                           child: Column(
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.start,
                                             children: [
-                                              const Text(
+                                              Text(
                                                 'Filter Courses',
                                                 style: TextStyle(
                                                     fontWeight: FontWeight.bold,
@@ -352,41 +324,52 @@ class _CoursesPageState extends State<CoursesPage> {
                                                           (BuildContext context,
                                                               int index) {
                                                         return GestureDetector(
-                                                          onTap: () {},
-                                                          child: Padding(
-                                                            padding:
-                                                                const EdgeInsets
+                                                          onTap: () {
+                                                            setState(() {
+                                                              _filtercourses =
+                                                                  preferenceslist[
+                                                                          index]
+                                                                      .toString();
+                                                            });
+                                                            Get.back();
+                                                          },
+                                                          child: Column(
+                                                            children: [
+                                                              Container(
+                                                                width: MediaQuery
+                                                                        .sizeOf(
+                                                                            context)
+                                                                    .width,
+                                                                padding: const EdgeInsets
                                                                     .symmetric(
                                                                     horizontal:
-                                                                        15.0),
-                                                            child: Column(
-                                                              crossAxisAlignment:
-                                                                  CrossAxisAlignment
-                                                                      .start,
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .center,
-                                                              children: [
-                                                                Padding(
-                                                                  padding: const EdgeInsets
-                                                                      .symmetric(
-                                                                      vertical:
-                                                                          20.0),
-                                                                  child: Text(
-                                                                    preferenceslist[
-                                                                        index],
-                                                                    style: const TextStyle(
-                                                                        fontWeight:
-                                                                            FontWeight.bold),
-                                                                  ),
+                                                                        20,
+                                                                    vertical:
+                                                                        20),
+                                                                color: Colors
+                                                                    .white,
+                                                                child: Text(
+                                                                  preferenceslist[
+                                                                      index],
+                                                                  style: const TextStyle(
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold),
                                                                 ),
-                                                                Container(
-                                                                  color:
-                                                                      backgroundcolorinterface,
+                                                              ),
+                                                              Padding(
+                                                                padding: const EdgeInsets
+                                                                    .symmetric(
+                                                                    horizontal:
+                                                                        15),
+                                                                child:
+                                                                    Container(
                                                                   height: 1,
-                                                                )
-                                                              ],
-                                                            ),
+                                                                  color:
+                                                                      backgroundColor,
+                                                                ),
+                                                              )
+                                                            ],
                                                           ),
                                                         );
                                                       },
@@ -405,34 +388,52 @@ class _CoursesPageState extends State<CoursesPage> {
                               height: 38,
                               width: 38,
                               decoration: BoxDecoration(
-                                  color: Colors.black.withAlpha(100),
+                                  color: Colors.black.withAlpha(20),
                                   borderRadius: BorderRadius.circular(50)),
                               child: Padding(
                                 padding: const EdgeInsets.all(10.0),
                                 child: SvgPicture.asset(
                                   'assets/svgs/preferences.svg',
+                                  color: Colors.black,
                                   height: 10,
                                 ),
                               ),
                             ),
                           ),
                         ],
-                      ))
-                ])
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  color: backgroundColor,
+                  height: 1,
+                ),
+                filteredCourses.isEmpty
+                    ? Expanded(
+                        child: Container(
+                          width: MediaQuery.of(context).size.width,
+                          color: Colors.white,
+                          child: courseController.loading.value
+                              ? const Center(
+                                  child: CircularProgressIndicator(),
+                                )
+                              : const Center(child: Text('No Courses found')),
+                        ),
+                      )
+                    : Expanded(
+                        child: ListView.builder(
+                          itemCount: filteredCourses.length,
+                          itemBuilder: (BuildContext context, int i) {
+                            final course = filteredCourses[i];
+                            return CourseItem(course: course);
+                          },
+                        ),
+                      ),
               ],
             ),
-          )
-        ];
-      },
-      body: Obx(
-        () => courseController.loading.value
-            ? const Center(child: CircularProgressIndicator())
-            : ListView.builder(
-                itemCount: courseController.courses.length,
-                itemBuilder: (BuildContext context, int i) {
-                  return CourseItem(course: courseController.courses[i]);
-                },
-              ),
+          );
+        },
       ),
     );
   }
