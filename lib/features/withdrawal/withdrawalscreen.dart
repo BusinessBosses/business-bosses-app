@@ -55,7 +55,7 @@ class _WithdrawalScreenState extends State<WithdrawalScreen> {
                       const SizedBox(
                         height: 10,
                       ),
-                      Text('Withdrawable Balance'),
+                      const Text('Withdrawable Balance'),
                       Container(
                         width: MediaQuery.of(context).size.width,
                         height: 55,
@@ -67,9 +67,9 @@ class _WithdrawalScreenState extends State<WithdrawalScreen> {
                           padding: const EdgeInsets.symmetric(horizontal: 10.0),
                           child: Row(
                             children: [
-                              Text('5720 Coins'),
-                              Text(
-                                '(\$20.39)',
+                              Text('${profileController.myProfile.coinscount}'),
+                              const Text(
+                                ' (\$20.39)',
                                 style: TextStyle(
                                     fontSize: 15, fontWeight: FontWeight.bold),
                               )

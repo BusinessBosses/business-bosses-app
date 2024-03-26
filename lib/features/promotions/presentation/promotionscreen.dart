@@ -329,7 +329,7 @@ class _PromotionScreenState extends State<PromotionScreen> {
                                       fontWeight: FontWeight.w700),
                                 ),
                                 Text(
-                                  '5720 Coins = \$2.32',
+                                  '${_profileController.myProfile.coinscount} Coins = \$2.32',
                                   style: TextStyle(
                                       color: textColor.withAlpha(80),
                                       fontWeight: FontWeight.w400,
