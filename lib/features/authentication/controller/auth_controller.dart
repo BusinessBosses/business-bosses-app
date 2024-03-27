@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:math';
 import 'package:async/async.dart';
+import 'package:business_bosses_v2/action/action.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/features/authentication/presentation/code_verification_screen.dart';
 import 'package:business_bosses_v2/features/authentication/presentation/forgot_password_verification.dart';
@@ -46,9 +47,9 @@ class AuthController extends GetxController {
     }
   }
 
-  Future<void> saveToSharedPreferences(String authCred) async {
+  Future<void> saveToSharedPreferences(String value, String key) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString('_authCred', authCred);
+    prefs.setString(key, value);
   }
 
   /// SEND OTP TO USER EMAIL FOR VERIFICATION
@@ -169,56 +170,61 @@ class AuthController extends GetxController {
   }
 
   /// SIGNING WITH APPLE
-  Future<void> appleAuthentication() async {
-    final String rawNonce = generateNonce();
-    final String nonce = sha256ofString(rawNonce);
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+  // void _handleAppleSignIn() async {
+  //   final String rawNonce = generateNonce();
+  //   final String nonce = sha256ofString(rawNonce);
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    try {
-      final AuthorizationCredentialAppleID appleCredential =
-          await SignInWithApple.getAppleIDCredential(
-        scopes: <AppleIDAuthorizationScopes>[
-          AppleIDAuthorizationScopes.email,
-          AppleIDAuthorizationScopes.fullName,
-        ],
-        nonce: nonce,
-      );
+  //   try {
+  //     final AuthorizationCredentialAppleID appleCredential =
+  //         await SignInWithApple.getAppleIDCredential(
+  //       scopes: <AppleIDAuthorizationScopes>[
+  //         AppleIDAuthorizationScopes.email,
+  //         AppleIDAuthorizationScopes.fullName,
+  //       ],
+  //       nonce: nonce,
+  //     );
 
-      _authCred = appleCredential.email ?? prefs.getString('_authCred');
-      _authusername =
-          '${appleCredential.givenName} ${appleCredential.familyName}';
 
-      if (appleCredential.email != null) {
-        saveToSharedPreferences(_authCred!);
-        dynamic user = await _handleRegister();
-        if (user['success'] == false) {
-          Get.snackbar('Error', user['error']);
-        } else {
-          Get.snackbar('Success', 'Authentication completed');
-          await logEvents('signup', 'email');
-          Get.toNamed(
-            Routes.updateProfile,
-            arguments: UserModel(
-              username: _authusername!,
-              email: _authCred!,
-            ),
-          );
-        }
-      } else {
-        await logEvents('login', 'Apple SignIn');
-        dynamic user = await _handleLogin();
-        if (user['success'] == false) {
-          Get.snackbar('Error', user['error']);
-        } else {
-          Get.offAndToNamed(Routes.home);
-        }
-      }
+  //     _authCred = appleCredential.email;
+  //     _authusername =
+  //         '${appleCredential.givenName} ${appleCredential.familyName}';
+  //     if (_authCred == null) {
+  //       _authCred = prefs.getString('_authCred');
+  //       _authusername = prefs.getString('_authusername');
+  //       await logEvents('login', 'Apple SignIn');
+  //       dynamic user = await _handleLogin();
+  //       Get.offAndToNamed(Routes.home);
+  //       if (user['success'] == false) {
+  //         Get.snackbar('Error', user['error']);
+  //       } else {}
+  //     } else {
+  //       saveToSharedPreferences(_authCred!, '_authCred');
+  //       saveToSharedPreferences(_authusername!, '_authusername');
+  //       dynamic user = await _handleRegister();
+  //       Get.snackbar('Success', 'Authentication completed');
+  //       await logEvents('signup', 'email');
+  //       Get.toNamed(
+  //         Routes.updateProfile,
+  //         arguments: UserModel(
+  //           username: _authusername!,
+  //           email: _authCred!,
+  //         ),
+  //       );
+  //     }
 
-      // print(appleCredential.email);
-    } catch (e) {
-      rethrow;
-    }
-  }
+  //     print(_authCred! + ' ' + _authusername!);
+
+   
+  //   } catch (error) {
+  //     // Error occurred during sign in
+  //     // log('Here ->>>>>> $error');
+
+      
+  //   }
+
+  
+  // }
 
   /// VALIDATE LOGIN INPUT
   String? loginValidator(String email, String password) {
