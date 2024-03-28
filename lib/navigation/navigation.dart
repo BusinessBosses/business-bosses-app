@@ -186,10 +186,10 @@ var routes = [
     page: () => const CreateBossUpScreen(),
     binding: BindingsBuilder.put(() => CreateBossUpController()),
   ),
-  GetPage(
-    name: Routes.postDetails,
-    page: () => PostDetailsScreen(),
-  ),
+  // GetPage(
+  //   name: Routes.postDetails,
+  //   page: () => PostDetailsScreen(),
+  // ),
   GetPage(
     name: Routes.specificuserlistscreen,
     page: () => const SpecificUserListScreen(),
