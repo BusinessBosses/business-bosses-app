@@ -146,7 +146,7 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
                                     // content of Tab 2
                                     Padding(
                                       padding: const EdgeInsets.only(
-                                          top: 15.0, left: 15, right: 15),
+                                           left: 15, right: 15),
                                       child: controller.loading.value
                                           ? SafetyModel(
                                               isLoading:
@@ -197,7 +197,7 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
                                                   },
                                                   gridDelegate:
                                                       const SliverGridDelegateWithFixedCrossAxisCount(
-                                                    mainAxisSpacing: 10.0,
+                                                    mainAxisSpacing: 15.0,
                                                     crossAxisSpacing: 15.0,
                                                     crossAxisCount: 2,
                                                   ),
@@ -206,7 +206,7 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
                                     // content of Tab 3
                                     Padding(
                                       padding: const EdgeInsets.only(
-                                          top: 15.0, left: 15, right: 15),
+                                       left: 15, right: 15),
                                       child: controller.loading.value
                                           ? SafetyModel(
                                               isLoading:
@@ -258,7 +258,7 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
                                                   },
                                                   gridDelegate:
                                                       const SliverGridDelegateWithFixedCrossAxisCount(
-                                                    mainAxisSpacing: 10.0,
+                                                    mainAxisSpacing: 15.0,
                                                     crossAxisSpacing: 15.0,
                                                     crossAxisCount: 2,
                                                   ),
