@@ -29,7 +29,7 @@ class _WithdrawalItemState extends State<WithdrawalItem> {
       child: Column(
         children: [
           const Padding(
-            padding: EdgeInsets.symmetric(vertical:10.0, horizontal: 10.0),
+            padding: EdgeInsets.symmetric(vertical:10.0, horizontal: 15.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
