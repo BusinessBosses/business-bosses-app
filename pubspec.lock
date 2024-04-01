@@ -65,6 +65,62 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.11.0"
+  audioplayers:
+    dependency: transitive
+    description:
+      name: audioplayers
+      sha256: c05c6147124cd63e725e861335a8b4d57300b80e6e92cea7c145c739223bbaef
+      url: "https://pub.dev"
+    source: hosted
+    version: "5.2.1"
+  audioplayers_android:
+    dependency: transitive
+    description:
+      name: audioplayers_android
+      sha256: b00e1a0e11365d88576320ec2d8c192bc21f1afb6c0e5995d1c57ae63156acb5
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.0.3"
+  audioplayers_darwin:
+    dependency: transitive
+    description:
+      name: audioplayers_darwin
+      sha256: "3034e99a6df8d101da0f5082dcca0a2a99db62ab1d4ddb3277bed3f6f81afe08"
+      url: "https://pub.dev"
+    source: hosted
+    version: "5.0.2"
+  audioplayers_linux:
+    dependency: transitive
+    description:
+      name: audioplayers_linux
+      sha256: "60787e73fefc4d2e0b9c02c69885402177e818e4e27ef087074cf27c02246c9e"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.1.0"
+  audioplayers_platform_interface:
+    dependency: transitive
+    description:
+      name: audioplayers_platform_interface
+      sha256: "365c547f1bb9e77d94dd1687903a668d8f7ac3409e48e6e6a3668a1ac2982adb"
+      url: "https://pub.dev"
+    source: hosted
+    version: "6.1.0"
+  audioplayers_web:
+    dependency: transitive
+    description:
+      name: audioplayers_web
+      sha256: "22cd0173e54d92bd9b2c80b1204eb1eb159ece87475ab58c9788a70ec43c2a62"
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.1.0"
+  audioplayers_windows:
+    dependency: transitive
+    description:
+      name: audioplayers_windows
+      sha256: "9536812c9103563644ada2ef45ae523806b0745f7a78e89d1b5fb1951de90e1a"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.1.0"
   boolean_selector:
     dependency: transitive
     description:
@@ -422,6 +478,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.3.1"
+  flutter_callkit_incoming_yoer:
+    dependency: transitive
+    description:
+      name: flutter_callkit_incoming_yoer
+      sha256: "0a8f1a45c29341082b572c16e02f882c2f61f2ea08b93bb86ca80aa827f526f9"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.1+2"
   flutter_datetime_picker_plus:
     dependency: "direct main"
     description:
@@ -640,6 +704,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_vibrate:
+    dependency: transitive
+    description:
+      name: flutter_vibrate
+      sha256: "9cc9b32cf52c90dd34c1cf396ed40010b2c74e69adbb0ff16005afa900971ad8"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.3.0"
   flutter_web_plugins:
     dependency: transitive
     description: flutter
@@ -845,6 +917,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.17.0"
+  is_lock_screen2:
+    dependency: transitive
+    description:
+      name: is_lock_screen2
+      sha256: "1e863afcddc2055a786ed7004492a24b88f98378c9c47e20ed5506cf447d4cb1"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.1"
   jiffy:
     dependency: "direct main"
     description:
@@ -1838,26 +1918,34 @@ packages:
     dependency: "direct main"
     description:
       name: zego_express_engine
-      sha256: "0c0f2fcdca7224f45f61f0c7d4b417cd0da52ad1529106469c1be82de39a7660"
+      sha256: "67853bd4940bba71dedd99a6bd99255e063c112032939b6955f149393bd07428"
       url: "https://pub.dev"
     source: hosted
-    version: "3.12.4"
+    version: "3.13.1"
   zego_plugin_adapter:
     dependency: transitive
     description:
       name: zego_plugin_adapter
-      sha256: "851e28879cd4cfe8109a64c6657b34db795bdccc3f99c1859a744af6074f4a39"
+      sha256: "730e7c416d66c8b774c9477b859318c47f614311c2b81db6f2e366a43b871ed1"
       url: "https://pub.dev"
     source: hosted
-    version: "2.11.2"
+    version: "2.11.5"
   zego_uikit:
     dependency: transitive
     description:
       name: zego_uikit
-      sha256: "1e1e4ab7429f37fb9b2b9a2e90b08f789aa81902d01796d9df70af6a213e157e"
+      sha256: "5425c3492485f573fc26512636783471a76d192d9ebedc0f3d776b95e7df3790"
       url: "https://pub.dev"
     source: hosted
-    version: "2.18.2"
+    version: "2.19.0"
+  zego_uikit_prebuilt_call:
+    dependency: "direct main"
+    description:
+      name: zego_uikit_prebuilt_call
+      sha256: "8d9a744fcf45243ee03a21ad44823fa122787f59567fad3cff8470bbe3b26642"
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.5.1"
   zego_uikit_prebuilt_live_audio_room:
     dependency: "direct main"
     description:
@@ -1870,10 +1958,10 @@ packages:
     dependency: "direct main"
     description:
       name: zego_uikit_signaling_plugin
-      sha256: "01d911157326535eb8948c469d56e9ccde160e6bcded6458934e9a546cedc73d"
+      sha256: "2f6fb396b707971324558edb82bfcf9589dc7bd0480a5a33341d89239bc7702b"
       url: "https://pub.dev"
     source: hosted
-    version: "2.7.4"
+    version: "2.7.6"
   zego_zim:
     dependency: transitive
     description:
@@ -1886,10 +1974,10 @@ packages:
     dependency: transitive
     description:
       name: zego_zpns
-      sha256: aa36973378588a3bac860ca88bcbb77ecc5dde491d0cb72f599fa1c27850deb0
+      sha256: "786f34fd5ad9de6c888770d3e6f8f4782d18fec1450c6152c378810d78638d23"
       url: "https://pub.dev"
     source: hosted
-    version: "2.6.0+1"
+    version: "2.6.0+2"
 sdks:
   dart: ">=3.1.0 <4.0.0"
   flutter: ">=3.13.0"
