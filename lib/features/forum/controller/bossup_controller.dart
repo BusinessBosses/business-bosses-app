@@ -10,7 +10,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
-import '../../../utils/constants/constants.dart';
 import '../../home/repository/home_repository.dart';
 
 class BossUpController extends GetxController {
@@ -27,13 +26,12 @@ class BossUpController extends GetxController {
   RxBool error = RxBool(false);
   RxBool loadingMembers = RxBool(false);
   RxBool errorMembers = RxBool(false);
-  Future<void> fetchForums() async {
+  Future<void> fetchForums(String industryId) async {
     loading(true);
     error(false);
     update();
     ApiResponseModel response;
-    response =
-        await ForumRepository.getForums(page.value, Constants.BOSSUPINDUSTRYID);
+    response = await ForumRepository.getForums(page.value, industryId);
 
     if (response.success) {
       totalForums(int.parse(response.data['count'].toString()));
@@ -235,11 +233,7 @@ class BossUpController extends GetxController {
   void onInit() {
     // TODO: implement onInit
     socket = _homeController.socket;
-    if (_homeController.bossupForums.isEmpty) {
-      fetchForums();
-    } else {
-      forums = _homeController.bossupForums;
-    }
+
     super.onInit();
   }
 }

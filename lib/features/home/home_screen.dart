@@ -1,7 +1,7 @@
 // ignore_for_file: public_member_api_docs, always_specify_types
 
 import 'package:business_bosses_v2/common/widgets/safety_model.dart';
-import 'package:business_bosses_v2/features/forum/controller/bossup_controller.dart';
+import 'package:business_bosses_v2/features/forum/controller/challenge_controller.dart';
 import 'package:business_bosses_v2/features/home/controller/commumities_controller.dart';
 import 'package:business_bosses_v2/features/home/widgets/bottom_bar.dart';
 import 'package:business_bosses_v2/features/home/widgets/floatingbutton.dart';
@@ -43,6 +43,8 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   final ProfileController _profileController = Get.find();
   final LiveController liveEventController = Get.put(LiveController());
+  final ChallengeController challengeController =
+      Get.put(ChallengeController());
   late IO.Socket socket;
   bool isScrolled = true;
   // List<TargetFocus> targets = [];
@@ -53,7 +55,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   final MarketController marketController = Get.put(MarketController());
   final CommunitiesController _communitiesController =
       Get.put(CommunitiesController());
-  final BossUpController bossUpController = Get.put(BossUpController());
 
   // final GlobalKey<NavigatorState> postButtonKey = GlobalKey<NavigatorState>();
 
@@ -837,7 +838,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                             marketController.initMarket();
                             marketController.initUsers();
                             _communitiesController.fetchIndustries();
-                            bossUpController.fetchForums();
                             liveEventController.initEvents();
                           },
                           icon: const Icon(
@@ -858,7 +858,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                                 marketController.initMarket();
                                 marketController.initUsers();
                                 _communitiesController.fetchIndustries();
-                                bossUpController.fetchForums();
                                 liveEventController.initEvents();
                               },
                               icon: const Icon(

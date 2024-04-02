@@ -68,6 +68,7 @@ class HomeController extends GetxController {
   }
 
   void addBossupForums(List<ForumModel> data) {
+    bossupForums.clear();
     bossupForums = data;
   }
 
