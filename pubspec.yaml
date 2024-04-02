@@ -88,7 +88,6 @@ dependencies:
   youtube_player_flutter: ^8.1.2
   zego_uikit_prebuilt_live_audio_room: 
   flutter_speed_dial: ^7.0.0
-  flutter_clipboard_manager: ^0.0.4
   purchases_flutter: ^6.5.0
   # add_2_calendar: 
   # tutorial_coach_mark: ^1.2.11
