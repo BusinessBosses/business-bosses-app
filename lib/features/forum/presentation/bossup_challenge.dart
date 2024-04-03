@@ -1,3 +1,4 @@
+import 'package:business_bosses_v2/common/widgets/safety_model.dart';
 import 'package:business_bosses_v2/features/forum/controller/challenge_controller.dart';
 import 'package:business_bosses_v2/features/forum/models/industry.dart';
 import 'package:business_bosses_v2/features/forum/presentation/bossup_screen.dart';
@@ -25,7 +26,15 @@ class _BossupChallengeState extends State<BossupChallenge> {
         if (controller.loading.value) {
           return const Center(child: CircularProgressIndicator());
         } else if (controller.error.value) {
-          return const Center(child: Text('Error fetching data'));
+          return SafetyModel(
+            clickableText: 'Reload',
+            isLoading: false,
+            icon: const Icon(Icons.warning, color: Colors.black),
+            onTap: () async {
+              controller.initCategories();
+            },
+            title: 'There was an error loading data',
+          );
         } else {
           return ListView.builder(
             itemCount: controller.categories.length,
@@ -66,7 +75,7 @@ class _BossupChallengeState extends State<BossupChallenge> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: <Widget>[
-                            Container(
+                            SizedBox(
                               height: 86,
                               width: 142,
                               child: ClipRRect(
@@ -124,9 +133,10 @@ class _BossupChallengeState extends State<BossupChallenge> {
                                     Text(
                                       category.industry == 'Boss Up Challenge '
                                           ? 'Every Monday'
-                                          : category.award ??
-                                              _calculateEndsDate(
-                                                  category.endedAt!),
+                                          : category.endedAt != null
+                                              ? _calculateEndsDate(
+                                                  category.endedAt!)
+                                              : 'Ends',
                                       style: const TextStyle(
                                           color: Colors.grey,
                                           fontWeight: FontWeight.w700),

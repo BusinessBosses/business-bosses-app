@@ -16,16 +16,18 @@ class ChallengeController extends GetxController {
 
   void initCategories() async {
     try {
-      loading.value = true; // Set loading to true before fetching data
+      loading(true); // Set loading to true before fetching data
       update();
       ApiResponseModel response = await ApiService.get(path: 'industry/get');
       List<dynamic> responseData = response.data['rows'];
 
       categories = responseData
-          .where((categoryMap) =>
-              Industry.fromMap(categoryMap).categoryId ==
-              '-Mos1VMlx3oxZFRaw_BH')
           .map((categoryMap) => Industry.fromMap(categoryMap))
+          .where((category) =>
+              category.categoryId == '-Mos1VMlx3oxZFRaw_BH' &&
+              (category.endedAt == null ||
+                  category.endedAt!.isAfter(DateTime.now()) ||
+                  category.endedAt!.isAtSameMomentAs(DateTime.now())))
           .toList();
       // Assuming data returned is a list of Map<String, dynamic>
       // Sort categories by placing 'Boss Up Challenge' at the top
@@ -39,12 +41,13 @@ class ChallengeController extends GetxController {
           return a.industry!.compareTo(b.industry!);
         }
       });
-    } catch (e) {
-      error.value = true; // Set error to true if there's an error
+      error(false);
       update();
-      print('Error fetching categories: $e');
+    } catch (e) {
+      error(true); // Set error to true if there's an error
+      update();
     } finally {
-      loading.value = false; // Set loading back to false after fetching data
+      loading(false); // Set loading back to false after fetching data
       update();
     }
   }

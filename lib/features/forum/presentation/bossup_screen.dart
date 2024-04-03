@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:business_bosses_v2/features/home/widgets/floatingbutton.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/gestures.dart';
@@ -8,7 +6,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:intl/intl.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 import '../../../common/widgets/popup/bossup_challenge_popup.dart';
@@ -16,12 +13,10 @@ import '../../../common/widgets/safety_model.dart';
 import '../../../navigation/routes.dart';
 import '../../../utils/theme/theme.dart';
 import '../../home/controller/home_controller.dart';
-import '../../moreinfoscreens/bossuppartner.dart';
 import '../../profile/controller/profile_controller.dart';
 import '../controller/bossup_controller.dart';
 import '../models/industry.dart';
 import '../widgets/forum_item.dart';
-import '../widgets/joinedbutton.dart';
 
 class BossUpSection extends StatefulWidget {
   final Industry industry;
@@ -168,7 +163,8 @@ class _BossUpSectionState extends State<BossUpSection> {
                                                   widget.industry.industry ==
                                                           'Boss Up Challenge '
                                                       ? 'Free Promotion'
-                                                      : 'Win \$200',
+                                                      : widget.industry.award ??
+                                                          'Win',
                                                   style: const TextStyle(
                                                     color: primaryColorLT,
                                                     fontWeight: FontWeight.bold,
@@ -306,7 +302,7 @@ class _BossUpSectionState extends State<BossUpSection> {
                                                 ),
                                               ),
                                             ),
-                                            SizedBox(
+                                            const SizedBox(
                                               width: 10,
                                             ),
                                             Expanded(
