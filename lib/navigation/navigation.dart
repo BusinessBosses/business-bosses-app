@@ -5,8 +5,6 @@ import 'package:business_bosses_v2/features/bottomnavigationscreen.dart';
 import 'package:business_bosses_v2/features/connects/controller/referrals_controller.dart';
 import 'package:business_bosses_v2/features/connects/presentation/referals_screen.dart';
 import 'package:business_bosses_v2/features/courses/presentation/course_history.dart';
-import 'package:business_bosses_v2/features/forum/controller/bossup_controller.dart';
-import 'package:business_bosses_v2/features/courses/presentation/expanded_course_screen.dart';
 import 'package:business_bosses_v2/features/home/all_communities_screen.dart';
 import 'package:business_bosses_v2/features/home/controller/commumities_controller.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
@@ -158,7 +156,6 @@ var routes = [
     name: Routes.allCommunitiesScreen,
     page: () => const AllCommunitiesScreen(),
     bindings: [
-      BindingsBuilder.put(() => BossUpController()),
       BindingsBuilder.put(() => CommunitiesController()),
     ],
     // binding: BindingsBuilder.put(() => BossUpController()),
@@ -186,10 +183,10 @@ var routes = [
     page: () => const CreateBossUpScreen(),
     binding: BindingsBuilder.put(() => CreateBossUpController()),
   ),
-  GetPage(
-    name: Routes.postDetails,
-    page: () => PostDetailsScreen(),
-  ),
+  // GetPage(
+  //   name: Routes.postDetails,
+  //   page: () => PostDetailsScreen(),
+  // ),
   GetPage(
     name: Routes.specificuserlistscreen,
     page: () => const SpecificUserListScreen(),

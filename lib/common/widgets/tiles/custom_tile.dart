@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 /// Custom Tile For Forums Categories GridView
 class CustomTile extends StatelessWidget {
@@ -26,6 +27,7 @@ class CustomTile extends StatelessWidget {
         child: Wrap(
           children: <Widget>[
             Container(
+              margin: const EdgeInsets.only(top: 15),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(20),
@@ -52,10 +54,7 @@ class CustomTile extends StatelessWidget {
                       ),
                       trailing: hideIcon
                           ? null
-                          : const Icon(
-                              Icons.keyboard_arrow_right,
-                              color: Colors.red,
-                            ),
+                          : SvgPicture.asset('assets/svgs/nexticon.svg')
                     ),
                     Padding(
                       padding: const EdgeInsets.only(
@@ -68,9 +67,9 @@ class CustomTile extends StatelessWidget {
                           memCacheWidth: 512,
                           placeholder: (BuildContext context, String photo) =>
                               const CircularProgressIndicator(),
-                          errorWidget:
-                              (BuildContext context, String photo, Object error) =>
-                                  const Icon(Icons.error),
+                          errorWidget: (BuildContext context, String photo,
+                                  Object error) =>
+                              const Icon(Icons.error),
                         ),
                       ),
                     ),

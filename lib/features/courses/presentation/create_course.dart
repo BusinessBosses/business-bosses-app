@@ -39,9 +39,8 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
   }
 
   List<String> selectedFileNames = <String>[];
+  List<String> selectedFilePaths = <String>[];
 
-  bool _hasSubtitles = false;
-  bool _hasTranscript = false;
   bool _shouldPromote = false;
   bool _paidCourse = false;
   int? _courseprice;
@@ -215,6 +214,8 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                       result.files
                           .map((PlatformFile file) => setState(() {
                                 selectedFileNames.add(file.name);
+
+                                selectedFilePaths.add(file.path!);
                               }))
                           .toList();
                     }
@@ -433,6 +434,13 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                   padding: const EdgeInsets.only(bottom: 50.0),
                   child: MCustomButton(
                     onPressed: () async {
+                      if (selectedFilePaths.isNotEmpty) {
+                        // Upload each file
+                        for (String filePath in selectedFilePaths) {
+                          await courseController.uploadFile(filePath);
+                        }
+                      }
+
                       if (title == null || title == '') {
                         Get.snackbar(
                           'Error',
@@ -471,6 +479,9 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                         'isActive': true,
                         'isApproved': false,
                         'subtitle': false,
+                        'documents': selectedFileNames.isEmpty
+                            ? null
+                            : selectedFileNames,
                         'courseType': _paidCourse ? 'paid' : 'free',
                         'youtubeUrls': _extractYoutubeUrls(),
                         'transcript': _extractTranscripts(),

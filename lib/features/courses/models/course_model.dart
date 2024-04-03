@@ -15,7 +15,7 @@ class CourseModel {
   final int? timestamp;
   final List<CommentModel>? comments;
   final UserModel? user;
-  int? views = 0;
+  int views = 0;
   final bool? isPromoted;
   final double? averageRating;
   final bool? isApproved;
@@ -171,7 +171,7 @@ class CourseModel {
     );
   }
 
-  void setViews(int newViews) {
-    views = newViews;
+  void setViews() {
+    views += 1;
   }
 }

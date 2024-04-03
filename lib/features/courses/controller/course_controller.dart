@@ -32,9 +32,15 @@ class CourseController extends GetxController {
         await ApiService.post(path: 'courses/create-course', body: course);
 
     if (response.success) {
+      courses.insert(0, CourseModel.fromMap(course));
       Get.back();
       Get.snackbar('Success', 'Course created successfully');
     }
+  }
+
+  Future<void> updateCourseViews(String id, int views) async {
+    Map<String, dynamic> course = {'views': views};
+    await ApiService.put(path: 'courses/update-course/$id', body: course);
   }
 
   Future<void> initCourses() async {
