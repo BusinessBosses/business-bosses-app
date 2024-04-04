@@ -1414,6 +1414,11 @@ double leadingWidth(PostModel p) {
 
 bool userHasVoted(PostModel post, ProfileController profileController) {
   String userId = profileController.myProfile.uid;
+  HomeController controller = Get.find();
+  String? selectedVote = controller.getSelectedVote(post.postId);
+  if (selectedVote != null) {
+    return true;
+  }
   return post.isPolled! &&
       post.pollvotes != null &&
       post.pollvotes!
@@ -1423,7 +1428,14 @@ bool userHasVoted(PostModel post, ProfileController profileController) {
 // Get the selected option if the user has voted
 String? userSelectedOption(
     PostModel post, ProfileController profileController) {
+  final HomeController homeController = Get.find();
   String userId = profileController.myProfile.uid;
+
+  String? selectedVote = homeController.getSelectedVote(post.postId);
+
+  if (selectedVote != null) {
+    return selectedVote;
+  }
 
   // Check if the post is a poll and if pollvotes exist and is not empty
   if (post.isPolled == true &&
