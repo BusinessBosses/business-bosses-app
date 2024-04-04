@@ -6,8 +6,8 @@ import 'package:business_bosses_v2/common/widgets/typography/text_widget.dart';
 import 'package:business_bosses_v2/features/courses/models/course_model.dart';
 import 'package:business_bosses_v2/features/courses/presentation/course_item.dart';
 import 'package:business_bosses_v2/features/courses/widgets/course_comment_item.dart';
+import 'package:business_bosses_v2/features/courses/widgets/downloadable_item.dart';
 import 'package:business_bosses_v2/features/courses/widgets/unpaidcoursepopup.dart';
-import 'package:business_bosses_v2/features/forum/widgets/downloadable_item.dart';
 import 'package:business_bosses_v2/features/posts/widgets/my_container.dart';
 import 'package:business_bosses_v2/features/posts/widgets/youtube_display.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
@@ -598,7 +598,7 @@ class _MyStickyHeaderState extends State<MyStickyHeader> {
                           scrollDirection: Axis.horizontal,
                           itemCount: 5,
                           itemBuilder: (BuildContext context, int index) {
-                            return const DownloadableItem(); // Assuming DownloadableItem is a widget class
+                            return  DownloadableItem(link: '',); // Assuming DownloadableItem is a widget class
                           }),
                     ),
                     SizedBox(
