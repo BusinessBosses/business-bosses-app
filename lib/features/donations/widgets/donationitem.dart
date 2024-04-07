@@ -4,6 +4,7 @@ import 'package:business_bosses_v2/action/action.dart';
 import 'package:business_bosses_v2/common/models/comment_model.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/common/widgets/typography/text_widget.dart';
+import 'package:business_bosses_v2/features/donations/widgets/supporteritem.dart';
 import 'package:business_bosses_v2/features/posts/widgets/youtube_display.dart';
 import 'package:business_bosses_v2/features/posts/widgets/yt_player.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
@@ -17,9 +18,12 @@ import 'package:get/get.dart';
 
 class DonationItem extends StatefulWidget {
   // final DonationModel Donation;
+  final bool isLastItem;
   const DonationItem({
-    super.key,
-  });
+    required this.isLastItem,
+    Key? key,
+  }) : super(key: key);
+
   // required this.Donation});
 
   @override
@@ -94,35 +98,26 @@ class _DonationItemState extends State<DonationItem> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Stack(children: [
-                  SizedBox(
-                    height: 90,
-                    width: 160,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(12.0),
-                      child: FittedBox(
-                        fit: BoxFit.fill,
-                        child: GestureDetector(
-                            onTap: () {},
-                            child: Container(
-                              color: Colors.black,
-                              height: 200,
-                              width: 200,
-                            )),
+                  GestureDetector(
+                    onTap: () {
+                      Get.toNamed(Routes.expandeddonationsscreen);
+                    },
+                    child: SizedBox(
+                      height: 90,
+                      width: 160,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(12.0),
+                        child: FittedBox(
+                          fit: BoxFit.fill,
+                          child: Container(
+                            color: Colors.black,
+                            height: 200,
+                            width: 200,
+                          ),
+                        ),
                       ),
                     ),
                   ),
-                  GestureDetector(
-                    onTap: () {
-                      // Get.to(() => ExpandedDonationScreen(Donation: widget.Donation));
-                    },
-                    child: Container(
-                      height: 90,
-                      width: 160,
-                      decoration: BoxDecoration(
-                          color: Colors.transparent,
-                          borderRadius: BorderRadius.circular(12.0)),
-                    ),
-                  )
                 ]),
                 const SizedBox(
                   width: 10,
@@ -145,78 +140,90 @@ class _DonationItemState extends State<DonationItem> {
                         'widget.Donation.description!',
                         style: const TextStyle(color: Colors.black45),
                       ),
-                      // Row(
-                      //   children: [
-                      //     const Text('by'),
-                      //     const SizedBox(
-                      //       width: 5,
-                      //     ),
-                      //     SizedBox(
-                      //       height: 20.0,
-                      //       width: 20.0,
-                      //       child: Align(
-                      //         alignment: Alignment.topLeft,
-                      //         child: ClipRRect(
-                      //           borderRadius: BorderRadius.circular(1000),
-                      //           child: NetworkImageWithPlaceHolder(
-                      //             imageUrl: widget.Donation.user?.photoUrl ?? '',
-                      //             radius: radius,
-                      //             placeHolder: Icons.person,
-                      //             iconSize: 15.0,
-                      //             fit: BoxFit.cover,
-                      //           ),
-                      //         ),
-                      //       ),
-                      //     ),
-                      //     const SizedBox(
-                      //       width: 5,
-                      //     ),
-                      //     Text(
-                      //       overflow: TextOverflow
-                      //           .ellipsis, // or TextOverflow.ellipsis
-                      //       maxLines: 1,
-                      //       widget.Donation.user?.name ??
-                      //           widget.Donation.user!.name!,
-                      //       style: const TextStyle(fontWeight: FontWeight.w700),
-                      //     ),
-                      //   ],
-                      // ),
                       SizedBox(
                         height: 10,
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text('100'),
-                          Wrap(
-                            crossAxisAlignment: WrapCrossAlignment.center,
+                          Row(
                             children: [
-                              Text('Target:'),
-                              SvgPicture.asset('assets/svgs/coin.svg'),
-                              Text('200')
+                              Text(
+                                '100',
+                                style: TextStyle(
+                                    fontSize: 10,
+                                    color: subtextColor,
+                                    fontWeight: FontWeight.w700),
+                              ),
+                              Text(
+                                ' coins raised',
+                                style: TextStyle(
+                                    fontSize: 10, color: subtextColor),
+                              ),
                             ],
-                          )
+                          ),
+                          Text(
+                            '70%',
+                            style: TextStyle(fontSize: 10, color: subtextColor),
+                          ),
                         ],
+                      ),
+                      SizedBox(
+                        height: 5,
                       ),
                       ClipRRect(
                         borderRadius: BorderRadius.circular(20),
                         child: const LinearProgressIndicator(
                           value: 0.4,
                           minHeight: 4,
-                          backgroundColor: Colors.grey,
+                          backgroundColor: backgroundcolorinterface,
                           valueColor:
                               AlwaysStoppedAnimation<Color>(primaryColorLT),
                         ),
                       ),
+                      SizedBox(
+                        height: 5,
+                      ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Text('70%'),
                           Wrap(
                             crossAxisAlignment: WrapCrossAlignment.center,
                             children: [
-                              Text('200'),
-                              Text(' Supporters'),
+                              SvgPicture.asset(
+                                'assets/svgs/coin.svg',
+                                height: 12,
+                              ),
+                              Text(
+                                '200',
+                                style: TextStyle(
+                                    color: subtextColor,
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 12),
+                              ),
+                              Text(
+                                'Target',
+                                style: TextStyle(
+                                    color: subtextColor, fontSize: 10),
+                              ),
+                            ],
+                          ),
+                          Wrap(
+                            crossAxisAlignment: WrapCrossAlignment.center,
+                            children: [
+                              Text(
+                                '100',
+                                style: TextStyle(
+                                    fontSize: 10,
+                                    color: subtextColor,
+                                    fontWeight: FontWeight.w700),
+                              ),
+                              Text(
+                                ' Supporters',
+                                style: TextStyle(
+                                    fontSize: 10, color: subtextColor),
+                              ),
                             ],
                           )
                         ],
@@ -433,15 +440,7 @@ class _DonationItemState extends State<DonationItem> {
                 ),
               ),
               TextButton.icon(
-                onPressed: () {
-                  // showModalBottomSheet(
-                  //   context: context,
-                  //   builder: (BuildContext context) => DonationCommentItem(
-                  //     Donation: widget.Donation,
-                  //     onComment: (CommentModel newComment) async {},
-                  //   ),
-                  // );
-                },
+                onPressed: () {},
                 icon: SvgPicture.asset(
                   'assets/svgs/comment.svg',
                   height: 15,
@@ -492,7 +491,12 @@ class _DonationItemState extends State<DonationItem> {
           Container(
             color: backgroundcolorinterface,
             height: 7,
-          )
+          ),
+          if (widget.isLastItem)
+             Container(
+              color: backgroundColor,
+              height: 80,
+            ),
         ],
       ),
     );

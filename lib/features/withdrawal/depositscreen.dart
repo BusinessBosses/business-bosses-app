@@ -93,7 +93,7 @@ class _DepositsScreenState extends State<DepositsScreen> {
                                 ],
                               ),
                               Container(
-                                width: 100,
+                                width: 120,
                                 height: 43,
                                 child: ElevatedButton(
                                     onPressed: () {
@@ -252,7 +252,7 @@ class _DepositsScreenState extends State<DepositsScreen> {
                                   child: Container(
                                     padding: EdgeInsets.symmetric(
                                         horizontal: 10, vertical: 10),
-                                    width: 100,
+                                    width: 120,
                                     decoration: BoxDecoration(
                                       border: Border.all(
                                           width: 2, color: primaryColorLT),
@@ -313,7 +313,7 @@ class _DepositsScreenState extends State<DepositsScreen> {
                                 child: Container(
                                   padding: EdgeInsets.symmetric(
                                       horizontal: 10, vertical: 10),
-                                  width: 100,
+                                  width: 120,
                                   decoration: BoxDecoration(
                                     border: Border.all(
                                         width: 2, color: primaryColorLT),

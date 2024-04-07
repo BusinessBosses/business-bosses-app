@@ -115,7 +115,7 @@ class _CreateDonationScreenState extends State<CreateDonationScreen> {
                     description = val;
                   },
                   decoration: inputDecoration.copyWith(
-                      hintText: 'Tell us the story behind your project'),
+                      hintText: 'Enter the story behind your project'),
                 ),
               ),
               const SizedBox(height: 12.0),
@@ -144,12 +144,14 @@ class _CreateDonationScreenState extends State<CreateDonationScreen> {
                           // controller: _priceController,
                           // onChanged: (String val) => price = val,
                           textInputAction: TextInputAction.next,
-                          keyboardType: TextInputType.text,
+                          keyboardType: TextInputType.number,
                           maxLength: 15,
                           decoration: inputDecoration.copyWith(
-                            hintText: 'Enter Amount to raise',
+                            hintText: 'Enter Amount to raise eg 2000',
                           ),
-                        )
+                        ),
+                        Positioned(
+                            top: 20, bottom: 0, right: 10, child: Text('(\$20.00)', style: TextStyle(color: textColor.withAlpha(100)),))
                       ]),
                     ),
                   ],
@@ -410,44 +412,30 @@ class _CreateDonationScreenState extends State<CreateDonationScreen> {
                 ),
               ),
               const SizedBox(height: 30),
-              Center(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: Text(
-                    textAlign: TextAlign.center,
-                    overflow: TextOverflow.visible,
-                    maxLines: null,
-                    style: const TextStyle(
-                      fontSize: 13,
-                      color: subtextColor,
+
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    SvgPicture.asset(
+                      'assets/svgs/report.svg',
+                      height: 18,
                     ),
-                    categoryId == Constants.LEARNINGID
-                        ? 'Only post articles, insights, and resources others can learn from.'
-                        : 'Only post opportunities that will help you and others grow their businesses.',
-                  ),
-                ),
-              ),
-              Center(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      SvgPicture.asset(
-                        'assets/svgs/report.svg',
-                        height: 18,
-                      ),
-                      const SizedBox(width: 2),
-                      Text(
-                          textAlign: TextAlign.left,
-                          overflow: TextOverflow.visible,
-                          maxLines: null,
-                          style: const TextStyle(
-                              fontSize: 13, color: primaryColorLT),
-                          'sddd'),
-                    ],
-                  ),
+                    const SizedBox(
+                      width: 2,
+                    ),
+                    const Flexible(
+                      child: Text(
+                          textAlign: TextAlign.center,
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 2,
+                          style: TextStyle(
+                              fontSize: 13, color: subtextColor),
+                          'Please note this donation MUST be for your business only. We do not currently support any charitable organisation donations. '),
+                    ),
+                  ],
                 ),
               ),
             ],

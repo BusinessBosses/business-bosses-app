@@ -44,70 +44,19 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
 
   List<Widget> get mActions {
     return <Widget>[
-      Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          Container(
-            decoration: BoxDecoration(
-              color: backgroundcolorinterface, // ash background color
-              borderRadius: BorderRadius.circular(20), // rounded corners
-            ),
-            child: GestureDetector(
-              child: Wrap(
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.only(
-                        left: 8, top: 5, right: 8, bottom: 5),
-                    child: GestureDetector(
-                      onTap: () {
-                        Get.toNamed(Routes.promotionscreen);
-                      },
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: <Widget>[
-                          SvgPicture.asset(
-                            'assets/svgs/coin.svg',
-                            height: 22,
-                          ),
-                          const SizedBox(
-                            width: 5,
-                          ),
-                          Text(
-                            _profileController.myProfile.coinscount.toString(),
-                            style: const TextStyle(
-                              color: Color.fromRGBO(133, 133, 133, 1),
-                              fontSize: 15,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  )
-                ],
+      IconButton(
+        icon: _isSearching
+            ? const Icon(Icons.close)
+            : SvgPicture.asset(
+                'assets/svgs/search.svg',
               ),
-            ),
-          ),
-          const SizedBox(
-            width: 10,
-          ),
-          IconButton(
-            icon: _isSearching
-                ? const Icon(Icons.close)
-                : SvgPicture.asset(
-                    'assets/svgs/search.svg',
-                  ),
-            onPressed: () {
-              // if (_isSearching) {
-              _isSearching = !_isSearching;
-              // }
-              setState(() {});
-              _communitiesController.clearSearch();
-            },
-          ),
-        ],
+        onPressed: () {
+          // if (_isSearching) {
+          _isSearching = !_isSearching;
+          // }
+          setState(() {});
+          _communitiesController.clearSearch();
+        },
       ),
     ];
   }

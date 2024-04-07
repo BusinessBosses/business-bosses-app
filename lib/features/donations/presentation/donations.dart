@@ -215,24 +215,26 @@ class _DonationsPageState extends State<DonationsPage> {
                                               BorderRadius.circular(10.0),
                                           child: FittedBox(
                                             fit: BoxFit.fill,
-                                            child: CachedNetworkImage(
-                                              imageUrl:
-                                                  //  industry.photo ??
-                                                  'https://businessbosses.com.ng/learningImages/events.jpg',
-                                              memCacheHeight: 256,
-                                              memCacheWidth: 256,
-                                              placeholder: (BuildContext
-                                                          context,
-                                                      String photo) =>
-                                                  const CircularProgressIndicator(),
-                                              errorWidget:
-                                                  // ignore: always_specify_types
-                                                  (BuildContext context,
-                                                          // ignore: always_specify_types
-                                                          String photo,
-                                                          Object error) =>
-                                                      const Icon(Icons.error),
-                                            ),
+                                            child: Image.asset(
+                                                'assets/images/donationpic.png'),
+                                            // CachedNetworkImage(
+                                            //   imageUrl:
+                                            //       //  industry.photo ??
+                                            //       'https://businessbosses.com.ng/learningImages/events.jpg',
+                                            //   memCacheHeight: 256,
+                                            //   memCacheWidth: 256,
+                                            //   placeholder: (BuildContext
+                                            //               context,
+                                            //           String photo) =>
+                                            //       const CircularProgressIndicator(),
+                                            //   errorWidget:
+                                            //       // ignore: always_specify_types
+                                            //       (BuildContext context,
+                                            //               // ignore: always_specify_types
+                                            //               String photo,
+                                            //               Object error) =>
+                                            //           const Icon(Icons.error),
+                                            // ),
                                           ),
                                         ),
                                       ),
@@ -242,7 +244,7 @@ class _DonationsPageState extends State<DonationsPage> {
                                             const EdgeInsets.only(right: 30),
                                         child: Text(
                                           // industry.description ??
-                                          'Industry Description',
+                                          'Donate to Support a Project',
                                           style: const TextStyle(
                                               fontSize: 15,
                                               fontWeight: FontWeight.w700),
@@ -274,33 +276,28 @@ class _DonationsPageState extends State<DonationsPage> {
                                               child: RichText(
                                                 text: TextSpan(
                                                   children: <InlineSpan>[
-                                                    // TextSpan(
-                                                    //   text:
-                                                    //   industry
-                                                    //               .joinedUsers ==
-                                                    //           null
-                                                    //       ? 'Members (0)'
-                                                    //       : 'Members ($formattedUserCount)',
-                                                    //   style: const TextStyle(
-                                                    //     fontSize: 12,
-                                                    //     fontWeight:
-                                                    //         FontWeight.w600,
-                                                    //     color: primaryColorLT,
-                                                    //     decoration:
-                                                    //         TextDecoration
-                                                    //             .underline,
-                                                    //   ),
-                                                    //   recognizer:
-                                                    //       TapGestureRecognizer()
-                                                    //         ..onTap = () {
-                                                    //           Get.toNamed(
-                                                    //             Routes
-                                                    //                 .specificuserlistscreen,
-                                                    //             arguments: industry
-                                                    //                 .industryId,
-                                                    //           );
-                                                    //         },
-                                                    // ),
+                                                    TextSpan(
+                                                      text: 'Members (22)',
+                                                      style: const TextStyle(
+                                                        fontSize: 12,
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                        color: primaryColorLT,
+                                                        decoration:
+                                                            TextDecoration
+                                                                .underline,
+                                                      ),
+                                                      recognizer:
+                                                          TapGestureRecognizer()
+                                                            ..onTap = () {
+                                                              // Get.toNamed(
+                                                              //   Routes
+                                                              //       .specificuserlistscreen,
+                                                              //   arguments: industry
+                                                              //       .industryId,
+                                                              // );
+                                                            },
+                                                    ),
                                                   ],
                                                 ),
                                               ),
@@ -313,7 +310,7 @@ class _DonationsPageState extends State<DonationsPage> {
                                               padding: const EdgeInsets.only(
                                                   left: 8.0, top: 5, right: 2),
                                               child: SvgPicture.asset(
-                                                'assets/svgs/Donations.svg',
+                                                'assets/svgs/topics.svg',
                                                 color: textColor,
                                                 height: 11.5,
                                               ),
@@ -324,19 +321,15 @@ class _DonationsPageState extends State<DonationsPage> {
                                               child: RichText(
                                                 text: TextSpan(
                                                   children: <InlineSpan>[
-                                                    // TextSpan(
-                                                    //   text: industry.categoryId!
-                                                    //               .toString() ==
-                                                    //           'd479f179-3f41-4d84-915d-33110cf5b4fb'
-                                                    //       ? 'Donations ($formattedpostCount) '
-                                                    //       : 'Opport. ($formattedpostCount)',
-                                                    //   style: const TextStyle(
-                                                    //     fontSize: 12,
-                                                    //     color: textColor,
-                                                    //     fontWeight:
-                                                    //         FontWeight.w600,
-                                                    //   ),
-                                                    // ),
+                                                    TextSpan(
+                                                      text: 'Posts (22)',
+                                                      style: const TextStyle(
+                                                        fontSize: 12,
+                                                        color: textColor,
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                      ),
+                                                    ),
                                                   ],
                                                 ),
                                               ),
@@ -344,18 +337,16 @@ class _DonationsPageState extends State<DonationsPage> {
                                           ],
                                         ),
                                         const Spacer(),
-                                        // Align(
-                                        //   alignment: Alignment.centerRight,
-                                        //   child: JoinedButton(
-                                        //     industry.joinedUsers?.contains(
-                                        //             _myProfile.myProfile.uid) ??
-                                        //         false,
-                                        //     () {
-                                        //       toggleJoinAndLeaveIndustry(
-                                        //           controller);
-                                        //     },
-                                        //   ),
-                                        // )
+                                        Align(
+                                          alignment: Alignment.centerRight,
+                                          child: JoinedButton(
+                                            false,
+                                            () {
+                                              // toggleJoinAndLeaveIndustry(
+                                              //     controller);
+                                            },
+                                          ),
+                                        )
                                       ],
                                     ),
                                   )
@@ -367,6 +358,71 @@ class _DonationsPageState extends State<DonationsPage> {
                         const SizedBox(
                           height: 10,
                         ),
+                        GestureDetector(
+                          onTap: () {
+                            Get.toNamed(Routes.promotionscreen);
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.only(
+                                right: 15, left: 15, bottom: 10),
+                            child: Container(
+                                height: 40,
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFFFFFFFF),
+                                  borderRadius: BorderRadius.circular(10),
+                                  boxShadow: <BoxShadow>[
+                                    BoxShadow(
+                                      color: Colors.grey.withOpacity(0.3),
+                                      spreadRadius: 20,
+                                      blurRadius: 500,
+                                      offset: const Offset(0, 3),
+                                    ),
+                                  ],
+                                ),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: <Widget>[
+                                    Padding(
+                                      padding:
+                                          const EdgeInsets.only(left: 10.0),
+                                      child: Wrap(
+                                        crossAxisAlignment:
+                                            WrapCrossAlignment.center,
+                                        children: [
+                                          SvgPicture.asset(
+                                              'assets/svgs/coin.svg'),
+                                          SizedBox(
+                                            width: 2,
+                                          ),
+                                          Text(
+                                            '${_myProfile.myProfile.coinscount!}',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.w700,
+                                                color: subtextColor),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                        right: 10.0,
+                                      ),
+                                      child: Wrap(
+                                          crossAxisAlignment:
+                                              WrapCrossAlignment.center,
+                                          children: [
+                                            Text('Coin Balance '),
+                                            SvgPicture.asset(
+                                              'assets/svgs/nexticon.svg',
+                                              color: textColor,
+                                            ),
+                                          ]),
+                                    )
+                                  ],
+                                )),
+                          ),
+                        )
                       ],
                     ),
                   )
@@ -412,6 +468,7 @@ class _DonationsPageState extends State<DonationsPage> {
                 //controller: differentController,
 
                 itemBuilder: (BuildContext context, int i) {
+                  bool isLastItem = i == 4 - 1;
                   return
                       //  VisibilityDetector(
                       //   key: Key(i.toString()),
@@ -431,7 +488,10 @@ class _DonationsPageState extends State<DonationsPage> {
                       //   }
                       // },
                       // child:
-                      DonationItem();
+
+                      DonationItem(
+                    isLastItem: isLastItem,
+                  );
                 }));
   }
 }

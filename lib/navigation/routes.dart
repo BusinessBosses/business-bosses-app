@@ -65,4 +65,5 @@ class Routes {
   static const String coursehistoryscreen = '/coursehistory-screen';
   static const String donationsscreen = '/donations-screen';
   static const String createdonationsscreen = '/create-donations-screen';
+    static const String expandeddonationsscreen = '/expanded-donations-screen';
 }
