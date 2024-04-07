@@ -113,8 +113,8 @@ class _DonationsHistoryState extends State<DonationsHistory> {
                     padding: const EdgeInsets.all(5),
                     children: {
                       0: Text('All'),
-                      1: Text('Incoming'),
-                      2: Text('Outgoing'),
+                      1: Text('Received'),
+                      2: Text('Outgone'),
                     },
                     onValueChanged: (int? value) {
                       if (value != null) {
