@@ -358,38 +358,39 @@ class _DonationsPageState extends State<DonationsPage> {
                         const SizedBox(
                           height: 10,
                         ),
-                        GestureDetector(
-                          onTap: () {
-                            Get.toNamed(Routes.promotionscreen);
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.only(
-                                right: 15, left: 15, bottom: 10),
-                            child: Container(
-                                height: 40,
-                                decoration: BoxDecoration(
-                                  color: const Color(0xFFFFFFFF),
-                                  borderRadius: BorderRadius.circular(10),
-                                  boxShadow: <BoxShadow>[
-                                    BoxShadow(
-                                      color: Colors.grey.withOpacity(0.3),
-                                      spreadRadius: 20,
-                                      blurRadius: 500,
-                                      offset: const Offset(0, 3),
-                                    ),
-                                  ],
-                                ),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: <Widget>[
-                                    Padding(
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              right: 15, left: 15, bottom: 10),
+                          child: Container(
+                              height: 40,
+                              decoration: BoxDecoration(
+                                color: const Color(0xFFFFFFFF),
+                                borderRadius: BorderRadius.circular(10),
+                                boxShadow: <BoxShadow>[
+                                  BoxShadow(
+                                    color: Colors.grey.withOpacity(0.3),
+                                    spreadRadius: 20,
+                                    blurRadius: 500,
+                                    offset: const Offset(0, 3),
+                                  ),
+                                ],
+                              ),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: <Widget>[
+                                  GestureDetector(
+                                    onTap: () {
+                                       Get.toNamed(Routes.promotionscreen);
+                                    },
+                                    child: Padding(
                                       padding:
                                           const EdgeInsets.only(left: 10.0),
                                       child: Wrap(
                                         crossAxisAlignment:
                                             WrapCrossAlignment.center,
                                         children: [
+                                          Text('Coin Balance: '),
                                           SvgPicture.asset(
                                               'assets/svgs/coin.svg'),
                                           SizedBox(
@@ -404,7 +405,10 @@ class _DonationsPageState extends State<DonationsPage> {
                                         ],
                                       ),
                                     ),
-                                    Padding(
+                                  ),
+                                  GestureDetector(
+                                    onTap: (){ Get.toNamed(Routes.donationshistoryscreen);},
+                                    child: Padding(
                                       padding: const EdgeInsets.only(
                                         right: 10.0,
                                       ),
@@ -412,16 +416,16 @@ class _DonationsPageState extends State<DonationsPage> {
                                           crossAxisAlignment:
                                               WrapCrossAlignment.center,
                                           children: [
-                                            Text('Coin Balance '),
+                                            Text('Donation History '),
                                             SvgPicture.asset(
                                               'assets/svgs/nexticon.svg',
                                               color: textColor,
                                             ),
                                           ]),
-                                    )
-                                  ],
-                                )),
-                          ),
+                                    ),
+                                  )
+                                ],
+                              )),
                         )
                       ],
                     ),
