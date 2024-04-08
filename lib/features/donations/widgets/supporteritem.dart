@@ -47,7 +47,7 @@ class _SupporterItemState extends State<SupporterItem> {
                 tabs: <Widget>[
                   Tab(
                     child: Text(
-                      'Supporters (0)',
+                      'Supporters (20)',
                       style: Theme.of(context).textTheme.bodyLarge,
                     ),
                   ),
@@ -60,7 +60,7 @@ class _SupporterItemState extends State<SupporterItem> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Expanded(
-                      child: '_commentController.comments.isEmpty' != ''
+                      child: '_commentController.comments.isEmpty' == ''
                           ? SafetyModel(
                               isLoading: false,
                               icon: SvgPicture.asset(
