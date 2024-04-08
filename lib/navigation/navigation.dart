@@ -178,11 +178,11 @@ var routes = [
     page: () => const CreateForumScreen(),
     binding: BindingsBuilder.put(() => CreateForumController()),
   ),
-  GetPage(
-    name: Routes.createBossUp,
-    page: () => const CreateBossUpScreen(),
-    binding: BindingsBuilder.put(() => CreateBossUpController()),
-  ),
+  // GetPage(
+  //   name: Routes.createBossUp,
+  //   page: () => const CreateBossUpScreen(industryModel: null,),
+  //   binding: BindingsBuilder.put(() => CreateBossUpController()),
+  // ),
   // GetPage(
   //   name: Routes.postDetails,
   //   page: () => PostDetailsScreen(),

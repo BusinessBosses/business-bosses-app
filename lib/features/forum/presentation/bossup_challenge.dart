@@ -42,7 +42,10 @@ class _BossupChallengeState extends State<BossupChallenge> {
               final Industry category = controller.categories[index];
               return GestureDetector(
                 onTap: () {
-                  Get.to(() => BossUpSection(industry: category));
+                  Get.to(() => BossUpSection(
+                        industry: category,
+                        bossUp: controller.categories[0],
+                      ));
                 },
                 child: Stack(children: [
                   Container(
