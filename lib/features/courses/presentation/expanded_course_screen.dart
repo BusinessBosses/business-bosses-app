@@ -1,11 +1,25 @@
+import 'package:business_bosses_v2/action/action.dart';
+import 'package:business_bosses_v2/common/models/comment_model.dart';
+import 'package:business_bosses_v2/common/widgets/buttons/my_outlined_button.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
+import 'package:business_bosses_v2/common/widgets/typography/text_widget.dart';
 import 'package:business_bosses_v2/features/courses/models/course_model.dart';
+import 'package:business_bosses_v2/features/courses/presentation/course_item.dart';
+import 'package:business_bosses_v2/features/courses/widgets/course_comment_item.dart';
 import 'package:business_bosses_v2/features/courses/widgets/downloadable_item.dart';
+import 'package:business_bosses_v2/features/courses/widgets/unpaidcoursepopup.dart';
+import 'package:business_bosses_v2/features/posts/widgets/my_container.dart';
 import 'package:business_bosses_v2/features/posts/widgets/youtube_display.dart';
+import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+
+import 'package:zego_uikit_prebuilt_live_audio_room/zego_uikit_prebuilt_live_audio_room.dart';
 
 class ExpandedCourseScreen extends StatefulWidget {
   static const String routeName = '/expandedcoursescreen';
@@ -25,222 +39,72 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
   @override
   void initState() {
     super.initState();
+    // Initialize data or perform any other necessary setup
   }
 
   @override
   Widget build(BuildContext context) {
+    String ytUrl = 'https://www.youtube.com/watch?v=3gm6eBtWfi4';
     ScrollController scrollController = ScrollController();
 
     return Scaffold(
-      body: Stack(
-        children: <Widget>[
-          NestedScrollView(
-            controller: scrollController,
-            headerSliverBuilder:
-                (BuildContext context, bool innerBoxIsScrolled) {
-              return <Widget>[
-                SliverAppBar(
-                  leading: IconButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
-                  ),
-                  centerTitle: true,
-                  title: Text(
-                    widget.course.title!,
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(fontSize: 20),
-                  ),
-                  expandedHeight: 300.0,
-                  collapsedHeight: 300.0,
-                  floating: false,
-                  pinned: true,
-                  flexibleSpace: FlexibleSpaceBar(
-                    background: Padding(
-                      padding: const EdgeInsets.only(top: 100.0),
-                      child: YoutubeDisplay(
+      body: NestedScrollView(
+        controller: scrollController,
+        headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+          return <Widget>[
+            SliverAppBar(
+              leading: IconButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
+              ),
+              centerTitle: true,
+              title: const Text(
+                'Course Title',
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 20),
+              ),
+              expandedHeight: 300.0,
+              collapsedHeight: 300.0,
+              floating: false,
+              pinned: true,
+              flexibleSpace: FlexibleSpaceBar(
+                background: Padding(
+                  padding: const EdgeInsets.only(top: 120.0),
+                  child: Stack(
+                    children: [
+                      YoutubeDisplay(
                         widget.course.youtubeUrls![0],
                         corner: BorderRadius.circular(0),
                       ),
-                    ),
-                  ),
-                ),
-              ];
-            },
-            body: MyStickyHeader(course: widget.course),
-          ),
-          if (widget.course.courseType != 'free')
-            Positioned.fill(
-              child: Container(
-                color:
-                    Colors.black.withOpacity(0.9), // Adjust opacity as needed
-                child: Stack(
-                  children: [
-                    Align(
-                      alignment: Alignment.topLeft,
-                      child: Padding(
-                        padding: const EdgeInsets.all(30.0),
+                      Visibility(
+                        visible: widget.course.courseType == 'paid',
                         child: GestureDetector(
                           onTap: () {
-                            Get.back();
+                            showDialog(
+                              barrierColor: Colors.black.withAlpha(240),
+                              context: context,
+                              builder: (BuildContext context) =>
+                                  UnpaidCoursePopUp(
+                                course: widget.course,
+                              ),
+                            );
                           },
                           child: Container(
-                            decoration: const BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Colors.white,
-                            ),
-                            child: const Icon(
-                              Icons.close,
-                              color: Colors.black,
-                            ),
+                            color: Colors.transparent,
+                            height: 200,
                           ),
                         ),
-                      ),
-                    ),
-                    Align(
-                      alignment: Alignment.topCenter,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(20),
-                            child: Container(
-                              width: MediaQuery.of(context).size.width * 0.75,
-                              height: 200,
-                              color: Colors.white,
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
-                                  children: <Widget>[
-                                    Text(
-                                      widget.course.title!,
-                                      softWrap: true,
-                                      style: const TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    Text(
-                                      widget.course.description!,
-                                      softWrap: true,
-                                    ),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: <Widget>[
-                                        SizedBox(
-                                          height: 45,
-                                          width: 45,
-                                          child: ClipRRect(
-                                            borderRadius:
-                                                BorderRadius.circular(1000),
-                                            child: NetworkImageWithPlaceHolder(
-                                              imageUrl: widget
-                                                      .course.user?.photoUrl ??
-                                                  '',
-                                              radius: radius,
-                                              placeHolder: Icons.person,
-                                              iconSize: 15.0,
-                                              fit: BoxFit.cover,
-                                            ),
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                          width: 6,
-                                        ),
-                                        Text(
-                                          widget.course.user?.name ??
-                                              widget.course.user!.username,
-                                          style: const TextStyle(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.bold),
-                                        )
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 80,
-                          ),
-                          const Text(
-                            'Access Denied',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 40,
-                          ),
-                          const Center(
-                            child: Padding(
-                              padding: EdgeInsets.all(9),
-                              child: Text(
-                                'Sorry this is a paid course and you currently do not have permissions to view the content.',
-                                softWrap: true,
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(height: 50),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 50,
-                            ),
-                            child: ElevatedButton(
-                              onPressed: () {},
-                              child: Padding(
-                                padding: const EdgeInsets.all(16.0),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    const Text(
-                                      'Buy Course For',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16,
-                                      ),
-                                    ),
-                                    const SizedBox(width: 6),
-                                    SvgPicture.asset(
-                                      'assets/svgs/coin.svg',
-                                      height: 22,
-                                    ),
-                                    const SizedBox(width: 6),
-                                    Text(
-                                      widget.course.price!,
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  ],
+                      )
+                    ],
+                  ),
                 ),
               ),
             ),
-        ],
+          ];
+        },
+        body: MyStickyHeader(course: widget.course),
       ),
     );
   }
@@ -249,16 +113,68 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
 class MyStickyHeader extends StatefulWidget {
   final CourseModel course;
 
-  const MyStickyHeader({required this.course});
+  MyStickyHeader({required this.course});
 
   @override
   State<MyStickyHeader> createState() => _MyStickyHeaderState();
 }
 
 class _MyStickyHeaderState extends State<MyStickyHeader> {
+  List<String> blocked = <String>[];
+  final List<PopupMenuEntry<String>> myPopupMore = <PopupMenuEntry<String>>[
+    const PopupMenuItem<String>(
+      value: 'Edit',
+      child: Text(
+        'Edit',
+        style: bodyText2,
+      ),
+    ),
+    const PopupMenuDivider(
+      height: 0.0,
+    ),
+    const PopupMenuItem<String>(
+      value: 'Delete',
+      child: Text(
+        'Delete',
+        style: bodyText2,
+      ),
+    ),
+    const PopupMenuDivider(
+      height: 0.0,
+    ),
+    const PopupMenuItem<String>(
+      value: 'Boost',
+      child: Text(
+        'Boost',
+        style: bodyText2,
+      ),
+    ),
+  ];
+
+  final List<PopupMenuEntry<String>> myPopup = <PopupMenuEntry<String>>[
+    const PopupMenuItem<String>(
+      value: 'Hide',
+      child: Text(
+        'Hide',
+        style: bodyText2,
+      ),
+    ),
+    const PopupMenuDivider(
+      height: 0.0,
+    ),
+    const PopupMenuItem<String>(
+      value: 'Report',
+      child: Text(
+        'Report',
+        style: bodyText2,
+      ),
+    )
+  ];
+
   @override
   Widget build(BuildContext context) {
-    return Stack(children: <Widget>[
+    ProfileController profileController = Get.find();
+    return Stack(children: [
       SingleChildScrollView(
         child: Container(
           color: Colors.white,
@@ -280,21 +196,212 @@ class _MyStickyHeaderState extends State<MyStickyHeader> {
                             overflow: TextOverflow
                                 .ellipsis, // or TextOverflow.ellipsis
                             maxLines: 5,
-                            style: const TextStyle(
+                            style: TextStyle(
                                 fontSize: 18, fontWeight: FontWeight.bold),
                           ),
                         ),
-                        const Icon(
-                          Icons.more_horiz,
-                          size: 20,
-                          color: Colors.black,
-                          weight: 100,
+                        GestureDetector(
+                          onTap: () {
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context) => AlertDialog(
+                                      content: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: <Widget>[
+                                          ListTile(
+                                            onTap: () {
+                                              // Navigator.pop(context);
+                                              showDialog(
+                                                context: context,
+                                                builder:
+                                                    (BuildContext context) =>
+                                                        AlertDialog(
+                                                  title: const TextWidget(
+                                                    text:
+                                                        'Do you want to block user?',
+                                                    centralize: true,
+                                                    fontWeight: FontWeight.w700,
+                                                    size: 20,
+                                                  ),
+                                                  content: TextWidget(
+                                                    text:
+                                                        'You will no longer see courses, posts and comments from this user on your feed',
+                                                    centralize: true,
+                                                    color: Colors.black
+                                                        .withOpacity(.6),
+                                                  ),
+                                                  actions: <Widget>[
+                                                    TextButton(
+                                                      onPressed: () =>
+                                                          Navigator.pop(
+                                                              context),
+                                                      child: const TextWidget(
+                                                        text: 'Cancel',
+                                                        fontWeight:
+                                                            FontWeight.w700,
+                                                        size: 18,
+                                                        color: Colors.grey,
+                                                      ),
+                                                    ),
+                                                    GestureDetector(
+                                                      onTap: () {
+                                                        Navigator.pop(context);
+                                                        // print(_post.user.uid);
+                                                        setState(() {
+                                                          blocked.add(widget
+                                                              .course
+                                                              .user!
+                                                              .uid);
+                                                        });
+                                                        showSnackBar(context,
+                                                            message:
+                                                                'User has been blocked');
+                                                      },
+                                                      child: Container(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .symmetric(
+                                                          vertical: 7,
+                                                          horizontal: 14,
+                                                        ),
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          color: primaryColorLT,
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(5),
+                                                        ),
+                                                        child: const TextWidget(
+                                                          text: 'Block',
+                                                          color: Colors.white,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                        ),
+                                                      ),
+                                                    )
+                                                  ],
+                                                ),
+                                              );
+                                            },
+                                            contentPadding: EdgeInsets.zero,
+                                            title: GestureDetector(
+                                              child: widget.course.user
+                                                          ?.isSubscribed ==
+                                                      true
+                                                  ? Row(
+                                                      children: <Widget>[
+                                                        TextWidget(
+                                                          text:
+                                                              'Block @${widget.course.user?.name}',
+                                                          color: Colors.blue,
+                                                        ),
+                                                        const SizedBox(
+                                                            width: 5),
+                                                        SvgPicture.asset(
+                                                          'assets/svgs/premiumbadge.svg',
+                                                          height: 9,
+                                                          color: primaryColorLT,
+                                                        )
+                                                      ],
+                                                    )
+                                                  : TextWidget(
+                                                      text:
+                                                          'Block @${widget.course.user?.name}',
+                                                      color: Colors.blue,
+                                                    ),
+                                            ),
+                                          ),
+                                          ListTile(
+                                            onTap: () {
+                                              Navigator.of(context)
+                                                  .pop(context);
+                                              showDialog(
+                                                context: context,
+                                                builder:
+                                                    (BuildContext context) =>
+                                                        AlertDialog(
+                                                  title: const TextWidget(
+                                                    text:
+                                                        'Do you want to report course?',
+                                                    centralize: true,
+                                                    fontWeight: FontWeight.w700,
+                                                    size: 20,
+                                                  ),
+                                                  content: TextWidget(
+                                                    text:
+                                                        'The course will be reported to admin to evaluate if it violates any community policy',
+                                                    centralize: true,
+                                                    color: Colors.black
+                                                        .withOpacity(.6),
+                                                  ),
+                                                  actions: <Widget>[
+                                                    TextButton(
+                                                      onPressed: () =>
+                                                          Navigator.pop(
+                                                              context),
+                                                      child: const TextWidget(
+                                                        text: 'Cancel',
+                                                        fontWeight:
+                                                            FontWeight.w700,
+                                                        size: 18,
+                                                        color: Colors.grey,
+                                                      ),
+                                                    ),
+                                                    GestureDetector(
+                                                      onTap: () {
+                                                        Navigator.pop(context);
+                                                        showSnackBar(context,
+                                                            message:
+                                                                'Course has been Reported');
+                                                      },
+                                                      child: Container(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .symmetric(
+                                                          vertical: 7,
+                                                          horizontal: 14,
+                                                        ),
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          color: primaryColorLT,
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(5),
+                                                        ),
+                                                        child: const TextWidget(
+                                                          text: 'Report',
+                                                          color: Colors.white,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                        ),
+                                                      ),
+                                                    )
+                                                  ],
+                                                ),
+                                              );
+                                            },
+                                            contentPadding: EdgeInsets.zero,
+                                            title: const TextWidget(
+                                              text: 'Report this course',
+                                              color: Colors.red,
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ));
+                          },
+                          child: const Icon(
+                            Icons.more_horiz,
+                            size: 20,
+                            color: Colors.black,
+                            weight: 100,
+                          ),
                         )
                       ],
                     ),
                     Text(
                       widget.course.description!,
-                      style: const TextStyle(fontSize: 15, color: textColor),
+                      style: TextStyle(fontSize: 15, color: textColor),
                     ),
                     Row(
                       children: <Widget>[
@@ -325,7 +432,7 @@ class _MyStickyHeaderState extends State<MyStickyHeader> {
                           widget.course.user?.name ?? widget.course.user!.name!,
                           style: const TextStyle(fontWeight: FontWeight.w700),
                         ),
-                        const SizedBox(
+                        SizedBox(
                           width: 5,
                         ),
                         const Icon(
@@ -357,89 +464,97 @@ class _MyStickyHeaderState extends State<MyStickyHeader> {
                         ),
                       ],
                     ),
-                    SizedBox(
-                      height: 90,
-                      child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: widget.course.youtubeUrls?.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            return Row(
-                              children: [
-                                Stack(children: [
-                                  SizedBox(
-                                    height: 90,
-                                    width: 160,
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(12.0),
-                                      child: FittedBox(
-                                        fit: BoxFit.fill,
-                                        child: Stack(
-                                          children: <Widget>[
-                                            GestureDetector(
-                                                onTap: () {},
-                                                child: YoutubeDisplay(widget
-                                                    .course
-                                                    .youtubeUrls![index])),
-                                            Positioned(
-                                              top: 0,
-                                              bottom: 0,
-                                              right: 0,
-                                              left: 0,
-                                              child: GestureDetector(
-                                                onTap: () {},
-                                                child: Icon(
-                                                  Icons.play_circle_outlined,
-                                                  color: Colors.black
-                                                      .withOpacity(0.5),
-                                                  size: 70,
-                                                ),
+                    widget.course.youtubeUrls!.length > 1
+                        ? Container(
+                            height: 90,
+                            child: ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                itemCount:
+                                    widget.course.youtubeUrls!.length - 1,
+                                itemBuilder: (BuildContext context, int index) {
+                                  return Row(
+                                    children: [
+                                      Stack(children: [
+                                        Container(
+                                          height: 90,
+                                          width: 160,
+                                          child: ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(12.0),
+                                            child: FittedBox(
+                                              fit: BoxFit.fill,
+                                              child: Stack(
+                                                children: <Widget>[
+                                                  GestureDetector(
+                                                      onTap: () {},
+                                                      child: YoutubeDisplay(
+                                                          widget.course
+                                                                  .youtubeUrls![
+                                                              index + 1])),
+                                                  Positioned(
+                                                    top: 0,
+                                                    bottom: 0,
+                                                    right: 0,
+                                                    left: 0,
+                                                    child: GestureDetector(
+                                                      onTap: () {},
+                                                      child: Icon(
+                                                        Icons
+                                                            .play_circle_outlined,
+                                                        color: Colors.black
+                                                            .withOpacity(0.5),
+                                                        size: 70,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
                                               ),
                                             ),
-                                          ],
+                                          ),
                                         ),
-                                      ),
-                                    ),
+                                        InkWell(
+                                          onTap: () {},
+                                          child: Container(
+                                            height: 90,
+                                            width: 160,
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(12),
+                                            ),
+                                          ),
+                                        ),
+                                      ]),
+                                      const SizedBox(
+                                        width: 10,
+                                      )
+                                    ],
+                                  );
+                                }),
+                          )
+                        : Container(),
+                    widget.course.youtubeUrls!.length > 1
+                        ? const SizedBox(
+                            height: 20,
+                          )
+                        : Container(),
+                    widget.course.courseType == 'free'
+                        ? Container()
+                        : Center(
+                            child: ElevatedButton(
+                                onPressed: () {},
+                                child: Padding(
+                                  padding: const EdgeInsets.all(10.0),
+                                  child: Wrap(
+                                    runAlignment: WrapAlignment.center,
+                                    crossAxisAlignment:
+                                        WrapCrossAlignment.center,
+                                    children: [
+                                      Text('Buy Course for '),
+                                      SvgPicture.asset('assets/svgs/coin.svg'),
+                                      Text(' ${widget.course.price!}')
+                                    ],
                                   ),
-                                  InkWell(
-                                    onTap: () {},
-                                    child: Container(
-                                      height: 90,
-                                      width: 160,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(12),
-                                      ),
-                                    ),
-                                  ),
-                                ]),
-                                const SizedBox(
-                                  width: 10,
-                                )
-                              ],
-                            );
-                          }),
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    Center(
-                      child: widget.course.courseType == 'free'
-                          ? const SizedBox()
-                          : ElevatedButton(
-                              onPressed: () {},
-                              child: Padding(
-                                padding: const EdgeInsets.all(10.0),
-                                child: Wrap(
-                                  runAlignment: WrapAlignment.center,
-                                  crossAxisAlignment: WrapCrossAlignment.center,
-                                  children: [
-                                    const Text('Buy Course for '),
-                                    SvgPicture.asset('assets/svgs/coin.svg'),
-                                    Text(widget.course.price!)
-                                  ],
-                                ),
-                              ),
-                            ),
-                    ),
+                                ))),
                     const SizedBox(
                       height: 20,
                     ),
@@ -450,58 +565,49 @@ class _MyStickyHeaderState extends State<MyStickyHeader> {
                     const SizedBox(
                       height: 20,
                     ),
-                    if (widget.course.transcript != null)
-                      Container(
-                        decoration: BoxDecoration(
-                          color: backgroundcolorinterface,
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        width: MediaQuery.of(context).size.width,
-                        child: Padding(
-                          padding: const EdgeInsets.all(10.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              const Text('Video Transcript'),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 20.0),
-                                child: Text(widget.course.transcript!),
-                              ),
-                            ],
-                          ),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: backgroundcolorinterface,
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      width: MediaQuery.sizeOf(context).width,
+                      child: const Padding(
+                        padding: EdgeInsets.all(10.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('Video Transcript'),
+                            Padding(
+                              padding: EdgeInsets.symmetric(vertical: 20.0),
+                              child: Text(
+                                  'Video Transcript Text here iuhuh uhiuh hiuhuhiuhiiu gu giuiukg'),
+                            ),
+                          ],
                         ),
                       ),
-                    if (widget.course.documents != null &&
-                        widget.course.documents!.isNotEmpty)
-                      const SizedBox(
-                        height: 30,
-                      ),
-                    if (widget.course.documents != null &&
-                        widget.course.documents!.isNotEmpty)
-                      const Text(
-                        'Downloadable Resources',
-                        style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.bold),
-                      ),
-                    if (widget.course.documents != null &&
-                        widget.course.documents!.isNotEmpty)
-                      SizedBox(
-                        height: 150,
-                        child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemCount: widget.course.documents?.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              return DownloadableItem(
-                                link: widget.course.documents![index],
-                              ); // Assuming DownloadableItem is a widget class
-                            }),
-                      ),
-                    if (widget.course.documents != null &&
-                        widget.course.documents!.isNotEmpty)
-                      const SizedBox(
-                        height: 100,
-                      )
+                    ),
+                    const SizedBox(
+                      height: 30,
+                    ),
+                    const Text(
+                      'Downloadable Resources',
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(
+                      height: 150,
+                      child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: 5,
+                          itemBuilder: (BuildContext context, int index) {
+                            return const DownloadableItem(
+                              link: '',
+                            ); // Assuming DownloadableItem is a widget class
+                          }),
+                    ),
+                    const SizedBox(
+                      height: 100,
+                    )
                   ],
                 ),
               )
@@ -516,60 +622,306 @@ class _MyStickyHeaderState extends State<MyStickyHeader> {
           height: 90,
           color: Colors.white,
           child: Column(
-            children: <Widget>[
+            children: [
               Container(
                 height: 1,
                 width: MediaQuery.of(context).size.width,
                 color: backgroundcolorinterface,
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Wrap(
-                    crossAxisAlignment: WrapCrossAlignment.center,
-                    children: [
-                      IconButton(
-                        icon: SvgPicture.asset('assets/svgs/comment.svg'),
-                        onPressed: () {},
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 15.0, vertical: 15),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        showModalBottomSheet(
+                          context: context,
+                          builder: (BuildContext context) => CourseCommentItem(
+                            course: widget.course,
+                            onComment: (CommentModel newComment) async {},
+                          ),
+                        );
+                      },
+                      child: Wrap(
+                        crossAxisAlignment: WrapCrossAlignment.center,
+                        children: [
+                          SvgPicture.asset('assets/svgs/comment.svg'),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          const Text('Comment'),
+                        ],
                       ),
-                      const Text('Comment'),
-                    ],
-                  ),
-                  Wrap(
-                    crossAxisAlignment: WrapCrossAlignment.center,
-                    children: [
-                      IconButton(
-                        icon: SvgPicture.asset(
-                          'assets/svgs/star.svg',
-                          height: 18,
-                        ),
-                        onPressed: () {},
+                    ),
+                    GestureDetector(
+                      onTap: () async {
+                        await rateCourse();
+                      },
+                      child: Wrap(
+                        crossAxisAlignment: WrapCrossAlignment.center,
+                        children: [
+                          SvgPicture.asset(
+                            'assets/svgs/star.svg',
+                            height: 18,
+                          ),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          const Text('Rate'),
+                        ],
                       ),
-                      const Text('Rate'),
-                    ],
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 20.0),
-                    child: Wrap(
-                      crossAxisAlignment: WrapCrossAlignment.center,
-                      children: [
-                        IconButton(
-                          icon: SvgPicture.asset(
+                    ),
+                    GestureDetector(
+                      onTap: () => _sharePost(),
+                      child: Wrap(
+                        crossAxisAlignment: WrapCrossAlignment.center,
+                        children: [
+                          SvgPicture.asset(
                             'assets/svgs/share.svg',
                             height: 18,
                           ),
-                          onPressed: () {},
-                        ),
-                        const Text('Share'),
-                      ],
-                    ),
-                  )
-                ],
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          const Text('Share'),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
               ),
             ],
           ),
         ),
-      ),
+      )
     ]);
+  }
+
+  void _sharePost() {
+    String message =
+        'Have a look at ${widget.course.user?.username ?? 'Business Bosses'}\'s course on Business Bosses\n'
+        'https://businessbosses.onelink.me/xLWk/36a2ff16';
+    logEvent(widget.course.id, 'course');
+    socialShare(message);
+  }
+
+  Future<void> rateCourse() async {
+    int rater = 0;
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        return Padding(
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(context).viewInsets.bottom,
+          ),
+          child: StatefulBuilder(
+            builder: (BuildContext context, StateSetter setState) {
+              return FractionallySizedBox(
+                heightFactor: 0.5,
+                child: GestureDetector(
+                  onTap: () {
+                    FocusScope.of(context).unfocus();
+                  },
+                  onVerticalDragDown: (_) {
+                    FocusScope.of(context).unfocus();
+                  },
+                  child: Container(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: <Widget>[
+                        Container(
+                          width: MediaQuery.of(context).size.width,
+                          padding: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            color: Colors.grey[200],
+                            borderRadius: const BorderRadius.only(
+                              topLeft: Radius.circular(12),
+                              topRight: Radius.circular(12),
+                            ),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              const Text(
+                                'Rate Course',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              IconButton(
+                                icon: const Icon(Icons.close),
+                                onPressed: () {
+                                  setState(
+                                    () {
+                                      rater = 0;
+                                    },
+                                  );
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 30,
+                        ),
+                        Container(
+                          width: MediaQuery.of(context).size.width * 0.9,
+                          padding: const EdgeInsets.all(15),
+                          decoration: BoxDecoration(
+                            color: Colors.grey[200],
+                            borderRadius: BorderRadius.circular(
+                              12,
+                            ),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              IconButton(
+                                icon: Icon(
+                                  Icons.star,
+                                  color: rater >= 1
+                                      ? const Color.fromRGBO(255, 202, 40, 1)
+                                      : const Color.fromRGBO(229, 229, 229, 1),
+                                  size: 40,
+                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    rater = 1;
+                                  });
+                                },
+                              ),
+                              IconButton(
+                                icon: Icon(
+                                  Icons.star,
+                                  color: rater >= 2
+                                      ? const Color.fromRGBO(255, 202, 40, 1)
+                                      : const Color.fromRGBO(229, 229, 229, 1),
+                                  size: 40,
+                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    rater = 2;
+                                  });
+                                },
+                              ),
+                              IconButton(
+                                icon: Icon(
+                                  Icons.star,
+                                  color: rater >= 3
+                                      ? const Color.fromRGBO(255, 202, 40, 1)
+                                      : const Color.fromRGBO(229, 229, 229, 1),
+                                  size: 40,
+                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    rater = 3;
+                                  });
+                                },
+                              ),
+                              IconButton(
+                                icon: Icon(
+                                  Icons.star,
+                                  color: rater >= 4
+                                      ? const Color.fromRGBO(255, 202, 40, 1)
+                                      : const Color.fromRGBO(229, 229, 229, 1),
+                                  size: 40,
+                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    rater = 4;
+                                  });
+                                },
+                              ),
+                              IconButton(
+                                icon: Icon(
+                                  Icons.star,
+                                  color: rater >= 5
+                                      ? const Color.fromRGBO(255, 202, 40, 1)
+                                      : const Color.fromRGBO(229, 229, 229, 1),
+                                  size: 40,
+                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    rater = 5;
+                                  });
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: 24),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.6,
+                          child: MCustomButton(
+                            // isProcessing: isSending,
+                            buttonType: ButtonType.elevated,
+                            onPressed: () async {
+                              setState(() {
+                                // isSending = true;
+                              });
+                              // await ApiService.post(
+                              //   path: 'reviews',
+                              //   body: <String, dynamic>{
+                              //     'sellerId': widget.user.uid,
+                              //     'rating': rater,
+                              //     'reviewText': reviewText,
+                              //   },
+                              // );
+                              // await ApiService.post(
+                              //   path: 'notification',
+                              //   body: <String, dynamic>{
+                              //     'senderUid': _profileController.myProfile.uid,
+                              //     'receiverUid': widget.user.uid,
+                              //     'title': 'Seller Review',
+                              //     'message':
+                              //         '${_profileController.myProfile.username} has reviewed your store',
+                              //     'timestamp':
+                              //         DateTime.now().millisecondsSinceEpoch,
+                              //     'notificationType': 'Review',
+                              //     'username': widget.user.username,
+                              //     'user': widget.user,
+                              //   },
+                              // );
+                              // await processData();
+                              // final Map<String, dynamic> currentUser =
+                              //     await ProfileController.loadData(
+                              //         widget.user.uid);
+                              // if (mounted) {
+                              //   setState(
+                              //     () {
+                              //       cUser =
+                              //           UserModel.fromMap(currentUser['user']);
+                              //       currentRating = currentUser['user']
+                              //               ['averageRating']
+                              //           .toDouble();
+                              //       rater = 0;
+                              //       reviewText = '';
+                              //       isSending = false;
+                              //     },
+                              //   );
+                              // }
+                              // _marketController.updateUser(
+                              //     widget.user.uid, currentRating);
+                              // Get.back();
+                            },
+                            child: const Text('Rate'),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            },
+          ),
+        );
+      },
+    );
   }
 }

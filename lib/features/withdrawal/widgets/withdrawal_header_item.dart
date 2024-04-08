@@ -28,7 +28,7 @@ class _WithdrawalHeaderItemState extends State<WithdrawalHeaderItem> {
     return Container(
       color: backgroundcolorinterface,
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical:15.0, horizontal: 10),
+        padding: const EdgeInsets.symmetric(vertical:15.0, horizontal: 15),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children:[

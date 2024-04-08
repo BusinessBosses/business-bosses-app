@@ -15,6 +15,9 @@ class Industry {
   List<String>? joinedUsers;
   String? criteria;
   String? award;
+  String? createTitle;
+  String? createInfo;
+  String? createDescription;
   DateTime? startAt; // Updated to DateTime
   DateTime? endedAt; // Updated to DateTime
 
@@ -30,6 +33,9 @@ class Industry {
     this.joinedUsers,
     this.award,
     this.criteria,
+    this.createTitle,
+    this.createInfo,
+    this.createDescription,
     this.startAt,
     this.endedAt,
   });
@@ -48,6 +54,9 @@ class Industry {
           : List<String>.from(map['joinedUsers']),
       criteria: map['criteria'] as String?,
       award: map['award'] as String?,
+      createTitle: map['createTitle'] as String?,
+      createInfo: map['createInfo'] as String?,
+      createDescription: map['createDescription'] as String?,
       startAt: map['startAt'] == null
           ? null
           : DateTime.parse(map['startAt'] as String),
@@ -69,6 +78,9 @@ class Industry {
       joinedUsers: List<String>.from(map['joinedUsers'] ?? []),
       criteria: map['criteria'],
       award: map['award'],
+      createTitle: map['createTitle'],
+      createInfo: map['createInfo'],
+      createDescription: map['createDescription'],
       startAt: map['startAt'] != null ? DateTime.parse(map['startAt']) : null,
       endedAt: map['endedAt'] != null ? DateTime.parse(map['endedAt']) : null,
     );
@@ -86,6 +98,9 @@ class Industry {
       'joinedUsers': joinedUsers,
       'criteria': criteria,
       'award': award,
+      'createTitle': createTitle,
+      'createInfo': createInfo,
+      'createDescription': createDescription,
       'startAt': startAt?.toIso8601String(),
       'endedAt': endedAt?.toIso8601String(),
     };

@@ -56,19 +56,21 @@ Container OutlineButtonHeader(BuildContext context, UserModel myProfile) {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-                const Text(
-                  'Earn',
+                 SvgPicture.asset(
+                  'assets/svgs/coin.svg',
+                ),
+                
+                const SizedBox(
+                  width: 5,
+                ),
+                 Text(
+                  '${myProfile.coinscount}',
                   style: TextStyle(
                       fontSize: 15,
                       color: primaryColorLT,
                       fontWeight: FontWeight.w500),
                 ),
-                const SizedBox(
-                  width: 5,
-                ),
-                SvgPicture.asset(
-                  'assets/svgs/coin.svg',
-                )
+               
               ],
             ),
           ),
