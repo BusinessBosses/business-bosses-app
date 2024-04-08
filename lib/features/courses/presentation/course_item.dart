@@ -3,17 +3,15 @@
 import 'package:business_bosses_v2/action/action.dart';
 import 'package:business_bosses_v2/common/models/comment_model.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
+import 'package:business_bosses_v2/features/courses/controller/course_controller.dart';
 import 'package:business_bosses_v2/common/widgets/typography/text_widget.dart';
 import 'package:business_bosses_v2/features/courses/models/course_model.dart';
 import 'package:business_bosses_v2/features/courses/presentation/expanded_course_screen.dart';
 import 'package:business_bosses_v2/features/courses/widgets/course_comment_item.dart';
 import 'package:business_bosses_v2/features/posts/widgets/youtube_display.dart';
-import 'package:business_bosses_v2/features/posts/widgets/yt_player.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
-import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:business_bosses_v2/utils/time_format.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -81,6 +79,7 @@ class _CourseItemState extends State<CourseItem> {
     )
   ];
 
+  final CourseController courseController = Get.find();
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -162,6 +161,11 @@ class _CourseItemState extends State<CourseItem> {
                   ),
                   GestureDetector(
                     onTap: () {
+                      setState(() {
+                        widget.course.setViews();
+                      });
+                      courseController.updateCourseViews(
+                          widget.course.id, widget.course.views);
                       Get.to(() => ExpandedCourseScreen(course: widget.course));
                     },
                     child: Container(

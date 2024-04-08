@@ -1,5 +1,5 @@
-import 'dart:io';
-
+import 'package:business_bosses_v2/features/forum/controller/create_bossup_controller.dart';
+import 'package:business_bosses_v2/features/forum/presentation/create_bossup_screen.dart';
 import 'package:business_bosses_v2/features/home/widgets/floatingbutton.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/gestures.dart';
@@ -8,7 +8,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:intl/intl.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 import '../../../common/widgets/popup/bossup_challenge_popup.dart';
@@ -16,16 +15,16 @@ import '../../../common/widgets/safety_model.dart';
 import '../../../navigation/routes.dart';
 import '../../../utils/theme/theme.dart';
 import '../../home/controller/home_controller.dart';
-import '../../moreinfoscreens/bossuppartner.dart';
 import '../../profile/controller/profile_controller.dart';
 import '../controller/bossup_controller.dart';
 import '../models/industry.dart';
 import '../widgets/forum_item.dart';
-import '../widgets/joinedbutton.dart';
 
 class BossUpSection extends StatefulWidget {
   final Industry industry;
-  const BossUpSection({super.key, required this.industry});
+  final Industry bossUp;
+  const BossUpSection(
+      {super.key, required this.industry, required this.bossUp});
 
   @override
   State<BossUpSection> createState() => _BossUpSectionState();
@@ -93,7 +92,7 @@ class _BossUpSectionState extends State<BossUpSection> {
 
   @override
   Widget build(BuildContext context) {
-    int userCount = widget.industry.joinedUsers
+    int userCount = widget.bossUp.joinedUsers
             ?.where((String element) => element.isNotEmpty)
             .toList()
             .length ??
@@ -168,7 +167,8 @@ class _BossUpSectionState extends State<BossUpSection> {
                                                   widget.industry.industry ==
                                                           'Boss Up Challenge '
                                                       ? 'Free Promotion'
-                                                      : 'Win \$200',
+                                                      : widget.industry.award ??
+                                                          'Win',
                                                   style: const TextStyle(
                                                     color: primaryColorLT,
                                                     fontWeight: FontWeight.bold,
@@ -192,10 +192,9 @@ class _BossUpSectionState extends State<BossUpSection> {
                                                   widget.industry.industry ==
                                                           'Boss Up Challenge '
                                                       ? 'Every Monday'
-                                                      : widget.industry.award ??
-                                                          _calculateEndsDate(
-                                                              widget.industry
-                                                                  .endedAt!),
+                                                      : _calculateEndsDate(
+                                                          widget.industry
+                                                              .endedAt!),
                                                   style: const TextStyle(
                                                       fontWeight:
                                                           FontWeight.w700),
@@ -215,7 +214,8 @@ class _BossUpSectionState extends State<BossUpSection> {
                                           showDialog(
                                             context: context,
                                             builder: (BuildContext context) =>
-                                                const BossUpChallangePopUpcopy(),
+                                                BossUpChallangePopUpcopy(
+                                                    industry: widget.industry),
                                           );
                                         }),
                                         child: Container(
@@ -270,11 +270,11 @@ class _BossUpSectionState extends State<BossUpSection> {
                                     child: Column(
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
-                                      children: [
+                                      children: <Widget>[
                                         Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
-                                          children: [
+                                          children: <Widget>[
                                             Container(
                                               margin: const EdgeInsets.all(5),
                                               height: 86,
@@ -306,7 +306,7 @@ class _BossUpSectionState extends State<BossUpSection> {
                                                 ),
                                               ),
                                             ),
-                                            SizedBox(
+                                            const SizedBox(
                                               width: 10,
                                             ),
                                             Expanded(
@@ -331,7 +331,7 @@ class _BossUpSectionState extends State<BossUpSection> {
                                         Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
-                                          children: [
+                                          children: <Widget>[
                                             Row(
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.center,
@@ -459,14 +459,20 @@ class _BossUpSectionState extends State<BossUpSection> {
                                                   ScaffoldMessenger.of(context)
                                                       .showSnackBar(snackBar);
                                                 } else {
-                                                  Get.toNamed(
-                                                      Routes.createBossUp,
-                                                      arguments: <String,
-                                                          Object?>{
-                                                        'isBossUp': true,
-                                                        'industryId': widget
-                                                            .industry.industryId
-                                                      });
+                                                  Get.to(
+                                                    CreateBossUpScreen(
+                                                        industryModel:
+                                                            widget.industry),
+                                                    arguments: <String,
+                                                        Object?>{
+                                                      'isBossUp': true,
+                                                      'industryId': widget
+                                                          .industry.industryId
+                                                    },
+                                                    binding: BindingsBuilder
+                                                        .put(() =>
+                                                            CreateBossUpController()),
+                                                  );
                                                 }
                                               },
                                               child: Row(
