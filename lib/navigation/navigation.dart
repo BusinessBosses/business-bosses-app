@@ -4,8 +4,7 @@ import 'package:business_bosses_v2/analytics/presentation/explorebusinessbosses_
 import 'package:business_bosses_v2/features/bottomnavigationscreen.dart';
 import 'package:business_bosses_v2/features/connects/controller/referrals_controller.dart';
 import 'package:business_bosses_v2/features/connects/presentation/referals_screen.dart';
-import 'package:business_bosses_v2/features/courses/presentation/createcourse.dart';
-import 'package:business_bosses_v2/features/forum/controller/bossup_controller.dart';
+import 'package:business_bosses_v2/features/courses/presentation/course_history.dart';
 import 'package:business_bosses_v2/features/home/all_communities_screen.dart';
 import 'package:business_bosses_v2/features/home/controller/commumities_controller.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
@@ -50,6 +49,7 @@ import 'package:business_bosses_v2/features/search/controller/search_controller.
 import 'package:business_bosses_v2/features/search/presentation/complete_searching_screen.dart';
 import 'package:business_bosses_v2/features/settings/invite_a_friendscreen.dart';
 import 'package:business_bosses_v2/features/settings/settingsscreen.dart';
+import 'package:business_bosses_v2/features/withdrawal/coinhistoryscreen.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/features/premium/premiumscreen.dart';
 import 'package:business_bosses_v2/features/premium/reviewpayment.dart';
@@ -156,7 +156,6 @@ var routes = [
     name: Routes.allCommunitiesScreen,
     page: () => const AllCommunitiesScreen(),
     bindings: [
-      BindingsBuilder.put(() => BossUpController()),
       BindingsBuilder.put(() => CommunitiesController()),
     ],
     // binding: BindingsBuilder.put(() => BossUpController()),
@@ -179,15 +178,15 @@ var routes = [
     page: () => const CreateForumScreen(),
     binding: BindingsBuilder.put(() => CreateForumController()),
   ),
-  GetPage(
-    name: Routes.createBossUp,
-    page: () => const CreateBossUpScreen(),
-    binding: BindingsBuilder.put(() => CreateBossUpController()),
-  ),
-  GetPage(
-    name: Routes.postDetails,
-    page: () => PostDetailsScreen(),
-  ),
+  // GetPage(
+  //   name: Routes.createBossUp,
+  //   page: () => const CreateBossUpScreen(industryModel: null,),
+  //   binding: BindingsBuilder.put(() => CreateBossUpController()),
+  // ),
+  // GetPage(
+  //   name: Routes.postDetails,
+  //   page: () => PostDetailsScreen(),
+  // ),
   GetPage(
     name: Routes.specificuserlistscreen,
     page: () => const SpecificUserListScreen(),
@@ -262,7 +261,11 @@ var routes = [
     page: () => const BottomNavigationScreen(),
   ),
   GetPage(
-    name: Routes.createcourse,
-    page: () => const CreateCourseScreen(),
+    name: Routes.CoinHistoryScreen,
+    page: () => const CoinHistoryScreen(),
+  ),
+  GetPage(
+    name: Routes.coursehistoryscreen,
+    page: () => const CourseHistory(),
   ),
 ];

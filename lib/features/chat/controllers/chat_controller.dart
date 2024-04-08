@@ -1,8 +1,10 @@
 import 'dart:io';
 
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
+import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/features/chat/models/my_message.dart';
+import 'package:business_bosses_v2/features/chat/presentation/call_page.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
@@ -269,6 +271,30 @@ class ChatController extends GetxController {
       rethrow;
       // handle error
     }
+  }
+
+  Future<dynamic> initiateCall(Map<String, dynamic> data) async {
+    final ApiResponseModel response =
+        await ApiService.initPost(path: 'share/initiate-call', body: data);
+    if (response.success) {
+      Map<String, dynamic> dataNew = <String, dynamic>{
+        ...data,
+        'callID': response.data['callId'],
+      };
+      Get.to(CallPage(
+          callID: dataNew['callID'],
+          userId: data['userId'],
+          username: data['username']));
+
+      return;
+    } else {
+      showSnackbar(
+        title: 'OOPS!',
+        message: 'An error occurred while adding an event, please try again!',
+        error: true,
+      );
+    }
+    update();
   }
 
   @override

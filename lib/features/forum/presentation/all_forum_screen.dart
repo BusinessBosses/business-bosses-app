@@ -1,5 +1,5 @@
 import 'package:business_bosses_v2/features/forum/controller/forum_controller.dart';
-import 'package:business_bosses_v2/features/forum/presentation/courses.dart';
+import 'package:business_bosses_v2/features/courses/presentation/courses.dart';
 import 'package:business_bosses_v2/features/forum/presentation/topics.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:flutter/material.dart';
@@ -77,19 +77,19 @@ class _AllForumScreenState extends State<AllForumScreen> {
                   ),
                 ),
                 Expanded(
-        child: TabBarView(
-          children: <Widget>[
-            // View for 'Topics' tab
-            Container(
-              child: const TopicsPage()
-            ),
-            // View for 'Courses' tab
-            Container(
-              child: const CoursesPage(),
-            ),
-          ],
-        ),
-      ),
+                  child: TabBarView(
+                    children: <Widget>[
+                      // View for 'Topics' tab
+                      Container(child: const TopicsPage()),
+                      // View for 'Courses' tab
+                      Container(
+                        child: CoursesPage(
+                          industryId: industry.industryId!,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ],
             ),
           ),

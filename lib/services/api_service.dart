@@ -273,6 +273,36 @@ class ApiService {
     }
   }
 
+  static Future<ApiResponseModel> initPost({
+    required String path,
+    required Map<String, dynamic> body,
+    dynamic data,
+  }) async {
+    // log(body.toString());
+    final String token = sandBox.read(Constants.ACCESS_TOKEN);
+    // log(token);
+    try {
+      final http.Response response = await http.post(
+        Uri.parse('${Constants.initUrl}/$path'),
+        body: jsonEncode(body),
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'bearer $token'
+        },
+      );
+      log(response.body);
+      return ApiResponseModel.fromMap(jsonDecode(response.body));
+    } catch (e) {
+      showSnackbar(
+          title: 'OOPS!',
+          message: 'An error occurred, please try again!',
+          error: true);
+      return ApiResponseModel(
+          success: false, message: e.toString(), data: <dynamic, dynamic>{});
+    }
+  }
+
   /// HTTP GET CALL
   static Future<ApiResponseModel> get({
     required String path,

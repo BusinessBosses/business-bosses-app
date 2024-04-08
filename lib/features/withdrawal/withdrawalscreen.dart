@@ -1,0 +1,241 @@
+import 'package:business_bosses_v2/common/widgets/buttons/custom_button.dart';
+import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
+import 'package:business_bosses_v2/features/withdrawal/widgets/withdrawal_header_item.dart';
+import 'package:business_bosses_v2/features/withdrawal/widgets/withdrawal_item.dart';
+import 'package:business_bosses_v2/utils/theme/theme.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_sticky_header/flutter_sticky_header.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
+
+import '../../../action/action.dart';
+import '../../../navigation/routes.dart';
+
+bool isExpanded = false;
+
+class WithdrawalScreen extends StatefulWidget {
+  static const String routeName = '/withdrawal-screen';
+
+  const WithdrawalScreen({Key? key}) : super(key: key);
+
+  @override
+  // ignore: library_private_types_in_public_api
+  _WithdrawalScreenState createState() => _WithdrawalScreenState();
+}
+
+class _WithdrawalScreenState extends State<WithdrawalScreen> {
+  final ScrollController scrollController = ScrollController();
+  final ProfileController _profileController = Get.find();
+  String? _paymentmethods;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    ProfileController profileController = Get.find();
+    return Scaffold(
+        backgroundColor: Colors.white,
+        body: NestedScrollView(
+            controller: scrollController,
+            headerSliverBuilder: (context, innerBoxIsScrolled) {
+              return <Widget>[
+                SliverStickyHeader(
+                  sticky: false,
+                  header: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20.0, vertical: 20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        const Row(
+                          children: [
+                            Text('Amount to withdraw'),
+                            SizedBox(
+                              width: 5,
+                            ),
+                            Text(
+                              '(Minimum 5,000 Coins)',
+                              style: TextStyle(color: Colors.grey),
+                            ),
+                          ],
+                        ),
+                        Stack(children: [
+                          TextFormField(
+                            onChanged: (String val) {
+                              setState(() {});
+                            },
+                            decoration: inputDecoration.copyWith(
+                              contentPadding: EdgeInsets.only(
+                                  left: 50, top: 18, bottom: 18),
+                              hintText: '0 (\$0)',
+                              hintStyle: const TextStyle(
+                                color: iconColor,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                              ),
+                              filled: true,
+                              fillColor: const Color(0xffF4F4F4),
+                            ),
+                          ),
+                          Positioned(
+                              top: 0,
+                              bottom: 0,
+                              left: 10,
+                              child: SvgPicture.asset('assets/svgs/coin.svg'))
+                        ]),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Text('Payment Method'),
+                        Container(
+                          height: 55,
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 9,
+                          ),
+                          decoration: BoxDecoration(
+                            color: backgroundcolorinterface,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Row(
+                                children: <Widget>[
+                                  SvgPicture.asset('assets/svgs/coin.svg'),
+                                  const SizedBox(width: 20),
+                                ],
+                              ),
+                              Expanded(
+                                child: DropdownButton<String>(
+                                  value: _paymentmethods,
+                                  borderRadius: BorderRadius.circular(radius),
+                                  isExpanded: true,
+                                  icon: const Icon(
+                                      Icons.keyboard_arrow_down_sharp),
+                                  iconSize: 24,
+                                  elevation: 16,
+                                  underline: Container(
+                                    height: 0,
+                                    color: Colors.white,
+                                  ),
+                                  onChanged: (String? newValue) {
+                                    setState(() {
+                                      _paymentmethods = newValue ?? 'Paypal';
+                                    });
+                                  },
+                                  items: <String>[
+                                    'Paypal',
+                                    'Bank',
+                                    'Mobile Money'
+                                  ].map<DropdownMenuItem<String>>(
+                                      (String value) {
+                                    return DropdownMenuItem<String>(
+                                      value: value,
+                                      child: Text(value),
+                                    );
+                                  }).toList(),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Visibility(
+                          visible: true,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('Destination Address'),
+                              TextFormField(
+                                onChanged: (String val) {
+                                  setState(() {});
+                                },
+                                decoration: inputDecoration.copyWith(
+                                  hintText: 'Enter your wallet address',
+                                  hintStyle: const TextStyle(
+                                    color: iconColor,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                  filled: true,
+                                  fillColor: const Color(0xffF4F4F4),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        Container(
+                          width: double.infinity,
+                          height: 50,
+                          child: ElevatedButton(
+                            onPressed: () async {},
+                            child: const Text(
+                              'Make Withdrawal',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w500, fontSize: 17),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                )
+              ];
+            },
+            body: Column(
+              children: [
+                Container(
+                  height: 1,
+                  color: backgroundcolorinterface,
+                ),
+                ExpansionTile(
+                  trailing: isExpanded
+                      ? SvgPicture.asset(
+                          'assets/svgs/dropdownexpansionup.svg',
+                        )
+                      : SvgPicture.asset(
+                          'assets/svgs/dropdownexpansion.svg',
+                        ),
+                  title: const Text('Withdrawal history',
+                      style:
+                          TextStyle(fontWeight: FontWeight.w700, fontSize: 16)),
+                  children: [
+                    Container(
+                      child: Column(
+                        children: [
+                          WithdrawalHeaderItem(),
+                          Container(
+                            child: ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: 10,
+                              itemBuilder: (BuildContext context, int i) {
+                                return WithdrawalItem();
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+                Container(
+                  height: 1,
+                  color: backgroundcolorinterface,
+                ),
+              ],
+            )));
+  }
+}

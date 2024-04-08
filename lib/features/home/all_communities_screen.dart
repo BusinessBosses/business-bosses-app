@@ -1,4 +1,4 @@
-import 'package:business_bosses_v2/features/forum/presentation/bossup_screen.dart';
+import 'package:business_bosses_v2/features/forum/presentation/bossup_challenge.dart';
 import 'package:business_bosses_v2/features/forum/widgets/forum_item.dart';
 import 'package:business_bosses_v2/features/home/controller/commumities_controller.dart';
 import 'package:business_bosses_v2/features/home/widgets/bottom_bar.dart';
@@ -142,15 +142,11 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
                                         ? const Center(
                                             child: CircularProgressIndicator(),
                                           )
-                                        : BossUpSection(
-                                            industry: controller
-                                                .getCategoryIndustries(Constants
-                                                    .BOSS_UP_CHALLENGE_CATEGORY_ID)[0],
-                                          ),
+                                        : BossupChallenge(),
                                     // content of Tab 2
                                     Padding(
                                       padding: const EdgeInsets.only(
-                                          top: 15.0, left: 15, right: 15),
+                                           left: 15, right: 15),
                                       child: controller.loading.value
                                           ? SafetyModel(
                                               isLoading:
@@ -201,7 +197,7 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
                                                   },
                                                   gridDelegate:
                                                       const SliverGridDelegateWithFixedCrossAxisCount(
-                                                    mainAxisSpacing: 10.0,
+                                                    mainAxisSpacing: 15.0,
                                                     crossAxisSpacing: 15.0,
                                                     crossAxisCount: 2,
                                                   ),
@@ -210,7 +206,7 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
                                     // content of Tab 3
                                     Padding(
                                       padding: const EdgeInsets.only(
-                                          top: 15.0, left: 15, right: 15),
+                                       left: 15, right: 15),
                                       child: controller.loading.value
                                           ? SafetyModel(
                                               isLoading:
@@ -262,7 +258,7 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
                                                   },
                                                   gridDelegate:
                                                       const SliverGridDelegateWithFixedCrossAxisCount(
-                                                    mainAxisSpacing: 10.0,
+                                                    mainAxisSpacing: 15.0,
                                                     crossAxisSpacing: 15.0,
                                                     crossAxisCount: 2,
                                                   ),

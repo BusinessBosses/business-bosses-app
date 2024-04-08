@@ -242,12 +242,12 @@ class _LiveEventState extends State<LiveEvent> {
             //         ),
             //     )
             //     : Container(),
-            body: liveController.loading.value
-                ? const Stack(children: [
-                    Center(child: CircularProgressIndicator()),
-                  ])
-                : Stack(children: [
-                    NestedScrollView(
+            body: Stack(children: [
+              liveController.loading.value
+                  ? const Stack(children: [
+                      Center(child: CircularProgressIndicator()),
+                    ])
+                  : NestedScrollView(
                       controller: scrollController,
                       headerSliverBuilder: (
                         BuildContext context,
@@ -376,11 +376,11 @@ class _LiveEventState extends State<LiveEvent> {
                         ),
                       ),
                     ),
-                    const BottomBar(
-                      activeIndex: 2,
-                    ),
-                    showFloatingButton ? const Floatingbutton() : Container(),
-                  ]));
+              const BottomBar(
+                activeIndex: 2,
+              ),
+              showFloatingButton ? const Floatingbutton() : Container(),
+            ]));
       },
     );
   }

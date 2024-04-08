@@ -4,7 +4,7 @@ import 'package:business_bosses_v2/common/models/comment_model.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 
 class CourseModel {
-  final String forumId;
+  final String id;
   final String industryId;
   final String? description;
   final String? title;
@@ -15,18 +15,21 @@ class CourseModel {
   final int? timestamp;
   final List<CommentModel>? comments;
   final UserModel? user;
-  int? views = 0;
+  int views = 0;
   final bool? isPromoted;
+  final double? averageRating;
   final bool? isApproved;
   final String? courseType;
   final String? paymentMethod;
   final String? transcript;
+  final List<String>? youtubeUrls;
   CourseModel({
-    required this.forumId,
+    required this.id,
     required this.industryId,
     required this.userId,
     this.description,
     this.title,
+    this.averageRating = 0.0,
     this.documents,
     this.timestamp,
     this.views = 0,
@@ -39,10 +42,11 @@ class CourseModel {
     this.courseType,
     this.paymentMethod,
     this.transcript,
+    this.youtubeUrls,
   });
 
   CourseModel copyWith({
-    String? forumId,
+    String? id,
     String? industryId,
     String? description,
     String? title,
@@ -54,14 +58,16 @@ class CourseModel {
     bool? isPromoted,
     int? views,
     String? price,
+    double? averageRating,
     dynamic promotionDuration,
     bool? isApproved,
     String? courseType,
     String? paymentMethod,
     String? transcript,
+    List<String>? youtubeUrls,
   }) {
     return CourseModel(
-      forumId: forumId ?? this.forumId,
+      id: id ?? this.id,
       industryId: industryId ?? this.industryId,
       description: description ?? this.description,
       userId: userId ?? this.userId,
@@ -70,6 +76,7 @@ class CourseModel {
       timestamp: timestamp ?? this.timestamp,
       comments: comments ?? this.comments,
       user: user ?? this.user,
+      averageRating: averageRating ?? this.averageRating,
       views: views ?? this.views,
       isPromoted: isPromoted ?? this.isPromoted,
       price: price ?? this.price,
@@ -78,15 +85,17 @@ class CourseModel {
       courseType: courseType ?? this.courseType,
       paymentMethod: paymentMethod ?? this.paymentMethod,
       transcript: transcript ?? this.transcript,
+      youtubeUrls: youtubeUrls ?? this.youtubeUrls,
     );
   }
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      'forumId': forumId,
+      'id': id,
       'industryId': industryId,
       'description': description,
       'title': title,
+      'averageRating': averageRating,
       'userId': userId,
       'documents': documents,
       'timestamp': timestamp,
@@ -100,12 +109,13 @@ class CourseModel {
       'courseType': courseType,
       'paymentMethod': paymentMethod,
       'transcript': transcript,
+      'youtubeUrls': youtubeUrls,
     };
   }
 
   factory CourseModel.fromMap(Map<String, dynamic> map) {
     return CourseModel(
-      forumId: map['forumId'] as String,
+      id: map['id'] as String,
       industryId: map['industryId'] as String,
       description:
           map['description'] != null ? map['description'] as String : null,
@@ -114,6 +124,11 @@ class CourseModel {
       price: map['price'] != null ? map['price'] as String : null,
       courseType:
           map['courseType'] != null ? map['courseType'] as String : null,
+      averageRating: map['averageRating'] != null
+          ? (map['averageRating'] is int
+              ? (map['averageRating'] as int).toDouble()
+              : map['averageRating'] as double)
+          : null,
       paymentMethod:
           map['paymentMethod'] != null ? map['paymentMethod'] as String : null,
       transcript:
@@ -143,10 +158,20 @@ class CourseModel {
       views: map['views'] != null ? map['views'] as int : 0,
       isPromoted: map['isPromoted'] ?? false,
       isApproved: map['isApproved'] ?? false,
+      youtubeUrls: map['youtubeUrls'] != null && map['youtubeUrls'] != ''
+          ? List<String>.from((map['youtubeUrls']))
+                  .where((String element) => element.isNotEmpty)
+                  .toList()
+                  .isEmpty
+              ? null
+              : List<String>.from((map['youtubeUrls']))
+                  .where((String element) => element.isNotEmpty)
+                  .toList()
+          : null,
     );
   }
 
-  void setViews(int newViews) {
-    views = newViews;
+  void setViews() {
+    views += 1;
   }
 }

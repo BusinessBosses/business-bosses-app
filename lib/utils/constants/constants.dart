@@ -25,6 +25,8 @@ class Constants {
   static const String baseUrl =
       'https://orca-app-5dg8w.ondigitalocean.app/api/v1';
 
+  static const String initUrl = 'https://orca-app-5dg8w.ondigitalocean.app/';
+
   //victor url
   // static const String socketUrl = 'http://192.168.0.178:5000';
   // static const String baseUrl = 'http://192.168.0.178:5000/api/v1';
@@ -106,6 +108,9 @@ class Constants {
   /// STORAGE CONSTANTS
   static const String ACCESS_TOKEN = 'accessToken';
   static const String USER_ID = 'uid';
+  static const String APP_SIGN =
+      "78767a4482873b4e981a6c245c38738e70024ef13e34c1c01bab13ed9a457db6";
+  static const int APP_ID = 468230095;
 }
 
 enum PasswordField { password, confirmPassword }
