@@ -446,7 +446,24 @@ class _DonationItemState extends State<DonationItem> {
                   height: 15,
                 ),
                 label: Text(
-                  'Comments',
+                  '0',
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        fontWeight: FontWeight.w700,
+                        color: textColor.withOpacity(0.8),
+                      ),
+                ),
+              ),
+               TextButton.icon(
+                onPressed: () { showModalBottomSheet(
+                                        context: context,
+                                        builder: (BuildContext context) =>
+                                            const SupporterItem());},
+                icon: SvgPicture.asset(
+                  'assets/svgs/supporter.svg', color: textColor.withOpacity(0.9) ,
+                  height: 18,
+                ),
+                label: Text(
+                  '0',
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         fontWeight: FontWeight.w700,
                         color: textColor.withOpacity(0.8),
@@ -458,7 +475,7 @@ class _DonationItemState extends State<DonationItem> {
                 icon: const Icon(Icons.remove_red_eye_outlined,
                     size: 19, color: Colors.black),
                 label: Text(
-                  'Views',
+                  '0',
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         fontWeight: FontWeight.w700,
                         color: textColor.withOpacity(0.8),
