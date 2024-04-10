@@ -1,0 +1,501 @@
+import 'package:business_bosses_v2/common/widgets/popup/learningpopup.dart';
+import 'package:business_bosses_v2/common/widgets/popup/opportunitiespopup.dart';
+import 'package:business_bosses_v2/common/widgets/safety_model.dart';
+import 'package:business_bosses_v2/features/donations/widgets/donationitem.dart';
+import 'package:business_bosses_v2/features/forum/controller/forum_controller.dart';
+import 'package:business_bosses_v2/features/forum/models/industry.dart';
+import 'package:business_bosses_v2/features/forum/widgets/joinedbutton.dart';
+import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
+import 'package:business_bosses_v2/features/home/widgets/forum_item.dart';
+import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
+import 'package:business_bosses_v2/navigation/routes.dart';
+import 'package:business_bosses_v2/utils/constants/constants.dart';
+import 'package:business_bosses_v2/utils/theme/theme.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/gestures.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_sticky_header/flutter_sticky_header.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
+import 'package:visibility_detector/visibility_detector.dart';
+
+class DonationsPage extends StatefulWidget {
+  const DonationsPage({super.key});
+
+  @override
+  State<DonationsPage> createState() => _DonationsPageState();
+}
+
+class _DonationsPageState extends State<DonationsPage> {
+  final ProfileController _myProfile = Get.find();
+  // final HomeController hmeController = Get.find();
+  final ScrollController scrollController = ScrollController();
+  // late Industry industry;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    // if (Get.arguments == null) {
+    //   Get.back();
+    // } else {
+    //   industry = Get.arguments;
+    // }
+  }
+
+  String formatCount(int count) {
+    if (count >= 1000) {
+      double countInK = count / 1000;
+      if (countInK >= 1000) {
+        return '${(countInK / 1000).toStringAsFixed(1)}m';
+      } else {
+        return '${countInK.toStringAsFixed(1)}k';
+      }
+    } else {
+      return count.toString();
+    }
+  }
+
+  // void toggleJoinAndLeaveIndustry(ForumController controller) {
+  //   final String myUid = _myProfile.myProfile.uid;
+  //   // print(myUid);
+  //   if (industry.joinedUsers?.contains(myUid) ?? false) {
+  //     industry.joinedUsers!.removeWhere((String element) => element == myUid);
+  //   } else {
+  //     if (industry.joinedUsers == null) {
+  //       industry.joinedUsers = <String>[myUid];
+  //     } else {
+  //       industry.joinedUsers!.add(myUid);
+  //     }
+  //   }
+  //   setState(() {});
+  //   controller.joinAndLeaveIndustry(myUid, industry.industryId!);
+  // }
+
+  @override
+  Widget build(BuildContext context) {
+    // return GetBuilder<ForumController>(builder: (ForumController controller) {
+    //   int userCount = industry.joinedUsers
+    //           ?.where((String element) => element.isNotEmpty)
+    //           .toList()
+    //           .length ??
+    //       0;
+    // String formattedUserCount = formatCount(userCount);
+    // int postCount = controller.totalForums.value;
+    // String formattedpostCount = formatCount(postCount);
+    return NestedScrollView(
+        controller: scrollController,
+        headerSliverBuilder: (
+          BuildContext context,
+          bool innerBoxIsScrolled,
+        ) {
+          return <Widget>[
+            SliverStickyHeader(
+              sticky: false,
+              header: Column(
+                children: <Widget>[
+                  Container(
+                    width: double.infinity,
+                    color: Colors.transparent,
+                    child: Column(
+                      children: <Widget>[
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        if (_myProfile.myProfile.toPost)
+                          Row(
+                            children: <Widget>[
+                              GestureDetector(
+                                onTap: () => <Future>{
+                                  // industry.categoryId!.toString() ==
+                                  //         Constants.LEARNINGID
+                                  //     ? showDialog(
+                                  //         context: context,
+                                  //         builder: (BuildContext context) =>
+                                  //             const LearningPopUp(),
+                                  //       )
+                                  //     : showDialog(
+                                  //         context: context,
+                                  //         builder: (BuildContext context) =>
+                                  //             const OpportunitiesPopup(),
+                                  //       )
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 15.0),
+                                  child: Row(
+                                    children: <Widget>[
+                                      const Text(
+                                        'Info',
+                                        style: TextStyle(
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w700),
+                                      ),
+                                      const SizedBox(
+                                        width: 5,
+                                      ),
+                                      SvgPicture.asset(
+                                        'assets/svgs/info.svg',
+                                        height: 20,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              const Spacer(),
+                              Align(
+                                  alignment: Alignment.centerRight,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(right: 15),
+                                    child: ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                          minimumSize: const Size(150, 45)),
+                                      onPressed: () {
+                                        Get.toNamed(
+                                            Routes.createdonationsscreen);
+                                        // arguments: <String, Object?>{
+
+                                        //   'industryId': industry.industryId,
+                                        //   'categoryId': industry.categoryId
+                                        // });
+                                      },
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: <Widget>[
+                                          Text(
+                                            'Create a Donation',
+                                            style: const TextStyle(
+                                                fontSize: 15,
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.w500),
+                                          ),
+                                          const SizedBox(
+                                            width: 5,
+                                          ),
+                                          SvgPicture.asset(
+                                              'assets/svgs/startatopic.svg')
+                                        ],
+                                      ),
+                                    ),
+                                  )),
+                            ],
+                          ),
+                        Container(
+                          decoration: BoxDecoration(
+                            boxShadow: <BoxShadow>[
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.09),
+                                blurRadius: 100.0, // soften the shadow
+                                spreadRadius: 5, //extend the shadow
+                              )
+                            ],
+                          ),
+                          child: Stack(
+                            children: <Widget>[
+                              Container(
+                                margin: const EdgeInsets.only(
+                                    top: 10, right: 15, left: 15),
+                                height: 150,
+                                width: double.infinity,
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(15.0),
+                                  child: const ColoredBox(color: Colors.white),
+                                ),
+                              ),
+                              Column(
+                                children: <Widget>[
+                                  Row(
+                                    children: <Widget>[
+                                      Container(
+                                        margin: const EdgeInsets.only(
+                                            top: 25, right: 15, left: 30),
+                                        height: 86,
+                                        width: 142,
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(10.0),
+                                          child: FittedBox(
+                                            fit: BoxFit.fill,
+                                            child: Image.asset(
+                                                'assets/images/donationpic.png'),
+                                            // CachedNetworkImage(
+                                            //   imageUrl:
+                                            //       //  industry.photo ??
+                                            //       'https://businessbosses.com.ng/learningImages/events.jpg',
+                                            //   memCacheHeight: 256,
+                                            //   memCacheWidth: 256,
+                                            //   placeholder: (BuildContext
+                                            //               context,
+                                            //           String photo) =>
+                                            //       const CircularProgressIndicator(),
+                                            //   errorWidget:
+                                            //       // ignore: always_specify_types
+                                            //       (BuildContext context,
+                                            //               // ignore: always_specify_types
+                                            //               String photo,
+                                            //               Object error) =>
+                                            //           const Icon(Icons.error),
+                                            // ),
+                                          ),
+                                        ),
+                                      ),
+                                      Expanded(
+                                          child: Padding(
+                                        padding:
+                                            const EdgeInsets.only(right: 30),
+                                        child: Text(
+                                          // industry.description ??
+                                          'Donate to Support a Project',
+                                          style: const TextStyle(
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.w700),
+                                          softWrap: true,
+                                          maxLines: 5,
+                                        ),
+                                      )),
+                                    ],
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 27, right: 15),
+                                    child: Row(
+                                      children: <Widget>[
+                                        Row(
+                                          children: <Widget>[
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                  right: 2, top: 5),
+                                              child: SvgPicture.asset(
+                                                'assets/svgs/members.svg',
+                                                height: 15,
+                                                color: primaryColorLT,
+                                              ),
+                                            ),
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                  top: 5.0),
+                                              child: RichText(
+                                                text: TextSpan(
+                                                  children: <InlineSpan>[
+                                                    TextSpan(
+                                                      text: 'Members (22)',
+                                                      style: const TextStyle(
+                                                        fontSize: 12,
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                        color: primaryColorLT,
+                                                        decoration:
+                                                            TextDecoration
+                                                                .underline,
+                                                      ),
+                                                      recognizer:
+                                                          TapGestureRecognizer()
+                                                            ..onTap = () {
+                                                              // Get.toNamed(
+                                                              //   Routes
+                                                              //       .specificuserlistscreen,
+                                                              //   arguments: industry
+                                                              //       .industryId,
+                                                              // );
+                                                            },
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        Row(
+                                          children: <Widget>[
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                  left: 8.0, top: 5, right: 2),
+                                              child: SvgPicture.asset(
+                                                'assets/svgs/topics.svg',
+                                                color: textColor,
+                                                height: 11.5,
+                                              ),
+                                            ),
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                  top: 5.0),
+                                              child: RichText(
+                                                text: TextSpan(
+                                                  children: <InlineSpan>[
+                                                    TextSpan(
+                                                      text: 'Posts (22)',
+                                                      style: const TextStyle(
+                                                        fontSize: 12,
+                                                        color: textColor,
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        const Spacer(),
+                                        Align(
+                                          alignment: Alignment.centerRight,
+                                          child: JoinedButton(
+                                            false,
+                                            () {
+                                              // toggleJoinAndLeaveIndustry(
+                                              //     controller);
+                                            },
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  )
+                                ],
+                              )
+                            ],
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              right: 15, left: 15, bottom: 10),
+                          child: Container(
+                              height: 40,
+                              decoration: BoxDecoration(
+                                color: const Color(0xFFFFFFFF),
+                                borderRadius: BorderRadius.circular(10),
+                                boxShadow: <BoxShadow>[
+                                  BoxShadow(
+                                    color: Colors.grey.withOpacity(0.3),
+                                    spreadRadius: 20,
+                                    blurRadius: 500,
+                                    offset: const Offset(0, 3),
+                                  ),
+                                ],
+                              ),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: <Widget>[
+                                  GestureDetector(
+                                    onTap: () {
+                                       Get.toNamed(Routes.promotionscreen);
+                                    },
+                                    child: Padding(
+                                      padding:
+                                          const EdgeInsets.only(left: 10.0),
+                                      child: Wrap(
+                                        crossAxisAlignment:
+                                            WrapCrossAlignment.center,
+                                        children: [
+                                          Text('Coin Balance: '),
+                                          SvgPicture.asset(
+                                              'assets/svgs/coin.svg'),
+                                          SizedBox(
+                                            width: 2,
+                                          ),
+                                          Text(
+                                            '${_myProfile.myProfile.coinscount!}',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.w700,
+                                                color: subtextColor),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  GestureDetector(
+                                    onTap: (){ Get.toNamed(Routes.donationshistoryscreen);},
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(
+                                        right: 10.0,
+                                      ),
+                                      child: Wrap(
+                                          crossAxisAlignment:
+                                              WrapCrossAlignment.center,
+                                          children: [
+                                            Text('Donation History '),
+                                            SvgPicture.asset(
+                                              'assets/svgs/nexticon.svg',
+                                              color: textColor,
+                                            ),
+                                          ]),
+                                    ),
+                                  )
+                                ],
+                              )),
+                        )
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            )
+          ];
+        },
+        body:
+
+            // controller.loading.value
+            //     ? SafetyModel(
+            //         isLoading: controller.loading.value,
+            //         title: '',
+            //       )
+            //     : controller.error.value
+            //         ? SafetyModel(
+            //             isLoading: false,
+            //             title: 'Something went wrong',
+            //             clickableText: 'Reload',
+            //             onTap: () async {
+            //               await controller.fetchForums();
+            //             },
+            //           )
+            //         : !controller.loading.value &&
+            //                 !controller.error.value &&
+            //                 controller.forums.isEmpty
+            //             ? const SafetyModel(
+            //                 isLoading: false,
+            //                 title: 'No post',
+            //                 subTitle: 'This industry has no post',
+            //                 // clickableText: "Reload",
+            //                 // onTap: () async {
+            //                 //   await controller.fetchForums();
+            //                 // },
+            //               )
+            //             :
+            ListView.builder(
+                itemCount: 4,
+
+                // <-- this will disable scroll
+
+                //controller: differentController,
+
+                itemBuilder: (BuildContext context, int i) {
+                  bool isLastItem = i == 4 - 1;
+                  return
+                      //  VisibilityDetector(
+                      //   key: Key(i.toString()),
+                      // onVisibilityChanged: (VisibilityInfo info) {
+                      //   final bool hasIncrementedView = hmeController
+                      //       .itemsWithIncrementedViews
+                      //       .contains(controller.forums[i].forumId);
+                      //   if (info.visibleFraction == 1.0 &&
+                      //       !hasIncrementedView) {
+                      //     controller
+                      //         .updateForumViews(controller.forums[i]);
+                      //     setState(() {
+                      //       hmeController.itemsWithIncrementedViews.add(
+                      //           controller.forums[i]
+                      //               .forumId); // Set the flag to prevent further increments
+                      //     });
+                      //   }
+                      // },
+                      // child:
+
+                      DonationItem(
+                    isLastItem: isLastItem,
+                  );
+                }));
+  }
+}

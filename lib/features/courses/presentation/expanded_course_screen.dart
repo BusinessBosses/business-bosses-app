@@ -82,14 +82,11 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
                         visible: widget.course.courseType == 'paid',
                         child: GestureDetector(
                           onTap: () {
-                            showDialog(
-                              barrierColor: Colors.black.withAlpha(240),
-                              context: context,
-                              builder: (BuildContext context) =>
-                                  UnpaidCoursePopUp(
-                                course: widget.course,
-                              ),
-                            );
+                             showDialog(barrierColor: Colors.black.withAlpha(240),
+                                          context: context,
+                                          builder: (BuildContext context) =>
+                                               UnpaidCoursePopUp(course: widget.course,),
+                                        );
                           },
                           child: Container(
                             color: Colors.transparent,
@@ -571,14 +568,15 @@ class _MyStickyHeaderState extends State<MyStickyHeader> {
                         borderRadius: BorderRadius.circular(15),
                       ),
                       width: MediaQuery.sizeOf(context).width,
-                      child: const Padding(
-                        padding: EdgeInsets.all(10.0),
+                      child: Padding(
+                        padding: const EdgeInsets.all(10.0),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text('Video Transcript'),
                             Padding(
-                              padding: EdgeInsets.symmetric(vertical: 20.0),
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 20.0),
                               child: Text(
                                   'Video Transcript Text here iuhuh uhiuh hiuhuhiuhiiu gu giuiukg'),
                             ),
@@ -600,12 +598,10 @@ class _MyStickyHeaderState extends State<MyStickyHeader> {
                           scrollDirection: Axis.horizontal,
                           itemCount: 5,
                           itemBuilder: (BuildContext context, int index) {
-                            return const DownloadableItem(
-                              link: '',
-                            ); // Assuming DownloadableItem is a widget class
+                            return  DownloadableItem(link: '',); // Assuming DownloadableItem is a widget class
                           }),
                     ),
-                    const SizedBox(
+                    SizedBox(
                       height: 100,
                     )
                   ],

@@ -5,6 +5,10 @@ import 'package:business_bosses_v2/features/bottomnavigationscreen.dart';
 import 'package:business_bosses_v2/features/connects/controller/referrals_controller.dart';
 import 'package:business_bosses_v2/features/connects/presentation/referals_screen.dart';
 import 'package:business_bosses_v2/features/courses/presentation/course_history.dart';
+import 'package:business_bosses_v2/features/donations/presentation/createdonations.dart';
+import 'package:business_bosses_v2/features/donations/presentation/donations.dart';
+import 'package:business_bosses_v2/features/donations/presentation/donations_history.dart';
+import 'package:business_bosses_v2/features/donations/presentation/expandeddonationsscren.dart';
 import 'package:business_bosses_v2/features/home/all_communities_screen.dart';
 import 'package:business_bosses_v2/features/home/controller/commumities_controller.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
@@ -267,5 +271,21 @@ var routes = [
   GetPage(
     name: Routes.coursehistoryscreen,
     page: () => const CourseHistory(),
+  ),
+  GetPage(
+    name: Routes.donationsscreen,
+    page: () => const DonationsPage(),
+  ),
+   GetPage(
+    name: Routes.createdonationsscreen,
+    page: () => const CreateDonationScreen(),
+  ),
+   GetPage(
+    name: Routes.expandeddonationsscreen,
+    page: () => const ExpandedDonationScreen(),
+  ),
+   GetPage(
+    name: Routes.donationshistoryscreen,
+    page: () => const DonationsHistory(),
   ),
 ];
