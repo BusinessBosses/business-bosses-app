@@ -1,8 +1,10 @@
+import 'package:business_bosses_v2/features/donations/presentation/donations.dart';
 import 'package:business_bosses_v2/features/forum/presentation/bossup_challenge.dart';
 import 'package:business_bosses_v2/features/forum/widgets/forum_item.dart';
 import 'package:business_bosses_v2/features/home/controller/commumities_controller.dart';
 import 'package:business_bosses_v2/features/home/widgets/bottom_bar.dart';
 import 'package:business_bosses_v2/features/home/widgets/industriessearch.dart';
+import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/utils/constants/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -37,6 +39,7 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
 
   final CommunitiesController _communitiesController =
       Get.put(CommunitiesController());
+  final ProfileController _profileController = Get.find();
   late final TabController _searchTabController;
 
   List<Widget> get mActions {
@@ -116,7 +119,7 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
                                           text: 'Learning',
                                         ),
                                         Tab(
-                                          text: 'Opportunities',
+                                          text: 'Donations',
                                         ),
                                       ])
                                 : TabBar(
@@ -146,7 +149,7 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
                                     // content of Tab 2
                                     Padding(
                                       padding: const EdgeInsets.only(
-                                           left: 15, right: 15),
+                                          left: 15, right: 15),
                                       child: controller.loading.value
                                           ? SafetyModel(
                                               isLoading:
@@ -204,66 +207,68 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
                                                 ),
                                     ),
                                     // content of Tab 3
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                       left: 15, right: 15),
-                                      child: controller.loading.value
-                                          ? SafetyModel(
-                                              isLoading:
-                                                  controller.loading.value,
-                                              title: '',
-                                            )
-                                          : controller.error.value
-                                              ? SafetyModel(
-                                                  isLoading: false,
-                                                  title: 'Something went wrong',
-                                                  clickableText: 'Reload',
-                                                  onTap: () async {
-                                                    await controller
-                                                        .fetchIndustries();
-                                                  },
-                                                )
-                                              : GridView.builder(
-                                                  itemCount: controller
-                                                      .getCategoryIndustries(
-                                                          Constants
-                                                              .OPPORTUNITIESID)
-                                                      .length,
-                                                  itemBuilder:
-                                                      (BuildContext context,
-                                                          int index) {
-                                                    return CustomTile(
-                                                      label: controller
-                                                          .getCategoryIndustries(
-                                                              Constants
-                                                                  .OPPORTUNITIESID)[
-                                                              index]
-                                                          .industry!,
-                                                      photo: controller
-                                                          .getCategoryIndustries(
-                                                              Constants
-                                                                  .OPPORTUNITIESID)[
-                                                              index]
-                                                          .photo!,
-                                                      onTap: () {
-                                                        Get.toNamed(
-                                                            Routes
-                                                                .allforumscreen,
-                                                            arguments: controller
-                                                                .getCategoryIndustries(
-                                                                    Constants
-                                                                        .OPPORTUNITIESID)[index]);
-                                                      },
-                                                    );
-                                                  },
-                                                  gridDelegate:
-                                                      const SliverGridDelegateWithFixedCrossAxisCount(
-                                                    mainAxisSpacing: 15.0,
-                                                    crossAxisSpacing: 15.0,
-                                                    crossAxisCount: 2,
-                                                  ),
-                                                ),
-                                    ),
+
+                                    const DonationsPage(),
+                                    // Padding(
+                                    //   padding: const EdgeInsets.only(
+                                    //       left: 15, right: 15),
+                                    //   child: controller.loading.value
+                                    //       ? SafetyModel(
+                                    //           isLoading:
+                                    //               controller.loading.value,
+                                    //           title: '',
+                                    //         )
+                                    //       : controller.error.value
+                                    //           ? SafetyModel(
+                                    //               isLoading: false,
+                                    //               title: 'Something went wrong',
+                                    //               clickableText: 'Reload',
+                                    //               onTap: () async {
+                                    //                 await controller
+                                    //                     .fetchIndustries();
+                                    //               },
+                                    //             )
+                                    //           : GridView.builder(
+                                    //               itemCount: controller
+                                    //                   .getCategoryIndustries(
+                                    //                       Constants
+                                    //                           .OPPORTUNITIESID)
+                                    //                   .length,
+                                    //               itemBuilder:
+                                    //                   (BuildContext context,
+                                    //                       int index) {
+                                    //                 return CustomTile(
+                                    //                   label: controller
+                                    //                       .getCategoryIndustries(
+                                    //                           Constants
+                                    //                               .OPPORTUNITIESID)[
+                                    //                           index]
+                                    //                       .industry!,
+                                    //                   photo: controller
+                                    //                       .getCategoryIndustries(
+                                    //                           Constants
+                                    //                               .OPPORTUNITIESID)[
+                                    //                           index]
+                                    //                       .photo!,
+                                    //                   onTap: () {
+                                    //                     Get.toNamed(
+                                    //                         Routes
+                                    //                             .allforumscreen,
+                                    //                         arguments: controller
+                                    //                             .getCategoryIndustries(
+                                    //                                 Constants
+                                    //                                     .OPPORTUNITIESID)[index]);
+                                    //                   },
+                                    //                 );
+                                    //               },
+                                    //               gridDelegate:
+                                    //                   const SliverGridDelegateWithFixedCrossAxisCount(
+                                    //                 mainAxisSpacing: 15.0,
+                                    //                 crossAxisSpacing: 15.0,
+                                    //                 crossAxisCount: 2,
+                                    //               ),
+                                    //             ),
+                                    // ),
                                   ],
                                 )
                               : TabBarView(

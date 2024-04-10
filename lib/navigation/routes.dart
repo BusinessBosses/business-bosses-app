@@ -49,7 +49,8 @@ class Routes {
   static const String inviteafriendscreen = '/inviteafriendScreen';
   static const String premiumscreen = '/premiumScreen';
   static const String nullscreen = '/nullscreen';
-  static const String explorebusinessbossesscreen = '/explorebusinessbossesscreen';
+  static const String explorebusinessbossesscreen =
+      '/explorebusinessbossesscreen';
   static const String renewconfirmation = '/renewconfirmation';
   static const String subscriptionconfirmation = '/subscriptionconfirmation';
   static const String reviewpayment = '/reviewpayment';
@@ -62,4 +63,8 @@ class Routes {
   static const String expandedcoursescreen = '/expandedcoursescreen';
   static const String CoinHistoryScreen = '/coinhistory-screen';
   static const String coursehistoryscreen = '/coursehistory-screen';
+  static const String donationsscreen = '/donations-screen';
+  static const String createdonationsscreen = '/create-donations-screen';
+  static const String expandeddonationsscreen = '/expanded-donations-screen';
+  static const String donationshistoryscreen = '/donations-history-screen';
 }
