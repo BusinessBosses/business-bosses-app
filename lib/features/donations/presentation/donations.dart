@@ -241,7 +241,7 @@ class _DonationsPageState extends State<DonationsPage> {
                                       Expanded(
                                           child: Padding(
                                         padding:
-                                            const EdgeInsets.only(right: 30),
+                                            const EdgeInsets.only(top:25, right: 30),
                                         child: Text(
                                           // industry.description ??
                                           'Donate to Support a Project',
