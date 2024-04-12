@@ -101,7 +101,7 @@ class _BossupChallengeState extends State<BossupChallenge> {
                               ),
                             ),
                             const SizedBox(
-                              width: 9,
+                              width: 25,
                             ),
                             Column(
                               mainAxisAlignment: MainAxisAlignment.start,
@@ -142,13 +142,38 @@ class _BossupChallengeState extends State<BossupChallenge> {
                                               : 'Ends',
                                       style: const TextStyle(
                                           color: Colors.grey,
+                                         
                                           fontWeight: FontWeight.w700),
                                     )
                                   ],
                                 ),
                                 const SizedBox(
-                                  height: 10,
-                                )
+                                  height: 5,
+                                ),
+                                Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10, vertical: 5),
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey[300],
+                                    borderRadius: BorderRadius.circular(
+                                        20), // Adjust the radius as needed
+                                  ),
+                                  child: category.endedAt != null
+                                      ? Text(
+                                          _calculateTimeLeft(category.endedAt!),
+                                          style: const TextStyle(
+                                              color: Colors.black54,
+                                               fontSize: 12,
+                                              fontWeight: FontWeight.w700),
+                                        )
+                                      : const Text(
+                                          'Ongoing',
+                                          style: TextStyle(
+                                              color: Colors.black54,
+                                               fontSize: 12,
+                                              fontWeight: FontWeight.w700),
+                                        ),
+                                ),
                               ],
                             )
                           ],
@@ -156,32 +181,11 @@ class _BossupChallengeState extends State<BossupChallenge> {
                       ],
                     ),
                   ),
-                  Positioned(
-                    right: 25,
-                    bottom: 10,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 12, vertical: 6),
-                      decoration: BoxDecoration(
-                        color: Colors.grey[300],
-                        borderRadius: BorderRadius.circular(
-                            20), // Adjust the radius as needed
-                      ),
-                      child: category.endedAt != null
-                          ? Text(
-                              _calculateTimeLeft(category.endedAt!),
-                              style: const TextStyle(
-                                  color: Colors.black54,
-                                  fontWeight: FontWeight.w700),
-                            )
-                          : const Text(
-                              'Ongoing',
-                              style: TextStyle(
-                                  color: Colors.black54,
-                                  fontWeight: FontWeight.w700),
-                            ),
-                    ),
-                  )
+                  // Positioned(
+                  //   right: 25,
+                  //   bottom: 10,
+                  //   child:
+                  // )
                 ]),
               );
             },

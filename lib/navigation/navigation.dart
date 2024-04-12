@@ -5,6 +5,7 @@ import 'package:business_bosses_v2/features/bottomnavigationscreen.dart';
 import 'package:business_bosses_v2/features/connects/controller/referrals_controller.dart';
 import 'package:business_bosses_v2/features/connects/presentation/referals_screen.dart';
 import 'package:business_bosses_v2/features/courses/presentation/course_history.dart';
+import 'package:business_bosses_v2/features/courses/presentation/courses.dart';
 import 'package:business_bosses_v2/features/donations/presentation/createdonations.dart';
 import 'package:business_bosses_v2/features/donations/presentation/donations.dart';
 import 'package:business_bosses_v2/features/donations/presentation/donations_history.dart';
@@ -148,7 +149,7 @@ var routes = [
   ),
   GetPage(
     name: Routes.allforumscreen,
-    page: () => const AllForumScreen(),
+    page: () =>   AllForumScreen(),
     binding: BindingsBuilder.put(() => ForumController()),
   ),
   GetPage(
