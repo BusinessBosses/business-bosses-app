@@ -26,6 +26,7 @@ class BossUpController extends GetxController {
   RxBool error = RxBool(false);
   RxBool loadingMembers = RxBool(false);
   RxBool errorMembers = RxBool(false);
+
   Future<void> fetchForums(String industryId) async {
     loading(true);
     error(false);

@@ -66,7 +66,7 @@ class _CourseHistoryState extends State<CourseHistory> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-             Padding(
+            Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15.0),
               child: const Text(
                 'Total',
@@ -142,7 +142,7 @@ class _CourseHistoryState extends State<CourseHistory> {
                     _currentIndex = index;
                   });
                 },
-                children: [
+                children: const [
                   AllTransactions(),
                   Sales(),
                   Purchases(),

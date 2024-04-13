@@ -178,7 +178,9 @@ class _CreateBossUpScreenState extends State<CreateBossUpScreen> {
                               borderRadius: BorderRadius.circular(50)),
                           child: Padding(
                             padding: const EdgeInsets.symmetric(
-                                horizontal: 8, vertical: 8),
+                              horizontal: 8,
+                              vertical: 8,
+                            ),
                             child: GestureDetector(
                               onTap: () {
                                 setState(() {
