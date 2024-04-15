@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 
 class DonationsController extends GetxController {
   RxList<DonationModel> donations = <DonationModel>[].obs;
+  RxList<String> userIds = <String>[].obs;
   RxBool loading = RxBool(false);
   RxBool error = RxBool(false);
 
@@ -52,6 +53,24 @@ class DonationsController extends GetxController {
       update();
       Get.back();
       Get.snackbar('Success', 'Donations Created Successfully');
+    }
+  }
+
+  Future<void> joinGroup() async {
+    ApiResponseModel response = await ApiService.put(
+        path:
+            'donation/join-leave-donation/6463a069-657d-47ae-b937-9a5d4c336811',
+        body: <String, dynamic>{});
+    if (response.success) {}
+  }
+
+  Future<void> initUsers() async {
+    ApiResponseModel response = await ApiService.get(
+        path: 'donation/get-joined-users/6463a069-657d-47ae-b937-9a5d4c336811');
+    if (response.success) {
+      List<dynamic> rows = response.data['rows'];
+      userIds.addAll(rows.map((row) => row['userId'].toString()).toList());
+      update();
     }
   }
 }
