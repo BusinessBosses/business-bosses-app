@@ -2,6 +2,7 @@
 
 import 'package:business_bosses_v2/common/models/comment_model.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
+import 'package:business_bosses_v2/features/courses/models/course_comment_model.dart';
 
 class CourseModel {
   final String id;
@@ -13,7 +14,7 @@ class CourseModel {
   final dynamic promotionDuration;
   final List<String>? documents;
   final int? timestamp;
-  final List<CommentModel>? comments;
+  final List<CourseCommentModel>? comments;
   final UserModel? user;
   int views = 0;
   final bool? isPromoted;
@@ -53,7 +54,7 @@ class CourseModel {
     String? userId,
     List<String>? documents,
     int? timestamp,
-    List<CommentModel>? comments,
+    List<CourseCommentModel>? comments,
     UserModel? user,
     bool? isPromoted,
     int? views,
@@ -99,7 +100,7 @@ class CourseModel {
       'userId': userId,
       'documents': documents,
       'timestamp': timestamp,
-      'comments': comments!.map((CommentModel x) => x.toMap()).toList(),
+      'comments': comments!.map((CourseCommentModel x) => x.toMap()).toList(),
       'user': user!.toMap(),
       'views': views,
       'isPromoted': isPromoted,
@@ -150,7 +151,7 @@ class CourseModel {
           ? int.parse(map['timestamp'].toString())
           : null,
       comments: List.from(map['comments'])
-          .map((e) => CommentModel.fromMap(e as Map<String, dynamic>))
+          .map((e) => CourseCommentModel.fromMap(e as Map<String, dynamic>))
           .toList(),
       user: map['user'] != null
           ? UserModel.fromMap(map['user'] as Map<String, dynamic>)

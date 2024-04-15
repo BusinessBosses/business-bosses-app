@@ -1,18 +1,27 @@
 import 'package:business_bosses_v2/action/action.dart';
+import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/common/models/comment_model.dart';
+import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/common/widgets/buttons/my_outlined_button.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/common/widgets/typography/text_widget.dart';
+import 'package:business_bosses_v2/features/chat/chat_room_screen.dart';
+import 'package:business_bosses_v2/features/courses/controller/course_controller.dart';
+import 'package:business_bosses_v2/features/courses/models/course_comment_model.dart';
 import 'package:business_bosses_v2/features/courses/models/course_model.dart';
+import 'package:business_bosses_v2/features/courses/models/reviews_model.dart';
 import 'package:business_bosses_v2/features/courses/presentation/course_item.dart';
-import 'package:business_bosses_v2/features/courses/widgets/course_comment_item.dart';
+import 'package:business_bosses_v2/features/courses/widgets/course_comment_bottomsheet.dart';
 import 'package:business_bosses_v2/features/courses/widgets/downloadable_item.dart';
 import 'package:business_bosses_v2/features/courses/widgets/unpaidcoursepopup.dart';
 import 'package:business_bosses_v2/features/posts/widgets/my_container.dart';
 import 'package:business_bosses_v2/features/posts/widgets/youtube_display.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
+import 'package:business_bosses_v2/navigation/routes.dart';
+import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -82,11 +91,14 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
                         visible: widget.course.courseType == 'paid',
                         child: GestureDetector(
                           onTap: () {
-                             showDialog(barrierColor: Colors.black.withAlpha(240),
-                                          context: context,
-                                          builder: (BuildContext context) =>
-                                               UnpaidCoursePopUp(course: widget.course,),
-                                        );
+                            showDialog(
+                              barrierColor: Colors.black.withAlpha(240),
+                              context: context,
+                              builder: (BuildContext context) =>
+                                  UnpaidCoursePopUp(
+                                course: widget.course,
+                              ),
+                            );
                           },
                           child: Container(
                             color: Colors.transparent,
@@ -117,7 +129,15 @@ class MyStickyHeader extends StatefulWidget {
 }
 
 class _MyStickyHeaderState extends State<MyStickyHeader> {
+  bool isSending = false;
+  bool loading = true;
   List<String> blocked = <String>[];
+  List<ReviewModel>? reviews;
+  int oneStar = 0;
+  int twoStar = 0;
+  int threeStar = 0;
+  int fourStar = 0;
+  int fiveStar = 0;
   final List<PopupMenuEntry<String>> myPopupMore = <PopupMenuEntry<String>>[
     const PopupMenuItem<String>(
       value: 'Edit',
@@ -170,7 +190,6 @@ class _MyStickyHeaderState extends State<MyStickyHeader> {
 
   @override
   Widget build(BuildContext context) {
-    ProfileController profileController = Get.find();
     return Stack(children: [
       SingleChildScrollView(
         child: Container(
@@ -402,34 +421,110 @@ class _MyStickyHeaderState extends State<MyStickyHeader> {
                     ),
                     Row(
                       children: <Widget>[
-                        SizedBox(
-                          height: 20.0,
-                          width: 20.0,
-                          child: Align(
-                            alignment: Alignment.topLeft,
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(1000),
-                              child: NetworkImageWithPlaceHolder(
-                                imageUrl: widget.course.user?.photoUrl ?? '',
-                                radius: radius,
-                                placeHolder: Icons.person,
-                                iconSize: 15.0,
-                                fit: BoxFit.cover,
+                        Stack(children: [
+                          Row(
+                            children: [
+                              SizedBox(
+                                height: 30.0,
+                                width: 30.0,
+                                child: Align(
+                                  alignment: Alignment.topLeft,
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(1000),
+                                    child: NetworkImageWithPlaceHolder(
+                                      imageUrl:
+                                          widget.course.user?.photoUrl ?? '',
+                                      radius: radius,
+                                      placeHolder: Icons.person,
+                                      iconSize: 15.0,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                ),
                               ),
-                            ),
+                              const SizedBox(
+                                width: 5,
+                              ),
+                              Text(
+                                overflow: TextOverflow
+                                    .ellipsis, // or TextOverflow.ellipsis
+                                maxLines: 1,
+                                widget.course.user?.name ??
+                                    widget.course.user!.name!,
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.w700),
+                              ),
+                            ],
                           ),
-                        ),
+                          SpeedDial(
+                            buttonSize: Size(100, 30),
+                            backgroundColor: Colors.transparent,
+                            iconTheme:
+                                const IconThemeData(color: Colors.transparent),
+                            activeIcon: Icons.close,
+                            spacing: 3,
+                            childPadding: const EdgeInsets.all(5),
+                            spaceBetweenChildren: 4,
+                            switchLabelPosition: true,
+                            visible: true,
+                            direction: SpeedDialDirection.down,
+                            closeManually: false,
+                            renderOverlay: true,
+                            overlayColor: Colors.black,
+                            overlayOpacity: 0.8,
+                            useRotationAnimation: true,
+                            tooltip: 'Open Speed Dial',
+                            elevation: 0.0,
+                            animationCurve: Curves.elasticInOut,
+                            isOpenOnStart: false,
+                            children: [
+                              SpeedDialChild(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(10.0),
+                                    child: SvgPicture.asset(
+                                      'assets/svgs/person.svg',
+                                      height: 20,
+                                      color: textColor.withOpacity(1.0),
+                                    ),
+                                  ),
+                                  backgroundColor: Colors.white,
+                                  label: 'View Instructor\'s Profile',
+                                  labelStyle: const TextStyle(
+                                      fontSize: 18.0,
+                                      fontWeight: FontWeight.w700),
+                                  onTap: () {
+                                    Get.toNamed(Routes.publicProfile,
+                                        arguments: widget.course.user);
+                                  }),
+                              SpeedDialChild(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(14.0),
+                                  child: SvgPicture.asset(
+                                    'assets/svgs/message.svg',
+                                    height: 20.0,
+
+                                    // ignore: deprecated_member_use
+                                    color: textColor.withOpacity(1.0),
+                                  ),
+                                ),
+                                backgroundColor: Colors.white,
+                                label: 'Message Instructor',
+                                labelStyle: const TextStyle(
+                                    fontSize: 18.0,
+                                    fontWeight: FontWeight.w700),
+                                onTap: () {
+                                  Get.to(
+                                    () => const ChatRoomScreen(
+                                      frommarketplace: false,
+                                    ),
+                                    arguments: widget.course.user,
+                                  );
+                                },
+                              ),
+                            ],
+                          ),
+                        ]),
                         const SizedBox(
-                          width: 5,
-                        ),
-                        Text(
-                          overflow:
-                              TextOverflow.ellipsis, // or TextOverflow.ellipsis
-                          maxLines: 1,
-                          widget.course.user?.name ?? widget.course.user!.name!,
-                          style: const TextStyle(fontWeight: FontWeight.w700),
-                        ),
-                        SizedBox(
                           width: 5,
                         ),
                         const Icon(
@@ -598,7 +693,9 @@ class _MyStickyHeaderState extends State<MyStickyHeader> {
                           scrollDirection: Axis.horizontal,
                           itemCount: 5,
                           itemBuilder: (BuildContext context, int index) {
-                            return  DownloadableItem(link: '',); // Assuming DownloadableItem is a widget class
+                            return DownloadableItem(
+                              link: '',
+                            ); // Assuming DownloadableItem is a widget class
                           }),
                     ),
                     SizedBox(
@@ -634,9 +731,9 @@ class _MyStickyHeaderState extends State<MyStickyHeader> {
                       onTap: () {
                         showModalBottomSheet(
                           context: context,
-                          builder: (BuildContext context) => CourseCommentItem(
+                          builder: (BuildContext context) => CourseCommentBottomSheet(
                             course: widget.course,
-                            onComment: (CommentModel newComment) async {},
+                            onComment: (CourseCommentModel newComment) async {},
                           ),
                         );
                       },
@@ -705,6 +802,11 @@ class _MyStickyHeaderState extends State<MyStickyHeader> {
 
   Future<void> rateCourse() async {
     int rater = 0;
+    ProfileController profileController = Get.find();
+    UserModel? cUser;
+    double currentRating = 0;
+    String reviewText = '';
+    CourseController _courseController = Get.find();
 
     showModalBottomSheet(
       context: context,
@@ -855,39 +957,42 @@ class _MyStickyHeaderState extends State<MyStickyHeader> {
                         SizedBox(
                           width: MediaQuery.of(context).size.width * 0.6,
                           child: MCustomButton(
-                            // isProcessing: isSending,
+                            isProcessing: isSending,
                             buttonType: ButtonType.elevated,
                             onPressed: () async {
                               setState(() {
-                                // isSending = true;
+                                isSending = true;
                               });
-                              // await ApiService.post(
-                              //   path: 'reviews',
-                              //   body: <String, dynamic>{
-                              //     'sellerId': widget.user.uid,
-                              //     'rating': rater,
-                              //     'reviewText': reviewText,
-                              //   },
-                              // );
+                              await ApiService.post(
+                                path: 'course-ratings',
+                                body: <String, dynamic>{
+                                  'raterId': profileController.myProfile.uid,
+                                  'courseId': widget.course.id,
+                                  'authorId': widget.course.user!.uid,
+                                  'rating': rater,
+                                  'review': ""
+                                },
+                              );
+                              // print(object)
                               // await ApiService.post(
                               //   path: 'notification',
                               //   body: <String, dynamic>{
-                              //     'senderUid': _profileController.myProfile.uid,
-                              //     'receiverUid': widget.user.uid,
-                              //     'title': 'Seller Review',
+                              //     'senderUid': profileController.myProfile.uid,
+                              //     'receiverUid': widget.course.user!.uid,
+                              //     'title': 'Course Rating',
                               //     'message':
-                              //         '${_profileController.myProfile.username} has reviewed your store',
+                              //         '${profileController.myProfile.username} has rated your course $rater stars',
                               //     'timestamp':
                               //         DateTime.now().millisecondsSinceEpoch,
                               //     'notificationType': 'Review',
-                              //     'username': widget.user.username,
-                              //     'user': widget.user,
+                              //     'username': widget.course.user!.username,
+                              //     'user': profileController.myProfile!,
                               //   },
                               // );
                               // await processData();
                               // final Map<String, dynamic> currentUser =
                               //     await ProfileController.loadData(
-                              //         widget.user.uid);
+                              //         widget.course.user!.uid);
                               // if (mounted) {
                               //   setState(
                               //     () {
@@ -902,8 +1007,8 @@ class _MyStickyHeaderState extends State<MyStickyHeader> {
                               //     },
                               //   );
                               // }
-                              // _marketController.updateUser(
-                              //     widget.user.uid, currentRating);
+                              // _courseController.updateUser(
+                              //     widget.course.user!.uid, currentRating);
                               // Get.back();
                             },
                             child: const Text('Rate'),
@@ -919,5 +1024,50 @@ class _MyStickyHeaderState extends State<MyStickyHeader> {
         );
       },
     );
+  }
+
+  Future<void> processData() async {
+    final ApiResponseModel response = await ApiService.get(
+        path: '/course-ratings/user/${widget.course.user!.uid}');
+    final List<dynamic> psts = response.data['rows'];
+    if (mounted) {
+      setState(() {
+        reviews = psts
+            .map((dynamic reviewData) => ReviewModel.fromMap(reviewData))
+            .toList();
+      });
+    }
+    if (reviews!.isEmpty) {
+      if (mounted) {
+        setState(() {
+          reviews = null;
+        });
+      }
+    } else {
+      int fiveCount =
+          reviews!.where((ReviewModel review) => review.rating == 5).length;
+      int fourCount =
+          reviews!.where((ReviewModel review) => review.rating == 4).length;
+      int threeCount =
+          reviews!.where((ReviewModel review) => review.rating == 3).length;
+      int twoCount =
+          reviews!.where((ReviewModel review) => review.rating == 2).length;
+      int oneCount =
+          reviews!.where((ReviewModel review) => review.rating == 1).length;
+      if (mounted) {
+        setState(() {
+          fiveStar = fiveCount;
+          fourStar = fourCount;
+          threeStar = threeCount;
+          twoStar = twoCount;
+          oneStar = oneCount;
+        });
+      }
+    }
+    if (mounted) {
+      setState(() {
+        loading = false;
+      });
+    }
   }
 }

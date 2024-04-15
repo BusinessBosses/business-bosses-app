@@ -1,134 +1,130 @@
-import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/common/models/comment_model.dart';
-import 'package:business_bosses_v2/features/courses/models/course_model.dart';
-import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
-import 'package:business_bosses_v2/features/posts/models/post_model.dart';
-import 'package:business_bosses_v2/navigation/routes.dart';
+import 'package:business_bosses_v2/features/courses/models/course_comment_model.dart';
+import 'package:business_bosses_v2/features/posts/widgets/my_container.dart';
+import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import '../../../../common/models/user_model.dart';
-import '../../../../common/widgets/safety_model.dart';
-import '../../../../common/widgets/user_avatar_with_badge.dart';
-import '../../../../utils/theme/theme.dart';
 
-import '../../../common/controllers/comment_controller.dart';
-import '../../../services/api_service.dart';
-import '../../posts/widgets/comment_item.dart';
-import '../../posts/widgets/write_comment.dart';
+import '../../../common/models/my_response.dart';
+import '../../../common/models/user_model.dart';
+import '../../../common/widgets/user_avatar_with_badge.dart';
+import '../../../functions/my_native_functions.dart';
+import '../../../navigation/routes.dart';
+import '../../../utils/theme/theme.dart';
+import '../../../utils/time_format.dart';
+
 
 class CourseCommentItem extends StatefulWidget {
-  final Function(CommentModel comment) onComment;
-  final CourseModel course;
+  final CourseCommentModel comment;
+  final Function(int)? onPageChange;
 
-  const CourseCommentItem({
-    Key? key,
-    required this.onComment,
-    required this.course,
-  }) : super(key: key);
+  ///
+  const CourseCommentItem(this.comment, {Key? key, this.onPageChange})
+      : super(key: key);
 
   @override
-  _CourseCommentItemState createState() => _CourseCommentItemState();
+  State<CourseCommentItem> createState() => _CommentItemState();
 }
 
-class _CourseCommentItemState extends State<CourseCommentItem> {
-  bool _isLoadingComments = true;
-
-  final CommentController _commentController = Get.put(CommentController());
-
-  @override
-  void initState() {
-    _loadCommentWithDetails();
-    super.initState();
-  }
+class _CommentItemState extends State<CourseCommentItem> {
+  final ProfileController profileController = Get.find();
+  UserModel user = UserModel();
+  bool loaded = false;
 
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 1,
-      child: Scaffold(
-        body: Column(
-          children: <Widget>[
-            Material(
-              color: Colors.grey.withOpacity(0.1),
-              child: TabBar(
-                indicatorColor: Colors.transparent,
-                tabs: <Widget>[
-                  Tab(
-                    child: Text(
-                      'Comments',
-                      style: Theme.of(context).textTheme.bodyLarge,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Expanded(
-              child: TabBarView(children: <Widget>[
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Expanded(
-                      child: _commentController.comments.isEmpty
-                          ? SafetyModel(
-                              isLoading: _isLoadingComments,
-                              icon: SvgPicture.asset(
-                                'assets/svgs/comment.svg',
-                                height: 80.0,
-                                color: hintColor,
+    return widget.comment.user != null
+        ? Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                MyContainer(
+                  width: MediaQuery.of(context).size.width * 0.7,
+                  padding: const EdgeInsets.only(
+                      bottom: 12.0, left: 12.0, right: 12.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      ListTile(
+                        onTap: () {
+                          if (profileController.myProfile.uid ==
+                              widget.comment.userId!) {
+                            if (widget.onPageChange != null) {
+                              widget.onPageChange!(3);
+                            }
+                          } else {
+                            Get.toNamed(Routes.publicProfile,
+                                arguments: widget.comment.user);
+                          }
+                        },
+                        leading: UserAvatarWithBadge(
+                          user: user,
+                          height: 36.0,
+                          width: 36.0,
+                          radius: 30.0,
+                          placeHolder: Icons.person,
+                        ),
+                        title: widget.comment.user!.isSubscribed == true
+                            ? Row(
+                                children: <Widget>[
+                                  Text(
+                                    widget.comment.user?.name ??
+                                        widget.comment.user!.username,
+                                    style: bodyText1,
+                                  ),
+                                  const SizedBox(width: 5),
+                                  SvgPicture.asset(
+                                    'assets/svgs/premiumbadge.svg',
+                                    height: 9,
+                                    color: primaryColorLT,
+                                  )
+                                ],
+                              )
+                            : Text(
+                                widget.comment.user?.name ??
+                                    widget.comment.user!.username,
+                                style: bodyText1,
                               ),
-                              title: 'There is no comment for now',
-                              subTitle: 'Be the first one to comment!',
-                            )
-                          : ListView.builder(
-                              reverse: true,
-                              itemBuilder: (BuildContext context, int i) {
-                                final int j =
-                                    _commentController.comments.length -
-                                        1 -
-                                        i; // reverse index
-                                return CommentItem(
-                                    _commentController.comments[j]);
-                              },
-                              itemCount: _commentController.comments.length,
-                            ),
-                    ),
-                    WriteAComment(
-                      onCommentSend: (CommentModel comment) {
-                        widget.onComment(comment);
-                        ApiService.post(
-                            path: 'comments',
-                            body: <String, dynamic>{
-                              ...comment.toMap(),
-                              'receiverUid': widget.course.user?.uid
-                            });
-                        setState(() {
-                          _commentController.comments.add(comment);
-                        });
-                        // _homeController.comment(
-                        //   widget.post.postId,
-                        //   comment,
-                        //   'post',
-                        // );
-                      },
-                      postId: widget.course.id,
-                    )
-                  ],
+                        subtitle: Text(
+                          TimeFormat.formatString(widget.comment.timestamp!),
+                          style: bodyText2.copyWith(
+                            fontSize: 11.0,
+                            color: hintColor,
+                          ),
+                        ),
+                        contentPadding: const EdgeInsets.all(0.0),
+                      ),
+                      Linkify(
+                        text: '${widget.comment.comment}',
+                        style: bodyText2.copyWith(
+                          fontWeight: FontWeight.normal,
+                        ),
+                        onOpen: (LinkableElement linkableElement) =>
+                            _onUrlClick(context, linkableElement),
+                        options: const LinkifyOptions(humanize: false),
+                        linkStyle: bodyText2.copyWith(
+                          color: Colors.blue,
+                          fontWeight: FontWeight.normal,
+                        ),
+                      ),
+                      const SizedBox(height: 4.0),
+                    ],
+                  ),
                 ),
-              ]),
+              ],
             ),
-          ],
-        ),
-      ),
-    );
+          )
+        : const SizedBox();
   }
 
-  Future<void> _loadCommentWithDetails() async {
-    await _commentController.fetchComments(widget.course.id);
-    setState(() {
-      _isLoadingComments = _commentController.loading.value;
-    });
+  Future<void> _onUrlClick(
+      BuildContext context, LinkableElement linkableElement) async {
+    MyResponse res = await MyNativeFunctions.onUrlLaunch(linkableElement.url);
+    if (!res.success) {
+      Get.snackbar('Error', res.message);
+    }
   }
-
-  final List<UserModel> _users = <UserModel>[];
 }
