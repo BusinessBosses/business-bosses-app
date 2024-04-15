@@ -14,7 +14,7 @@ class DonationsController extends GetxController {
     super.onInit();
   }
 
-  void fetchDonations() async {
+  Future<void> fetchDonations() async {
     try {
       loading(true); // Set loading to true before fetching data
       update();
@@ -31,12 +31,10 @@ class DonationsController extends GetxController {
                   .map((dynamic like) => like['userId'].toString())
                   .toList(),
             });
-            print(donation);
             donations.add(donation);
           }
         }
       }
-      print(donations.length);
       error(false);
     } catch (e) {
       error(true); // Set error to true if there's an error
@@ -44,5 +42,16 @@ class DonationsController extends GetxController {
       loading(false); // Set loading back to false after fetching data
     }
     update();
+  }
+
+  Future<void> createDonation(Map<String, dynamic> donation) async {
+    ApiResponseModel response =
+        await ApiService.post(path: 'donation', body: donation);
+    if (response.success) {
+      donations.add(DonationModel.fromMap(donation));
+      update();
+      Get.back();
+      Get.snackbar('Success', 'Donations Created Successfully');
+    }
   }
 }

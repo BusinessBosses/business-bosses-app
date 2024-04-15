@@ -306,9 +306,8 @@ class _DonationItemState extends State<DonationItem> {
                                               ? Row(
                                                   children: <Widget>[
                                                     TextWidget(
-                                                      text: 'Block @${''
-                                                          // widget.Donation.user?.name
-                                                          }',
+                                                      text:
+                                                          'Block @${widget.donation.user?.name}',
                                                       color: Colors.blue,
                                                     ),
                                                     const SizedBox(width: 5),
@@ -320,9 +319,8 @@ class _DonationItemState extends State<DonationItem> {
                                                   ],
                                                 )
                                               : TextWidget(
-                                                  text: 'Block @${''
-                                                      // widget.Donation.user?.name
-                                                      }',
+                                                  text:
+                                                      'Block @${widget.donation.user?.name}',
                                                   color: Colors.blue,
                                                 ),
                                     ),
@@ -414,20 +412,12 @@ class _DonationItemState extends State<DonationItem> {
             children: <Widget>[
               TextButton.icon(
                 onPressed: () async {},
-                icon:
-                    // post.likes?.contains(profileController.myProfile.uid) ==
-                    //         true
-                    //     ? SvgPicture.asset(
-                    //         'assets/svgs/likefilled.svg',
-                    //         height: 15,
-                    //       )
-                    //     :
-                    SvgPicture.asset(
+                icon: SvgPicture.asset(
                   'assets/svgs/like.svg',
                   height: 15,
                 ),
                 label: Text(
-                  '0',
+                  widget.donation.likes!.length.toString(),
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         fontWeight: FontWeight.w700,
                         color: textColor.withOpacity(0.8),
@@ -441,7 +431,7 @@ class _DonationItemState extends State<DonationItem> {
                   height: 15,
                 ),
                 label: Text(
-                  'Comments',
+                  '${widget.donation.comments?.length.toString()} Comments',
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         fontWeight: FontWeight.w700,
                         color: textColor.withOpacity(0.8),
@@ -453,7 +443,7 @@ class _DonationItemState extends State<DonationItem> {
                 icon: const Icon(Icons.remove_red_eye_outlined,
                     size: 19, color: Colors.black),
                 label: Text(
-                  'Views',
+                  '${widget.donation.views.toString()} Views',
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         fontWeight: FontWeight.w700,
                         color: textColor.withOpacity(0.8),

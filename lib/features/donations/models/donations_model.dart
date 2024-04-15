@@ -11,7 +11,7 @@ class DonationModel {
   final int? amountRecieved;
   final String? title;
   final String? youtubeUrls;
-  final List<String>? images;
+  final String? photo;
   final int? timestamp;
   late final List<String>? likes;
   final List<String>? coins;
@@ -28,7 +28,7 @@ class DonationModel {
     this.targetAmount,
     this.amountRecieved,
     this.title,
-    this.images,
+    this.photo,
     this.timestamp,
     this.likes,
     this.views = 0,
@@ -48,7 +48,7 @@ class DonationModel {
     String? title,
     int? targetAmount,
     int? amountRecieved,
-    List<String>? images,
+    String? photo,
     int? timestamp,
     List<String>? likes,
     List<String>? coins,
@@ -67,7 +67,7 @@ class DonationModel {
       title: title ?? this.title,
       targetAmount: targetAmount ?? this.targetAmount,
       amountRecieved: amountRecieved ?? this.amountRecieved,
-      images: images ?? this.images,
+      photo: photo ?? this.photo,
       timestamp: timestamp ?? this.timestamp,
       likes: likes ?? this.likes,
       coins: coins ?? this.coins,
@@ -89,7 +89,7 @@ class DonationModel {
       'title': title,
       'targetAmount': targetAmount,
       'amountRecieved': amountRecieved,
-      'images': images,
+      'photo': photo,
       'timestamp': timestamp,
       'likes': likes,
       'coins': coins,
@@ -116,16 +116,7 @@ class DonationModel {
           map['targetAmount'] != null ? map['targetAmount'] as int : null,
       amountRecieved:
           map['amountRecieved'] != null ? map['amountRecieved'] as int : null,
-      images: map['images'] != null && map['images'] != ''
-          ? List<String>.from((map['images']))
-                  .where((String element) => element.isNotEmpty)
-                  .toList()
-                  .isEmpty
-              ? null
-              : List<String>.from((map['images']))
-                  .where((String element) => element.isNotEmpty)
-                  .toList()
-          : null,
+      photo: map['photo'] != null ? map['photo'] as String : null,
       timestamp: map['timestamp'] != null
           ? int.parse(map['timestamp'].toString())
           : null,
