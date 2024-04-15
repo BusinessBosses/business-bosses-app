@@ -281,10 +281,6 @@ var routes = [
     page: () => const CreateDonationScreen(),
   ),
   GetPage(
-    name: Routes.expandeddonationsscreen,
-    page: () => const ExpandedDonationScreen(),
-  ),
-  GetPage(
     name: Routes.donationshistoryscreen,
     page: () => const DonationsHistory(),
   ),

@@ -1,27 +1,18 @@
 import 'package:business_bosses_v2/action/action.dart';
-import 'package:business_bosses_v2/common/models/comment_model.dart';
-import 'package:business_bosses_v2/common/widgets/buttons/my_outlined_button.dart';
-import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/common/widgets/typography/text_widget.dart';
+import 'package:business_bosses_v2/features/donations/models/donations_model.dart';
 import 'package:business_bosses_v2/features/donations/widgets/supporteritem.dart';
-import 'package:business_bosses_v2/features/posts/widgets/my_container.dart';
-import 'package:business_bosses_v2/features/posts/widgets/youtube_display.dart';
-import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:get/get.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
-
-import 'package:zego_uikit_prebuilt_live_audio_room/zego_uikit_prebuilt_live_audio_room.dart';
 
 class ExpandedDonationScreen extends StatefulWidget {
+  final DonationModel donation;
   static const String routeName = '/expandedDonationscreen';
 
   const ExpandedDonationScreen({
     Key? key,
+    required this.donation,
   }) : super(key: key);
 
   @override
@@ -135,31 +126,30 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
                                   },
                                   contentPadding: EdgeInsets.zero,
                                   title: GestureDetector(
-                                    child:
-                                        'widget.Donation.user?.isSubscribed' ==
-                                                true
-                                            ? Row(
-                                                children: <Widget>[
-                                                  const TextWidget(
-                                                    text: 'Block @${''
-                                                        // widget.Donation.user?.name
-                                                        }',
-                                                    color: Colors.blue,
-                                                  ),
-                                                  const SizedBox(width: 5),
-                                                  SvgPicture.asset(
-                                                    'assets/svgs/premiumbadge.svg',
-                                                    height: 9,
-                                                    color: primaryColorLT,
-                                                  )
-                                                ],
-                                              )
-                                            : const TextWidget(
+                                    child: widget.donation.user?.isSubscribed ==
+                                            true
+                                        ? Row(
+                                            children: <Widget>[
+                                              const TextWidget(
                                                 text: 'Block @${''
                                                     // widget.Donation.user?.name
                                                     }',
                                                 color: Colors.blue,
                                               ),
+                                              const SizedBox(width: 5),
+                                              SvgPicture.asset(
+                                                'assets/svgs/premiumbadge.svg',
+                                                height: 9,
+                                                color: primaryColorLT,
+                                              )
+                                            ],
+                                          )
+                                        : const TextWidget(
+                                            text: 'Block @${''
+                                                // widget.Donation.user?.name
+                                                }',
+                                            color: Colors.blue,
+                                          ),
                                   ),
                                 ),
                                 ListTile(
@@ -271,34 +261,34 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
                             borderRadius: BorderRadius.circular(20)),
                         child: Column(
                           children: [
-                            const Text(
-                              'Donation Title here',
-                              style: TextStyle(
+                            Text(
+                              widget.donation.title!,
+                              style: const TextStyle(
                                   fontWeight: FontWeight.w700, fontSize: 17),
                             ),
                             const SizedBox(
                               height: 20,
                             ),
-                            const Row(
+                            Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Row(
                                   children: [
                                     Text(
-                                      '100',
-                                      style: TextStyle(
+                                      widget.donation.amountRecieved.toString(),
+                                      style: const TextStyle(
                                           fontSize: 10,
                                           color: subtextColor,
                                           fontWeight: FontWeight.w700),
                                     ),
-                                    Text(
+                                    const Text(
                                       ' coins raised',
                                       style: TextStyle(
                                           fontSize: 10, color: subtextColor),
                                     ),
                                   ],
                                 ),
-                                Text(
+                                const Text(
                                   '70%',
                                   style: TextStyle(
                                       fontSize: 10, color: subtextColor),
@@ -332,9 +322,9 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
                                       'assets/svgs/coin.svg',
                                       height: 12,
                                     ),
-                                    const Text(
-                                      '200',
-                                      style: TextStyle(
+                                    Text(
+                                      widget.donation.targetAmount.toString(),
+                                      style: const TextStyle(
                                           color: subtextColor,
                                           fontWeight: FontWeight.w700,
                                           fontSize: 12),
@@ -353,7 +343,7 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
                                         builder: (BuildContext context) =>
                                             const SupporterItem());
                                   },
-                                  child:  Column(
+                                  child: Column(
                                     children: [
                                       Wrap(
                                         crossAxisAlignment:
@@ -369,11 +359,16 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
                                           Text(
                                             ' Supporters',
                                             style: TextStyle(
-                                                fontSize: 10, color: subtextColor),
+                                                fontSize: 10,
+                                                color: subtextColor),
                                           ),
                                         ],
                                       ),
-                                      Container(color: Colors.black54, height: 1, width: 70,)
+                                      Container(
+                                        color: Colors.black54,
+                                        height: 1,
+                                        width: 70,
+                                      )
                                     ],
                                   ),
                                 )
@@ -485,12 +480,12 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
                               children: [
                                 Container(
                                   padding: const EdgeInsets.all(14),
-                                  child: SvgPicture.asset(
-                                      'assets/svgs/coin.svg',
-                                      height: 30),
                                   decoration: BoxDecoration(
                                       color: backgroundColor,
                                       borderRadius: BorderRadius.circular(10)),
+                                  child: SvgPicture.asset(
+                                      'assets/svgs/coin.svg',
+                                      height: 30),
                                 ),
                                 const SizedBox(
                                   width: 10,
@@ -515,7 +510,7 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
                                         bottom: 0,
                                         right: 10,
                                         child: Text(
-                                          '/200 Coin target',
+                                          '/${widget.donation.targetAmount.toString()} Coin target',
                                           style: TextStyle(
                                               color: textColor.withAlpha(100)),
                                         ))
@@ -565,11 +560,11 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
                     color: backgroundColor,
                     height: 1,
                   ),
-                  const Padding(
+                  Padding(
                     padding: EdgeInsets.all(15.0),
                     child: Column(
                       children: [
-                        Row(
+                        const Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
@@ -583,12 +578,12 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
                             )
                           ],
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 20,
                         ),
                         Text(
-                          'At Coffee Hut, we strive to be more than just a place to grab your morning brew. We\'re a cosy hub where friendships are forged, ideas are shared, and smiles are exchanged over the comforting aroma of freshly ground coffee. But like many small businesses, we\'ve faced our fair share of challenges lately. From fluctuating coffee prices to unexpected maintenance costs, keeping our doors.',
-                          style: TextStyle(fontSize: 16),
+                          widget.donation.description!,
+                          style: const TextStyle(fontSize: 16),
                         )
                       ],
                     ),

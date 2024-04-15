@@ -3,8 +3,8 @@
 import 'package:business_bosses_v2/action/action.dart';
 import 'package:business_bosses_v2/common/widgets/typography/text_widget.dart';
 import 'package:business_bosses_v2/features/donations/models/donations_model.dart';
+import 'package:business_bosses_v2/features/donations/presentation/expanded_donations_scren.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
-import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -95,7 +95,8 @@ class _DonationItemState extends State<DonationItem> {
                 Stack(children: [
                   GestureDetector(
                     onTap: () {
-                      Get.toNamed(Routes.expandeddonationsscreen);
+                      Get.to(() =>
+                          ExpandedDonationScreen(donation: widget.donation));
                     },
                     child: SizedBox(
                       height: 90,

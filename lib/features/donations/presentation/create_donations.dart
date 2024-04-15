@@ -1,3 +1,4 @@
+import 'package:business_bosses_v2/common/models/comment_model.dart';
 import 'package:business_bosses_v2/common/widgets/typography/text_widget.dart';
 import 'package:business_bosses_v2/features/donations/controller/donations_controller.dart';
 import 'package:business_bosses_v2/features/donations/models/donations_model.dart';
@@ -27,7 +28,7 @@ class _CreateDonationScreenState extends State<CreateDonationScreen> {
 
   String title = '';
   String description = '';
-  String? targetAmount;
+  int? targetAmount;
   bool isUpdating = false;
   late String industryId;
   String? categoryId;
@@ -134,7 +135,7 @@ class _CreateDonationScreenState extends State<CreateDonationScreen> {
                             hintText: 'Enter Amount to raise eg 2000',
                           ),
                           onChanged: (String val) {
-                            targetAmount = val;
+                            targetAmount = int.tryParse(val) ?? 0;
                           },
                         ),
                         Positioned(
@@ -343,6 +344,8 @@ class _CreateDonationScreenState extends State<CreateDonationScreen> {
                       'targetAmount': targetAmount,
                       'youtubeUrls': _ytUrl,
                       'photo': photo,
+                      'comments': <CommentModel>[],
+                      'likes': [],
                     });
                     setState(() {
                       isProcessing = false;
