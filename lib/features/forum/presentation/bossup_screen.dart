@@ -446,8 +446,10 @@ class _BossUpSectionState extends State<BossUpSection> {
                                                         .bossOfTheWeekTimeStamp ??
                                                     0;
                                                 if ((previousStamp +
-                                                        1209600000) >
-                                                    now) {
+                                                            1209600000) >
+                                                        now &&
+                                                    widget.industry.industry ==
+                                                        'Boss Up Challenge ') {
                                                   const SnackBar snackBar =
                                                       SnackBar(
                                                     duration:
