@@ -92,8 +92,8 @@ class _CourseHistoryState extends State<CourseHistory> {
                   ),
                   const SizedBox(width: 5),
                   Text(
-                    '(\$2000)',
-                    style: TextStyle(
+                    '(\$${(num.parse(profileController.myProfile.coinscount.toString()) / 100).toString()})',
+                    style: const TextStyle(
                       fontWeight: FontWeight.w700,
                       fontSize: 22,
                       color: Colors.black38,
