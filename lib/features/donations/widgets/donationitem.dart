@@ -1,27 +1,22 @@
 // ignore_for_file: always_specify_types
 
 import 'package:business_bosses_v2/action/action.dart';
-import 'package:business_bosses_v2/common/models/comment_model.dart';
-import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/common/widgets/typography/text_widget.dart';
-import 'package:business_bosses_v2/features/donations/widgets/supporteritem.dart';
-import 'package:business_bosses_v2/features/posts/widgets/youtube_display.dart';
-import 'package:business_bosses_v2/features/posts/widgets/yt_player.dart';
+import 'package:business_bosses_v2/features/donations/models/donations_model.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
-import 'package:business_bosses_v2/utils/time_format.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 class DonationItem extends StatefulWidget {
-  // final DonationModel Donation;
+  final DonationModel donation;
   final bool isLastItem;
   const DonationItem({
     required this.isLastItem,
     Key? key,
+    required this.donation,
   }) : super(key: key);
 
   // required this.Donation});
@@ -130,17 +125,17 @@ class _DonationItemState extends State<DonationItem> {
                         overflow:
                             TextOverflow.ellipsis, // or TextOverflow.ellipsis
                         maxLines: 2,
-                        'widget.Donation.title!',
+                        widget.donation.title!,
                         style: const TextStyle(fontWeight: FontWeight.w700),
                       ),
                       Text(
                         overflow:
                             TextOverflow.ellipsis, // or TextOverflow.ellipsis
                         maxLines: 2,
-                        'widget.Donation.description!',
+                        widget.donation.description!,
                         style: const TextStyle(color: Colors.black45),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 10,
                       ),
                       Row(
@@ -149,26 +144,26 @@ class _DonationItemState extends State<DonationItem> {
                           Row(
                             children: [
                               Text(
-                                '100',
-                                style: TextStyle(
+                                widget.donation.amountRecieved.toString(),
+                                style: const TextStyle(
                                     fontSize: 10,
                                     color: subtextColor,
                                     fontWeight: FontWeight.w700),
                               ),
-                              Text(
+                              const Text(
                                 ' coins raised',
                                 style: TextStyle(
                                     fontSize: 10, color: subtextColor),
                               ),
                             ],
                           ),
-                          Text(
+                          const Text(
                             '70%',
                             style: TextStyle(fontSize: 10, color: subtextColor),
                           ),
                         ],
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 5,
                       ),
                       ClipRRect(
@@ -181,7 +176,7 @@ class _DonationItemState extends State<DonationItem> {
                               AlwaysStoppedAnimation<Color>(primaryColorLT),
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 5,
                       ),
                       Row(
@@ -196,20 +191,20 @@ class _DonationItemState extends State<DonationItem> {
                                 height: 12,
                               ),
                               Text(
-                                '200',
-                                style: TextStyle(
+                                widget.donation.targetAmount.toString(),
+                                style: const TextStyle(
                                     color: subtextColor,
                                     fontWeight: FontWeight.w700,
                                     fontSize: 12),
                               ),
-                              Text(
+                              const Text(
                                 'Target',
                                 style: TextStyle(
                                     color: subtextColor, fontSize: 10),
                               ),
                             ],
                           ),
-                          Wrap(
+                          const Wrap(
                             crossAxisAlignment: WrapCrossAlignment.center,
                             children: [
                               Text(
@@ -311,9 +306,8 @@ class _DonationItemState extends State<DonationItem> {
                                               ? Row(
                                                   children: <Widget>[
                                                     TextWidget(
-                                                      text: 'Block @${''
-                                                          // widget.Donation.user?.name
-                                                          }',
+                                                      text:
+                                                          'Block @${widget.donation.user?.name}',
                                                       color: Colors.blue,
                                                     ),
                                                     const SizedBox(width: 5),
@@ -325,9 +319,8 @@ class _DonationItemState extends State<DonationItem> {
                                                   ],
                                                 )
                                               : TextWidget(
-                                                  text: 'Block @${''
-                                                      // widget.Donation.user?.name
-                                                      }',
+                                                  text:
+                                                      'Block @${widget.donation.user?.name}',
                                                   color: Colors.blue,
                                                 ),
                                     ),
@@ -419,20 +412,12 @@ class _DonationItemState extends State<DonationItem> {
             children: <Widget>[
               TextButton.icon(
                 onPressed: () async {},
-                icon:
-                    // post.likes?.contains(profileController.myProfile.uid) ==
-                    //         true
-                    //     ? SvgPicture.asset(
-                    //         'assets/svgs/likefilled.svg',
-                    //         height: 15,
-                    //       )
-                    //     :
-                    SvgPicture.asset(
+                icon: SvgPicture.asset(
                   'assets/svgs/like.svg',
                   height: 15,
                 ),
                 label: Text(
-                  '0',
+                  widget.donation.likes!.length.toString(),
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         fontWeight: FontWeight.w700,
                         color: textColor.withOpacity(0.8),
@@ -446,7 +431,7 @@ class _DonationItemState extends State<DonationItem> {
                   height: 15,
                 ),
                 label: Text(
-                  'Comments',
+                  '${widget.donation.comments?.length.toString()} Comments',
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         fontWeight: FontWeight.w700,
                         color: textColor.withOpacity(0.8),
@@ -458,7 +443,7 @@ class _DonationItemState extends State<DonationItem> {
                 icon: const Icon(Icons.remove_red_eye_outlined,
                     size: 19, color: Colors.black),
                 label: Text(
-                  'Views',
+                  '${widget.donation.views.toString()} Views',
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         fontWeight: FontWeight.w700,
                         color: textColor.withOpacity(0.8),
@@ -493,7 +478,7 @@ class _DonationItemState extends State<DonationItem> {
             height: 7,
           ),
           if (widget.isLastItem)
-             Container(
+            Container(
               color: backgroundColor,
               height: 80,
             ),

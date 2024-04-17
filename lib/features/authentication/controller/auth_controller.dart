@@ -1,8 +1,6 @@
 import 'dart:convert';
 import 'dart:math';
 import 'package:async/async.dart';
-import 'package:business_bosses_v2/action/action.dart';
-import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/features/authentication/presentation/code_verification_screen.dart';
 import 'package:business_bosses_v2/features/authentication/presentation/forgot_password_verification.dart';
 import 'package:business_bosses_v2/features/authentication/repository/auth_repository.dart';
@@ -13,7 +11,6 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:sendgrid_mailer/sendgrid_mailer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 import '../../../navigation/routes.dart';
 import '../../../services/api_service.dart';

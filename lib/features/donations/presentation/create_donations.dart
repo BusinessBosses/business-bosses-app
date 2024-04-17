@@ -1,63 +1,48 @@
 import 'package:business_bosses_v2/common/widgets/typography/text_widget.dart';
+import 'package:business_bosses_v2/features/donations/controller/donations_controller.dart';
+import 'package:business_bosses_v2/features/donations/models/donations_model.dart';
+import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:business_bosses_v2/features/posts/widgets/preview.dart';
-import 'package:business_bosses_v2/utils/constants/constants.dart';
 import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
 import 'package:detectable_text_field/widgets/detectable_text_field.dart';
 import '../../../action/action.dart';
-import '../../../common/dialogs/snackbar.dart';
 import '../../../common/widgets/buttons/my_outlined_button.dart';
 import '../../../utils/theme/theme.dart';
 
 class CreateDonationScreen extends StatefulWidget {
   static const String routeName = '/create-Donation-screen';
-
-  const CreateDonationScreen({Key? key}) : super(key: key);
+  final DonationModel? donation;
+  const CreateDonationScreen({Key? key, this.donation}) : super(key: key);
 
   @override
   State<CreateDonationScreen> createState() => _CreateDonationScreenState();
 }
 
 class _CreateDonationScreenState extends State<CreateDonationScreen> {
+  final DonationsController donationsController = Get.find();
+  final ProfileController profileController = Get.find();
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
   String title = '';
   String description = '';
+  String? targetAmount;
   bool isUpdating = false;
   late String industryId;
   String? categoryId;
   bool isVisible = false;
   String? _ytUrl;
+  String? photo;
   bool isImageSelected = false;
   bool isYoutubeSelected = false;
   final TextEditingController descriptionController = TextEditingController();
   bool _shouldPromote = false;
+  bool isProcessing = false;
 
   @override
   void initState() {
     super.initState();
-
-    final arguments = Get.arguments;
-
-    // if (arguments == null) {
-    //   Get.back();
-    // } else {
-    //   isbossup = arguments['isBossUp'] ?? false;
-    //   if (arguments['isUpdating'] != null) {
-    //     isUpdating = true;
-    //     Donation = arguments['Donation'];
-    //     title = Donation.title ?? '';
-    //     description = Donation.description ?? '';
-    //     descriptionController.text = Donation.description ?? '';
-    //     industryId = Donation.industryId;
-    //     _createDonationController.initializeDonationEditImage(Donation.images);
-    //   } else {
-    //     industryId = arguments['industryId'];
-    //     categoryId = arguments['categoryId'];
-    //   }
-    // }
   }
 
   @override
@@ -126,12 +111,13 @@ class _CreateDonationScreenState extends State<CreateDonationScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                      padding: EdgeInsets.all(14),
+                      padding: const EdgeInsets.all(14),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
                       child:
                           SvgPicture.asset('assets/svgs/coin.svg', height: 30),
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(10)),
                     ),
                     const SizedBox(
                       width: 10,
@@ -141,24 +127,30 @@ class _CreateDonationScreenState extends State<CreateDonationScreen> {
                           6, // Adjust the flex value to control the relative sizes
                       child: Stack(children: [
                         TextFormField(
-                          // controller: _priceController,
-                          // onChanged: (String val) => price = val,
                           textInputAction: TextInputAction.next,
                           keyboardType: TextInputType.number,
                           maxLength: 15,
                           decoration: inputDecoration.copyWith(
                             hintText: 'Enter Amount to raise eg 2000',
                           ),
+                          onChanged: (String val) {
+                            targetAmount = val;
+                          },
                         ),
                         Positioned(
-                            top: 20, bottom: 0, right: 10, child: Text('(\$20.00)', style: TextStyle(color: textColor.withAlpha(100)),))
+                            top: 20,
+                            bottom: 0,
+                            right: 10,
+                            child: Text(
+                              '(\$20.00)',
+                              style: TextStyle(color: textColor.withAlpha(100)),
+                            ))
                       ]),
                     ),
                   ],
                 ),
               ),
               const SizedBox(height: 12.0),
-              // if (!isUpdating)
               Padding(
                 padding: const EdgeInsets.only(left: 15.0),
                 child: Row(
@@ -172,15 +164,7 @@ class _CreateDonationScreenState extends State<CreateDonationScreen> {
                           padding: const EdgeInsets.symmetric(
                               horizontal: 8, vertical: 8),
                           child: GestureDetector(
-                            onTap: () {
-                              // if (controller.imageFileList.length < 5) {
-                              //   controller.onPickImage();
-                              // } else {
-                              //   showSnackbar(
-                              //       message:
-                              //           'You can only upload up to 5 images.');
-                              // }
-                            },
+                            onTap: () {},
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.center,
@@ -197,20 +181,6 @@ class _CreateDonationScreenState extends State<CreateDonationScreen> {
                                   'assets/svgs/addimagepost.svg',
                                   height: 11,
                                 ),
-                                // Radio(
-                                //   value: true,
-                                //   groupValue: isImageSelected,
-                                //   onChanged: (value) {
-                                //     setState(() {
-                                //       isImageSelected = value!;
-                                //       isYoutubeSelected = false;
-                                //     });
-                                //   },
-                                // ),
-                                // const Text(
-                                //   'Max file size for images is 10Mb',
-                                //   style: TextStyle(fontSize: 11, color: Colors.red),
-                                // )
                               ],
                             ),
                           ),
@@ -246,16 +216,6 @@ class _CreateDonationScreenState extends State<CreateDonationScreen> {
                                   'assets/svgs/yt.svg',
                                   height: 15,
                                 ),
-                                // Radio(
-                                //   value: true,
-                                //   groupValue: isYoutubeSelected,
-                                //   onChanged: (value) {
-                                //     setState(() {
-                                //       isYoutubeSelected = value!;
-                                //       isImageSelected = false;
-                                //     });
-                                //   },
-                                // ),
                               ],
                             ),
                           ),
@@ -264,7 +224,6 @@ class _CreateDonationScreenState extends State<CreateDonationScreen> {
                 ),
               ),
               const SizedBox(height: 8.0),
-
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 14),
                 child: Container(
@@ -283,13 +242,6 @@ class _CreateDonationScreenState extends State<CreateDonationScreen> {
                           _ytUrl = val;
                           setState(() {});
                         },
-                        // validator: (value) {
-                        //   if (value == null || value.isEmpty) {
-                        //     return '';
-                        //   }
-                        //   return null;
-                        // },
-                        // textInputAction: TextInputAction.done,
                         keyboardType: TextInputType.visiblePassword,
                         maxLines: 1,
                         decoration: InputDecoration(
@@ -308,14 +260,6 @@ class _CreateDonationScreenState extends State<CreateDonationScreen> {
               const SizedBox(
                 height: 10,
               ),
-
-              // Padding(
-              //   padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              //   child: Preview(
-              //     controller: controller,
-              //     isUpdating: isUpdating,
-              //   ),
-              // ),
               const SizedBox(height: 24.0),
               Column(
                 children: <Widget>[
@@ -381,38 +325,33 @@ class _CreateDonationScreenState extends State<CreateDonationScreen> {
                 ],
               ),
               const SizedBox(height: 24.0),
-
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 child: MCustomButton(
+                  isProcessing: isProcessing,
                   buttonType: ButtonType.elevated,
-                  onPressed: () {
-                    // if (isUpdating) {
-                    //   controller.editDonation(<String, dynamic>{
-                    //     ...Donation.toMap(),
-                    //     'title': title.trim(),
-                    //     'description': description.trim(),
-                    //     'industryId': industryId,
-                    //   }, isBossup: isbossup);
-                    // } else {
-                    //   controller.createDonation(<String, dynamic>{
-                    //     'title': title.trim(),
-                    //     'description': description.trim(),
-                    //     'timestamp': DateTime.now().millisecondsSinceEpoch,
-                    //     'industryId': industryId,
-                    //     'ytUrl': _ytUrl,
-                    //     'images': _ytUrl != null && _ytUrl != ''
-                    //         ? 'https://api.businessbosses.co.uk/appfiles/1698854755_13_download_(1).png'
-                    //         : null,
-                    //   });
-                    // }
+                  onPressed: () async {
+                    setState(() {
+                      isProcessing = true;
+                    });
+                    await donationsController.createDonation(<String, dynamic>{
+                      'categoryId': '6463a069-657d-47ae-b937-9a5d4c336811',
+                      'userId': profileController.myProfile.uid,
+                      'title': title,
+                      'description': descriptionController.text,
+                      'timestamp': DateTime.now().millisecondsSinceEpoch,
+                      'targetAmount': targetAmount,
+                      'youtubeUrls': _ytUrl,
+                      'photo': photo,
+                    });
+                    setState(() {
+                      isProcessing = false;
+                    });
                   },
                   label: isUpdating ? 'Update Post' : 'Post',
-                  // isProcessing: controller.loading.value,
                 ),
               ),
               const SizedBox(height: 30),
-
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 child: Row(
@@ -428,12 +367,12 @@ class _CreateDonationScreenState extends State<CreateDonationScreen> {
                     ),
                     const Flexible(
                       child: Text(
-                          textAlign: TextAlign.center,
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 2,
-                          style: TextStyle(
-                              fontSize: 13, color: subtextColor),
-                          'Please note this donation MUST be for your business only. We do not currently support any charitable organisation donations. '),
+                        textAlign: TextAlign.center,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 2,
+                        style: TextStyle(fontSize: 13, color: subtextColor),
+                        'Please note this donation MUST be for your business only. We do not currently support any charitable organisation donations. ',
+                      ),
                     ),
                   ],
                 ),
