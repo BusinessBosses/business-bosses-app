@@ -719,7 +719,7 @@ class _MyStickyHeaderState extends State<MyStickyHeader> {
                         : Center(
                             child: ElevatedButton(
                                 onPressed: () {
-                                  if (num.parse(widget.course.price!) <
+                                  if (num.parse(widget.course.price!) >
                                       num.parse(profileController
                                           .myProfile.coinscount
                                           .toString())) {

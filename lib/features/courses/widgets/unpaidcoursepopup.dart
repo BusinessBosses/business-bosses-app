@@ -145,7 +145,7 @@ class _UnpaidCoursePopUpState extends State<UnpaidCoursePopUp> {
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-                if (num.parse(widget.course.price!) <
+                if (num.parse(widget.course.price!) >
                     num.parse(profileController.myProfile.coinscount.toString())) {
                   showSnackbar(
                     title: 'OOPS!',
