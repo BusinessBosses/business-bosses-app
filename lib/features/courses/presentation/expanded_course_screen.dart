@@ -1,4 +1,5 @@
 import 'package:business_bosses_v2/action/action.dart';
+import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/common/models/comment_model.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
@@ -72,7 +73,7 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
                 icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
               ),
               centerTitle: true,
-              title:  Text(
+              title: Text(
                 widget.course.title!,
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 20),
@@ -134,6 +135,7 @@ class MyStickyHeader extends StatefulWidget {
 class _MyStickyHeaderState extends State<MyStickyHeader> {
   bool isSending = false;
   bool loading = true;
+  bool insufficientBalance = false;
   List<String> blocked = <String>[];
   List<ReviewModel>? reviews;
   int oneStar = 0;
@@ -717,7 +719,23 @@ class _MyStickyHeaderState extends State<MyStickyHeader> {
                         : Center(
                             child: ElevatedButton(
                                 onPressed: () {
-                                 
+                                  if (num.parse(widget.course.price!) <
+                                      num.parse(profileController
+                                          .myProfile.coinscount
+                                          .toString())) {
+                                    showSnackbar(
+                                      title: 'OOPS!',
+                                      message:
+                                          'Insufficient Coin balance, please top up!',
+                                      error: true,
+                                    );
+
+                                    setState(() {
+                                      insufficientBalance = true;
+                                    });
+                                  } else {
+                                    // Proceed with course purchase
+                                  }
                                 },
                                 child: Padding(
                                   padding: const EdgeInsets.all(10.0),
