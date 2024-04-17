@@ -615,15 +615,7 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
                         children: [
                           TextButton.icon(
                             onPressed: () async {},
-                            icon:
-                                // post.likes?.contains(profileController.myProfile.uid) ==
-                                //         true
-                                //     ? SvgPicture.asset(
-                                //         'assets/svgs/likefilled.svg',
-                                //         height: 15,
-                                //       )
-                                //     :
-                                SvgPicture.asset(
+                            icon: SvgPicture.asset(
                               'assets/svgs/like.svg',
                               height: 15,
                             ),
