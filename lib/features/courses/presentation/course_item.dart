@@ -3,12 +3,15 @@
 import 'package:business_bosses_v2/action/action.dart';
 import 'package:business_bosses_v2/common/models/comment_model.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
+import 'package:business_bosses_v2/common/widgets/popup/my_popup_menu_button.dart';
 import 'package:business_bosses_v2/features/courses/controller/course_controller.dart';
 import 'package:business_bosses_v2/common/widgets/typography/text_widget.dart';
 import 'package:business_bosses_v2/features/courses/models/course_comment_model.dart';
 import 'package:business_bosses_v2/features/courses/models/course_model.dart';
+import 'package:business_bosses_v2/features/courses/presentation/create_course.dart';
 import 'package:business_bosses_v2/features/courses/presentation/expanded_course_screen.dart';
 import 'package:business_bosses_v2/features/courses/widgets/course_comment_bottomsheet.dart';
+import 'package:business_bosses_v2/features/posts/presentation/boost_post_screen.dart';
 import 'package:business_bosses_v2/features/posts/widgets/youtube_display.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
@@ -247,181 +250,240 @@ class _CourseItemState extends State<CourseItem> {
                     ],
                   ),
                 ),
-                GestureDetector(
-                  onTap: () {
-                    showDialog(
-                        context: context,
-                        builder: (BuildContext context) => AlertDialog(
-                              content: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: <Widget>[
-                                  ListTile(
-                                    onTap: () {
-                                      // Navigator.pop(context);
-                                      showDialog(
-                                        context: context,
-                                        builder: (BuildContext context) =>
-                                            AlertDialog(
-                                          title: const TextWidget(
-                                            text: 'Do you want to block user?',
-                                            centralize: true,
-                                            fontWeight: FontWeight.w700,
-                                            size: 20,
-                                          ),
-                                          content: TextWidget(
-                                            text:
-                                                'You will no longer see courses, posts and comments from this user on your feed',
-                                            centralize: true,
-                                            color: Colors.black.withOpacity(.6),
-                                          ),
-                                          actions: <Widget>[
-                                            TextButton(
-                                              onPressed: () =>
-                                                  Navigator.pop(context),
-                                              child: const TextWidget(
-                                                text: 'Cancel',
-                                                fontWeight: FontWeight.w700,
-                                                size: 18,
-                                                color: Colors.grey,
-                                              ),
-                                            ),
-                                            GestureDetector(
-                                              onTap: () {
-                                                Navigator.pop(context);
-                                                // print(_post.user.uid);
-                                                setState(() {
-                                                  blocked.add(
-                                                      widget.course.user!.uid);
-                                                });
-                                                showSnackBar(context,
-                                                    message:
-                                                        'User has been blocked');
-                                              },
-                                              child: Container(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                  vertical: 7,
-                                                  horizontal: 14,
-                                                ),
-                                                decoration: BoxDecoration(
-                                                  color: primaryColorLT,
-                                                  borderRadius:
-                                                      BorderRadius.circular(5),
-                                                ),
-                                                child: const TextWidget(
-                                                  text: 'Block',
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              ),
-                                            )
-                                          ],
-                                        ),
-                                      );
-                                    },
-                                    contentPadding: EdgeInsets.zero,
-                                    title: GestureDetector(
-                                      child: widget.course.user?.isSubscribed ==
-                                              true
-                                          ? Row(
-                                              children: <Widget>[
-                                                TextWidget(
-                                                  text:
-                                                      'Block @${widget.course.user?.name}',
-                                                  color: Colors.blue,
-                                                ),
-                                                const SizedBox(width: 5),
-                                                SvgPicture.asset(
-                                                  'assets/svgs/premiumbadge.svg',
-                                                  height: 9,
-                                                  color: primaryColorLT,
-                                                )
-                                              ],
-                                            )
-                                          : TextWidget(
-                                              text:
-                                                  'Block @${widget.course.user?.name}',
-                                              color: Colors.blue,
-                                            ),
-                                    ),
+                widget.course.user!.uid == profileController.myProfile.uid
+                    ? MyPopupMenuButton(
+                        popupItems: myPopupMore,
+                        icon: const Icon(
+                          Icons.more_horiz,
+                          size: 20,
+                          color: Colors.black,
+                          weight: 100,
+                        ),
+                        onSelected: (String val) {
+                          if (val == 'Edit') {
+                            Get.to(() => CreateCourseScreen(
+                                  industryId: widget.course.industryId,
+                                  course: widget.course,
+                                ));
+                          } else if (val == 'Delete') {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) => AlertDialog(
+                                title: const Text(
+                                  'Delete Course',
+                                  style: bodyText1,
+                                ),
+                                content: const Text(
+                                    'Are you sure you want to delete this course?'),
+                                actions: <Widget>[
+                                  TextButton(
+                                    onPressed: () => Get.back(),
+                                    child: const Text('No'),
                                   ),
-                                  ListTile(
-                                    onTap: () {
-                                      Navigator.of(context).pop(context);
-                                      showDialog(
-                                        context: context,
-                                        builder: (BuildContext context) =>
-                                            AlertDialog(
-                                          title: const TextWidget(
-                                            text:
-                                                'Do you want to report course?',
-                                            centralize: true,
-                                            fontWeight: FontWeight.w700,
-                                            size: 20,
-                                          ),
-                                          content: TextWidget(
-                                            text:
-                                                'The course will be reported to admin to evaluate if it violates any community policy',
-                                            centralize: true,
-                                            color: Colors.black.withOpacity(.6),
-                                          ),
-                                          actions: <Widget>[
-                                            TextButton(
-                                              onPressed: () =>
-                                                  Navigator.pop(context),
-                                              child: const TextWidget(
-                                                text: 'Cancel',
-                                                fontWeight: FontWeight.w700,
-                                                size: 18,
-                                                color: Colors.grey,
-                                              ),
-                                            ),
-                                            GestureDetector(
-                                              onTap: () {
-                                                Navigator.pop(context);
-                                                showSnackBar(context,
-                                                    message:
-                                                        'Course has been Reported');
-                                              },
-                                              child: Container(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                  vertical: 7,
-                                                  horizontal: 14,
-                                                ),
-                                                decoration: BoxDecoration(
-                                                  color: primaryColorLT,
-                                                  borderRadius:
-                                                      BorderRadius.circular(5),
-                                                ),
-                                                child: const TextWidget(
-                                                  text: 'Report',
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              ),
-                                            )
-                                          ],
-                                        ),
-                                      );
+                                  TextButton(
+                                    onPressed: () {
+                                      CourseController()
+                                          .onDeleteCourse(widget.course.id);
+                                      Get.back();
                                     },
-                                    contentPadding: EdgeInsets.zero,
-                                    title: const TextWidget(
-                                      text: 'Report this course',
-                                      color: Colors.red,
-                                    ),
-                                  )
+                                    child: const Text('Yes'),
+                                  ),
                                 ],
                               ),
-                            ));
-                  },
-                  child: const Icon(
-                    Icons.more_horiz,
-                    size: 20,
-                    color: Colors.black,
-                    weight: 100,
-                  ),
-                )
+                            );
+                          } else if (val == 'Boost') {
+                            Get.to(() => BoostPost(
+                                  postId: widget.course.id,
+                                  postTitle: widget.course.title!,
+                                ));
+                          }
+                        },
+                      )
+                    : GestureDetector(
+                        onTap: () {
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext context) => AlertDialog(
+                                    content: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: <Widget>[
+                                        ListTile(
+                                          onTap: () {
+                                            // Navigator.pop(context);
+                                            showDialog(
+                                              context: context,
+                                              builder: (BuildContext context) =>
+                                                  AlertDialog(
+                                                title: const TextWidget(
+                                                  text:
+                                                      'Do you want to block user?',
+                                                  centralize: true,
+                                                  fontWeight: FontWeight.w700,
+                                                  size: 20,
+                                                ),
+                                                content: TextWidget(
+                                                  text:
+                                                      'You will no longer see courses, posts and comments from this user on your feed',
+                                                  centralize: true,
+                                                  color: Colors.black
+                                                      .withOpacity(.6),
+                                                ),
+                                                actions: <Widget>[
+                                                  TextButton(
+                                                    onPressed: () =>
+                                                        Navigator.pop(context),
+                                                    child: const TextWidget(
+                                                      text: 'Cancel',
+                                                      fontWeight:
+                                                          FontWeight.w700,
+                                                      size: 18,
+                                                      color: Colors.grey,
+                                                    ),
+                                                  ),
+                                                  GestureDetector(
+                                                    onTap: () {
+                                                      Navigator.pop(context);
+                                                      // print(_post.user.uid);
+                                                      setState(() {
+                                                        blocked.add(widget
+                                                            .course.user!.uid);
+                                                      });
+                                                      showSnackBar(context,
+                                                          message:
+                                                              'User has been blocked');
+                                                    },
+                                                    child: Container(
+                                                      padding: const EdgeInsets
+                                                          .symmetric(
+                                                        vertical: 7,
+                                                        horizontal: 14,
+                                                      ),
+                                                      decoration: BoxDecoration(
+                                                        color: primaryColorLT,
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(5),
+                                                      ),
+                                                      child: const TextWidget(
+                                                        text: 'Block',
+                                                        color: Colors.white,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                      ),
+                                                    ),
+                                                  )
+                                                ],
+                                              ),
+                                            );
+                                          },
+                                          contentPadding: EdgeInsets.zero,
+                                          title: GestureDetector(
+                                            child: widget.course.user
+                                                        ?.isSubscribed ==
+                                                    true
+                                                ? Row(
+                                                    children: <Widget>[
+                                                      TextWidget(
+                                                        text:
+                                                            'Block @${widget.course.user?.name}',
+                                                        color: Colors.blue,
+                                                      ),
+                                                      const SizedBox(width: 5),
+                                                      SvgPicture.asset(
+                                                        'assets/svgs/premiumbadge.svg',
+                                                        height: 9,
+                                                        color: primaryColorLT,
+                                                      )
+                                                    ],
+                                                  )
+                                                : TextWidget(
+                                                    text:
+                                                        'Block @${widget.course.user?.name}',
+                                                    color: Colors.blue,
+                                                  ),
+                                          ),
+                                        ),
+                                        ListTile(
+                                          onTap: () {
+                                            Navigator.of(context).pop(context);
+                                            showDialog(
+                                              context: context,
+                                              builder: (BuildContext context) =>
+                                                  AlertDialog(
+                                                title: const TextWidget(
+                                                  text:
+                                                      'Do you want to report course?',
+                                                  centralize: true,
+                                                  fontWeight: FontWeight.w700,
+                                                  size: 20,
+                                                ),
+                                                content: TextWidget(
+                                                  text:
+                                                      'The course will be reported to admin to evaluate if it violates any community policy',
+                                                  centralize: true,
+                                                  color: Colors.black
+                                                      .withOpacity(.6),
+                                                ),
+                                                actions: <Widget>[
+                                                  TextButton(
+                                                    onPressed: () =>
+                                                        Navigator.pop(context),
+                                                    child: const TextWidget(
+                                                      text: 'Cancel',
+                                                      fontWeight:
+                                                          FontWeight.w700,
+                                                      size: 18,
+                                                      color: Colors.grey,
+                                                    ),
+                                                  ),
+                                                  GestureDetector(
+                                                    onTap: () {
+                                                      Navigator.pop(context);
+                                                      showSnackBar(context,
+                                                          message:
+                                                              'Course has been Reported');
+                                                    },
+                                                    child: Container(
+                                                      padding: const EdgeInsets
+                                                          .symmetric(
+                                                        vertical: 7,
+                                                        horizontal: 14,
+                                                      ),
+                                                      decoration: BoxDecoration(
+                                                        color: primaryColorLT,
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(5),
+                                                      ),
+                                                      child: const TextWidget(
+                                                        text: 'Report',
+                                                        color: Colors.white,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                      ),
+                                                    ),
+                                                  )
+                                                ],
+                                              ),
+                                            );
+                                          },
+                                          contentPadding: EdgeInsets.zero,
+                                          title: const TextWidget(
+                                            text: 'Report this course',
+                                            color: Colors.red,
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ));
+                        },
+                        child: const Icon(
+                          Icons.more_horiz,
+                          size: 20,
+                          color: Colors.black,
+                          weight: 100,
+                        ),
+                      )
               ],
             ),
           ),

@@ -14,6 +14,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
+
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -35,6 +37,8 @@ void main() async {
   await GetStorage.init();
   await dotenv.load();
   await Firebase.initializeApp();
+  await FlutterDownloader.initialize();
+
   // await firebaseInitUniLinks();
   AnalyticsServices();
   Stripe.publishableKey =
