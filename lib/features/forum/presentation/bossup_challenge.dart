@@ -2,6 +2,7 @@ import 'package:business_bosses_v2/common/widgets/safety_model.dart';
 import 'package:business_bosses_v2/features/forum/controller/challenge_controller.dart';
 import 'package:business_bosses_v2/features/forum/models/industry.dart';
 import 'package:business_bosses_v2/features/forum/presentation/bossup_screen.dart';
+import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +18,7 @@ class BossupChallenge extends StatefulWidget {
 }
 
 class _BossupChallengeState extends State<BossupChallenge> {
+  final ProfileController profileController = Get.find();
   @override
   Widget build(BuildContext context) {
     return GetBuilder<ChallengeController>(
@@ -101,7 +103,7 @@ class _BossupChallengeState extends State<BossupChallenge> {
                               ),
                             ),
                             const SizedBox(
-                              width: 9,
+                              width: 25,
                             ),
                             Column(
                               mainAxisAlignment: MainAxisAlignment.start,
@@ -147,8 +149,32 @@ class _BossupChallengeState extends State<BossupChallenge> {
                                   ],
                                 ),
                                 const SizedBox(
-                                  height: 10,
-                                )
+                                  height: 5,
+                                ),
+                                Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10, vertical: 5),
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey[300],
+                                    borderRadius: BorderRadius.circular(
+                                        20), // Adjust the radius as needed
+                                  ),
+                                  child: category.endedAt != null
+                                      ? Text(
+                                          _calculateTimeLeft(category.endedAt!),
+                                          style: const TextStyle(
+                                              color: Colors.black54,
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w700),
+                                        )
+                                      : const Text(
+                                          'Ongoing',
+                                          style: TextStyle(
+                                              color: Colors.black54,
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w700),
+                                        ),
+                                ),
                               ],
                             )
                           ],
@@ -156,32 +182,11 @@ class _BossupChallengeState extends State<BossupChallenge> {
                       ],
                     ),
                   ),
-                  Positioned(
-                    right: 25,
-                    bottom: 10,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 12, vertical: 6),
-                      decoration: BoxDecoration(
-                        color: Colors.grey[300],
-                        borderRadius: BorderRadius.circular(
-                            20), // Adjust the radius as needed
-                      ),
-                      child: category.endedAt != null
-                          ? Text(
-                              _calculateTimeLeft(category.endedAt!),
-                              style: const TextStyle(
-                                  color: Colors.black54,
-                                  fontWeight: FontWeight.w700),
-                            )
-                          : const Text(
-                              'Ongoing',
-                              style: TextStyle(
-                                  color: Colors.black54,
-                                  fontWeight: FontWeight.w700),
-                            ),
-                    ),
-                  )
+                  // Positioned(
+                  //   right: 25,
+                  //   bottom: 10,
+                  //   child:
+                  // )
                 ]),
               );
             },

@@ -34,6 +34,17 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
     String ytUrl = 'https://www.youtube.com/watch?v=3gm6eBtWfi4';
     ScrollController scrollController = ScrollController();
 
+    int timestampMs = widget.donation.timestamp!;
+
+    // Convert milliseconds to DateTime
+    DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(timestampMs);
+
+    // Calculate the difference between current time and the timestamp
+    Duration difference = DateTime.now().difference(dateTime);
+
+    // Format the duration
+    String formattedDifference = formatDuration(difference);
+
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
@@ -564,16 +575,16 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
                     padding: EdgeInsets.all(15.0),
                     child: Column(
                       children: [
-                        const Row(
+                        Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
+                            const Text(
                               'Story',
                               style: TextStyle(
                                   fontWeight: FontWeight.w700, fontSize: 18),
                             ),
                             Text(
-                              'Posted 5 days ago',
+                              'Posted ${formattedDifference}',
                               style: TextStyle(color: subtextColor),
                             )
                           ],
@@ -695,5 +706,17 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
             ),
           ],
         ));
+  }
+
+  String formatDuration(Duration difference) {
+    if (difference.inDays > 0) {
+      return '${difference.inDays} ${difference.inDays == 1 ? 'day ago' : 'days ago'}';
+    } else if (difference.inHours > 0) {
+      return '${difference.inHours} ${difference.inHours == 1 ? 'hour ago' : 'hours ago'}';
+    } else if (difference.inMinutes > 0) {
+      return '${difference.inMinutes} ${difference.inMinutes == 1 ? 'minute ago' : 'minutes ago'}';
+    } else {
+      return 'just now';
+    }
   }
 }

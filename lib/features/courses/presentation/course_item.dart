@@ -5,11 +5,13 @@ import 'package:business_bosses_v2/common/models/comment_model.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/features/courses/controller/course_controller.dart';
 import 'package:business_bosses_v2/common/widgets/typography/text_widget.dart';
+import 'package:business_bosses_v2/features/courses/models/course_comment_model.dart';
 import 'package:business_bosses_v2/features/courses/models/course_model.dart';
 import 'package:business_bosses_v2/features/courses/presentation/expanded_course_screen.dart';
-import 'package:business_bosses_v2/features/courses/widgets/course_comment_item.dart';
+import 'package:business_bosses_v2/features/courses/widgets/course_comment_bottomsheet.dart';
 import 'package:business_bosses_v2/features/posts/widgets/youtube_display.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
+import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:business_bosses_v2/utils/time_format.dart';
 import 'package:flutter/material.dart';
@@ -198,41 +200,49 @@ class _CourseItemState extends State<CourseItem> {
                         widget.course.description!,
                         style: const TextStyle(color: Colors.black45),
                       ),
-                      Row(
-                        children: [
-                          const Text('by'),
-                          const SizedBox(
-                            width: 5,
-                          ),
-                          SizedBox(
-                            height: 20.0,
-                            width: 20.0,
-                            child: Align(
-                              alignment: Alignment.topLeft,
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(1000),
-                                child: NetworkImageWithPlaceHolder(
-                                  imageUrl: widget.course.user?.photoUrl ?? '',
-                                  radius: radius,
-                                  placeHolder: Icons.person,
-                                  iconSize: 15.0,
-                                  fit: BoxFit.cover,
+                      GestureDetector(
+                        onTap: () {
+                          Get.toNamed(Routes.publicProfile,
+                              arguments: widget.course.user);
+                        },
+                        child: Row(
+                          children: [
+                            const Text('by'),
+                            const SizedBox(
+                              width: 5,
+                            ),
+                            SizedBox(
+                              height: 20.0,
+                              width: 20.0,
+                              child: Align(
+                                alignment: Alignment.topLeft,
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(1000),
+                                  child: NetworkImageWithPlaceHolder(
+                                    imageUrl:
+                                        widget.course.user?.photoUrl ?? '',
+                                    radius: radius,
+                                    placeHolder: Icons.person,
+                                    iconSize: 15.0,
+                                    fit: BoxFit.cover,
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                          const SizedBox(
-                            width: 5,
-                          ),
-                          Text(
-                            overflow: TextOverflow
-                                .ellipsis, // or TextOverflow.ellipsis
-                            maxLines: 1,
-                            widget.course.user?.name ??
-                                widget.course.user!.name!,
-                            style: const TextStyle(fontWeight: FontWeight.w700),
-                          ),
-                        ],
+                            const SizedBox(
+                              width: 5,
+                            ),
+                            Text(
+                              overflow: TextOverflow
+                                  .ellipsis, // or TextOverflow.ellipsis
+                              maxLines: 1,
+                              widget.course.user?.name ??
+                                  widget.course.user!.name!,
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.w700),
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   ),
@@ -531,9 +541,12 @@ class _CourseItemState extends State<CourseItem> {
                   onPressed: () {
                     showModalBottomSheet(
                       context: context,
-                      builder: (BuildContext context) => CourseCommentItem(
+                      builder: (BuildContext context) =>
+                          CourseCommentBottomSheet(
                         course: widget.course,
-                        onComment: (CommentModel newComment) async {},
+                        onComment: (CourseCommentModel newComment) async {
+                          setState(() {});
+                        },
                       ),
                     );
                   },

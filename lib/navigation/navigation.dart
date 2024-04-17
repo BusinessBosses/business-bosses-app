@@ -8,7 +8,6 @@ import 'package:business_bosses_v2/features/courses/presentation/course_history.
 import 'package:business_bosses_v2/features/donations/presentation/create_donations.dart';
 import 'package:business_bosses_v2/features/donations/presentation/donations.dart';
 import 'package:business_bosses_v2/features/donations/presentation/donations_history.dart';
-import 'package:business_bosses_v2/features/donations/presentation/expanded_donations_scren.dart';
 import 'package:business_bosses_v2/features/home/all_communities_screen.dart';
 import 'package:business_bosses_v2/features/home/controller/commumities_controller.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
@@ -148,7 +147,7 @@ var routes = [
   ),
   GetPage(
     name: Routes.allforumscreen,
-    page: () => const AllForumScreen(),
+    page: () => AllForumScreen(),
     binding: BindingsBuilder.put(() => ForumController()),
   ),
   GetPage(

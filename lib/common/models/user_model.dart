@@ -25,6 +25,7 @@ class UserModel {
   final String? industry;
   final String? category;
   final String? location;
+  final List<String>? postChallenges;
   final List<String>? achievements;
   final List<Industry>? interests;
   final List<String>? productsandservices;
@@ -68,6 +69,7 @@ class UserModel {
     this.surname,
     this.bio,
     this.website,
+    this.postChallenges,
     this.instagram,
     this.twitter,
     this.industry,
@@ -121,6 +123,7 @@ class UserModel {
     String? category,
     String? location,
     List<String>? achievements,
+    List<String>? postChallenges,
     List<Industry>? interests,
     List<String>? productsandservices,
     List<ReferralsModel>? referals,
@@ -171,6 +174,7 @@ class UserModel {
       category: category ?? this.category,
       location: location ?? this.location,
       achievements: achievements ?? this.achievements,
+      postChallenges: postChallenges ?? this.postChallenges,
       interests: interests ?? this.interests,
       productsandservices: productsandservices ?? this.productsandservices,
       referals: referals ?? this.referals,
@@ -220,6 +224,7 @@ class UserModel {
       'category': category,
       'location': location,
       'achievements': achievements,
+      'postChallenges': postChallenges,
       'interests': interests?.map((Industry x) => x.toMap()).toList(),
       'productsandservices': productsandservices,
       'referals': referals?.map((ReferralsModel x) => x.toMap()).toList(),
@@ -277,6 +282,9 @@ class UserModel {
       location: map['location'] != null ? map['location'] as String : null,
       achievements: map['achievements'] != null
           ? List<String>.from((map['achievements']))
+          : null,
+      postChallenges: map['postChallenges'] != null
+          ? List<String>.from((map['postChallenges']))
           : null,
       interests: map['interests'] != null
           ? List.from(map['interests'])

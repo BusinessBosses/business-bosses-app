@@ -272,7 +272,8 @@ class _CreateBossUpScreenState extends State<CreateBossUpScreen> {
                             ? 'https://api.businessbosses.co.uk/appfiles/1698854755_13_download_(1).png'
                             : null,
                       });
-                      if (isbossup == true) {
+                      if (widget.industryModel.industry ==
+                          'Boss Up Challenge ') {
                         Map<String, dynamic> updateData = <String, dynamic>{
                           'bossOfTheWeekTimeStamp':
                               DateTime.now().millisecondsSinceEpoch,
@@ -282,6 +283,24 @@ class _CreateBossUpScreenState extends State<CreateBossUpScreen> {
                           body: <String, dynamic>{
                             'bossOfTheWeekTimeStamp':
                                 DateTime.now().millisecondsSinceEpoch,
+                          },
+                        );
+                        _profileController.updateProfile(<String, dynamic>{
+                          ..._profileController.myProfile.toMap(),
+                          ...updateData
+                        });
+                      } else {
+                        _profileController.myProfile.postChallenges
+                            ?.add(widget.industryModel.industryId!);
+                        Map<String, dynamic> updateData = <String, dynamic>{
+                          'postChallenges':
+                              _profileController.myProfile.postChallenges,
+                        };
+                        await ApiService.put(
+                          path: 'users/${_profileController.myProfile.uid}',
+                          body: <String, dynamic>{
+                            'postChallenges':
+                                _profileController.myProfile.postChallenges,
                           },
                         );
                         _profileController.updateProfile(<String, dynamic>{
