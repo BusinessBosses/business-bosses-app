@@ -72,8 +72,8 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
                 icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
               ),
               centerTitle: true,
-              title: const Text(
-                'Course Title',
+              title:  Text(
+                widget.course.title!,
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 20),
               ),
@@ -716,7 +716,9 @@ class _MyStickyHeaderState extends State<MyStickyHeader> {
                         ? Container()
                         : Center(
                             child: ElevatedButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                 
+                                },
                                 child: Padding(
                                   padding: const EdgeInsets.all(10.0),
                                   child: Wrap(
@@ -780,7 +782,8 @@ class _MyStickyHeaderState extends State<MyStickyHeader> {
                                 itemCount: widget.course.documents!.length,
                                 itemBuilder: (BuildContext context, int index) {
                                   return DownloadableItem(
-                                    link: 'https://miro.medium.com/v2/resize:fit:1200/1*5JFH1YSl7NHZ4kPghfXfEg.jpeg',
+                                    link:
+                                        'https://miro.medium.com/v2/resize:fit:1200/1*5JFH1YSl7NHZ4kPghfXfEg.jpeg',
                                     filename: 'test1',
                                   );
                                 }),

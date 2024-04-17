@@ -571,7 +571,7 @@ class _CourseItemState extends State<CourseItem> {
                           top: 0,
                           child: Container(
                             decoration: BoxDecoration(
-                                color: Colors.black,
+                                color: Colors.black54,
                                 borderRadius: BorderRadius.circular(50)),
                             child: Padding(
                               padding:
