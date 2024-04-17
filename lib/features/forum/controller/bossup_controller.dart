@@ -6,6 +6,7 @@ import 'package:business_bosses_v2/features/forum/models/industry.dart';
 import 'package:business_bosses_v2/features/forum/repository/forum_repository.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
+import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
@@ -104,7 +105,12 @@ class BossUpController extends GetxController {
     final HomeController homeController = Get.find();
     forums.removeWhere((ForumModel element) => element.forumId == forumId);
     homeController.removeForum(forumId);
-
+    ApiService.put(
+      path: 'users/${_profileController.myProfile.uid}',
+      body: <String, dynamic>{
+        'postChallenges': _profileController.myProfile.postChallenges,
+      },
+    );
     update();
   }
 

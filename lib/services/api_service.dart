@@ -261,9 +261,12 @@ class ApiService {
           'Authorization': 'bearer $token'
         },
       );
+
       log(response.body);
+      print(response.body);
       return ApiResponseModel.fromMap(jsonDecode(response.body));
     } catch (e) {
+      print(e.toString());
       showSnackbar(
           title: 'OOPS!',
           message: 'An error occurred, please try again!',

@@ -1,5 +1,5 @@
 import 'package:business_bosses_v2/features/donations/controller/donations_controller.dart';
-import 'package:business_bosses_v2/features/donations/widgets/donationitem.dart';
+import 'package:business_bosses_v2/features/donations/widgets/donation_item.dart';
 import 'package:business_bosses_v2/features/forum/widgets/joinedbutton.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
@@ -75,8 +75,9 @@ class _DonationsPageState extends State<DonationsPage> {
                                     const Text(
                                       'Info',
                                       style: TextStyle(
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.w700),
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w700,
+                                      ),
                                     ),
                                     const SizedBox(
                                       width: 5,
@@ -164,7 +165,8 @@ class _DonationsPageState extends State<DonationsPage> {
                                     ),
                                     const Expanded(
                                         child: Padding(
-                                      padding: EdgeInsets.only(right: 30),
+                                      padding:
+                                          EdgeInsets.only(top: 25, right: 30),
                                       child: Text(
                                         // industry.description ??
                                         'Donate to Support a Project',
@@ -200,7 +202,8 @@ class _DonationsPageState extends State<DonationsPage> {
                                               text: TextSpan(
                                                 children: <InlineSpan>[
                                                   TextSpan(
-                                                    text: 'Members (22)',
+                                                    text:
+                                                        'Members (${formatCount(donationsController.userIds.length)})',
                                                     style: const TextStyle(
                                                       fontSize: 12,
                                                       fontWeight:
@@ -256,12 +259,15 @@ class _DonationsPageState extends State<DonationsPage> {
                                       const Spacer(),
                                       Align(
                                         alignment: Alignment.centerRight,
-                                        child: JoinedButton(
-                                          false,
-                                          () {
-                                            // toggleJoinAndLeaveIndustry(
-                                            //     controller);
-                                          },
+                                        child: Obx(
+                                          () => JoinedButton(
+                                            donationsController.userIds
+                                                .contains(
+                                                    _myProfile.myProfile.uid),
+                                            () {
+                                              donationsController.joinGroup();
+                                            },
+                                          ),
                                         ),
                                       )
                                     ],

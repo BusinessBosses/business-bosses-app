@@ -1,4 +1,5 @@
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
+import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/features/courses/models/course_model.dart';
 import 'package:business_bosses_v2/features/forum/models/industry.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
@@ -80,5 +81,27 @@ class CourseController extends GetxController {
       print('Error uploading file: $e');
       // Handle exception
     }
+  }
+
+  /// UPDATE COURSE RATING IF THERE IS AN UPDATE IN REVIEWS
+  void updateUser(String id, double newAverageRating) {
+    final List<int> postIndices = <int>[];
+
+    for (int i = 0; i < courses.length; i++) {
+      if (courses[i].userId == id) {
+        postIndices.add(i);
+      }
+    }
+
+    for (final int index in postIndices) {
+      final CourseModel course = courses[index];
+      final UserModel? user = course.user;
+      final UserModel? updatedUser =
+          user?.copyWith(averageRating: newAverageRating);
+      final CourseModel updatedCourse = course.copyWith(user: updatedUser);
+      courses[index] = updatedCourse;
+    }
+
+    update();
   }
 }

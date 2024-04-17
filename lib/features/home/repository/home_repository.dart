@@ -67,6 +67,13 @@ class HomeRepository {
     return response;
   }
 
+  /// Fetch Course Comments
+  static Future<ApiResponseModel> fetchCourseComments(String courseId) async {
+    final ApiResponseModel response =
+        await ApiService.get(path: 'course-comments/course/$courseId');
+    return response;
+  }
+
   /// Filter Marketplace Data
   static Future<ApiResponseModel> filterMarket(
       String? location, String? category) async {

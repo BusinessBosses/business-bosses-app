@@ -101,6 +101,7 @@ class _CreatePollScreenState extends State<CreatePollScreen> {
               ),
             ),
             child: TextFormField(
+              maxLength: 25,
               onChanged: (String value) {
                 optionsValues[index] = value;
               },

@@ -911,7 +911,7 @@ class HomeController extends GetxController {
         element['shouldCount'] == null &&
         element['isForum'] &&
         element['data'].forumId == forumId);
-
+    ApiService.delete(path: 'forum/delete/$forumId');
     bossupForums
         .removeWhere((ForumModel element) => element.forumId == forumId);
     update();

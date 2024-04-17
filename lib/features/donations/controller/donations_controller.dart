@@ -1,16 +1,19 @@
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/features/donations/models/donations_model.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
+import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:get/get.dart';
 
 class DonationsController extends GetxController {
+  final ProfileController profileController = Get.find();
   RxList<DonationModel> donations = <DonationModel>[].obs;
   RxList<String> userIds = <String>[].obs;
   RxBool loading = RxBool(false);
   RxBool error = RxBool(false);
 
   @override
-  void onInit() {
+  void onInit() async {
+    await initUsers();
     fetchDonations();
     super.onInit();
   }
@@ -49,10 +52,13 @@ class DonationsController extends GetxController {
     ApiResponseModel response =
         await ApiService.post(path: 'donation', body: donation);
     if (response.success) {
-      donations.add(DonationModel.fromMap(donation));
+      donations.insert(
+          0,
+          DonationModel.fromMap(
+              <String, dynamic>{...donation, 'id': response.data['id']}));
       update();
       Get.back();
-      Get.snackbar('Success', 'Donations Created Successfully');
+      Get.snackbar('Success', 'Donations Pending Approval!');
     }
   }
 
@@ -61,7 +67,16 @@ class DonationsController extends GetxController {
         path:
             'donation/join-leave-donation/6463a069-657d-47ae-b937-9a5d4c336811',
         body: <String, dynamic>{});
-    if (response.success) {}
+    if (response.success) {
+      if (userIds.contains(profileController.myProfile.uid)) {
+        // If it exists, remove it
+        userIds.remove(profileController.myProfile.uid);
+      } else {
+        // If it doesn't exist, add it
+        userIds.add(profileController.myProfile.uid);
+      }
+    }
+    update();
   }
 
   Future<void> initUsers() async {

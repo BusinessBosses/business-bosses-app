@@ -15,7 +15,10 @@ import 'package:get/get.dart';
 
 class CoursesPage extends StatefulWidget {
   final String industryId;
-  const CoursesPage({super.key, required this.industryId});
+  final String filter;
+  
+
+  CoursesPage({Key? key, required this.industryId, required this.filter});
 
   @override
   State<CoursesPage> createState() => _CoursesPageState();
@@ -26,7 +29,7 @@ class _CoursesPageState extends State<CoursesPage> {
   final ProfileController profileController = Get.find();
   late Industry industry;
   final CourseController courseController = Get.put(CourseController());
-  String _filtercourses = "";
+  
   List<String> preferenceslist = [
     'All Courses',
     'Free Courses',
@@ -50,10 +53,11 @@ class _CoursesPageState extends State<CoursesPage> {
   Widget build(BuildContext context) {
     void _refreshScreen() {
       setState(() {
-        _filtercourses = "";
+        // widget.filter = "";
       });
     }
 
+   
     return NestedScrollView(
       controller: scrollController,
       headerSliverBuilder: (
@@ -76,64 +80,25 @@ class _CoursesPageState extends State<CoursesPage> {
                       Row(
                         children: <Widget>[
                           GestureDetector(
-                            onTap: () {
-                              Get.toNamed(Routes.coursehistoryscreen);
-                            },
+                            onTap: () {},
                             child: Padding(
                               padding: const EdgeInsets.only(left: 15.0),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                    color: Colors.black.withAlpha(20),
-                                    borderRadius: BorderRadius.circular(50)),
-                                child: Padding(
-                                  padding: const EdgeInsets.only(
-                                      left: 8.0, right: 8.0, top: 6, bottom: 6),
-                                  child: Row(
-                                    children: <Widget>[
-                                      SizedBox(
-                                        height: 35.0,
-                                        width: 35.0,
-                                        child: Align(
-                                          alignment: Alignment.topLeft,
-                                          child: ClipRRect(
-                                            borderRadius:
-                                                BorderRadius.circular(1000),
-                                            child: NetworkImageWithPlaceHolder(
-                                              imageUrl: profileController
-                                                      .myProfile.photoUrl ??
-                                                  '',
-                                              radius: radius,
-                                              placeHolder: Icons.person,
-                                              iconSize: 22.0,
-                                              fit: BoxFit.cover,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        width: 5,
-                                      ),
-                                      Row(
-                                        children: [
-                                          const Text(
-                                            'Course History',
-                                            style: TextStyle(
-                                                color: Colors.black,
-                                                fontSize: 15,
-                                                fontWeight: FontWeight.w700),
-                                          ),
-                                          const SizedBox(
-                                            width: 10,
-                                          ),
-                                          SvgPicture.asset(
-                                            'assets/svgs/nexticon.svg',
-                                            color: Colors.black,
-                                          )
-                                        ],
-                                      ),
-                                    ],
+                              child: Row(
+                                children: <Widget>[
+                                  const Text(
+                                    'Info',
+                                    style: TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w700),
                                   ),
-                                ),
+                                  const SizedBox(
+                                    width: 5,
+                                  ),
+                                  SvgPicture.asset(
+                                    'assets/svgs/info.svg',
+                                    height: 20,
+                                  ),
+                                ],
                               ),
                             ),
                           ),
@@ -173,9 +138,6 @@ class _CoursesPageState extends State<CoursesPage> {
                     ],
                   ),
                 ),
-                const SizedBox(
-                  height: 10,
-                ),
               ],
             ),
           )
@@ -184,19 +146,19 @@ class _CoursesPageState extends State<CoursesPage> {
       body: Obx(
         () {
           final filteredCourses = courseController.courses.where((course) {
-            if (_filtercourses.isEmpty ||
-                (_filtercourses == 'All Courses' &&
+            if (widget.filter.isEmpty ||
+                (widget.filter == 'All Courses' &&
                     (course.courseType == 'free' ||
                         course.courseType == 'paid' ||
                         course.youtubeUrls!.length > 1)) ||
-                (_filtercourses == 'Free Courses' &&
+                (widget.filter == 'Free Courses' &&
                     course.courseType == 'free') ||
-                (_filtercourses == 'Paid Courses' &&
+                (widget.filter == 'Paid Courses' &&
                     course.courseType == 'paid') ||
-                (_filtercourses == 'Free Course Bundles' &&
+                (widget.filter == 'Free Course Bundles' &&
                     course.courseType == 'free' &&
                     course.youtubeUrls!.length > 1) ||
-                (_filtercourses == 'Paid Course Bundles' &&
+                (widget.filter == 'Paid Course Bundles' &&
                     course.courseType == 'paid' &&
                     course.youtubeUrls!.length > 1)) {
               return true;
@@ -208,203 +170,73 @@ class _CoursesPageState extends State<CoursesPage> {
           return Container(
             child: Column(
               children: [
-                Container(
-                  padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-                  color: Colors.white,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text('Showing ${filteredCourses.length} Courses'),
-                      Row(
-                        children: [
-                          InkWell(
-                            onTap: () {
-                              Get.toNamed(Routes.promotionscreen);
-                            },
-                            child: Container(
-                              padding: const EdgeInsets.all(10),
-                              decoration: BoxDecoration(
-                                  color: Colors.black.withAlpha(20),
-                                  borderRadius: BorderRadius.circular(50)),
-                              child: GestureDetector(
-                                child: Wrap(
-                                  children: <Widget>[
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                        left: 6,
-                                        right: 6,
-                                      ),
-                                      child: GestureDetector(
-                                        onTap: () {},
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: <Widget>[
-                                            SvgPicture.asset(
-                                              'assets/svgs/coin.svg',
-                                              height: 22,
-                                            ),
-                                            const SizedBox(
-                                              width: 5,
-                                            ),
-                                            Text(
-                                              profileController
-                                                  .myProfile.coinscount
-                                                  .toString(),
-                                              style: const TextStyle(
-                                                color: Colors.black,
-                                                fontSize: 15,
-                                                fontWeight: FontWeight.w700,
-                                              ),
-                                            )
-                                          ],
-                                        ),
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              showModalBottomSheet(
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(20)),
-                                  backgroundColor: Colors.white,
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        const Padding(
-                                          padding: EdgeInsets.symmetric(
-                                              vertical: 40.0, horizontal: 20),
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                'Filter Courses',
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 18),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        Container(
-                                          child: Expanded(
-                                            child: Column(
-                                              children: [
-                                                Padding(
-                                                  padding: const EdgeInsets
-                                                      .symmetric(
-                                                      horizontal: 10.0),
-                                                  child: Container(
-                                                    color:
-                                                        backgroundcolorinterface,
-                                                    height: 1,
-                                                  ),
-                                                ),
-                                                Container(
-                                                  child: Expanded(
-                                                    child: ListView.builder(
-                                                      itemCount: preferenceslist
-                                                          .length,
-                                                      itemBuilder:
-                                                          (BuildContext context,
-                                                              int index) {
-                                                        return GestureDetector(
-                                                          onTap: () {
-                                                            setState(() {
-                                                              _filtercourses =
-                                                                  preferenceslist[
-                                                                          index]
-                                                                      .toString();
-                                                            });
-                                                            Get.back();
-                                                          },
-                                                          child: Column(
-                                                            children: [
-                                                              Container(
-                                                                width: MediaQuery
-                                                                        .sizeOf(
-                                                                            context)
-                                                                    .width,
-                                                                padding: const EdgeInsets
-                                                                    .symmetric(
-                                                                    horizontal:
-                                                                        20,
-                                                                    vertical:
-                                                                        20),
-                                                                color: Colors
-                                                                    .white,
-                                                                child: Text(
-                                                                  preferenceslist[
-                                                                      index],
-                                                                  style: const TextStyle(
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .bold),
-                                                                ),
-                                                              ),
-                                                              Padding(
-                                                                padding: const EdgeInsets
-                                                                    .symmetric(
-                                                                    horizontal:
-                                                                        15),
-                                                                child:
-                                                                    Container(
-                                                                  height: 1,
-                                                                  color:
-                                                                      backgroundColor,
-                                                                ),
-                                                              )
-                                                            ],
-                                                          ),
-                                                        );
-                                                      },
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    );
-                                  });
-                            },
-                            child: Container(
-                              height: 38,
-                              width: 38,
-                              decoration: BoxDecoration(
-                                  color: Colors.black.withAlpha(20),
-                                  borderRadius: BorderRadius.circular(50)),
-                              child: Padding(
-                                padding: const EdgeInsets.all(10.0),
-                                child: SvgPicture.asset(
-                                  'assets/svgs/preferences.svg',
-                                  color: Colors.black,
-                                  height: 10,
-                                ),
-                              ),
-                            ),
+                Padding(
+                  padding: const EdgeInsets.only(
+                      right: 15, left: 15, bottom: 10, top: 10),
+                  child: Container(
+                      height: 40,
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFFFFFFF),
+                        borderRadius: BorderRadius.circular(10),
+                        boxShadow: <BoxShadow>[
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.3),
+                            spreadRadius: 20,
+                            blurRadius: 500,
+                            offset: const Offset(0, 3),
                           ),
                         ],
                       ),
-                    ],
-                  ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          GestureDetector(
+                            onTap: () {
+                              Get.toNamed(Routes.promotionscreen);
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 10.0),
+                              child: Wrap(
+                                crossAxisAlignment: WrapCrossAlignment.center,
+                                children: [
+                                  Text('Coin Balance: '),
+                                  SvgPicture.asset('assets/svgs/coin.svg'),
+                                  SizedBox(
+                                    width: 2,
+                                  ),
+                                  Text(
+                                    '${profileController.myProfile.coinscount!}',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w700,
+                                        color: subtextColor),
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              Get.toNamed(Routes.coursehistoryscreen);
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.only(
+                                right: 10.0,
+                              ),
+                              child: Wrap(
+                                  crossAxisAlignment: WrapCrossAlignment.center,
+                                  children: [
+                                    Text('Course History '),
+                                    SvgPicture.asset(
+                                      'assets/svgs/nexticon.svg',
+                                      color: textColor,
+                                    ),
+                                  ]),
+                            ),
+                          )
+                        ],
+                      )),
                 ),
+               
                 Container(
                   color: backgroundColor,
                   height: 1,
