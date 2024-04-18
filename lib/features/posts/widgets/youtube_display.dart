@@ -22,7 +22,6 @@ class _YoutubeDisplayState extends State<YoutubeDisplay> {
   final bool _isPlayerReady = false;
   late String videoId;
 
-
   @override
   void initState() {
     super.initState();
@@ -41,6 +40,15 @@ class _YoutubeDisplayState extends State<YoutubeDisplay> {
     )..addListener(listener);
     _idController = TextEditingController();
     _seekToController = TextEditingController();
+  }
+
+  @override
+  void didUpdateWidget(covariant YoutubeDisplay oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.youtubeUrl != widget.youtubeUrl) {
+      videoId = YoutubePlayer.convertUrlToId(widget.youtubeUrl)!;
+      _controller.load(videoId);
+    }
   }
 
   void listener() {

@@ -1,3 +1,4 @@
+import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/widgets/buttons/custom_button.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/features/withdrawal/widgets/withdrawal_header_item.dart';
@@ -27,17 +28,21 @@ class WithdrawalScreen extends StatefulWidget {
 class _WithdrawalScreenState extends State<WithdrawalScreen> {
   final ScrollController scrollController = ScrollController();
   final ProfileController _profileController = Get.find();
+  TextEditingController _withdrawlamountcontroller = TextEditingController();
+  TextEditingController _walletaddresscontroller = TextEditingController();
   String? _paymentmethods;
 
   @override
   void initState() {
     // TODO: implement initState
+
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     ProfileController profileController = Get.find();
+
     return Scaffold(
         backgroundColor: Colors.white,
         body: NestedScrollView(
@@ -69,13 +74,14 @@ class _WithdrawalScreenState extends State<WithdrawalScreen> {
                         ),
                         Stack(children: [
                           TextFormField(
+                            controller: _withdrawlamountcontroller,
                             onChanged: (String val) {
                               setState(() {});
                             },
                             decoration: inputDecoration.copyWith(
-                              contentPadding: EdgeInsets.only(
+                              contentPadding: const EdgeInsets.only(
                                   left: 50, top: 18, bottom: 18),
-                              hintText: '0 (\$0)',
+                              hintText: '0',
                               hintStyle: const TextStyle(
                                 color: iconColor,
                                 fontSize: 16,
@@ -89,12 +95,20 @@ class _WithdrawalScreenState extends State<WithdrawalScreen> {
                               top: 0,
                               bottom: 0,
                               left: 10,
-                              child: SvgPicture.asset('assets/svgs/coin.svg'))
+                              child: SvgPicture.asset('assets/svgs/coin.svg')),
+                          Positioned(
+                            top: 0,
+                            bottom: 0,
+                            right: 10,
+                            child: Text(_withdrawlamountcontroller.text != ''
+                                ? ' \$${num.parse(_withdrawlamountcontroller.text) / 100}'
+                                : '0'),
+                          ),
                         ]),
                         const SizedBox(
                           height: 10,
                         ),
-                        Text('Payment Method'),
+                        const Text('Payment Method'),
                         Container(
                           height: 55,
                           padding: const EdgeInsets.symmetric(
@@ -157,6 +171,7 @@ class _WithdrawalScreenState extends State<WithdrawalScreen> {
                             children: [
                               Text('Destination Address'),
                               TextFormField(
+                                controller: _walletaddresscontroller,
                                 onChanged: (String val) {
                                   setState(() {});
                                 },
@@ -181,7 +196,31 @@ class _WithdrawalScreenState extends State<WithdrawalScreen> {
                           width: double.infinity,
                           height: 50,
                           child: ElevatedButton(
-                            onPressed: () async {},
+                            onPressed: () async {
+                              if (_withdrawlamountcontroller.text != '') {
+                                if (num.parse(_withdrawlamountcontroller.text) <
+                                    5000) {
+                                  showSnackbar(
+                                      title: 'OOPS!',
+                                      message:
+                                          'Withdrawal amount cannot be less than 5000 coins, please try again!',
+                                      error: true);
+                                } else if (_paymentmethods == null) {
+                                  showSnackbar(
+                                      title: 'OOPS!',
+                                      message:
+                                          'Please select a payment method to continue',
+                                      error: true);
+                                } else if (_walletaddresscontroller
+                                    .text.isEmpty) {
+                                  showSnackbar(
+                                      title: 'OOPS!',
+                                      message:
+                                          'Please enter a wallet address to continue',
+                                      error: true);
+                                } else {}
+                              } else {}
+                            },
                             child: const Text(
                               'Make Withdrawal',
                               style: TextStyle(

@@ -492,6 +492,38 @@ class HomeController extends GetxController {
     }
   }
 
+  /// BUY COURSE WITH COINS
+  void courseCoin(String userId, String courseId, String price,
+      ProfileController profileController, String type, String receiverUid) {
+    // final bool checkIfCoined =
+    //     mixedPosts[forumIndex]['data'].coins!.contains(userId);
+    // if (checkIfCoined) {
+    //   profileController.updateCoinCount(int.parse(price));
+    //   // mixedPosts[forumIndex]['data']
+    //   //     .coins!
+    //   //     .removeWhere((String element) => element == userId);
+    // } else {
+    //   profileController.updateCoinCount(-int.parse(price));
+    //   // mixedPosts[forumIndex]['data'].coins!.add(userId);
+    // }
+
+    update();
+    if (profileController.myProfile.uid != receiverUid) {
+      socket.emit('coin', {
+        'postId': courseId,
+        'userId': userId,
+        'timestamp': DateTime.now().millisecondsSinceEpoch,
+        'receiverUid': receiverUid,
+      });
+    } else {
+      socket.emit('coin', {
+        'postId': courseId,
+        'userId': userId,
+        'timestamp': DateTime.now().millisecondsSinceEpoch,
+      });
+    }
+  }
+
   // /// REPOST AND UNDO REPOST FUNCTION
   // Future<void> postRepost(String userId, String postId, String type,
   //     int timestamp, String receiverUid) async {

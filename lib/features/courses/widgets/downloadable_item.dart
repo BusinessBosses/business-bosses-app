@@ -8,6 +8,17 @@ import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:path_provider/path_provider.dart';
 
+double downloadProgress = 0;
+
+void downloadCallback(String id, int status, int progress) {
+  print(
+      'Download task ($id) is in status ($status) and process (${progress / 100})');
+
+  downloadProgress = (progress / 100).toDouble();
+
+  print(downloadProgress);
+}
+
 class DownloadableItem extends StatefulWidget {
   final String link;
   final String filename;
@@ -22,6 +33,7 @@ class DownloadableItem extends StatefulWidget {
 class _DownloadableItemState extends State<DownloadableItem> {
   bool isDownloading = false;
   String? downloadTaskId;
+
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -45,17 +57,26 @@ class _DownloadableItemState extends State<DownloadableItem> {
                 const SizedBox(
                   height: 10,
                 ),
-                Container(
-                  padding: const EdgeInsets.all(7),
-                  width: 30,
-                  height: 30,
-                  decoration: BoxDecoration(
-                      color: Colors.black12,
-                      borderRadius: BorderRadius.circular(50)),
-                  child: SvgPicture.asset(
-                    'assets/svgs/download.svg',
+                Stack(children: [
+                  Container(
+                    padding: const EdgeInsets.all(7),
+                    width: 30,
+                    height: 30,
+                    decoration: BoxDecoration(
+                        color: Colors.black12,
+                        borderRadius: BorderRadius.circular(50)),
+                    child: SvgPicture.asset(
+                      'assets/svgs/download.svg',
+                    ),
                   ),
-                )
+                  CircularProgressIndicator(
+                    strokeWidth: 8,
+                    color: primaryColorLT,
+                    backgroundColor: Colors.white,
+                    value: 0.3,
+                    strokeCap: StrokeCap.round,
+                  ),
+                ])
               ],
             ),
           ),
@@ -72,22 +93,24 @@ class _DownloadableItemState extends State<DownloadableItem> {
       isDownloading = true;
     });
 
-    /// [downloadDirPath] var stores the path of device's download directory path.
-    late String downloadDirPath;
-    if (Platform.isIOS) {
-      downloadDirPath = (await getDownloadsDirectory())!.path;
-    } else {
-      downloadDirPath = (await getApplicationDocumentsDirectory()).path;
-    }
+    // Register the callback
+    FlutterDownloader.registerCallback(downloadCallback);
+
+    Directory appDocDir = await getApplicationDocumentsDirectory();
+    String appDocPath = appDocDir.path;
+
+    String saveDir = '$appDocPath/downloads';
+
+    Directory(saveDir).createSync(recursive: true);
+
     downloadTaskId = await FlutterDownloader.enqueue(
-      url: url,
-      headers: {}, 
-      savedDir: downloadDirPath,
+      url: widget.link,
+      headers: {},
+      savedDir: saveDir,
       saveInPublicStorage: true,
-      showNotification:
-          true, 
-      openFileFromNotification:
-          true,
+      showNotification: true,
+      openFileFromNotification: true,
+      fileName: widget.filename,
     );
   }
 }

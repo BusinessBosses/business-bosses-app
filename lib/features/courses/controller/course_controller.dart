@@ -121,4 +121,6 @@ class CourseController extends GetxController {
       //     message: 'Error deleting post.', title: 'O0PS!', error: true);
     }
   }
+
+  
 }

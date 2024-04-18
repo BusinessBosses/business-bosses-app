@@ -39,7 +39,7 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
   @override
   void initState() {
     if (videoLinks.isEmpty) {
-      VideoLinkData videolin = VideoLinkData(url: '');
+      VideoLinkData videolin = VideoLinkData(url: '', transcript: '');
       videoLinks.add(videolin);
     }
     super.initState();
@@ -492,7 +492,7 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                             : selectedFileNames,
                         'courseType': _paidCourse ? 'paid' : 'free',
                         'youtubeUrls': _extractYoutubeUrls(),
-                        'transcript': '_extractTranscripts()',
+                        'transcript': _extractTranscripts(),
                       };
                       widget.course == null
                           ? await courseController.createCourse(course)
@@ -512,126 +512,111 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
   }
 
   Widget buildVideoLinkContainer(VideoLinkData videoLinkData, dynamic index) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 10),
-      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.all(
-          Radius.circular(15),
-        ),
+  return Container(
+    margin: const EdgeInsets.only(bottom: 10),
+    padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+    decoration: const BoxDecoration(
+      color: Colors.white,
+      borderRadius: BorderRadius.all(
+        Radius.circular(15),
       ),
-      child: Column(
-        children: <Widget>[
-          Row(
-            children: <Widget>[
-              Expanded(
-                child: TextFormField(
-                  onChanged: (String value) {
-                    // Create a new VideoLinkData object from the entered URL
-                    VideoLinkData newVideoLink = VideoLinkData(url: value);
-                    // Replace the existing video link at index 0 with the new one
-                    videoLinks.isNotEmpty
-                        ? videoLinks[index] = newVideoLink
-                        : videoLinks.add(newVideoLink);
-                    setState(() {});
-                  },
-                  decoration: const InputDecoration(
-                    border: UnderlineInputBorder(),
-                    hintText: 'https://',
-                  ),
+    ),
+    child: Column(
+      children: <Widget>[
+        Row(
+          children: <Widget>[
+            Expanded(
+              child: TextFormField(
+                onChanged: (String value) {
+                  // Create a new VideoLinkData object from the entered URL
+                  VideoLinkData newVideoLink =
+                      VideoLinkData(url: value, transcript: videoLinkData.transcript);
+                  // Replace the existing video link at index with the new one
+                  if (videoLinks.isNotEmpty && index < videoLinks.length) {
+                    videoLinks[index] = newVideoLink;
+                  } else {
+                    videoLinks.add(newVideoLink);
+                  }
+                  setState(() {});
+                },
+                decoration: const InputDecoration(
+                  border: UnderlineInputBorder(),
+                  hintText: 'https://',
                 ),
               ),
-              const SizedBox(
-                width: 20,
-              ),
-              if (index != 0)
-                GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        videoLinks.removeAt(index);
-                      });
-                    },
-                    child: SvgPicture.asset(
-                      'assets/svgs/close.svg',
-                      height: 20,
-                    ))
-            ],
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          // Row(
-          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //   children: <Widget>[
-          //     Row(
-          //       children: <Widget>[
-          //         SvgPicture.asset('assets/svgs/subtitlesicon.svg'),
-          //         const SizedBox(
-          //           width: 20,
-          //         ),
-          //         const Text('Subtitles / Closed Captions')
-          //       ],
-          //     ),
-          //     Switch(
-          //       value: videoLinkData.hasSubtitles,
-          //       onChanged: (bool value) {
-          //         setState(() {
-          //           videoLinkData.hasSubtitles = value;
-          //         });
-          //       },
-          //     ),
-          //   ],
-          // ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Row(
-                children: <Widget>[
-                  SvgPicture.asset('assets/svgs/transcriptsicon.svg'),
-                  const SizedBox(
-                    width: 20,
-                  ),
-                  const Text('Transcript'),
-                ],
-              ),
-              Switch(
-                value: videoLinkData.hasTranscript,
-                onChanged: (bool value) {
+            ),
+            const SizedBox(
+              width: 20,
+            ),
+            if (index != 0)
+              GestureDetector(
+                onTap: () {
                   setState(() {
-                    videoLinkData.hasTranscript = value;
+                    videoLinks.removeAt(index);
                   });
                 },
+                child: SvgPicture.asset(
+                  'assets/svgs/close.svg',
+                  height: 20,
+                ),
               ),
-            ],
+          ],
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Row(
+              children: <Widget>[
+                SvgPicture.asset('assets/svgs/transcriptsicon.svg'),
+                const SizedBox(
+                  width: 20,
+                ),
+                const Text('Transcript'),
+              ],
+            ),
+            Switch(
+              value: videoLinkData.hasTranscript,
+              onChanged: (bool value) {
+                setState(() {
+                  videoLinkData.hasTranscript = value;
+                });
+              },
+            ),
+          ],
+        ),
+        Visibility(
+          visible: videoLinkData.hasTranscript,
+          child: Container(
+            height: 300,
+            decoration: BoxDecoration(
+              color: backgroundcolorinterface,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: TextFormField(
+              onChanged: (String value) {
+                setState(() {
+                  videoLinkData.transcript = value;
+                });
+              },
+              initialValue: videoLinkData.transcript, // Set initial value
+              decoration: const InputDecoration(
+                contentPadding: EdgeInsets.all(15),
+                hintText: 'Add transcript text here',
+                border: InputBorder.none,
+              ),
+              maxLines: null,
+              keyboardType: TextInputType.multiline,
+            ),
           ),
-          Visibility(
-              visible: videoLinkData.hasTranscript,
-              child: Container(
-                height: 300,
-                decoration: BoxDecoration(
-                  color: backgroundcolorinterface,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: TextFormField(
-                  onChanged: (String value) {
-                    setState(() {
-                      videoLinkData.transcript = value;
-                    });
-                  },
-                  decoration: const InputDecoration(
-                    contentPadding: EdgeInsets.all(15),
-                    hintText: 'Add transcript text here',
-                    border: InputBorder.none,
-                  ),
-                  maxLines: null,
-                  keyboardType: TextInputType.multiline,
-                ),
-              ))
-        ],
-      ),
-    );
-  }
+        ),
+      ],
+    ),
+  );
+}
+
 
   // Function to validate a URL using regular expressions
   bool _isValidUrl(String url) {
