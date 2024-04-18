@@ -198,25 +198,28 @@ class _DonationsPageState extends State<DonationsPage> {
                                           Padding(
                                             padding:
                                                 const EdgeInsets.only(top: 5.0),
-                                            child: RichText(
-                                              text: TextSpan(
-                                                children: <InlineSpan>[
-                                                  TextSpan(
-                                                    text:
-                                                        'Members (${formatCount(donationsController.userIds.length)})',
-                                                    style: const TextStyle(
-                                                      fontSize: 12,
-                                                      fontWeight:
-                                                          FontWeight.w600,
-                                                      color: primaryColorLT,
-                                                      decoration: TextDecoration
-                                                          .underline,
+                                            child: Obx(
+                                              () => RichText(
+                                                text: TextSpan(
+                                                  children: <InlineSpan>[
+                                                    TextSpan(
+                                                      text:
+                                                          'Members (${formatCount(donationsController.userIds.length)})',
+                                                      style: const TextStyle(
+                                                        fontSize: 12,
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                        color: primaryColorLT,
+                                                        decoration:
+                                                            TextDecoration
+                                                                .underline,
+                                                      ),
+                                                      recognizer:
+                                                          TapGestureRecognizer()
+                                                            ..onTap = () {},
                                                     ),
-                                                    recognizer:
-                                                        TapGestureRecognizer()
-                                                          ..onTap = () {},
-                                                  ),
-                                                ],
+                                                  ],
+                                                ),
                                               ),
                                             ),
                                           ),
@@ -236,21 +239,23 @@ class _DonationsPageState extends State<DonationsPage> {
                                           Padding(
                                             padding:
                                                 const EdgeInsets.only(top: 5.0),
-                                            child: RichText(
-                                              text: TextSpan(
-                                                children: <InlineSpan>[
-                                                  TextSpan(
-                                                    text: donationsController
-                                                        .donations.length
-                                                        .toString(),
-                                                    style: const TextStyle(
-                                                      fontSize: 12,
-                                                      color: textColor,
-                                                      fontWeight:
-                                                          FontWeight.w600,
+                                            child: Obx(
+                                              () => RichText(
+                                                text: TextSpan(
+                                                  children: <InlineSpan>[
+                                                    TextSpan(
+                                                      text: donationsController
+                                                          .donations.length
+                                                          .toString(),
+                                                      style: const TextStyle(
+                                                        fontSize: 12,
+                                                        color: textColor,
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                      ),
                                                     ),
-                                                  ),
-                                                ],
+                                                  ],
+                                                ),
                                               ),
                                             ),
                                           ),
@@ -265,6 +270,7 @@ class _DonationsPageState extends State<DonationsPage> {
                                                 .contains(
                                                     _myProfile.myProfile.uid),
                                             () {
+                                              print('print');
                                               donationsController.joinGroup();
                                             },
                                           ),
