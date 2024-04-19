@@ -31,6 +31,7 @@ class _WithdrawalScreenState extends State<WithdrawalScreen> {
   TextEditingController _withdrawlamountcontroller = TextEditingController();
   TextEditingController _walletaddresscontroller = TextEditingController();
   String? _paymentmethods;
+  bool paymentSelected = false;
 
   @override
   void initState() {
@@ -48,6 +49,7 @@ class _WithdrawalScreenState extends State<WithdrawalScreen> {
         body: NestedScrollView(
             controller: scrollController,
             headerSliverBuilder: (context, innerBoxIsScrolled) {
+              
               return <Widget>[
                 SliverStickyHeader(
                   sticky: false,
@@ -75,9 +77,20 @@ class _WithdrawalScreenState extends State<WithdrawalScreen> {
                         Stack(children: [
                           TextFormField(
                             controller: _withdrawlamountcontroller,
+                            maxLength: 6,
                             onChanged: (String val) {
                               setState(() {});
                             },
+                            keyboardType: TextInputType.number,
+                            inputFormatters: [
+                              FilteringTextInputFormatter.allow(
+                                  RegExp(r'[0-9]')), // Allow only numbers
+                            ],
+                            buildCounter: (BuildContext context,
+                                    {required int? currentLength,
+                                    required bool isFocused,
+                                    required int? maxLength}) =>
+                                null,
                             decoration: inputDecoration.copyWith(
                               contentPadding: const EdgeInsets.only(
                                   left: 50, top: 18, bottom: 18),
@@ -95,15 +108,26 @@ class _WithdrawalScreenState extends State<WithdrawalScreen> {
                               top: 0,
                               bottom: 0,
                               left: 10,
-                              child: SvgPicture.asset('assets/svgs/coin.svg')),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  SvgPicture.asset('assets/svgs/coin.svg'),
+                                ],
+                              )),
                           Positioned(
-                            top: 0,
-                            bottom: 0,
-                            right: 10,
-                            child: Text(_withdrawlamountcontroller.text != ''
-                                ? ' \$${num.parse(_withdrawlamountcontroller.text) / 100}'
-                                : '0'),
-                          ),
+                              top: 0,
+                              bottom: 0,
+                              right: 10,
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(_withdrawlamountcontroller.text != ''
+                                      ? ' \$${num.parse(_withdrawlamountcontroller.text) / 100}'
+                                      : '\$0'),
+                                ],
+                              )),
                         ]),
                         const SizedBox(
                           height: 10,
@@ -121,12 +145,6 @@ class _WithdrawalScreenState extends State<WithdrawalScreen> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
-                              Row(
-                                children: <Widget>[
-                                  SvgPicture.asset('assets/svgs/coin.svg'),
-                                  const SizedBox(width: 20),
-                                ],
-                              ),
                               Expanded(
                                 child: DropdownButton<String>(
                                   value: _paymentmethods,
@@ -143,6 +161,7 @@ class _WithdrawalScreenState extends State<WithdrawalScreen> {
                                   onChanged: (String? newValue) {
                                     setState(() {
                                       _paymentmethods = newValue ?? 'Paypal';
+                                      paymentSelected = true;
                                     });
                                   },
                                   items: <String>[
@@ -153,7 +172,28 @@ class _WithdrawalScreenState extends State<WithdrawalScreen> {
                                       (String value) {
                                     return DropdownMenuItem<String>(
                                       value: value,
-                                      child: Text(value),
+                                      child: Row(
+                                        children: [
+                                          value == 'Paypal'
+                                              ? SvgPicture.asset(
+                                                  'assets/svgs/paypallogo.svg',
+                                                  height: 20,
+                                                )
+                                              : value == 'Bank'
+                                                  ? SvgPicture.asset(
+                                                      'assets/svgs/bank.svg',
+                                                      height: 20,
+                                                    )
+                                                  : SvgPicture.asset(
+                                                      'assets/svgs/mobilemoney.svg',
+                                                      height: 15,
+                                                    ),
+                                          const SizedBox(
+                                            width: 10,
+                                          ),
+                                          Text(value),
+                                        ],
+                                      ),
                                     );
                                   }).toList(),
                                 ),
@@ -165,18 +205,20 @@ class _WithdrawalScreenState extends State<WithdrawalScreen> {
                           height: 10,
                         ),
                         Visibility(
-                          visible: true,
+                          visible: paymentSelected,
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text('Destination Address'),
+                              Text('Enter your $_paymentmethods details below'),
+                              Text(_paymentmethods == 'Bank' ? 'FULL NAME: COUNTRY: BANK NAME: ACCOUNT NUMBER:' : _paymentmethods == 'Paypal' ? 'FULL NAME: PAYPAL EMAIL ADDRESS: ' : 'FULL NAME: MOBILE MONEY NUMBER: ' ),
                               TextFormField(
                                 controller: _walletaddresscontroller,
+                                maxLines: 5,
                                 onChanged: (String val) {
                                   setState(() {});
                                 },
                                 decoration: inputDecoration.copyWith(
-                                  hintText: 'Enter your wallet address',
+                                  hintText: '',
                                   hintStyle: const TextStyle(
                                     color: iconColor,
                                     fontSize: 14,
