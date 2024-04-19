@@ -153,9 +153,9 @@ class CourseModel {
       timestamp: map['timestamp'] != null
           ? int.parse(map['timestamp'].toString())
           : null,
-      comments: List.from(map['comments'])
+      comments: map['comments'] != null ? List.from(map['comments'])
           .map((e) => CourseCommentModel.fromMap(e as Map<String, dynamic>))
-          .toList(),
+          .toList() : null,
       user: map['user'] != null
           ? UserModel.fromMap(map['user'] as Map<String, dynamic>)
           : null,

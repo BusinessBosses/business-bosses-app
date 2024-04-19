@@ -241,7 +241,7 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
                                                 onPressed: () {
                                                   CourseController()
                                                       .onDeleteCourse(
-                                                          widget.course.id);
+                                                          widget.course.id!);
                                                   Get.back();
                                                 },
                                                 child: const Text('Yes'),
@@ -251,7 +251,7 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
                                         );
                                       } else if (val == 'Boost') {
                                         Get.to(() => BoostPost(
-                                              postId: widget.course.id,
+                                              postId: widget.course.id!,
                                               postTitle: widget.course.title!,
                                             ));
                                       }

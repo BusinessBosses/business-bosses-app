@@ -32,6 +32,8 @@ class CourseController extends GetxController {
   }
 
   Future<void> createCourse(Map<String, dynamic> course) async {
+    loading(true);
+    update();
     final ApiResponseModel response =
         await ApiService.post(path: 'courses/create-course', body: course);
 
@@ -40,10 +42,11 @@ class CourseController extends GetxController {
       Get.back();
       Get.snackbar('Success', 'Course created successfully');
     }
+    loading(false);
+    update();
   }
 
   Future<void> updateCourse(Map<String, dynamic> course) async {
-    
     final ApiResponseModel response = await ApiService.put(
         path: 'courses/update-course/${course['courseId']}', body: course);
 
@@ -121,6 +124,4 @@ class CourseController extends GetxController {
       //     message: 'Error deleting post.', title: 'O0PS!', error: true);
     }
   }
-
-  
 }
