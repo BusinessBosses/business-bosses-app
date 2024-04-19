@@ -41,7 +41,7 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
 
   @override
   void initState() {
-    desccontroller = TextEditingController(text: widget.course!.description);
+    desccontroller = TextEditingController(text:widget.course !=null ? widget.course!.description : '');
     if (widget.course != null) {
       videoLinks.clear();
       int minLength = widget.course!.youtubeUrls!.length;
