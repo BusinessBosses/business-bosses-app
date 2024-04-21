@@ -1,13 +1,16 @@
+import 'dart:io';
 import 'package:business_bosses_v2/common/models/comment_model.dart';
 import 'package:business_bosses_v2/common/widgets/typography/text_widget.dart';
 import 'package:business_bosses_v2/features/donations/controller/donations_controller.dart';
 import 'package:business_bosses_v2/features/donations/models/donations_model.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
+import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
 import 'package:detectable_text_field/widgets/detectable_text_field.dart';
+import 'package:image_picker/image_picker.dart';
 import '../../../action/action.dart';
 import '../../../common/widgets/buttons/my_outlined_button.dart';
 import '../../../utils/theme/theme.dart';
@@ -40,6 +43,7 @@ class _CreateDonationScreenState extends State<CreateDonationScreen> {
   final TextEditingController descriptionController = TextEditingController();
   bool _shouldPromote = false;
   bool isProcessing = false;
+  File? _selectedImage;
 
   @override
   void initState() {
@@ -165,7 +169,12 @@ class _CreateDonationScreenState extends State<CreateDonationScreen> {
                           padding: const EdgeInsets.symmetric(
                               horizontal: 8, vertical: 8),
                           child: GestureDetector(
-                            onTap: () {},
+                            onTap: () {
+                              setState(() {
+                                isVisible = false;
+                              });
+                              _pickImage(context);
+                            },
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.center,
@@ -224,6 +233,33 @@ class _CreateDonationScreenState extends State<CreateDonationScreen> {
                   ],
                 ),
               ),
+              if (_selectedImage != null)
+                Stack(
+                  children: <Widget>[
+                    SizedBox(
+                        width: 100, // Adjust the width as needed
+                        height: 100, // Adjust the height as needed
+                        child: Image.file(_selectedImage!)),
+                    Positioned(
+                      top: 25,
+                      right: 25,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle, // Make it a circle
+                          color: Colors.red
+                              .withOpacity(0.5), // Choose your desired color
+                        ),
+                        child: IconButton(
+                          icon: const Icon(
+                            Icons.close,
+                            color: Colors.white,
+                          ), // Close icon
+                          onPressed: _removeImage,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               const SizedBox(height: 8.0),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 14),
@@ -266,60 +302,58 @@ class _CreateDonationScreenState extends State<CreateDonationScreen> {
                 children: <Widget>[
                   Align(
                     alignment: Alignment.center,
-                    child: Container(
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                            top: 10, bottom: 10, left: 16, right: 16),
-                        child: Row(
-                          children: <Widget>[
-                            SvgPicture.asset('assets/svgs/rocket.svg'),
-                            const SizedBox(width: 15),
-                            const Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Text(
-                                    'Boost this listing?',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 18,
-                                    ),
-                                  ),
-                                  Text(
-                                    'Reach a wider audience and get more views',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 11,
-                                      color: Color(0xFF777777),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Row(
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                          top: 10, bottom: 10, left: 16, right: 16),
+                      child: Row(
+                        children: <Widget>[
+                          SvgPicture.asset('assets/svgs/rocket.svg'),
+                          const SizedBox(width: 15),
+                          const Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
-                                const Text(
-                                  'No',
+                                Text(
+                                  'Boost this listing?',
                                   style: TextStyle(
-                                      fontSize: 8, fontWeight: FontWeight.w700),
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 18,
+                                  ),
                                 ),
-                                Switch(
-                                  value: _shouldPromote,
-                                  onChanged: (bool value) {
-                                    setState(() {
-                                      _shouldPromote = value;
-                                    });
-                                  },
-                                ),
-                                const Text(
-                                  'Yes',
+                                Text(
+                                  'Reach a wider audience and get more views',
                                   style: TextStyle(
-                                      fontSize: 8, fontWeight: FontWeight.w700),
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 11,
+                                    color: Color(0xFF777777),
+                                  ),
                                 ),
                               ],
                             ),
-                          ],
-                        ),
+                          ),
+                          Row(
+                            children: <Widget>[
+                              const Text(
+                                'No',
+                                style: TextStyle(
+                                    fontSize: 8, fontWeight: FontWeight.w700),
+                              ),
+                              Switch(
+                                value: _shouldPromote,
+                                onChanged: (bool value) {
+                                  setState(() {
+                                    _shouldPromote = value;
+                                  });
+                                },
+                              ),
+                              const Text(
+                                'Yes',
+                                style: TextStyle(
+                                    fontSize: 8, fontWeight: FontWeight.w700),
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
                     ),
                   ),
@@ -335,6 +369,13 @@ class _CreateDonationScreenState extends State<CreateDonationScreen> {
                     setState(() {
                       isProcessing = true;
                     });
+                    if (_selectedImage != null) {
+                      dynamic response =
+                          await ApiService.uploadFile(_selectedImage!);
+                      if (response['success']) {
+                        photo = response['fileUrl'];
+                      }
+                    }
                     await donationsController.createDonation(<String, dynamic>{
                       'categoryId': '6463a069-657d-47ae-b937-9a5d4c336811',
                       'userId': profileController.myProfile.uid,
@@ -343,7 +384,7 @@ class _CreateDonationScreenState extends State<CreateDonationScreen> {
                       'timestamp': DateTime.now().millisecondsSinceEpoch,
                       'targetAmount': targetAmount,
                       'youtubeUrls': _ytUrl,
-                      'photo': photo,
+                      'images': photo != null ? [photo] : [],
                       'comments': <CommentModel>[],
                       'likes': [],
                     });
@@ -385,5 +426,24 @@ class _CreateDonationScreenState extends State<CreateDonationScreen> {
         ),
       ),
     );
+  }
+
+  Future<void> _pickImage(BuildContext context) async {
+    final ImagePicker imagePicker = ImagePicker();
+    final XFile? image =
+        await imagePicker.pickImage(source: ImageSource.gallery);
+
+    if (image != null) {
+      // Handle the selected image. You can save it, display it, or upload it.
+      setState(() {
+        _selectedImage = File(image.path);
+      });
+    }
+  }
+
+  void _removeImage() {
+    setState(() {
+      _selectedImage = null;
+    });
   }
 }

@@ -1,9 +1,10 @@
-import 'package:business_bosses_v2/features/courses/widgets/course_history_item.dart';
+import 'package:business_bosses_v2/common/widgets/safety_model.dart';
 import 'package:business_bosses_v2/features/donations/widgets/donationhistoryitem.dart';
 import 'package:flutter/material.dart';
 
 class OutgoneDonations extends StatefulWidget {
-  const OutgoneDonations({super.key});
+  final List<dynamic> history;
+  const OutgoneDonations({super.key, required this.history});
 
   @override
   // ignore: library_private_types_in_public_api
@@ -13,13 +14,20 @@ class OutgoneDonations extends StatefulWidget {
 class _OutgoneDonationsState extends State<OutgoneDonations> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: ListView.builder(
-                itemCount: 2,
-                itemBuilder: (BuildContext context, int i) {
-                  return const DonationHistoryItem();
-                },
-              ),
-    );
+    return widget.history.isEmpty
+        ? const SafetyModel(
+            isLoading: false,
+            title: 'No Donations Found',
+            icon: Icon(Icons.warning),
+          )
+        : ListView.builder(
+            itemCount: widget.history.length,
+            itemBuilder: (BuildContext context, int i) {
+              final item = widget.history[i];
+              return DonationHistoryItem(
+                item: item,
+              );
+            },
+          );
   }
 }

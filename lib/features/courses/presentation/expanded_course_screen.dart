@@ -1,9 +1,11 @@
 import 'package:business_bosses_v2/action/action.dart';
+import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/common/models/comment_model.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/common/widgets/buttons/my_outlined_button.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
+import 'package:business_bosses_v2/common/widgets/popup/my_popup_menu_button.dart';
 import 'package:business_bosses_v2/common/widgets/typography/text_widget.dart';
 import 'package:business_bosses_v2/features/chat/chat_room_screen.dart';
 import 'package:business_bosses_v2/features/courses/controller/course_controller.dart';
@@ -11,9 +13,11 @@ import 'package:business_bosses_v2/features/courses/models/course_comment_model.
 import 'package:business_bosses_v2/features/courses/models/course_model.dart';
 import 'package:business_bosses_v2/features/courses/models/reviews_model.dart';
 import 'package:business_bosses_v2/features/courses/presentation/course_item.dart';
+import 'package:business_bosses_v2/features/courses/presentation/create_course.dart';
 import 'package:business_bosses_v2/features/courses/widgets/course_comment_bottomsheet.dart';
 import 'package:business_bosses_v2/features/courses/widgets/downloadable_item.dart';
 import 'package:business_bosses_v2/features/courses/widgets/unpaidcoursepopup.dart';
+import 'package:business_bosses_v2/features/posts/presentation/boost_post_screen.dart';
 import 'package:business_bosses_v2/features/posts/widgets/my_container.dart';
 import 'package:business_bosses_v2/features/posts/widgets/youtube_display.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
@@ -69,8 +73,8 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
                 icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
               ),
               centerTitle: true,
-              title: const Text(
-                'Course Title',
+              title: Text(
+                widget.course.title!,
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 20),
               ),
@@ -131,6 +135,7 @@ class MyStickyHeader extends StatefulWidget {
 class _MyStickyHeaderState extends State<MyStickyHeader> {
   bool isSending = false;
   bool loading = true;
+  bool insufficientBalance = false;
   List<String> blocked = <String>[];
   List<ReviewModel>? reviews;
   int oneStar = 0;
@@ -138,6 +143,7 @@ class _MyStickyHeaderState extends State<MyStickyHeader> {
   int threeStar = 0;
   int fourStar = 0;
   int fiveStar = 0;
+  ProfileController profileController = Get.find();
   final List<PopupMenuEntry<String>> myPopupMore = <PopupMenuEntry<String>>[
     const PopupMenuItem<String>(
       value: 'Edit',
@@ -212,207 +218,286 @@ class _MyStickyHeaderState extends State<MyStickyHeader> {
                             overflow: TextOverflow
                                 .ellipsis, // or TextOverflow.ellipsis
                             maxLines: 5,
-                            style: TextStyle(
+                            style: const TextStyle(
                                 fontSize: 18, fontWeight: FontWeight.bold),
                           ),
                         ),
-                        GestureDetector(
-                          onTap: () {
-                            showDialog(
-                                context: context,
-                                builder: (BuildContext context) => AlertDialog(
-                                      content: Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: <Widget>[
-                                          ListTile(
-                                            onTap: () {
-                                              // Navigator.pop(context);
-                                              showDialog(
-                                                context: context,
-                                                builder:
-                                                    (BuildContext context) =>
-                                                        AlertDialog(
-                                                  title: const TextWidget(
-                                                    text:
-                                                        'Do you want to block user?',
-                                                    centralize: true,
-                                                    fontWeight: FontWeight.w700,
-                                                    size: 20,
-                                                  ),
-                                                  content: TextWidget(
-                                                    text:
-                                                        'You will no longer see courses, posts and comments from this user on your feed',
-                                                    centralize: true,
-                                                    color: Colors.black
-                                                        .withOpacity(.6),
-                                                  ),
-                                                  actions: <Widget>[
-                                                    TextButton(
-                                                      onPressed: () =>
-                                                          Navigator.pop(
-                                                              context),
-                                                      child: const TextWidget(
-                                                        text: 'Cancel',
-                                                        fontWeight:
-                                                            FontWeight.w700,
-                                                        size: 18,
-                                                        color: Colors.grey,
-                                                      ),
-                                                    ),
-                                                    GestureDetector(
-                                                      onTap: () {
-                                                        Navigator.pop(context);
-                                                        // print(_post.user.uid);
-                                                        setState(() {
-                                                          blocked.add(widget
-                                                              .course
-                                                              .user!
-                                                              .uid);
-                                                        });
-                                                        showSnackBar(context,
-                                                            message:
-                                                                'User has been blocked');
-                                                      },
-                                                      child: Container(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .symmetric(
-                                                          vertical: 7,
-                                                          horizontal: 14,
-                                                        ),
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          color: primaryColorLT,
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(5),
-                                                        ),
-                                                        child: const TextWidget(
-                                                          text: 'Block',
-                                                          color: Colors.white,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                        ),
-                                                      ),
-                                                    )
-                                                  ],
-                                                ),
-                                              );
-                                            },
-                                            contentPadding: EdgeInsets.zero,
-                                            title: GestureDetector(
-                                              child: widget.course.user
-                                                          ?.isSubscribed ==
-                                                      true
-                                                  ? Row(
-                                                      children: <Widget>[
-                                                        TextWidget(
-                                                          text:
-                                                              'Block @${widget.course.user?.name}',
-                                                          color: Colors.blue,
-                                                        ),
-                                                        const SizedBox(
-                                                            width: 5),
-                                                        SvgPicture.asset(
-                                                          'assets/svgs/premiumbadge.svg',
-                                                          height: 9,
-                                                          color: primaryColorLT,
-                                                        )
-                                                      ],
-                                                    )
-                                                  : TextWidget(
-                                                      text:
-                                                          'Block @${widget.course.user?.name}',
-                                                      color: Colors.blue,
-                                                    ),
-                                            ),
+                        widget.course.user!.uid ==
+                                profileController.myProfile.uid
+                            ? MyPopupMenuButton(
+                                popupItems: myPopupMore,
+                                icon: const Icon(
+                                  Icons.more_horiz,
+                                  size: 20,
+                                  color: Colors.black,
+                                  weight: 100,
+                                ),
+                                onSelected: (String val) {
+                                  if (val == 'Edit') {
+                                    Get.to(() => CreateCourseScreen(
+                                          industryId: widget.course.industryId,
+                                          course: widget.course,
+                                        ));
+                                  } else if (val == 'Delete') {
+                                    showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) =>
+                                          AlertDialog(
+                                        title: const Text(
+                                          'Delete Course',
+                                          style: bodyText1,
+                                        ),
+                                        content: const Text(
+                                            'Are you sure you want to delete this course?'),
+                                        actions: <Widget>[
+                                          TextButton(
+                                            onPressed: () => Get.back(),
+                                            child: const Text('No'),
                                           ),
-                                          ListTile(
-                                            onTap: () {
-                                              Navigator.of(context)
-                                                  .pop(context);
-                                              showDialog(
-                                                context: context,
-                                                builder:
-                                                    (BuildContext context) =>
-                                                        AlertDialog(
-                                                  title: const TextWidget(
-                                                    text:
-                                                        'Do you want to report course?',
-                                                    centralize: true,
-                                                    fontWeight: FontWeight.w700,
-                                                    size: 20,
-                                                  ),
-                                                  content: TextWidget(
-                                                    text:
-                                                        'The course will be reported to admin to evaluate if it violates any community policy',
-                                                    centralize: true,
-                                                    color: Colors.black
-                                                        .withOpacity(.6),
-                                                  ),
-                                                  actions: <Widget>[
-                                                    TextButton(
-                                                      onPressed: () =>
-                                                          Navigator.pop(
-                                                              context),
-                                                      child: const TextWidget(
-                                                        text: 'Cancel',
-                                                        fontWeight:
-                                                            FontWeight.w700,
-                                                        size: 18,
-                                                        color: Colors.grey,
-                                                      ),
-                                                    ),
-                                                    GestureDetector(
-                                                      onTap: () {
-                                                        Navigator.pop(context);
-                                                        showSnackBar(context,
-                                                            message:
-                                                                'Course has been Reported');
-                                                      },
-                                                      child: Container(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .symmetric(
-                                                          vertical: 7,
-                                                          horizontal: 14,
-                                                        ),
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          color: primaryColorLT,
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(5),
-                                                        ),
-                                                        child: const TextWidget(
-                                                          text: 'Report',
-                                                          color: Colors.white,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                        ),
-                                                      ),
-                                                    )
-                                                  ],
-                                                ),
-                                              );
+                                          TextButton(
+                                            onPressed: () {
+                                              CourseController().onDeleteCourse(
+                                                  widget.course.id);
+                                              Get.back();
                                             },
-                                            contentPadding: EdgeInsets.zero,
-                                            title: const TextWidget(
-                                              text: 'Report this course',
-                                              color: Colors.red,
-                                            ),
-                                          )
+                                            child: const Text('Yes'),
+                                          ),
                                         ],
                                       ),
-                                    ));
-                          },
-                          child: const Icon(
-                            Icons.more_horiz,
-                            size: 20,
-                            color: Colors.black,
-                            weight: 100,
-                          ),
-                        )
+                                    );
+                                  } else if (val == 'Boost') {
+                                    Get.to(() => BoostPost(
+                                          postId: widget.course.id,
+                                          postTitle: widget.course.title!,
+                                        ));
+                                  }
+                                },
+                              )
+                            : GestureDetector(
+                                onTap: () {
+                                  showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) =>
+                                          AlertDialog(
+                                            content: Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: <Widget>[
+                                                ListTile(
+                                                  onTap: () {
+                                                    // Navigator.pop(context);
+                                                    showDialog(
+                                                      context: context,
+                                                      builder: (BuildContext
+                                                              context) =>
+                                                          AlertDialog(
+                                                        title: const TextWidget(
+                                                          text:
+                                                              'Do you want to block user?',
+                                                          centralize: true,
+                                                          fontWeight:
+                                                              FontWeight.w700,
+                                                          size: 20,
+                                                        ),
+                                                        content: TextWidget(
+                                                          text:
+                                                              'You will no longer see courses, posts and comments from this user on your feed',
+                                                          centralize: true,
+                                                          color: Colors.black
+                                                              .withOpacity(.6),
+                                                        ),
+                                                        actions: <Widget>[
+                                                          TextButton(
+                                                            onPressed: () =>
+                                                                Navigator.pop(
+                                                                    context),
+                                                            child:
+                                                                const TextWidget(
+                                                              text: 'Cancel',
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w700,
+                                                              size: 18,
+                                                              color:
+                                                                  Colors.grey,
+                                                            ),
+                                                          ),
+                                                          GestureDetector(
+                                                            onTap: () {
+                                                              Navigator.pop(
+                                                                  context);
+                                                              // print(_post.user.uid);
+                                                              setState(() {
+                                                                blocked.add(
+                                                                    widget
+                                                                        .course
+                                                                        .user!
+                                                                        .uid);
+                                                              });
+                                                              showSnackBar(
+                                                                  context,
+                                                                  message:
+                                                                      'User has been blocked');
+                                                            },
+                                                            child: Container(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .symmetric(
+                                                                vertical: 7,
+                                                                horizontal: 14,
+                                                              ),
+                                                              decoration:
+                                                                  BoxDecoration(
+                                                                color:
+                                                                    primaryColorLT,
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            5),
+                                                              ),
+                                                              child:
+                                                                  const TextWidget(
+                                                                text: 'Block',
+                                                                color: Colors
+                                                                    .white,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                              ),
+                                                            ),
+                                                          )
+                                                        ],
+                                                      ),
+                                                    );
+                                                  },
+                                                  contentPadding:
+                                                      EdgeInsets.zero,
+                                                  title: GestureDetector(
+                                                    child: widget.course.user
+                                                                ?.isSubscribed ==
+                                                            true
+                                                        ? Row(
+                                                            children: <Widget>[
+                                                              TextWidget(
+                                                                text:
+                                                                    'Block @${widget.course.user?.name}',
+                                                                color:
+                                                                    Colors.blue,
+                                                              ),
+                                                              const SizedBox(
+                                                                  width: 5),
+                                                              SvgPicture.asset(
+                                                                'assets/svgs/premiumbadge.svg',
+                                                                height: 9,
+                                                                color:
+                                                                    primaryColorLT,
+                                                              )
+                                                            ],
+                                                          )
+                                                        : TextWidget(
+                                                            text:
+                                                                'Block @${widget.course.user?.name}',
+                                                            color: Colors.blue,
+                                                          ),
+                                                  ),
+                                                ),
+                                                ListTile(
+                                                  onTap: () {
+                                                    Navigator.of(context)
+                                                        .pop(context);
+                                                    showDialog(
+                                                      context: context,
+                                                      builder: (BuildContext
+                                                              context) =>
+                                                          AlertDialog(
+                                                        title: const TextWidget(
+                                                          text:
+                                                              'Do you want to report course?',
+                                                          centralize: true,
+                                                          fontWeight:
+                                                              FontWeight.w700,
+                                                          size: 20,
+                                                        ),
+                                                        content: TextWidget(
+                                                          text:
+                                                              'The course will be reported to admin to evaluate if it violates any community policy',
+                                                          centralize: true,
+                                                          color: Colors.black
+                                                              .withOpacity(.6),
+                                                        ),
+                                                        actions: <Widget>[
+                                                          TextButton(
+                                                            onPressed: () =>
+                                                                Navigator.pop(
+                                                                    context),
+                                                            child:
+                                                                const TextWidget(
+                                                              text: 'Cancel',
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w700,
+                                                              size: 18,
+                                                              color:
+                                                                  Colors.grey,
+                                                            ),
+                                                          ),
+                                                          GestureDetector(
+                                                            onTap: () {
+                                                              Navigator.pop(
+                                                                  context);
+                                                              showSnackBar(
+                                                                  context,
+                                                                  message:
+                                                                      'Course has been Reported');
+                                                            },
+                                                            child: Container(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .symmetric(
+                                                                vertical: 7,
+                                                                horizontal: 14,
+                                                              ),
+                                                              decoration:
+                                                                  BoxDecoration(
+                                                                color:
+                                                                    primaryColorLT,
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            5),
+                                                              ),
+                                                              child:
+                                                                  const TextWidget(
+                                                                text: 'Report',
+                                                                color: Colors
+                                                                    .white,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                              ),
+                                                            ),
+                                                          )
+                                                        ],
+                                                      ),
+                                                    );
+                                                  },
+                                                  contentPadding:
+                                                      EdgeInsets.zero,
+                                                  title: const TextWidget(
+                                                    text: 'Report this course',
+                                                    color: Colors.red,
+                                                  ),
+                                                )
+                                              ],
+                                            ),
+                                          ));
+                                },
+                                child: const Icon(
+                                  Icons.more_horiz,
+                                  size: 20,
+                                  color: Colors.black,
+                                  weight: 100,
+                                ),
+                              )
                       ],
                     ),
                     Text(
@@ -633,7 +718,25 @@ class _MyStickyHeaderState extends State<MyStickyHeader> {
                         ? Container()
                         : Center(
                             child: ElevatedButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  if (num.parse(widget.course.price!) >
+                                      num.parse(profileController
+                                          .myProfile.coinscount
+                                          .toString())) {
+                                    showSnackbar(
+                                      title: 'OOPS!',
+                                      message:
+                                          'Insufficient Coin balance, please top up!',
+                                      error: true,
+                                    );
+
+                                    setState(() {
+                                      insufficientBalance = true;
+                                    });
+                                  } else {
+                                    // Proceed with course purchase
+                                  }
+                                },
                                 child: Padding(
                                   padding: const EdgeInsets.all(10.0),
                                   child: Wrap(
@@ -682,22 +785,28 @@ class _MyStickyHeaderState extends State<MyStickyHeader> {
                     const SizedBox(
                       height: 30,
                     ),
-                    const Text(
-                      'Downloadable Resources',
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(
-                      height: 150,
-                      child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: 5,
-                          itemBuilder: (BuildContext context, int index) {
-                            return DownloadableItem(
-                              link: '',
-                            ); // Assuming DownloadableItem is a widget class
-                          }),
-                    ),
+                    widget.course.documents != null
+                        ? const Text(
+                            'Downloadable Resources',
+                            style: TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.bold),
+                          )
+                        : Container(),
+                    widget.course.documents != null
+                        ? SizedBox(
+                            height: 150,
+                            child: ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                itemCount: widget.course.documents!.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  return DownloadableItem(
+                                    link:
+                                        'https://miro.medium.com/v2/resize:fit:1200/1*5JFH1YSl7NHZ4kPghfXfEg.jpeg',
+                                    filename: 'test1',
+                                  );
+                                }),
+                          )
+                        : Container(),
                     SizedBox(
                       height: 100,
                     )
@@ -731,7 +840,8 @@ class _MyStickyHeaderState extends State<MyStickyHeader> {
                       onTap: () {
                         showModalBottomSheet(
                           context: context,
-                          builder: (BuildContext context) => CourseCommentBottomSheet(
+                          builder: (BuildContext context) =>
+                              CourseCommentBottomSheet(
                             course: widget.course,
                             onComment: (CourseCommentModel newComment) async {},
                           ),
@@ -803,7 +913,7 @@ class _MyStickyHeaderState extends State<MyStickyHeader> {
   Future<void> rateCourse() async {
     int rater = 0;
     ProfileController profileController = Get.find();
-    UserModel? cUser;
+    CourseModel? cCourse;
     double currentRating = 0;
     String reviewText = '';
     CourseController _courseController = Get.find();
@@ -973,43 +1083,22 @@ class _MyStickyHeaderState extends State<MyStickyHeader> {
                                   'review': ""
                                 },
                               );
-                              // print(object)
-                              // await ApiService.post(
-                              //   path: 'notification',
-                              //   body: <String, dynamic>{
-                              //     'senderUid': profileController.myProfile.uid,
-                              //     'receiverUid': widget.course.user!.uid,
-                              //     'title': 'Course Rating',
-                              //     'message':
-                              //         '${profileController.myProfile.username} has rated your course $rater stars',
-                              //     'timestamp':
-                              //         DateTime.now().millisecondsSinceEpoch,
-                              //     'notificationType': 'Review',
-                              //     'username': widget.course.user!.username,
-                              //     'user': profileController.myProfile!,
-                              //   },
-                              // );
-                              // await processData();
-                              // final Map<String, dynamic> currentUser =
-                              //     await ProfileController.loadData(
-                              //         widget.course.user!.uid);
-                              // if (mounted) {
-                              //   setState(
-                              //     () {
-                              //       cUser =
-                              //           UserModel.fromMap(currentUser['user']);
-                              //       currentRating = currentUser['user']
-                              //               ['averageRating']
-                              //           .toDouble();
-                              //       rater = 0;
-                              //       reviewText = '';
-                              //       isSending = false;
-                              //     },
-                              //   );
-                              // }
-                              // _courseController.updateUser(
-                              //     widget.course.user!.uid, currentRating);
-                              // Get.back();
+                              await ApiService.post(
+                                path: 'notification',
+                                body: <String, dynamic>{
+                                  'senderUid': profileController.myProfile.uid,
+                                  'receiverUid': widget.course.user!.uid,
+                                  'title': 'Seller Review',
+                                  'message':
+                                      '${profileController.myProfile.username} has rated your course',
+                                  'timestamp':
+                                      DateTime.now().millisecondsSinceEpoch,
+                                  'notificationType': 'Review',
+                                  'username': widget.course.user!.username,
+                                  'user': widget.course.user,
+                                },
+                              );
+                              await processData();
                             },
                             child: const Text('Rate'),
                           ),

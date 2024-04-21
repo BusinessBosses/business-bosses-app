@@ -14,7 +14,7 @@ class UserModel {
   final int? bossOfTheWeekTimeStamp;
   final int? bossOfTheWeekUpTimeStamp;
   final String? photoUrl;
-  final int? coinscount;
+  int? coinscount;
   final String? name;
   final String? companyName;
   final String? surname;
@@ -359,5 +359,11 @@ class UserModel {
               : map['averageRating'] as double)
           : null,
     );
+  }
+
+  int get coinsCount => coinscount ?? 0;
+
+  void incrementCoinsCount(int incrementBy) {
+    coinscount = (coinscount ?? 0) + incrementBy;
   }
 }

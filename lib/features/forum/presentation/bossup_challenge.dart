@@ -38,158 +38,165 @@ class _BossupChallengeState extends State<BossupChallenge> {
             title: 'There was an error loading data',
           );
         } else {
-          return ListView.builder(
-            itemCount: controller.categories.length,
-            itemBuilder: (BuildContext context, int index) {
-              final Industry category = controller.categories[index];
-              return GestureDetector(
-                onTap: () {
-                  Get.to(() => BossUpSection(
-                        industry: category,
-                        bossUp: controller.categories[0],
-                      ));
-                },
-                child: Stack(children: [
-                  Container(
-                    padding: const EdgeInsets.all(15),
-                    margin: const EdgeInsets.only(top: 15, left: 15, right: 15),
-                    decoration: const BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(16),
-                      ),
-                    ),
-                    child: Column(
-                      children: <Widget>[
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Text(
-                              category.industry!,
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.w700, fontSize: 17),
-                            ),
-                            SvgPicture.asset(
-                              'assets/svgs/nexticon.svg',
-                            )
-                          ],
+          return Padding(
+            padding: const EdgeInsets.only(bottom: 100),
+            child: ListView.builder(
+              itemCount: controller.categories.length,
+              itemBuilder: (BuildContext context, int index) {
+                final Industry category = controller.categories[index];
+                return GestureDetector(
+                  onTap: () {
+                    Get.to(() => BossUpSection(
+                          industry: category,
+                          bossUp: controller.categories[0],
+                        ));
+                  },
+                  child: Stack(
+                    children: <Widget>[
+                      Container(
+                        padding: const EdgeInsets.all(15),
+                        margin:
+                            const EdgeInsets.only(top: 15, left: 15, right: 15),
+                        decoration: const BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(16),
+                          ),
                         ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
+                        child: Column(
                           children: <Widget>[
-                            SizedBox(
-                              height: 86,
-                              width: 142,
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(10.0),
-                                child: FittedBox(
-                                  fit: BoxFit.fill,
-                                  child: CachedNetworkImage(
-                                    width: 120,
-                                    imageUrl: category.photo!,
-                                    memCacheHeight: 256,
-                                    memCacheWidth: 256,
-                                    placeholder:
-                                        (BuildContext context, String photo) =>
-                                            const CircularProgressIndicator(),
-                                    errorWidget: (BuildContext context,
-                                            String photo, dynamic error) =>
-                                        const Icon(Icons.error),
-                                  ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                Text(
+                                  category.industry!,
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.w700,
+                                      fontSize: 17),
                                 ),
-                              ),
+                                SvgPicture.asset(
+                                  'assets/svgs/nexticon.svg',
+                                )
+                              ],
                             ),
                             const SizedBox(
-                              width: 25,
+                              height: 10,
                             ),
-                            Column(
+                            Row(
                               mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      category.industry == 'Boss Up Challenge '
-                                          ? 'Free Promotion'
-                                          : category.award ?? 'Win',
-                                      style: const TextStyle(
-                                        color: primaryColorLT,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16,
+                                SizedBox(
+                                  height: 86,
+                                  width: 142,
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                    child: FittedBox(
+                                      fit: BoxFit.fill,
+                                      child: CachedNetworkImage(
+                                        width: 120,
+                                        imageUrl: category.photo!,
+                                        memCacheHeight: 256,
+                                        memCacheWidth: 256,
+                                        placeholder: (BuildContext context,
+                                                String photo) =>
+                                            const CircularProgressIndicator(),
+                                        errorWidget: (BuildContext context,
+                                                String photo, dynamic error) =>
+                                            const Icon(Icons.error),
                                       ),
                                     ),
-                                  ],
-                                ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: <Widget>[
-                                    const Icon(
-                                      Icons.watch_later_outlined,
-                                      size: 15,
-                                      color: Colors.grey,
-                                    ),
-                                    const SizedBox(
-                                      width: 5,
-                                    ),
-                                    Text(
-                                      category.industry == 'Boss Up Challenge '
-                                          ? 'Every Monday'
-                                          : category.endedAt != null
-                                              ? _calculateEndsDate(
-                                                  category.endedAt!)
-                                              : 'Ends',
-                                      style: const TextStyle(
-                                          color: Colors.grey,
-                                          fontWeight: FontWeight.w700),
-                                    )
-                                  ],
+                                  ),
                                 ),
                                 const SizedBox(
-                                  height: 5,
+                                  width: 25,
                                 ),
-                                Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 10, vertical: 5),
-                                  decoration: BoxDecoration(
-                                    color: Colors.grey[300],
-                                    borderRadius: BorderRadius.circular(
-                                        20), // Adjust the radius as needed
-                                  ),
-                                  child: category.endedAt != null
-                                      ? Text(
-                                          _calculateTimeLeft(category.endedAt!),
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: <Widget>[
+                                        Text(
+                                          category.industry ==
+                                                  'Boss Up Challenge '
+                                              ? 'Free Promotion'
+                                              : category.award ?? 'Win',
                                           style: const TextStyle(
-                                              color: Colors.black54,
-                                              fontSize: 12,
+                                            color: primaryColorLT,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 16,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: <Widget>[
+                                        const Icon(
+                                          Icons.watch_later_outlined,
+                                          size: 15,
+                                          color: Colors.grey,
+                                        ),
+                                        const SizedBox(
+                                          width: 5,
+                                        ),
+                                        Text(
+                                          category.industry ==
+                                                  'Boss Up Challenge '
+                                              ? 'Every Monday'
+                                              : category.endedAt != null
+                                                  ? _calculateEndsDate(
+                                                      category.endedAt!)
+                                                  : 'Ends',
+                                          style: const TextStyle(
+                                              color: Colors.grey,
                                               fontWeight: FontWeight.w700),
                                         )
-                                      : const Text(
-                                          'Ongoing',
-                                          style: TextStyle(
-                                              color: Colors.black54,
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.w700),
-                                        ),
-                                ),
+                                      ],
+                                    ),
+                                    const SizedBox(
+                                      height: 5,
+                                    ),
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 10, vertical: 5),
+                                      decoration: BoxDecoration(
+                                        color: Colors.grey[300],
+                                        borderRadius: BorderRadius.circular(
+                                            20), // Adjust the radius as needed
+                                      ),
+                                      child: category.endedAt != null
+                                          ? Text(
+                                              _calculateTimeLeft(
+                                                  category.endedAt!),
+                                              style: const TextStyle(
+                                                  color: Colors.black54,
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.w700),
+                                            )
+                                          : const Text(
+                                              'Ongoing',
+                                              style: TextStyle(
+                                                  color: Colors.black54,
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.w700),
+                                            ),
+                                    ),
+                                  ],
+                                )
                               ],
-                            )
+                            ),
                           ],
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                  // Positioned(
-                  //   right: 25,
-                  //   bottom: 10,
-                  //   child:
-                  // )
-                ]),
-              );
-            },
+                );
+              },
+            ),
           );
         }
       },

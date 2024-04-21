@@ -1,10 +1,14 @@
 import 'package:business_bosses_v2/action/action.dart';
 import 'package:business_bosses_v2/common/widgets/typography/text_widget.dart';
+import 'package:business_bosses_v2/features/donations/controller/donations_controller.dart';
 import 'package:business_bosses_v2/features/donations/models/donations_model.dart';
 import 'package:business_bosses_v2/features/donations/widgets/supporteritem.dart';
+import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 class ExpandedDonationScreen extends StatefulWidget {
   final DonationModel donation;
@@ -22,6 +26,9 @@ class ExpandedDonationScreen extends StatefulWidget {
 class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
   String? description;
   bool isLoading = false;
+  final DonationsController donationsController = Get.find();
+  final ProfileController profileController = Get.find();
+  final TextEditingController _priceController = TextEditingController();
 
   @override
   void initState() {
@@ -31,9 +38,6 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    String ytUrl = 'https://www.youtube.com/watch?v=3gm6eBtWfi4';
-    ScrollController scrollController = ScrollController();
-
     int timestampMs = widget.donation.timestamp!;
 
     // Convert milliseconds to DateTime
@@ -50,7 +54,7 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
         appBar: AppBar(
           leading: IconButton(
             onPressed: () {
-              Navigator.pop(context);
+              Get.back();
             },
             icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
           ),
@@ -60,7 +64,7 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
             textAlign: TextAlign.center,
             style: TextStyle(fontSize: 20),
           ),
-          actions: [
+          actions: <Widget>[
             Padding(
               padding: const EdgeInsets.only(right: 15.0),
               child: GestureDetector(
@@ -260,7 +264,7 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
                         padding: const EdgeInsets.symmetric(
                             vertical: 15, horizontal: 30),
                         decoration: BoxDecoration(
-                            boxShadow: const [
+                            boxShadow: const <BoxShadow>[
                               BoxShadow(
                                   color: Colors.black26,
                                   offset: Offset.zero,
@@ -506,7 +510,7 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
                                       6, // Adjust the flex value to control the relative sizes
                                   child: Stack(children: [
                                     TextFormField(
-                                      // controller: _priceController,
+                                      controller: _priceController,
                                       // onChanged: (String val) => price = val,
 
                                       textInputAction: TextInputAction.next,
@@ -546,19 +550,84 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
                               child: ElevatedButton(
                                 style: ElevatedButton.styleFrom(
                                     minimumSize: const Size(150, 45)),
-                                onPressed: () {},
-                                child: const Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: <Widget>[
-                                    Text(
-                                      'Donate' ?? 'Claim Amount',
-                                      style: TextStyle(
-                                          fontSize: 15,
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.w500),
-                                    ),
-                                  ],
-                                ),
+                                onPressed: () async {
+                                  if (int.tryParse(_priceController.text) ==
+                                      null) {
+                                    Get.snackbar(
+                                      'Error',
+                                      'Invalid Amount',
+                                      backgroundColor: Colors.red,
+                                      colorText: Colors.white,
+                                    );
+                                    return;
+                                  }
+                                  if ((int.tryParse(_priceController.text)! >
+                                      profileController
+                                          .myProfile.coinscount!)) {
+                                    Get.snackbar(
+                                      'Error',
+                                      'You do not have sufficient coins to donate',
+                                      backgroundColor: Colors.red,
+                                      colorText: Colors.white,
+                                    );
+                                    return;
+                                  }
+
+                                  setState(() {
+                                    isLoading = true;
+                                  });
+                                  DateTime now = DateTime.now();
+
+                                  // Format the date and time
+                                  String formattedDateTime =
+                                      DateFormat('yyyy-MM-dd HH:mm:ss')
+                                          .format(now);
+
+                                  Map<String, dynamic> data = {
+                                    'userId': profileController.myProfile.uid,
+                                    'donationId': widget.donation.id,
+                                    'date': formattedDateTime,
+                                    'amount': _priceController.text
+                                  };
+                                  final bool response =
+                                      await donationsController
+                                          .contributeDonation(
+                                              data, widget.donation.id);
+                                  if (response) {
+                                    Get.snackbar(
+                                        'Success', 'Donation Successfull',
+                                        backgroundColor: Colors.green,
+                                        colorText: Colors.white);
+                                    // ignore: use_build_context_synchronously
+                                    Navigator.of(context).pop();
+                                  } else {
+                                    Get.snackbar('Error',
+                                        'There\'s an error while trying to donate',
+                                        backgroundColor: Colors.red,
+                                        colorText: Colors.white);
+                                  }
+                                  setState(() {
+                                    isLoading = false;
+                                  });
+                                },
+                                child:
+                                    isLoading // Conditional widget to show loader or donate text
+                                        ? const CircularProgressIndicator(
+                                            color: Colors
+                                                .white) // Show loader when _isLoading is true
+                                        : const Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: <Widget>[
+                                              Text(
+                                                'Donate',
+                                                style: TextStyle(
+                                                    fontSize: 15,
+                                                    color: Colors.white,
+                                                    fontWeight:
+                                                        FontWeight.w500),
+                                              ),
+                                            ],
+                                          ),
                               ),
                             )),
                       )
@@ -631,7 +700,7 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
                               height: 15,
                             ),
                             label: Text(
-                              '0',
+                              widget.donation.likes!.length.toString(),
                               style: Theme.of(context)
                                   .textTheme
                                   .bodyMedium
@@ -656,7 +725,7 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
                               height: 15,
                             ),
                             label: Text(
-                              'Comments',
+                              '${widget.donation.comments?.length} Comments',
                               style: Theme.of(context)
                                   .textTheme
                                   .bodyMedium
@@ -671,7 +740,7 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
                             icon: const Icon(Icons.remove_red_eye_outlined,
                                 size: 19, color: Colors.black),
                             label: Text(
-                              'Views',
+                              '${widget.donation.views} Views',
                               style: Theme.of(context)
                                   .textTheme
                                   .bodyMedium
