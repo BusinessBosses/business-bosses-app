@@ -166,43 +166,50 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
                                                         .fetchIndustries();
                                                   },
                                                 )
-                                              : GridView.builder(
-                                                  itemCount: controller
-                                                      .getCategoryIndustries(
-                                                          Constants.LEARNINGID)
-                                                      .length,
-                                                  itemBuilder:
-                                                      (BuildContext context,
-                                                          int index) {
-                                                    return CustomTile(
-                                                      label: controller
-                                                          .getCategoryIndustries(
-                                                              Constants
-                                                                  .LEARNINGID)[
-                                                              index]
-                                                          .industry!,
-                                                      photo: controller
-                                                          .getCategoryIndustries(
-                                                              Constants
-                                                                  .LEARNINGID)[
-                                                              index]
-                                                          .photo!,
-                                                      onTap: () {
-                                                        Get.toNamed(
-                                                          Routes.allforumscreen,
-                                                          arguments: controller
-                                                              .getCategoryIndustries(
-                                                                  Constants
-                                                                      .LEARNINGID)[index],
-                                                        );
-                                                      },
-                                                    );
-                                                  },
-                                                  gridDelegate:
-                                                      const SliverGridDelegateWithFixedCrossAxisCount(
-                                                    mainAxisSpacing: 15.0,
-                                                    crossAxisSpacing: 15.0,
-                                                    crossAxisCount: 2,
+                                              : Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          bottom: 100),
+                                                  child: GridView.builder(
+                                                    itemCount: controller
+                                                        .getCategoryIndustries(
+                                                            Constants
+                                                                .LEARNINGID)
+                                                        .length,
+                                                    itemBuilder:
+                                                        (BuildContext context,
+                                                            int index) {
+                                                      return CustomTile(
+                                                        label: controller
+                                                            .getCategoryIndustries(
+                                                                Constants
+                                                                    .LEARNINGID)[
+                                                                index]
+                                                            .industry!,
+                                                        photo: controller
+                                                            .getCategoryIndustries(
+                                                                Constants
+                                                                    .LEARNINGID)[
+                                                                index]
+                                                            .photo!,
+                                                        onTap: () {
+                                                          Get.toNamed(
+                                                            Routes
+                                                                .allforumscreen,
+                                                            arguments: controller
+                                                                .getCategoryIndustries(
+                                                                    Constants
+                                                                        .LEARNINGID)[index],
+                                                          );
+                                                        },
+                                                      );
+                                                    },
+                                                    gridDelegate:
+                                                        const SliverGridDelegateWithFixedCrossAxisCount(
+                                                      mainAxisSpacing: 15.0,
+                                                      crossAxisSpacing: 15.0,
+                                                      crossAxisCount: 2,
+                                                    ),
                                                   ),
                                                 ),
                                     ),

@@ -1,5 +1,6 @@
 import 'package:business_bosses_v2/common/widgets/buttons/my_outlined_button.dart';
 import 'package:business_bosses_v2/features/courses/controller/course_controller.dart';
+import 'package:business_bosses_v2/features/courses/models/course_model.dart';
 import 'package:business_bosses_v2/features/courses/models/video_link_data.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:file_picker/file_picker.dart';
@@ -14,9 +15,15 @@ import '../../../utils/theme/theme.dart';
 class CreateCourseScreen extends StatefulWidget {
   static const String routeName = '/create-course-screen';
   final String industryId;
+  final String? courseId;
+  final CourseModel? course;
 
-  const CreateCourseScreen({Key? key, required this.industryId})
-      : super(key: key);
+  const CreateCourseScreen({
+    Key? key,
+    required this.industryId,
+    this.courseId,
+    this.course,
+  }) : super(key: key);
 
   @override
   State<CreateCourseScreen> createState() => _CreateCourseScreenState();
@@ -54,7 +61,8 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
       child: Scaffold(
         backgroundColor: backgroundcolorinterface,
         appBar: AppBar(
-          title: const Text('Start a Course'),
+          title: Text(
+              widget.course == null ? 'Start a Course' : 'Update Your Course'),
           automaticallyImplyLeading: false,
           actions: <Widget>[
             IconButton(
@@ -81,12 +89,13 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                     textInputAction: TextInputAction.next,
                     keyboardType: TextInputType.text,
                     maxLength: 50,
+                    initialValue:
+                        widget.course == null ? '' : widget.course!.title,
                     decoration: inputDecoration.copyWith(
                       hintText: 'Enter Course Title',
                     )),
                 const SizedBox(height: 24.0),
                 DetectableTextField(
-                  // controller: descriptionController,
                   detectionRegExp: detectionRegExp(hashtag: false)!,
                   onDetectionTyped: (String text) {},
                   onDetectionFinished: () {},
@@ -188,9 +197,8 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                 //   ),
                 // ),
                 ListView.builder(
-                  shrinkWrap: true, // Add this line
-                  physics:
-                      const NeverScrollableScrollPhysics(), // Add this line
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
                   itemCount: videoLinks.length + 1,
                   itemBuilder: (BuildContext context, int index) {
                     if (index < videoLinks.length) {
@@ -484,11 +492,13 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                             : selectedFileNames,
                         'courseType': _paidCourse ? 'paid' : 'free',
                         'youtubeUrls': _extractYoutubeUrls(),
-                        'transcript': _extractTranscripts(),
+                        'transcript': '_extractTranscripts()',
                       };
-                      await courseController.createCourse(course);
+                      widget.course == null
+                          ? await courseController.createCourse(course)
+                          : await courseController.updateCourse(course);
                     },
-                    label: 'Post',
+                    label: widget.course == null ? 'Post' : 'Update Course',
                     // isProcessing: _isProcessing,
                     buttonType: ButtonType.elevated,
                   ),

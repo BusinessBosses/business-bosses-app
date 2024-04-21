@@ -30,6 +30,7 @@ class CourseHistory extends StatefulWidget {
 class _CourseHistoryState extends State<CourseHistory> {
   int _currentIndex = 0;
   late PageController _pageController;
+  ProfileController profileController = Get.find();
 
   @override
   void initState() {
@@ -66,9 +67,9 @@ class _CourseHistoryState extends State<CourseHistory> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15.0),
-              child: const Text(
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 15.0),
+              child: Text(
                 'Total',
                 style: TextStyle(fontWeight: FontWeight.w700),
               ),
@@ -81,18 +82,18 @@ class _CourseHistoryState extends State<CourseHistory> {
                     'assets/svgs/coin.svg',
                     height: 35,
                   ),
-                  SizedBox(width: 5),
+                  const SizedBox(width: 5),
                   Text(
-                    '4000',
-                    style: TextStyle(
+                    profileController.myProfile.coinscount.toString(),
+                    style: const TextStyle(
                       fontWeight: FontWeight.w900,
                       fontSize: 22,
                     ),
                   ),
-                  SizedBox(width: 5),
+                  const SizedBox(width: 5),
                   Text(
-                    '(\$2000)',
-                    style: TextStyle(
+                    '(\$${(num.parse(profileController.myProfile.coinscount.toString()) / 100).toString()})',
+                    style: const TextStyle(
                       fontWeight: FontWeight.w700,
                       fontSize: 22,
                       color: Colors.black38,

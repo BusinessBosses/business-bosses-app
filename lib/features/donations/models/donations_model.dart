@@ -8,7 +8,7 @@ class DonationModel {
   final String categoryId;
   final String? description;
   final int? targetAmount;
-  final int? amountRecieved;
+  int amountRecieved;
   final String? title;
   final String? youtubeUrls;
   final String? photo;
@@ -18,6 +18,7 @@ class DonationModel {
   final List<CommentModel>? comments;
   final UserModel? user;
   int? views = 0;
+  final List<String> images;
   final bool? isApproved;
   final bool? isSuspended;
   final bool? isCashoutApproved;
@@ -26,7 +27,7 @@ class DonationModel {
     required this.categoryId,
     this.description,
     this.targetAmount,
-    this.amountRecieved,
+    required this.amountRecieved,
     this.title,
     this.photo,
     this.timestamp,
@@ -39,6 +40,7 @@ class DonationModel {
     this.isSuspended,
     this.isCashoutApproved,
     this.youtubeUrls,
+    required this.images,
   });
 
   DonationModel copyWith({
@@ -59,6 +61,7 @@ class DonationModel {
     bool? isCashoutApproved,
     int? views,
     String? youtubeUrls,
+    List<String>? images,
   }) {
     return DonationModel(
       id: id ?? this.id,
@@ -78,6 +81,7 @@ class DonationModel {
       isSuspended: isSuspended ?? this.isSuspended,
       isCashoutApproved: isCashoutApproved ?? this.isCashoutApproved,
       youtubeUrls: youtubeUrls ?? this.youtubeUrls,
+      images: images ?? this.images,
     );
   }
 
@@ -100,6 +104,7 @@ class DonationModel {
       'isSuspended': isSuspended,
       'isCashoutApproved': isCashoutApproved,
       'youtubeUrls': youtubeUrls,
+      'images': images,
     };
   }
 
@@ -115,7 +120,7 @@ class DonationModel {
       targetAmount:
           map['targetAmount'] != null ? map['targetAmount'] as int : null,
       amountRecieved:
-          map['amountRecieved'] != null ? map['amountRecieved'] as int : null,
+          map['amountRecieved'] != null ? map['amountRecieved'] as int : 0,
       photo: map['photo'] != null ? map['photo'] as String : null,
       timestamp: map['timestamp'] != null
           ? int.parse(map['timestamp'].toString())
@@ -132,10 +137,15 @@ class DonationModel {
       isApproved: map['isApproved'] ?? false,
       isSuspended: map['isSuspended'] ?? false,
       isCashoutApproved: map['isCashoutApproved'] ?? false,
+      images: List<String>.from((map['images'])),
     );
   }
 
   void setViews(int newViews) {
     views = newViews;
+  }
+
+  void setRecievedAmount(int incrementBy) {
+    amountRecieved += incrementBy;
   }
 }

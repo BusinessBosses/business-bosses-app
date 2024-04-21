@@ -1,7 +1,10 @@
+import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/features/courses/models/course_model.dart';
 import 'package:business_bosses_v2/features/forum/models/industry.dart';
+import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
+import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:http/http.dart' as http;
 import 'package:get/get.dart';
@@ -37,6 +40,19 @@ class CourseController extends GetxController {
       Get.back();
       Get.snackbar('Success', 'Course created successfully');
     }
+  }
+
+  Future<void> updateCourse(Map<String, dynamic> course) async {
+    
+    final ApiResponseModel response = await ApiService.put(
+        path: 'courses/update-course/${course['courseId']}', body: course);
+
+    if (response.success) {
+      courses.insert(0, CourseModel.fromMap(course));
+      Get.back();
+      Get.snackbar('Success', 'Course updated successfully');
+    }
+    update();
   }
 
   Future<void> updateCourseViews(String id, int views) async {
@@ -83,25 +99,26 @@ class CourseController extends GetxController {
     }
   }
 
-  /// UPDATE COURSE RATING IF THERE IS AN UPDATE IN REVIEWS
-  void updateUser(String id, double newAverageRating) {
-    final List<int> postIndices = <int>[];
+  /// delete selected course
+  void onDeleteCourse(String courseId) async {
+    try {
+      final ApiResponseModel response = await ApiService.delete(
+        path: 'courses/delete-course/$courseId',
+      );
 
-    for (int i = 0; i < courses.length; i++) {
-      if (courses[i].userId == id) {
-        postIndices.add(i);
+      if (response.success) {
+        showSnackbar(message: 'Course deleted successfully!', title: 'Success');
+        update();
+        return;
+      } else {
+        showSnackbar(
+            message: 'Failed to delete course.', title: 'O0PS!', error: true);
+        return;
       }
+    } catch (e) {
+      rethrow;
+      // showSnackbar(
+      //     message: 'Error deleting post.', title: 'O0PS!', error: true);
     }
-
-    for (final int index in postIndices) {
-      final CourseModel course = courses[index];
-      final UserModel? user = course.user;
-      final UserModel? updatedUser =
-          user?.copyWith(averageRating: newAverageRating);
-      final CourseModel updatedCourse = course.copyWith(user: updatedUser);
-      courses[index] = updatedCourse;
-    }
-
-    update();
   }
 }
