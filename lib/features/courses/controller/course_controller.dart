@@ -14,6 +14,11 @@ class CourseController extends GetxController {
   RxBool loading = RxBool(false);
   RxBool error = RxBool(false);
   late Industry industry;
+  List<dynamic> myHistory = <dynamic>[];
+  List<dynamic> myHistoryReceived = <dynamic>[];
+  List<dynamic> myHistoryOut = <dynamic>[];
+  RxBool hLoading = RxBool(false);
+  RxBool hError = RxBool(false);
 
   @override
   void onInit() {
@@ -49,14 +54,16 @@ class CourseController extends GetxController {
   Future<void> updateCourse(Map<String, dynamic> course, String id) async {
     loading(true);
     update();
-    final ApiResponseModel response = await ApiService.put(
-        path: 'courses/update-course/$id', body: course);
+    final ApiResponseModel response =
+        await ApiService.put(path: 'courses/update-course/$id', body: course);
 
     if (response.success) {
       courses.insert(0, CourseModel.fromMap(course));
       Get.back();
       Get.snackbar('Success', 'Course updated successfully');
-    }else{print('$id');}
+    } else {
+
+    }
     loading(false);
     update();
   }
@@ -94,6 +101,7 @@ class CourseController extends GetxController {
       dynamic response = await request.send();
       if (response.statusCode == 200) {
         print('File uploaded successfully');
+        print('url of uploaded file');
         // Handle success
       } else {
         print('Error during file upload: ${response.reasonPhrase}');
