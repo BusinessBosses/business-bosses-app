@@ -41,7 +41,8 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
 
   @override
   void initState() {
-    desccontroller = TextEditingController(text:widget.course !=null ? widget.course!.description : '');
+    desccontroller = TextEditingController(
+        text: widget.course != null ? widget.course!.description : '');
     if (widget.course != null) {
       videoLinks.clear();
       int minLength = widget.course!.youtubeUrls!.length;
@@ -50,7 +51,9 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
           VideoLinkData(
             hasTranscript: widget.course!.transcript == null ? false : true,
             url: widget.course!.youtubeUrls![i],
-            transcript: widget.course!.transcript == null ? '' : widget.course!.transcript![i],
+            transcript: widget.course!.transcript == null
+                ? ''
+                : widget.course!.transcript![i],
           ),
         );
       }
@@ -73,6 +76,8 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
 
   @override
   Widget build(BuildContext context) {
+    widget.course != null ? title = widget.course!.title : '';
+    widget.course != null ? description = widget.course!.description : '';
     return GetBuilder<CourseController>(builder: (CourseController controller) {
       return GestureDetector(
         onTap: () => unFocusKeyboard(context),
@@ -420,7 +425,7 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                         Map<String, dynamic> course = <String, dynamic>{
                           'title': title,
                           'industryId': widget.industryId,
-                          'description': description,
+                          'description': description ?? desccontroller!.text,
                           'userId': profileController.myProfile.uid,
                           'timestamp': DateTime.now().millisecondsSinceEpoch,
                           'price': _courseprice,
@@ -437,7 +442,8 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                         };
                         widget.course == null
                             ? await courseController.createCourse(course)
-                            : await courseController.updateCourse(course);
+                            : await courseController.updateCourse(
+                                course, widget.course!.id);
                       },
                       label: widget.course == null ? 'Post' : 'Update Course',
                       isProcessing: controller.loading.value,

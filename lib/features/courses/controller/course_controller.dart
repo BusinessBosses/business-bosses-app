@@ -46,15 +46,18 @@ class CourseController extends GetxController {
     update();
   }
 
-  Future<void> updateCourse(Map<String, dynamic> course) async {
+  Future<void> updateCourse(Map<String, dynamic> course, String id) async {
+    loading(true);
+    update();
     final ApiResponseModel response = await ApiService.put(
-        path: 'courses/update-course/${course['courseId']}', body: course);
+        path: 'courses/update-course/$id', body: course);
 
     if (response.success) {
       courses.insert(0, CourseModel.fromMap(course));
       Get.back();
       Get.snackbar('Success', 'Course updated successfully');
-    }
+    }else{print('$id');}
+    loading(false);
     update();
   }
 

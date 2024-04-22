@@ -122,6 +122,7 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
   Widget build(BuildContext context) {
     ScrollController scrollController = ScrollController();
     return Scaffold(
+      backgroundColor:Colors.white,
       body: NestedScrollView(
         controller: scrollController,
         headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
