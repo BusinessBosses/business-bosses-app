@@ -8,7 +8,6 @@ import 'package:business_bosses_v2/features/courses/presentation/course_history.
 import 'package:business_bosses_v2/features/donations/presentation/create_donations.dart';
 import 'package:business_bosses_v2/features/donations/presentation/donations.dart';
 import 'package:business_bosses_v2/features/donations/presentation/donations_history.dart';
-import 'package:business_bosses_v2/features/donations/presentation/expandeddonationsscren.dart';
 import 'package:business_bosses_v2/features/home/all_communities_screen.dart';
 import 'package:business_bosses_v2/features/home/controller/commumities_controller.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
@@ -31,7 +30,6 @@ import 'package:business_bosses_v2/features/authentication/presentation/login_sc
 import 'package:business_bosses_v2/features/authentication/presentation/register_screen.dart';
 import 'package:business_bosses_v2/features/chat/chat_screen.dart';
 import 'package:business_bosses_v2/features/connects/presentation/all_connections_screen.dart';
-import 'package:business_bosses_v2/features/forum/controller/create_bossup_controller.dart';
 import 'package:business_bosses_v2/features/forum/controller/create_forum_controller.dart';
 import 'package:business_bosses_v2/features/forum/controller/forum_controller.dart';
 import 'package:business_bosses_v2/features/forum/presentation/all_forum_screen.dart';
@@ -41,7 +39,6 @@ import 'package:business_bosses_v2/features/moreinfoscreens/bossuppartner.dart';
 import 'package:business_bosses_v2/features/notifications/controller/notification_controller.dart';
 import 'package:business_bosses_v2/features/notifications/notificationsscreen.dart';
 import 'package:business_bosses_v2/features/posts/presentation/create_post_screen.dart';
-import 'package:business_bosses_v2/features/posts/presentation/post_details_screen.dart';
 import 'package:business_bosses_v2/analytics/presentation/analysescreen.dart';
 import 'package:business_bosses_v2/features/profile/change_password_screen.dart';
 import 'package:business_bosses_v2/features/profile/presentation/myprofilescreen.dart';
@@ -59,7 +56,6 @@ import 'package:business_bosses_v2/features/premium/premiumscreen.dart';
 import 'package:business_bosses_v2/features/premium/reviewpayment.dart';
 import 'package:get/get.dart';
 
-import '../features/forum/presentation/create_bossup_screen.dart';
 import '../features/settings/delete_account_screen.dart';
 
 ///NAV INITIALIZATIONS
@@ -148,7 +144,7 @@ var routes = [
   ),
   GetPage(
     name: Routes.allforumscreen,
-    page: () => const AllForumScreen(),
+    page: () => AllForumScreen(),
     binding: BindingsBuilder.put(() => ForumController()),
   ),
   GetPage(
@@ -279,10 +275,6 @@ var routes = [
   GetPage(
     name: Routes.createdonationsscreen,
     page: () => const CreateDonationScreen(),
-  ),
-  GetPage(
-    name: Routes.expandeddonationsscreen,
-    page: () => const ExpandedDonationScreen(),
   ),
   GetPage(
     name: Routes.donationshistoryscreen,

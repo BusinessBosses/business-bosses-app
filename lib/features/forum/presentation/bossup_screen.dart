@@ -461,20 +461,57 @@ class _BossUpSectionState extends State<BossUpSection> {
                                                   ScaffoldMessenger.of(context)
                                                       .showSnackBar(snackBar);
                                                 } else {
-                                                  Get.to(
-                                                    CreateBossUpScreen(
-                                                        industryModel:
-                                                            widget.industry),
-                                                    arguments: <String,
-                                                        Object?>{
-                                                      'isBossUp': true,
-                                                      'industryId': widget
-                                                          .industry.industryId
-                                                    },
-                                                    binding: BindingsBuilder
-                                                        .put(() =>
-                                                            CreateBossUpController()),
-                                                  );
+                                                  if (widget
+                                                          .industry.industry ==
+                                                      'Boss Up Challenge ') {
+                                                    Get.to(
+                                                      CreateBossUpScreen(
+                                                          industryModel:
+                                                              widget.industry),
+                                                      arguments: <String,
+                                                          Object?>{
+                                                        'isBossUp': true,
+                                                        'industryId': widget
+                                                            .industry.industryId
+                                                      },
+                                                      binding: BindingsBuilder
+                                                          .put(() =>
+                                                              CreateBossUpController()),
+                                                    );
+                                                  } else {
+                                                    if (_myProfile.myProfile
+                                                        .postChallenges!
+                                                        .contains(widget
+                                                            .industry
+                                                            .industryId)) {
+                                                      const SnackBar snackBar =
+                                                          SnackBar(
+                                                        duration: Duration(
+                                                            seconds: 4),
+                                                        content: Text(
+                                                            'You can only post once in a challenge'),
+                                                      );
+                                                      ScaffoldMessenger.of(
+                                                              context)
+                                                          .showSnackBar(
+                                                              snackBar);
+                                                      return;
+                                                    }
+                                                    Get.to(
+                                                      CreateBossUpScreen(
+                                                          industryModel:
+                                                              widget.industry),
+                                                      arguments: <String,
+                                                          Object?>{
+                                                        'isBossUp': true,
+                                                        'industryId': widget
+                                                            .industry.industryId
+                                                      },
+                                                      binding: BindingsBuilder
+                                                          .put(() =>
+                                                              CreateBossUpController()),
+                                                    );
+                                                  }
                                                 }
                                               },
                                               child: Row(

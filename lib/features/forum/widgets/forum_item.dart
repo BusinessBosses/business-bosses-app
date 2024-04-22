@@ -41,10 +41,6 @@ class ForumItem extends StatefulWidget {
   const ForumItem({
     Key? key,
     required this.forum,
-    // this.commented,
-    // this.likeUnlikeForum,
-    // this.coinUncoinForum,
-    // this.onUpdateForum,
     this.controller,
     this.isBossUp = false,
   }) : super(key: key);
@@ -862,6 +858,8 @@ class _ForumItemState extends State<ForumItem> {
                   }
 
                   if (Get.isRegistered<BossUpController>()) {
+                    profileController.myProfile.postChallenges
+                        ?.remove(widget.forum.industryId);
                     Get.find<BossUpController>()
                         .deleteForum(widget.forum.forumId);
                   }

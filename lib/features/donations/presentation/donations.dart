@@ -1,5 +1,6 @@
 import 'package:business_bosses_v2/features/donations/controller/donations_controller.dart';
-import 'package:business_bosses_v2/features/donations/widgets/donationitem.dart';
+import 'package:business_bosses_v2/features/donations/presentation/donations_history.dart';
+import 'package:business_bosses_v2/features/donations/widgets/donation_item.dart';
 import 'package:business_bosses_v2/features/forum/widgets/joinedbutton.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
@@ -75,8 +76,9 @@ class _DonationsPageState extends State<DonationsPage> {
                                     const Text(
                                       'Info',
                                       style: TextStyle(
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.w700),
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w700,
+                                      ),
                                     ),
                                     const SizedBox(
                                       width: 5,
@@ -164,7 +166,8 @@ class _DonationsPageState extends State<DonationsPage> {
                                     ),
                                     const Expanded(
                                         child: Padding(
-                                      padding: EdgeInsets.only(right: 30),
+                                      padding:
+                                          EdgeInsets.only(top: 25, right: 30),
                                       child: Text(
                                         // industry.description ??
                                         'Donate to Support a Project',
@@ -196,24 +199,28 @@ class _DonationsPageState extends State<DonationsPage> {
                                           Padding(
                                             padding:
                                                 const EdgeInsets.only(top: 5.0),
-                                            child: RichText(
-                                              text: TextSpan(
-                                                children: <InlineSpan>[
-                                                  TextSpan(
-                                                    text: 'Members (22)',
-                                                    style: const TextStyle(
-                                                      fontSize: 12,
-                                                      fontWeight:
-                                                          FontWeight.w600,
-                                                      color: primaryColorLT,
-                                                      decoration: TextDecoration
-                                                          .underline,
+                                            child: Obx(
+                                              () => RichText(
+                                                text: TextSpan(
+                                                  children: <InlineSpan>[
+                                                    TextSpan(
+                                                      text:
+                                                          'Members (${formatCount(donationsController.userIds.length)})',
+                                                      style: const TextStyle(
+                                                        fontSize: 12,
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                        color: primaryColorLT,
+                                                        decoration:
+                                                            TextDecoration
+                                                                .underline,
+                                                      ),
+                                                      recognizer:
+                                                          TapGestureRecognizer()
+                                                            ..onTap = () {},
                                                     ),
-                                                    recognizer:
-                                                        TapGestureRecognizer()
-                                                          ..onTap = () {},
-                                                  ),
-                                                ],
+                                                  ],
+                                                ),
                                               ),
                                             ),
                                           ),
@@ -233,21 +240,23 @@ class _DonationsPageState extends State<DonationsPage> {
                                           Padding(
                                             padding:
                                                 const EdgeInsets.only(top: 5.0),
-                                            child: RichText(
-                                              text: TextSpan(
-                                                children: <InlineSpan>[
-                                                  TextSpan(
-                                                    text: donationsController
-                                                        .donations.length
-                                                        .toString(),
-                                                    style: const TextStyle(
-                                                      fontSize: 12,
-                                                      color: textColor,
-                                                      fontWeight:
-                                                          FontWeight.w600,
+                                            child: Obx(
+                                              () => RichText(
+                                                text: TextSpan(
+                                                  children: <InlineSpan>[
+                                                    TextSpan(
+                                                      text: donationsController
+                                                          .donations.length
+                                                          .toString(),
+                                                      style: const TextStyle(
+                                                        fontSize: 12,
+                                                        color: textColor,
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                      ),
                                                     ),
-                                                  ),
-                                                ],
+                                                  ],
+                                                ),
                                               ),
                                             ),
                                           ),
@@ -256,12 +265,15 @@ class _DonationsPageState extends State<DonationsPage> {
                                       const Spacer(),
                                       Align(
                                         alignment: Alignment.centerRight,
-                                        child: JoinedButton(
-                                          false,
-                                          () {
-                                            // toggleJoinAndLeaveIndustry(
-                                            //     controller);
-                                          },
+                                        child: Obx(
+                                          () => JoinedButton(
+                                            donationsController.userIds
+                                                .contains(
+                                                    _myProfile.myProfile.uid),
+                                            () {
+                                              donationsController.joinGroup();
+                                            },
+                                          ),
                                         ),
                                       )
                                     ],
@@ -323,7 +335,7 @@ class _DonationsPageState extends State<DonationsPage> {
                                 ),
                                 GestureDetector(
                                   onTap: () {
-                                    Get.toNamed(Routes.donationshistoryscreen);
+                                    Get.to(() => const DonationsHistory());
                                   },
                                   child: Padding(
                                     padding: const EdgeInsets.only(
@@ -333,7 +345,7 @@ class _DonationsPageState extends State<DonationsPage> {
                                         crossAxisAlignment:
                                             WrapCrossAlignment.center,
                                         children: <Widget>[
-                                          Text('Donation History '),
+                                          const Text('Donation History '),
                                           SvgPicture.asset(
                                             'assets/svgs/nexticon.svg',
                                             color: textColor,

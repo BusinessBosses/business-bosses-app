@@ -1,10 +1,15 @@
 // ignore_for_file: always_specify_types
 
 import 'package:business_bosses_v2/action/action.dart';
+import 'package:business_bosses_v2/common/models/comment_model.dart';
+import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/common/widgets/typography/text_widget.dart';
+import 'package:business_bosses_v2/features/donations/controller/donations_controller.dart';
 import 'package:business_bosses_v2/features/donations/models/donations_model.dart';
+import 'package:business_bosses_v2/features/donations/presentation/expanded_donations_scren.dart';
+import 'package:business_bosses_v2/features/donations/widgets/donation_comment.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
-import 'package:business_bosses_v2/navigation/routes.dart';
+import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -27,7 +32,8 @@ class DonationItem extends StatefulWidget {
 }
 
 class _DonationItemState extends State<DonationItem> {
-  ProfileController profileController = Get.find();
+  final ProfileController profileController = Get.find();
+  final DonationsController donationsController = Get.find();
   List<String> blocked = <String>[];
 
   final List<PopupMenuEntry<String>> myPopupMore = <PopupMenuEntry<String>>[
@@ -82,6 +88,17 @@ class _DonationItemState extends State<DonationItem> {
 
   @override
   Widget build(BuildContext context) {
+    int timestampMs = widget.donation.timestamp!;
+
+    // Convert milliseconds to DateTime
+    DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(timestampMs);
+
+    // Calculate the difference between current time and the timestamp
+    Duration difference = DateTime.now().difference(dateTime);
+
+    // Format the duration
+    String formattedDifference = formatDuration(difference);
+
     return Container(
       decoration: const BoxDecoration(color: Colors.white),
       child: Column(
@@ -95,7 +112,16 @@ class _DonationItemState extends State<DonationItem> {
                 Stack(children: [
                   GestureDetector(
                     onTap: () {
-                      Get.toNamed(Routes.expandeddonationsscreen);
+                      widget.donation.setViews(widget.donation.views! + 1);
+                      ApiService.put(
+                          path: 'donation/approve/${widget.donation.id}',
+                          body: {
+                            'views': widget.donation.views! + 1,
+                            'isActive': true,
+                            'isApproved': true,
+                          });
+                      Get.to(() =>
+                          ExpandedDonationScreen(donation: widget.donation));
                     },
                     child: SizedBox(
                       height: 90,
@@ -108,6 +134,10 @@ class _DonationItemState extends State<DonationItem> {
                             color: Colors.black,
                             height: 200,
                             width: 200,
+                            child: widget.donation.images.isNotEmpty
+                                ? NetworkImageWithPlaceHolder(
+                                    imageUrl: widget.donation.images[0])
+                                : const SizedBox(),
                           ),
                         ),
                       ),
@@ -157,9 +187,10 @@ class _DonationItemState extends State<DonationItem> {
                               ),
                             ],
                           ),
-                          const Text(
-                            '70%',
-                            style: TextStyle(fontSize: 10, color: subtextColor),
+                          Text(
+                            '${((widget.donation.amountRecieved / widget.donation.targetAmount!) * 100).toString()}%',
+                            style: const TextStyle(
+                                fontSize: 10, color: subtextColor),
                           ),
                         ],
                       ),
@@ -168,12 +199,13 @@ class _DonationItemState extends State<DonationItem> {
                       ),
                       ClipRRect(
                         borderRadius: BorderRadius.circular(20),
-                        child: const LinearProgressIndicator(
-                          value: 0.4,
+                        child: LinearProgressIndicator(
+                          value: (widget.donation.amountRecieved /
+                              widget.donation.targetAmount!),
                           minHeight: 4,
                           backgroundColor: backgroundcolorinterface,
-                          valueColor:
-                              AlwaysStoppedAnimation<Color>(primaryColorLT),
+                          valueColor: const AlwaysStoppedAnimation<Color>(
+                              primaryColorLT),
                         ),
                       ),
                       const SizedBox(
@@ -411,11 +443,24 @@ class _DonationItemState extends State<DonationItem> {
           Row(
             children: <Widget>[
               TextButton.icon(
-                onPressed: () async {},
-                icon: SvgPicture.asset(
-                  'assets/svgs/like.svg',
-                  height: 15,
-                ),
+                onPressed: () async {
+                  donationsController.postLike(
+                    profileController.myProfile.uid,
+                    widget.donation.id,
+                    widget.donation.user!.uid,
+                  );
+                },
+                icon: widget.donation.likes
+                            ?.contains(profileController.myProfile.uid) ==
+                        true
+                    ? SvgPicture.asset(
+                        'assets/svgs/likefilled.svg',
+                        height: 15,
+                      )
+                    : SvgPicture.asset(
+                        'assets/svgs/like.svg',
+                        height: 15,
+                      ),
                 label: Text(
                   widget.donation.likes!.length.toString(),
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
@@ -425,7 +470,15 @@ class _DonationItemState extends State<DonationItem> {
                 ),
               ),
               TextButton.icon(
-                onPressed: () {},
+                onPressed: () {
+                  showModalBottomSheet(
+                    context: context,
+                    builder: (BuildContext context) => DonationCommentItem(
+                      donation: widget.donation,
+                      onComment: (CommentModel newComment) async {},
+                    ),
+                  );
+                },
                 icon: SvgPicture.asset(
                   'assets/svgs/comment.svg',
                   height: 15,
@@ -464,7 +517,7 @@ class _DonationItemState extends State<DonationItem> {
               Padding(
                 padding: const EdgeInsets.only(right: 15),
                 child: Text(
-                  '    Time',
+                  formattedDifference,
                   style: Theme.of(context)
                       .textTheme
                       .bodyMedium
@@ -485,6 +538,18 @@ class _DonationItemState extends State<DonationItem> {
         ],
       ),
     );
+  }
+
+  String formatDuration(Duration difference) {
+    if (difference.inDays > 0) {
+      return '${difference.inDays} ${difference.inDays == 1 ? 'day ago' : 'days ago'}';
+    } else if (difference.inHours > 0) {
+      return '${difference.inHours} ${difference.inHours == 1 ? 'hour ago' : 'hours ago'}';
+    } else if (difference.inMinutes > 0) {
+      return '${difference.inMinutes} ${difference.inMinutes == 1 ? 'minute ago' : 'minutes ago'}';
+    } else {
+      return 'just now';
+    }
   }
 
   // void _sharePost() {
