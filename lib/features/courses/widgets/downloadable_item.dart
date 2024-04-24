@@ -1,6 +1,8 @@
 // ignore_for_file: always_specify_types
 
 import 'dart:io';
+import 'dart:isolate';
+import 'dart:ui';
 
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
@@ -9,18 +11,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:path_provider/path_provider.dart';
 
 double downloadProgress = 0;
-  ValueNotifier downloadProgressNotifier = ValueNotifier(0);
-
-void downloadCallback(String id, int status, int progress) {
-  print('Download task ($id) is in status ($status) and progress (${progress / 100})');
-
-  var progresss = (progress / 100).toDouble();
-
-  downloadProgress = progresss;
-
-  downloadProgressNotifier.value = downloadProgress; // Update with downloadProgress
-}
-
+ValueNotifier downloadProgressNotifier = ValueNotifier(0);
 
 class DownloadableItem extends StatefulWidget {
   final String link;
@@ -29,7 +20,7 @@ class DownloadableItem extends StatefulWidget {
       {super.key, required this.link, required this.filename});
 
   @override
-  // ignore: library_private_types_in_public_api
+
   _DownloadableItemState createState() => _DownloadableItemState();
 }
 
@@ -37,6 +28,26 @@ class _DownloadableItemState extends State<DownloadableItem> {
   bool isDownloading = false;
   String? downloadTaskId;
 
+  int _progress = 0;
+
+  final ReceivePort _port = ReceivePort();
+
+  static void downloadCallback(String id, int status, int progress) {
+    // print(progress);
+   
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    _port.listen((message) {
+      setState(() {
+        _progress = message[2];
+        print(message);
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -73,7 +84,7 @@ class _DownloadableItemState extends State<DownloadableItem> {
                           strokeWidth: 8,
                           color: primaryColorLT,
                           backgroundColor: Colors.white,
-                          value: downloadProgress,
+                          value: _progress / 100,
                           strokeCap: StrokeCap.round,
                         ),
                       ])
@@ -90,12 +101,10 @@ class _DownloadableItemState extends State<DownloadableItem> {
   }
 
   Future<void> downloadFile({required String url}) async {
+    FlutterDownloader.registerCallback(downloadCallback);
     setState(() {
       isDownloading = true;
-      FlutterDownloader.registerCallback(downloadCallback);
     });
-
-
 
     Directory appDocDir = await getApplicationDocumentsDirectory();
     String appDocPath = appDocDir.path;
