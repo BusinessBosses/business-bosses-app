@@ -71,7 +71,7 @@ class _CreateDonationScreenState extends State<CreateDonationScreen> {
         key: scaffoldKey,
         appBar: AppBar(
           title: Text(
-            widget.donation != null ? 'Edit Donation' : 'Create a Donation',
+            widget.donation != null ? 'Update Donation' : 'Create a Donation',
           ),
           automaticallyImplyLeading: false,
           actions: <Widget>[
@@ -255,35 +255,39 @@ class _CreateDonationScreenState extends State<CreateDonationScreen> {
                   ],
                 ),
               ),
+              const SizedBox(height: 20,),
               if (_selectedImage != null || photo != null)
-                Stack(
-                  children: <Widget>[
-                    SizedBox(
-                      width: 100, // Adjust the width as needed
-                      height: 100, // Adjust the height as needed
-                      child: photo == null
-                          ? Image.file(_selectedImage!)
-                          : NetworkImageWithPlaceHolder(imageUrl: photo),
-                    ),
-                    Positioned(
-                      top: 25,
-                      right: 25,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle, // Make it a circle
-                          color: Colors.red
-                              .withOpacity(0.5), // Choose your desired color
-                        ),
-                        child: IconButton(
-                          icon: const Icon(
-                            Icons.close,
-                            color: Colors.white,
-                          ), // Close icon
-                          onPressed: _removeImage,
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal:15.0),
+                  child: Stack(
+                    children: <Widget>[
+                      SizedBox(
+                        width: 100, // Adjust the width as needed
+                        height: 100, // Adjust the height as needed
+                        child: photo == null
+                            ? Image.file(_selectedImage!)
+                            : NetworkImageWithPlaceHolder(imageUrl: photo),
+                      ),
+                      Positioned(
+                        top: 25,
+                        right: 25,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle, // Make it a circle
+                            color: Colors.red
+                                .withOpacity(0.5), // Choose your desired color
+                          ),
+                          child: IconButton(
+                            icon: const Icon(
+                              Icons.close,
+                              color: Colors.white,
+                            ), // Close icon
+                            onPressed: _removeImage,
+                          ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               const SizedBox(height: 8.0),
               Padding(

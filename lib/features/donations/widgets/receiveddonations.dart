@@ -17,13 +17,15 @@ class _ReceivedDonationsState extends State<ReceivedDonations> {
     return widget.history.isEmpty
         ? const SafetyModel(
             isLoading: false,
-            title: 'No Donations Found',
+            title: 'No Received Donations Found',
             icon: Icon(Icons.warning),
           )
         : ListView.builder(
             itemCount: widget.history.length,
             itemBuilder: (BuildContext context, int i) {
-              return DonationHistoryItem(item: widget.history[i], previousDate: '',);
+              final prevdate =
+                  i == 0 ? "" : formatDate(widget.history[i - 1]['date']);
+              return DonationHistoryItem(item: widget.history[i], previousDate: prevdate,);
             },
           );
   }

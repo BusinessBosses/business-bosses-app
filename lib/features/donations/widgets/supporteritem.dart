@@ -2,6 +2,7 @@ import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/features/donations/controller/donations_controller.dart';
 import 'package:business_bosses_v2/features/donations/models/donations_model.dart';
+import 'package:business_bosses_v2/utils/time_format.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -81,8 +82,7 @@ class _SupporterItemState extends State<SupporterItem> {
                                           donationsController.amounts[i];
 
                                       String formattedTime =
-                                          DateFormat('d\'th\' MMMM y - HH:mm')
-                                              .format(time);
+                                          TimeFormat.formatString(time.millisecondsSinceEpoch);
                                       return Padding(
                                         padding: const EdgeInsets.symmetric(
                                           horizontal: 15.0,

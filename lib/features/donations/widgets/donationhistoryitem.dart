@@ -164,15 +164,15 @@ class _DonationHistoryItemState extends State<DonationHistoryItem> {
     Duration difference = DateTime.now().difference(dateTime);
 
     if (difference.inDays > 365) {
-      return '${(difference.inDays / 365).floor()} years ago';
+      return '${(difference.inDays / 365).floor()} yrs ago';
     } else if (difference.inDays > 30) {
-      return '${(difference.inDays / 30).floor()} months ago';
+      return '${(difference.inDays / 30).floor()} mon ago';
     } else if (difference.inDays > 0) {
-      return '${difference.inDays} days ago';
+      return '${difference.inDays} d ago';
     } else if (difference.inHours > 0) {
-      return '${difference.inHours} hours ago';
+      return '${difference.inHours} hrs ago';
     } else if (difference.inMinutes > 0) {
-      return '${difference.inMinutes} minutes ago';
+      return '${difference.inMinutes} mins ago';
     } else {
       return 'just now';
     }
