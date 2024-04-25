@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:business_bosses_v2/common/models/comment_model.dart';
+import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/common/widgets/typography/text_widget.dart';
 import 'package:business_bosses_v2/features/donations/controller/donations_controller.dart';
 import 'package:business_bosses_v2/features/donations/models/donations_model.dart';
@@ -41,6 +42,8 @@ class _CreateDonationScreenState extends State<CreateDonationScreen> {
   bool isImageSelected = false;
   bool isYoutubeSelected = false;
   final TextEditingController descriptionController = TextEditingController();
+  final TextEditingController titleController = TextEditingController();
+  final TextEditingController priceController = TextEditingController();
   bool _shouldPromote = false;
   bool isProcessing = false;
   File? _selectedImage;
@@ -48,6 +51,14 @@ class _CreateDonationScreenState extends State<CreateDonationScreen> {
   @override
   void initState() {
     super.initState();
+
+    if (widget.donation != null) {
+      titleController.text = widget.donation!.title!;
+      descriptionController.text = widget.donation!.description!;
+      priceController.text = widget.donation!.targetAmount!.toString();
+      photo =
+          widget.donation!.images.isEmpty ? null : widget.donation!.images[0];
+    }
   }
 
   @override
@@ -58,8 +69,8 @@ class _CreateDonationScreenState extends State<CreateDonationScreen> {
         backgroundColor: backgroundcolorinterface,
         key: scaffoldKey,
         appBar: AppBar(
-          title: const Text(
-            'Create a Donation',
+          title: Text(
+            widget.donation != null ? 'Edit Donation' : 'Create a Donation',
           ),
           automaticallyImplyLeading: false,
           actions: <Widget>[
@@ -79,6 +90,7 @@ class _CreateDonationScreenState extends State<CreateDonationScreen> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 child: TextFormField(
+                  controller: titleController,
                   onChanged: (String val) {
                     title = val;
                   },
@@ -132,11 +144,12 @@ class _CreateDonationScreenState extends State<CreateDonationScreen> {
                           6, // Adjust the flex value to control the relative sizes
                       child: Stack(children: [
                         TextFormField(
+                          controller: priceController,
                           textInputAction: TextInputAction.next,
                           keyboardType: TextInputType.number,
                           maxLength: 15,
                           decoration: inputDecoration.copyWith(
-                            hintText: 'Enter Amount to raise eg 2000',
+                            hintText: 'Enter Amount to raise e.g 2000',
                           ),
                           onChanged: (String val) {
                             targetAmount = int.tryParse(val) ?? 0;
@@ -147,7 +160,7 @@ class _CreateDonationScreenState extends State<CreateDonationScreen> {
                             bottom: 0,
                             right: 10,
                             child: Text(
-                              '(\$20.00)',
+                              '(\$)',
                               style: TextStyle(color: textColor.withAlpha(100)),
                             ))
                       ]),
@@ -172,6 +185,7 @@ class _CreateDonationScreenState extends State<CreateDonationScreen> {
                             onTap: () {
                               setState(() {
                                 isVisible = false;
+                                _ytUrl = null;
                               });
                               _pickImage(context);
                             },
@@ -233,13 +247,16 @@ class _CreateDonationScreenState extends State<CreateDonationScreen> {
                   ],
                 ),
               ),
-              if (_selectedImage != null)
+              if (_selectedImage != null || photo != null)
                 Stack(
                   children: <Widget>[
                     SizedBox(
-                        width: 100, // Adjust the width as needed
-                        height: 100, // Adjust the height as needed
-                        child: Image.file(_selectedImage!)),
+                      width: 100, // Adjust the width as needed
+                      height: 100, // Adjust the height as needed
+                      child: photo == null
+                          ? Image.file(_selectedImage!)
+                          : NetworkImageWithPlaceHolder(imageUrl: photo),
+                    ),
                     Positioned(
                       top: 25,
                       right: 25,
@@ -298,67 +315,68 @@ class _CreateDonationScreenState extends State<CreateDonationScreen> {
                 height: 10,
               ),
               const SizedBox(height: 24.0),
-              Column(
-                children: <Widget>[
-                  Align(
-                    alignment: Alignment.center,
-                    child: Padding(
-                      padding: const EdgeInsets.only(
-                          top: 10, bottom: 10, left: 16, right: 16),
-                      child: Row(
-                        children: <Widget>[
-                          SvgPicture.asset('assets/svgs/rocket.svg'),
-                          const SizedBox(width: 15),
-                          const Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+              if (widget.donation != null)
+                Column(
+                  children: <Widget>[
+                    Align(
+                      alignment: Alignment.center,
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                            top: 10, bottom: 10, left: 16, right: 16),
+                        child: Row(
+                          children: <Widget>[
+                            SvgPicture.asset('assets/svgs/rocket.svg'),
+                            const SizedBox(width: 15),
+                            const Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Text(
+                                    'Boost this listing?',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 18,
+                                    ),
+                                  ),
+                                  Text(
+                                    'Reach a wider audience and get more views',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 11,
+                                      color: Color(0xFF777777),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Row(
                               children: <Widget>[
-                                Text(
-                                  'Boost this listing?',
+                                const Text(
+                                  'No',
                                   style: TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 18,
-                                  ),
+                                      fontSize: 8, fontWeight: FontWeight.w700),
                                 ),
-                                Text(
-                                  'Reach a wider audience and get more views',
+                                Switch(
+                                  value: _shouldPromote,
+                                  onChanged: (bool value) {
+                                    setState(() {
+                                      _shouldPromote = value;
+                                    });
+                                  },
+                                ),
+                                const Text(
+                                  'Yes',
                                   style: TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 11,
-                                    color: Color(0xFF777777),
-                                  ),
+                                      fontSize: 8, fontWeight: FontWeight.w700),
                                 ),
                               ],
                             ),
-                          ),
-                          Row(
-                            children: <Widget>[
-                              const Text(
-                                'No',
-                                style: TextStyle(
-                                    fontSize: 8, fontWeight: FontWeight.w700),
-                              ),
-                              Switch(
-                                value: _shouldPromote,
-                                onChanged: (bool value) {
-                                  setState(() {
-                                    _shouldPromote = value;
-                                  });
-                                },
-                              ),
-                              const Text(
-                                'Yes',
-                                style: TextStyle(
-                                    fontSize: 8, fontWeight: FontWeight.w700),
-                              ),
-                            ],
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                ],
-              ),
+                  ],
+                ),
               const SizedBox(height: 24.0),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -376,23 +394,38 @@ class _CreateDonationScreenState extends State<CreateDonationScreen> {
                         photo = response['fileUrl'];
                       }
                     }
-                    await donationsController.createDonation(<String, dynamic>{
-                      'categoryId': '6463a069-657d-47ae-b937-9a5d4c336811',
-                      'userId': profileController.myProfile.uid,
-                      'title': title,
-                      'description': descriptionController.text,
-                      'timestamp': DateTime.now().millisecondsSinceEpoch,
-                      'targetAmount': targetAmount,
-                      'youtubeUrls': _ytUrl,
-                      'images': photo != null ? [photo] : [],
-                      'comments': <CommentModel>[],
-                      'likes': [],
-                    });
+                    if (widget.donation != null) {
+                      await donationsController
+                          .updateDonation(<String, dynamic>{
+                        'isActive': true,
+                        'isApproved': true,
+                        'categoryId': '6463a069-657d-47ae-b937-9a5d4c336811',
+                        'title': titleController.text,
+                        'description': descriptionController.text,
+                        'targetAmount': int.tryParse(priceController.text),
+                        'youtubeUrls': _ytUrl,
+                        'images': photo != null ? [photo] : [],
+                      }, widget.donation!.id);
+                    } else {
+                      await donationsController
+                          .createDonation(<String, dynamic>{
+                        'categoryId': '6463a069-657d-47ae-b937-9a5d4c336811',
+                        'userId': profileController.myProfile.uid,
+                        'title': titleController.text,
+                        'description': descriptionController.text,
+                        'timestamp': DateTime.now().millisecondsSinceEpoch,
+                        'targetAmount': targetAmount,
+                        'youtubeUrls': _ytUrl,
+                        'images': photo != null ? [photo] : [],
+                        'comments': <CommentModel>[],
+                        'likes': [],
+                      });
+                    }
                     setState(() {
                       isProcessing = false;
                     });
                   },
-                  label: isUpdating ? 'Update Post' : 'Post',
+                  label: widget.donation != null ? 'Update Post' : 'Post',
                 ),
               ),
               const SizedBox(height: 30),
@@ -444,6 +477,7 @@ class _CreateDonationScreenState extends State<CreateDonationScreen> {
   void _removeImage() {
     setState(() {
       _selectedImage = null;
+      photo = null;
     });
   }
 }
