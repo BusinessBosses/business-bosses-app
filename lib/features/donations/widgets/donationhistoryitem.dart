@@ -62,61 +62,71 @@ class _DonationHistoryItemState extends State<DonationHistoryItem> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Wrap(crossAxisAlignment: WrapCrossAlignment.center, children: [
-                  Container(
-                    padding: const EdgeInsets.all(10),
-                    width: 40,
-                    height: 40,
-                    decoration: BoxDecoration(
-                        color: backgroundColor,
-                        borderRadius: BorderRadius.circular(10)),
-                    child: widget.item['type'] == 'donated'
-                        ? SvgPicture.asset(
-                            'assets/svgs/upicon.svg',
-                            color: Colors.red,
-                          )
-                        : SvgPicture.asset(
-                            'assets/svgs/downicon.svg',
-                            color: Colors.green,
+                Expanded(
+                  child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(10),
+                          width: 40,
+                          height: 40,
+                          decoration: BoxDecoration(
+                              color: backgroundColor,
+                              borderRadius: BorderRadius.circular(10)),
+                          child: widget.item['type'] == 'donated'
+                              ? SvgPicture.asset(
+                                  'assets/svgs/upicon.svg',
+                                  color: Colors.red,
+                                )
+                              : SvgPicture.asset(
+                                  'assets/svgs/downicon.svg',
+                                  color: Colors.green,
+                                ),
+                        ),
+                        const SizedBox(
+                          width: 15,
+                        ),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            // mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                widget.item['donation']['title'],
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.w700, fontSize: 18),
+                                maxLines: 2,
+                                overflow: TextOverflow
+                                    .ellipsis, // Optional: Handle overflow
+                              ),
+                              Wrap(
+                                  crossAxisAlignment: WrapCrossAlignment.center,
+                                  children: [
+                                    NetworkImageWithPlaceHolder(
+                                      imageUrl:
+                                          profileController.myProfile.photoUrl ??
+                                              '',
+                                      radius: 200,
+                                      width: 25,
+                                      height: 25,
+                                      placeHolder: Icons.person,
+                                      iconSize: 20.0,
+                                      fit: BoxFit.cover,
+                                    ),
+                                    const SizedBox(
+                                      width: 5,
+                                    ),
+                                    Text(profileController.myProfile.name ??
+                                        profileController.myProfile.username)
+                                  ]),
+                            ],
                           ),
-                  ),
-                  const SizedBox(
-                    width: 15,
-                  ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        widget.item['donation']['title'],
-                        style: const TextStyle(
-                            fontWeight: FontWeight.w700, fontSize: 18),
-                        maxLines: 2,
-                        overflow:
-                            TextOverflow.ellipsis, // Optional: Handle overflow
-                      ),
-                      Wrap(
-                          crossAxisAlignment: WrapCrossAlignment.center,
-                          children: [
-                            NetworkImageWithPlaceHolder(
-                              imageUrl:
-                                  profileController.myProfile.photoUrl ?? '',
-                              radius: 200,
-                              width: 25,
-                              height: 25,
-                              placeHolder: Icons.person,
-                              iconSize: 20.0,
-                              fit: BoxFit.cover,
-                            ),
-                            const SizedBox(
-                              width: 5,
-                            ),
-                            Text(profileController.myProfile.name ??
-                                profileController.myProfile.username)
-                          ]),
-                    ],
-                  ),
-                ]),
+                        ),
+                      ]),
+                ),
+                const SizedBox(
+                          width: 15,
+                        ),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
@@ -155,52 +165,50 @@ class _DonationHistoryItemState extends State<DonationHistoryItem> {
       ),
     );
   }
-
-
 }
 
-  String formatDateTimeToAgo(String dateTimeString) {
-    DateTime dateTime = DateTime.parse(dateTimeString);
-    Duration difference = DateTime.now().difference(dateTime);
+String formatDateTimeToAgo(String dateTimeString) {
+  DateTime dateTime = DateTime.parse(dateTimeString);
+  Duration difference = DateTime.now().difference(dateTime);
 
-    if (difference.inDays > 365) {
-      return '${(difference.inDays / 365).floor()} yrs ago';
-    } else if (difference.inDays > 30) {
-      return '${(difference.inDays / 30).floor()} mon ago';
-    } else if (difference.inDays > 0) {
-      return '${difference.inDays} d ago';
-    } else if (difference.inHours > 0) {
-      return '${difference.inHours} hrs ago';
-    } else if (difference.inMinutes > 0) {
-      return '${difference.inMinutes} mins ago';
-    } else {
-      return 'just now';
-    }
+  if (difference.inDays > 365) {
+    return '${(difference.inDays / 365).floor()} yrs ago';
+  } else if (difference.inDays > 30) {
+    return '${(difference.inDays / 30).floor()} mon ago';
+  } else if (difference.inDays > 0) {
+    return '${difference.inDays} d ago';
+  } else if (difference.inHours > 0) {
+    return '${difference.inHours} hrs ago';
+  } else if (difference.inMinutes > 0) {
+    return '${difference.inMinutes} mins ago';
+  } else {
+    return 'just now';
   }
+}
 
-  String _getDaySuffix(int day) {
-    if (day >= 11 && day <= 13) {
+String _getDaySuffix(int day) {
+  if (day >= 11 && day <= 13) {
+    return 'th';
+  }
+  switch (day % 10) {
+    case 1:
+      return 'st';
+    case 2:
+      return 'nd';
+    case 3:
+      return 'rd';
+    default:
       return 'th';
-    }
-    switch (day % 10) {
-      case 1:
-        return 'st';
-      case 2:
-        return 'nd';
-      case 3:
-        return 'rd';
-      default:
-        return 'th';
-    }
   }
+}
 
-  String formatDate(String dateString) {
-    DateTime dateTime = DateTime.parse(dateString);
-    String day = DateFormat('d').format(dateTime);
-    String month = DateFormat('MMM').format(dateTime);
-    String year = DateFormat('y').format(dateTime);
+String formatDate(String dateString) {
+  DateTime dateTime = DateTime.parse(dateString);
+  String day = DateFormat('d').format(dateTime);
+  String month = DateFormat('MMM').format(dateTime);
+  String year = DateFormat('y').format(dateTime);
 
-    String suffix = _getDaySuffix(int.parse(day));
+  String suffix = _getDaySuffix(int.parse(day));
 
-    return '$day$suffix $month $year';
-  }
+  return '$day$suffix $month $year';
+}
