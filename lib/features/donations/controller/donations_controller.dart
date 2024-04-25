@@ -1,5 +1,7 @@
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/features/donations/models/donations_model.dart';
+import 'package:business_bosses_v2/features/donations/presentation/donation_created.dart';
+import 'package:business_bosses_v2/features/forum/models/industry.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/utils/constants/constants.dart';
@@ -61,13 +63,28 @@ class DonationsController extends GetxController {
     ApiResponseModel response =
         await ApiService.post(path: 'donation', body: donation);
     if (response.success) {
-      // donations.insert(
-      //     0,
-      //     DonationModel.fromMap(
-      //         <String, dynamic>{...donation, 'id': response.data['id']}));
+      Get.to(() => const DonationCreated());
+    }
+  }
+
+  Future<void> updateDonation(Map<String, dynamic> donation, String id) async {
+    ApiResponseModel response =
+        await ApiService.put(path: 'donation/approve/$id', body: donation);
+    if (response.success) {
+      final int donationIndex =
+          donations.indexWhere((DonationModel donation) => donation.id == id);
+
+      // Update the donation in the list with the updated data
+      if (donationIndex != -1) {
+        Map<String, dynamic> mergedData = {
+          ...donations[donationIndex].toMap(),
+          ...donation
+        };
+        donations[donationIndex] = DonationModel.fromMap(mergedData);
+      }
       update();
       Get.back();
-      Get.snackbar('Success', 'Donations Pending Approval!');
+      Get.snackbar('Success', 'Donation Updated Succesfully!');
     }
   }
 
@@ -83,6 +100,16 @@ class DonationsController extends GetxController {
       } else {
         // If it doesn't exist, add it
         userIds.add(profileController.myProfile.uid);
+        final Map<String, dynamic> marketData = <String, dynamic>{
+          'industryId': 'donation_id',
+          'categoryId': '6463a069-657d-47ae-b937-9a5d4c336811',
+          'description': '- Donate to support to a product \n - Find Donations',
+          'industry': 'Donation',
+          'photo': 'http://44.210.87.234/learningImages/marketplace.jpg',
+          'active': true,
+          'timestamp': DateTime.now().millisecondsSinceEpoch
+        };
+        profileController.toggleInterests(Industry.toObject(marketData));
       }
     }
     update();
@@ -114,6 +141,19 @@ class DonationsController extends GetxController {
       }
     }
     return false;
+  }
+
+  Future<void> claimAmount(DonationModel donationModel) async {
+    ApiResponseModel response = await ApiService.put(
+        path: 'donation-transactions/claim-reward',
+        body: <String, dynamic>{
+          'donationId': donationModel.id,
+          'userId': profileController.myProfile.uid
+        });
+    if (response.success) {
+      profileController.myProfile
+          .incrementCoinsCount(donationModel.amountRecieved);
+    }
   }
 
   Future<void> initHistory() async {

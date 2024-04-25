@@ -6,8 +6,9 @@ import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder
 import 'package:business_bosses_v2/common/widgets/typography/text_widget.dart';
 import 'package:business_bosses_v2/features/donations/controller/donations_controller.dart';
 import 'package:business_bosses_v2/features/donations/models/donations_model.dart';
-import 'package:business_bosses_v2/features/donations/presentation/expanded_donations_scren.dart';
+import 'package:business_bosses_v2/features/donations/presentation/expanded_donations_screen.dart';
 import 'package:business_bosses_v2/features/donations/widgets/donation_comment.dart';
+import 'package:business_bosses_v2/features/posts/widgets/youtube_display.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
@@ -137,7 +138,10 @@ class _DonationItemState extends State<DonationItem> {
                             child: widget.donation.images.isNotEmpty
                                 ? NetworkImageWithPlaceHolder(
                                     imageUrl: widget.donation.images[0])
-                                : const SizedBox(),
+                                : widget.donation.youtubeUrls != null
+                                    ? YoutubeDisplay(
+                                        widget.donation.youtubeUrls!)
+                                    : const SizedBox(),
                           ),
                         ),
                       ),
@@ -496,7 +500,7 @@ class _DonationItemState extends State<DonationItem> {
                 icon: const Icon(Icons.remove_red_eye_outlined,
                     size: 19, color: Colors.black),
                 label: Text(
-                  '${widget.donation.views.toString()} Views',
+                  widget.donation.views.toString(),
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         fontWeight: FontWeight.w700,
                         color: textColor.withOpacity(0.8),
