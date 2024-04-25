@@ -1,4 +1,5 @@
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
+import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/features/donations/models/donations_model.dart';
 import 'package:business_bosses_v2/features/donations/presentation/donation_created.dart';
 import 'package:business_bosses_v2/features/forum/models/industry.dart';
@@ -12,6 +13,9 @@ class DonationsController extends GetxController {
   late IO.Socket socket;
   final ProfileController profileController = Get.find();
   RxList<DonationModel> donations = <DonationModel>[].obs;
+  RxList<UserModel> users = <UserModel>[].obs;
+  RxList<dynamic> times = <dynamic>[].obs;
+  RxList<dynamic> amounts = <dynamic>[].obs;
   RxList<String> userIds = <String>[].obs;
   List<dynamic> myHistory = <dynamic>[];
   List<dynamic> myHistoryReceived = <dynamic>[];
@@ -20,6 +24,8 @@ class DonationsController extends GetxController {
   RxBool error = RxBool(false);
   RxBool hLoading = RxBool(false);
   RxBool hError = RxBool(false);
+  RxBool tLoading = RxBool(false);
+  RxBool tError = RxBool(false);
 
   @override
   void onInit() async {
@@ -57,6 +63,37 @@ class DonationsController extends GetxController {
       loading(false); // Set loading back to false after fetching data
     }
     update();
+  }
+
+  Future<void> fetchDonationTransactions(DonationModel donation) async {
+    try {
+      tLoading(true); // Set loading to true before fetching data
+      ApiResponseModel response = await ApiService.get(
+          path: 'donation-transactions/donation/${donation.id}');
+
+      // Clear previous donations before adding new ones
+      users.clear();
+      times.clear();
+      amounts.clear();
+      if (response.success) {
+        for (int i = 0; i < response.data['rows'].length; i++) {
+          if (response.data['rows'][i]['user'] != null) {
+            UserModel user = UserModel.fromMap(<String, dynamic>{
+              ...response.data['rows'][i]['user'],
+            });
+            times.add(response.data['rows'][i]['date']);
+            amounts.add(response.data['rows'][i]['amount']);
+            users.add(user);
+          }
+        }
+      }
+      tError(false);
+    } catch (e) {
+      tError(true); // Set error to true if there's an error
+    } finally {
+      tLoading(false); // Set loading back to false after fetching data
+      update();
+    }
   }
 
   Future<void> createDonation(Map<String, dynamic> donation) async {

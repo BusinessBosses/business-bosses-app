@@ -371,22 +371,25 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
                                     showModalBottomSheet(
                                         context: context,
                                         builder: (BuildContext context) =>
-                                            const SupporterItem());
+                                            SupporterItem(
+                                              donation: widget.donation,
+                                            ));
                                   },
                                   child: Column(
                                     children: <Widget>[
-                                      const Wrap(
+                                      Wrap(
                                         crossAxisAlignment:
                                             WrapCrossAlignment.center,
                                         children: <Widget>[
                                           Text(
-                                            '100',
-                                            style: TextStyle(
+                                            widget.donation.transactions!.length
+                                                .toString(),
+                                            style: const TextStyle(
                                                 fontSize: 10,
                                                 color: subtextColor,
                                                 fontWeight: FontWeight.w700),
                                           ),
-                                          Text(
+                                          const Text(
                                             ' Supporters',
                                             style: TextStyle(
                                                 fontSize: 10,
@@ -582,7 +585,9 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
                         ),
                       ),
                       if (widget.donation.user?.uid !=
-                          profileController.myProfile.uid)
+                              profileController.myProfile.uid &&
+                          widget.donation.amountRecieved <
+                              widget.donation.targetAmount!)
                         Positioned(
                           left: 0,
                           right: 0,
@@ -698,6 +703,8 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
                                   setState(() {
                                     isLoading = true;
                                   });
+                                  donationsController
+                                      .claimAmount(widget.donation);
                                   setState(() {
                                     isLoading = false;
                                   });
