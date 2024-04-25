@@ -240,17 +240,17 @@ class _DonationItemState extends State<DonationItem> {
                               ),
                             ],
                           ),
-                          const Wrap(
+                          Wrap(
                             crossAxisAlignment: WrapCrossAlignment.center,
                             children: [
                               Text(
-                                '100',
-                                style: TextStyle(
+                                widget.donation.transactions!.length.toString(),
+                                style: const TextStyle(
                                     fontSize: 10,
                                     color: subtextColor,
                                     fontWeight: FontWeight.w700),
                               ),
-                              Text(
+                              const Text(
                                 ' Supporters',
                                 style: TextStyle(
                                     fontSize: 10, color: subtextColor),
