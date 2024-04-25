@@ -7,6 +7,7 @@ import 'package:business_bosses_v2/features/donations/models/donations_model.dar
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
@@ -144,6 +145,10 @@ class _CreateDonationScreenState extends State<CreateDonationScreen> {
                           6, // Adjust the flex value to control the relative sizes
                       child: Stack(children: [
                         TextFormField(
+                          inputFormatters: [
+                            FilteringTextInputFormatter.allow(
+                                RegExp(r'[0-9]')), // Allow only numbers
+                          ],
                           controller: priceController,
                           textInputAction: TextInputAction.next,
                           keyboardType: TextInputType.number,
@@ -153,6 +158,7 @@ class _CreateDonationScreenState extends State<CreateDonationScreen> {
                           ),
                           onChanged: (String val) {
                             targetAmount = int.tryParse(val) ?? 0;
+                              setState(() {});
                           },
                         ),
                         Positioned(
@@ -160,7 +166,9 @@ class _CreateDonationScreenState extends State<CreateDonationScreen> {
                             bottom: 0,
                             right: 10,
                             child: Text(
-                              '(\$)',
+                              priceController.text != ''
+                                  ? ' \$${num.parse(priceController.text) / 100}'
+                                  : '\$0',
                               style: TextStyle(color: textColor.withAlpha(100)),
                             ))
                       ]),

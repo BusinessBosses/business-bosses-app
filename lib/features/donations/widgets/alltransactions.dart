@@ -25,7 +25,7 @@ class _AllTransactionsState extends State<AllTransactions> {
             itemBuilder: (BuildContext context, int i) {
               final history = widget.history[i];
               return DonationHistoryItem(
-                item: history,
+                item: history, previousDate: '',
               );
             },
           );

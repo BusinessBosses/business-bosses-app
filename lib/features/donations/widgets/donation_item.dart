@@ -10,6 +10,7 @@ import 'package:business_bosses_v2/features/donations/presentation/expanded_dona
 import 'package:business_bosses_v2/features/donations/widgets/donation_comment.dart';
 import 'package:business_bosses_v2/features/posts/widgets/youtube_display.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
+import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
@@ -488,7 +489,7 @@ class _DonationItemState extends State<DonationItem> {
                   height: 15,
                 ),
                 label: Text(
-                  '${widget.donation.comments?.length.toString()} Comments',
+                  '${widget.donation.comments?.length.toString()}',
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         fontWeight: FontWeight.w700,
                         color: textColor.withOpacity(0.8),
@@ -518,16 +519,56 @@ class _DonationItemState extends State<DonationItem> {
                 ),
               ),
               const Spacer(),
-              Padding(
-                padding: const EdgeInsets.only(right: 15),
-                child: Text(
-                  formattedDifference,
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyMedium
-                      ?.copyWith(color: textColor.withOpacity(0.4)),
-                ),
-              )
+              widget.donation.user!.uid == profileController.myProfile.uid
+                  ? Padding(
+                      padding: const EdgeInsets.only(right: 15),
+                      child: Text(
+                        formattedDifference,
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyMedium
+                            ?.copyWith(color: textColor.withOpacity(0.4)),
+                      ),
+                    )
+                  : Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 15.0),
+                        child: GestureDetector(
+                          onTap: () {
+                            widget.donation
+                                .setViews(widget.donation.views! + 1);
+                            ApiService.put(
+                                path: 'donation/approve/${widget.donation.id}',
+                                body: {
+                                  'views': widget.donation.views! + 1,
+                                  'isActive': true,
+                                  'isApproved': true,
+                                });
+                            Get.to(() => ExpandedDonationScreen(
+                                donation: widget.donation));
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(8),
+                                border: Border.all(
+                                    width: 1.5, color: primaryColorLT)),
+                            child: const Center(
+                              child: Padding(
+                                padding: EdgeInsets.all(5.0),
+                                child: Text(
+                                  'Donate',
+                                  style: TextStyle(
+                                    color: primaryColorLT,
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 11,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
             ],
           ),
           Container(

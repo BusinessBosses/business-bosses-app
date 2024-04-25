@@ -150,10 +150,9 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
                                             true
                                         ? Row(
                                             children: <Widget>[
-                                              const TextWidget(
-                                                text: 'Block @${''
-                                                    // widget.Donation.user?.name
-                                                    }',
+                                              TextWidget(
+                                                text:
+                                                    'Block @${widget.donation.user?.name}',
                                                 color: Colors.blue,
                                               ),
                                               const SizedBox(width: 5),
@@ -164,10 +163,9 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
                                               )
                                             ],
                                           )
-                                        : const TextWidget(
-                                            text: 'Block @${''
-                                                // widget.Donation.user?.name
-                                                }',
+                                        : TextWidget(
+                                            text:
+                                                'Block @${widget.donation.user?.name}',
                                             color: Colors.blue,
                                           ),
                                   ),
@@ -258,12 +256,12 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
               child: Column(
                 children: <Widget>[
                   Stack(children: <Widget>[
-                    Container(
-                      color: Colors.black,
+                    SizedBox(
                       height: 300,
+                      width: double.infinity,
                       child: widget.donation.images.isNotEmpty
                           ? NetworkImageWithPlaceHolder(
-                              imageUrl: widget.donation.images[0])
+                              radius: 0, imageUrl: widget.donation.images[0])
                           : const SizedBox(),
                     ),
                     Stack(children: <Widget>[
@@ -658,9 +656,12 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
                                 },
                                 child:
                                     isLoading // Conditional widget to show loader or donate text
-                                        ? const CircularProgressIndicator(
-                                            color: Colors
-                                                .white) // Show loader when _isLoading is true
+                                        ? const SizedBox(
+                                          width: 20,
+                                          height: 20,
+                                          child: CircularProgressIndicator(
+                                              color: Colors.white),
+                                        ) // Show loader when _isLoading is true
                                         : const Row(
                                             mainAxisSize: MainAxisSize.min,
                                             children: <Widget>[
@@ -735,6 +736,8 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
                   Padding(
                     padding: const EdgeInsets.all(15.0),
                     child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -831,7 +834,7 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
                               height: 15,
                             ),
                             label: Text(
-                              '${widget.donation.comments?.length} Comments',
+                              '${widget.donation.comments?.length}',
                               style: Theme.of(context)
                                   .textTheme
                                   .bodyMedium
@@ -846,7 +849,7 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
                             icon: const Icon(Icons.remove_red_eye_outlined,
                                 size: 19, color: Colors.black),
                             label: Text(
-                              '${widget.donation.views} Views',
+                              '${widget.donation.views}',
                               style: Theme.of(context)
                                   .textTheme
                                   .bodyMedium

@@ -10,9 +10,11 @@ import 'package:intl/intl.dart';
 
 class DonationHistoryItem extends StatefulWidget {
   final dynamic item;
+  final String? previousDate;
   const DonationHistoryItem({
     super.key,
     this.item,
+    required this.previousDate,
   });
 
   @override
@@ -33,13 +35,16 @@ class _DonationHistoryItemState extends State<DonationHistoryItem> {
           const SizedBox(
             height: 5,
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15.0),
-            child: Text(
-              formatDate(dateTimeString),
-              style: TextStyle(
-                  color: textColor.withOpacity(0.4),
-                  fontWeight: FontWeight.w700),
+          Visibility(
+            visible: widget.previousDate != formatDate(dateTimeString),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15.0),
+              child: Text(
+                formatDate(dateTimeString),
+                style: TextStyle(
+                    color: textColor.withOpacity(0.4),
+                    fontWeight: FontWeight.w700),
+              ),
             ),
           ),
           const SizedBox(
@@ -50,63 +55,7 @@ class _DonationHistoryItemState extends State<DonationHistoryItem> {
             color: backgroundcolorinterface,
           ),
           const SizedBox(
-            height: 5,
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15.0),
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
-              decoration: BoxDecoration(
-                  color: backgroundcolorinterface,
-                  borderRadius: BorderRadius.circular(30)),
-              child: Text(
-                  widget.item['type'] == 'donated' ? 'Outgone' : 'Received'),
-            ),
-          ),
-          const SizedBox(
-            height: 5,
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15.0),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const SizedBox(
-                  height: 20,
-                ),
-                Expanded(
-                  child: Text(
-                    widget.item['donation']['title'],
-                    style: const TextStyle(
-                        fontWeight: FontWeight.w700, fontSize: 18),
-                    maxLines: 2,
-                    overflow:
-                        TextOverflow.ellipsis, // Optional: Handle overflow
-                  ),
-                ),
-                const SizedBox(
-                  width: 50,
-                ),
-                Wrap(
-                  crossAxisAlignment: WrapCrossAlignment.center,
-                  children: [
-                    const Text('+',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w900, fontSize: 18)),
-                    SvgPicture.asset('assets/svgs/coin.svg'),
-                    Text(widget.item['amount'],
-                        style: const TextStyle(
-                            fontWeight: FontWeight.w900, fontSize: 18)),
-                    Text('(\$${widget.item['amount']})',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w700,
-                            fontSize: 18,
-                            color: textColor.withOpacity(0.4)))
-                  ],
-                ),
-              ],
-            ),
+            height: 10,
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 15.0),
@@ -114,27 +63,88 @@ class _DonationHistoryItemState extends State<DonationHistoryItem> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Wrap(crossAxisAlignment: WrapCrossAlignment.center, children: [
-                  NetworkImageWithPlaceHolder(
-                    imageUrl: profileController.myProfile.photoUrl ?? '',
-                    radius: 200,
-                    width: 25,
-                    height: 25,
-                    placeHolder: Icons.person,
-                    iconSize: 20.0,
-                    fit: BoxFit.cover,
+                  Container(
+                    padding: const EdgeInsets.all(10),
+                    width: 40,
+                    height: 40,
+                    decoration: BoxDecoration(
+                        color: backgroundColor,
+                        borderRadius: BorderRadius.circular(10)),
+                    child: widget.item['type'] == 'donated'
+                        ? SvgPicture.asset(
+                            'assets/svgs/upicon.svg',
+                            color: Colors.red,
+                          )
+                        : SvgPicture.asset(
+                            'assets/svgs/downicon.svg',
+                            color: Colors.green,
+                          ),
                   ),
                   const SizedBox(
-                    width: 5,
+                    width: 15,
                   ),
-                  Text(profileController.myProfile.name ??
-                      profileController.myProfile.username)
-                ]),
-                Text(
-                  formatDateTimeToAgo(dateTimeString),
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: textColor.withOpacity(0.4),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        widget.item['donation']['title'],
+                        style: const TextStyle(
+                            fontWeight: FontWeight.w700, fontSize: 18),
+                        maxLines: 2,
+                        overflow:
+                            TextOverflow.ellipsis, // Optional: Handle overflow
                       ),
-                ),
+                      Wrap(
+                          crossAxisAlignment: WrapCrossAlignment.center,
+                          children: [
+                            NetworkImageWithPlaceHolder(
+                              imageUrl:
+                                  profileController.myProfile.photoUrl ?? '',
+                              radius: 200,
+                              width: 25,
+                              height: 25,
+                              placeHolder: Icons.person,
+                              iconSize: 20.0,
+                              fit: BoxFit.cover,
+                            ),
+                            const SizedBox(
+                              width: 5,
+                            ),
+                            Text(profileController.myProfile.name ??
+                                profileController.myProfile.username)
+                          ]),
+                    ],
+                  ),
+                ]),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Wrap(
+                      crossAxisAlignment: WrapCrossAlignment.center,
+                      children: [
+                        Text(widget.item['type'] == 'donated' ? '-' : '+',
+                            style: const TextStyle(
+                                fontWeight: FontWeight.w900, fontSize: 18)),
+                        SvgPicture.asset('assets/svgs/coin.svg'),
+                        Text(widget.item['amount'],
+                            style: const TextStyle(
+                                fontWeight: FontWeight.w900, fontSize: 18)),
+                        Text('(\$${double.parse(widget.item['amount']) / 100})',
+                            style: TextStyle(
+                                fontWeight: FontWeight.w700,
+                                fontSize: 18,
+                                color: textColor.withOpacity(0.4)))
+                      ],
+                    ),
+                    Text(
+                      formatDateTimeToAgo(dateTimeString),
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color: textColor.withOpacity(0.4),
+                          ),
+                    ),
+                  ],
+                )
               ],
             ),
           ),
@@ -145,6 +155,9 @@ class _DonationHistoryItemState extends State<DonationHistoryItem> {
       ),
     );
   }
+
+
+}
 
   String formatDateTimeToAgo(String dateTimeString) {
     DateTime dateTime = DateTime.parse(dateTimeString);
@@ -191,4 +204,3 @@ class _DonationHistoryItemState extends State<DonationHistoryItem> {
 
     return '$day$suffix $month $year';
   }
-}

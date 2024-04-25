@@ -23,7 +23,7 @@ class _ReceivedDonationsState extends State<ReceivedDonations> {
         : ListView.builder(
             itemCount: widget.history.length,
             itemBuilder: (BuildContext context, int i) {
-              return DonationHistoryItem(item: widget.history[i]);
+              return DonationHistoryItem(item: widget.history[i], previousDate: '',);
             },
           );
   }

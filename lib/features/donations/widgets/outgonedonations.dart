@@ -25,7 +25,7 @@ class _OutgoneDonationsState extends State<OutgoneDonations> {
             itemBuilder: (BuildContext context, int i) {
               final item = widget.history[i];
               return DonationHistoryItem(
-                item: item,
+                item: item, previousDate: '',
               );
             },
           );
