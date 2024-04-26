@@ -1,7 +1,9 @@
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/widgets/buttons/custom_button.dart';
+import 'package:business_bosses_v2/common/widgets/safety_model.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/features/promotions/widgets/buycoinslist_item.dart';
+import 'package:business_bosses_v2/features/withdrawal/controller/coinhistorycontroller.dart';
 import 'package:business_bosses_v2/features/withdrawal/widgets/withdrawal_header_item.dart';
 import 'package:business_bosses_v2/features/withdrawal/widgets/withdrawal_item.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
@@ -30,6 +32,8 @@ class DepositsScreen extends StatefulWidget {
 class _DepositsScreenState extends State<DepositsScreen> {
   final ScrollController scrollController = ScrollController();
   final ProfileController _profileController = Get.find();
+  final CoinHistoryController coinHistoryController =
+      Get.put(CoinHistoryController());
   String? _paymentmethods;
   late String _referralId;
   List<String> coinAmounts = ['100', '200', '500', '1000', '10000'];
@@ -255,9 +259,11 @@ class _DepositsScreenState extends State<DepositsScreen> {
                                   width: 120,
                                   decoration: BoxDecoration(
                                     border: Border.all(
-                                        width: 2, color:  !profileController
+                                        width: 2,
+                                        color: !profileController
                                                 .myProfile.isSubscribed
-                                            ? primaryColorLT : Colors.grey),
+                                            ? primaryColorLT
+                                            : Colors.grey),
                                     borderRadius: BorderRadius.circular(12),
                                   ),
                                   child: Row(
@@ -269,10 +275,11 @@ class _DepositsScreenState extends State<DepositsScreen> {
                                                 .myProfile.isSubscribed
                                             ? 'Subscribe'
                                             : 'Subscribed',
-                                        style:  TextStyle(
-                                            color:  !profileController
-                                                .myProfile.isSubscribed
-                                            ? primaryColorLT : Colors.grey,
+                                        style: TextStyle(
+                                            color: !profileController
+                                                    .myProfile.isSubscribed
+                                                ? primaryColorLT
+                                                : Colors.grey,
                                             fontWeight: FontWeight.w700,
                                             fontSize: 16),
                                       ),
@@ -375,20 +382,26 @@ class _DepositsScreenState extends State<DepositsScreen> {
                           TextStyle(fontWeight: FontWeight.w700, fontSize: 16)),
                   children: [
                     Container(
-                      child: Column(
-                        children: [
-                          WithdrawalHeaderItem(),
-                          Container(
-                            child: ListView.builder(
-                              shrinkWrap: true,
-                              itemCount: 10,
-                              itemBuilder: (BuildContext context, int i) {
-                                return WithdrawalItem();
-                              },
+                      child: coinHistoryController.coindepositsHistory.isEmpty
+                          ? const SafetyModel(
+                              isLoading: false,
+                              title: 'No Coin Deposits Found',
+                              icon: Icon(Icons.warning),
+                            )
+                          : Column(
+                              children: [
+                                WithdrawalHeaderItem(),
+                                Container(
+                                  child: ListView.builder(
+                                    shrinkWrap: true,
+                                    itemCount: coinHistoryController.coindepositsHistory.length,
+                                    itemBuilder: (BuildContext context, int i) {
+                                      return WithdrawalItem();
+                                    },
+                                  ),
+                                ),
+                              ],
                             ),
-                          ),
-                        ],
-                      ),
                     )
                   ],
                 ),

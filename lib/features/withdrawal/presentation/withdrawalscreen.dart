@@ -1,6 +1,8 @@
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/widgets/buttons/custom_button.dart';
+import 'package:business_bosses_v2/common/widgets/safety_model.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
+import 'package:business_bosses_v2/features/withdrawal/controller/coinhistorycontroller.dart';
 import 'package:business_bosses_v2/features/withdrawal/widgets/withdrawal_header_item.dart';
 import 'package:business_bosses_v2/features/withdrawal/widgets/withdrawal_item.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
@@ -32,6 +34,9 @@ class _WithdrawalScreenState extends State<WithdrawalScreen> {
   TextEditingController _walletaddresscontroller = TextEditingController();
   String? _paymentmethods;
   bool paymentSelected = false;
+  bool isProcessing = false;
+  final CoinHistoryController coinHistoryController =
+      Get.put(CoinHistoryController());
 
   @override
   void initState() {
@@ -49,7 +54,6 @@ class _WithdrawalScreenState extends State<WithdrawalScreen> {
         body: NestedScrollView(
             controller: scrollController,
             headerSliverBuilder: (context, innerBoxIsScrolled) {
-              
               return <Widget>[
                 SliverStickyHeader(
                   sticky: false,
@@ -201,7 +205,7 @@ class _WithdrawalScreenState extends State<WithdrawalScreen> {
                             ],
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 10,
                         ),
                         Visibility(
@@ -210,7 +214,11 @@ class _WithdrawalScreenState extends State<WithdrawalScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text('Enter your $_paymentmethods details below'),
-                              Text(_paymentmethods == 'Bank' ? 'FULL NAME: COUNTRY: BANK NAME: ACCOUNT NUMBER:' : _paymentmethods == 'Paypal' ? 'FULL NAME: PAYPAL EMAIL ADDRESS: ' : 'FULL NAME: MOBILE MONEY NUMBER: ' ),
+                              Text(_paymentmethods == 'Bank'
+                                  ? 'FULL NAME: COUNTRY: BANK NAME: ACCOUNT NUMBER:'
+                                  : _paymentmethods == 'Paypal'
+                                      ? 'FULL NAME: PAYPAL EMAIL ADDRESS: '
+                                      : 'FULL NAME: MOBILE MONEY NUMBER: '),
                               TextFormField(
                                 controller: _walletaddresscontroller,
                                 maxLines: 5,
@@ -260,8 +268,36 @@ class _WithdrawalScreenState extends State<WithdrawalScreen> {
                                       message:
                                           'Please enter a wallet address to continue',
                                       error: true);
-                                } else {}
-                              } else {}
+                                } else {
+                                  setState(() {
+                                    isProcessing = true;
+                                  });
+                                  await coinHistoryController
+                                      .makeWithdrawal(<String, dynamic>{
+                                    'status': 'Pending',
+                                    'approved': false,
+                                    'duration': null,
+                                    'description':
+                                        _walletaddresscontroller.text,
+                                    'deleted': false,
+                                    'deletedAt': null,
+                                    'userId': profileController.myProfile.uid,
+                                    'transactionType': 'credit',
+                                    'amount': _withdrawlamountcontroller.text,
+                                    'paymentMethod': 'revenuecat',
+                                    'date': DateTime.now().toString(),
+                                  });
+                                  setState(() {
+                                    isProcessing = false;
+                                  });
+                                }
+                              } else {
+                                showSnackbar(
+                                    title: 'OOPS!',
+                                    message:
+                                        'Please enter an amount to withdraw!',
+                                    error: true);
+                              }
                             },
                             child: const Text(
                               'Make Withdrawal',
@@ -295,20 +331,27 @@ class _WithdrawalScreenState extends State<WithdrawalScreen> {
                           TextStyle(fontWeight: FontWeight.w700, fontSize: 16)),
                   children: [
                     Container(
-                      child: Column(
-                        children: [
-                          WithdrawalHeaderItem(),
-                          Container(
-                            child: ListView.builder(
-                              shrinkWrap: true,
-                              itemCount: 10,
-                              itemBuilder: (BuildContext context, int i) {
-                                return WithdrawalItem();
-                              },
+                      child: coinHistoryController.coinwithdrawalHistory.isEmpty
+                          ? const SafetyModel(
+                              isLoading: false,
+                              title: 'No Coin Withdrawals Found',
+                              icon: Icon(Icons.warning),
+                            )
+                          : Column(
+                              children: [
+                                WithdrawalHeaderItem(),
+                                Container(
+                                  child: ListView.builder(
+                                    shrinkWrap: true,
+                                    itemCount: coinHistoryController
+                                        .coinwithdrawalHistory.length,
+                                    itemBuilder: (BuildContext context, int i) {
+                                      return WithdrawalItem();
+                                    },
+                                  ),
+                                ),
+                              ],
                             ),
-                          ),
-                        ],
-                      ),
                     )
                   ],
                 ),
