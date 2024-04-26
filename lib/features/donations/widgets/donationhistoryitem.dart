@@ -14,7 +14,7 @@ class DonationHistoryItem extends StatefulWidget {
   const DonationHistoryItem({
     super.key,
     this.item,
-    required this.previousDate,
+     this.previousDate,
   });
 
   @override
