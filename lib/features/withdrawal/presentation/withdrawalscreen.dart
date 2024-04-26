@@ -34,6 +34,7 @@ class _WithdrawalScreenState extends State<WithdrawalScreen> {
   TextEditingController _walletaddresscontroller = TextEditingController();
   String? _paymentmethods;
   bool paymentSelected = false;
+  bool isProcessing = false;
   final CoinHistoryController coinHistoryController =
       Get.put(CoinHistoryController());
 
@@ -268,6 +269,9 @@ class _WithdrawalScreenState extends State<WithdrawalScreen> {
                                           'Please enter a wallet address to continue',
                                       error: true);
                                 } else {
+                                  setState(() {
+                                    isProcessing = true;
+                                  });
                                   await coinHistoryController
                                       .makeWithdrawal(<String, dynamic>{
                                     'status': 'Pending',
@@ -282,6 +286,9 @@ class _WithdrawalScreenState extends State<WithdrawalScreen> {
                                     'amount': _withdrawlamountcontroller.text,
                                     'paymentMethod': 'revenuecat',
                                     'date': DateTime.now().toString(),
+                                  });
+                                  setState(() {
+                                    isProcessing = false;
                                   });
                                 }
                               } else {
