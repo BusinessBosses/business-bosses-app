@@ -268,7 +268,22 @@ class _WithdrawalScreenState extends State<WithdrawalScreen> {
                                           'Please enter a wallet address to continue',
                                       error: true);
                                 } else {}
-                              } else {}
+                              } else {
+                                await coinHistoryController
+                                    .makeWithdrawal(<String, dynamic>{
+                                  'status': 'Pending',
+                                  'approved': false,
+                                  'duration': null,
+                                  'description': null,
+                                  'deleted': false,
+                                  'deletedAt': null,
+                                  'userId': profileController.myProfile.uid,
+                                  'transactionType': 'credit',
+                                  'amount': _withdrawlamountcontroller.text,
+                                  'paymentMethod': 'revenuecat',
+                                  'date': DateTime.now(),
+                                });
+                              }
                             },
                             child: const Text(
                               'Make Withdrawal',
@@ -314,7 +329,8 @@ class _WithdrawalScreenState extends State<WithdrawalScreen> {
                                 Container(
                                   child: ListView.builder(
                                     shrinkWrap: true,
-                                    itemCount: coinHistoryController.coinwithdrawalHistory.length,
+                                    itemCount: coinHistoryController
+                                        .coinwithdrawalHistory.length,
                                     itemBuilder: (BuildContext context, int i) {
                                       return WithdrawalItem();
                                     },

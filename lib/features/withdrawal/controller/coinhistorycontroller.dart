@@ -35,6 +35,18 @@ class CoinHistoryController extends GetxController {
     
   }
 
+
+  ///Make Withdrawal
+  Future<void> makeWithdrawal(Map<String, dynamic> coinTransaction) async {
+    ApiResponseModel response =
+        await ApiService.post(path: 'transaction-history', body: coinTransaction);
+    if (response.success) {
+      Get.to(() => const DonationCreated());
+    }
+  }
+
+  
+
   Future<void> fetchCoinHistoryTransactions(CoinTransaction coinTransaction) async {
     try {
       hLoading(true); // Set loading to true before fetching data
