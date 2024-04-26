@@ -6,7 +6,6 @@ import 'package:business_bosses_v2/utils/time_format.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 import '../../../../common/widgets/safety_model.dart';
 import '../../../../utils/theme/theme.dart';
 
@@ -82,7 +81,8 @@ class _SupporterItemState extends State<SupporterItem> {
                                           donationsController.amounts[i];
 
                                       String formattedTime =
-                                          TimeFormat.formatString(time.millisecondsSinceEpoch);
+                                          TimeFormat.formatString(
+                                              time.millisecondsSinceEpoch);
                                       return Padding(
                                         padding: const EdgeInsets.symmetric(
                                           horizontal: 15.0,

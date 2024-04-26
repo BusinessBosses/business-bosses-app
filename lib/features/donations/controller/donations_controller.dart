@@ -14,6 +14,7 @@ class DonationsController extends GetxController {
   final ProfileController profileController = Get.find();
   RxList<DonationModel> donations = <DonationModel>[].obs;
   RxList<UserModel> users = <UserModel>[].obs;
+  RxList<UserModel> usersMembers = <UserModel>[].obs;
   RxList<dynamic> times = <dynamic>[].obs;
   RxList<dynamic> amounts = <dynamic>[].obs;
   RxList<String> userIds = <String>[].obs;
@@ -157,7 +158,17 @@ class DonationsController extends GetxController {
         path: 'donation/get-joined-users/6463a069-657d-47ae-b937-9a5d4c336811');
     if (response.success) {
       List<dynamic> rows = response.data['rows'];
-      userIds.addAll(rows.map((row) => row['userId'].toString()).toList());
+      userIds
+          .addAll(rows.map((dynamic row) => row['userId'].toString()).toList());
+      usersMembers.clear();
+      for (int i = 0; i < response.data['rows'].length; i++) {
+        if (response.data['rows'][i]['user'] != null) {
+          UserModel user = UserModel.fromMap(<String, dynamic>{
+            ...response.data['rows'][i]['user'],
+          });
+          usersMembers.add(user);
+        }
+      }
       update();
     }
   }
@@ -202,6 +213,8 @@ class DonationsController extends GetxController {
               'donation-transactions/user/${profileController.myProfile.uid}');
       if (response.success) {
         myHistory.clear();
+        myHistoryOut.clear();
+        myHistoryReceived.clear();
         final List<dynamic> responseData = response.data['rows'];
         final List<Map<String, dynamic>> mappedData =
             responseData.cast<Map<String, dynamic>>();
@@ -270,7 +283,7 @@ class DonationsController extends GetxController {
     }
   }
 
-  initSocket() {
+  void initSocket() {
     socket = IO.io(Constants.socketUrl, <String, dynamic>{
       'autoConnect': false,
       'transports': ['websocket'],

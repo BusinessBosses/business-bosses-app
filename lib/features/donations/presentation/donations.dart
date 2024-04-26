@@ -1,4 +1,5 @@
 import 'package:business_bosses_v2/features/donations/controller/donations_controller.dart';
+import 'package:business_bosses_v2/features/donations/presentation/donation_members.dart';
 import 'package:business_bosses_v2/features/donations/presentation/donations_history.dart';
 import 'package:business_bosses_v2/features/donations/widgets/donation_item.dart';
 import 'package:business_bosses_v2/features/forum/widgets/joinedbutton.dart';
@@ -100,6 +101,16 @@ class _DonationsPageState extends State<DonationsPage> {
                                     style: ElevatedButton.styleFrom(
                                         minimumSize: const Size(150, 45)),
                                     onPressed: () {
+                                      if (!donationsController.userIds
+                                          .contains(_myProfile.myProfile.uid)) {
+                                        Get.snackbar(
+                                          'Error!',
+                                          'You have to join to create a donation!',
+                                          backgroundColor: Colors.red,
+                                          colorText: Colors.white,
+                                        );
+                                        return;
+                                      }
                                       Get.toNamed(Routes.createdonationsscreen);
                                     },
                                     child: Row(
@@ -217,7 +228,12 @@ class _DonationsPageState extends State<DonationsPage> {
                                                       ),
                                                       recognizer:
                                                           TapGestureRecognizer()
-                                                            ..onTap = () {},
+                                                            ..onTap = () {
+                                                              Get.to(() =>
+                                                                  DonationMembers(
+                                                                      users: donationsController
+                                                                          .usersMembers));
+                                                            },
                                                     ),
                                                   ],
                                                 ),
