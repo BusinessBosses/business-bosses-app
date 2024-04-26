@@ -207,7 +207,7 @@ class DonationsController extends GetxController {
             responseData.cast<Map<String, dynamic>>();
         myHistory.addAll(mappedData);
         for (Map<String, dynamic> item in mappedData) {
-          if (item['type'] == 'donated') {
+          if (item['userId'] == profileController.myProfile.uid) {
             myHistoryOut.add(item);
           } else {
             myHistoryReceived.add(item);
