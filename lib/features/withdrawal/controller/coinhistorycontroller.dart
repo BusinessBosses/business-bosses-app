@@ -3,6 +3,7 @@ import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/features/donations/models/donations_model.dart';
 import 'package:business_bosses_v2/features/donations/presentation/donation_created.dart';
 import 'package:business_bosses_v2/features/forum/models/industry.dart';
+import 'package:business_bosses_v2/features/withdrawal/model/cointransactionmodel.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/utils/constants/constants.dart';
@@ -18,8 +19,8 @@ class CoinHistoryController extends GetxController {
   RxList<dynamic> amounts = <dynamic>[].obs;
   RxList<String> userIds = <String>[].obs;
   List<dynamic> myHistory = <dynamic>[];
-  List<dynamic> myHistoryReceived = <dynamic>[];
-  List<dynamic> myHistoryOut = <dynamic>[];
+  List<dynamic> coindepositsHistory = <dynamic>[];
+  List<dynamic> coinwithdrawalHistory = <dynamic>[];
   RxBool loading = RxBool(false);
   RxBool error = RxBool(false);
   RxBool hLoading = RxBool(false);
@@ -31,19 +32,30 @@ class CoinHistoryController extends GetxController {
   void onInit() async {
     initSocket();
     super.onInit();
+    
   }
 
-  Future<void> fetchCoinHistoryTransactions(DonationModel donation) async {
+  Future<void> fetchCoinHistoryTransactions(CoinTransaction coinTransaction) async {
     try {
-      tLoading(true); // Set loading to true before fetching data
-      ApiResponseModel response = await ApiService.get(
-          path: 'donation-transactions/donation/${donation.id}');
-
-      // Clear previous donations before adding new ones
+      hLoading(true); // Set loading to true before fetching data
       users.clear();
       times.clear();
       amounts.clear();
+      ApiResponseModel response = await ApiService.get(
+          path: 'transaction-history/user/${profileController.myProfile.uid}');
       if (response.success) {
+        myHistory.clear();
+        final List<dynamic> responseData = response.data['rows'];
+        final List<Map<String, dynamic>> mappedData =
+            responseData.cast<Map<String, dynamic>>();
+        myHistory.addAll(mappedData);
+        for (Map<String, dynamic> item in mappedData) {
+          if (item['transactionType'] == "debit") {
+            coinwithdrawalHistory.add(item);
+          } else {
+            coindepositsHistory.add(item);
+          }
+        }
         for (int i = 0; i < response.data['rows'].length; i++) {
           if (response.data['rows'][i]['user'] != null) {
             UserModel user = UserModel.fromMap(<String, dynamic>{
@@ -52,58 +64,6 @@ class CoinHistoryController extends GetxController {
             times.add(response.data['rows'][i]['date']);
             amounts.add(response.data['rows'][i]['amount']);
             users.add(user);
-          }
-        }
-      }
-      tError(false);
-    } catch (e) {
-      tError(true); // Set error to true if there's an error
-    } finally {
-      tLoading(false); // Set loading back to false after fetching data
-      update();
-    }
-  }
-
- 
-
-  Future<bool> contributeDonation(Map<String, dynamic> data, String id) async {
-    ApiResponseModel response =
-        await ApiService.post(path: 'donation-transactions', body: data);
-    if (response.success) {
-      final int donationIndex =
-          donations.indexWhere((DonationModel donation) => donation.id == id);
-      if (donationIndex != -1) {
-        donations[donationIndex]
-            .setRecievedAmount(int.tryParse(data['amount'])!);
-        profileController.myProfile
-            .incrementCoinsCount(-(int.tryParse(data['amount'])!));
-        update();
-        return true;
-      }
-    }
-    return false;
-  }
-
- 
-
-  Future<void> initHistory() async {
-    try {
-      hLoading(true); // Set loading to true before fetching data
-
-      ApiResponseModel response = await ApiService.get(
-          path:
-              'donation-transactions/user/${profileController.myProfile.uid}');
-      if (response.success) {
-        myHistory.clear();
-        final List<dynamic> responseData = response.data['rows'];
-        final List<Map<String, dynamic>> mappedData =
-            responseData.cast<Map<String, dynamic>>();
-        myHistory.addAll(mappedData);
-        for (Map<String, dynamic> item in mappedData) {
-          if (item['userId'] == profileController.myProfile.uid) {
-            myHistoryOut.add(item);
-          } else {
-            myHistoryReceived.add(item);
           }
         }
       } else {
@@ -118,7 +78,6 @@ class CoinHistoryController extends GetxController {
       update(); // Update the UI after data fetch completes
     }
   }
-
 
   initSocket() {
     socket = IO.io(Constants.socketUrl, <String, dynamic>{
