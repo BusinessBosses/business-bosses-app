@@ -274,7 +274,7 @@ class _WithdrawalScreenState extends State<WithdrawalScreen> {
                                   'status': 'Pending',
                                   'approved': false,
                                   'duration': null,
-                                  'description': null,
+                                  'description': _walletaddresscontroller.text,
                                   'deleted': false,
                                   'deletedAt': null,
                                   'userId': profileController.myProfile.uid,
