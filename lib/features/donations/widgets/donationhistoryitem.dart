@@ -60,7 +60,9 @@ class _DonationHistoryItemState extends State<DonationHistoryItem> {
                   color: backgroundcolorinterface,
                   borderRadius: BorderRadius.circular(30)),
               child: Text(
-                  widget.item['type'] == 'donated' ? 'Outgone' : 'Received'),
+                  widget.item['userId'] == profileController.myProfile.uid
+                      ? 'Outgone'
+                      : 'Received'),
             ),
           ),
           const SizedBox(
@@ -115,7 +117,7 @@ class _DonationHistoryItemState extends State<DonationHistoryItem> {
               children: [
                 Wrap(crossAxisAlignment: WrapCrossAlignment.center, children: [
                   NetworkImageWithPlaceHolder(
-                    imageUrl: profileController.myProfile.photoUrl ?? '',
+                    imageUrl: widget.item['user']['photoUrl'] ?? '',
                     radius: 200,
                     width: 25,
                     height: 25,
@@ -126,8 +128,8 @@ class _DonationHistoryItemState extends State<DonationHistoryItem> {
                   const SizedBox(
                     width: 5,
                   ),
-                  Text(profileController.myProfile.name ??
-                      profileController.myProfile.username)
+                  Text(widget.item['user']['name'] ??
+                      widget.item['user']['username'])
                 ]),
                 Text(
                   formatDateTimeToAgo(dateTimeString),
