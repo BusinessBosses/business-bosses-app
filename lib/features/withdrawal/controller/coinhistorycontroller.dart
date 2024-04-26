@@ -4,6 +4,7 @@ import 'package:business_bosses_v2/features/donations/models/donations_model.dar
 import 'package:business_bosses_v2/features/donations/presentation/donation_created.dart';
 import 'package:business_bosses_v2/features/forum/models/industry.dart';
 import 'package:business_bosses_v2/features/withdrawal/model/cointransactionmodel.dart';
+import 'package:business_bosses_v2/features/withdrawal/presentation/withdrawal_created.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/utils/constants/constants.dart';
@@ -41,7 +42,9 @@ class CoinHistoryController extends GetxController {
     ApiResponseModel response =
         await ApiService.post(path: 'transaction-history', body: coinTransaction);
     if (response.success) {
-      Get.to(() => const DonationCreated());
+      Get.to(() => const WithdrawalCreated());
+    }else{
+      print(response.toString());
     }
   }
 

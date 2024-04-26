@@ -204,7 +204,7 @@ class _WithdrawalScreenState extends State<WithdrawalScreen> {
                             ],
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 10,
                         ),
                         Visibility(
@@ -267,22 +267,29 @@ class _WithdrawalScreenState extends State<WithdrawalScreen> {
                                       message:
                                           'Please enter a wallet address to continue',
                                       error: true);
-                                } else {}
+                                } else {
+                                  await coinHistoryController
+                                      .makeWithdrawal(<String, dynamic>{
+                                    'status': 'Pending',
+                                    'approved': false,
+                                    'duration': null,
+                                    'description':
+                                        _walletaddresscontroller.text,
+                                    'deleted': false,
+                                    'deletedAt': null,
+                                    'userId': profileController.myProfile.uid,
+                                    'transactionType': 'credit',
+                                    'amount': _withdrawlamountcontroller.text,
+                                    'paymentMethod': 'revenuecat',
+                                    'date': DateTime.now().toString(),
+                                  });
+                                }
                               } else {
-                                await coinHistoryController
-                                    .makeWithdrawal(<String, dynamic>{
-                                  'status': 'Pending',
-                                  'approved': false,
-                                  'duration': null,
-                                  'description': _walletaddresscontroller.text,
-                                  'deleted': false,
-                                  'deletedAt': null,
-                                  'userId': profileController.myProfile.uid,
-                                  'transactionType': 'credit',
-                                  'amount': _withdrawlamountcontroller.text,
-                                  'paymentMethod': 'revenuecat',
-                                  'date': DateTime.now(),
-                                });
+                                showSnackbar(
+                                    title: 'OOPS!',
+                                    message:
+                                        'Please enter an amount to withdraw!',
+                                    error: true);
                               }
                             },
                             child: const Text(

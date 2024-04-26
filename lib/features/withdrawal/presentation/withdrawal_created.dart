@@ -1,5 +1,7 @@
 import 'package:business_bosses_v2/common/widgets/safety_model.dart';
 import 'package:business_bosses_v2/features/home/all_communities_screen.dart';
+import 'package:business_bosses_v2/features/profile/presentation/myprofilescreen.dart';
+import 'package:business_bosses_v2/features/promotions/presentation/promotionscreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -18,7 +20,7 @@ class _WithdrawalCreatedState extends State<WithdrawalCreated> {
       appBar: AppBar(
         leading: IconButton(
           onPressed: () {
-            Get.to(() => const AllCommunitiesScreen());
+            Get.to(() => const PromotionScreen());
           },
           icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
         ),
