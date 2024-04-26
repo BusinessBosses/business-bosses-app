@@ -73,7 +73,8 @@ class _DonationHistoryItemState extends State<DonationHistoryItem> {
                           decoration: BoxDecoration(
                               color: backgroundColor,
                               borderRadius: BorderRadius.circular(10)),
-                          child: widget.item['type'] == 'donated'
+                          child: widget.item['user']['uid'] ==
+                                  profileController.myProfile.uid
                               ? SvgPicture.asset(
                                   'assets/svgs/upicon.svg',
                                   color: Colors.red,
@@ -104,8 +105,7 @@ class _DonationHistoryItemState extends State<DonationHistoryItem> {
                                   children: [
                                     NetworkImageWithPlaceHolder(
                                       imageUrl:
-                                          profileController.myProfile.photoUrl ??
-                                              '',
+                                          widget.item['user']['photoUrl'] ?? '',
                                       radius: 200,
                                       width: 25,
                                       height: 25,
@@ -116,8 +116,8 @@ class _DonationHistoryItemState extends State<DonationHistoryItem> {
                                     const SizedBox(
                                       width: 5,
                                     ),
-                                    Text(profileController.myProfile.name ??
-                                        profileController.myProfile.username)
+                                    Text(widget.item['user']['name'] ??
+                                        widget.item['user']['username'])
                                   ]),
                             ],
                           ),
@@ -125,8 +125,8 @@ class _DonationHistoryItemState extends State<DonationHistoryItem> {
                       ]),
                 ),
                 const SizedBox(
-                          width: 15,
-                        ),
+                  width: 15,
+                ),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
