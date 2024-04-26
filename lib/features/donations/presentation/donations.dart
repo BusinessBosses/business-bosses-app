@@ -245,9 +245,8 @@ class _DonationsPageState extends State<DonationsPage> {
                                                 text: TextSpan(
                                                   children: <InlineSpan>[
                                                     TextSpan(
-                                                      text: donationsController
-                                                          .donations.length
-                                                          .toString(),
+                                                      text:
+                                                          'Posts (${formatCount(donationsController.donations.length)})',
                                                       style: const TextStyle(
                                                         fontSize: 12,
                                                         color: textColor,

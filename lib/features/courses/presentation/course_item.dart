@@ -170,7 +170,7 @@ class _CourseItemState extends State<CourseItem> {
                         widget.course.setViews();
                       });
                       courseController.updateCourseViews(
-                          widget.course.id, widget.course.views);
+                          widget.course.id!, widget.course.views);
                       Get.to(() => ExpandedCourseScreen(course: widget.course));
                     },
                     child: Container(
@@ -283,7 +283,7 @@ class _CourseItemState extends State<CourseItem> {
                                   TextButton(
                                     onPressed: () {
                                       CourseController()
-                                          .onDeleteCourse(widget.course.id);
+                                          .onDeleteCourse(widget.course.id!);
                                       Get.back();
                                     },
                                     child: const Text('Yes'),
@@ -293,7 +293,7 @@ class _CourseItemState extends State<CourseItem> {
                             );
                           } else if (val == 'Boost') {
                             Get.to(() => BoostPost(
-                                  postId: widget.course.id,
+                                  postId: widget.course.id!,
                                   postTitle: widget.course.title!,
                                 ));
                           }

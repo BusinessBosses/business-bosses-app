@@ -1,6 +1,7 @@
 // ignore_for_file: always_specify_types
 
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
+import 'package:business_bosses_v2/features/courses/controller/course_controller.dart';
 import 'package:business_bosses_v2/features/courses/models/course_model.dart';
 import 'package:business_bosses_v2/features/courses/presentation/alltransactions.dart';
 import 'package:business_bosses_v2/features/courses/presentation/expanded_course_screen.dart';
@@ -31,6 +32,7 @@ class _CourseHistoryState extends State<CourseHistory> {
   int _currentIndex = 0;
   late PageController _pageController;
   ProfileController profileController = Get.find();
+  final CourseController courseController = Get.find();
 
   @override
   void initState() {
@@ -143,10 +145,10 @@ class _CourseHistoryState extends State<CourseHistory> {
                     _currentIndex = index;
                   });
                 },
-                children: const [
-                  AllTransactions(),
-                  Sales(),
-                  Purchases(),
+                children:  [
+                  AllTransactions(history: courseController.myHistory,),
+                  Sales(history: courseController.myHistoryReceived),
+                  Purchases(history: courseController.myHistoryOut),
                 ],
               ),
             ),

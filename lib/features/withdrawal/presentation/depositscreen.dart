@@ -220,63 +220,71 @@ class _DepositsScreenState extends State<DepositsScreen> {
                             color: backgroundcolorinterface,
                           ),
                         ),
-                        Visibility(
-                          visible: !profileController.myProfile.isSubscribed,
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 15.0, vertical: 10),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                const Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'Become a premium user',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.w700,
-                                          fontSize: 16),
-                                    ),
-                                    Text(
-                                      'Get 500 coins monthly',
-                                      style: TextStyle(
-                                          color: Colors.grey,
-                                          fontWeight: FontWeight.w700),
-                                    )
-                                  ],
-                                ),
-                                GestureDetector(
-                                  onTap: () {
-                                    Get.toNamed(Routes.premiumscreen);
-                                  },
-                                  child: Container(
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 10, vertical: 10),
-                                    width: 120,
-                                    decoration: BoxDecoration(
-                                      border: Border.all(
-                                          width: 2, color: primaryColorLT),
-                                      borderRadius: BorderRadius.circular(12),
-                                    ),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        const Text(
-                                          'Subscribe',
-                                          style: TextStyle(
-                                              color: primaryColorLT,
-                                              fontWeight: FontWeight.w700,
-                                              fontSize: 16),
-                                        ),
-                                        SvgPicture.asset(
-                                            'assets/svgs/nexticon.svg')
-                                      ],
-                                    ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 15.0, vertical: 10),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Become a premium user',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 16),
                                   ),
-                                )
-                              ],
-                            ),
+                                  Text(
+                                    'Get 500 coins monthly',
+                                    style: TextStyle(
+                                        color: Colors.grey,
+                                        fontWeight: FontWeight.w700),
+                                  )
+                                ],
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  !profileController.myProfile.isSubscribed
+                                      ? Get.toNamed(Routes.premiumscreen)
+                                      : null;
+                                },
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10, vertical: 10),
+                                  width: 120,
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                        width: 2, color:  !profileController
+                                                .myProfile.isSubscribed
+                                            ? primaryColorLT : Colors.grey),
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        !profileController
+                                                .myProfile.isSubscribed
+                                            ? 'Subscribe'
+                                            : 'Subscribed',
+                                        style:  TextStyle(
+                                            color:  !profileController
+                                                .myProfile.isSubscribed
+                                            ? primaryColorLT : Colors.grey,
+                                            fontWeight: FontWeight.w700,
+                                            fontSize: 16),
+                                      ),
+                                      !profileController.myProfile.isSubscribed
+                                          ? SvgPicture.asset(
+                                              'assets/svgs/nexticon.svg')
+                                          : Container()
+                                    ],
+                                  ),
+                                ),
+                              )
+                            ],
                           ),
                         ),
                         Container(

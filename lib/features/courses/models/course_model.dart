@@ -15,6 +15,7 @@ class CourseModel {
   final List<String>? documents;
   final int? timestamp;
   final List<CourseCommentModel>? comments;
+  final List<String>? purchases;
   final UserModel? user;
   int views = 0;
   final bool? isPromoted;
@@ -22,7 +23,7 @@ class CourseModel {
   final bool? isApproved;
   final String? courseType;
   final String? paymentMethod;
-  final String? transcript;
+  final List<String>? transcript;
   final List<String>? youtubeUrls;
   CourseModel({
     required this.id,
@@ -33,6 +34,7 @@ class CourseModel {
     this.averageRating = 0.0,
     this.documents,
     this.timestamp,
+    this.purchases,
     this.views = 0,
     this.comments,
     this.user,
@@ -55,6 +57,7 @@ class CourseModel {
     List<String>? documents,
     int? timestamp,
     List<CourseCommentModel>? comments,
+    List<String>? purchases,
     UserModel? user,
     bool? isPromoted,
     int? views,
@@ -64,7 +67,7 @@ class CourseModel {
     bool? isApproved,
     String? courseType,
     String? paymentMethod,
-    String? transcript,
+    List<String>? transcript,
     List<String>? youtubeUrls,
   }) {
     return CourseModel(
@@ -76,6 +79,7 @@ class CourseModel {
       documents: documents ?? this.documents,
       timestamp: timestamp ?? this.timestamp,
       comments: comments ?? this.comments,
+      purchases: purchases ?? this.purchases,
       user: user ?? this.user,
       averageRating: averageRating ?? this.averageRating,
       views: views ?? this.views,
@@ -103,6 +107,7 @@ class CourseModel {
       'comments': comments!.map((CourseCommentModel x) => x.toMap()).toList(),
       'user': user!.toMap(),
       'views': views,
+      'purchases': purchases,
       'isPromoted': isPromoted,
       'price': price,
       'promotionDuration': promotionDuration,
@@ -132,8 +137,6 @@ class CourseModel {
           : null,
       paymentMethod:
           map['paymentMethod'] != null ? map['paymentMethod'] as String : null,
-      transcript:
-          map['transcript'] != null ? map['transcript'] as String : null,
       promotionDuration: map['promotionDuration'] != null
           ? map['promotionDuration'] as String
           : null,
@@ -150,15 +153,28 @@ class CourseModel {
       timestamp: map['timestamp'] != null
           ? int.parse(map['timestamp'].toString())
           : null,
-      comments: List.from(map['comments'])
+      comments: map['comments'] != null ? List.from(map['comments'])
           .map((e) => CourseCommentModel.fromMap(e as Map<String, dynamic>))
-          .toList(),
+          .toList() : null,
       user: map['user'] != null
           ? UserModel.fromMap(map['user'] as Map<String, dynamic>)
+          : null,
+      purchases: map['purchases'] != null
+          ? List<String>.from((map['purchases']))
           : null,
       views: map['views'] != null ? map['views'] as int : 0,
       isPromoted: map['isPromoted'] ?? false,
       isApproved: map['isApproved'] ?? false,
+      transcript: map['transcript'] != null && map['transcript'] != ''
+          ? List<String>.from((map['transcript']))
+                  .where((String element) => element.isNotEmpty)
+                  .toList()
+                  .isEmpty
+              ? null
+              : List<String>.from((map['transcript']))
+                  .where((String element) => element.isNotEmpty)
+                  .toList()
+          : null,
       youtubeUrls: map['youtubeUrls'] != null && map['youtubeUrls'] != ''
           ? List<String>.from((map['youtubeUrls']))
                   .where((String element) => element.isNotEmpty)
