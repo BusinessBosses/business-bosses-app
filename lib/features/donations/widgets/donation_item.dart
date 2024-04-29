@@ -13,7 +13,6 @@ import 'package:business_bosses_v2/features/donations/presentation/expanded_dona
 import 'package:business_bosses_v2/features/donations/widgets/donation_comment.dart';
 import 'package:business_bosses_v2/features/posts/widgets/youtube_display.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
-import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
@@ -280,32 +279,32 @@ class _DonationItemState extends State<DonationItem> {
                             Get.to(() => CreateDonationScreen(
                                   donation: widget.donation,
                                 ));
-                          // } else if (val == 'Delete') {
-                          //   showDialog(
-                          //     context: context,
-                          //     builder: (BuildContext context) => AlertDialog(
-                          //       title: const Text(
-                          //         'Delete Donation Post',
-                          //         style: bodyText1,
-                          //       ),
-                          //       content: const Text(
-                          //           'Are you sure you want to delete this donation post?'),
-                          //       actions: <Widget>[
-                          //         TextButton(
-                          //           onPressed: () => Get.back(),
-                          //           child: const Text('No'),
-                          //         ),
-                          //         TextButton(
-                          //           onPressed: () {
-                          //             // CourseController()
-                          //             //     .onDeleteCourse(widget.course.id!);
-                          //             // Get.back();
-                          //           },
-                          //           child: const Text('Yes'),
-                          //         ),
-                          //       ],
-                          //     ),
-                          //   );
+                            // } else if (val == 'Delete') {
+                            //   showDialog(
+                            //     context: context,
+                            //     builder: (BuildContext context) => AlertDialog(
+                            //       title: const Text(
+                            //         'Delete Donation Post',
+                            //         style: bodyText1,
+                            //       ),
+                            //       content: const Text(
+                            //           'Are you sure you want to delete this donation post?'),
+                            //       actions: <Widget>[
+                            //         TextButton(
+                            //           onPressed: () => Get.back(),
+                            //           child: const Text('No'),
+                            //         ),
+                            //         TextButton(
+                            //           onPressed: () {
+                            //             // CourseController()
+                            //             //     .onDeleteCourse(widget.course.id!);
+                            //             // Get.back();
+                            //           },
+                            //           child: const Text('Yes'),
+                            //         ),
+                            //       ],
+                            //     ),
+                            //   );
                           } else if (val == 'Boost') {
                             Get.to(() => BoostDonation(
                                   donationId: widget.donation.id,
@@ -572,7 +571,7 @@ class _DonationItemState extends State<DonationItem> {
               ),
               const SizedBox(width: 8.0),
               GestureDetector(
-                // onTap: () => _sharePost(),
+                onTap: () => _sharePost(),
                 child: SvgPicture.asset(
                   'assets/svgs/share.svg',
                   height: 15.0,
@@ -659,11 +658,11 @@ class _DonationItemState extends State<DonationItem> {
     }
   }
 
-  // void _sharePost() {
-  //   String message =
-  //       'Have a look at ${widget.Donation.user?.username ?? 'Business Bosses'}\'s Donation on Business Bosses\n'
-  //       'https://businessbosses.onelink.me/xLWk/36a2ff16';
-  //   logEvent(widget.Donation.id, 'Donation');
-  //   socialShare(message);
-  // }
+  void _sharePost() {
+    String message =
+        'Have a look at ${widget.donation.user?.username ?? 'Business Bosses'}\'s Donation on Business Bosses\n'
+        'https://businessbosses.onelink.me/xLWk/36a2ff16';
+    logEvent(widget.donation.id, 'donation');
+    socialShare(message);
+  }
 }
