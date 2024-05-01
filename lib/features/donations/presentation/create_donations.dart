@@ -152,9 +152,10 @@ class _CreateDonationScreenState extends State<CreateDonationScreen> {
                           controller: priceController,
                           textInputAction: TextInputAction.next,
                           keyboardType: TextInputType.number,
-                          maxLength: 15,
+                          maxLength: 7,
                           decoration: inputDecoration.copyWith(
                             hintText: 'Enter Amount to raise e.g 2000',
+                             counterText: '',
                           ),
                           onChanged: (String val) {
                             targetAmount = int.tryParse(val) ?? 0;
@@ -176,7 +177,7 @@ class _CreateDonationScreenState extends State<CreateDonationScreen> {
                   ],
                 ),
               ),
-              const SizedBox(height: 12.0),
+              const SizedBox(height: 30.0),
               Padding(
                 padding: const EdgeInsets.only(left: 15.0),
                 child: Row(

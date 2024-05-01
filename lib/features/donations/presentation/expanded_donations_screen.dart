@@ -9,6 +9,7 @@ import 'package:business_bosses_v2/features/donations/presentation/create_donati
 import 'package:business_bosses_v2/features/donations/widgets/donation_comment.dart';
 import 'package:business_bosses_v2/features/donations/widgets/supporteritem.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
+import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -34,6 +35,8 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
   final DonationsController donationsController = Get.find();
   final ProfileController profileController = Get.find();
   final TextEditingController _priceController = TextEditingController();
+
+  NumberFormat formatter = NumberFormat.compact();
 
   @override
   void initState() {
@@ -316,21 +319,24 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
                                 Row(
                                   children: <Widget>[
                                     Text(
-                                      widget.donation.amountRecieved.toString(),
+                                      formatter.format(
+                                          widget.donation.amountRecieved),
                                       style: const TextStyle(
                                           fontSize: 10,
                                           color: subtextColor,
                                           fontWeight: FontWeight.w700),
                                     ),
-                                    const Text(
-                                      ' coins raised',
+                                    Text(
+                                      widget.donation.amountRecieved == 1
+                                          ? ' coin raised'
+                                          : ' coins raised',
                                       style: TextStyle(
                                           fontSize: 10, color: subtextColor),
                                     ),
                                   ],
                                 ),
                                 Text(
-                                  '${((widget.donation.amountRecieved / widget.donation.targetAmount!) * 100).toString()}%',
+                                  '${((widget.donation.amountRecieved / widget.donation.targetAmount!) * 100).toStringAsFixed(1)}%',
                                   style: const TextStyle(
                                       fontSize: 10, color: subtextColor),
                                 ),
@@ -366,14 +372,15 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
                                       height: 12,
                                     ),
                                     Text(
-                                      widget.donation.targetAmount.toString(),
+                                      formatter.format(
+                                          widget.donation.targetAmount!),
                                       style: const TextStyle(
                                           color: subtextColor,
                                           fontWeight: FontWeight.w700,
                                           fontSize: 12),
                                     ),
                                     const Text(
-                                      'Target',
+                                      ' Target',
                                       style: TextStyle(
                                           color: subtextColor, fontSize: 10),
                                     ),
@@ -395,26 +402,31 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
                                             WrapCrossAlignment.center,
                                         children: <Widget>[
                                           Text(
-                                            widget.donation.transactions!.length
-                                                .toString(),
+                                            formatter.format(widget
+                                                .donation.transactions!.length),
                                             style: const TextStyle(
-                                                fontSize: 10,
-                                                color: subtextColor,
-                                                fontWeight: FontWeight.w700),
+                                              fontSize: 10,
+                                              color: subtextColor,
+                                              fontWeight: FontWeight.w700,
+                                              decoration:
+                                                  TextDecoration.underline,
+                                            ),
                                           ),
-                                          const Text(
-                                            ' Supporters',
-                                            style: TextStyle(
-                                                fontSize: 10,
-                                                color: subtextColor),
+                                          Text(
+                                            widget.donation.transactions!
+                                                        .length ==
+                                                    1
+                                                ? ' Supporter'
+                                                : ' Supporters',
+                                            style: const TextStyle(
+                                              fontSize: 10,
+                                              color: subtextColor,
+                                              decoration:
+                                                  TextDecoration.underline,
+                                            ),
                                           ),
                                         ],
                                       ),
-                                      Container(
-                                        color: Colors.black54,
-                                        height: 1,
-                                        width: 70,
-                                      )
                                     ],
                                   ),
                                 )
@@ -573,6 +585,7 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
                                     child: Stack(children: <Widget>[
                                       TextFormField(
                                         controller: _priceController,
+                                        maxLength: 7,
                                         // onChanged: (String val) => price = val,
 
                                         textInputAction: TextInputAction.next,
@@ -580,6 +593,7 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
 
                                         decoration: inputDecoration.copyWith(
                                             hintText: 'Enter Amount',
+                                            counterText: '',
                                             fillColor: backgroundColor),
                                       ),
                                       Positioned(
@@ -587,7 +601,7 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
                                           bottom: 0,
                                           right: 10,
                                           child: Text(
-                                            '/${widget.donation.targetAmount.toString()} Coin target',
+                                            '/${formatter.format(widget.donation.targetAmount)} Coin target',
                                             style: TextStyle(
                                                 color:
                                                     textColor.withAlpha(100)),
@@ -767,19 +781,64 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            const Text(
-                              'Story',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w700, fontSize: 18),
-                            ),
-                            Text(
-                              'Posted $formattedDifference',
-                              style: const TextStyle(color: subtextColor),
-                            )
-                          ],
+                        GestureDetector(
+                          onTap: () {
+                            Get.toNamed(Routes.publicProfile,
+                                arguments: widget.donation.user);
+                          },
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Wrap(
+                                  crossAxisAlignment: WrapCrossAlignment.center,
+                                  children: [
+                                    SizedBox(
+                                      height: 30.0,
+                                      width: 30.0,
+                                      child: Align(
+                                        alignment: Alignment.topLeft,
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(1000),
+                                          child: NetworkImageWithPlaceHolder(
+                                            imageUrl: widget
+                                                    .donation.user?.photoUrl ??
+                                                '',
+                                            radius: radius,
+                                            placeHolder: Icons.person,
+                                            iconSize: 15.0,
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      width: 5,
+                                    ),
+                                    Text(
+                                      overflow: TextOverflow
+                                          .ellipsis, // or TextOverflow.ellipsis
+                                      maxLines: 1,
+                                      widget.donation.user?.name ??
+                                          widget.donation.user!.name!,
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.w700),
+                                    ),
+                                  ]),
+                              Text(
+                                '$formattedDifference',
+                                style: const TextStyle(color: subtextColor),
+                              )
+                            ],
+                          ),
+                        ),
+                        SizedBox(
+                          height: 30,
+                        ),
+                        const Text(
+                          'Story',
+                          style: TextStyle(
+                              fontWeight: FontWeight.w700, fontSize: 18),
                         ),
                         const SizedBox(
                           height: 20,
@@ -836,7 +895,7 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
                                     height: 15,
                                   ),
                             label: Text(
-                              widget.donation.likes!.length.toString(),
+                              formatter.format(widget.donation.likes!.length),
                               style: Theme.of(context)
                                   .textTheme
                                   .bodyMedium
@@ -862,7 +921,7 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
                               height: 15,
                             ),
                             label: Text(
-                              '${widget.donation.comments?.length}',
+                              '${formatter.format(widget.donation.comments?.length)}',
                               style: Theme.of(context)
                                   .textTheme
                                   .bodyMedium
@@ -877,7 +936,7 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
                             icon: const Icon(Icons.remove_red_eye_outlined,
                                 size: 19, color: Colors.black),
                             label: Text(
-                              '${widget.donation.views}',
+                              '${formatter.format(widget.donation.views)}',
                               style: Theme.of(context)
                                   .textTheme
                                   .bodyMedium

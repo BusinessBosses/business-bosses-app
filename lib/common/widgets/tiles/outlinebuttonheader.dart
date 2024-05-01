@@ -63,7 +63,7 @@ Container OutlineButtonHeader(BuildContext context, UserModel myProfile) {
                   width: 5,
                 ),
                 Text(
-                  '${myProfile.coinscount}',
+                  'Earn',
                   style: TextStyle(
                       fontSize: 15,
                       color: primaryColorLT,

@@ -13,11 +13,13 @@ import 'package:business_bosses_v2/features/donations/presentation/expanded_dona
 import 'package:business_bosses_v2/features/donations/widgets/donation_comment.dart';
 import 'package:business_bosses_v2/features/posts/widgets/youtube_display.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
+import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 class DonationItem extends StatefulWidget {
   final DonationModel donation;
@@ -39,6 +41,7 @@ class _DonationItemState extends State<DonationItem> {
   final ProfileController profileController = Get.find();
   final DonationsController donationsController = Get.find();
   List<String> blocked = <String>[];
+  NumberFormat formatter = NumberFormat.compact();
 
   final List<PopupMenuEntry<String>> myPopupMore = <PopupMenuEntry<String>>[
     const PopupMenuItem<String>(
@@ -172,95 +175,55 @@ class _DonationItemState extends State<DonationItem> {
                         widget.donation.description!,
                         style: const TextStyle(color: Colors.black45),
                       ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            children: [
-                              Text(
-                                widget.donation.amountRecieved.toString(),
-                                style: const TextStyle(
-                                    fontSize: 10,
-                                    color: subtextColor,
-                                    fontWeight: FontWeight.w700),
-                              ),
-                              const Text(
-                                ' coins raised',
-                                style: TextStyle(
-                                    fontSize: 10, color: subtextColor),
-                              ),
-                            ],
-                          ),
-                          Text(
-                            '${((widget.donation.amountRecieved / widget.donation.targetAmount!) * 100).toString()}%',
-                            style: const TextStyle(
-                                fontSize: 10, color: subtextColor),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(
+                      SizedBox(
                         height: 5,
                       ),
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(20),
-                        child: LinearProgressIndicator(
-                          value: (widget.donation.amountRecieved /
-                              widget.donation.targetAmount!),
-                          minHeight: 4,
-                          backgroundColor: backgroundcolorinterface,
-                          valueColor: const AlwaysStoppedAnimation<Color>(
-                              primaryColorLT),
+                      GestureDetector(
+                        onTap: () {
+                          Get.toNamed(Routes.publicProfile,
+                              arguments: widget.donation.user);
+                        },
+                        child: Row(
+                          children: [
+                            const Text('by'),
+                            const SizedBox(
+                              width: 5,
+                            ),
+                            SizedBox(
+                              height: 20.0,
+                              width: 20.0,
+                              child: Align(
+                                alignment: Alignment.topLeft,
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(1000),
+                                  child: NetworkImageWithPlaceHolder(
+                                    imageUrl:
+                                        widget.donation.user?.photoUrl ?? '',
+                                    radius: radius,
+                                    placeHolder: Icons.person,
+                                    iconSize: 15.0,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(
+                              width: 5,
+                            ),
+                            Text(
+                              overflow: TextOverflow
+                                  .ellipsis, // or TextOverflow.ellipsis
+                              maxLines: 1,
+                              widget.donation.user?.name ??
+                                  widget.donation.user!.name!,
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.w700),
+                            ),
+                          ],
                         ),
                       ),
                       const SizedBox(
-                        height: 5,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Wrap(
-                            crossAxisAlignment: WrapCrossAlignment.center,
-                            children: [
-                              SvgPicture.asset(
-                                'assets/svgs/coin.svg',
-                                height: 12,
-                              ),
-                              Text(
-                                widget.donation.targetAmount.toString(),
-                                style: const TextStyle(
-                                    color: subtextColor,
-                                    fontWeight: FontWeight.w700,
-                                    fontSize: 12),
-                              ),
-                              const Text(
-                                'Target',
-                                style: TextStyle(
-                                    color: subtextColor, fontSize: 10),
-                              ),
-                            ],
-                          ),
-                          Wrap(
-                            crossAxisAlignment: WrapCrossAlignment.center,
-                            children: [
-                              Text(
-                                widget.donation.transactions!.length.toString(),
-                                style: const TextStyle(
-                                    fontSize: 10,
-                                    color: subtextColor,
-                                    fontWeight: FontWeight.w700),
-                              ),
-                              const Text(
-                                ' Supporters',
-                                style: TextStyle(
-                                    fontSize: 10, color: subtextColor),
-                              ),
-                            ],
-                          )
-                        ],
+                        height: 10,
                       ),
                     ],
                   ),
@@ -504,6 +467,140 @@ class _DonationItemState extends State<DonationItem> {
               ],
             ),
           ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal:15.0),
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              Text(
+                                formatter.format(widget.donation.amountRecieved),
+                                style: const TextStyle(
+                                    fontSize: 10,
+                                    color: subtextColor,
+                                    fontWeight: FontWeight.w700),
+                              ),
+                              Text(
+                                widget.donation.amountRecieved == 1 ?' coin raised' :' coins raised',
+                                style: TextStyle(fontSize: 10, color: subtextColor),
+                              ),
+                            ],
+                          ),
+                          Text(
+                            '${((widget.donation.amountRecieved / widget.donation.targetAmount!) * 100).toStringAsFixed(1)}%',
+                            style: const TextStyle(fontSize: 10, color: subtextColor),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(20),
+                        child: LinearProgressIndicator(
+                          value: (widget.donation.amountRecieved /
+                              widget.donation.targetAmount!),
+                          minHeight: 4,
+                          backgroundColor: backgroundcolorinterface,
+                          valueColor:
+                              const AlwaysStoppedAnimation<Color>(primaryColorLT),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Wrap(
+                            crossAxisAlignment: WrapCrossAlignment.center,
+                            children: [
+                              SvgPicture.asset(
+                                'assets/svgs/coin.svg',
+                                height: 12,
+                              ),
+                              Text(
+                                formatter.format(widget.donation.targetAmount!),
+                                style: const TextStyle(
+                                    color: subtextColor,
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 12),
+                              ),
+                              const Text(
+                                ' Target',
+                                style: TextStyle(color: subtextColor, fontSize: 10),
+                              ),
+                            ],
+                          ),
+                          Wrap(
+                            crossAxisAlignment: WrapCrossAlignment.center,
+                            children: [
+                              Text(
+                                formatter.format(widget.donation.transactions!.length),
+                                style: const TextStyle(
+                                    fontSize: 10,
+                                    color: subtextColor,
+                                    fontWeight: FontWeight.w700),
+                              ),
+                               Text(
+                               widget.donation.transactions!.length == 1 ? ' Supporter':' Supporters',
+                                style: TextStyle(fontSize: 10, color: subtextColor),
+                              ),
+                            ],
+                          )
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(right: 15.0),
+                child: GestureDetector(
+                  onTap: () {
+                    widget.donation
+                        .setViews(widget.donation.views! + 1);
+                    ApiService.put(
+                        path: 'donation/approve/${widget.donation.id}',
+                        body: {
+                          'views': widget.donation.views! + 1,
+                          'isActive': true,
+                          'isApproved': true,
+                        });
+                    Get.to(() => ExpandedDonationScreen(
+                        donation: widget.donation));
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(
+                            width: 1.5, color: primaryColorLT)),
+                    child: const Center(
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(vertical:5.0, horizontal: 30),
+                        child: Text(
+                          'Donate',
+                          style: TextStyle(
+                            color: primaryColorLT,
+                            fontWeight: FontWeight.w700,
+                            fontSize: 11,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
           const SizedBox(
             height: 10,
           ),
@@ -581,8 +678,7 @@ class _DonationItemState extends State<DonationItem> {
                 ),
               ),
               const Spacer(),
-              widget.donation.user!.uid == profileController.myProfile.uid
-                  ? Padding(
+            Padding(
                       padding: const EdgeInsets.only(right: 15),
                       child: Text(
                         formattedDifference,
@@ -592,45 +688,7 @@ class _DonationItemState extends State<DonationItem> {
                             ?.copyWith(color: textColor.withOpacity(0.4)),
                       ),
                     )
-                  : Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.only(right: 15.0),
-                        child: GestureDetector(
-                          onTap: () {
-                            widget.donation
-                                .setViews(widget.donation.views! + 1);
-                            ApiService.put(
-                                path: 'donation/approve/${widget.donation.id}',
-                                body: {
-                                  'views': widget.donation.views! + 1,
-                                  'isActive': true,
-                                  'isApproved': true,
-                                });
-                            Get.to(() => ExpandedDonationScreen(
-                                donation: widget.donation));
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8),
-                                border: Border.all(
-                                    width: 1.5, color: primaryColorLT)),
-                            child: const Center(
-                              child: Padding(
-                                padding: EdgeInsets.all(5.0),
-                                child: Text(
-                                  'Donate',
-                                  style: TextStyle(
-                                    color: primaryColorLT,
-                                    fontWeight: FontWeight.w700,
-                                    fontSize: 11,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
+                  
             ],
           ),
           Container(
@@ -666,4 +724,19 @@ class _DonationItemState extends State<DonationItem> {
     logEvent(widget.donation.id, 'donation');
     socialShare(message);
   }
+  
+  
+  String formatCount(int count) {
+    if (count >= 1000) {
+      double countInK = count / 1000;
+      if (countInK >= 1000) {
+        return '${(countInK / 1000).toStringAsFixed(1)}m';
+      } else {
+        return '${countInK.toStringAsFixed(1)}k';
+      }
+    } else {
+      return count.toString();
+    }
+  }
+
 }
