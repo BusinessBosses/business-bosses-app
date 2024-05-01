@@ -408,6 +408,18 @@ class _CreateDonationScreenState extends State<CreateDonationScreen> {
                         colorText: Colors.white,
                       );
                     }
+                    if (_ytUrl != null && !_isValidYoutubeUrl(_ytUrl!)) {
+                      if (_selectedImage == null &&
+                          photo == null &&
+                          _ytUrl == null) {
+                        Get.snackbar(
+                          'Error!',
+                          'You must add a valid youtube url to continue!',
+                          backgroundColor: Colors.red,
+                          colorText: Colors.white,
+                        );
+                      }
+                    }
                     setState(() {
                       isProcessing = true;
                     });
@@ -503,5 +515,14 @@ class _CreateDonationScreenState extends State<CreateDonationScreen> {
       _selectedImage = null;
       photo = null;
     });
+  }
+
+  bool _isValidYoutubeUrl(String url) {
+    final RegExp youtubeRegExp = RegExp(
+      r'^(https?\:\/\/)?(www\.youtube\.com|youtu\.?be)\/.+$',
+      caseSensitive: false,
+      multiLine: false,
+    );
+    return youtubeRegExp.hasMatch(url);
   }
 }
