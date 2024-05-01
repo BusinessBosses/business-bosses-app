@@ -162,7 +162,7 @@ class _TopicsPageState extends State<TopicsPage> {
                                           Text(
                                             industry.categoryId!.toString() ==
                                                     Constants.LEARNINGID
-                                                ? 'Start a Topic'
+                                                ? 'Share Resources'
                                                 : 'Share Opportunities',
                                             style: const TextStyle(
                                                 fontSize: 15,

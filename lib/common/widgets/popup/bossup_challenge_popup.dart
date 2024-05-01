@@ -49,7 +49,7 @@ class BossUpChallangePopUpcopy extends StatelessWidget {
                       Text('●  ', style: bodyText2),
                       Expanded(
                         child: Text(
-                            'Start a topic in Boss up challenge group, introduce yourself and business',
+                            'Share resources in Boss up challenge group, introduce yourself and business',
                             style: bodyText2),
                       ),
                     ],

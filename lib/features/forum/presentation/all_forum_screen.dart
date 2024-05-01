@@ -173,8 +173,9 @@ class _AllForumScreenState extends State<AllForumScreen> {
                   constraints: const BoxConstraints.expand(height: 50),
                   child: TabBar(
                     tabs: <Widget>[
-                      Tab(text: 'Topics'),
                       Tab(text: 'Courses'),
+                      Tab(text: 'Resources'),
+                      
                     ],
                     onTap: (int index) {
                       setState(() {
@@ -187,7 +188,7 @@ class _AllForumScreenState extends State<AllForumScreen> {
                   child: TabBarView(
                     physics: const NeverScrollableScrollPhysics(),
                     children: <Widget>[
-                      Container(child: const TopicsPage()),
+                    
                       Container(
                         child: CoursesPage(
                           industryId: industry.industryId!, filter: _filtercourses,
@@ -195,6 +196,7 @@ class _AllForumScreenState extends State<AllForumScreen> {
                           
                         ),
                       ),
+                        Container(child: const TopicsPage()),
                     ],
                   ),
                 ),
