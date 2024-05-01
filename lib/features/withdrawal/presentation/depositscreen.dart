@@ -217,12 +217,9 @@ class _DepositsScreenState extends State<DepositsScreen> {
                             ],
                           ),
                         ),
-                        Visibility(
-                          visible: !profileController.myProfile.isSubscribed,
-                          child: Container(
-                            height: 1,
-                            color: backgroundcolorinterface,
-                          ),
+                        Container(
+                          height: 1,
+                          color: backgroundcolorinterface,
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(
@@ -287,6 +284,130 @@ class _DepositsScreenState extends State<DepositsScreen> {
                                           ? SvgPicture.asset(
                                               'assets/svgs/nexticon.svg')
                                           : Container()
+                                    ],
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                        Container(
+                          height: 1,
+                          color: backgroundcolorinterface,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 15.0, vertical: 10),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Sell on Marketplace',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 16),
+                                  ),
+                                  Text(
+                                    'Sell your Products or Services',
+                                    style: TextStyle(
+                                        color: Colors.grey,
+                                        fontWeight: FontWeight.w700),
+                                  )
+                                ],
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  Get.toNamed(
+                                    Routes.marketPlace,
+                                  );
+                                },
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10, vertical: 10),
+                                  width: 120,
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                        width: 2, color: primaryColorLT),
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        'Sell',
+                                        style: TextStyle(
+                                            color: primaryColorLT,
+                                            fontWeight: FontWeight.w700,
+                                            fontSize: 16),
+                                      ),
+                                      SvgPicture.asset(
+                                          'assets/svgs/nexticon.svg')
+                                    ],
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                        Container(
+                          height: 1,
+                          color: backgroundcolorinterface,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 15.0, vertical: 10),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Sell a Course',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 16),
+                                  ),
+                                  Text(
+                                    'Create premium courses and earn',
+                                    style: TextStyle(
+                                        color: Colors.grey,
+                                        fontWeight: FontWeight.w700),
+                                  )
+                                ],
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  !profileController.myProfile.isSubscribed
+                                      ? Get.toNamed(Routes.premiumscreen)
+                                      : null;
+                                },
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10, vertical: 10),
+                                  width: 120,
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                        width: 2, color: primaryColorLT),
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        'Sell Course',
+                                        style: TextStyle(
+                                            color: primaryColorLT,
+                                            fontWeight: FontWeight.w700,
+                                            fontSize: 16),
+                                      ),
+                                      SvgPicture.asset(
+                                          'assets/svgs/nexticon.svg')
                                     ],
                                   ),
                                 ),
@@ -394,7 +515,8 @@ class _DepositsScreenState extends State<DepositsScreen> {
                                 Container(
                                   child: ListView.builder(
                                     shrinkWrap: true,
-                                    itemCount: coinHistoryController.coindepositsHistory.length,
+                                    itemCount: coinHistoryController
+                                        .coindepositsHistory.length,
                                     itemBuilder: (BuildContext context, int i) {
                                       return WithdrawalItem();
                                     },
