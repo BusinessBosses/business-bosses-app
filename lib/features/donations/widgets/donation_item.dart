@@ -562,6 +562,7 @@ class _DonationItemState extends State<DonationItem> {
                   ),
                 ),
               ),
+              SizedBox(width: 20,),
               Padding(
                 padding: const EdgeInsets.only(right: 15.0),
                 child: GestureDetector(

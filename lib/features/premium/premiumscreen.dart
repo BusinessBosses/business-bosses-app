@@ -264,7 +264,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
                                                     height: 30),
                                                 const SizedBox(width: 10),
                                                 const Text(
-                                                  'Get 500 coins per month',
+                                                  'Get 100 coins per month',
                                                   style: TextStyle(
                                                       fontSize: 14,
                                                       fontWeight:

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:lottie/lottie.dart';
 
 import '../../../utils/size_config.dart';
 import '../../../utils/theme/theme.dart';
@@ -12,7 +13,7 @@ class CoinPopup extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      backgroundColor: backgroundColor,
+      backgroundColor: Colors.white,
       elevation: 5,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       insetPadding: const EdgeInsets.all(10),
@@ -23,25 +24,28 @@ class CoinPopup extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             const SizedBox(
-              height: 20,
+              height: 40,
             ),
-            Text(
-              'Business Bosses Coins',
-              textAlign: TextAlign.center,
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyLarge
-                  ?.copyWith(fontWeight: FontWeight.w900, color: Colors.black),
+            Center(
+              child: Container(
+                // padding: EdgeInsets.all(10),
+                decoration: BoxDecoration(color: backgroundColor,
+                borderRadius: BorderRadius.circular(15)),
+                child: Lottie.asset(
+                  'assets/anim/coinflip.json',
+                  height: 120,
+                ),
+              ),
             ),
             const SizedBox(
-              height: 20,
+              height: 40,
             ),
             Text('What are Bosses Coins?',
                 textAlign: TextAlign.start,
                 style: bodyText1.copyWith(
-                    fontWeight: FontWeight.w700, color: Colors.red)),
+                    fontWeight: FontWeight.w700, color: Colors.black),),
             const SizedBox(
-              height: 20,
+              height: 10,
             ),
             const Row(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -60,12 +64,12 @@ class CoinPopup extends StatelessWidget {
             const SizedBox(
               height: 20,
             ),
-             Text('How do I earn Bosses Coins?',
+            Text('How do I earn Bosses Coins?',
                 textAlign: TextAlign.start,
                 style: bodyText1.copyWith(
-                    fontWeight: FontWeight.w700, color: Colors.red)),
+                    fontWeight: FontWeight.w700, color: Colors.black),),
             const SizedBox(
-              height: 20,
+              height: 10,
             ),
             const Row(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -81,15 +85,15 @@ class CoinPopup extends StatelessWidget {
                 ),
               ],
             ),
-             const SizedBox(
-              height: 20,
-            ),
-             Text('How do I spend Bosses Coins?',
-                textAlign: TextAlign.start,
-                style: bodyText1.copyWith(
-                    fontWeight: FontWeight.w700, color: Colors.red)),
             const SizedBox(
               height: 20,
+            ),
+            Text('How do I spend Bosses Coins?',
+                textAlign: TextAlign.start,
+                style: bodyText1.copyWith(
+                    fontWeight: FontWeight.w700, color: Colors.black),),
+            const SizedBox(
+              height: 10,
             ),
             const Row(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -105,16 +109,15 @@ class CoinPopup extends StatelessWidget {
                 ),
               ],
             ),
-
-             const SizedBox(
-              height: 20,
-            ),
-             Text('How do I withdraw my Bosses Coins to cash?',
-                textAlign: TextAlign.start,
-                style: bodyText1.copyWith(
-                    fontWeight: FontWeight.w700, color: Colors.red)),
             const SizedBox(
               height: 20,
+            ),
+            Text('How do I withdraw my Bosses Coins to cash?',
+                textAlign: TextAlign.start,
+                style: bodyText1.copyWith(
+                    fontWeight: FontWeight.w700, color: Colors.black),),
+            const SizedBox(
+              height: 10,
             ),
             const Row(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -130,7 +133,6 @@ class CoinPopup extends StatelessWidget {
                 ),
               ],
             ),
-            
             const SizedBox(
               height: 20,
             ),

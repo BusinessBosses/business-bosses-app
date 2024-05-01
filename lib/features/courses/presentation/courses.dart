@@ -196,21 +196,30 @@ class _CoursesPageState extends State<CoursesPage> {
                             },
                             child: Padding(
                               padding: const EdgeInsets.only(left: 10.0),
-                              child: Wrap(
-                                crossAxisAlignment: WrapCrossAlignment.center,
-                                children: [
-                                  Text('Coin Balance: '),
-                                  SvgPicture.asset('assets/svgs/coin.svg'),
-                                  SizedBox(
-                                    width: 2,
-                                  ),
-                                  Text(
-                                    '${profileController.myProfile.coinscount!}',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.w700,
-                                        color: subtextColor),
-                                  )
-                                ],
+                              child: Container(
+                                      width:142,
+                                      padding: EdgeInsets.symmetric(vertical: 1),
+                                      decoration: BoxDecoration(
+                                        color:  backgroundColor,
+                                        borderRadius: BorderRadius.circular(5)
+                                      ),
+                                child: Wrap(
+                                   alignment: WrapAlignment.center, 
+                                  crossAxisAlignment: WrapCrossAlignment.center,
+                                  children: [
+                                    Text('Balance: '),
+                                    SvgPicture.asset('assets/svgs/coin.svg'),
+                                    SizedBox(
+                                      width: 2,
+                                    ),
+                                    Text(
+                                      '${profileController.myProfile.coinscount!}',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w700,
+                                          color: subtextColor),
+                                    )
+                                  ],
+                                ),
                               ),
                             ),
                           ),
@@ -225,7 +234,7 @@ class _CoursesPageState extends State<CoursesPage> {
                               child: Wrap(
                                   crossAxisAlignment: WrapCrossAlignment.center,
                                   children: [
-                                    Text('Course History '),
+                                    Text('Course History ', style: TextStyle(fontWeight: FontWeight.w700),),
                                     SvgPicture.asset(
                                       'assets/svgs/nexticon.svg',
                                       color: textColor,

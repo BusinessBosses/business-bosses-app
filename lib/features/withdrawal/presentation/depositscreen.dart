@@ -237,7 +237,7 @@ class _DepositsScreenState extends State<DepositsScreen> {
                                         fontSize: 16),
                                   ),
                                   Text(
-                                    'Get 500 coins monthly',
+                                    'Get 100 coins monthly',
                                     style: TextStyle(
                                         color: Colors.grey,
                                         fontWeight: FontWeight.w700),
