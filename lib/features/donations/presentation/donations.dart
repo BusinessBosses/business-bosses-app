@@ -111,6 +111,16 @@ class _DonationsPageState extends State<DonationsPage> {
                                         );
                                         return;
                                       }
+                                      if (donationsController
+                                          .doesUserDonationExist()) {
+                                        Get.snackbar(
+                                          'Error!',
+                                          'You cannot create multiple donations!',
+                                          backgroundColor: Colors.red,
+                                          colorText: Colors.white,
+                                        );
+                                        return;
+                                      }
                                       Get.toNamed(Routes.createdonationsscreen);
                                     },
                                     child: Row(

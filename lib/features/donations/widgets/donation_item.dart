@@ -51,16 +51,16 @@ class _DonationItemState extends State<DonationItem> {
     const PopupMenuDivider(
       height: 0.0,
     ),
-    // const PopupMenuItem<String>(
-    //   value: 'Delete',
-    //   child: Text(
-    //     'Delete',
-    //     style: bodyText2,
-    //   ),
-    // ),
-    // const PopupMenuDivider(
-    //   height: 0.0,
-    // ),
+    const PopupMenuItem<String>(
+      value: 'Delete',
+      child: Text(
+        'Delete',
+        style: bodyText2,
+      ),
+    ),
+    const PopupMenuDivider(
+      height: 0.0,
+    ),
     const PopupMenuItem<String>(
       value: 'Boost',
       child: Text(
@@ -279,32 +279,33 @@ class _DonationItemState extends State<DonationItem> {
                             Get.to(() => CreateDonationScreen(
                                   donation: widget.donation,
                                 ));
-                            // } else if (val == 'Delete') {
-                            //   showDialog(
-                            //     context: context,
-                            //     builder: (BuildContext context) => AlertDialog(
-                            //       title: const Text(
-                            //         'Delete Donation Post',
-                            //         style: bodyText1,
-                            //       ),
-                            //       content: const Text(
-                            //           'Are you sure you want to delete this donation post?'),
-                            //       actions: <Widget>[
-                            //         TextButton(
-                            //           onPressed: () => Get.back(),
-                            //           child: const Text('No'),
-                            //         ),
-                            //         TextButton(
-                            //           onPressed: () {
-                            //             // CourseController()
-                            //             //     .onDeleteCourse(widget.course.id!);
-                            //             // Get.back();
-                            //           },
-                            //           child: const Text('Yes'),
-                            //         ),
-                            //       ],
-                            //     ),
-                            //   );
+                          } else if (val == 'Delete') {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) => AlertDialog(
+                                title: const Text(
+                                  'Delete Donation Post',
+                                  style: bodyText1,
+                                ),
+                                content: const Text(
+                                    'Are you sure you want to delete this donation post?'),
+                                actions: <Widget>[
+                                  TextButton(
+                                    onPressed: () => Get.back(),
+                                    child: const Text('No'),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      donationsController
+                                          .deleteDonation(widget.donation.id);
+                                      Get.back();
+                                      setState(() {});
+                                    },
+                                    child: const Text('Yes'),
+                                  ),
+                                ],
+                              ),
+                            );
                           } else if (val == 'Boost') {
                             Get.to(() => BoostDonation(
                                   donationId: widget.donation.id,

@@ -40,8 +40,6 @@ class HomeController extends GetxController {
   List<Industry> industries = [];
   List<UserModel> bossupMembers = [];
 
-  List<ForumModel> bossupForums = [];
-
   RxInt paginationPage = RxInt(1);
   RxBool loading = RxBool(false);
   RxBool loadingMore = RxBool(false);
@@ -65,11 +63,6 @@ class HomeController extends GetxController {
 
   void addIndustries(List<Industry> data) {
     industries = data;
-  }
-
-  void addBossupForums(List<ForumModel> data) {
-    bossupForums.clear();
-    bossupForums = data;
   }
 
   void addMarkets(RxList<MarketModel> data) {
@@ -944,8 +937,6 @@ class HomeController extends GetxController {
         element['isForum'] &&
         element['data'].forumId == forumId);
     ApiService.delete(path: 'forum/delete/$forumId');
-    bossupForums
-        .removeWhere((ForumModel element) => element.forumId == forumId);
     update();
   }
 

@@ -1,3 +1,4 @@
+import 'package:business_bosses_v2/features/donations/controller/donations_controller.dart';
 import 'package:business_bosses_v2/features/donations/presentation/donations.dart';
 import 'package:business_bosses_v2/features/forum/presentation/bossup_challenge.dart';
 import 'package:business_bosses_v2/features/forum/widgets/forum_item.dart';
@@ -41,6 +42,8 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
 
   final CommunitiesController _communitiesController =
       Get.put(CommunitiesController());
+  final DonationsController donationsController =
+      Get.put(DonationsController());
   final ProfileController _profileController = Get.find();
   late final TabController _searchTabController;
   late final TabController _pageTabController;

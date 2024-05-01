@@ -18,7 +18,9 @@ class _DonationCreatedState extends State<DonationCreated> {
       appBar: AppBar(
         leading: IconButton(
           onPressed: () {
-            Get.to(() => const AllCommunitiesScreen());
+            Get.to(() => const AllCommunitiesScreen(
+                  initialTabIndex: 2,
+                ));
           },
           icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
         ),

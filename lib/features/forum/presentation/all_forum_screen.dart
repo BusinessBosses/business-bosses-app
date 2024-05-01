@@ -16,9 +16,7 @@ import '../../../utils/theme/theme.dart';
 
 class AllForumScreen extends StatefulWidget {
   static const String routeName = 'all-forum-screen';
-  const AllForumScreen({super.key });
-
-
+  const AllForumScreen({super.key});
 
   @override
   State<AllForumScreen> createState() => _AllForumScreenState();
@@ -52,7 +50,7 @@ class _AllForumScreenState extends State<AllForumScreen> {
       print("Selected Filter Option: $_filtercourses");
     });
 
-  //  CoursesPage.callUpdateFilter(filterOption);
+    //  CoursesPage.callUpdateFilter(filterOption);
   }
 
   @override
@@ -129,7 +127,8 @@ class _AllForumScreenState extends State<AllForumScreen> {
                                           ),
                                           color: Colors.white,
                                           child: Text(
-                                            preferenceslist[index] + preferencesnumber[index],
+                                            preferenceslist[index] +
+                                                preferencesnumber[index],
                                             style: const TextStyle(
                                               fontWeight: FontWeight.bold,
                                             ),
@@ -172,7 +171,7 @@ class _AllForumScreenState extends State<AllForumScreen> {
                   color: Colors.white,
                   constraints: const BoxConstraints.expand(height: 50),
                   child: TabBar(
-                    tabs: <Widget>[
+                    tabs: const <Widget>[
                       Tab(text: 'Topics'),
                       Tab(text: 'Courses'),
                     ],
@@ -190,9 +189,8 @@ class _AllForumScreenState extends State<AllForumScreen> {
                       Container(child: const TopicsPage()),
                       Container(
                         child: CoursesPage(
-                          industryId: industry.industryId!, filter: _filtercourses,
-                          
-                          
+                          industryId: industry.industryId!,
+                          filter: _filtercourses,
                         ),
                       ),
                     ],
