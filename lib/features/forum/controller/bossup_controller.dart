@@ -17,10 +17,9 @@ class BossUpController extends GetxController {
   late IO.Socket socket;
   final HomeController _homeController = Get.find();
   final ProfileController _profileController = Get.find();
-  List<ForumModel> forums = <ForumModel>[];
+  RxList<ForumModel> forums = <ForumModel>[].obs;
   List<UserModel> members = <UserModel>[];
   RxInt totalForums = RxInt(0);
-  RxInt page = RxInt(0);
   RxInt membersPage = RxInt(0);
   RxBool loadingNextMembers = RxBool(false);
   RxBool loading = RxBool(false);
@@ -30,55 +29,47 @@ class BossUpController extends GetxController {
 
   Future<void> fetchForums(String industryId) async {
     loading(true);
-    error(false);
     update();
-    ApiResponseModel response;
-    response = await ForumRepository.getForums(page.value, industryId);
+    try {
+      final ApiResponseModel response =
+          await ForumRepository.getForums(0, industryId);
+      if (response.success) {
+        totalForums(int.parse(response.data['count'].toString()));
 
-    if (response.success) {
-      totalForums(int.parse(response.data['count'].toString()));
-      page(page.value + 1);
+        // Separate lists for ranked and non-ranked posts
+        List<ForumModel> rankedForums = <ForumModel>[];
+        List<ForumModel> nonRankedForums = <ForumModel>[];
 
-      // Separate lists for ranked and non-ranked posts
-      List<ForumModel> rankedForums = <ForumModel>[];
-      List<ForumModel> nonRankedForums = <ForumModel>[];
-
-      for (int i = 0; i < response.data['rows'].length; i++) {
-        if (response.data['rows'][i]['user'] != null) {
-          ForumModel forum = ForumModel.fromMap(<String, dynamic>{
-            ...response.data['rows'][i],
-            'likes': response.data['rows'][i]['likes']
-                .map((dynamic like) => like['userId'].toString())
-                .toList(),
-            'coins': response.data['rows'][i]['coins']
-                .map((dynamic coin) => coin['userId'].toString())
-                .toList()
-          });
-
-          if (forum.isRanked != null && forum.isRanked!) {
-            rankedForums.add(forum);
-          } else {
-            nonRankedForums.add(forum);
+        for (int i = 0; i < response.data['rows'].length; i++) {
+          if (response.data['rows'][i]['user'] != null) {
+            ForumModel forum = ForumModel.fromMap(<String, dynamic>{
+              ...response.data['rows'][i],
+              'likes': response.data['rows'][i]['likes']
+                  .map((dynamic like) => like['userId'].toString())
+                  .toList(),
+              'coins': response.data['rows'][i]['coins']
+                  .map((dynamic coin) => coin['userId'].toString())
+                  .toList()
+            });
+            if (forum.isRanked != null && forum.isRanked!) {
+              rankedForums.add(forum);
+            } else {
+              nonRankedForums.add(forum);
+            }
           }
         }
+        List<ForumModel> combinedForums = <ForumModel>[
+          ...rankedForums,
+          ...nonRankedForums
+        ];
+        forums.assignAll(combinedForums); // Add the combined list of forums
+      } else {
+        error(true);
       }
-      // After categorizing ranked and non-ranked forums
-      nonRankedForums.sort((ForumModel a, ForumModel b) =>
-          b.likes!.length.compareTo(a.likes!.length));
-      // Combine ranked and non-ranked posts, with ranked posts at the beginning
-      List<ForumModel> combinedForums = <ForumModel>[
-        ...rankedForums,
-        ...nonRankedForums
-      ];
-
-      // Clear the existing list before adding new forums
-      forums.addAll(combinedForums); // Add the combined list of forums
-
-      _homeController.addBossupForums(forums);
-    } else {
+    } catch (e) {
+      // You can set error flag to true to indicate that an error occurred
       error(true);
     }
-
     loading(false);
     update();
   }

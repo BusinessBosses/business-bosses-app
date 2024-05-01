@@ -170,7 +170,7 @@ class _CourseItemState extends State<CourseItem> {
                         widget.course.setViews();
                       });
                       courseController.updateCourseViews(
-                          widget.course.id!, widget.course.views);
+                          widget.course.id, widget.course.views + 1);
                       Get.to(() => ExpandedCourseScreen(course: widget.course));
                     },
                     child: Container(

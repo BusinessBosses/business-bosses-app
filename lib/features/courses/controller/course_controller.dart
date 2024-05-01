@@ -43,7 +43,12 @@ class CourseController extends GetxController {
         await ApiService.post(path: 'courses/create-course', body: course);
 
     if (response.success) {
-      courses.insert(0, CourseModel.fromMap(course));
+      courses.insert(
+          0,
+          CourseModel.fromMap(<String, dynamic>{
+            ...course,
+            'id': response.data['id'],
+          }));
       Get.back();
       Get.snackbar('Success', 'Course created successfully');
     }
@@ -52,25 +57,40 @@ class CourseController extends GetxController {
   }
 
   Future<void> updateCourse(Map<String, dynamic> course, String id) async {
-    loading(true);
-    update();
     final ApiResponseModel response =
         await ApiService.put(path: 'courses/update-course/$id', body: course);
 
     if (response.success) {
-      courses.insert(0, CourseModel.fromMap(course));
-      Get.back();
-      Get.snackbar('Success', 'Course updated successfully');
-    } else {
-
+      int index = courses.indexWhere((c) => c.id == id);
+      if (index != -1) {
+        courses[index] = CourseModel.fromMap(course);
+        Get.back();
+        showSnackbar(message: 'Course updated successfully', title: 'Success');
+      } else {
+        showSnackbar(
+            message: 'Course not found in the list',
+            title: 'Error',
+            error: true);
+      }
+      update();
     }
-    loading(false);
-    update();
   }
 
   Future<void> updateCourseViews(String id, int views) async {
-    Map<String, dynamic> course = {'views': views};
-    await ApiService.put(path: 'courses/update-course/$id', body: course);
+    Map<String, dynamic> course = <String, dynamic>{'views': views};
+    final ApiResponseModel response =
+        await ApiService.put(path: 'courses/update-course/$id', body: course);
+
+    if (response.success) {
+      int index = courses.indexWhere((c) => c.id == id);
+      if (index != -1) {
+        courses[index] = CourseModel.fromMap({
+          ...courses[index].toMap(),
+          ...course,
+        });
+      }
+      update();
+    }
   }
 
   Future<void> initCourses() async {

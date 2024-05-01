@@ -13,6 +13,7 @@ class DonationsController extends GetxController {
   late IO.Socket socket;
   final ProfileController profileController = Get.find();
   RxList<DonationModel> donations = <DonationModel>[].obs;
+  RxList<DonationModel> donationsNotApproved = <DonationModel>[].obs;
   RxList<UserModel> users = <UserModel>[].obs;
   RxList<UserModel> usersMembers = <UserModel>[].obs;
   RxList<dynamic> times = <dynamic>[].obs;
@@ -56,6 +57,25 @@ class DonationsController extends GetxController {
             donations.add(donation);
           }
         }
+        ApiResponseModel responseNot =
+            await ApiService.get(path: 'donation/query?isActive=false');
+
+        // Clear previous donations before adding new ones
+        donationsNotApproved.clear();
+        if (responseNot.success) {
+          for (int i = 0; i < responseNot.data['rows'].length; i++) {
+            if (responseNot.data['rows'][i]['user'] != null) {
+              DonationModel donationNot =
+                  DonationModel.fromMap(<String, dynamic>{
+                ...responseNot.data['rows'][i],
+                'likes': responseNot.data['rows'][i]['likes']
+                    .map((dynamic like) => like['userId'].toString())
+                    .toList(),
+              });
+              donationsNotApproved.add(donationNot);
+            }
+          }
+        }
       }
       error(false);
     } catch (e) {
@@ -64,6 +84,39 @@ class DonationsController extends GetxController {
       loading(false); // Set loading back to false after fetching data
     }
     update();
+  }
+
+  Future<void> deleteDonation(String donationId) async {
+    try {
+      ApiResponseModel response =
+          await ApiService.delete(path: 'donation/$donationId');
+
+      if (response.success) {
+        // Remove the deleted donation from the list
+        donations
+            .removeWhere((DonationModel donation) => donation.id == donationId);
+        donationsNotApproved
+            .removeWhere((DonationModel donation) => donation.id == donationId);
+        Get.snackbar('Success', 'Donation Deleted Successfully');
+      } else {
+        Get.snackbar('Error', 'Failed to Delete Donation');
+      }
+    } catch (e) {
+      Get.snackbar('Error', 'Failed to Delete Donation');
+    }
+  }
+
+  bool doesUserDonationExist() {
+    final String userId = profileController.myProfile.uid;
+    final bool approved = donations.any((DonationModel donation) =>
+        donation.user?.uid == userId &&
+        donation.amountRecieved < donation.targetAmount!);
+    final bool pending = donationsNotApproved
+        .any((DonationModel donation) => donation.user?.uid == userId);
+    if (pending || approved) {
+      return true;
+    }
+    return false;
   }
 
   Future<void> fetchDonationTransactions(DonationModel donation) async {
@@ -102,6 +155,11 @@ class DonationsController extends GetxController {
         await ApiService.post(path: 'donation', body: donation);
     if (response.success) {
       Get.to(() => const DonationCreated());
+      donationsNotApproved.add(DonationModel.fromMap(<String, dynamic>{
+        ...donation,
+        'id': response.data['id'],
+        'amountRecieved': 0,
+      }));
     }
   }
 

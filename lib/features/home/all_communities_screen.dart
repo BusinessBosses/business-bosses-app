@@ -1,3 +1,4 @@
+import 'package:business_bosses_v2/features/donations/controller/donations_controller.dart';
 import 'package:business_bosses_v2/features/donations/presentation/donations.dart';
 import 'package:business_bosses_v2/features/forum/presentation/bossup_challenge.dart';
 import 'package:business_bosses_v2/features/forum/widgets/forum_item.dart';
@@ -22,9 +23,11 @@ import '../search/widgets/search_bar.dart';
 class AllCommunitiesScreen extends StatefulWidget {
   // ignore: public_member_api_docs
   static const String routeName = '/all-communities-screen';
+  final int? initialTabIndex;
 
   // ignore: public_member_api_docs
-  const AllCommunitiesScreen({Key? key}) : super(key: key);
+  const AllCommunitiesScreen({Key? key, this.initialTabIndex})
+      : super(key: key);
 
   @override
   // ignore: library_private_types_in_public_api
@@ -39,8 +42,11 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
 
   final CommunitiesController _communitiesController =
       Get.put(CommunitiesController());
+  final DonationsController donationsController =
+      Get.put(DonationsController());
   final ProfileController _profileController = Get.find();
   late final TabController _searchTabController;
+  late final TabController _pageTabController;
 
   List<Widget> get mActions {
     return <Widget>[
@@ -66,6 +72,8 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
     // TODO: implement initState
     super.initState();
     _searchTabController = TabController(length: 2, vsync: this);
+    _pageTabController = TabController(
+        length: 3, vsync: this, initialIndex: widget.initialTabIndex ?? 0);
   }
 
   @override
@@ -107,11 +115,12 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
                                 : const Text('Boss Up'),
                             actions: mActions,
                             bottom: !_isSearching
-                                ? const TabBar(
-                                    labelStyle:
-                                        TextStyle(fontWeight: FontWeight.w500),
+                                ? TabBar(
+                                    controller: _pageTabController,
+                                    labelStyle: const TextStyle(
+                                        fontWeight: FontWeight.w500),
                                     labelColor: Colors.black,
-                                    tabs: <Widget>[
+                                    tabs: const <Widget>[
                                         Tab(
                                           text: 'Challenge',
                                         ),
@@ -139,6 +148,7 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
                           ),
                           body: !_isSearching
                               ? TabBarView(
+                                  controller: _pageTabController,
                                   children: <Widget>[
                                     // content of Tab 1
                                     controller.loading.value
@@ -364,6 +374,7 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
   void dispose() {
     // TODO: implement dispose
     _searchTabController.dispose();
+    _pageTabController.dispose();
     super.dispose();
   }
 

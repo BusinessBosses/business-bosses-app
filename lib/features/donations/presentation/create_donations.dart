@@ -158,7 +158,7 @@ class _CreateDonationScreenState extends State<CreateDonationScreen> {
                           ),
                           onChanged: (String val) {
                             targetAmount = int.tryParse(val) ?? 0;
-                              setState(() {});
+                            setState(() {});
                           },
                         ),
                         Positioned(
@@ -255,10 +255,12 @@ class _CreateDonationScreenState extends State<CreateDonationScreen> {
                   ],
                 ),
               ),
-              const SizedBox(height: 20,),
+              const SizedBox(
+                height: 20,
+              ),
               if (_selectedImage != null || photo != null)
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal:15.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 15.0),
                   child: Stack(
                     children: <Widget>[
                       SizedBox(
@@ -396,6 +398,16 @@ class _CreateDonationScreenState extends State<CreateDonationScreen> {
                   isProcessing: isProcessing,
                   buttonType: ButtonType.elevated,
                   onPressed: () async {
+                    if (_selectedImage == null &&
+                        photo == null &&
+                        _ytUrl == null) {
+                      Get.snackbar(
+                        'Error!',
+                        'You must add an image or youtube url to continue!',
+                        backgroundColor: Colors.red,
+                        colorText: Colors.white,
+                      );
+                    }
                     setState(() {
                       isProcessing = true;
                     });
