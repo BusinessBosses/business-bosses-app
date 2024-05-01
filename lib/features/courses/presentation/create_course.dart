@@ -416,7 +416,7 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                         if (!_validateVideoLinks()) {
                           Get.snackbar(
                             'Error',
-                            'Please enter valid URLs for video links!',
+                            'Please enter valid youtube URLs for video links!',
                             backgroundColor: Colors.redAccent,
                             colorText: Colors.white,
                           );
@@ -596,7 +596,9 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
   bool _validateVideoLinks() {
     for (dynamic videoLink in videoLinks) {
       if (!_isValidUrl(videoLink.url)) {
-        return false;
+        if (!_isValidYoutubeUrl(videoLink.url)) {
+          return false;
+        }
       }
     }
     return true;
@@ -640,5 +642,14 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
         ),
       ),
     );
+  }
+
+  bool _isValidYoutubeUrl(String url) {
+    final RegExp youtubeRegExp = RegExp(
+      r'^(https?\:\/\/)?(www\.youtube\.com|youtu\.?be)\/.+$',
+      caseSensitive: false,
+      multiLine: false,
+    );
+    return youtubeRegExp.hasMatch(url);
   }
 }
