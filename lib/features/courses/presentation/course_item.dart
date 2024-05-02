@@ -8,6 +8,7 @@ import 'package:business_bosses_v2/features/courses/controller/course_controller
 import 'package:business_bosses_v2/common/widgets/typography/text_widget.dart';
 import 'package:business_bosses_v2/features/courses/models/course_comment_model.dart';
 import 'package:business_bosses_v2/features/courses/models/course_model.dart';
+import 'package:business_bosses_v2/features/courses/presentation/course_reviews.dart';
 import 'package:business_bosses_v2/features/courses/presentation/create_course.dart';
 import 'package:business_bosses_v2/features/courses/presentation/expanded_course_screen.dart';
 import 'package:business_bosses_v2/features/courses/widgets/course_comment_bottomsheet.dart';
@@ -532,16 +533,25 @@ class _CourseItemState extends State<CourseItem> {
                 const SizedBox(
                   width: 10,
                 ),
-                const Icon(
-                  Icons.star,
-                  color: Color.fromRGBO(255, 202, 40, 1),
-                  size: 16,
-                ),
-                Text(
-                  widget.course.averageRating.toString(),
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 13,
+                GestureDetector(
+                  onTap: (){
+                    Get.to(CourseReviewScreen(course: widget.course!));
+                  },
+                  child: Wrap(
+                    children: [
+                      const Icon(
+                        Icons.star,
+                        color: Color.fromRGBO(255, 202, 40, 1),
+                        size: 16,
+                      ),
+                      Text(
+                        widget.course.averageRating.toString(),
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 13,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 const SizedBox(
