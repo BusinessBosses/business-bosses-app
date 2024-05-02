@@ -1,8 +1,6 @@
 import 'package:business_bosses_v2/action/action.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
-import 'package:business_bosses_v2/common/models/comment_model.dart';
-import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/common/widgets/buttons/my_outlined_button.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/common/widgets/popup/my_popup_menu_button.dart';
@@ -12,13 +10,11 @@ import 'package:business_bosses_v2/features/courses/controller/course_controller
 import 'package:business_bosses_v2/features/courses/models/course_comment_model.dart';
 import 'package:business_bosses_v2/features/courses/models/course_model.dart';
 import 'package:business_bosses_v2/features/courses/models/reviews_model.dart';
-import 'package:business_bosses_v2/features/courses/presentation/course_item.dart';
 import 'package:business_bosses_v2/features/courses/presentation/create_course.dart';
 import 'package:business_bosses_v2/features/courses/widgets/course_comment_bottomsheet.dart';
 import 'package:business_bosses_v2/features/courses/widgets/downloadable_item.dart';
 import 'package:business_bosses_v2/features/courses/widgets/unpaidcoursepopup.dart';
 import 'package:business_bosses_v2/features/posts/presentation/boost_post_screen.dart';
-import 'package:business_bosses_v2/features/posts/widgets/my_container.dart';
 import 'package:business_bosses_v2/features/posts/widgets/youtube_display.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
@@ -26,13 +22,8 @@ import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
-import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
-
-import 'package:zego_uikit_prebuilt_live_audio_room/zego_uikit_prebuilt_live_audio_room.dart';
 
 int selectedVideo = 0;
 
@@ -122,7 +113,7 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
   Widget build(BuildContext context) {
     ScrollController scrollController = ScrollController();
     return Scaffold(
-      backgroundColor:Colors.white,
+      backgroundColor: Colors.white,
       body: NestedScrollView(
         controller: scrollController,
         headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
@@ -242,7 +233,7 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
                                                 onPressed: () {
                                                   CourseController()
                                                       .onDeleteCourse(
-                                                          widget.course.id!);
+                                                          widget.course.id);
                                                   Get.back();
                                                 },
                                                 child: const Text('Yes'),
@@ -252,7 +243,7 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
                                         );
                                       } else if (val == 'Boost') {
                                         Get.to(() => BoostPost(
-                                              postId: widget.course.id!,
+                                              postId: widget.course.id,
                                               postTitle: widget.course.title!,
                                             ));
                                       }

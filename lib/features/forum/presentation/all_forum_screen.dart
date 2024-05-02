@@ -4,7 +4,6 @@ import 'package:business_bosses_v2/features/courses/presentation/courses.dart';
 import 'package:business_bosses_v2/features/forum/controller/forum_controller.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
@@ -186,12 +185,10 @@ class _AllForumScreenState extends State<AllForumScreen> {
                   child: TabBarView(
                     physics: const NeverScrollableScrollPhysics(),
                     children: <Widget>[
-                      Container(child: const TopicsPage()),
-                      Container(
-                        child: CoursesPage(
-                          industryId: industry.industryId!,
-                          filter: _filtercourses,
-                        ),
+                      const TopicsPage(),
+                      CoursesPage(
+                        industryId: industry.industryId!,
+                        filter: _filtercourses,
                       ),
                     ],
                   ),

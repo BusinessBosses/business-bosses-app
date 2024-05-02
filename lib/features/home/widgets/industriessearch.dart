@@ -1,6 +1,11 @@
+import 'package:business_bosses_v2/features/forum/controller/challenge_controller.dart';
+import 'package:business_bosses_v2/features/forum/presentation/bossup_screen.dart';
+import 'package:business_bosses_v2/navigation/routes.dart';
+import 'package:business_bosses_v2/utils/constants/constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 import '../../../common/widgets/safety_model.dart';
 import '../../../common/widgets/tiles/custom_tile.dart';
 import '../../../utils/theme/theme.dart';
@@ -8,9 +13,10 @@ import '../../forum/models/industry.dart';
 
 class MySearchIndustries extends StatelessWidget {
   final List<Industry> searchIndustries;
+  final ChallengeController challengeController = Get.find();
   final bool isLoading;
 
-  const MySearchIndustries({
+  MySearchIndustries({
     Key? key,
     this.searchIndustries = const <Industry>[],
     this.isLoading = false,
@@ -40,29 +46,18 @@ class MySearchIndustries extends StatelessWidget {
                 label: searchIndustries[i].industry!,
                 photo: searchIndustries[i].photo!,
                 onTap: () {
-                  // searchIndustries[i]
-                  //         .industryId
-                  //         .contains('-MsUPNEHnp8-An5VLI_v')
-                  //     ? Navigator.push(
-                  //         context,
-                  //         MaterialPageRoute(
-                  //           builder: (context) => BottomNavScreen(2, true),
-                  //         ),
-                  //       )
-                  //     : searchIndustries[i]
-                  //             .industryId
-                  //             .contains('-MsUOGcOT9oRXGakCcJv')
-                  //         ? Navigator.push(
-                  //             context,
-                  //             MaterialPageRoute(
-                  //               builder: (context) => BottomNavScreen(1, true),
-                  //             ),
-                  //           )
-                  //         : navigateTo(
-                  //             context,
-                  //             routeName: AllForumScreen.routeName,
-                  //             arguments: searchIndustries[i].industryId,
-                  //           );
+                  if (searchIndustries[i].categoryId ==
+                      Constants.BOSS_UP_CHALLENGE_CATEGORY_ID) {
+                    Get.to(() => BossUpSection(
+                          industry: searchIndustries[i],
+                          bossUp: challengeController.categories[0],
+                        ));
+                  } else {
+                    Get.toNamed(
+                      Routes.allforumscreen,
+                      arguments: searchIndustries[i],
+                    );
+                  }
                 },
               );
             },

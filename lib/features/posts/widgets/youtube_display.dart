@@ -5,10 +5,10 @@ import 'package:visibility_detector/visibility_detector.dart';
 
 class YoutubeDisplay extends StatefulWidget {
   final String youtubeUrl;
-  final BorderRadiusGeometry ? corner;
+  final BorderRadiusGeometry? corner;
 
-  const YoutubeDisplay(this.youtubeUrl, {this.corner, Key? key}) : super(key: key);
-
+  const YoutubeDisplay(this.youtubeUrl, {this.corner, Key? key})
+      : super(key: key);
 
   @override
   _YoutubeDisplayState createState() => _YoutubeDisplayState();
@@ -20,14 +20,14 @@ class _YoutubeDisplayState extends State<YoutubeDisplay> {
   late TextEditingController _idController;
   late TextEditingController _seekToController;
   final bool _isPlayerReady = false;
-  late String videoId;
+  late String? videoId;
 
   @override
   void initState() {
     super.initState();
     videoId = YoutubePlayer.convertUrlToId(widget.youtubeUrl)!;
     _controller = YoutubePlayerController(
-      initialVideoId: videoId,
+      initialVideoId: videoId!,
       flags: const YoutubePlayerFlags(
         mute: false,
         autoPlay: false,
@@ -47,7 +47,7 @@ class _YoutubeDisplayState extends State<YoutubeDisplay> {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.youtubeUrl != widget.youtubeUrl) {
       videoId = YoutubePlayer.convertUrlToId(widget.youtubeUrl)!;
-      _controller.load(videoId);
+      _controller.load(videoId!);
     }
   }
 
@@ -76,7 +76,8 @@ class _YoutubeDisplayState extends State<YoutubeDisplay> {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        borderRadius: widget.corner ?? BorderRadius.circular(50) , // Adjust the radius as needed
+        borderRadius: widget.corner ??
+            BorderRadius.circular(50), // Adjust the radius as needed
         color: Colors.blue,
       ),
       height: 200,
