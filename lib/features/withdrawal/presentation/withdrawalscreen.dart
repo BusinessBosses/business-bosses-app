@@ -245,7 +245,7 @@ class _WithdrawalScreenState extends State<WithdrawalScreen> {
                         Container(
                           width: double.infinity,
                           height: 50,
-                          child: ElevatedButton(
+                          child: CustomButton(
                             onPressed: () async {
                               if (_withdrawlamountcontroller.text != '') {
                                 if (num.parse(_withdrawlamountcontroller.text) <
@@ -254,6 +254,14 @@ class _WithdrawalScreenState extends State<WithdrawalScreen> {
                                       title: 'OOPS!',
                                       message:
                                           'Withdrawal amount cannot be less than 5000 coins, please try again!',
+                                      error: true);
+                                } else if (num.parse(
+                                        _withdrawlamountcontroller.text) >
+                                    profileController.myProfile.coinsCount) {
+                                  showSnackbar(
+                                      title: 'OOPS!',
+                                      message:
+                                          'Withdrawal amount cannot exceed your balance, please try again!',
                                       error: true);
                                 } else if (_paymentmethods == null) {
                                   showSnackbar(
@@ -299,6 +307,8 @@ class _WithdrawalScreenState extends State<WithdrawalScreen> {
                                     error: true);
                               }
                             },
+                            isProcessing: isProcessing,
+                            buttonType: ButtonType.elevated,
                             child: const Text(
                               'Make Withdrawal',
                               style: TextStyle(

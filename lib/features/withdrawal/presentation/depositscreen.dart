@@ -1,6 +1,7 @@
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/widgets/buttons/custom_button.dart';
 import 'package:business_bosses_v2/common/widgets/safety_model.dart';
+import 'package:business_bosses_v2/features/home/all_communities_screen.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/features/promotions/widgets/buycoinslist_item.dart';
 import 'package:business_bosses_v2/features/withdrawal/controller/coinhistorycontroller.dart';
@@ -367,13 +368,13 @@ class _DepositsScreenState extends State<DepositsScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    'Sell a Course',
+                                    'Create Premium Courses',
                                     style: TextStyle(
                                         fontWeight: FontWeight.w700,
                                         fontSize: 16),
                                   ),
                                   Text(
-                                    'Create premium courses and earn',
+                                    'Monetise your expetise',
                                     style: TextStyle(
                                         color: Colors.grey,
                                         fontWeight: FontWeight.w700),
@@ -382,9 +383,9 @@ class _DepositsScreenState extends State<DepositsScreen> {
                               ),
                               GestureDetector(
                                 onTap: () {
-                                  !profileController.myProfile.isSubscribed
-                                      ? Get.toNamed(Routes.premiumscreen)
-                                      : null;
+                                  Get.to(() => const AllCommunitiesScreen(
+                                        initialTabIndex: 1,
+                                      ));
                                 },
                                 child: Container(
                                   padding: const EdgeInsets.symmetric(
@@ -399,8 +400,8 @@ class _DepositsScreenState extends State<DepositsScreen> {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Text(
-                                        'Sell Course',
+                                      const Text(
+                                        'Create',
                                         style: TextStyle(
                                             color: primaryColorLT,
                                             fontWeight: FontWeight.w700,

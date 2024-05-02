@@ -77,7 +77,7 @@ class _AllForumScreenState extends State<AllForumScreen> {
             ),
             actions: <Widget>[
               if (currentTabIndex ==
-                  1) // Show preferences button only for Courses tab
+                  0) // Show preferences button only for Courses tab
                 GestureDetector(
                   onTap: () {
                     showModalBottomSheet(
