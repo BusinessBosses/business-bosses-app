@@ -110,7 +110,9 @@ class _CourseItemState extends State<CourseItem> {
                             GestureDetector(
                                 onTap: () {},
                                 child: YoutubeDisplay(
-                                    widget.course.youtubeUrls![0])),
+                                    widget.course.youtubeUrls != null
+                                        ? widget.course.youtubeUrls![0]
+                                        : '')),
                             Positioned(
                               top: 0,
                               bottom: 0,
@@ -148,7 +150,7 @@ class _CourseItemState extends State<CourseItem> {
                                           width: 5,
                                         ),
                                         Text(
-                                          '${widget.course.youtubeUrls!.length.toString()} ${widget.course.youtubeUrls!.length > 1 ? 'Videos' : 'Video'}',
+                                          '${widget.course.youtubeUrls?.length.toString()} ${widget.course.youtubeUrls!.length > 1 ? 'Videos' : 'Video'}',
                                           style: const TextStyle(
                                             fontSize: 20,
                                             color: Colors.white,

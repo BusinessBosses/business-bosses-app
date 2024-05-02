@@ -155,7 +155,7 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
                                         ? const Center(
                                             child: CircularProgressIndicator(),
                                           )
-                                        : BossupChallenge(),
+                                        : const BossupChallenge(),
                                     // content of Tab 2
                                     Padding(
                                       padding: const EdgeInsets.only(

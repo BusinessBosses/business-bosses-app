@@ -1,6 +1,4 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-
-import 'package:business_bosses_v2/common/models/comment_model.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/features/courses/models/course_comment_model.dart';
 
@@ -153,9 +151,11 @@ class CourseModel {
       timestamp: map['timestamp'] != null
           ? int.parse(map['timestamp'].toString())
           : null,
-      comments: map['comments'] != null ? List.from(map['comments'])
-          .map((e) => CourseCommentModel.fromMap(e as Map<String, dynamic>))
-          .toList() : null,
+      comments: map['comments'] != null
+          ? List.from(map['comments'])
+              .map((e) => CourseCommentModel.fromMap(e as Map<String, dynamic>))
+              .toList()
+          : null,
       user: map['user'] != null
           ? UserModel.fromMap(map['user'] as Map<String, dynamic>)
           : null,
