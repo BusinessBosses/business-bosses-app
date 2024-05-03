@@ -28,6 +28,7 @@ class _CourseReviewScreenState extends State<CourseReviewScreen> {
   UserModel? cUser;
   int rater = 0;
   final CourseController courseController = Get.find();
+  ProfileController profileController = Get.find();
   String reviewText = '';
   List<dynamic>? reviews;
   bool isSending = false;
@@ -305,10 +306,14 @@ class _CourseReviewScreenState extends State<CourseReviewScreen> {
                                                       BorderRadius.circular(10),
                                                   child:
                                                       LinearProgressIndicator(
-                                                    value: (fiveStar /
-                                                            courseController
-                                                                .reviews.length)
-                                                        .toDouble(),
+                                                    value: courseController
+                                                            .reviews.isEmpty
+                                                        ? 0
+                                                        : (fiveStar /
+                                                                courseController
+                                                                    .reviews
+                                                                    .length)
+                                                            .toDouble(),
                                                     minHeight: 10,
                                                     backgroundColor:
                                                         Colors.grey,
@@ -339,13 +344,20 @@ class _CourseReviewScreenState extends State<CourseReviewScreen> {
                                                   borderRadius:
                                                       BorderRadius.circular(10),
                                                   child:
-                                                      const LinearProgressIndicator(
-                                                    value: 0,
+                                                      LinearProgressIndicator(
+                                                    value: courseController
+                                                            .reviews.isEmpty
+                                                        ? 0
+                                                        : (fourStar /
+                                                                courseController
+                                                                    .reviews
+                                                                    .length)
+                                                            .toDouble(),
                                                     minHeight: 10,
                                                     backgroundColor:
                                                         Colors.grey,
                                                     valueColor:
-                                                        AlwaysStoppedAnimation<
+                                                        const AlwaysStoppedAnimation<
                                                                 Color>(
                                                             Color.fromRGBO(255,
                                                                 202, 40, 1)),
@@ -371,13 +383,20 @@ class _CourseReviewScreenState extends State<CourseReviewScreen> {
                                                   borderRadius:
                                                       BorderRadius.circular(10),
                                                   child:
-                                                      const LinearProgressIndicator(
-                                                    value: 0,
+                                                      LinearProgressIndicator(
+                                                    value: courseController
+                                                            .reviews.isEmpty
+                                                        ? 0
+                                                        : (threeStar /
+                                                                courseController
+                                                                    .reviews
+                                                                    .length)
+                                                            .toDouble(),
                                                     minHeight: 10,
                                                     backgroundColor:
                                                         Colors.grey,
                                                     valueColor:
-                                                        AlwaysStoppedAnimation<
+                                                        const AlwaysStoppedAnimation<
                                                                 Color>(
                                                             Color.fromRGBO(255,
                                                                 202, 40, 1)),
@@ -403,13 +422,20 @@ class _CourseReviewScreenState extends State<CourseReviewScreen> {
                                                   borderRadius:
                                                       BorderRadius.circular(10),
                                                   child:
-                                                      const LinearProgressIndicator(
-                                                    value: 0,
+                                                      LinearProgressIndicator(
+                                                    value: courseController
+                                                            .reviews.isEmpty
+                                                        ? 0
+                                                        : (twoStar /
+                                                                courseController
+                                                                    .reviews
+                                                                    .length)
+                                                            .toDouble(),
                                                     minHeight: 10,
                                                     backgroundColor:
                                                         Colors.grey,
                                                     valueColor:
-                                                        AlwaysStoppedAnimation<
+                                                        const AlwaysStoppedAnimation<
                                                                 Color>(
                                                             Color.fromRGBO(255,
                                                                 202, 40, 1)),
@@ -437,13 +463,20 @@ class _CourseReviewScreenState extends State<CourseReviewScreen> {
                                                   borderRadius:
                                                       BorderRadius.circular(10),
                                                   child:
-                                                      const LinearProgressIndicator(
-                                                    value: 0,
+                                                      LinearProgressIndicator(
+                                                    value: courseController
+                                                            .reviews.isEmpty
+                                                        ? 0
+                                                        : (oneStar /
+                                                                courseController
+                                                                    .reviews
+                                                                    .length)
+                                                            .toDouble(),
                                                     minHeight: 10,
                                                     backgroundColor:
                                                         Colors.grey,
                                                     valueColor:
-                                                        AlwaysStoppedAnimation<
+                                                        const AlwaysStoppedAnimation<
                                                                 Color>(
                                                             Color.fromRGBO(255,
                                                                 202, 40, 1)),
@@ -462,18 +495,20 @@ class _CourseReviewScreenState extends State<CourseReviewScreen> {
                             const SizedBox(
                               height: 20,
                             ),
-                            MCustomButton(
-                              height: 50,
-                              buttonType: ButtonType.elevated,
-                              onPressed: () async {
-                                await rateCourse();
-                              },
-                              width: 200,
-                              child: const Text(
-                                'Rate Course',
-                                style: TextStyle(fontWeight: FontWeight.bold),
+                            if (widget.course.user?.uid !=
+                                profileController.myProfile.uid)
+                              MCustomButton(
+                                height: 50,
+                                buttonType: ButtonType.elevated,
+                                onPressed: () async {
+                                  await rateCourse();
+                                },
+                                width: 200,
+                                child: const Text(
+                                  'Rate Course',
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
                               ),
-                            ),
                             courseController.reviews.isEmpty
                                 ? const Column(
                                     children: <Widget>[
@@ -554,7 +589,6 @@ class _CourseReviewScreenState extends State<CourseReviewScreen> {
   }
 
   Future<void> rateCourse() async {
-    ProfileController profileController = Get.find();
     String reviewText = '';
 
     showModalBottomSheet(
@@ -742,8 +776,7 @@ class _CourseReviewScreenState extends State<CourseReviewScreen> {
                               },
                             );
                             if (response.success) {
-                              courseController.reviews
-                                  .insert(0, <String, dynamic>{
+                              courseController.reviews.add(<String, dynamic>{
                                 ...response.data,
                                 'rater': profileController.myProfile.toMap(),
                               });
