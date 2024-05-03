@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:business_bosses_v2/common/widgets/buttons/my_outlined_button.dart';
 import 'package:business_bosses_v2/features/courses/controller/course_controller.dart';
 import 'package:business_bosses_v2/features/courses/models/course_model.dart';
@@ -389,7 +387,6 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                     child: MCustomButton(
                       onPressed: () async {
                         if (selectedFilePaths.isNotEmpty) {
-                          // Upload each file
                           for (String filePath in selectedFilePaths) {
                             await courseController.uploadFile(filePath);
                           }
@@ -576,7 +573,7 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
   }
 
   List<String> _extractYoutubeUrls() {
-    List<String> youtubeUrls = [];
+    List<String> youtubeUrls = <String>[];
     for (dynamic videoLink in videoLinks) {
       if (_isValidUrl(videoLink.url)) {
         youtubeUrls.add(videoLink.url);
@@ -586,7 +583,7 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
   }
 
   List<String> _extractTranscripts() {
-    List<String> videoTranscripts = [];
+    List<String> videoTranscripts = <String>[];
     for (dynamic videoLink in videoLinks) {
       videoTranscripts.add(videoLink.transcript);
     }
@@ -611,7 +608,6 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
           videoLinks.length != 4
               ? videoLinks.add(VideoLinkData())
               : Get.snackbar('Error', 'You can only add 4 video links!');
-          ;
         });
       },
       child: Container(
