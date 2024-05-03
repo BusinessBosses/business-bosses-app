@@ -1,7 +1,6 @@
 // ignore_for_file: always_specify_types
 
 import 'package:business_bosses_v2/action/action.dart';
-import 'package:business_bosses_v2/common/models/comment_model.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/common/widgets/popup/my_popup_menu_button.dart';
 import 'package:business_bosses_v2/features/courses/controller/course_controller.dart';
@@ -286,7 +285,7 @@ class _CourseItemState extends State<CourseItem> {
                                   TextButton(
                                     onPressed: () {
                                       CourseController()
-                                          .onDeleteCourse(widget.course.id!);
+                                          .onDeleteCourse(widget.course.id);
                                       Get.back();
                                     },
                                     child: const Text('Yes'),
@@ -296,7 +295,7 @@ class _CourseItemState extends State<CourseItem> {
                             );
                           } else if (val == 'Boost') {
                             Get.to(() => BoostPost(
-                                  postId: widget.course.id!,
+                                  postId: widget.course.id,
                                   postTitle: widget.course.title!,
                                 ));
                           }
@@ -534,8 +533,8 @@ class _CourseItemState extends State<CourseItem> {
                   width: 10,
                 ),
                 GestureDetector(
-                  onTap: (){
-                    Get.to(CourseReviewScreen(course: widget.course!));
+                  onTap: () {
+                    Get.to(CourseReviewScreen(course: widget.course));
                   },
                   child: Wrap(
                     children: [
