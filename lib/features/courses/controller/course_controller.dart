@@ -145,10 +145,8 @@ class CourseController extends GetxController {
         dynamic jsonResponse = await http.Response.fromStream(response);
         Map<String, dynamic> data = json.decode(jsonResponse.body);
         if (data.containsKey('file_name')) {
-          print(data['file_name']);
           return data['file_name'];
         } else {
-          print('File name not found in the response');
           return null;
         }
       } else {
