@@ -155,7 +155,7 @@ class _CreateDonationScreenState extends State<CreateDonationScreen> {
                           maxLength: 7,
                           decoration: inputDecoration.copyWith(
                             hintText: 'Enter Amount to raise e.g 2000',
-                             counterText: '',
+                            counterText: '',
                           ),
                           onChanged: (String val) {
                             targetAmount = int.tryParse(val) ?? 0;

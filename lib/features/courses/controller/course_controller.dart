@@ -1,10 +1,9 @@
+import 'dart:convert';
+
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
-import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/features/courses/models/course_model.dart';
 import 'package:business_bosses_v2/features/forum/models/industry.dart';
-import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
-import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:http/http.dart' as http;
 import 'package:get/get.dart';
@@ -19,10 +18,13 @@ class CourseController extends GetxController {
   List<dynamic> myHistoryOut = <dynamic>[];
   RxBool hLoading = RxBool(false);
   RxBool hError = RxBool(false);
+  RxBool rLoading = RxBool(false);
+  RxBool rError = RxBool(false);
+  List<dynamic> reviews = <dynamic>[];
 
   @override
   void onInit() {
-    // TODO: implement onInit
+    super.onInit();
     if (Get.arguments == null) {
       Get.back();
       return;
@@ -32,8 +34,6 @@ class CourseController extends GetxController {
         initCourses();
       }
     }
-
-    super.onInit();
   }
 
   Future<void> createCourse(Map<String, dynamic> course) async {
@@ -61,7 +61,7 @@ class CourseController extends GetxController {
         await ApiService.put(path: 'courses/update-course/$id', body: course);
 
     if (response.success) {
-      int index = courses.indexWhere((c) => c.id == id);
+      int index = courses.indexWhere((CourseModel c) => c.id == id);
       if (index != -1) {
         courses[index] = CourseModel.fromMap(course);
         Get.back();
@@ -82,15 +82,36 @@ class CourseController extends GetxController {
         await ApiService.put(path: 'courses/update-course/$id', body: course);
 
     if (response.success) {
-      int index = courses.indexWhere((c) => c.id == id);
+      int index = courses.indexWhere((CourseModel c) => c.id == id);
       if (index != -1) {
-        courses[index] = CourseModel.fromMap({
+        courses[index] = CourseModel.fromMap(<String, dynamic>{
           ...courses[index].toMap(),
           ...course,
         });
       }
       update();
     }
+  }
+
+  Future<void> getReviews(String id) async {
+    rLoading(true);
+    rError(false);
+    update();
+    reviews.clear();
+    final ApiResponseModel response =
+        await ApiService.get(path: 'course-ratings/course/$id');
+    if (response.success) {
+      for (int i = 0; i < response.data.length; i++) {
+        if (response.data[i]['rater'] != null &&
+            response.data[i]['author'] != null) {
+          reviews.add(response.data[i]);
+        }
+      }
+    } else {
+      rError(true);
+    }
+    rLoading(false);
+    update();
   }
 
   Future<void> initCourses() async {
@@ -113,22 +134,27 @@ class CourseController extends GetxController {
     update();
   }
 
-  Future<void> uploadFile(String filePath) async {
+  Future<String?> uploadFile(String filePath) async {
     try {
       dynamic uri = Uri.parse('https://businessbosses.com.ng/upload_files.php');
       dynamic request = http.MultipartRequest('POST', uri)
         ..files.add(await http.MultipartFile.fromPath('file', filePath));
       dynamic response = await request.send();
       if (response.statusCode == 200) {
-        print('File uploaded successfully');
-        print('url of uploaded file');
         // Handle success
+        dynamic jsonResponse = await http.Response.fromStream(response);
+        Map<String, dynamic> data = json.decode(jsonResponse.body);
+        if (data.containsKey('file_name')) {
+          print(data['file_name']);
+          return data['file_name'];
+        } else {
+          print('File name not found in the response');
+          return null;
+        }
       } else {
-        print('Error during file upload: ${response.reasonPhrase}');
         // Handle error
       }
     } catch (e) {
-      print('Error uploading file: $e');
       // Handle exception
     }
   }
@@ -142,6 +168,7 @@ class CourseController extends GetxController {
 
       if (response.success) {
         showSnackbar(message: 'Course deleted successfully!', title: 'Success');
+        courses.removeWhere((CourseModel course) => course.id == courseId);
         update();
         return;
       } else {

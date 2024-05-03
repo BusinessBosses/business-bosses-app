@@ -1,7 +1,5 @@
 import 'package:business_bosses_v2/action/action.dart';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
-import 'package:business_bosses_v2/common/models/api_response_model.dart';
-import 'package:business_bosses_v2/common/widgets/buttons/my_outlined_button.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/common/widgets/popup/my_popup_menu_button.dart';
 import 'package:business_bosses_v2/common/widgets/typography/text_widget.dart';
@@ -19,7 +17,6 @@ import 'package:business_bosses_v2/features/posts/presentation/boost_post_screen
 import 'package:business_bosses_v2/features/posts/widgets/youtube_display.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
-import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
@@ -823,8 +820,8 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
                                   child: Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
-                                    children: [
-                                      Text('Video Transcript'),
+                                    children: <Widget>[
+                                      const Text('Video Transcript'),
                                       Padding(
                                         padding: const EdgeInsets.symmetric(
                                             vertical: 20.0),
@@ -870,12 +867,12 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
 
                                       // Use getFileExtension to get the file extension
                                       String fileExtension = getFileExtension(
-                                          'https://miro.medium.com/v2/resize:fit:1200/1*5JFH1YSl7NHZ4kPghfXfEg.jpeg');
+                                          'https://businessbosses.com.ng/documents/${widget.course.documents?[index]}');
 
                                       // Return DownloadableItem widget
                                       return DownloadableItem(
                                         link:
-                                            'https://miro.medium.com/v2/resize:fit:1200/1*5JFH1YSl7NHZ4kPghfXfEg.jpeg',
+                                            'https://businessbosses.com.ng/documents/${widget.course.documents?[index]}',
                                         filename:
                                             '${widget.course.title} resource ${index + 1}.$fileExtension', // Ensure to add the extension to the filename
                                       );
@@ -899,7 +896,7 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
               height: 90,
               color: Colors.white,
               child: Column(
-                children: [
+                children: <Widget>[
                   Container(
                     height: 1,
                     width: MediaQuery.of(context).size.width,
@@ -936,11 +933,12 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
                         ),
                         GestureDetector(
                           onTap: () async {
-                            await rateCourse();
+                            Get.to(() =>
+                                CourseReviewScreen(course: widget.course));
                           },
                           child: Wrap(
                             crossAxisAlignment: WrapCrossAlignment.center,
-                            children: [
+                            children: <Widget>[
                               SvgPicture.asset(
                                 'assets/svgs/star.svg',
                                 height: 18,
@@ -948,7 +946,7 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
                               const SizedBox(
                                 width: 10,
                               ),
-                              const Text('Rate'),
+                              const Text('Reviews'),
                             ],
                           ),
                         ),
@@ -956,7 +954,7 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
                           onTap: () => _sharePost(),
                           child: Wrap(
                             crossAxisAlignment: WrapCrossAlignment.center,
-                            children: [
+                            children: <Widget>[
                               SvgPicture.asset(
                                 'assets/svgs/share.svg',
                                 height: 18,
@@ -986,255 +984,5 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
         'https://businessbosses.onelink.me/xLWk/36a2ff16';
     logEvent(widget.course.id, 'course');
     socialShare(message);
-  }
-
-  Future<void> rateCourse() async {
-    int rater = 0;
-    ProfileController profileController = Get.find();
-    CourseModel? cCourse;
-    double currentRating = 0;
-    String reviewText = '';
-    CourseController _courseController = Get.find();
-
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      builder: (BuildContext context) {
-        return Padding(
-          padding: EdgeInsets.only(
-            bottom: MediaQuery.of(context).viewInsets.bottom,
-          ),
-          child: StatefulBuilder(
-            builder: (BuildContext context, StateSetter setState) {
-              return FractionallySizedBox(
-                heightFactor: 0.5,
-                child: GestureDetector(
-                  onTap: () {
-                    FocusScope.of(context).unfocus();
-                  },
-                  onVerticalDragDown: (_) {
-                    FocusScope.of(context).unfocus();
-                  },
-                  child: Container(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: <Widget>[
-                        Container(
-                          width: MediaQuery.of(context).size.width,
-                          padding: const EdgeInsets.all(10),
-                          decoration: BoxDecoration(
-                            color: Colors.grey[200],
-                            borderRadius: const BorderRadius.only(
-                              topLeft: Radius.circular(12),
-                              topRight: Radius.circular(12),
-                            ),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              const Text(
-                                'Rate Course',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              IconButton(
-                                icon: const Icon(Icons.close),
-                                onPressed: () {
-                                  setState(
-                                    () {
-                                      rater = 0;
-                                    },
-                                  );
-                                  Navigator.of(context).pop();
-                                },
-                              ),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 30,
-                        ),
-                        Container(
-                          width: MediaQuery.of(context).size.width * 0.9,
-                          padding: const EdgeInsets.all(15),
-                          decoration: BoxDecoration(
-                            color: Colors.grey[200],
-                            borderRadius: BorderRadius.circular(
-                              12,
-                            ),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              IconButton(
-                                icon: Icon(
-                                  Icons.star,
-                                  color: rater >= 1
-                                      ? const Color.fromRGBO(255, 202, 40, 1)
-                                      : const Color.fromRGBO(229, 229, 229, 1),
-                                  size: 40,
-                                ),
-                                onPressed: () {
-                                  setState(() {
-                                    rater = 1;
-                                  });
-                                },
-                              ),
-                              IconButton(
-                                icon: Icon(
-                                  Icons.star,
-                                  color: rater >= 2
-                                      ? const Color.fromRGBO(255, 202, 40, 1)
-                                      : const Color.fromRGBO(229, 229, 229, 1),
-                                  size: 40,
-                                ),
-                                onPressed: () {
-                                  setState(() {
-                                    rater = 2;
-                                  });
-                                },
-                              ),
-                              IconButton(
-                                icon: Icon(
-                                  Icons.star,
-                                  color: rater >= 3
-                                      ? const Color.fromRGBO(255, 202, 40, 1)
-                                      : const Color.fromRGBO(229, 229, 229, 1),
-                                  size: 40,
-                                ),
-                                onPressed: () {
-                                  setState(() {
-                                    rater = 3;
-                                  });
-                                },
-                              ),
-                              IconButton(
-                                icon: Icon(
-                                  Icons.star,
-                                  color: rater >= 4
-                                      ? const Color.fromRGBO(255, 202, 40, 1)
-                                      : const Color.fromRGBO(229, 229, 229, 1),
-                                  size: 40,
-                                ),
-                                onPressed: () {
-                                  setState(() {
-                                    rater = 4;
-                                  });
-                                },
-                              ),
-                              IconButton(
-                                icon: Icon(
-                                  Icons.star,
-                                  color: rater >= 5
-                                      ? const Color.fromRGBO(255, 202, 40, 1)
-                                      : const Color.fromRGBO(229, 229, 229, 1),
-                                  size: 40,
-                                ),
-                                onPressed: () {
-                                  setState(() {
-                                    rater = 5;
-                                  });
-                                },
-                              ),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(height: 24),
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.6,
-                          child: MCustomButton(
-                            isProcessing: isSending,
-                            buttonType: ButtonType.elevated,
-                            onPressed: () async {
-                              setState(() {
-                                isSending = true;
-                              });
-                              await ApiService.post(
-                                path: 'course-ratings',
-                                body: <String, dynamic>{
-                                  'raterId': profileController.myProfile.uid,
-                                  'courseId': widget.course.id,
-                                  'authorId': widget.course.user!.uid,
-                                  'rating': rater,
-                                  'review': ""
-                                },
-                              );
-                              await ApiService.post(
-                                path: 'notification',
-                                body: <String, dynamic>{
-                                  'senderUid': profileController.myProfile.uid,
-                                  'receiverUid': widget.course.user!.uid,
-                                  'title': 'Seller Review',
-                                  'message':
-                                      '${profileController.myProfile.username} has rated your course',
-                                  'timestamp':
-                                      DateTime.now().millisecondsSinceEpoch,
-                                  'notificationType': 'Review',
-                                  'username': widget.course.user!.username,
-                                  'user': widget.course.user,
-                                },
-                              );
-                              await processData();
-                            },
-                            child: const Text('Rate'),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              );
-            },
-          ),
-        );
-      },
-    );
-  }
-
-  Future<void> processData() async {
-    final ApiResponseModel response = await ApiService.get(
-        path: '/course-ratings/user/${widget.course.user!.uid}');
-    final List<dynamic> psts = response.data['rows'];
-    if (mounted) {
-      setState(() {
-        reviews = psts
-            .map((dynamic reviewData) => ReviewModel.fromMap(reviewData))
-            .toList();
-      });
-    }
-    if (reviews!.isEmpty) {
-      if (mounted) {
-        setState(() {
-          reviews = null;
-        });
-      }
-    } else {
-      int fiveCount =
-          reviews!.where((ReviewModel review) => review.rating == 5).length;
-      int fourCount =
-          reviews!.where((ReviewModel review) => review.rating == 4).length;
-      int threeCount =
-          reviews!.where((ReviewModel review) => review.rating == 3).length;
-      int twoCount =
-          reviews!.where((ReviewModel review) => review.rating == 2).length;
-      int oneCount =
-          reviews!.where((ReviewModel review) => review.rating == 1).length;
-      if (mounted) {
-        setState(() {
-          fiveStar = fiveCount;
-          fourStar = fourCount;
-          threeStar = threeCount;
-          twoStar = twoCount;
-          oneStar = oneCount;
-        });
-      }
-    }
-    if (mounted) {
-      setState(() {
-        loading = false;
-      });
-    }
   }
 }
