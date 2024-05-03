@@ -32,7 +32,8 @@ class _WithdrawalItemState extends State<WithdrawalItem> {
       child: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
+            padding:
+                const EdgeInsets.symmetric(vertical: 15.0, horizontal: 15.0),
             child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -40,16 +41,29 @@ class _WithdrawalItemState extends State<WithdrawalItem> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        widget.item['amount'],
-                        style: const TextStyle(fontWeight: FontWeight.w700),
-                      ),
+                      Wrap(
+                        crossAxisAlignment: WrapCrossAlignment.center,
+                        children: [
+                        Text(
+                          widget.item['amount'],
+                          style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
+                        ),
+                        const SizedBox(
+                          width: 5,
+                        ),
+                        Text(
+                          '(\$${(num.parse(widget.item['amount']) / 100).toStringAsFixed(0)})',
+                          style: const TextStyle(color: Colors.black26),
+                        ),
+                      ]),
                       Text(formatDateTimeToAgo(dateTimeString)),
                     ],
                   ),
                   Text(
                     widget.item['status'],
-                    style: const TextStyle(color: Colors.greenAccent),
+                    style: widget.item['status'] == 'Pending'
+                        ? const TextStyle(color: Colors.grey)
+                        : const TextStyle(color: Colors.greenAccent),
                   ),
                 ]),
           ),

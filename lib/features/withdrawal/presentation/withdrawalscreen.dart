@@ -3,6 +3,7 @@ import 'package:business_bosses_v2/common/widgets/buttons/custom_button.dart';
 import 'package:business_bosses_v2/common/widgets/safety_model.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/features/withdrawal/controller/coinhistorycontroller.dart';
+import 'package:business_bosses_v2/features/withdrawal/model/cointransactionmodel.dart';
 import 'package:business_bosses_v2/features/withdrawal/widgets/withdrawal_header_item.dart';
 import 'package:business_bosses_v2/features/withdrawal/widgets/withdrawal_item.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
@@ -35,19 +36,19 @@ class _WithdrawalScreenState extends State<WithdrawalScreen> {
   String? _paymentmethods;
   bool paymentSelected = false;
   bool isProcessing = false;
-  final CoinHistoryController coinHistoryController =
-      Get.put(CoinHistoryController());
+  final CoinHistoryController coinHistoryController = Get.find();
 
   @override
   void initState() {
-    // TODO: implement initState
-
     super.initState();
+    coinHistoryController.initHistory();
   }
 
   @override
   Widget build(BuildContext context) {
     ProfileController profileController = Get.find();
+    print(coinHistoryController.coinwithdrawalHistory);
+    final theme = Theme.of(context).copyWith(dividerColor: Colors.transparent);
 
     return Scaffold(
         backgroundColor: Colors.white,
@@ -328,42 +329,86 @@ class _WithdrawalScreenState extends State<WithdrawalScreen> {
                   height: 1,
                   color: backgroundcolorinterface,
                 ),
-                ExpansionTile(
-                  trailing: isExpanded
-                      ? SvgPicture.asset(
-                          'assets/svgs/dropdownexpansionup.svg',
-                        )
-                      : SvgPicture.asset(
-                          'assets/svgs/dropdownexpansion.svg',
-                        ),
-                  title: const Text('Withdrawal history',
-                      style:
-                          TextStyle(fontWeight: FontWeight.w700, fontSize: 16)),
-                  children: [
-                    Container(
-                      child: coinHistoryController.coinwithdrawalHistory.isEmpty
-                          ? const SafetyModel(
-                              isLoading: false,
-                              title: 'No Coin Withdrawals Found',
-                              icon: Icon(Icons.warning),
-                            )
-                          : Column(
-                              children: [
-                                WithdrawalHeaderItem(),
-                                Container(
-                                  child: ListView.builder(
-                                    shrinkWrap: true,
-                                    itemCount: coinHistoryController
-                                        .coinwithdrawalHistory.length,
-                                    itemBuilder: (BuildContext context, int i) {
-                                      return WithdrawalItem();
-                                    },
-                                  ),
-                                ),
-                              ],
-                            ),
-                    )
-                  ],
+                Theme(
+                  data: theme,
+                  child: ExpansionTile(
+                    trailing: isExpanded
+                        ? SvgPicture.asset(
+                            'assets/svgs/dropdownexpansionup.svg',
+                          )
+                        : SvgPicture.asset(
+                            'assets/svgs/dropdownexpansion.svg',
+                          ),
+                    title: const Text('Withdrawal history',
+                        style:
+                            TextStyle(fontWeight: FontWeight.w700, fontSize: 16)),
+                    children: [
+                      FutureBuilder<void>(
+                        future: coinHistoryController.initHistory(),
+                        builder:
+                            (BuildContext context, AsyncSnapshot<void> snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            // While data is being fetched, show a loading indicator
+                            return Padding(
+                              padding: const EdgeInsets.all(80.0),
+                              child: CircularProgressIndicator(),
+                            );
+                          } else if (snapshot.hasError) {
+                            // If an error occurs during data fetching, handle it accordingly
+                            return Text('Error: ${snapshot.error}');
+                          } else {
+                            // If data fetching is successful, build your UI with the fetched data
+                            return Container(
+                              child: coinHistoryController
+                                      .coinwithdrawalHistory.isEmpty
+                                  ? Padding(
+                                    padding: const EdgeInsets.all(80.0),
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      children: [
+                                        SvgPicture.asset('assets/svgs/coinnn.svg', height: 40, color: Colors.grey,),
+                                        SizedBox(height: 10,),
+                                        Text('No Coin Withdrawals Found', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15),)
+                                        
+                                      ],
+                                    ),
+                                  )
+                                  : Column(
+                                      children: [
+                                        WithdrawalHeaderItem(),
+                                        Container(
+                                          child: ListView.builder(
+                                            shrinkWrap: true,
+                                            itemCount: coinHistoryController
+                                                .coinwithdrawalHistory.length,
+                                            itemBuilder:
+                                                (BuildContext context, int i) {
+                                              // Sort the list based on the 'date' key in each map in descending order
+                                              coinHistoryController
+                                                  .coinwithdrawalHistory
+                                                  .sort((a, b) =>
+                                                      DateTime.parse(b['date'])
+                                                          .compareTo(
+                                                              DateTime.parse(
+                                                                  a['date'])));
+                
+                                              return WithdrawalItem(
+                                                item: coinHistoryController
+                                                    .coinwithdrawalHistory[i],
+                                              );
+                                            },
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                            );
+                          }
+                        },
+                      )
+                    ],
+                  ),
                 ),
                 Container(
                   height: 1,

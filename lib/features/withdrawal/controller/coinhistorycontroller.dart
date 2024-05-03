@@ -33,52 +33,39 @@ class CoinHistoryController extends GetxController {
   void onInit() async {
     initSocket();
     super.onInit();
-    
   }
-
 
   ///Make Withdrawal
   Future<void> makeWithdrawal(Map<String, dynamic> coinTransaction) async {
-    ApiResponseModel response =
-        await ApiService.post(path: 'transaction-history', body: coinTransaction);
+    ApiResponseModel response = await ApiService.post(
+        path: 'transaction-history', body: coinTransaction);
     if (response.success) {
       Get.to(() => const WithdrawalCreated());
-    }else{
+    } else {
       print(response.toString());
     }
   }
 
-  
-
-  Future<void> fetchCoinHistoryTransactions(CoinTransaction coinTransaction) async {
+  Future<void> initHistory() async {
     try {
-      hLoading(true); // Set loading to true before fetching data
-      users.clear();
-      times.clear();
-      amounts.clear();
+      hLoading(true);
+
       ApiResponseModel response = await ApiService.get(
-          path: 'transaction-history/user/${profileController.myProfile.uid}');
+          path:
+              'transaction-history/user/${profileController.myProfile.uid}');
       if (response.success) {
         myHistory.clear();
+        coindepositsHistory.clear();
+        coinwithdrawalHistory.clear();
         final List<dynamic> responseData = response.data['rows'];
         final List<Map<String, dynamic>> mappedData =
             responseData.cast<Map<String, dynamic>>();
         myHistory.addAll(mappedData);
         for (Map<String, dynamic> item in mappedData) {
-          if (item['transactionType'] == "debit") {
+          if (item['transactionType'] == "credit") {
             coinwithdrawalHistory.add(item);
           } else {
             coindepositsHistory.add(item);
-          }
-        }
-        for (int i = 0; i < response.data['rows'].length; i++) {
-          if (response.data['rows'][i]['user'] != null) {
-            UserModel user = UserModel.fromMap(<String, dynamic>{
-              ...response.data['rows'][i]['user'],
-            });
-            times.add(response.data['rows'][i]['date']);
-            amounts.add(response.data['rows'][i]['amount']);
-            users.add(user);
           }
         }
       } else {
@@ -90,8 +77,9 @@ class CoinHistoryController extends GetxController {
       hError(true);
     } finally {
       hLoading(false); // Set loading back to false after fetching data
-      update(); // Update the UI after data fetch completes
+   // Update the UI after data fetch completes
     }
+      update();
   }
 
   initSocket() {
