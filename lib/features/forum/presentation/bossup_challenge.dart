@@ -39,7 +39,7 @@ class _BossupChallengeState extends State<BossupChallenge> {
           );
         } else {
           return Padding(
-            padding: const EdgeInsets.only(bottom: 100),
+            padding: const EdgeInsets.only(bottom: 80),
             child: ListView.builder(
               itemCount: controller.categories.length,
               itemBuilder: (BuildContext context, int index) {

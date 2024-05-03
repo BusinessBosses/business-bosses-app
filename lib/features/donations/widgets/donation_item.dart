@@ -228,6 +228,7 @@ class _DonationItemState extends State<DonationItem> {
                     ],
                   ),
                 ),
+                const SizedBox(width: 10,),
                 widget.donation.user!.uid == profileController.myProfile.uid
                     ? MyPopupMenuButton(
                         popupItems: myPopupMore,

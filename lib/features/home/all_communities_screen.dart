@@ -179,7 +179,7 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
                                               : Padding(
                                                   padding:
                                                       const EdgeInsets.only(
-                                                          bottom: 100),
+                                                          bottom: 80),
                                                   child: GridView.builder(
                                                     itemCount: controller
                                                         .getCategoryIndustries(
