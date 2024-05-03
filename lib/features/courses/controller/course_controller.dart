@@ -20,7 +20,7 @@ class CourseController extends GetxController {
   RxBool hError = RxBool(false);
   RxBool rLoading = RxBool(false);
   RxBool rError = RxBool(false);
-  List<dynamic> reviews = <dynamic>[];
+  RxList<dynamic> reviews = <dynamic>[].obs;
 
   @override
   void onInit() {

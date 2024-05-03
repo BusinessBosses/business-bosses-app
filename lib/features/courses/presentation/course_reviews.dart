@@ -776,10 +776,31 @@ class _CourseReviewScreenState extends State<CourseReviewScreen> {
                               },
                             );
                             if (response.success) {
+                            setState(() {
                               courseController.reviews.add(<String, dynamic>{
                                 ...response.data,
-                                'rater': profileController.myProfile.toMap(),
+                                'rater': <String, dynamic>{
+                                  'username':
+                                      profileController.myProfile.username,
+                                  'email': profileController.myProfile.email,
+                                  'uid': profileController.myProfile.uid,
+                                  'bio': profileController.myProfile.bio,
+                                  'companyName':
+                                      profileController.myProfile.companyName,
+                                  'surname': null,
+                                  'name': profileController.myProfile.name ??
+                                      profileController.myProfile.username,
+                                  'coinscount':
+                                      profileController.myProfile.coinsCount,
+                                  'photoUrl':
+                                      profileController.myProfile.photoUrl,
+                                  'isRanked':
+                                      profileController.myProfile.isRanked,
+                                  'isSubscribed':
+                                      profileController.myProfile.isSubscribed,
+                                },
                               });
+                            });
                             }
                             await ApiService.post(
                               path: 'notification',
@@ -792,13 +813,14 @@ class _CourseReviewScreenState extends State<CourseReviewScreen> {
                                 'timestamp':
                                     DateTime.now().millisecondsSinceEpoch,
                                 'notificationType': 'Review',
-                                'username': widget.course.user!.username,
-                                'user': widget.course.user,
+                                'username': widget.course.user?.username,
+                                'user': widget.course.user?.toMap(),
                               },
                             );
                             setState(() {
                               isSending = false;
                             });
+                            Get.back();
                           },
                           child: const Text('Rate'),
                         ),
