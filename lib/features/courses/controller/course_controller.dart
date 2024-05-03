@@ -157,6 +157,7 @@ class CourseController extends GetxController {
     } catch (e) {
       // Handle exception
     }
+    return null;
   }
 
   /// delete selected course
