@@ -33,6 +33,7 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
   int optionCode = 1;
   String? title;
   String? description;
+  bool isProcessing = false;
   final CourseController courseController = Get.put(CourseController());
   final ProfileController profileController = Get.find();
   TextEditingController? desccontroller = TextEditingController();
@@ -386,6 +387,9 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                     padding: const EdgeInsets.only(bottom: 50.0),
                     child: MCustomButton(
                       onPressed: () async {
+                        setState(() {
+                          isProcessing = true;
+                        });
                         if (selectedFilePaths.isNotEmpty) {
                           for (String filePath in selectedFilePaths) {
                             await courseController.uploadFile(filePath);
@@ -399,6 +403,9 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                             backgroundColor: Colors.redAccent,
                             colorText: Colors.white,
                           );
+                          setState(() {
+                            isProcessing = false;
+                          });
                           return;
                         }
                         if (description == null || description == '') {
@@ -408,6 +415,9 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                             backgroundColor: Colors.redAccent,
                             colorText: Colors.white,
                           );
+                          setState(() {
+                            isProcessing = false;
+                          });
                           return;
                         }
                         if (!_validateVideoLinks()) {
@@ -417,6 +427,9 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                             backgroundColor: Colors.redAccent,
                             colorText: Colors.white,
                           );
+                          setState(() {
+                            isProcessing = false;
+                          });
                           return;
                         }
                         Map<String, dynamic> course = <String, dynamic>{
@@ -441,9 +454,12 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                             ? await courseController.createCourse(course)
                             : await courseController.updateCourse(
                                 course, widget.course!.id);
+                        setState(() {
+                          isProcessing = false;
+                        });
                       },
                       label: widget.course == null ? 'Post' : 'Update Course',
-                      isProcessing: controller.loading.value,
+                      isProcessing: isProcessing,
                       buttonType: ButtonType.elevated,
                     ),
                   ),
