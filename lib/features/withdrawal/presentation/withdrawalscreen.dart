@@ -248,6 +248,7 @@ class _WithdrawalScreenState extends State<WithdrawalScreen> {
                           height: 50,
                           child: CustomButton(
                             onPressed: () async {
+                              FocusScope.of(context).unfocus();
                               if (_withdrawlamountcontroller.text != '') {
                                 if (num.parse(_withdrawlamountcontroller.text) <
                                     5000) {
@@ -340,13 +341,13 @@ class _WithdrawalScreenState extends State<WithdrawalScreen> {
                             'assets/svgs/dropdownexpansion.svg',
                           ),
                     title: const Text('Withdrawal history',
-                        style:
-                            TextStyle(fontWeight: FontWeight.w700, fontSize: 16)),
+                        style: TextStyle(
+                            fontWeight: FontWeight.w700, fontSize: 16)),
                     children: [
                       FutureBuilder<void>(
                         future: coinHistoryController.initHistory(),
-                        builder:
-                            (BuildContext context, AsyncSnapshot<void> snapshot) {
+                        builder: (BuildContext context,
+                            AsyncSnapshot<void> snapshot) {
                           if (snapshot.connectionState ==
                               ConnectionState.waiting) {
                             // While data is being fetched, show a loading indicator
@@ -363,18 +364,30 @@ class _WithdrawalScreenState extends State<WithdrawalScreen> {
                               child: coinHistoryController
                                       .coinwithdrawalHistory.isEmpty
                                   ? Padding(
-                                    padding: const EdgeInsets.all(80.0),
-                                    child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                      children: [
-                                        SvgPicture.asset('assets/svgs/coinnn.svg', height: 40, color: Colors.grey,),
-                                        SizedBox(height: 10,),
-                                        Text('No Coin Withdrawals Found', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15),)
-                                        
-                                      ],
-                                    ),
-                                  )
+                                      padding: const EdgeInsets.all(80.0),
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          SvgPicture.asset(
+                                            'assets/svgs/coinnn.svg',
+                                            height: 40,
+                                            color: Colors.grey,
+                                          ),
+                                          SizedBox(
+                                            height: 10,
+                                          ),
+                                          Text(
+                                            'No Coin Withdrawals Found',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.w700,
+                                                fontSize: 15),
+                                          )
+                                        ],
+                                      ),
+                                    )
                                   : Column(
                                       children: [
                                         WithdrawalHeaderItem(),
@@ -393,7 +406,7 @@ class _WithdrawalScreenState extends State<WithdrawalScreen> {
                                                           .compareTo(
                                                               DateTime.parse(
                                                                   a['date'])));
-                
+
                                               return WithdrawalItem(
                                                 item: coinHistoryController
                                                     .coinwithdrawalHistory[i],
