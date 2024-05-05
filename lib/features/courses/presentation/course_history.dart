@@ -1,3 +1,4 @@
+import 'package:business_bosses_v2/common/widgets/safety_model.dart';
 import 'package:business_bosses_v2/features/courses/controller/course_controller.dart';
 import 'package:business_bosses_v2/features/courses/presentation/alltransactions.dart';
 import 'package:business_bosses_v2/features/courses/presentation/purchases.dart';
@@ -32,6 +33,7 @@ class _CourseHistoryState extends State<CourseHistory> {
   void dispose() {
     _pageController.dispose();
     super.dispose();
+    courseController.initHistory(profileController.myProfile);
   }
 
   @override
@@ -52,98 +54,104 @@ class _CourseHistoryState extends State<CourseHistory> {
           style: TextStyle(fontSize: 20),
         ),
       ),
-      body: Container(
-        color: Colors.white,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 15.0),
-              child: Text(
-                'Total',
-                style: TextStyle(fontWeight: FontWeight.w700),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15.0),
-              child: Row(
-                children: <Widget>[
-                  SvgPicture.asset(
-                    'assets/svgs/coin.svg',
-                    height: 35,
-                  ),
-                  const SizedBox(width: 5),
-                  Text(
-                    profileController.myProfile.coinscount.toString(),
-                    style: const TextStyle(
-                      fontWeight: FontWeight.w900,
-                      fontSize: 22,
+      body: Obx(
+        () => courseController.hLoading.value
+            ? SafetyModel(
+                isLoading: courseController.hLoading.value,
+              )
+            : Container(
+                color: Colors.white,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 15.0),
+                      child: Text(
+                        'Total',
+                        style: TextStyle(fontWeight: FontWeight.w700),
+                      ),
                     ),
-                  ),
-                  const SizedBox(width: 5),
-                  Text(
-                    '(\$${(num.parse(profileController.myProfile.coinscount.toString()) / 100).toString()})',
-                    style: const TextStyle(
-                      fontWeight: FontWeight.w700,
-                      fontSize: 22,
-                      color: Colors.black38,
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                      child: Row(
+                        children: <Widget>[
+                          SvgPicture.asset(
+                            'assets/svgs/coin.svg',
+                            height: 35,
+                          ),
+                          const SizedBox(width: 5),
+                          Text(
+                            profileController.myProfile.coinscount.toString(),
+                            style: const TextStyle(
+                              fontWeight: FontWeight.w900,
+                              fontSize: 22,
+                            ),
+                          ),
+                          const SizedBox(width: 5),
+                          Text(
+                            '(\$${(num.parse(profileController.myProfile.coinscount.toString()) / 100).toString()})',
+                            style: const TextStyle(
+                              fontWeight: FontWeight.w700,
+                              fontSize: 22,
+                              color: Colors.black38,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 5),
-            Container(
-              color: Colors.white,
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-                child: Align(
-                  alignment: Alignment.topCenter,
-                  child: CupertinoSlidingSegmentedControl<int>(
-                    backgroundColor: Colors.grey[200]!,
-                    padding: const EdgeInsets.all(5),
-                    children: const <int, Widget>{
-                      0: Text('All'),
-                      1: Text('Sales'),
-                      2: Text('Purchases'),
-                    },
-                    onValueChanged: (int? value) {
-                      if (value != null) {
-                        setState(() {
-                          _currentIndex = value;
-                          _pageController.animateToPage(
-                            _currentIndex,
-                            duration: const Duration(milliseconds: 300),
-                            curve: Curves.ease,
-                          );
-                        });
-                      }
-                    },
-                    groupValue: _currentIndex,
-                  ),
+                    const SizedBox(height: 5),
+                    Container(
+                      color: Colors.white,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 15, vertical: 10),
+                        child: Align(
+                          alignment: Alignment.topCenter,
+                          child: CupertinoSlidingSegmentedControl<int>(
+                            backgroundColor: Colors.grey[200]!,
+                            padding: const EdgeInsets.all(5),
+                            children: const <int, Widget>{
+                              0: Text('All'),
+                              1: Text('Sales'),
+                              2: Text('Purchases'),
+                            },
+                            onValueChanged: (int? value) {
+                              if (value != null) {
+                                setState(() {
+                                  _currentIndex = value;
+                                  _pageController.animateToPage(
+                                    _currentIndex,
+                                    duration: const Duration(milliseconds: 300),
+                                    curve: Curves.ease,
+                                  );
+                                });
+                              }
+                            },
+                            groupValue: _currentIndex,
+                          ),
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      child: PageView(
+                        controller: _pageController,
+                        onPageChanged: (int index) {
+                          setState(() {
+                            _currentIndex = index;
+                          });
+                        },
+                        children: <Widget>[
+                          AllTransactions(
+                            history: courseController.myHistory,
+                          ),
+                          Sales(history: courseController.myHistoryReceived),
+                          Purchases(history: courseController.myHistoryOut),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            ),
-            Expanded(
-              child: PageView(
-                controller: _pageController,
-                onPageChanged: (int index) {
-                  setState(() {
-                    _currentIndex = index;
-                  });
-                },
-                children: <Widget>[
-                  AllTransactions(
-                    history: courseController.myHistory,
-                  ),
-                  Sales(history: courseController.myHistoryReceived),
-                  Purchases(history: courseController.myHistoryOut),
-                ],
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }
