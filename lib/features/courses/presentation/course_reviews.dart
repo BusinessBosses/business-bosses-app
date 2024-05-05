@@ -496,7 +496,11 @@ class _CourseReviewScreenState extends State<CourseReviewScreen> {
                               height: 20,
                             ),
                             if (widget.course.user?.uid !=
-                                profileController.myProfile.uid)
+                                    profileController.myProfile.uid &&
+                                !courseController.reviews.any(
+                                    (dynamic review) =>
+                                        review['raterId'] ==
+                                        profileController.myProfile.uid))
                               MCustomButton(
                                 height: 50,
                                 buttonType: ButtonType.elevated,
@@ -776,31 +780,31 @@ class _CourseReviewScreenState extends State<CourseReviewScreen> {
                               },
                             );
                             if (response.success) {
-                            setState(() {
-                              courseController.reviews.add(<String, dynamic>{
-                                ...response.data,
-                                'rater': <String, dynamic>{
-                                  'username':
-                                      profileController.myProfile.username,
-                                  'email': profileController.myProfile.email,
-                                  'uid': profileController.myProfile.uid,
-                                  'bio': profileController.myProfile.bio,
-                                  'companyName':
-                                      profileController.myProfile.companyName,
-                                  'surname': null,
-                                  'name': profileController.myProfile.name ??
-                                      profileController.myProfile.username,
-                                  'coinscount':
-                                      profileController.myProfile.coinsCount,
-                                  'photoUrl':
-                                      profileController.myProfile.photoUrl,
-                                  'isRanked':
-                                      profileController.myProfile.isRanked,
-                                  'isSubscribed':
-                                      profileController.myProfile.isSubscribed,
-                                },
+                              setState(() {
+                                courseController.reviews.add(<String, dynamic>{
+                                  ...response.data,
+                                  'rater': <String, dynamic>{
+                                    'username':
+                                        profileController.myProfile.username,
+                                    'email': profileController.myProfile.email,
+                                    'uid': profileController.myProfile.uid,
+                                    'bio': profileController.myProfile.bio,
+                                    'companyName':
+                                        profileController.myProfile.companyName,
+                                    'surname': null,
+                                    'name': profileController.myProfile.name ??
+                                        profileController.myProfile.username,
+                                    'coinscount':
+                                        profileController.myProfile.coinsCount,
+                                    'photoUrl':
+                                        profileController.myProfile.photoUrl,
+                                    'isRanked':
+                                        profileController.myProfile.isRanked,
+                                    'isSubscribed': profileController
+                                        .myProfile.isSubscribed,
+                                  },
+                                });
                               });
-                            });
                             }
                             await ApiService.post(
                               path: 'notification',

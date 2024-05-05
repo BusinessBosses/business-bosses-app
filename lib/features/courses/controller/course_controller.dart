@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
+import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/features/courses/models/course_model.dart';
 import 'package:business_bosses_v2/features/forum/models/industry.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
@@ -18,7 +19,7 @@ class CourseController extends GetxController {
   List<dynamic> myHistoryOut = <dynamic>[];
   RxBool hLoading = RxBool(false);
   RxBool hError = RxBool(false);
-  RxBool rLoading = RxBool(false);
+  RxBool rLoading = RxBool(true);
   RxBool rError = RxBool(false);
   RxList<dynamic> reviews = <dynamic>[].obs;
 
@@ -180,5 +181,28 @@ class CourseController extends GetxController {
       // showSnackbar(
       //     message: 'Error deleting post.', title: 'O0PS!', error: true);
     }
+  }
+
+  Future<void> initHistory(UserModel user) async {
+    hLoading(true);
+    hError(false);
+    update();
+    myHistory.clear();
+    final ApiResponseModel response =
+        await ApiService.get(path: 'course-transactions/user/${user.uid}');
+    if (response.success) {
+      for (int i = 0; i < response.data['rows'].length; i++) {
+        myHistory.add(response.data['rows'][i]);
+        if (response.data['rows'][i]['course']['userId'] == user.uid) {
+          myHistoryReceived.add(response.data['rows'][i]);
+        } else {
+          myHistoryOut.add(response.data['rows'][i]);
+        }
+      }
+    } else {
+      hError(true);
+    }
+    hLoading(false);
+    update();
   }
 }
