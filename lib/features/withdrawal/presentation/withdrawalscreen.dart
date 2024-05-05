@@ -249,64 +249,63 @@ class _WithdrawalScreenState extends State<WithdrawalScreen> {
                           child: CustomButton(
                             onPressed: () async {
                               FocusScope.of(context).unfocus();
+
                               if (_withdrawlamountcontroller.text != '') {
-                                if (num.parse(_withdrawlamountcontroller.text) <
-                                    5000) {
-                                  showSnackbar(
-                                      title: 'OOPS!',
-                                      message:
-                                          'Withdrawal amount cannot be less than 5000 coins, please try again!',
-                                      error: true);
-                                } else if (num.parse(
-                                        _withdrawlamountcontroller.text) >
-                                    profileController.myProfile.coinsCount) {
-                                  showSnackbar(
-                                      title: 'OOPS!',
-                                      message:
-                                          'Withdrawal amount cannot exceed your balance, please try again!',
-                                      error: true);
-                                } else if (_paymentmethods == null) {
-                                  showSnackbar(
-                                      title: 'OOPS!',
-                                      message:
-                                          'Please select a payment method to continue',
-                                      error: true);
-                                } else if (_walletaddresscontroller
-                                    .text.isEmpty) {
-                                  showSnackbar(
-                                      title: 'OOPS!',
-                                      message:
-                                          'Please enter a wallet address to continue',
-                                      error: true);
-                                } else {
-                                  setState(() {
-                                    isProcessing = true;
-                                  });
-                                  await coinHistoryController
-                                      .makeWithdrawal(<String, dynamic>{
-                                    'status': 'Pending',
-                                    'approved': false,
-                                    'duration': null,
-                                    'description':
-                                        _walletaddresscontroller.text,
-                                    'deleted': false,
-                                    'deletedAt': null,
-                                    'userId': profileController.myProfile.uid,
-                                    'transactionType': 'credit',
-                                    'amount': _withdrawlamountcontroller.text,
-                                    'paymentMethod': 'revenuecat',
-                                    'date': DateTime.now().toString(),
-                                  });
-                                  setState(() {
-                                    isProcessing = false;
-                                  });
-                                }
-                              } else {
                                 showSnackbar(
                                     title: 'OOPS!',
                                     message:
                                         'Please enter an amount to withdraw!',
                                     error: true);
+                              } else if (num.parse(
+                                      _withdrawlamountcontroller.text) <
+                                  5000) {
+                                showSnackbar(
+                                    title: 'OOPS!',
+                                    message:
+                                        'Withdrawal amount cannot be less than 5000 coins, please try again!',
+                                    error: true);
+                              } else if (num.parse(
+                                      _withdrawlamountcontroller.text) >
+                                  profileController.myProfile.coinsCount) {
+                                showSnackbar(
+                                    title: 'OOPS!',
+                                    message:
+                                        'Withdrawal amount cannot exceed your balance, please try again!',
+                                    error: true);
+                              } else if (_paymentmethods == null) {
+                                showSnackbar(
+                                    title: 'OOPS!',
+                                    message:
+                                        'Please select a payment method to continue',
+                                    error: true);
+                              } else if (_walletaddresscontroller
+                                  .text.isEmpty) {
+                                showSnackbar(
+                                    title: 'OOPS!',
+                                    message:
+                                        'Please enter a wallet address to continue',
+                                    error: true);
+                              } else {
+                                setState(() {
+                                  isProcessing = true;
+                                });
+                                await coinHistoryController
+                                    .makeWithdrawal(<String, dynamic>{
+                                  'status': 'Pending',
+                                  'approved': false,
+                                  'duration': null,
+                                  'description': _walletaddresscontroller.text,
+                                  'deleted': false,
+                                  'deletedAt': null,
+                                  'userId': profileController.myProfile.uid,
+                                  'transactionType': 'credit',
+                                  'amount': _withdrawlamountcontroller.text,
+                                  'paymentMethod': 'revenuecat',
+                                  'date': DateTime.now().toString(),
+                                });
+                                setState(() {
+                                  isProcessing = false;
+                                });
                               }
                             },
                             isProcessing: isProcessing,
