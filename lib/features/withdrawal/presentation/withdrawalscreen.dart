@@ -250,7 +250,7 @@ class _WithdrawalScreenState extends State<WithdrawalScreen> {
                             onPressed: () async {
                               FocusScope.of(context).unfocus();
 
-                              if (_withdrawlamountcontroller.text != '') {
+                              if (_withdrawlamountcontroller.text == '') {
                                 showSnackbar(
                                     title: 'OOPS!',
                                     message:
