@@ -490,94 +490,110 @@ class _DepositsScreenState extends State<DepositsScreen> {
                 )
               ];
             },
-            body: Column(
-              children: [
-                Theme(
-                  data: theme,
-                  child: ExpansionTile(
-                    trailing: isExpanded
-                        ? SvgPicture.asset(
-                            'assets/svgs/dropdownexpansionup.svg',
-                          )
-                        : SvgPicture.asset(
-                            'assets/svgs/dropdownexpansion.svg',
-                          ),
-                    title: const Text('Top up history',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w700, fontSize: 16)),
-                    children: [
-                      FutureBuilder<void>(
-                        future: coinHistoryController.initHistory(),
-                        builder: (BuildContext context,
-                            AsyncSnapshot<void> snapshot) {
-                          if (snapshot.connectionState ==
-                              ConnectionState.waiting) {
-                            // While data is being fetched, show a loading indicator
-                            return const Padding(
-                              padding: EdgeInsets.all(80.0),
-                              child: CircularProgressIndicator(),
-                            );
-                          } else if (snapshot.hasError) {
-                            // If an error occurs during data fetching, handle it accordingly
-                            return Text('Error: ${snapshot.error}');
-                          } else {
-                            print(coinHistoryController.coindepositsHistory);
-                            // If data fetching is successful, build your UI with the fetched data
-                            return Container(
-                              child: coinHistoryController
-                                      .coindepositsHistory.isEmpty
-                                  ? Padding(
-                                    padding: const EdgeInsets.all(80.0),
-                                    child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                      children: [
-                                        SvgPicture.asset('assets/svgs/coinnn.svg', height: 40, color: Colors.grey,),
-                                        SizedBox(height: 10,),
-                                        Text('No Coin Deposits Found', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15),)
-                                        
-                                      ],
-                                    ),
-                                  )
-                                  : Column(
-                                      children: [
-                                        WithdrawalHeaderItem(),
-                                        Container(
-                                          child: ListView.builder(
-                                            shrinkWrap: true,
-                                            itemCount: coinHistoryController
-                                                .coindepositsHistory.length,
-                                            itemBuilder:
-                                                (BuildContext context, int i) {
-                                              coinHistoryController
-                                                  .coindepositsHistory
-                                                  .sort((a, b) =>
-                                                      DateTime.parse(b['date'])
-                                                          .compareTo(
-                                                              DateTime.parse(
-                                                                  a['date'])));
-
-                                              return WithdrawalItem(
-                                                item: coinHistoryController
-                                                    .coinwithdrawalHistory[i],
-                                              );
-                                            },
-                                          ),
+            body: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Theme(
+                    data: theme,
+                    child: ExpansionTile(
+                      trailing: isExpanded
+                          ? SvgPicture.asset(
+                              'assets/svgs/dropdownexpansionup.svg',
+                            )
+                          : SvgPicture.asset(
+                              'assets/svgs/dropdownexpansion.svg',
+                            ),
+                      title: const Text('Top up history',
+                          style: TextStyle(
+                              fontWeight: FontWeight.w700, fontSize: 16)),
+                      children: [
+                        FutureBuilder<void>(
+                          future: coinHistoryController.initHistory(),
+                          builder: (BuildContext context,
+                              AsyncSnapshot<void> snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              // While data is being fetched, show a loading indicator
+                              return const Padding(
+                                padding: EdgeInsets.all(80.0),
+                                child: CircularProgressIndicator(),
+                              );
+                            } else if (snapshot.hasError) {
+                              // If an error occurs during data fetching, handle it accordingly
+                              return Text('Error: ${snapshot.error}');
+                            } else {
+                              print(coinHistoryController.coindepositsHistory);
+                              // If data fetching is successful, build your UI with the fetched data
+                              return Container(
+                                child: coinHistoryController
+                                        .coindepositsHistory.isEmpty
+                                    ? Padding(
+                                        padding: const EdgeInsets.all(80.0),
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            SvgPicture.asset(
+                                              'assets/svgs/coinnn.svg',
+                                              height: 40,
+                                              color: Colors.grey,
+                                            ),
+                                            SizedBox(
+                                              height: 10,
+                                            ),
+                                            Text(
+                                              'No Coin Deposits Found',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.w700,
+                                                  fontSize: 15),
+                                            )
+                                          ],
                                         ),
-                                      ],
-                                    ),
-                            );
-                          }
-                        },
-                      )
-                    ],
+                                      )
+                                    : Column(
+                                        children: [
+                                          WithdrawalHeaderItem(),
+                                          Container(
+                                            child: ListView.builder(
+                                              physics:
+                                                  NeverScrollableScrollPhysics(),
+                                              shrinkWrap: true,
+                                              itemCount: coinHistoryController
+                                                  .coindepositsHistory.length,
+                                              itemBuilder:
+                                                  (BuildContext context, int i) {
+                                                coinHistoryController
+                                                    .coindepositsHistory
+                                                    .sort((a, b) =>
+                                                        DateTime.parse(b['date'])
+                                                            .compareTo(
+                                                                DateTime.parse(
+                                                                    a['date'])));
+            
+                                                return WithdrawalItem(
+                                                  item: coinHistoryController
+                                                      .coinwithdrawalHistory[i],
+                                                );
+                                              },
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                              );
+                            }
+                          },
+                        )
+                      ],
+                    ),
                   ),
-                ),
-                Container(
-                  height: 1,
-                  color: backgroundcolorinterface,
-                ),
-              ],
+                  Container(
+                    height: 1,
+                    color: backgroundcolorinterface,
+                  ),
+                ],
+              ),
             )));
   }
 
