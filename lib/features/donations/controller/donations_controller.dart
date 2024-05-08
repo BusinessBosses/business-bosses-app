@@ -23,7 +23,7 @@ class DonationsController extends GetxController {
   List<dynamic> myHistory = <dynamic>[];
   List<dynamic> myHistoryReceived = <dynamic>[];
   List<dynamic> myHistoryOut = <dynamic>[];
-  RxBool loading = RxBool(false);
+  RxBool loading = RxBool(true);
   RxBool error = RxBool(false);
   RxBool hLoading = RxBool(false);
   RxBool hError = RxBool(false);
