@@ -322,7 +322,7 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
                                       formatter.format(
                                           widget.donation.amountRecieved),
                                       style: const TextStyle(
-                                          fontSize: 10,
+                                          fontSize: 12,
                                           color: subtextColor,
                                           fontWeight: FontWeight.w700),
                                     ),
@@ -331,14 +331,14 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
                                           ? ' coin raised'
                                           : ' coins raised',
                                       style: TextStyle(
-                                          fontSize: 10, color: subtextColor),
+                                          fontSize: 12, color: subtextColor),
                                     ),
                                   ],
                                 ),
                                 Text(
                                   '${((widget.donation.amountRecieved / widget.donation.targetAmount!) * 100).toStringAsFixed(1)}%',
                                   style: const TextStyle(
-                                      fontSize: 10, color: subtextColor),
+                                      fontSize: 12, color: subtextColor),
                                 ),
                               ],
                             ),
@@ -382,7 +382,7 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
                                     const Text(
                                       ' Target',
                                       style: TextStyle(
-                                          color: subtextColor, fontSize: 10),
+                                          color: subtextColor, fontSize: 12),
                                     ),
                                   ],
                                 ),
@@ -405,7 +405,7 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
                                             formatter.format(widget
                                                 .donation.transactions!.length),
                                             style: const TextStyle(
-                                              fontSize: 10,
+                                              fontSize: 12,
                                               color: subtextColor,
                                               fontWeight: FontWeight.w700,
                                               decoration:
@@ -419,7 +419,7 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
                                                 ? ' Supporter'
                                                 : ' Supporters',
                                             style: const TextStyle(
-                                              fontSize: 10,
+                                              fontSize: 12,
                                               color: subtextColor,
                                               decoration:
                                                   TextDecoration.underline,
@@ -824,6 +824,16 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
                                       style: const TextStyle(
                                           fontWeight: FontWeight.w700),
                                     ),
+                                    widget.donation.user?.isSubscribed == true
+                                    ? Wrap(children: [
+                                        SizedBox(width: 5),
+                                        SvgPicture.asset(
+                                          'assets/svgs/premiumbadge.svg',
+                                          height: 9,
+                                          color: primaryColorLT,
+                                        )
+                                      ])
+                                    : Container()
                                   ]),
                               Text(
                                 '$formattedDifference',

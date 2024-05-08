@@ -204,8 +204,8 @@ class _CourseReviewScreenState extends State<CourseReviewScreen> {
                                                 MainAxisAlignment.start,
                                             children: <Widget>[
                                               Text(
-                                                  widget.course.averageRating
-                                                      .toString(),
+                                                  widget.course.averageRating!
+                                                      .toStringAsFixed(2),
                                                   style: const TextStyle(
                                                     fontWeight: FontWeight.bold,
                                                     fontSize: 20,
