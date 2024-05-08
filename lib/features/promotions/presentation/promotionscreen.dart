@@ -1,8 +1,9 @@
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/features/promotions/widgets/buycoinslist_item.dart';
-import 'package:business_bosses_v2/features/withdrawal/depositscreen.dart';
-import 'package:business_bosses_v2/features/withdrawal/withdrawalscreen.dart';
+import 'package:business_bosses_v2/features/promotions/widgets/coinpopup.dart';
+import 'package:business_bosses_v2/features/withdrawal/presentation/depositscreen.dart';
+import 'package:business_bosses_v2/features/withdrawal/presentation/withdrawalscreen.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -61,11 +62,19 @@ class _PromotionScreenState extends State<PromotionScreen> {
               icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
             ),
             actions: [
-              Padding(
-                padding: const EdgeInsets.only(right: 15.0),
-                child: SvgPicture.asset(
-                  'assets/svgs/info.svg',
-                  height: 22,
+              GestureDetector(
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) => const CoinPopup(),
+                  );
+                },
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 15.0),
+                  child: SvgPicture.asset(
+                    'assets/svgs/info.svg',
+                    height: 22,
+                  ),
                 ),
               )
             ],

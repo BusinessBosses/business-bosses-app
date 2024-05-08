@@ -1,8 +1,10 @@
+import 'package:business_bosses_v2/common/widgets/safety_model.dart';
 import 'package:business_bosses_v2/features/courses/widgets/course_history_item.dart';
 import 'package:flutter/material.dart';
 
 class AllTransactions extends StatefulWidget {
-  const AllTransactions({super.key});
+  final List<dynamic> history;
+  const AllTransactions({super.key, required this.history});
 
   @override
   // ignore: library_private_types_in_public_api
@@ -12,7 +14,13 @@ class AllTransactions extends StatefulWidget {
 class _AllTransactionsState extends State<AllTransactions> {
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return widget.history.isEmpty
+        ? const SafetyModel(
+            isLoading: false,
+            title: 'No Courses History Found',
+            icon: Icon(Icons.warning),
+          )
+        :  Container(
       child: ListView.builder(
                 itemCount: 5,
                 itemBuilder: (BuildContext context, int i) {

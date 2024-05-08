@@ -1,5 +1,8 @@
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
+import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/features/donations/models/donations_model.dart';
+import 'package:business_bosses_v2/features/donations/presentation/donation_created.dart';
+import 'package:business_bosses_v2/features/forum/models/industry.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/utils/constants/constants.dart';
@@ -10,6 +13,11 @@ class DonationsController extends GetxController {
   late IO.Socket socket;
   final ProfileController profileController = Get.find();
   RxList<DonationModel> donations = <DonationModel>[].obs;
+  RxList<DonationModel> donationsNotApproved = <DonationModel>[].obs;
+  RxList<UserModel> users = <UserModel>[].obs;
+  RxList<UserModel> usersMembers = <UserModel>[].obs;
+  RxList<dynamic> times = <dynamic>[].obs;
+  RxList<dynamic> amounts = <dynamic>[].obs;
   RxList<String> userIds = <String>[].obs;
   List<dynamic> myHistory = <dynamic>[];
   List<dynamic> myHistoryReceived = <dynamic>[];
@@ -18,6 +26,8 @@ class DonationsController extends GetxController {
   RxBool error = RxBool(false);
   RxBool hLoading = RxBool(false);
   RxBool hError = RxBool(false);
+  RxBool tLoading = RxBool(false);
+  RxBool tError = RxBool(false);
 
   @override
   void onInit() async {
@@ -47,6 +57,25 @@ class DonationsController extends GetxController {
             donations.add(donation);
           }
         }
+        ApiResponseModel responseNot =
+            await ApiService.get(path: 'donation/query?isActive=false');
+
+        // Clear previous donations before adding new ones
+        donationsNotApproved.clear();
+        if (responseNot.success) {
+          for (int i = 0; i < responseNot.data['rows'].length; i++) {
+            if (responseNot.data['rows'][i]['user'] != null) {
+              DonationModel donationNot =
+                  DonationModel.fromMap(<String, dynamic>{
+                ...responseNot.data['rows'][i],
+                'likes': responseNot.data['rows'][i]['likes']
+                    .map((dynamic like) => like['userId'].toString())
+                    .toList(),
+              });
+              donationsNotApproved.add(donationNot);
+            }
+          }
+        }
       }
       error(false);
     } catch (e) {
@@ -57,17 +86,101 @@ class DonationsController extends GetxController {
     update();
   }
 
+  Future<void> deleteDonation(String donationId) async {
+    try {
+      ApiResponseModel response =
+          await ApiService.delete(path: 'donation/$donationId');
+
+      if (response.success) {
+        // Remove the deleted donation from the list
+        donations
+            .removeWhere((DonationModel donation) => donation.id == donationId);
+        donationsNotApproved
+            .removeWhere((DonationModel donation) => donation.id == donationId);
+        Get.snackbar('Success', 'Donation Deleted Successfully');
+      } else {
+        Get.snackbar('Error', 'Failed to Delete Donation');
+      }
+    } catch (e) {
+      Get.snackbar('Error', 'Failed to Delete Donation');
+    }
+  }
+
+  bool doesUserDonationExist() {
+    final String userId = profileController.myProfile.uid;
+    final bool approved = donations.any((DonationModel donation) =>
+        donation.user?.uid == userId &&
+        donation.amountRecieved < donation.targetAmount!);
+    final bool pending = donationsNotApproved
+        .any((DonationModel donation) => donation.user?.uid == userId);
+    if (pending || approved) {
+      return true;
+    }
+    return false;
+  }
+
+  Future<void> fetchDonationTransactions(DonationModel donation) async {
+    try {
+      tLoading(true); // Set loading to true before fetching data
+      ApiResponseModel response = await ApiService.get(
+          path: 'donation-transactions/donation/${donation.id}');
+
+      // Clear previous donations before adding new ones
+      users.clear();
+      times.clear();
+      amounts.clear();
+      if (response.success) {
+        for (int i = 0; i < response.data['rows'].length; i++) {
+          if (response.data['rows'][i]['user'] != null) {
+            UserModel user = UserModel.fromMap(<String, dynamic>{
+              ...response.data['rows'][i]['user'],
+            });
+            times.add(response.data['rows'][i]['date']);
+            amounts.add(response.data['rows'][i]['amount']);
+            users.add(user);
+          }
+        }
+      }
+      tError(false);
+    } catch (e) {
+      tError(true); // Set error to true if there's an error
+    } finally {
+      tLoading(false); // Set loading back to false after fetching data
+      update();
+    }
+  }
+
   Future<void> createDonation(Map<String, dynamic> donation) async {
     ApiResponseModel response =
         await ApiService.post(path: 'donation', body: donation);
     if (response.success) {
-      // donations.insert(
-      //     0,
-      //     DonationModel.fromMap(
-      //         <String, dynamic>{...donation, 'id': response.data['id']}));
+      Get.to(() => const DonationCreated());
+      donationsNotApproved.add(DonationModel.fromMap(<String, dynamic>{
+        ...donation,
+        'id': response.data['id'],
+        'amountRecieved': 0,
+      }));
+    }
+  }
+
+  Future<void> updateDonation(Map<String, dynamic> donation, String id) async {
+    ApiResponseModel response =
+        await ApiService.put(path: 'donation/approve/$id', body: donation);
+    if (response.success) {
+      final int donationIndex =
+          donations.indexWhere((DonationModel donation) => donation.id == id);
+
+      // Update the donation in the list with the updated data
+      if (donationIndex != -1) {
+        Map<String, dynamic> mergedData = {
+          ...donations[donationIndex].toMap(),
+          ...donation
+        };
+        donations[donationIndex] = DonationModel.fromMap(mergedData);
+      }
       update();
       Get.back();
-      Get.snackbar('Success', 'Donations Pending Approval!');
+      Get.snackbar('Success', 'Donation Updated Succesfully!');
     }
   }
 
@@ -83,6 +196,16 @@ class DonationsController extends GetxController {
       } else {
         // If it doesn't exist, add it
         userIds.add(profileController.myProfile.uid);
+        final Map<String, dynamic> marketData = <String, dynamic>{
+          'industryId': 'donation_id',
+          'categoryId': '6463a069-657d-47ae-b937-9a5d4c336811',
+          'description': '- Donate to support to a product \n - Find Donations',
+          'industry': 'Donation',
+          'photo': 'http://44.210.87.234/learningImages/marketplace.jpg',
+          'active': true,
+          'timestamp': DateTime.now().millisecondsSinceEpoch
+        };
+        profileController.toggleInterests(Industry.toObject(marketData));
       }
     }
     update();
@@ -93,7 +216,17 @@ class DonationsController extends GetxController {
         path: 'donation/get-joined-users/6463a069-657d-47ae-b937-9a5d4c336811');
     if (response.success) {
       List<dynamic> rows = response.data['rows'];
-      userIds.addAll(rows.map((row) => row['userId'].toString()).toList());
+      userIds
+          .addAll(rows.map((dynamic row) => row['userId'].toString()).toList());
+      usersMembers.clear();
+      for (int i = 0; i < response.data['rows'].length; i++) {
+        if (response.data['rows'][i]['user'] != null) {
+          UserModel user = UserModel.fromMap(<String, dynamic>{
+            ...response.data['rows'][i]['user'],
+          });
+          usersMembers.add(user);
+        }
+      }
       update();
     }
   }
@@ -116,6 +249,19 @@ class DonationsController extends GetxController {
     return false;
   }
 
+  Future<void> claimAmount(DonationModel donationModel) async {
+    ApiResponseModel response = await ApiService.put(
+        path: 'donation-transactions/claim-reward',
+        body: <String, dynamic>{
+          'donationId': donationModel.id,
+          'userId': profileController.myProfile.uid
+        });
+    if (response.success) {
+      profileController.myProfile
+          .incrementCoinsCount(donationModel.amountRecieved);
+    }
+  }
+
   Future<void> initHistory() async {
     try {
       hLoading(true); // Set loading to true before fetching data
@@ -125,12 +271,14 @@ class DonationsController extends GetxController {
               'donation-transactions/user/${profileController.myProfile.uid}');
       if (response.success) {
         myHistory.clear();
+        myHistoryOut.clear();
+        myHistoryReceived.clear();
         final List<dynamic> responseData = response.data['rows'];
         final List<Map<String, dynamic>> mappedData =
             responseData.cast<Map<String, dynamic>>();
         myHistory.addAll(mappedData);
         for (Map<String, dynamic> item in mappedData) {
-          if (item['type'] == 'donated') {
+          if (item['userId'] == profileController.myProfile.uid) {
             myHistoryOut.add(item);
           } else {
             myHistoryReceived.add(item);
@@ -193,7 +341,7 @@ class DonationsController extends GetxController {
     }
   }
 
-  initSocket() {
+  void initSocket() {
     socket = IO.io(Constants.socketUrl, <String, dynamic>{
       'autoConnect': false,
       'transports': ['websocket'],

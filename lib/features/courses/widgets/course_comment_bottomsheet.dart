@@ -125,7 +125,7 @@ class _CourseCommentBottomSheetState extends State<CourseCommentBottomSheet> {
   }
 
   Future<void> _loadCommentWithDetails() async {
-    await _commentController.fetchComments(widget.course.id);
+    await _commentController.fetchComments(widget.course.id!);
     setState(() {
       _isLoadingComments = _commentController.loading.value;
     });

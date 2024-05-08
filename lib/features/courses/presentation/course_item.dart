@@ -1,13 +1,13 @@
 // ignore_for_file: always_specify_types
 
 import 'package:business_bosses_v2/action/action.dart';
-import 'package:business_bosses_v2/common/models/comment_model.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/common/widgets/popup/my_popup_menu_button.dart';
 import 'package:business_bosses_v2/features/courses/controller/course_controller.dart';
 import 'package:business_bosses_v2/common/widgets/typography/text_widget.dart';
 import 'package:business_bosses_v2/features/courses/models/course_comment_model.dart';
 import 'package:business_bosses_v2/features/courses/models/course_model.dart';
+import 'package:business_bosses_v2/features/courses/presentation/course_reviews.dart';
 import 'package:business_bosses_v2/features/courses/presentation/create_course.dart';
 import 'package:business_bosses_v2/features/courses/presentation/expanded_course_screen.dart';
 import 'package:business_bosses_v2/features/courses/widgets/course_comment_bottomsheet.dart';
@@ -110,7 +110,9 @@ class _CourseItemState extends State<CourseItem> {
                             GestureDetector(
                                 onTap: () {},
                                 child: YoutubeDisplay(
-                                    widget.course.youtubeUrls![0])),
+                                    widget.course.youtubeUrls != null
+                                        ? widget.course.youtubeUrls![0]
+                                        : '')),
                             Positioned(
                               top: 0,
                               bottom: 0,
@@ -148,7 +150,7 @@ class _CourseItemState extends State<CourseItem> {
                                           width: 5,
                                         ),
                                         Text(
-                                          '${widget.course.youtubeUrls!.length.toString()} ${widget.course.youtubeUrls!.length > 1 ? 'Videos' : 'Video'}',
+                                          '${widget.course.youtubeUrls?.length.toString()} ${widget.course.youtubeUrls!.length > 1 ? 'Videos' : 'Video'}',
                                           style: const TextStyle(
                                             fontSize: 20,
                                             color: Colors.white,
@@ -170,7 +172,7 @@ class _CourseItemState extends State<CourseItem> {
                         widget.course.setViews();
                       });
                       courseController.updateCourseViews(
-                          widget.course.id, widget.course.views);
+                          widget.course.id, widget.course.views + 1);
                       Get.to(() => ExpandedCourseScreen(course: widget.course));
                     },
                     child: Container(
@@ -530,16 +532,25 @@ class _CourseItemState extends State<CourseItem> {
                 const SizedBox(
                   width: 10,
                 ),
-                const Icon(
-                  Icons.star,
-                  color: Color.fromRGBO(255, 202, 40, 1),
-                  size: 16,
-                ),
-                Text(
-                  widget.course.averageRating.toString(),
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 13,
+                GestureDetector(
+                  onTap: () {
+                    Get.to(CourseReviewScreen(course: widget.course));
+                  },
+                  child: Wrap(
+                    children: [
+                      const Icon(
+                        Icons.star,
+                        color: Color.fromRGBO(255, 202, 40, 1),
+                        size: 16,
+                      ),
+                      Text(
+                        widget.course.averageRating.toString(),
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 13,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 const SizedBox(

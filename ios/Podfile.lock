@@ -1,9 +1,9 @@
 PODS:
-  - AppAuth (1.7.4):
-    - AppAuth/Core (= 1.7.4)
-    - AppAuth/ExternalUserAgent (= 1.7.4)
-  - AppAuth/Core (1.7.4)
-  - AppAuth/ExternalUserAgent (1.7.4):
+  - AppAuth (1.7.5):
+    - AppAuth/Core (= 1.7.5)
+    - AppAuth/ExternalUserAgent (= 1.7.5)
+  - AppAuth/Core (1.7.5)
+  - AppAuth/ExternalUserAgent (1.7.5):
     - AppAuth/Core
   - audioplayers_darwin (0.0.1):
     - Flutter
@@ -212,7 +212,7 @@ PODS:
   - GTMAppAuth (4.1.1):
     - AppAuth/Core (~> 1.7)
     - GTMSessionFetcher/Core (< 4.0, >= 3.3)
-  - GTMSessionFetcher/Core (3.4.0)
+  - GTMSessionFetcher/Core (3.4.1)
   - image_picker_ios (0.0.1):
     - Flutter
   - is_lock_screen2 (2.0.1):
@@ -250,12 +250,12 @@ PODS:
     - Flutter
     - FlutterMacOS
   - PromisesObjC (2.4.0)
-  - purchases_flutter (6.26.0):
+  - purchases_flutter (6.28.0):
     - Flutter
-    - PurchasesHybridCommon (= 10.4.0)
-  - PurchasesHybridCommon (10.4.0):
-    - RevenueCat (= 4.40.0)
-  - RevenueCat (4.40.0)
+    - PurchasesHybridCommon (= 10.5.0)
+  - PurchasesHybridCommon (10.5.0):
+    - RevenueCat (= 4.41.0)
+  - RevenueCat (4.41.0)
   - SDWebImage (5.19.1):
     - SDWebImage/Core (= 5.19.1)
   - SDWebImage/Core (5.19.1)
@@ -528,7 +528,7 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/zego_zpns/ios"
 
 SPEC CHECKSUMS:
-  AppAuth: 182c5b88630569df5acb672720534756c29b3358
+  AppAuth: 501c04eda8a8d11f179dbe8637b7a91bb7e5d2fa
   audioplayers_darwin: 877d9a4d06331c5c374595e46e16453ac7eafa40
   CryptoSwift: c63a805d8bb5e5538e88af4e44bb537776af11ea
   device_info_plus: c6fb39579d0f423935b0c9ce7ee2f44b71b9fce6
@@ -567,7 +567,7 @@ SPEC CHECKSUMS:
   GoogleSignIn: d4281ab6cf21542b1cfaff85c191f230b399d2db
   GoogleUtilities: d053d902a8edaa9904e1bd00c37535385b8ed152
   GTMAppAuth: f69bd07d68cd3b766125f7e072c45d7340dea0de
-  GTMSessionFetcher: ed61055dc13f769533d057edc520a4cb8f41c324
+  GTMSessionFetcher: 8000756fc1c19d2e5697b90311f7832d2e33f6cd
   image_picker_ios: 99dfe1854b4fa34d0364e74a78448a0151025425
   is_lock_screen2: 2bc16ada7d49434ba1a2b24f09aa49a87b154e79
   libwebp: 1786c9f4ff8a279e4dac1e8f385004d5fc253009
@@ -580,9 +580,9 @@ SPEC CHECKSUMS:
   permission_handler_apple: e76247795d700c14ea09e3a2d8855d41ee80a2e6
   photo_manager: 4f6810b7dfc4feb03b461ac1a70dacf91fba7604
   PromisesObjC: f5707f49cb48b9636751c5b2e7d227e43fba9f47
-  purchases_flutter: 8dae74795cc654391454da4cc99b5f9ca5e53c34
-  PurchasesHybridCommon: 70b93acd428e5f67a4d2f13de4c4eb229e4ff39f
-  RevenueCat: f33d2bb58e75afc68d3a8cf193971f008f553a2c
+  purchases_flutter: 374d09772f892e73f19bec6fb91eecd4dd21b23d
+  PurchasesHybridCommon: 3ada52b4b1214b1bdcc499812d061580b85b1b10
+  RevenueCat: 1e864e3b26f3f22ca067dd8578da8123030e6774
   SDWebImage: 40b0b4053e36c660a764958bff99eed16610acbb
   shared_preferences_foundation: b4c3b4cddf1c21f02770737f147a3f5da9d39695
   sign_in_with_apple: f3bf75217ea4c2c8b91823f225d70230119b8440

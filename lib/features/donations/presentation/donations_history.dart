@@ -83,7 +83,7 @@ class _DonationsHistoryState extends State<DonationsHistory> {
                             ),
                             const SizedBox(width: 5),
                             Text(
-                              totalAmount.toString(),
+                              totalAmount.toInt().toString(),
                               style: const TextStyle(
                                 fontWeight: FontWeight.w900,
                                 fontSize: 22,
@@ -91,7 +91,7 @@ class _DonationsHistoryState extends State<DonationsHistory> {
                             ),
                             const SizedBox(width: 5),
                             Text(
-                              '(\$${(totalAmount / 2).toString()})',
+                              '(\$${(totalAmount / 100).toString()})',
                               style: const TextStyle(
                                 fontWeight: FontWeight.w700,
                                 fontSize: 22,

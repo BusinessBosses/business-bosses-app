@@ -80,7 +80,7 @@ class _CreateForumScreenState extends State<CreateForumScreen> {
                 isbossup
                     ? 'Enter Challenge'
                     : categoryId == Constants.LEARNINGID
-                        ? 'Start a Topic'
+                        ? 'Share Resources'
                         : 'Share Opportunities',
               ),
               automaticallyImplyLeading: false,
@@ -112,7 +112,7 @@ class _CreateForumScreenState extends State<CreateForumScreen> {
                           hintText: isbossup
                               ? 'Enter Business name'
                               : categoryId == Constants.LEARNINGID
-                                  ? 'Enter Topic Title'
+                                  ? 'Enter Resource Title'
                                   : 'Enter Opportunity Title'),
                     ),
                   ),

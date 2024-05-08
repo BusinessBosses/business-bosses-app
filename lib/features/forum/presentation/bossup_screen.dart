@@ -90,6 +90,10 @@ class _BossUpSectionState extends State<BossUpSection> {
     });
   }
 
+  Future<void> refreshData() async {
+    await bossUpController.fetchForums(widget.industry.industryId!);
+  }
+
   @override
   Widget build(BuildContext context) {
     int userCount = widget.bossUp.joinedUsers
@@ -568,9 +572,7 @@ class _BossUpSectionState extends State<BossUpSection> {
                                 .fetchForums(widget.industry.industryId!);
                           },
                         )
-                      : !controller.loading.value &&
-                              !controller.error.value &&
-                              controller.forums.isEmpty
+                      : controller.forums.isEmpty
                           ? const SafetyModel(
                               isLoading: false,
                               title: 'No post',
@@ -580,11 +582,6 @@ class _BossUpSectionState extends State<BossUpSection> {
                               onRefresh: refreshData,
                               child: ListView.builder(
                                   itemCount: controller.forums.length,
-
-                                  // <-- this will disable scroll
-
-                                  //controller: differentController,
-
                                   itemBuilder: (BuildContext context, int i) {
                                     return VisibilityDetector(
                                       key: Key(i.toString()),
@@ -627,20 +624,6 @@ class _BossUpSectionState extends State<BossUpSection> {
         }
       }),
     );
-  }
-
-  Future<void> loadData() async {
-    setState(() {});
-
-    // Call the loadPosts() function from the PostsController
-    // await Get.find<PostsController>().loadPosts();
-    await Get.find<BossUpController>().fetchForums(widget.industry.industryId!);
-
-    setState(() {});
-  }
-
-  Future<void> refreshData() async {
-    await loadData(); // Trigger data reload
   }
 
   String _calculateTimeLeft(DateTime endTime) {

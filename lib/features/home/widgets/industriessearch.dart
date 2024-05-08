@@ -1,6 +1,13 @@
+import 'package:business_bosses_v2/action/action.dart';
+import 'package:business_bosses_v2/features/forum/presentation/all_forum_screen.dart';
+import 'package:business_bosses_v2/features/forum/presentation/bossup_screen.dart';
+import 'package:business_bosses_v2/features/home/bottom_nav.dart';
+import 'package:business_bosses_v2/navigation/routes.dart';
+import 'package:business_bosses_v2/utils/constants/constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 import '../../../common/widgets/safety_model.dart';
 import '../../../common/widgets/tiles/custom_tile.dart';
 import '../../../utils/theme/theme.dart';
@@ -40,8 +47,16 @@ class MySearchIndustries extends StatelessWidget {
                 label: searchIndustries[i].industry!,
                 photo: searchIndustries[i].photo!,
                 onTap: () {
+                  searchIndustries[i].categoryId!.contains('-Mos1VMnV53H7AZa0W8p') ?  
+                  Get.toNamed(
+                    Routes.allforumscreen,
+                    arguments: searchIndustries[i],
+                  ) : Get.to(() => BossUpSection(
+                          industry: searchIndustries[i],
+                          bossUp: searchIndustries[i],
+                        ));
                   // searchIndustries[i]
-                  //         .industryId
+                  //         .industryId!
                   //         .contains('-MsUPNEHnp8-An5VLI_v')
                   //     ? Navigator.push(
                   //         context,
@@ -50,7 +65,7 @@ class MySearchIndustries extends StatelessWidget {
                   //         ),
                   //       )
                   //     : searchIndustries[i]
-                  //             .industryId
+                  //             .industryId!
                   //             .contains('-MsUOGcOT9oRXGakCcJv')
                   //         ? Navigator.push(
                   //             context,

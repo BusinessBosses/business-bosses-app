@@ -22,6 +22,7 @@ class DonationModel {
   final bool? isApproved;
   final bool? isSuspended;
   final bool? isCashoutApproved;
+  final List<DonationTransaction>? transactions;
   DonationModel({
     required this.id,
     required this.categoryId,
@@ -41,6 +42,7 @@ class DonationModel {
     this.isCashoutApproved,
     this.youtubeUrls,
     required this.images,
+    this.transactions,
   });
 
   DonationModel copyWith({
@@ -62,6 +64,7 @@ class DonationModel {
     int? views,
     String? youtubeUrls,
     List<String>? images,
+    List<DonationTransaction>? transactions,
   }) {
     return DonationModel(
       id: id ?? this.id,
@@ -82,6 +85,7 @@ class DonationModel {
       isCashoutApproved: isCashoutApproved ?? this.isCashoutApproved,
       youtubeUrls: youtubeUrls ?? this.youtubeUrls,
       images: images ?? this.images,
+      transactions: transactions ?? this.transactions,
     );
   }
 
@@ -105,6 +109,8 @@ class DonationModel {
       'isCashoutApproved': isCashoutApproved,
       'youtubeUrls': youtubeUrls,
       'images': images,
+      'transactions':
+          transactions!.map((DonationTransaction t) => t.toMap()).toList(),
     };
   }
 
@@ -138,6 +144,9 @@ class DonationModel {
       isSuspended: map['isSuspended'] ?? false,
       isCashoutApproved: map['isCashoutApproved'] ?? false,
       images: List<String>.from((map['images'])),
+      transactions: List.from(map['transactions'])
+          .map((t) => DonationTransaction.fromMap(t as Map<String, dynamic>))
+          .toList(),
     );
   }
 
@@ -148,4 +157,32 @@ class DonationModel {
   void setRecievedAmount(int incrementBy) {
     amountRecieved += incrementBy;
   }
+}
+
+class DonationTransaction {
+  final String id;
+  final DateTime date;
+  final int amount;
+  final String? description;
+  final String type;
+
+  DonationTransaction({
+    required this.id,
+    required this.date,
+    required this.amount,
+    this.description,
+    required this.type,
+  });
+
+  factory DonationTransaction.fromMap(Map<String, dynamic> map) {
+    return DonationTransaction(
+      id: map['id'] as String,
+      date: DateTime.parse(map['date']),
+      amount: int.parse(map['amount']),
+      description: map['description'] as String?,
+      type: map['type'] as String,
+    );
+  }
+
+  toMap() {}
 }

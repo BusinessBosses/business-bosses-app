@@ -1,7 +1,10 @@
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/widgets/buttons/custom_button.dart';
+import 'package:business_bosses_v2/common/widgets/safety_model.dart';
+import 'package:business_bosses_v2/features/home/all_communities_screen.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/features/promotions/widgets/buycoinslist_item.dart';
+import 'package:business_bosses_v2/features/withdrawal/controller/coinhistorycontroller.dart';
 import 'package:business_bosses_v2/features/withdrawal/widgets/withdrawal_header_item.dart';
 import 'package:business_bosses_v2/features/withdrawal/widgets/withdrawal_item.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
@@ -30,6 +33,8 @@ class DepositsScreen extends StatefulWidget {
 class _DepositsScreenState extends State<DepositsScreen> {
   final ScrollController scrollController = ScrollController();
   final ProfileController _profileController = Get.find();
+  final CoinHistoryController coinHistoryController =
+      Get.put(CoinHistoryController());
   String? _paymentmethods;
   late String _referralId;
   List<String> coinAmounts = ['100', '200', '500', '1000', '10000'];
@@ -52,6 +57,7 @@ class _DepositsScreenState extends State<DepositsScreen> {
   @override
   Widget build(BuildContext context) {
     ProfileController profileController = Get.find();
+    final theme = Theme.of(context).copyWith(dividerColor: Colors.transparent);
     return Scaffold(
         backgroundColor: Colors.white,
         body: NestedScrollView(
@@ -213,70 +219,202 @@ class _DepositsScreenState extends State<DepositsScreen> {
                             ],
                           ),
                         ),
-                        Visibility(
-                          visible: !profileController.myProfile.isSubscribed,
-                          child: Container(
-                            height: 1,
-                            color: backgroundcolorinterface,
+                        Container(
+                          height: 1,
+                          color: backgroundcolorinterface,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 15.0, vertical: 10),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Become a premium user',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 16),
+                                  ),
+                                  Text(
+                                    'Get 100 coins monthly',
+                                    style: TextStyle(
+                                        color: Colors.grey,
+                                        fontWeight: FontWeight.w700),
+                                  )
+                                ],
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  !profileController.myProfile.isSubscribed
+                                      ? Get.toNamed(Routes.premiumscreen)
+                                      : null;
+                                },
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10, vertical: 10),
+                                  width: 120,
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                        width: 2,
+                                        color: !profileController
+                                                .myProfile.isSubscribed
+                                            ? primaryColorLT
+                                            : Colors.grey),
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        !profileController
+                                                .myProfile.isSubscribed
+                                            ? 'Subscribe'
+                                            : 'Subscribed',
+                                        style: TextStyle(
+                                            color: !profileController
+                                                    .myProfile.isSubscribed
+                                                ? primaryColorLT
+                                                : Colors.grey,
+                                            fontWeight: FontWeight.w700,
+                                            fontSize: 16),
+                                      ),
+                                      !profileController.myProfile.isSubscribed
+                                          ? SvgPicture.asset(
+                                              'assets/svgs/nexticon.svg')
+                                          : Container()
+                                    ],
+                                  ),
+                                ),
+                              )
+                            ],
                           ),
                         ),
-                        Visibility(
-                          visible: !profileController.myProfile.isSubscribed,
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 15.0, vertical: 10),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                const Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'Become a premium user',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.w700,
-                                          fontSize: 16),
-                                    ),
-                                    Text(
-                                      'Get 500 coins monthly',
-                                      style: TextStyle(
-                                          color: Colors.grey,
-                                          fontWeight: FontWeight.w700),
-                                    )
-                                  ],
-                                ),
-                                GestureDetector(
-                                  onTap: () {
-                                    Get.toNamed(Routes.premiumscreen);
-                                  },
-                                  child: Container(
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 10, vertical: 10),
-                                    width: 120,
-                                    decoration: BoxDecoration(
-                                      border: Border.all(
-                                          width: 2, color: primaryColorLT),
-                                      borderRadius: BorderRadius.circular(12),
-                                    ),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        const Text(
-                                          'Subscribe',
-                                          style: TextStyle(
-                                              color: primaryColorLT,
-                                              fontWeight: FontWeight.w700,
-                                              fontSize: 16),
-                                        ),
-                                        SvgPicture.asset(
-                                            'assets/svgs/nexticon.svg')
-                                      ],
-                                    ),
+                        Container(
+                          height: 1,
+                          color: backgroundcolorinterface,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 15.0, vertical: 10),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Sell on Marketplace',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 16),
                                   ),
-                                )
-                              ],
-                            ),
+                                  Text(
+                                    'Sell your Products or Services',
+                                    style: TextStyle(
+                                        color: Colors.grey,
+                                        fontWeight: FontWeight.w700),
+                                  )
+                                ],
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  Get.toNamed(
+                                    Routes.marketPlace,
+                                  );
+                                },
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10, vertical: 10),
+                                  width: 120,
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                        width: 2, color: primaryColorLT),
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        'Sell',
+                                        style: TextStyle(
+                                            color: primaryColorLT,
+                                            fontWeight: FontWeight.w700,
+                                            fontSize: 16),
+                                      ),
+                                      SvgPicture.asset(
+                                          'assets/svgs/nexticon.svg')
+                                    ],
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                        Container(
+                          height: 1,
+                          color: backgroundcolorinterface,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 15.0, vertical: 10),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Create Premium Courses',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 16),
+                                  ),
+                                  Text(
+                                    'Monetise your expetise',
+                                    style: TextStyle(
+                                        color: Colors.grey,
+                                        fontWeight: FontWeight.w700),
+                                  )
+                                ],
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  Get.to(() => const AllCommunitiesScreen(
+                                        initialTabIndex: 1,
+                                      ));
+                                },
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10, vertical: 10),
+                                  width: 120,
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                        width: 2, color: primaryColorLT),
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      const Text(
+                                        'Create',
+                                        style: TextStyle(
+                                            color: primaryColorLT,
+                                            fontWeight: FontWeight.w700,
+                                            fontSize: 16),
+                                      ),
+                                      SvgPicture.asset(
+                                          'assets/svgs/nexticon.svg')
+                                    ],
+                                  ),
+                                ),
+                              )
+                            ],
                           ),
                         ),
                         Container(
@@ -354,35 +492,86 @@ class _DepositsScreenState extends State<DepositsScreen> {
             },
             body: Column(
               children: [
-                ExpansionTile(
-                  trailing: isExpanded
-                      ? SvgPicture.asset(
-                          'assets/svgs/dropdownexpansionup.svg',
-                        )
-                      : SvgPicture.asset(
-                          'assets/svgs/dropdownexpansion.svg',
-                        ),
-                  title: const Text('Top up history',
-                      style:
-                          TextStyle(fontWeight: FontWeight.w700, fontSize: 16)),
-                  children: [
-                    Container(
-                      child: Column(
-                        children: [
-                          WithdrawalHeaderItem(),
-                          Container(
-                            child: ListView.builder(
-                              shrinkWrap: true,
-                              itemCount: 10,
-                              itemBuilder: (BuildContext context, int i) {
-                                return WithdrawalItem();
-                              },
-                            ),
+                Theme(
+                  data: theme,
+                  child: ExpansionTile(
+                    trailing: isExpanded
+                        ? SvgPicture.asset(
+                            'assets/svgs/dropdownexpansionup.svg',
+                          )
+                        : SvgPicture.asset(
+                            'assets/svgs/dropdownexpansion.svg',
                           ),
-                        ],
-                      ),
-                    )
-                  ],
+                    title: const Text('Top up history',
+                        style: TextStyle(
+                            fontWeight: FontWeight.w700, fontSize: 16)),
+                    children: [
+                      FutureBuilder<void>(
+                        future: coinHistoryController.initHistory(),
+                        builder: (BuildContext context,
+                            AsyncSnapshot<void> snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            // While data is being fetched, show a loading indicator
+                            return const Padding(
+                              padding: EdgeInsets.all(80.0),
+                              child: CircularProgressIndicator(),
+                            );
+                          } else if (snapshot.hasError) {
+                            // If an error occurs during data fetching, handle it accordingly
+                            return Text('Error: ${snapshot.error}');
+                          } else {
+                            print(coinHistoryController.coindepositsHistory);
+                            // If data fetching is successful, build your UI with the fetched data
+                            return Container(
+                              child: coinHistoryController
+                                      .coindepositsHistory.isEmpty
+                                  ? Padding(
+                                    padding: const EdgeInsets.all(80.0),
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      children: [
+                                        SvgPicture.asset('assets/svgs/coinnn.svg', height: 40, color: Colors.grey,),
+                                        SizedBox(height: 10,),
+                                        Text('No Coin Deposits Found', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15),)
+                                        
+                                      ],
+                                    ),
+                                  )
+                                  : Column(
+                                      children: [
+                                        WithdrawalHeaderItem(),
+                                        Container(
+                                          child: ListView.builder(
+                                            shrinkWrap: true,
+                                            itemCount: coinHistoryController
+                                                .coindepositsHistory.length,
+                                            itemBuilder:
+                                                (BuildContext context, int i) {
+                                              coinHistoryController
+                                                  .coindepositsHistory
+                                                  .sort((a, b) =>
+                                                      DateTime.parse(b['date'])
+                                                          .compareTo(
+                                                              DateTime.parse(
+                                                                  a['date'])));
+
+                                              return WithdrawalItem(
+                                                item: coinHistoryController
+                                                    .coinwithdrawalHistory[i],
+                                              );
+                                            },
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                            );
+                          }
+                        },
+                      )
+                    ],
+                  ),
                 ),
                 Container(
                   height: 1,

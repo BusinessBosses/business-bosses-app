@@ -1,4 +1,5 @@
 import 'package:business_bosses_v2/features/donations/controller/donations_controller.dart';
+import 'package:business_bosses_v2/features/donations/presentation/donation_members.dart';
 import 'package:business_bosses_v2/features/donations/presentation/donations_history.dart';
 import 'package:business_bosses_v2/features/donations/widgets/donation_item.dart';
 import 'package:business_bosses_v2/features/forum/widgets/joinedbutton.dart';
@@ -100,6 +101,26 @@ class _DonationsPageState extends State<DonationsPage> {
                                     style: ElevatedButton.styleFrom(
                                         minimumSize: const Size(150, 45)),
                                     onPressed: () {
+                                      if (!donationsController.userIds
+                                          .contains(_myProfile.myProfile.uid)) {
+                                        Get.snackbar(
+                                          'Error!',
+                                          'You have to join to create a donation!',
+                                          backgroundColor: Colors.red,
+                                          colorText: Colors.white,
+                                        );
+                                        return;
+                                      }
+                                      if (donationsController
+                                          .doesUserDonationExist()) {
+                                        Get.snackbar(
+                                          'Error!',
+                                          'You cannot create multiple donations!',
+                                          backgroundColor: Colors.red,
+                                          colorText: Colors.white,
+                                        );
+                                        return;
+                                      }
                                       Get.toNamed(Routes.createdonationsscreen);
                                     },
                                     child: Row(
@@ -217,7 +238,12 @@ class _DonationsPageState extends State<DonationsPage> {
                                                       ),
                                                       recognizer:
                                                           TapGestureRecognizer()
-                                                            ..onTap = () {},
+                                                            ..onTap = () {
+                                                              Get.to(() =>
+                                                                  DonationMembers(
+                                                                      users: donationsController
+                                                                          .usersMembers));
+                                                            },
                                                     ),
                                                   ],
                                                 ),
@@ -245,9 +271,8 @@ class _DonationsPageState extends State<DonationsPage> {
                                                 text: TextSpan(
                                                   children: <InlineSpan>[
                                                     TextSpan(
-                                                      text: donationsController
-                                                          .donations.length
-                                                          .toString(),
+                                                      text:
+                                                          'Posts (${formatCount(donationsController.donations.length)})',
                                                       style: const TextStyle(
                                                         fontSize: 12,
                                                         color: textColor,
@@ -284,78 +309,6 @@ class _DonationsPageState extends State<DonationsPage> {
                           ],
                         ),
                       ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(
-                            right: 15, left: 15, bottom: 10),
-                        child: Container(
-                            height: 40,
-                            decoration: BoxDecoration(
-                              color: const Color(0xFFFFFFFF),
-                              borderRadius: BorderRadius.circular(10),
-                              boxShadow: <BoxShadow>[
-                                BoxShadow(
-                                  color: Colors.grey.withOpacity(0.3),
-                                  spreadRadius: 20,
-                                  blurRadius: 500,
-                                  offset: const Offset(0, 3),
-                                ),
-                              ],
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: <Widget>[
-                                GestureDetector(
-                                  onTap: () {
-                                    Get.toNamed(Routes.promotionscreen);
-                                  },
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(left: 10.0),
-                                    child: Wrap(
-                                      crossAxisAlignment:
-                                          WrapCrossAlignment.center,
-                                      children: <Widget>[
-                                        const Text('Coin Balance: '),
-                                        SvgPicture.asset(
-                                            'assets/svgs/coin.svg'),
-                                        const SizedBox(
-                                          width: 2,
-                                        ),
-                                        Text(
-                                          '${_myProfile.myProfile.coinscount!}',
-                                          style: const TextStyle(
-                                              fontWeight: FontWeight.w700,
-                                              color: subtextColor),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                                GestureDetector(
-                                  onTap: () {
-                                    Get.to(() => const DonationsHistory());
-                                  },
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(
-                                      right: 10.0,
-                                    ),
-                                    child: Wrap(
-                                        crossAxisAlignment:
-                                            WrapCrossAlignment.center,
-                                        children: <Widget>[
-                                          const Text('Donation History '),
-                                          SvgPicture.asset(
-                                            'assets/svgs/nexticon.svg',
-                                            color: textColor,
-                                          ),
-                                        ]),
-                                  ),
-                                )
-                              ],
-                            )),
-                      )
                     ],
                   ),
                 )
@@ -366,20 +319,109 @@ class _DonationsPageState extends State<DonationsPage> {
       },
       body: GetBuilder<DonationsController>(
         builder: (DonationsController controller) {
-          return controller.loading.value
-              ? const Center(
-                  child: CircularProgressIndicator(),
-                )
-              : ListView.builder(
-                  itemCount: controller.donations.length,
-                  itemBuilder: (BuildContext context, int i) {
-                    bool isLastItem = i == controller.donations.length - 1;
-                    return DonationItem(
-                      donation: controller.donations[i],
-                      isLastItem: isLastItem,
-                    );
-                  },
-                );
+          return Container(
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(
+                      right: 15, left: 15, bottom: 10, top: 10),
+                  child: Container(
+                      height: 40,
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFFFFFFF),
+                        borderRadius: BorderRadius.circular(10),
+                        boxShadow: <BoxShadow>[
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.3),
+                            spreadRadius: 20,
+                            blurRadius: 500,
+                            offset: const Offset(0, 3),
+                          ),
+                        ],
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          GestureDetector(
+                            onTap: () {
+                              Get.toNamed(Routes.promotionscreen);
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 10.0),
+                              child: Container(
+                                width: 142,
+                                padding: EdgeInsets.symmetric(vertical: 1),
+                                decoration: BoxDecoration(
+                                    color: backgroundColor,
+                                    borderRadius: BorderRadius.circular(5)),
+                                child: Wrap(
+                                  alignment: WrapAlignment.center,
+                                  crossAxisAlignment: WrapCrossAlignment.center,
+                                  children: <Widget>[
+                                    const Text('Balance: '),
+                                    SvgPicture.asset('assets/svgs/coin.svg'),
+                                    const SizedBox(
+                                      width: 2,
+                                    ),
+                                    Text(
+                                      '${_myProfile.myProfile.coinscount!}',
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.w700,
+                                          color: subtextColor),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              Get.to(() => const DonationsHistory());
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.only(
+                                right: 10.0,
+                              ),
+                              child: Wrap(
+                                  crossAxisAlignment: WrapCrossAlignment.center,
+                                  children: <Widget>[
+                                    const Text(
+                                      'Donation History ',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w700),
+                                    ),
+                                    SvgPicture.asset(
+                                      'assets/svgs/nexticon.svg',
+                                      color: textColor,
+                                    ),
+                                  ]),
+                            ),
+                          )
+                        ],
+                      )),
+                ),
+                controller.loading.value
+                    ? Expanded(
+                        child: Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                      )
+                    : Expanded(
+                        child: ListView.builder(
+                          itemCount: controller.donations.length,
+                          itemBuilder: (BuildContext context, int i) {
+                            bool isLastItem =
+                                i == controller.donations.length - 1;
+                            return DonationItem(
+                              donation: controller.donations[i],
+                              isLastItem: isLastItem,
+                            );
+                          },
+                        ),
+                      )
+              ],
+            ),
+          );
         },
       ),
     );

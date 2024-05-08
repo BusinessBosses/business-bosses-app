@@ -40,8 +40,6 @@ class HomeController extends GetxController {
   List<Industry> industries = [];
   List<UserModel> bossupMembers = [];
 
-  List<ForumModel> bossupForums = [];
-
   RxInt paginationPage = RxInt(1);
   RxBool loading = RxBool(false);
   RxBool loadingMore = RxBool(false);
@@ -65,11 +63,6 @@ class HomeController extends GetxController {
 
   void addIndustries(List<Industry> data) {
     industries = data;
-  }
-
-  void addBossupForums(List<ForumModel> data) {
-    bossupForums.clear();
-    bossupForums = data;
   }
 
   void addMarkets(RxList<MarketModel> data) {
@@ -487,6 +480,38 @@ class HomeController extends GetxController {
         'postId': postId,
         'userId': userId,
         'type': type,
+        'timestamp': DateTime.now().millisecondsSinceEpoch,
+      });
+    }
+  }
+
+  /// BUY COURSE WITH COINS
+  void courseCoin(String userId, String courseId, String price,
+      ProfileController profileController, String type, String receiverUid) {
+    // final bool checkIfCoined =
+    //     mixedPosts[forumIndex]['data'].coins!.contains(userId);
+    // if (checkIfCoined) {
+    //   profileController.updateCoinCount(int.parse(price));
+    //   // mixedPosts[forumIndex]['data']
+    //   //     .coins!
+    //   //     .removeWhere((String element) => element == userId);
+    // } else {
+    //   profileController.updateCoinCount(-int.parse(price));
+    //   // mixedPosts[forumIndex]['data'].coins!.add(userId);
+    // }
+
+    update();
+    if (profileController.myProfile.uid != receiverUid) {
+      socket.emit('coin', {
+        'postId': courseId,
+        'userId': userId,
+        'timestamp': DateTime.now().millisecondsSinceEpoch,
+        'receiverUid': receiverUid,
+      });
+    } else {
+      socket.emit('coin', {
+        'postId': courseId,
+        'userId': userId,
         'timestamp': DateTime.now().millisecondsSinceEpoch,
       });
     }
@@ -912,8 +937,6 @@ class HomeController extends GetxController {
         element['isForum'] &&
         element['data'].forumId == forumId);
     ApiService.delete(path: 'forum/delete/$forumId');
-    bossupForums
-        .removeWhere((ForumModel element) => element.forumId == forumId);
     update();
   }
 
