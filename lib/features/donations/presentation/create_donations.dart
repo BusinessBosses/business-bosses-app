@@ -127,7 +127,7 @@ class _CreateDonationScreenState extends State<CreateDonationScreen> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
+                  children: <Widget>[
                     Container(
                       padding: const EdgeInsets.all(14),
                       decoration: BoxDecoration(
@@ -143,36 +143,39 @@ class _CreateDonationScreenState extends State<CreateDonationScreen> {
                     Expanded(
                       flex:
                           6, // Adjust the flex value to control the relative sizes
-                      child: Stack(children: [
-                        TextFormField(
-                          inputFormatters: [
-                            FilteringTextInputFormatter.allow(
-                                RegExp(r'[0-9]')), // Allow only numbers
-                          ],
-                          controller: priceController,
-                          textInputAction: TextInputAction.next,
-                          keyboardType: TextInputType.number,
-                          maxLength: 7,
-                          decoration: inputDecoration.copyWith(
-                            hintText: 'Enter Amount to raise e.g 2000',
-                            counterText: '',
+                      child: Stack(
+                        children: <Widget>[
+                          TextFormField(
+                            inputFormatters: <TextInputFormatter>[
+                              FilteringTextInputFormatter.allow(
+                                  RegExp(r'[0-9]')), // Allow only numbers
+                            ],
+                            controller: priceController,
+                            textInputAction: TextInputAction.next,
+                            keyboardType: TextInputType.number,
+                            maxLength: 7,
+                            decoration: inputDecoration.copyWith(
+                              hintText: 'Enter Amount to raise e.g 2000',
+                              counterText: '',
+                            ),
+                            onChanged: (String val) {
+                              targetAmount = int.tryParse(val) ?? 0;
+                              setState(() {});
+                            },
                           ),
-                          onChanged: (String val) {
-                            targetAmount = int.tryParse(val) ?? 0;
-                            setState(() {});
-                          },
-                        ),
-                        Positioned(
-                            top: 20,
-                            bottom: 0,
-                            right: 10,
-                            child: Text(
-                              priceController.text != ''
-                                  ? ' \$${num.parse(priceController.text) / 100}'
-                                  : '\$0',
-                              style: TextStyle(color: textColor.withAlpha(100)),
-                            ))
-                      ]),
+                          Positioned(
+                              top: 20,
+                              bottom: 0,
+                              right: 10,
+                              child: Text(
+                                priceController.text != ''
+                                    ? ' \$${num.parse(priceController.text) / 100}'
+                                    : '\$0',
+                                style:
+                                    TextStyle(color: textColor.withAlpha(100)),
+                              ))
+                        ],
+                      ),
                     ),
                   ],
                 ),
@@ -182,7 +185,7 @@ class _CreateDonationScreenState extends State<CreateDonationScreen> {
                 padding: const EdgeInsets.only(left: 15.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
+                  children: <Widget>[
                     Container(
                         decoration: BoxDecoration(
                             color: Colors.white,
@@ -441,7 +444,8 @@ class _CreateDonationScreenState extends State<CreateDonationScreen> {
                         'description': descriptionController.text,
                         'targetAmount': int.tryParse(priceController.text),
                         'youtubeUrls': _ytUrl,
-                        'images': photo != null ? [photo] : [],
+                        'images':
+                            photo != null ? <String?>[photo] : <dynamic>[],
                       }, widget.donation!.id);
                     } else {
                       await donationsController
@@ -453,9 +457,10 @@ class _CreateDonationScreenState extends State<CreateDonationScreen> {
                         'timestamp': DateTime.now().millisecondsSinceEpoch,
                         'targetAmount': targetAmount,
                         'youtubeUrls': _ytUrl,
-                        'images': photo != null ? [photo] : [],
+                        'images':
+                            photo != null ? <String?>[photo] : <dynamic>[],
                         'comments': <CommentModel>[],
-                        'likes': [],
+                        'likes': <dynamic>[],
                       });
                     }
                     setState(() {
@@ -520,7 +525,7 @@ class _CreateDonationScreenState extends State<CreateDonationScreen> {
 
   bool _isValidYoutubeUrl(String url) {
     final RegExp youtubeRegExp = RegExp(
-      r'^(https?\:\/\/)?(www\.youtube\.com|youtu\.?be)\/.+$',
+      r'^(https?\:\/\/)?(www\.youtube\.com\/watch\?v=|youtu\.be\/).+$',
       caseSensitive: false,
       multiLine: false,
     );

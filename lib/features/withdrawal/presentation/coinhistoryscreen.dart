@@ -1,19 +1,11 @@
-import 'package:business_bosses_v2/common/widgets/buttons/custom_button.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/features/withdrawal/presentation/depositscreen.dart';
 import 'package:business_bosses_v2/features/withdrawal/presentation/withdrawalscreen.dart';
-import 'package:business_bosses_v2/features/withdrawal/widgets/withdrawal_header_item.dart';
-import 'package:business_bosses_v2/features/withdrawal/widgets/withdrawal_item.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-
-import '../../../action/action.dart';
-import '../../../navigation/routes.dart';
 
 class CoinHistoryScreen extends StatefulWidget {
   static const String routeName = '/withdrawal-screen';
@@ -40,7 +32,6 @@ class _CoinHistoryScreenState extends State<CoinHistoryScreen> {
 
   @override
   Widget build(BuildContext context) {
-    ProfileController profileController = Get.find();
     return Scaffold(
         appBar: AppBar(
             leading: IconButton(
@@ -49,10 +40,12 @@ class _CoinHistoryScreenState extends State<CoinHistoryScreen> {
               },
               icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
             ),
-            actions: [ Padding(
-              padding: const EdgeInsets.only(right:15.0),
-              child: SvgPicture.asset('assets/svgs/help.svg'),
-            )],
+            actions: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(right: 15.0),
+                child: SvgPicture.asset('assets/svgs/help.svg'),
+              )
+            ],
             centerTitle: true,
             title: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -99,7 +92,7 @@ class _CoinHistoryScreenState extends State<CoinHistoryScreen> {
                 ])),
         backgroundColor: Colors.white,
         body: Column(
-          children: [
+          children: <Widget>[
             Container(
               color: Colors.white,
               child: Padding(
@@ -110,10 +103,9 @@ class _CoinHistoryScreenState extends State<CoinHistoryScreen> {
                   child: CupertinoSlidingSegmentedControl<int>(
                     backgroundColor: Colors.grey[200]!,
                     padding: const EdgeInsets.all(5),
-                    children: {
+                    children: <int, Widget>{
                       0: Text('Withdrawals'),
                       1: Text('Coin Purchases'),
-                      
                     },
                     onValueChanged: (int? value) {
                       if (value != null) {
@@ -132,8 +124,9 @@ class _CoinHistoryScreenState extends State<CoinHistoryScreen> {
                 ),
               ),
             ),
-           
-            SizedBox(height: 5,),
+            SizedBox(
+              height: 5,
+            ),
             Expanded(
               child: Container(
                 child: PageView(
@@ -143,7 +136,10 @@ class _CoinHistoryScreenState extends State<CoinHistoryScreen> {
                       _currentIndex = index;
                     });
                   },
-                  children: [ WithdrawalScreen(), DepositsScreen(),],
+                  children: <Widget>[
+                    WithdrawalScreen(),
+                    DepositsScreen(),
+                  ],
                 ),
               ),
             ),
