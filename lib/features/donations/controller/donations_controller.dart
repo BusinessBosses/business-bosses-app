@@ -1,3 +1,4 @@
+import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/features/donations/models/donations_model.dart';
@@ -259,6 +260,12 @@ class DonationsController extends GetxController {
     if (response.success) {
       profileController.myProfile
           .incrementCoinsCount(donationModel.amountRecieved);
+    } else {
+      showSnackbar(
+        title: 'OOPS!',
+        message: response.message,
+        error: true,
+      );
     }
   }
 
