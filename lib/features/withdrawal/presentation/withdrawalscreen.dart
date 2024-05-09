@@ -288,7 +288,7 @@ class _WithdrawalScreenState extends State<WithdrawalScreen> {
                                     'deleted': false,
                                     'deletedAt': null,
                                     'userId': profileController.myProfile.uid,
-                                    'transactionType': 'credit',
+                                    'transactionType': 'debit',
                                     'amount': _withdrawlamountcontroller.text,
                                     'paymentMethod': _paymentmethods,
                                     'date': DateTime.now().toString(),
