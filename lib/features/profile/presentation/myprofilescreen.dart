@@ -319,7 +319,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                                                     .center,
                                                             children: [
                                                               SvgPicture.asset(
-                                                                'assets/svgs/coinnn.svg',
+                                                                'assets/svgs/supporter.svg',
                                                                 height: 40,
                                                                 color:
                                                                     Colors.grey,
@@ -328,7 +328,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                                                 height: 10,
                                                               ),
                                                               const Text(
-                                                                'No Coin Withdrawals Found',
+                                                                'No Donations Found',
                                                                 style:
                                                                     TextStyle(
                                                                   fontWeight:
