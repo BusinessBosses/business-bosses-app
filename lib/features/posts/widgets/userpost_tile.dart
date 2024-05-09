@@ -519,7 +519,7 @@ class _PostTileState extends State<PostTile> {
                                     )
                                   : Padding(
                                       padding: const EdgeInsets.only(
-                                          left: 14, right: 15.0),
+                                          left: 14,),
                                       child: InkWell(
                                         onTap: () {
                                           _showDialog();
