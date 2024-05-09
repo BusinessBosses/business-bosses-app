@@ -410,8 +410,8 @@ class _DonationsPageState extends State<DonationsPage> {
                         child: ListView.builder(
                           itemCount: controller.donations.length,
                           itemBuilder: (BuildContext context, int i) {
-                            bool isLastItem =
-                                i == controller.donations.length - 1;
+                            bool isLastItem = controller.donations.length != 1 ?  i == controller.donations.length - 1 :
+                                i == controller.donations.length;
                             return DonationItem(
                               donation: controller.donations[i],
                               isLastItem: isLastItem,
