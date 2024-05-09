@@ -107,18 +107,14 @@ class DonationsController extends GetxController {
                   .map((dynamic like) => like['userId'].toString())
                   .toList(),
             });
-            print('Fetched Data: $userdonations');
+
             userdonations.add(userdonation);
           }
         }
       } else {
-        print(
-            'Error fetching user donations: ${response.message}'); // Print the error message from the response
         error(true); // Set error to true if there's an error
       }
     } catch (e) {
-      print(
-          'Error fetching user donations: $e'); // Print the error for debugging
       error(true); // Set error to true if there's an error
     } finally {
       loading(false); // Set loading back to false after fetching data
