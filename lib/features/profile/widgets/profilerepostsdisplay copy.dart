@@ -10,7 +10,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import '../../../common/widgets/safety_model.dart';
 
-Widget profilepostsdisplay(
+Widget profilerepostsdisplay(
     BuildContext context, UserModel publicUser, List<PostModel> posts,
     {bool loading = true, bool ispublicposts = false}) {
   final HomeController homeController = Get.find();
@@ -22,7 +22,7 @@ Widget profilepostsdisplay(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             SvgPicture.asset(
-              'assets/svgs/text.svg',
+              'assets/svgs/repost.svg',
               height: 40,
               color: Colors.grey,
             ),
@@ -30,18 +30,18 @@ Widget profilepostsdisplay(
               height: 10,
             ),
             const Text(
-              'No Posts Found',
+              'No Re-Posts Found',
               style: TextStyle(
                 fontWeight: FontWeight.w700,
                 fontSize: 15,
               ),
             ),
             const SizedBox(
-              height: 50,
-            ),
+                                                height: 50,
+                                              ),
           ],
         )
-      // SafetyModel(
+      // ? SafetyModel(
       //     isLoading: loading,
       //     icon: const Icon(
       //       Icons.edit,
