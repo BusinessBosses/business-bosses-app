@@ -58,6 +58,11 @@ class BossUpController extends GetxController {
             }
           }
         }
+
+        if (industryId == '-MsUOGcOT9oRXGakCcJv') {
+          nonRankedForums.sort((ForumModel a, ForumModel b) =>
+              b.likes!.length.compareTo(a.likes!.length));
+        }
         List<ForumModel> combinedForums = <ForumModel>[
           ...rankedForums,
           ...nonRankedForums
