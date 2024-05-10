@@ -53,7 +53,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
   void initState() {
     super.initState();
     donationsController.fetchuserDonations(profileController.myProfile.uid);
-    courseController.fetchuserCourses(profileController.myProfile.uid);
+    // courseController.fetchuserCourses(profileController.myProfile.uid);
   }
 
   @override
