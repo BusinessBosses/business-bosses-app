@@ -31,7 +31,7 @@ class BossUpLikeCommentItem extends StatefulWidget {
 
 class _BossUpLikeCommentItemState extends State<BossUpLikeCommentItem> {
   bool _isLoadingLikes = true, _isLoadingComments = true;
-  final BossUpController _bossUpController = Get.find();
+  final BossUpController _bossUpController = Get.put(BossUpController());
   final ProfileController profileController = Get.find();
   final CommentController _commentController = Get.put(CommentController());
 
