@@ -24,7 +24,7 @@ class _WithdrawalCreatedState extends State<WithdrawalCreated> {
         centerTitle: true,
         leading: IconButton(
           onPressed: () {
-            Get.to(() => const PromotionScreen());
+            Get.back();
           },
           icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
         ),

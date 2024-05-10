@@ -330,7 +330,7 @@ class _TopicsPageState extends State<TopicsPage> {
                                                                   .toString() ==
                                                               'd479f179-3f41-4d84-915d-33110cf5b4fb'
                                                           ? 'Topics ($formattedpostCount) '
-                                                          : 'Opport. ($formattedpostCount)',
+                                                          : 'Topics ($formattedpostCount)',
                                                       style: const TextStyle(
                                                         fontSize: 12,
                                                         color: textColor,

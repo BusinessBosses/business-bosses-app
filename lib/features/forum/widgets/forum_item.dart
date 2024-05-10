@@ -635,7 +635,7 @@ class _ForumItemState extends State<ForumItem> {
                                   color: Colors.redAccent,
                                 ),
                                 trimExpandedText: '  show less',
-                                maxLines: 100,
+                                trimLength: 100,
                                 basicStyle: bodyText2,
                                 onTap: (String link) async {
                                   String url = MyNativeFunctions.completeURL(

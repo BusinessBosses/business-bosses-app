@@ -52,7 +52,7 @@ class _WithdrawalItemState extends State<WithdrawalItem> {
                           width: 5,
                         ),
                         Text(
-                          '(\$${(num.parse(widget.item['amount']) / 100).toStringAsFixed(0)})',
+                          '(\$${(num.parse(widget.item['amount']) / 100).toStringAsFixed(1)})',
                           style: const TextStyle(color: Colors.black26),
                         ),
                       ]),

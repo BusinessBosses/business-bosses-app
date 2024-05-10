@@ -154,6 +154,52 @@ class ProfileController extends GetxController {
     }
   }
 
+
+   static Future<Map<String, dynamic>> loadrepostsData(String userId) async {
+    List<PostModel> posts = <PostModel>[];
+    final ApiResponseModel response =
+        // ProfileRepos
+        await ProfileRepository.fetchData(0, 50, userId);
+    if (response.success) {
+      final List psts = response.data['posts']['rows'];
+      for (int i = 0; i < psts.length; i++) {
+        posts.add(PostModel.fromMap(<String, dynamic>{
+          ...psts[i],
+          'likes': psts[i]['likes']
+              .map((like) => like['userId'].toString())
+              .toList(),
+          'reposts': psts[i]['reposts']
+              ?.map((repost) => repost['userId'].toString())
+              .toList(),
+          'coins':
+              psts[i]['coins'].map((coin) => coin['userId'].toString()).toList()
+        }));
+      }
+
+      return <String, dynamic>{
+        'posts': posts,
+        'user': <dynamic, dynamic>{
+          ...response.data['user']['data'],
+          'connections': response.data['user']['data']['connections']
+              .map((mp) => mp['connect'])
+              .toList()
+        },
+        'industries': response.data['industries']
+      };
+    } else {
+      return <String, dynamic>{
+        'posts': <PostModel>[],
+        'user': <dynamic, dynamic>{
+          ...response.data['user']['data'],
+          'connections': response.data['user']['data']['connections']
+              .map((mp) => mp['connect'])
+              .toList()
+        },
+        'industries': response.data['industries']
+      };
+    }
+  }
+
   /// ADD NEW POST TO STATE
   void addNewPost(
     Map<String, dynamic> newPost,

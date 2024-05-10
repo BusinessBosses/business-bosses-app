@@ -1,8 +1,15 @@
+import 'package:business_bosses_v2/features/courses/controller/course_controller.dart';
+import 'package:business_bosses_v2/features/courses/presentation/course_item.dart';
+import 'package:business_bosses_v2/features/donations/controller/donations_controller.dart';
+import 'package:business_bosses_v2/features/donations/widgets/donation_item.dart';
+import 'package:business_bosses_v2/features/forum/controller/forum_controller.dart';
 import 'package:business_bosses_v2/features/home/widgets/bottom_bar.dart';
+import 'package:business_bosses_v2/features/home/widgets/forum_item.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/features/profile/widgets/profileinfodisplay.dart';
 import 'package:business_bosses_v2/features/live_event/controller/live_event_controller.dart';
 import 'package:business_bosses_v2/features/profile/widgets/profilepostsdisplay.dart';
+import 'package:business_bosses_v2/features/profile/widgets/profilerepostsdisplay%20copy.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
@@ -35,8 +42,19 @@ class MyProfileScreen extends StatefulWidget {
 class _MyProfileScreenState extends State<MyProfileScreen> {
   final ProfileController profileController = Get.find();
   final MarketController marketController = Get.find();
+  final DonationsController donationsController =
+      Get.put(DonationsController());
+  final CourseController courseController = Get.put(CourseController());
+  final ForumController forumController = Get.put(ForumController());
   final LiveController liveEventController = Get.put(LiveController());
   bool isScrolled = true;
+
+  @override
+  void initState() {
+    super.initState();
+    donationsController.userid = profileController.myProfile.uid;
+    donationsController.onInit();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,86 +63,6 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
       builder: (ProfileController profileController) {
         return Scaffold(
           backgroundColor: Colors.white,
-          // floatingActionButton: Padding(
-          //   padding:  EdgeInsets.only(bottom: Platform.isIOS ? 50 : 80.0),
-          //   child: FloatingActionButton(
-          //     child: Icon(Icons.add),
-          //   shape: CircleBorder(),
-          //     onPressed: () {
-          //       showModalBottomSheet(
-          //           context: context,
-          //           shape: const RoundedRectangleBorder(
-          //             borderRadius: BorderRadius.vertical(
-          //               top: Radius.circular(25.0),
-          //             ),
-          //           ),
-          //           builder: (context) {
-          //             return SizedBox(
-          //               height: 250,
-          //               child: Padding(
-          //                 padding: const EdgeInsets.all(15.0),
-          //                 child: Column(
-          //                   crossAxisAlignment: CrossAxisAlignment.start,
-          //                   mainAxisSize: MainAxisSize.min,
-          //                   children: <Widget>[
-          //                     Expanded(
-          //                       // Set a specific height
-          //                       child: ListView.separated(
-          //                         itemCount: 3,
-          //                         separatorBuilder:
-          //                             (BuildContext context, int index) =>
-          //                                 const Divider(),
-          //                         itemBuilder:
-          //                             (BuildContext context, int index) {
-          //                           return ListTile(
-          //                             onTap: () {
-          //                               Navigator.pop(context);
-          //                               index == 0
-          //                                   ? Get.toNamed(Routes.createPost)
-          //                                   : index == 1
-          //                                       ? sellProduct(context)
-          //                                       : Get.toNamed(
-          //                                           Routes.createevent);
-          //                             },
-          //                             minVerticalPadding: 0,
-          //                             contentPadding:
-          //                                 const EdgeInsets.only(left: 10),
-          //                             leading: SvgPicture.asset(
-          //                               index == 0
-          //                                   ? 'assets/svgs/text.svg'
-          //                                   : index == 1
-          //                                       ? 'assets/svgs/sellicon.svg'
-          //                                       : 'assets/svgs/liveevent.svg',
-          //                               height: index == 0
-          //                                   ? 25
-          //                                   : index == 1
-          //                                       ? 30
-          //                                       : 22,
-          //                               color: textColor.withOpacity(1),
-          //                             ),
-          //                             title: Text(
-          //                               index == 0
-          //                                   ? 'Create a Post'
-          //                                   : index == 1
-          //                                       ? 'Sell your product & service'
-          //                                       : 'Create a Live Event',
-          //                               style: const TextStyle(
-          //                                   fontSize: 18,
-          //                                   fontWeight: FontWeight.w700),
-          //                             ),
-          //                           );
-          //                         },
-          //                       ),
-          //                     )
-          //                   ],
-          //                 ),
-          //               ),
-          //             );
-          //           });
-          //     },
-          //     backgroundColor: primaryColorLT,
-          //   ),
-          // ),
           appBar: AppBar(
             automaticallyImplyLeading: false,
             title: Text('@${profileController.myProfile.username}'),
@@ -170,13 +108,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                       ];
                     },
                     body: DefaultTabController(
-                      length: marketController.markets
-                              .where((MarketModel market) =>
-                                  market.userId ==
-                                  profileController.myProfile.uid)
-                              .isEmpty
-                          ? 2
-                          : 3,
+                      length: 7,
                       child: Column(
                         children: <Widget>[
                           // if (_publicUser.uid !=
@@ -191,360 +123,461 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                             height: 1.5,
                             child: ColoredBox(color: backgroundcolorinterface),
                           ),
-                          Material(
-                            color: const Color(0xFFF9F9F9),
+                          const Material(
+                            color: Color(0xFFF9F9F9),
                             child: TabBar(
-                              indicatorColor:
-                                  primaryColorLT, // Replace primaryColorLT with the desired color
-                              labelStyle:
-                                  const TextStyle(fontWeight: FontWeight.w500),
-                              labelColor: Colors.black,
-                              tabs: marketController.markets
-                                      .where((MarketModel market) =>
-                                          market.userId ==
-                                          profileController.myProfile.uid)
-                                      .isEmpty
-                                  ? <Widget>[
-                                      const Tab(
-                                        text: 'About',
-                                      ),
-                                      const Tab(
-                                        text: 'Posts',
-                                      ),
-                                    ]
-                                  : <Widget>[
-                                      const Tab(
-                                        text: 'About',
-                                      ),
-                                      const Tab(
-                                        text: 'Posts',
-                                      ),
-                                      const Tab(
-                                        text: 'Shop',
-                                      ),
-                                    ],
-                            ),
+                                isScrollable: true,
+                                indicatorColor:
+                                    primaryColorLT, // Replace primaryColorLT with the desired color
+                                labelStyle:
+                                    TextStyle(fontWeight: FontWeight.w500),
+                                labelColor: Colors.black,
+                                tabs: <Widget>[
+                                  Tab(
+                                    text: 'About',
+                                  ),
+                                  Tab(
+                                    text: 'Posts',
+                                  ),
+                                  Tab(
+                                    text: 'Shop',
+                                  ),
+                                  Tab(
+                                    text: 'Resources',
+                                  ),
+                                  Tab(
+                                    text: 'Donations',
+                                  ),
+                                  Tab(
+                                    text: 'Courses',
+                                  ),
+                                  Tab(
+                                    text: 'Reposts',
+                                  ),
+                                ]),
                           ),
 
                           const SizedBox(
                             width: double.infinity,
                             height: 1.5,
                             child: ColoredBox(color: backgroundcolorinterface),
-                          ), // Container(
+                          ),
 
                           Expanded(
-                            child: TabBarView(
-                                children: marketController.markets
-                                        .where((MarketModel market) =>
-                                            market.userId ==
-                                            profileController.myProfile.uid)
-                                        .isEmpty
-                                    ? <Widget>[
-                                        NotificationListener<
-                                            ScrollNotification>(
-                                          onNotification: (notification) {
-                                            if (notification
-                                                is ScrollUpdateNotification) {
-                                              if (notification.dragDetails !=
-                                                      null &&
-                                                  notification.dragDetails!
-                                                          .primaryDelta !=
-                                                      null) {
-                                                double primaryDelta =
-                                                    notification.dragDetails!
-                                                        .primaryDelta!;
+                            child: TabBarView(children: <Widget>[
+                              SingleChildScrollView(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    const SizedBox(
+                                      height: 30,
+                                    ),
+                                    profileinfodisplay(
+                                        context, profileController.myProfile),
+                                  ],
+                                ),
+                              ),
 
-                                                if (primaryDelta > 0) {
-                                                  // Scrolling downward
-                                                  setState(() {
-                                                    isScrolled = true;
-                                                  });
-                                                } else if (primaryDelta < 0) {
-                                                  // Scrolling upward
-                                                  setState(() {
-                                                    isScrolled = false;
-                                                  });
-                                                }
-                                              }
-                                            }
+                              ///Postsdisplay
+                              profilepostsdisplay(
+                                ispublicposts: false,
+                                context,
+                                profileController.myProfile,
+                                profileController.posts,
+                                loading: profileController.isLoading.value,
+                              ),
 
-                                            return true;
-                                          },
-                                          child: SingleChildScrollView(
-                                            child: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: <Widget>[
-                                                const SizedBox(
-                                                  height: 30,
-                                                ),
-                                                profileinfodisplay(
-                                                    context,
-                                                    profileController
-                                                        .myProfile),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                        NotificationListener<
-                                            ScrollNotification>(
-                                          onNotification: (notification) {
-                                            if (notification
-                                                is ScrollUpdateNotification) {
-                                              if (notification.dragDetails !=
-                                                      null &&
-                                                  notification.dragDetails!
-                                                          .primaryDelta !=
-                                                      null) {
-                                                double primaryDelta =
-                                                    notification.dragDetails!
-                                                        .primaryDelta!;
-
-                                                if (primaryDelta > 0) {
-                                                  // Scrolling downward
-                                                  setState(() {
-                                                    isScrolled = true;
-                                                  });
-                                                } else if (primaryDelta < 0) {
-                                                  // Scrolling upward
-                                                  setState(() {
-                                                    isScrolled = false;
-                                                  });
-                                                }
-                                              }
-                                            }
-
-                                            return true;
-                                          },
-                                          child: profilepostsdisplay(
-                                            ispublicposts: false,
-                                            context,
-                                            profileController.myProfile,
-                                            profileController.posts,
-                                            loading: profileController
-                                                .isLoading.value,
-                                          ),
-                                        ),
-                                      ]
-                                    : <Widget>[
-                                        NotificationListener<
-                                            ScrollNotification>(
-                                          onNotification: (notification) {
-                                            if (notification
-                                                is ScrollUpdateNotification) {
-                                              if (notification.dragDetails !=
-                                                      null &&
-                                                  notification.dragDetails!
-                                                          .primaryDelta !=
-                                                      null) {
-                                                double primaryDelta =
-                                                    notification.dragDetails!
-                                                        .primaryDelta!;
-
-                                                if (primaryDelta > 0) {
-                                                  // Scrolling downward
-                                                  setState(() {
-                                                    isScrolled = true;
-                                                  });
-                                                } else if (primaryDelta < 0) {
-                                                  // Scrolling upward
-                                                  setState(() {
-                                                    isScrolled = false;
-                                                  });
-                                                }
-                                              }
-                                            }
-
-                                            return true;
-                                          },
-                                          child: SingleChildScrollView(
-                                            child: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: <Widget>[
-                                                const SizedBox(
-                                                  height: 30,
-                                                ),
-                                                profileinfodisplay(
-                                                    context,
-                                                    profileController
-                                                        .myProfile),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                        NotificationListener<
-                                            ScrollNotification>(
-                                          onNotification: (notification) {
-                                            if (notification
-                                                is ScrollUpdateNotification) {
-                                              if (notification.dragDetails !=
-                                                      null &&
-                                                  notification.dragDetails!
-                                                          .primaryDelta !=
-                                                      null) {
-                                                double primaryDelta =
-                                                    notification.dragDetails!
-                                                        .primaryDelta!;
-
-                                                if (primaryDelta > 0) {
-                                                  // Scrolling downward
-                                                  setState(() {
-                                                    isScrolled = true;
-                                                  });
-                                                } else if (primaryDelta < 0) {
-                                                  // Scrolling upward
-                                                  setState(() {
-                                                    isScrolled = false;
-                                                  });
-                                                }
-                                              }
-                                            }
-
-                                            return true;
-                                          },
-                                          child: profilepostsdisplay(
-                                            ispublicposts: false,
-                                            context,
-                                            profileController.myProfile,
-                                            profileController.posts,
-                                            loading: profileController
-                                                .isLoading.value,
-                                          ),
-                                        ),
-                                        SingleChildScrollView(
-                                          child: Column(
-                                            children: <Widget>[
-                                              Obx(() {
-                                                return marketController.markets
-                                                        .where((MarketModel
-                                                                market) =>
-                                                            market.userId ==
-                                                            profileController
-                                                                .myProfile.uid)
-                                                        .isEmpty
-                                                    ? const SafetyModel(
-                                                        isLoading: false,
-                                                        icon: Icon(
-                                                          Icons.warning,
-                                                          color: Colors.grey,
-                                                          size: 80.0,
-                                                        ),
-                                                        title:
-                                                            'This user has no items in store',
-                                                        // subTitle: '',
-                                                      )
-                                                    : NotificationListener<
-                                                        ScrollNotification>(
-                                                        onNotification:
-                                                            (notification) {
-                                                          if (notification
-                                                              is ScrollUpdateNotification) {
-                                                            if (notification
-                                                                        .dragDetails !=
-                                                                    null &&
-                                                                notification
-                                                                        .dragDetails!
-                                                                        .primaryDelta !=
-                                                                    null) {
-                                                              double
-                                                                  primaryDelta =
-                                                                  notification
-                                                                      .dragDetails!
-                                                                      .primaryDelta!;
-
-                                                              if (primaryDelta >
-                                                                  0) {
-                                                                // Scrolling downward
-                                                                setState(() {
-                                                                  isScrolled =
-                                                                      true;
-                                                                });
-                                                              } else if (primaryDelta <
-                                                                  0) {
-                                                                // Scrolling upward
-                                                                setState(() {
-                                                                  isScrolled =
-                                                                      false;
-                                                                });
-                                                              }
-                                                            }
-                                                          }
-
-                                                          return true;
-                                                        },
-                                                        child: ListView.builder(
-                                                          shrinkWrap: true,
-                                                          physics:
-                                                              const NeverScrollableScrollPhysics(),
-                                                          itemCount: marketController
-                                                              .markets
-                                                              .where((MarketModel
-                                                                      market) =>
-                                                                  market
-                                                                      .userId ==
-                                                                  profileController
-                                                                      .myProfile
-                                                                      .uid)
-                                                              .length,
-                                                          itemBuilder:
-                                                              (BuildContext
-                                                                      context,
-                                                                  int index) {
-                                                            final List<
-                                                                    MarketModel>
-                                                                filteredMarkets =
-                                                                marketController
-                                                                    .markets
-                                                                    .where((MarketModel
-                                                                            market) =>
-                                                                        market
-                                                                            .userId ==
-                                                                        profileController
-                                                                            .myProfile
-                                                                            .uid)
-                                                                    .toList();
-                                                            final MarketModel
-                                                                market =
-                                                                filteredMarkets[
-                                                                    index];
-
-                                                            return market
-                                                                    .isProduct
-                                                                ? MarketTile(
-                                                                    post:
-                                                                        market,
-                                                                    controller:
-                                                                        marketController,
-                                                                    key: ValueKey(
-                                                                        market
-                                                                            .marketId),
-                                                                  )
-                                                                : ServiceTile(
-                                                                    post:
-                                                                        market,
-                                                                    controller:
-                                                                        marketController,
-                                                                    key: ValueKey(
-                                                                        market
-                                                                            .marketId),
-                                                                  );
-                                                          },
-                                                        ),
-                                                      );
-                                              }),
+                              ///Marketplace
+                              ///
+                         Container(
+                                  height: double.infinity,
+                                  width: double.infinity,
+                                  child: Obx(() {
+                                    return  marketController.markets
+                                            .where((MarketModel market) =>
+                                                market.userId ==
+                                                profileController.myProfile.uid)
+                                            .isEmpty
+                                        ? Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: [
+                                              SvgPicture.asset(
+                                                'assets/svgs/store.svg',
+                                                height: 40,
+                                                color: Colors.grey,
+                                              ),
                                               const SizedBox(
-                                                height: 100,
-                                              )
+                                                height: 10,
+                                              ),
+                                              const Text(
+                                                'No Items Found in your Shop',
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.w700,
+                                                  fontSize: 15,
+                                                ),
+                                              ),
+                                              const SizedBox(
+                                                height: 50,
+                                              ),
                                             ],
-                                          ),
-                                        ),
-                                      ]),
-                          ),
+                                          )
+                                        : Container(
+                                            child: ListView.builder(
+                                              physics:
+                                                  NeverScrollableScrollPhysics(),
+                                              shrinkWrap: true,
+                                              itemCount: marketController.markets
+                                                .where((MarketModel market) =>
+                                                    market.userId ==
+                                                    profileController
+                                                        .myProfile.uid)
+                                                .length,
+                                              itemBuilder: (BuildContext context,
+                                                int index) {
+                                              final List<MarketModel>
+                                                  filteredMarkets =
+                                                  marketController.markets
+                                                      .where((MarketModel
+                                                              market) =>
+                                                          market.userId ==
+                                                          profileController
+                                                              .myProfile.uid)
+                                                      .toList();
+                                              final MarketModel market =
+                                                  filteredMarkets[index];
+
+                                              return market.isProduct
+                                                  ? MarketTile(
+                                                      post: market,
+                                                      controller:
+                                                          marketController,
+                                                      key: ValueKey(
+                                                          market.marketId),
+                                                    )
+                                                  : ServiceTile(
+                                                      post: market,
+                                                      controller:
+                                                          marketController,
+                                                      key: ValueKey(
+                                                          market.marketId),
+                                                    );
+                                            },
+                                            ),
+                                          );
+                                  })),
+
+                              
+
+                              ///Forum or Resources
+                               Container(
+                                  height: double.infinity,
+                                  width: double.infinity,
+                                  child: Obx(() {
+                                    return forumController.userresources.isEmpty
+                                        ? Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: [
+                                              SvgPicture.asset(
+                                                'assets/svgs/courses.svg',
+                                                height: 40,
+                                                color: Colors.grey,
+                                              ),
+                                              const SizedBox(
+                                                height: 10,
+                                              ),
+                                              const Text(
+                                                'No Resources Found',
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.w700,
+                                                  fontSize: 15,
+                                                ),
+                                              ),
+                                              const SizedBox(
+                                                height: 50,
+                                              ),
+                                            ],
+                                          )
+                                        : Container(
+                                            child: ListView.builder(
+                                              physics:
+                                                  NeverScrollableScrollPhysics(),
+                                              shrinkWrap: true,
+                                              itemCount: forumController
+                                                  .userresources.length,
+                                              itemBuilder:
+                                                  (BuildContext context,
+                                                      int i) {
+                                                return ForumItem(
+                                                  forum: forumController
+                                                      .userresources[i],
+                                                  controller: null!,
+                                                );
+                                              },
+                                            ),
+                                          );
+                                  })),
+
+
+                                  ///Donations
+                              Container(
+                                  height: double.infinity,
+                                  width: double.infinity,
+                                  child: Obx(() {
+                                    return donationsController
+                                            .userdonations.isEmpty
+                                        ? Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: [
+                                              SvgPicture.asset(
+                                                'assets/svgs/supporter.svg',
+                                                height: 40,
+                                                color: Colors.grey,
+                                              ),
+                                              const SizedBox(
+                                                height: 10,
+                                              ),
+                                              const Text(
+                                                'No Donations Found',
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.w700,
+                                                  fontSize: 15,
+                                                ),
+                                              ),
+                                              const SizedBox(
+                                                height: 50,
+                                              ),
+                                            ],
+                                          )
+                                        : Container(
+                                            child: ListView.builder(
+                                              physics:
+                                                  NeverScrollableScrollPhysics(),
+                                              shrinkWrap: true,
+                                              itemCount: donationsController
+                                                  .userdonations.length,
+                                              itemBuilder:
+                                                  (BuildContext context,
+                                                      int i) {
+                                                bool isLastItem =
+                                                    donationsController
+                                                                .userdonations
+                                                                .length !=
+                                                            1
+                                                        ? i ==
+                                                            donationsController
+                                                                    .userdonations
+                                                                    .length -
+                                                                1
+                                                        : i ==
+                                                            donationsController
+                                                                .userdonations
+                                                                .length;
+                                                return DonationItem(
+                                                  donation: donationsController
+                                                      .userdonations[i],
+                                                  isLastItem: isLastItem,
+                                                );
+                                              },
+                                            ),
+                                          );
+                                  })),
+
+                              
+                             
+                              // Container(
+                              //   height: double.infinity,
+                              //   width: double.infinity,
+                              //   child: Column(children: <Widget>[
+                              //     Obx(() {
+                              //       if (donationsController.loading.value) {
+                              //         return const Padding(
+                              //           padding: EdgeInsets.all(80.0),
+                              //           child: CircularProgressIndicator(),
+                              //         );
+                              //       } else if (donationsController
+                              //           .error.value) {
+                              //         return Text(
+                              //             'Error occurred during data fetching');
+                              //       } else {
+                              //         return Container(
+                              //           child: donationsController
+                              //                   .userdonations.isEmpty
+                              //               ? Column(
+                              //                   mainAxisAlignment:
+                              //                       MainAxisAlignment.center,
+                              //                   crossAxisAlignment:
+                              //                       CrossAxisAlignment.center,
+                              //                   children: [
+                              //                     SvgPicture.asset(
+                              //                       'assets/svgs/supporter.svg',
+                              //                       height: 40,
+                              //                       color: Colors.grey,
+                              //                     ),
+                              //                     const SizedBox(
+                              //                       height: 10,
+                              //                     ),
+                              //                     const Text(
+                              //                       'No Donations Found',
+                              //                       style: TextStyle(
+                              //                         fontWeight:
+                              //                             FontWeight.w700,
+                              //                         fontSize: 15,
+                              //                       ),
+                              //                     )
+                              //                   ],
+                              //                 )
+                              //               : Column(
+                              //                   children: [
+                              //                     Container(
+                              //                       child: ListView.builder(
+                              //                         physics:
+                              //                             NeverScrollableScrollPhysics(),
+                              //                         shrinkWrap: true,
+                              //                         itemCount:
+                              //                             donationsController
+                              //                                 .userdonations
+                              //                                 .length,
+                              //                         itemBuilder:
+                              //                             (BuildContext context,
+                              //                                 int i) {
+                              //                           // Sort the list based on the 'date' key in each map in descending order
+                              //                           bool isLastItem = donationsController
+                              //                                       .userdonations
+                              //                                       .length !=
+                              //                                   1
+                              //                               ? i ==
+                              //                                   donationsController
+                              //                                           .userdonations
+                              //                                           .length -
+                              //                                       1
+                              //                               : i ==
+                              //                                   donationsController
+                              //                                       .userdonations
+                              //                                       .length;
+                              //                           return DonationItem(
+                              //                             donation:
+                              //                                 donationsController
+                              //                                     .userdonations[i],
+                              //                             isLastItem:
+                              //                                 isLastItem,
+                              //                           );
+                              //                         },
+                              //                       ),
+                              //                     ),
+                              //                   ],
+                              //                 ),
+                              //         );
+                              //       }
+                              //     })
+                              //   ]),
+                              // ),
+                              Container(
+                                  height: double.infinity,
+                                  width: double.infinity,
+                                  child: Obx(() {
+                                    return courseController.usercourses.isEmpty
+                                        ? Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: [
+                                              SvgPicture.asset(
+                                                'assets/svgs/courses.svg',
+                                                height: 40,
+                                                color: Colors.grey,
+                                              ),
+                                              const SizedBox(
+                                                height: 10,
+                                              ),
+                                              const Text(
+                                                'No Courses Found',
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.w700,
+                                                  fontSize: 15,
+                                                ),
+                                              ),
+                                              const SizedBox(
+                                                height: 50,
+                                              ),
+                                            ],
+                                          )
+                                        : Container(
+                                            child: ListView.builder(
+                                              physics:
+                                                  NeverScrollableScrollPhysics(),
+                                              shrinkWrap: true,
+                                              itemCount: courseController
+                                                  .usercourses.length,
+                                              itemBuilder:
+                                                  (BuildContext context,
+                                                      int i) {
+                                                return CourseItem(
+                                                  course: courseController
+                                                      .usercourses[i],
+                                                );
+                                              },
+                                            ),
+                                          );
+                                  })),
+
+                              //     if (courseController.loading.value) {
+                              //       return const Padding(
+                              //         padding: EdgeInsets.all(80.0),
+                              //         child: CircularProgressIndicator(),
+                              //       );
+                              //     } else if (courseController.error.value) {
+                              //       return Text(
+                              //           'Error occurred during data fetching');
+                              //     } else {
+                              //       return Container(
+                              //         child: courseController
+                              //                 .usercourses.isEmpty
+                              //             ?
+                              //             : Column(
+                              //                 children: [
+                              //                   Container(
+                              //                     child: ListView.builder(
+                              //                       physics:
+                              //                           NeverScrollableScrollPhysics(),
+                              //                       shrinkWrap: true,
+                              //                       itemCount: courseController
+                              //                           .usercourses.length,
+                              //                       itemBuilder:
+                              //                           (BuildContext context,
+                              //                               int i) {
+                              //                         return CourseItem(
+                              //                           course: courseController
+                              //                               .usercourses[i],
+                              //                         );
+                              //                       },
+                              //                     ),
+                              //                   ),
+                              //                 ],
+                              //               ),
+                              //       );
+                              //     }
+                              //   }),
+                              // ),
+                              profilerepostsdisplay(
+                                ispublicposts: false,
+                                context,
+                                profileController.myProfile,
+                                profileController.posts,
+                                loading: profileController.isLoading.value,
+                              ),
+                            ]),
+                          )
                         ],
                       ),
                     ),

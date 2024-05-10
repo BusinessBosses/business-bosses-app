@@ -534,6 +534,16 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
                                     style: const TextStyle(
                                         fontWeight: FontWeight.w700),
                                   ),
+                                  widget.course.user?.isSubscribed == true
+                                      ? Wrap(children: [
+                                          SizedBox(width: 3),
+                                          SvgPicture.asset(
+                                            'assets/svgs/premiumbadge.svg',
+                                            height: 7,
+                                            color: primaryColorLT,
+                                          )
+                                        ])
+                                      : Container()
                                 ],
                               ),
                               SpeedDial(
@@ -620,7 +630,8 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
                                     size: 16,
                                   ),
                                   Text(
-                                    widget.course.averageRating.toString(),
+                                    widget.course.averageRating!
+                                        .toStringAsFixed(2),
                                     style: const TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 13,

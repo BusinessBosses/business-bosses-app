@@ -29,12 +29,15 @@ class DonationsController extends GetxController {
   RxBool hError = RxBool(false);
   RxBool tLoading = RxBool(false);
   RxBool tError = RxBool(false);
+  RxList<DonationModel> userdonations = <DonationModel>[].obs;
+  String userid = '';
 
   @override
   void onInit() async {
     initSocket();
     await initUsers();
     fetchDonations();
+    fetchuserDonations(userid);
     super.onInit();
   }
 
@@ -85,6 +88,38 @@ class DonationsController extends GetxController {
       loading(false); // Set loading back to false after fetching data
     }
     update();
+  }
+
+  Future<void> fetchuserDonations(String userId) async {
+    try {
+      loading(true); // Set loading to true before fetching data
+
+      ApiResponseModel response =
+          await ApiService.get(path: 'donation/user-donations/$userId');
+
+      if (response.success) {
+        userdonations.clear();
+        for (int i = 0; i < response.data['rows'].length; i++) {
+          if (response.data['rows'] != null) {
+            DonationModel userdonation =
+                DonationModel.fromMap(<String, dynamic>{
+              ...response.data['rows'][i],
+              'likes': response.data['rows'][i]['likes']
+                  .map((dynamic like) => like['userId'].toString())
+                  .toList(),
+            });
+
+            userdonations.add(userdonation);
+          }
+        }
+      } else {
+        error(true); // Set error to true if there's an error
+      }
+    } catch (e) {
+      error(true); // Set error to true if there's an error
+    } finally {
+      loading(false); // Set loading back to false after fetching data
+    }
   }
 
   Future<void> deleteDonation(String donationId) async {

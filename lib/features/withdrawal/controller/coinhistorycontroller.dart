@@ -56,7 +56,7 @@ class CoinHistoryController extends GetxController {
             responseData.cast<Map<String, dynamic>>();
         myHistory.addAll(mappedData);
         for (Map<String, dynamic> item in mappedData) {
-          if (item['transactionType'] == 'credit') {
+          if (item['transactionType'] == 'debit') {
             coinwithdrawalHistory.add(item);
           } else {
             coindepositsHistory.add(item);

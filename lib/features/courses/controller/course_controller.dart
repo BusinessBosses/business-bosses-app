@@ -22,6 +22,7 @@ class CourseController extends GetxController {
   RxBool rLoading = RxBool(true);
   RxBool rError = RxBool(false);
   RxList<dynamic> reviews = <dynamic>[].obs;
+  RxList<CourseModel> usercourses = <CourseModel>[].obs;
 
   @override
   void onInit() {
@@ -180,6 +181,37 @@ class CourseController extends GetxController {
       rethrow;
       // showSnackbar(
       //     message: 'Error deleting post.', title: 'O0PS!', error: true);
+    }
+  }
+
+  Future<void> fetchuserCourses(String userId) async {
+    try {
+      loading(true); // Set loading to true before fetching data
+
+      ApiResponseModel response =
+          await ApiService.get(path: 'courses/get-user-courses/$userId');
+
+      if (response.success) {
+        usercourses.clear();
+        for (int i = 0; i < response.data['rows'].length; i++) {
+          if (response.data['rows'] != null) {
+            CourseModel usercourse = CourseModel.fromMap(<String, dynamic>{
+              ...response.data['rows'][i],
+              'likes': response.data['rows'][i]['likes']
+                  .map((dynamic like) => like['userId'].toString())
+                  .toList(),
+            });
+
+            usercourses.add(usercourse);
+          }
+        }
+      } else {
+        error(true); // Set error to true if there's an error
+      }
+    } catch (e) {
+      error(true); // Set error to true if there's an error
+    } finally {
+      loading(false); // Set loading back to false after fetching data
     }
   }
 

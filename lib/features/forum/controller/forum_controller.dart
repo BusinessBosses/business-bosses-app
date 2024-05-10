@@ -7,6 +7,7 @@ import 'package:business_bosses_v2/features/forum/repository/forum_repository.da
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/home/repository/home_repository.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
+import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
@@ -27,6 +28,7 @@ class ForumController extends GetxController {
   RxBool error = RxBool(false);
   RxBool loadingMembers = RxBool(false);
   RxBool errorMembers = RxBool(false);
+  RxList<ForumModel> userresources = <ForumModel>[].obs;
 
   void updateForum(int index, Map<String, dynamic> data) {
     if (index != -1) {
@@ -91,6 +93,39 @@ class ForumController extends GetxController {
 
     update();
   }
+
+  Future<void> fetchuserResources(String userId) async {
+    try {
+      loading(true); // Set loading to true before fetching data
+
+      ApiResponseModel response =
+          await ApiService.get(path: 'forum/get-user-forum/$userId?page=0&size=20');
+
+      if (response.success) {
+        userresources.clear();
+        for (int i = 0; i < response.data['rows'].length; i++) {
+          if (response.data['rows'] != null) {
+            ForumModel userresource =
+                ForumModel.fromMap(<String, dynamic>{
+              ...response.data['rows'][i],
+              'likes': response.data['rows'][i]['likes']
+                  .map((dynamic like) => like['userId'].toString())
+                  .toList(),
+            });
+            userresources.add(userresource);
+          }
+        }
+      } else {
+        error(true); // Set error to true if there's an error
+      }
+    } catch (e) {
+      error(true); // Set error to true if there's an error
+    } finally {
+      loading(false); // Set loading back to false after fetching data
+    }
+  }
+
+  
 
   void updateForumViews(ForumModel post) {
     final int postIndex = forums
