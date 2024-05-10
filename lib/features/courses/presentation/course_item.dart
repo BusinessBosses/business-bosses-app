@@ -709,6 +709,7 @@ class _CourseItemState extends State<CourseItem> {
                             'post',
                             widget.course.user!.uid);
                       }
+                      setState(() {});
                     },
                     icon: widget.course.coins
                                 ?.contains(profileController.myProfile.uid) ==
