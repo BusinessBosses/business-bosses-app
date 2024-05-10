@@ -108,7 +108,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                       ];
                     },
                     body: DefaultTabController(
-                      length: 7,
+                      length: 6,
                       child: Column(
                         children: <Widget>[
                           // if (_publicUser.uid !=
@@ -151,9 +151,9 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                   Tab(
                                     text: 'Courses',
                                   ),
-                                  Tab(
-                                    text: 'Reposts',
-                                  ),
+                                  // Tab(
+                                  //   text: 'Reposts',
+                                  // ),
                                 ]),
                           ),
 
@@ -569,13 +569,13 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                               //     }
                               //   }),
                               // ),
-                              profilerepostsdisplay(
-                                ispublicposts: false,
-                                context,
-                                profileController.myProfile,
-                                profileController.posts,
-                                loading: profileController.isLoading.value,
-                              ),
+                              // profilerepostsdisplay(
+                              //   ispublicposts: false,
+                              //   context,
+                              //   profileController.myProfile,
+                              //   profileController.posts,
+                              //   loading: profileController.isLoading.value,
+                              // ),
                             ]),
                           )
                         ],

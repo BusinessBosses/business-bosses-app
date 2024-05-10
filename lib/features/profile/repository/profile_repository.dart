@@ -14,7 +14,7 @@ class ProfileRepository {
   static Future<ApiResponseModel> fetchData(
       int page, int size, String userId) async {
     final ApiResponseModel response = await ApiService.get(
-        path: 'post/get-user-posts/$userId?page=$page&size=$size');
+        path: 'post/get-user-posts-and-reposts/$userId?page=$page&size=$size');
     return response;
   }
 
