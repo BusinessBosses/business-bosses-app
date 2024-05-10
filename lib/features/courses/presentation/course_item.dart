@@ -653,6 +653,7 @@ class _CourseItemState extends State<CourseItem> {
                       widget.course.id,
                       widget.course.user!.uid,
                     );
+                    setState(() {});
                   },
                   icon: widget.course.likes
                               ?.contains(profileController.myProfile.uid) ==
