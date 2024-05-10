@@ -519,7 +519,8 @@ class _PostTileState extends State<PostTile> {
                                     )
                                   : Padding(
                                       padding: const EdgeInsets.only(
-                                          left: 14,),
+                                        left: 14,
+                                      ),
                                       child: InkWell(
                                         onTap: () {
                                           _showDialog();
@@ -571,6 +572,7 @@ class _PostTileState extends State<PostTile> {
                           children: <Widget>[
                             DetectableText(
                               text: widget.post.title,
+                              trimLength: 100,
                               detectionRegExp: detectionRegExp(hashtag: false)!,
                               detectedStyle: bodyText2.copyWith(
                                 color: Colors.blue,
