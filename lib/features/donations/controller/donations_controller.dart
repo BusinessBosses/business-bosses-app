@@ -1,3 +1,4 @@
+import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/features/donations/models/donations_model.dart';
@@ -22,7 +23,7 @@ class DonationsController extends GetxController {
   List<dynamic> myHistory = <dynamic>[];
   List<dynamic> myHistoryReceived = <dynamic>[];
   List<dynamic> myHistoryOut = <dynamic>[];
-  RxBool loading = RxBool(false);
+  RxBool loading = RxBool(true);
   RxBool error = RxBool(false);
   RxBool hLoading = RxBool(false);
   RxBool hError = RxBool(false);
@@ -207,7 +208,7 @@ class DonationsController extends GetxController {
 
       // Update the donation in the list with the updated data
       if (donationIndex != -1) {
-        Map<String, dynamic> mergedData = {
+        Map<String, dynamic> mergedData = <String, dynamic>{
           ...donations[donationIndex].toMap(),
           ...donation
         };
@@ -248,7 +249,8 @@ class DonationsController extends GetxController {
 
   Future<void> initUsers() async {
     ApiResponseModel response = await ApiService.get(
-        path: 'donation/get-joined-users/6463a069-657d-47ae-b937-9a5d4c336811');
+      path: 'donation/get-joined-users/6463a069-657d-47ae-b937-9a5d4c336811',
+    );
     if (response.success) {
       List<dynamic> rows = response.data['rows'];
       userIds
@@ -294,6 +296,12 @@ class DonationsController extends GetxController {
     if (response.success) {
       profileController.myProfile
           .incrementCoinsCount(donationModel.amountRecieved);
+    } else {
+      showSnackbar(
+        title: 'OOPS!',
+        message: response.message,
+        error: true,
+      );
     }
   }
 
@@ -335,7 +343,7 @@ class DonationsController extends GetxController {
   /// LIKE AND UNLIKE FUNCTION
   void postLike(String userId, String postId, String receiverUid) {
     final int donationIndex =
-        donations.indexWhere((donation) => donation.id == postId);
+        donations.indexWhere((DonationModel donation) => donation.id == postId);
     if (donationIndex != -1) {
       final bool checkLiked = donations[donationIndex].likes!.contains(userId);
       if (checkLiked) {
@@ -347,14 +355,14 @@ class DonationsController extends GetxController {
     }
 
     if (profileController.myProfile.uid != receiverUid) {
-      socket.emit('like', {
+      socket.emit('like', <String, dynamic>{
         'postId': postId,
         'userId': userId,
         'timestamp': DateTime.now().millisecondsSinceEpoch,
         'receiverUid': receiverUid,
       });
     } else {
-      socket.emit('like', {
+      socket.emit('like', <String, dynamic>{
         'postId': postId,
         'userId': userId,
         'timestamp': DateTime.now().millisecondsSinceEpoch,
@@ -365,7 +373,7 @@ class DonationsController extends GetxController {
   /// COMMENT FUNCTION
   void comment(String postId, dynamic comment, String type) {
     final int donationIndex =
-        donations.indexWhere((donation) => donation.id == postId);
+        donations.indexWhere((DonationModel donation) => donation.id == postId);
     if (donationIndex != -1) {
       if (type == 'post') {
         donations[donationIndex].comments?.add(comment);
@@ -379,7 +387,7 @@ class DonationsController extends GetxController {
   void initSocket() {
     socket = IO.io(Constants.socketUrl, <String, dynamic>{
       'autoConnect': false,
-      'transports': ['websocket'],
+      'transports': <String>['websocket'],
     });
     socket.connect();
     socket.onConnect((_) {
@@ -392,8 +400,10 @@ class DonationsController extends GetxController {
 
     socket.on('new-notification', (data) {
       // print(data);
-      profileController.updateProfile(
-          {...profileController.myProfile.toMap(), 'unReadCount': 1});
+      profileController.updateProfile(<String, dynamic>{
+        ...profileController.myProfile.toMap(),
+        'unReadCount': 1
+      });
     });
 
     socket.onReconnect((_) {

@@ -608,13 +608,20 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
 
   bool _validateVideoLinks() {
     for (dynamic videoLink in videoLinks) {
-      if (!_isValidUrl(videoLink.url)) {
-        if (!_isValidYoutubeUrl(videoLink.url)) {
-          return false;
-        }
+      if (!_isValidYoutubeUrl(videoLink.url)) {
+        return false;
       }
     }
     return true;
+  }
+
+  bool _isValidYoutubeUrl(String url) {
+    final RegExp youtubeRegExp = RegExp(
+      r'^(https?\:\/\/)?(www\.youtube\.com\/watch\?v=|youtu\.be\/).+$',
+      caseSensitive: false,
+      multiLine: false,
+    );
+    return youtubeRegExp.hasMatch(url);
   }
 
   Widget buildAddButton() {
@@ -654,14 +661,5 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
         ),
       ),
     );
-  }
-
-  bool _isValidYoutubeUrl(String url) {
-    final RegExp youtubeRegExp = RegExp(
-      r'^(https?\:\/\/)?(www\.youtube\.com|youtu\.?be)\/.+$',
-      caseSensitive: false,
-      multiLine: false,
-    );
-    return youtubeRegExp.hasMatch(url);
   }
 }
