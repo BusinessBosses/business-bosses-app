@@ -30,14 +30,12 @@ class DonationsController extends GetxController {
   RxBool tLoading = RxBool(false);
   RxBool tError = RxBool(false);
   RxList<DonationModel> userdonations = <DonationModel>[].obs;
-  String userid = '';
 
   @override
   void onInit() async {
     initSocket();
     await initUsers();
     fetchDonations();
-    fetchuserDonations(userid);
     super.onInit();
   }
 

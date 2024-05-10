@@ -9,7 +9,6 @@ import 'package:business_bosses_v2/features/profile/controller/profile_controlle
 import 'package:business_bosses_v2/features/profile/widgets/profileinfodisplay.dart';
 import 'package:business_bosses_v2/features/live_event/controller/live_event_controller.dart';
 import 'package:business_bosses_v2/features/profile/widgets/profilepostsdisplay.dart';
-import 'package:business_bosses_v2/features/profile/widgets/profilerepostsdisplay%20copy.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
@@ -42,11 +41,11 @@ class MyProfileScreen extends StatefulWidget {
 class _MyProfileScreenState extends State<MyProfileScreen> {
   final ProfileController profileController = Get.find();
   final MarketController marketController = Get.find();
+  final LiveController liveEventController = Get.put(LiveController());
   final DonationsController donationsController =
       Get.put(DonationsController());
-  final CourseController courseController = Get.put(CourseController());
-  final ForumController forumController = Get.put(ForumController());
-  final LiveController liveEventController = Get.put(LiveController());
+  // final ForumController forumController = Get.put(ForumController());
+  // final CourseController courseController = Get.put(CourseController());
   bool isScrolled = true;
 
   @override
@@ -54,6 +53,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
     super.initState();
     donationsController.fetchuserDonations(profileController.myProfile.uid);
     // courseController.fetchuserCourses(profileController.myProfile.uid);
+    // forumController.fetchuserResources(profileController.myProfile.uid);
   }
 
   @override
@@ -126,70 +126,125 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                           const Material(
                             color: Color(0xFFF9F9F9),
                             child: TabBar(
-                                isScrollable: true,
-                                indicatorColor:
-                                    primaryColorLT, // Replace primaryColorLT with the desired color
-                                labelStyle:
-                                    TextStyle(fontWeight: FontWeight.w500),
-                                labelColor: Colors.black,
-                                tabs: <Widget>[
-                                  Tab(
-                                    text: 'About',
-                                  ),
-                                  Tab(
-                                    text: 'Posts',
-                                  ),
-                                  Tab(
-                                    text: 'Shop',
-                                  ),
-                                  Tab(
-                                    text: 'Resources',
-                                  ),
-                                  Tab(
-                                    text: 'Donations',
-                                  ),
-                                  Tab(
-                                    text: 'Courses',
-                                  ),
-                                  // Tab(
-                                  //   text: 'Reposts',
-                                  // ),
-                                ]),
+                              isScrollable: true,
+                              indicatorColor:
+                                  primaryColorLT, // Replace primaryColorLT with the desired color
+                              labelStyle:
+                                  TextStyle(fontWeight: FontWeight.w500),
+                              labelColor: Colors.black,
+                              tabs: <Widget>[
+                                Tab(
+                                  text: 'About',
+                                ),
+                                Tab(
+                                  text: 'Posts',
+                                ),
+                                Tab(
+                                  text: 'Shop',
+                                ),
+                                Tab(
+                                  text: 'Resources',
+                                ),
+                                Tab(
+                                  text: 'Donations',
+                                ),
+                                Tab(
+                                  text: 'Courses',
+                                ),
+                                // Tab(
+                                //   text: 'Reposts',
+                                // ),
+                              ],
+                            ),
                           ),
 
                           const SizedBox(
                             width: double.infinity,
                             height: 1.5,
                             child: ColoredBox(color: backgroundcolorinterface),
-                          ),
+                          ), // Container(
 
                           Expanded(
                             child: TabBarView(children: <Widget>[
-                              SingleChildScrollView(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    const SizedBox(
-                                      height: 30,
-                                    ),
-                                    profileinfodisplay(
-                                        context, profileController.myProfile),
-                                  ],
+                              NotificationListener<ScrollNotification>(
+                                onNotification: (notification) {
+                                  if (notification
+                                      is ScrollUpdateNotification) {
+                                    if (notification.dragDetails != null &&
+                                        notification
+                                                .dragDetails!.primaryDelta !=
+                                            null) {
+                                      double primaryDelta = notification
+                                          .dragDetails!.primaryDelta!;
+
+                                      if (primaryDelta > 0) {
+                                        // Scrolling downward
+                                        setState(() {
+                                          isScrolled = true;
+                                        });
+                                      } else if (primaryDelta < 0) {
+                                        // Scrolling upward
+                                        setState(() {
+                                          isScrolled = false;
+                                        });
+                                      }
+                                    }
+                                  }
+
+                                  return true;
+                                },
+                                child: SingleChildScrollView(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      const SizedBox(
+                                        height: 30,
+                                      ),
+                                      profileinfodisplay(
+                                          context, profileController.myProfile),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              NotificationListener<ScrollNotification>(
+                                onNotification: (notification) {
+                                  if (notification
+                                      is ScrollUpdateNotification) {
+                                    if (notification.dragDetails != null &&
+                                        notification
+                                                .dragDetails!.primaryDelta !=
+                                            null) {
+                                      double primaryDelta = notification
+                                          .dragDetails!.primaryDelta!;
+
+                                      if (primaryDelta > 0) {
+                                        // Scrolling downward
+                                        setState(() {
+                                          isScrolled = true;
+                                        });
+                                      } else if (primaryDelta < 0) {
+                                        // Scrolling upward
+                                        setState(() {
+                                          isScrolled = false;
+                                        });
+                                      }
+                                    }
+                                  }
+
+                                  return true;
+                                },
+                                child: profilepostsdisplay(
+                                  ispublicposts: false,
+                                  context,
+                                  profileController.myProfile,
+                                  profileController.posts,
+                                  loading: profileController.isLoading.value,
                                 ),
                               ),
 
-                              ///Postsdisplay
-                              profilepostsdisplay(
-                                ispublicposts: false,
-                                context,
-                                profileController.myProfile,
-                                profileController.posts,
-                                loading: profileController.isLoading.value,
-                              ),
-
                               ///Marketplace
-                              ///
                               Container(
                                   height: double.infinity,
                                   width: double.infinity,
@@ -273,56 +328,56 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                   })),
 
                               ///Forum or Resources
-                              Container(
-                                  height: double.infinity,
-                                  width: double.infinity,
-                                  child: Obx(() {
-                                    return forumController.userresources.isEmpty
-                                        ? Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            children: [
-                                              SvgPicture.asset(
-                                                'assets/svgs/courses.svg',
-                                                height: 40,
-                                                color: Colors.grey,
-                                              ),
-                                              const SizedBox(
-                                                height: 10,
-                                              ),
-                                              const Text(
-                                                'No Resources Found',
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.w700,
-                                                  fontSize: 15,
-                                                ),
-                                              ),
-                                              const SizedBox(
-                                                height: 50,
-                                              ),
-                                            ],
-                                          )
-                                        : Container(
-                                            child: ListView.builder(
-                                              physics:
-                                                  NeverScrollableScrollPhysics(),
-                                              shrinkWrap: true,
-                                              itemCount: forumController
-                                                  .userresources.length,
-                                              itemBuilder:
-                                                  (BuildContext context,
-                                                      int i) {
-                                                return ForumItem(
-                                                  forum: forumController
-                                                      .userresources[i],
-                                                  controller: null!,
-                                                );
-                                              },
-                                            ),
-                                          );
-                                  })),
+                              // Container(
+                              //     height: double.infinity,
+                              //     width: double.infinity,
+                              //     child: Obx(() {
+                              //       return forumController.userresources.isEmpty
+                              //           ? Column(
+                              //               mainAxisAlignment:
+                              //                   MainAxisAlignment.center,
+                              //               crossAxisAlignment:
+                              //                   CrossAxisAlignment.center,
+                              //               children: [
+                              //                 SvgPicture.asset(
+                              //                   'assets/svgs/courses.svg',
+                              //                   height: 40,
+                              //                   color: Colors.grey,
+                              //                 ),
+                              //                 const SizedBox(
+                              //                   height: 10,
+                              //                 ),
+                              //                 const Text(
+                              //                   'No Resources Found',
+                              //                   style: TextStyle(
+                              //                     fontWeight: FontWeight.w700,
+                              //                     fontSize: 15,
+                              //                   ),
+                              //                 ),
+                              //                 const SizedBox(
+                              //                   height: 50,
+                              //                 ),
+                              //               ],
+                              //             )
+                              //           : Container(
+                              //               child: ListView.builder(
+                              //                 physics:
+                              //                     NeverScrollableScrollPhysics(),
+                              //                 shrinkWrap: true,
+                              //                 itemCount: forumController
+                              //                     .userresources.length,
+                              //                 itemBuilder:
+                              //                     (BuildContext context,
+                              //                         int i) {
+                              //                   return ForumItem(
+                              //                     forum: forumController
+                              //                         .userresources[i],
+                              //                     controller: null!,
+                              //                   );
+                              //                 },
+                              //               ),
+                              //             );
+                              //     })),
 
                               ///Donations
                               Container(
@@ -391,190 +446,60 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                           );
                                   })),
 
+                           
+
+                              ///Courses
                               // Container(
                               //   height: double.infinity,
                               //   width: double.infinity,
-                              //   child: Column(children: <Widget>[
-                              //     Obx(() {
-                              //       if (donationsController.loading.value) {
-                              //         return const Padding(
-                              //           padding: EdgeInsets.all(80.0),
-                              //           child: CircularProgressIndicator(),
-                              //         );
-                              //       } else if (donationsController
-                              //           .error.value) {
-                              //         return Text(
-                              //             'Error occurred during data fetching');
-                              //       } else {
-                              //         return Container(
-                              //           child: donationsController
-                              //                   .userdonations.isEmpty
-                              //               ? Column(
-                              //                   mainAxisAlignment:
-                              //                       MainAxisAlignment.center,
-                              //                   crossAxisAlignment:
-                              //                       CrossAxisAlignment.center,
-                              //                   children: [
-                              //                     SvgPicture.asset(
-                              //                       'assets/svgs/supporter.svg',
-                              //                       height: 40,
-                              //                       color: Colors.grey,
-                              //                     ),
-                              //                     const SizedBox(
-                              //                       height: 10,
-                              //                     ),
-                              //                     const Text(
-                              //                       'No Donations Found',
-                              //                       style: TextStyle(
-                              //                         fontWeight:
-                              //                             FontWeight.w700,
-                              //                         fontSize: 15,
-                              //                       ),
-                              //                     )
-                              //                   ],
-                              //                 )
-                              //               : Column(
-                              //                   children: [
-                              //                     Container(
-                              //                       child: ListView.builder(
-                              //                         physics:
-                              //                             NeverScrollableScrollPhysics(),
-                              //                         shrinkWrap: true,
-                              //                         itemCount:
-                              //                             donationsController
-                              //                                 .userdonations
-                              //                                 .length,
-                              //                         itemBuilder:
-                              //                             (BuildContext context,
-                              //                                 int i) {
-                              //                           // Sort the list based on the 'date' key in each map in descending order
-                              //                           bool isLastItem = donationsController
-                              //                                       .userdonations
-                              //                                       .length !=
-                              //                                   1
-                              //                               ? i ==
-                              //                                   donationsController
-                              //                                           .userdonations
-                              //                                           .length -
-                              //                                       1
-                              //                               : i ==
-                              //                                   donationsController
-                              //                                       .userdonations
-                              //                                       .length;
-                              //                           return DonationItem(
-                              //                             donation:
-                              //                                 donationsController
-                              //                                     .userdonations[i],
-                              //                             isLastItem:
-                              //                                 isLastItem,
-                              //                           );
-                              //                         },
-                              //                       ),
-                              //                     ),
-                              //                   ],
-                              //                 ),
-                              //         );
-                              //       }
-                              //     })
-                              //   ]),
-                              // ),
-                              Container(
-                                height: double.infinity,
-                                width: double.infinity,
-                                child: Obx(() {
-                                  return courseController.usercourses.isEmpty
-                                      ? Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: [
-                                            SvgPicture.asset(
-                                              'assets/svgs/courses.svg',
-                                              height: 40,
-                                              color: Colors.grey,
-                                            ),
-                                            const SizedBox(
-                                              height: 10,
-                                            ),
-                                            const Text(
-                                              'No Courses Found',
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.w700,
-                                                fontSize: 15,
-                                              ),
-                                            ),
-                                            const SizedBox(
-                                              height: 50,
-                                            ),
-                                          ],
-                                        )
-                                      : Container(
-                                          child: ListView.builder(
-                                            physics:
-                                                NeverScrollableScrollPhysics(),
-                                            shrinkWrap: true,
-                                            itemCount: courseController
-                                                .usercourses.length,
-                                            itemBuilder:
-                                                (BuildContext context, int i) {
-                                              return CourseItem(
-                                                course: courseController
-                                                    .usercourses[i],
-                                              );
-                                            },
-                                          ),
-                                        );
-                                }),
-                              )
-
-                              //     if (courseController.loading.value) {
-                              //       return const Padding(
-                              //         padding: EdgeInsets.all(80.0),
-                              //         child: CircularProgressIndicator(),
-                              //       );
-                              //     } else if (courseController.error.value) {
-                              //       return Text(
-                              //           'Error occurred during data fetching');
-                              //     } else {
-                              //       return Container(
-                              //         child: courseController
-                              //                 .usercourses.isEmpty
-                              //             ?
-                              //             : Column(
-                              //                 children: [
-                              //                   Container(
-                              //                     child: ListView.builder(
-                              //                       physics:
-                              //                           NeverScrollableScrollPhysics(),
-                              //                       shrinkWrap: true,
-                              //                       itemCount: courseController
-                              //                           .usercourses.length,
-                              //                       itemBuilder:
-                              //                           (BuildContext context,
-                              //                               int i) {
-                              //                         return CourseItem(
-                              //                           course: courseController
-                              //                               .usercourses[i],
-                              //                         );
-                              //                       },
-                              //                     ),
-                              //                   ),
-                              //                 ],
+                              //   child: Obx(() {
+                              //     return courseController.usercourses.isEmpty
+                              //         ? Column(
+                              //             mainAxisAlignment:
+                              //                 MainAxisAlignment.center,
+                              //             crossAxisAlignment:
+                              //                 CrossAxisAlignment.center,
+                              //             children: [
+                              //               SvgPicture.asset(
+                              //                 'assets/svgs/courses.svg',
+                              //                 height: 40,
+                              //                 color: Colors.grey,
                               //               ),
-                              //       );
-                              //     }
+                              //               const SizedBox(
+                              //                 height: 10,
+                              //               ),
+                              //               const Text(
+                              //                 'No Courses Found',
+                              //                 style: TextStyle(
+                              //                   fontWeight: FontWeight.w700,
+                              //                   fontSize: 15,
+                              //                 ),
+                              //               ),
+                              //               const SizedBox(
+                              //                 height: 50,
+                              //               ),
+                              //             ],
+                              //           )
+                              //         : Container(
+                              //             child: ListView.builder(
+                              //               physics:
+                              //                   NeverScrollableScrollPhysics(),
+                              //               shrinkWrap: true,
+                              //               itemCount: courseController
+                              //                   .usercourses.length,
+                              //               itemBuilder:
+                              //                   (BuildContext context, int i) {
+                              //                 return CourseItem(
+                              //                   course: courseController
+                              //                       .usercourses[i],
+                              //                 );
+                              //               },
+                              //             ),
+                              //           );
                               //   }),
-                              // ),
-                              // profilerepostsdisplay(
-                              //   ispublicposts: false,
-                              //   context,
-                              //   profileController.myProfile,
-                              //   profileController.posts,
-                              //   loading: profileController.isLoading.value,
-                              // ),
+                              // )
                             ]),
-                          )
+                          ),
                         ],
                       ),
                     ),

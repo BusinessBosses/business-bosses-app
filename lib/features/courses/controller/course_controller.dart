@@ -27,7 +27,6 @@ class CourseController extends GetxController {
   RxBool rError = RxBool(false);
   RxList<dynamic> reviews = <dynamic>[].obs;
   RxList<CourseModel> usercourses = <CourseModel>[].obs;
-  String userid = '';
   final ProfileController profileController = Get.find();
   late IO.Socket socket;
 
@@ -35,7 +34,6 @@ class CourseController extends GetxController {
   void onInit() async {
     initSocket();
     super.onInit();
-    fetchuserCourses(userid);
     if (Get.arguments == null) {
       Get.back();
       return;
@@ -213,15 +211,12 @@ class CourseController extends GetxController {
             });
 
             usercourses.add(usercourse);
-            print(usercourses.toString());
           }
         }
       } else {
         error(true);
-        print(response); // Set error to true if there's an error
       }
     } catch (e) {
-      print(e);
       error(true); // Set error to true if there's an error
     } finally {
       loading(false); // Set loading back to false after fetching data
@@ -281,7 +276,7 @@ class CourseController extends GetxController {
     }
   }
 
-  ///COIN AND UNCOINFUNCTION
+
   
 
   void initSocket() {
