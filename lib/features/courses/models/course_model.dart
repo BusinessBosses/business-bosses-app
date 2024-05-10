@@ -12,6 +12,8 @@ class CourseModel {
   final dynamic promotionDuration;
   final List<String>? documents;
   final int? timestamp;
+  late final List<String>? likes;
+  final List<String>? coins;
   final List<CourseCommentModel>? comments;
   final List<String>? purchases;
   final UserModel? user;
@@ -34,6 +36,8 @@ class CourseModel {
     this.timestamp,
     this.purchases,
     this.views = 0,
+    this.likes,
+    this.coins,
     this.comments,
     this.user,
     this.isPromoted,
@@ -60,6 +64,8 @@ class CourseModel {
     bool? isPromoted,
     int? views,
     String? price,
+    List<String>? likes,
+    List<String>? coins,
     double? averageRating,
     dynamic promotionDuration,
     bool? isApproved,
@@ -79,6 +85,8 @@ class CourseModel {
       comments: comments ?? this.comments,
       purchases: purchases ?? this.purchases,
       user: user ?? this.user,
+      likes: likes ?? this.likes,
+      coins: coins ?? this.coins,
       averageRating: averageRating ?? this.averageRating,
       views: views ?? this.views,
       isPromoted: isPromoted ?? this.isPromoted,
@@ -105,6 +113,8 @@ class CourseModel {
       'comments': comments!.map((CourseCommentModel x) => x.toMap()).toList(),
       'user': user!.toMap(),
       'views': views,
+      'likes': likes,
+      'coins': coins,
       'purchases': purchases,
       'isPromoted': isPromoted,
       'price': price,
@@ -133,6 +143,11 @@ class CourseModel {
               ? (map['averageRating'] as int).toDouble()
               : map['averageRating'] as double)
           : null,
+      likes: map['likes'] != null
+          ? List<String>.from(
+              map['likes'].map((like) => like['userId'].toString()))
+          : null,
+      coins: map['coins'] != null ? List<String>.from((map['coins'])) : null,
       paymentMethod:
           map['paymentMethod'] != null ? map['paymentMethod'] as String : null,
       promotionDuration: map['promotionDuration'] != null

@@ -52,8 +52,8 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
   @override
   void initState() {
     super.initState();
-    donationsController.userid = profileController.myProfile.uid;
-    donationsController.onInit();
+    donationsController.fetchuserDonations(profileController.myProfile.uid);
+    courseController.fetchuserCourses(profileController.myProfile.uid);
   }
 
   @override
@@ -190,11 +190,11 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
 
                               ///Marketplace
                               ///
-                         Container(
+                              Container(
                                   height: double.infinity,
                                   width: double.infinity,
                                   child: Obx(() {
-                                    return  marketController.markets
+                                    return marketController.markets
                                             .where((MarketModel market) =>
                                                 market.userId ==
                                                 profileController.myProfile.uid)
@@ -230,50 +230,50 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                               physics:
                                                   NeverScrollableScrollPhysics(),
                                               shrinkWrap: true,
-                                              itemCount: marketController.markets
-                                                .where((MarketModel market) =>
-                                                    market.userId ==
-                                                    profileController
-                                                        .myProfile.uid)
-                                                .length,
-                                              itemBuilder: (BuildContext context,
-                                                int index) {
-                                              final List<MarketModel>
-                                                  filteredMarkets =
-                                                  marketController.markets
-                                                      .where((MarketModel
-                                                              market) =>
-                                                          market.userId ==
-                                                          profileController
-                                                              .myProfile.uid)
-                                                      .toList();
-                                              final MarketModel market =
-                                                  filteredMarkets[index];
+                                              itemCount: marketController
+                                                  .markets
+                                                  .where((MarketModel market) =>
+                                                      market.userId ==
+                                                      profileController
+                                                          .myProfile.uid)
+                                                  .length,
+                                              itemBuilder:
+                                                  (BuildContext context,
+                                                      int index) {
+                                                final List<MarketModel>
+                                                    filteredMarkets =
+                                                    marketController.markets
+                                                        .where((MarketModel
+                                                                market) =>
+                                                            market.userId ==
+                                                            profileController
+                                                                .myProfile.uid)
+                                                        .toList();
+                                                final MarketModel market =
+                                                    filteredMarkets[index];
 
-                                              return market.isProduct
-                                                  ? MarketTile(
-                                                      post: market,
-                                                      controller:
-                                                          marketController,
-                                                      key: ValueKey(
-                                                          market.marketId),
-                                                    )
-                                                  : ServiceTile(
-                                                      post: market,
-                                                      controller:
-                                                          marketController,
-                                                      key: ValueKey(
-                                                          market.marketId),
-                                                    );
-                                            },
+                                                return market.isProduct
+                                                    ? MarketTile(
+                                                        post: market,
+                                                        controller:
+                                                            marketController,
+                                                        key: ValueKey(
+                                                            market.marketId),
+                                                      )
+                                                    : ServiceTile(
+                                                        post: market,
+                                                        controller:
+                                                            marketController,
+                                                        key: ValueKey(
+                                                            market.marketId),
+                                                      );
+                                              },
                                             ),
                                           );
                                   })),
 
-                              
-
                               ///Forum or Resources
-                               Container(
+                              Container(
                                   height: double.infinity,
                                   width: double.infinity,
                                   child: Obx(() {
@@ -324,8 +324,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                           );
                                   })),
 
-
-                                  ///Donations
+                              ///Donations
                               Container(
                                   height: double.infinity,
                                   width: double.infinity,
@@ -392,8 +391,6 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                           );
                                   })),
 
-                              
-                             
                               // Container(
                               //   height: double.infinity,
                               //   width: double.infinity,
@@ -482,54 +479,54 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                               //   ]),
                               // ),
                               Container(
-                                  height: double.infinity,
-                                  width: double.infinity,
-                                  child: Obx(() {
-                                    return courseController.usercourses.isEmpty
-                                        ? Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            children: [
-                                              SvgPicture.asset(
-                                                'assets/svgs/courses.svg',
-                                                height: 40,
-                                                color: Colors.grey,
-                                              ),
-                                              const SizedBox(
-                                                height: 10,
-                                              ),
-                                              const Text(
-                                                'No Courses Found',
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.w700,
-                                                  fontSize: 15,
-                                                ),
-                                              ),
-                                              const SizedBox(
-                                                height: 50,
-                                              ),
-                                            ],
-                                          )
-                                        : Container(
-                                            child: ListView.builder(
-                                              physics:
-                                                  NeverScrollableScrollPhysics(),
-                                              shrinkWrap: true,
-                                              itemCount: courseController
-                                                  .usercourses.length,
-                                              itemBuilder:
-                                                  (BuildContext context,
-                                                      int i) {
-                                                return CourseItem(
-                                                  course: courseController
-                                                      .usercourses[i],
-                                                );
-                                              },
+                                height: double.infinity,
+                                width: double.infinity,
+                                child: Obx(() {
+                                  return courseController.usercourses.isEmpty
+                                      ? Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            SvgPicture.asset(
+                                              'assets/svgs/courses.svg',
+                                              height: 40,
+                                              color: Colors.grey,
                                             ),
-                                          );
-                                  })),
+                                            const SizedBox(
+                                              height: 10,
+                                            ),
+                                            const Text(
+                                              'No Courses Found',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.w700,
+                                                fontSize: 15,
+                                              ),
+                                            ),
+                                            const SizedBox(
+                                              height: 50,
+                                            ),
+                                          ],
+                                        )
+                                      : Container(
+                                          child: ListView.builder(
+                                            physics:
+                                                NeverScrollableScrollPhysics(),
+                                            shrinkWrap: true,
+                                            itemCount: courseController
+                                                .usercourses.length,
+                                            itemBuilder:
+                                                (BuildContext context, int i) {
+                                              return CourseItem(
+                                                course: courseController
+                                                    .usercourses[i],
+                                              );
+                                            },
+                                          ),
+                                        );
+                                }),
+                              )
 
                               //     if (courseController.loading.value) {
                               //       return const Padding(

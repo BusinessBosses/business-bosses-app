@@ -1,13 +1,17 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/features/courses/models/course_model.dart';
 import 'package:business_bosses_v2/features/forum/models/industry.dart';
+import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
+import 'package:business_bosses_v2/utils/constants/constants.dart';
 import 'package:http/http.dart' as http;
 import 'package:get/get.dart';
+import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class CourseController extends GetxController {
   RxList<CourseModel> courses = RxList<CourseModel>(<CourseModel>[]);
@@ -23,10 +27,15 @@ class CourseController extends GetxController {
   RxBool rError = RxBool(false);
   RxList<dynamic> reviews = <dynamic>[].obs;
   RxList<CourseModel> usercourses = <CourseModel>[].obs;
+  String userid = '';
+  final ProfileController profileController = Get.find();
+  late IO.Socket socket;
 
   @override
-  void onInit() {
+  void onInit() async {
+    initSocket();
     super.onInit();
+    fetchuserCourses(userid);
     if (Get.arguments == null) {
       Get.back();
       return;
@@ -193,22 +202,26 @@ class CourseController extends GetxController {
 
       if (response.success) {
         usercourses.clear();
-        for (int i = 0; i < response.data['rows'].length; i++) {
-          if (response.data['rows'] != null) {
+        if (response.data['rows'] != null) {
+          // Check if response.data['rows'] is not null
+          for (int i = 0; i < response.data['rows'].length; i++) {
             CourseModel usercourse = CourseModel.fromMap(<String, dynamic>{
               ...response.data['rows'][i],
-              'likes': response.data['rows'][i]['likes']
-                  .map((dynamic like) => like['userId'].toString())
-                  .toList(),
+              // 'likes': response.data['rows'][i]['likes']
+              //     .map((dynamic like) => like['userId'].toString())
+              //     .toList(),
             });
 
             usercourses.add(usercourse);
+            print(usercourses.toString());
           }
         }
       } else {
-        error(true); // Set error to true if there's an error
+        error(true);
+        print(response); // Set error to true if there's an error
       }
     } catch (e) {
+      print(e);
       error(true); // Set error to true if there's an error
     } finally {
       loading(false); // Set loading back to false after fetching data
@@ -236,5 +249,71 @@ class CourseController extends GetxController {
     }
     hLoading(false);
     update();
+  }
+
+  /// LIKE AND UNLIKE FUNCTION
+  void postLike(String userId, String postId, String receiverUid) {
+    final int courseIndex =
+        courses.indexWhere((CourseModel course) => course.id == postId);
+    if (courseIndex != -1) {
+      final bool checkLiked = courses[courseIndex].likes!.contains(userId);
+      if (checkLiked) {
+        courses[courseIndex].likes?.remove(userId);
+      } else {
+        courses[courseIndex].likes?.add(userId);
+      }
+      update();
+    }
+
+    if (profileController.myProfile.uid != receiverUid) {
+      socket.emit('like', <String, dynamic>{
+        'postId': postId,
+        'userId': userId,
+        'timestamp': DateTime.now().millisecondsSinceEpoch,
+        'receiverUid': receiverUid,
+      });
+    } else {
+      socket.emit('like', <String, dynamic>{
+        'postId': postId,
+        'userId': userId,
+        'timestamp': DateTime.now().millisecondsSinceEpoch,
+      });
+    }
+  }
+
+  ///COIN AND UNCOINFUNCTION
+  
+
+  void initSocket() {
+    socket = IO.io(Constants.socketUrl, <String, dynamic>{
+      'autoConnect': false,
+      'transports': <String>['websocket'],
+    });
+    socket.connect();
+    socket.onConnect((_) {
+      print('Connection established');
+    });
+
+    socket.on('handshake', (data) {
+      // print(data);
+    });
+
+    socket.on('new-notification', (data) {
+      // print(data);
+      profileController.updateProfile(<String, dynamic>{
+        ...profileController.myProfile.toMap(),
+        'unReadCount': 1
+      });
+    });
+
+    socket.onReconnect((_) {
+      socket.emit('handshake', profileController.myProfile.uid);
+
+      print('reconnected');
+    });
+
+    socket.onDisconnect((_) => print('Connection Disconnection'));
+    socket.onConnectError((err) => print(err));
+    socket.onError((err) => print(err));
   }
 }

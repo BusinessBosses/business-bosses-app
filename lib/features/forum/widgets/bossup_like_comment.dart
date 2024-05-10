@@ -124,7 +124,7 @@ class _BossUpLikeCommentItemState extends State<BossUpLikeCommentItem> {
                       ? SafetyModel(
                           isLoading: _isLoadingLikes,
                           icon: const Icon(
-                            Icons.favorite,
+                            Icons.thumb_up,
                             size: 80.0,
                             color: hintColor,
                           ),

@@ -11,6 +11,7 @@ import 'package:business_bosses_v2/features/courses/presentation/course_reviews.
 import 'package:business_bosses_v2/features/courses/presentation/create_course.dart';
 import 'package:business_bosses_v2/features/courses/presentation/expanded_course_screen.dart';
 import 'package:business_bosses_v2/features/courses/widgets/course_comment_bottomsheet.dart';
+import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/posts/presentation/boost_post_screen.dart';
 import 'package:business_bosses_v2/features/posts/widgets/youtube_display.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
@@ -33,6 +34,7 @@ class CourseItem extends StatefulWidget {
 class _CourseItemState extends State<CourseItem> {
   ProfileController profileController = Get.find();
   List<String> blocked = <String>[];
+  final HomeController homeController = Get.find();
 
   final List<PopupMenuEntry<String>> myPopupMore = <PopupMenuEntry<String>>[
     const PopupMenuItem<String>(
@@ -645,6 +647,30 @@ class _CourseItemState extends State<CourseItem> {
             Row(
               children: <Widget>[
                 TextButton.icon(
+                  onPressed: () async {
+                    courseController.postLike(
+                      profileController.myProfile.uid,
+                      widget.course.id,
+                      widget.course.user!.uid,
+                    );
+                  },
+                  icon: widget.course.likes
+                              ?.contains(profileController.myProfile.uid) ==
+                          true
+                      ? SvgPicture.asset(
+                          'assets/svgs/likefilled.svg',
+                          height: 15,
+                        )
+                      : SvgPicture.asset('assets/svgs/like.svg', height: 15),
+                  label: Text(
+                    '${widget.course.likes?.length ?? 0}',
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          fontWeight: FontWeight.w700,
+                          color: textColor.withOpacity(0.8),
+                        ),
+                  ),
+                ),
+                TextButton.icon(
                   onPressed: () {
                     showModalBottomSheet(
                       context: context,
@@ -667,6 +693,40 @@ class _CourseItemState extends State<CourseItem> {
                           fontWeight: FontWeight.w700,
                           color: textColor.withOpacity(0.8),
                         ),
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.only(right: 0.0),
+                  child: TextButton.icon(
+                    onPressed: () async {
+                      if (widget.course.user!.uid !=
+                          profileController.myProfile.uid) {
+                        homeController.postCoin(
+                            profileController.myProfile.uid,
+                            widget.course.id,
+                            profileController,
+                            'post',
+                            widget.course.user!.uid);
+                      }
+                    },
+                    icon: widget.course.coins
+                                ?.contains(profileController.myProfile.uid) ==
+                            true
+                        ? SvgPicture.asset(
+                            'assets/svgs/coin.svg',
+                            height: 20,
+                          )
+                        : SvgPicture.asset(
+                            'assets/svgs/coin.svg',
+                            height: 20,
+                          ),
+                    label: Text(
+                      '${widget.course.coins?.length ?? 0}',
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            fontWeight: FontWeight.w700,
+                            color: textColor.withOpacity(0.8),
+                          ),
+                    ),
                   ),
                 ),
                 TextButton.icon(
