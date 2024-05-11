@@ -242,9 +242,9 @@ class _LiveEventState extends State<LiveEvent> {
             //         ),
             //     )
             //     : Container(),
-            body: Stack(children: [
+            body: Stack(children: <Widget>[
               liveController.loading.value
-                  ? const Stack(children: [
+                  ? const Stack(children: <Widget>[
                       Center(child: CircularProgressIndicator()),
                     ])
                   : NestedScrollView(

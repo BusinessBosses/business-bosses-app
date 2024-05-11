@@ -109,7 +109,7 @@ class Constants {
   static const String ACCESS_TOKEN = 'accessToken';
   static const String USER_ID = 'uid';
   static const String APP_SIGN =
-      "78767a4482873b4e981a6c245c38738e70024ef13e34c1c01bab13ed9a457db6";
+      '78767a4482873b4e981a6c245c38738e70024ef13e34c1c01bab13ed9a457db6';
   static const int APP_ID = 468230095;
 }
 

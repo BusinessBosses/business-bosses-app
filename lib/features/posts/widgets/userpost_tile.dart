@@ -419,7 +419,7 @@ class _PostTileState extends State<PostTile> {
                                 child: const RankingBadge(),
                               ),
                         Container(
-                          padding: EdgeInsets.only(right: 15),
+                          padding: const EdgeInsets.only(right: 15),
                           height: double.infinity,
                           color: Colors.white,
                           child: widget.post.user!.uid ==

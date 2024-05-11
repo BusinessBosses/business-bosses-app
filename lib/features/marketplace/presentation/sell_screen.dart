@@ -405,7 +405,7 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
+                    children: <Widget>[
                       Expanded(
                         flex: 3,
                         child: TextFormField(
@@ -435,7 +435,7 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
                       Expanded(
                         flex:
                             6, // Adjust the flex value to control the relative sizes
-                        child: Stack(children: [
+                        child: Stack(children: <Widget>[
                           TextFormField(
                             controller: _priceController,
                             onChanged: (String val) => price = val,
@@ -455,7 +455,7 @@ class _CreateSellingitemScreenState extends State<CreateSellingitemScreen> {
                         flex:
                             4, // Adjust the flex value to control the relative sizes
                         child: Stack(
-                          children: [
+                          children: <Widget>[
                             TextFormField(
                               controller: _discountController,
                               onChanged: (String val) => discount = val,

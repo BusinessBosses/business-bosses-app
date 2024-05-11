@@ -24,8 +24,8 @@ class _AllTransactionsState extends State<AllTransactions> {
             itemCount: widget.history.length,
             itemBuilder: (BuildContext context, int i) {
               final history = widget.history[i];
-              final prevdate =
-                  i == 0 ? "" : formatDate(widget.history[i - 1]['date']);
+              final String prevdate =
+                  i == 0 ? '' : formatDate(widget.history[i - 1]['date']);
               return DonationHistoryItem(
                 item: history,
                 previousDate: prevdate,

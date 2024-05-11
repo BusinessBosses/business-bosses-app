@@ -37,10 +37,10 @@ class _PostInteractionsState extends State<PostInteractions> {
   @override
   void initState() {
     super.initState();
-    postLikes = List<String>.from(widget.post.likes ?? []);
-    postCoins = List<String>.from(widget.post.coins ?? []);
-    postComments = List<CommentModel>.from(widget.post.comments ?? []);
-    postReposts = List<String>.from(widget.post.reposts ?? []);
+    postLikes = List<String>.from(widget.post.likes ?? <String>[]);
+    postCoins = List<String>.from(widget.post.coins ?? <String>[]);
+    postComments = List<CommentModel>.from(widget.post.comments ?? <String>[]);
+    postReposts = List<String>.from(widget.post.reposts ?? <String>[]);
   }
 
   @override
@@ -176,7 +176,7 @@ class _PostInteractionsState extends State<PostInteractions> {
                             top: Radius.circular(25.0),
                           ),
                         ),
-                        builder: (context) {
+                        builder: (BuildContext context) {
                           return SizedBox(
                             height: 250,
                             child: Padding(

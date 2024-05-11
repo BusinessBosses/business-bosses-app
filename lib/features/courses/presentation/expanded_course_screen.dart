@@ -536,7 +536,7 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
                                         fontWeight: FontWeight.w700),
                                   ),
                                   widget.course.user?.isSubscribed == true
-                                      ? Wrap(children: [
+                                      ? Wrap(children: <Widget>[
                                           const SizedBox(width: 3),
                                           SvgPicture.asset(
                                             'assets/svgs/premiumbadge.svg',

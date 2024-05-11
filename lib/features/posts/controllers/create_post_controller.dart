@@ -209,7 +209,7 @@ class CreatePostController extends GetxController {
             _homeController.addNewPost(response.data, profileController);
             profileController.addNewPost(response.data);
             // Emit a WebSocket event to notify other users of the new post
-            socket.emit('newPostEvent', {'newPost': "this is the new posts"});
+            socket.emit('newPostEvent', <String, String>{'newPost': 'this is the new posts'});
 
             if (shouldPromote.value == true) {
               Get.to(() => BoostPost(
@@ -506,7 +506,7 @@ class CreatePostController extends GetxController {
 
     socket = IO.io(Constants.socketUrl, <String, dynamic>{
       'autoConnect': false,
-      'transports': ['websocket'],
+      'transports': <String>['websocket'],
     });
     socket.connect();
     socket.onConnect((_) {

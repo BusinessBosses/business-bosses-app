@@ -12,7 +12,6 @@ import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:country_picker/country_picker.dart';
 import 'package:crypto/crypto.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -218,7 +217,7 @@ class _SignUpFormState extends State<SignUpForm> {
       } else {
         saveToSharedPreferences(_authCred!, '_authCred');
         saveToSharedPreferences(_authusername!, '_authusername');
-        dynamic user = await _handleRegister();
+        await _handleRegister();
         Get.snackbar('Success', 'Authentication completed');
         await logEvents('signup', 'email');
         Get.toNamed(
@@ -230,10 +229,9 @@ class _SignUpFormState extends State<SignUpForm> {
         );
       }
 
-      print(_authCred! + ' ' + _authusername!);
+      print('${_authCred!} ${_authusername!}');
     } catch (error) {
-      // Error occurred during sign in
-      // log('Here ->>>>>> $error');
+      // Error oc'${_authCred!} ${_authusername!}'og('Here ->>>>>> $error');
 
       showSnackBar(context, message: 'Opps!! Something went wrong. Try again');
     }

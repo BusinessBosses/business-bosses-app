@@ -23,8 +23,8 @@ class WithdrawalScreen extends StatefulWidget {
 class _WithdrawalScreenState extends State<WithdrawalScreen> {
   final ScrollController scrollController = ScrollController();
   late ProfileController _profileController;
-  TextEditingController _withdrawlAmountController = TextEditingController();
-  TextEditingController _walletAddressController = TextEditingController();
+  final TextEditingController _withdrawlAmountController = TextEditingController();
+  final TextEditingController _walletAddressController = TextEditingController();
   String? _paymentMethods;
   bool paymentSelected = false;
   bool isProcessing = false;
@@ -41,25 +41,25 @@ class _WithdrawalScreenState extends State<WithdrawalScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context).copyWith(dividerColor: Colors.transparent);
+    final ThemeData theme = Theme.of(context).copyWith(dividerColor: Colors.transparent);
 
     return Scaffold(
       backgroundColor: Colors.white,
       body: NestedScrollView(
         controller: scrollController,
-        headerSliverBuilder: (context, innerBoxIsScrolled) {
+        headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
           return <Widget>[
             SliverPadding(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
               sliver: SliverToBoxAdapter(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
+                  children: <Widget>[
                     const SizedBox(
                       height: 10,
                     ),
                     const Row(
-                      children: [
+                      children: <Widget>[
                         Text('Amount to withdraw'),
                         SizedBox(
                           width: 5,
@@ -71,7 +71,7 @@ class _WithdrawalScreenState extends State<WithdrawalScreen> {
                       ],
                     ),
                     Stack(
-                      children: [
+                      children: <Widget>[
                         TextFormField(
                           controller: _withdrawlAmountController,
                           maxLength: 6,
@@ -79,7 +79,7 @@ class _WithdrawalScreenState extends State<WithdrawalScreen> {
                             setState(() {});
                           },
                           keyboardType: TextInputType.number,
-                          inputFormatters: [
+                          inputFormatters: <TextInputFormatter>[
                             FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
                           ],
                           buildCounter: (BuildContext context,
@@ -106,7 +106,7 @@ class _WithdrawalScreenState extends State<WithdrawalScreen> {
                           left: 10,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
+                            children: <Widget>[
                               SvgPicture.asset('assets/svgs/coin.svg'),
                             ],
                           ),
@@ -117,7 +117,7 @@ class _WithdrawalScreenState extends State<WithdrawalScreen> {
                           right: 10,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
+                            children: <Widget>[
                               Text(
                                 _withdrawlAmountController.text.isNotEmpty
                                     ? ' \$${num.parse(_withdrawlAmountController.text) / 100}'
@@ -164,7 +164,7 @@ class _WithdrawalScreenState extends State<WithdrawalScreen> {
                                   return DropdownMenuItem<String>(
                                     value: value,
                                     child: Row(
-                                      children: [
+                                      children: <Widget>[
                                         value == 'Paypal'
                                             ? SvgPicture.asset(
                                                 'assets/svgs/paypallogo.svg',
@@ -198,7 +198,7 @@ class _WithdrawalScreenState extends State<WithdrawalScreen> {
                       visible: paymentSelected,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
+                        children: <Widget>[
                           Text('Enter your $_paymentMethods details below'),
                           Text(_paymentMethods == 'Bank'
                               ? 'FULL NAME: COUNTRY: BANK NAME: ACCOUNT NUMBER:'
@@ -226,7 +226,7 @@ class _WithdrawalScreenState extends State<WithdrawalScreen> {
                       ),
                     ),
                     const SizedBox(height: 20),
-                    Container(
+                    SizedBox(
                       width: double.infinity,
                       height: 50,
                       child: CustomButton(
@@ -313,7 +313,7 @@ class _WithdrawalScreenState extends State<WithdrawalScreen> {
         },
         body: SingleChildScrollView(
           child: Column(
-            children: [
+            children: <Widget>[
               Container(
                 height: 1,
                 color: backgroundcolorinterface,
@@ -331,7 +331,7 @@ class _WithdrawalScreenState extends State<WithdrawalScreen> {
                   title: const Text('Withdrawal history',
                       style:
                           TextStyle(fontWeight: FontWeight.w700, fontSize: 16)),
-                  children: [
+                  children: <Widget>[
                     FutureBuilder<void>(
                       future: coinHistoryController.initHistory(),
                       builder:
@@ -358,7 +358,7 @@ class _WithdrawalScreenState extends State<WithdrawalScreen> {
                                           MainAxisAlignment.center,
                                       crossAxisAlignment:
                                           CrossAxisAlignment.center,
-                                      children: [
+                                      children: <Widget>[
                                         SvgPicture.asset(
                                           'assets/svgs/coinnn.svg',
                                           height: 40,
@@ -377,12 +377,12 @@ class _WithdrawalScreenState extends State<WithdrawalScreen> {
                                     ),
                                   )
                                 : Column(
-                                    children: [
+                                    children: <Widget>[
                                       const WithdrawalHeaderItem(),
                                       Container(
                                         child: ListView.builder(
                                           physics:
-                                              NeverScrollableScrollPhysics(),
+                                              const NeverScrollableScrollPhysics(),
                                           shrinkWrap: true,
                                           itemCount: coinHistoryController
                                               .coinwithdrawalHistory.length,

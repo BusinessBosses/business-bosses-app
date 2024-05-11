@@ -1060,7 +1060,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                                       child: _marketController.isfiltered.value
                                           ? NotificationListener<
                                               ScrollNotification>(
-                                              onNotification: (notification) {
+                                              onNotification: (ScrollNotification notification) {
                                                 if (notification
                                                     is ScrollUpdateNotification) {
                                                   if (notification
@@ -1242,7 +1242,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                     activeIndex: 3,
                   ),
                   showFloatingButton
-                      ? Floatingbutton(
+                      ? const Floatingbutton(
                      
                         )
                       : Container(),

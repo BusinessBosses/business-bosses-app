@@ -95,7 +95,7 @@ class _ConfirmCreateEventState extends State<ConfirmCreateEvent> {
                     padding: EdgeInsets.only(
                         left: 15.0, right: 15, top: 8, bottom: 8),
                     child: Row(
-                      children: [
+                      children: <Widget>[
                         Text('Copy ID'),
                         SizedBox(
                           width: 5,
@@ -149,7 +149,7 @@ class _ConfirmCreateEventState extends State<ConfirmCreateEvent> {
                 String title = '${widget.title}';
                 String livedata = '${widget.livedata}';
 
-                Get.toNamed(Routes.createPost, arguments: {
+                Get.toNamed(Routes.createPost, arguments: <String, String>{
                   'sharemessage': sharemessage,
                   'title': title,
                   'livedata': livedata,

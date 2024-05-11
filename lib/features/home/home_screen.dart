@@ -104,7 +104,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                 element['shouldCount'] == null &&
                 !element['isForum'] &&
                 element['data'].postId == data['newPost']['postId']);
-        print("================postIndex $postIndex");
+        print('================postIndex $postIndex');
         if (postIndex == -1) {
           homeController.sinkPosts(data);
         }
@@ -113,7 +113,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       socket.onDisconnect((_) {
         print('Connection Disconnection');
         // Reconnect the socket when it's disconnected
-        Future.delayed(Duration(seconds: 5), () {
+        Future.delayed(const Duration(seconds: 5), () {
           connectSocket();
         });
       });
@@ -1240,7 +1240,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                                   const BottomBar(
                                     activeIndex: 0,
                                   ),
-                                  Floatingbutton(),
+                                  const Floatingbutton(),
                                 ],
                               ),
                             ),

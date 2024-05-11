@@ -330,7 +330,7 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
                                       widget.donation.amountRecieved == 1
                                           ? ' coin raised'
                                           : ' coins raised',
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                           fontSize: 12, color: subtextColor),
                                     ),
                                   ],
@@ -441,7 +441,7 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
                                 widget.donation.targetAmount!)
                               Wrap(
                                 crossAxisAlignment: WrapCrossAlignment.center,
-                                children: [
+                                children: <Widget>[
                                   SvgPicture.asset(
                                     'assets/svgs/completed.svg',
                                     height: 20,
@@ -461,7 +461,7 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
                                 ? Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
-                                    children: [
+                                    children: <Widget>[
                                       GestureDetector(
                                         onTap: () {
                                           Get.to(() => CreateDonationScreen(
@@ -479,7 +479,7 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
                                           child: Wrap(
                                             crossAxisAlignment:
                                                 WrapCrossAlignment.center,
-                                            children: [
+                                            children: <Widget>[
                                               const Text('Edit'),
                                               const SizedBox(
                                                 width: 5,
@@ -511,7 +511,7 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
                                           child: Wrap(
                                             crossAxisAlignment:
                                                 WrapCrossAlignment.center,
-                                            children: [
+                                            children: <Widget>[
                                               const Text('Boost'),
                                               const SizedBox(
                                                 width: 5,
@@ -538,7 +538,7 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
                                           child: Wrap(
                                             crossAxisAlignment:
                                                 WrapCrossAlignment.center,
-                                            children: [
+                                            children: <Widget>[
                                               const Text('Share'),
                                               const SizedBox(
                                                 width: 5,
@@ -788,10 +788,10 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
                           },
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
+                            children: <Widget>[
                               Wrap(
                                   crossAxisAlignment: WrapCrossAlignment.center,
-                                  children: [
+                                  children: <Widget>[
                                     SizedBox(
                                       height: 30.0,
                                       width: 30.0,
@@ -825,8 +825,8 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
                                           fontWeight: FontWeight.w700),
                                     ),
                                     widget.donation.user?.isSubscribed == true
-                                    ? Wrap(children: [
-                                        SizedBox(width: 5),
+                                    ? Wrap(children: <Widget>[
+                                        const SizedBox(width: 5),
                                         SvgPicture.asset(
                                           'assets/svgs/premiumbadge.svg',
                                           height: 9,
@@ -836,13 +836,13 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
                                     : Container()
                                   ]),
                               Text(
-                                '$formattedDifference',
+                                formattedDifference,
                                 style: const TextStyle(color: subtextColor),
                               )
                             ],
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 30,
                         ),
                         const Text(
@@ -931,7 +931,7 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
                               height: 15,
                             ),
                             label: Text(
-                              '${formatter.format(widget.donation.comments?.length)}',
+                              formatter.format(widget.donation.comments?.length),
                               style: Theme.of(context)
                                   .textTheme
                                   .bodyMedium
@@ -946,7 +946,7 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
                             icon: const Icon(Icons.remove_red_eye_outlined,
                                 size: 19, color: Colors.black),
                             label: Text(
-                              '${formatter.format(widget.donation.views)}',
+                              formatter.format(widget.donation.views),
                               style: Theme.of(context)
                                   .textTheme
                                   .bodyMedium

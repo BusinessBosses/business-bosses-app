@@ -15,7 +15,9 @@ class Floatingbutton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ProfileController myProfile = Get.find();
+    // ignore: unused_local_variable
     int now = DateTime.now().millisecondsSinceEpoch;
+    // ignore: unused_local_variable
     int previousStamp = myProfile.myProfile.bossOfTheWeekTimeStamp ?? 0;
     return GestureDetector(
       onTap: () {
@@ -80,6 +82,7 @@ class Floatingbutton extends StatelessWidget {
                                             : index == 2
                                                 ? 22
                                                 : 22, // Adjust the height as needed
+                                    // ignore: deprecated_member_use
                                     color: textColor.withOpacity(1),
                                   ),
                             title: Text(

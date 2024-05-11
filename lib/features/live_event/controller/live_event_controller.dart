@@ -205,7 +205,7 @@ class LiveController extends GetxController {
         events.add(updatedEvent);
 
         // Sort the events based on startAt
-        events.sort((a, b) => a.startAt!.compareTo(b.startAt!));
+        events.sort((EventModel a, EventModel b) => a.startAt!.compareTo(b.startAt!));
 
         DateTime now = DateTime.now();
         DateTime today = DateTime(now.year, now.month, now.day);
@@ -229,7 +229,7 @@ class LiveController extends GetxController {
           // Updated event has already started, it's not upcoming
           // Find the index where the updated event should be inserted based on startAt
           int index = ongoing.indexWhere(
-              (event) => event.startAt!.isAfter(updatedEvent.startAt!));
+              (EventModel event) => event.startAt!.isAfter(updatedEvent.startAt!));
 
           if (index == -1) {
             // If the index is -1, it means the updated event should be placed at the end

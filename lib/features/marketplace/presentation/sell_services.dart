@@ -162,7 +162,7 @@ class _CreateServiceScreenState extends State<CreateServiceScreen> {
                 Padding(
                   padding: const EdgeInsets.only(left: 16.0, right: 16),
                   child: Stack(
-                    children: [
+                    children: <Widget>[
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: TextFormField(

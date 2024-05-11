@@ -3,7 +3,6 @@ import 'package:business_bosses_v2/common/models/user_model.dart';
 // import 'package:flutter/foundation.dart' as foundation;
 import 'package:business_bosses_v2/features/chat/controllers/chat_controller.dart';
 import 'package:business_bosses_v2/features/chat/presentation/call_invitation_page.dart';
-import 'package:business_bosses_v2/features/chat/presentation/call_page.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/seller_reviews.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
@@ -121,7 +120,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                     trailing: SizedBox(
                       width: 70,
                       child: Row(
-                        children: [
+                        children: <Widget>[
                           IconButton(
                               onPressed: () async {
                                 //   Get.to(CallPage(

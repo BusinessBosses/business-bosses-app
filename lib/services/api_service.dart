@@ -94,7 +94,7 @@ class ApiService {
     http.MultipartRequest request =
         http.MultipartRequest('POST', Uri.parse(uploadUrl));
     request.files.add(await http.MultipartFile.fromPath('file', image.path));
-    print("image url ========${image.path}");
+    print('image url ========${image.path}');
     try {
       final http.StreamedResponse streamedResponse = await request.send();
 

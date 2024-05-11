@@ -803,7 +803,7 @@ class HomeController extends GetxController {
         if (reposted) {
           profileController.addRePost(response.data);
           final ApiResponseModel timeresponse = await ApiService.put(
-              path: 'post/update-post/${postId}',
+              path: 'post/update-post/$postId',
               body: oldtimestamp == 0 ? timestampData : timestampDataoldpost);
           if (timeresponse.success) {
             print('true');
@@ -811,7 +811,7 @@ class HomeController extends GetxController {
             print('false');
           }
         } else {
-          profileController.removePost(response.data["postId"]);
+          profileController.removePost(response.data['postId']);
         }
       } else {
         print('Repost failed with status code: $response');

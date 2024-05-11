@@ -4,12 +4,11 @@ class VideoLinkData {
   bool hasTranscript;
   String transcript;
 
-  VideoLinkData({
-    this.url = '',
-    this.hasSubtitles = false,
-    this.hasTranscript = false,
-    this.transcript = ''
-  });
+  VideoLinkData(
+      {this.url = '',
+      this.hasSubtitles = false,
+      this.hasTranscript = false,
+      this.transcript = ''});
 
   // Constructor to initialize from map value
   VideoLinkData.fromMap(Map<String, dynamic> map)
@@ -19,7 +18,7 @@ class VideoLinkData {
         transcript = map['transcript'] ?? '';
 
   Map<String, dynamic> toMap() {
-    return {
+    return <String, dynamic>{
       'url': url,
       'hasSubtitles': hasSubtitles,
       'hasTranscript': hasTranscript,

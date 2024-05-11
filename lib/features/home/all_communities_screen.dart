@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:business_bosses_v2/features/donations/controller/donations_controller.dart';
 import 'package:business_bosses_v2/features/donations/presentation/donations.dart';
 import 'package:business_bosses_v2/features/forum/presentation/bossup_challenge.dart';
@@ -44,6 +46,7 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
       Get.put(CommunitiesController());
   final DonationsController donationsController =
       Get.put(DonationsController());
+  // ignore: unused_field
   final ProfileController _profileController = Get.find();
   late final TabController _searchTabController;
   late final TabController _pageTabController;
@@ -69,7 +72,6 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _searchTabController = TabController(length: 2, vsync: this);
     _pageTabController = TabController(
@@ -323,6 +325,7 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
                                               //'Search for specific topic of ${cat.category.toLowerCase()}',
                                             )
                                           : ListView.builder(
+                                              // ignore: always_specify_types
                                               key: const ValueKey(
                                                   'cat.categoryId'),
                                               padding: const EdgeInsets.only(
@@ -372,11 +375,9 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
 
   @override
   void dispose() {
-    // TODO: implement dispose
+    //
     _searchTabController.dispose();
     _pageTabController.dispose();
     super.dispose();
   }
-
-  void _onChanged(String value) {}
 }

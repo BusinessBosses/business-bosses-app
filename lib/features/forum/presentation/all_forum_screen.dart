@@ -1,10 +1,11 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:business_bosses_v2/features/courses/controller/course_controller.dart';
 import 'package:business_bosses_v2/features/courses/models/course_model.dart';
 import 'package:business_bosses_v2/features/courses/presentation/courses.dart';
 import 'package:business_bosses_v2/features/forum/controller/forum_controller.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
@@ -16,9 +17,7 @@ import '../../../utils/theme/theme.dart';
 
 class AllForumScreen extends StatefulWidget {
   static const String routeName = 'all-forum-screen';
-  const AllForumScreen({super.key });
-
-
+  const AllForumScreen({super.key});
 
   @override
   State<AllForumScreen> createState() => _AllForumScreenState();
@@ -27,13 +26,14 @@ class AllForumScreen extends StatefulWidget {
 class _AllForumScreenState extends State<AllForumScreen> {
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   late Industry industry;
+  // ignore: unused_field
   final ProfileController _myProfile = Get.find();
   final HomeController homeController = Get.find();
   late ForumController forumController;
   final CourseController courseController = Get.put(CourseController());
 
   int currentTabIndex = 0; // Track the current tab index
-  String _filtercourses = "";
+  String _filtercourses = '';
 
   @override
   void initState() {
@@ -49,10 +49,9 @@ class _AllForumScreenState extends State<AllForumScreen> {
   void onPreferencesTap(String filterOption) {
     setState(() {
       _filtercourses = filterOption;
-      print("Selected Filter Option: $_filtercourses");
     });
 
-  //  CoursesPage.callUpdateFilter(filterOption);
+    //  CoursesPage.callUpdateFilter(filterOption);
   }
 
   @override
@@ -129,7 +128,8 @@ class _AllForumScreenState extends State<AllForumScreen> {
                                           ),
                                           color: Colors.white,
                                           child: Text(
-                                            preferenceslist[index] + preferencesnumber[index],
+                                            preferenceslist[index] +
+                                                preferencesnumber[index],
                                             style: const TextStyle(
                                               fontWeight: FontWeight.bold,
                                             ),
@@ -172,10 +172,9 @@ class _AllForumScreenState extends State<AllForumScreen> {
                   color: Colors.white,
                   constraints: const BoxConstraints.expand(height: 50),
                   child: TabBar(
-                    tabs: <Widget>[
+                    tabs: const <Widget>[
                       Tab(text: 'Courses'),
                       Tab(text: 'Resources'),
-                      
                     ],
                     onTap: (int index) {
                       setState(() {
@@ -188,15 +187,11 @@ class _AllForumScreenState extends State<AllForumScreen> {
                   child: TabBarView(
                     physics: const NeverScrollableScrollPhysics(),
                     children: <Widget>[
-                    
-                      Container(
-                        child: CoursesPage(
-                          industryId: industry.industryId!, filter: _filtercourses,
-                          
-                          
-                        ),
+                      CoursesPage(
+                        industryId: industry.industryId!,
+                        filter: _filtercourses,
                       ),
-                        Container(child: const TopicsPage()),
+                      const TopicsPage(),
                     ],
                   ),
                 ),

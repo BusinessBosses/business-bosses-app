@@ -23,8 +23,8 @@ class _ReceivedDonationsState extends State<ReceivedDonations> {
         : ListView.builder(
             itemCount: widget.history.length,
             itemBuilder: (BuildContext context, int i) {
-              final prevdate =
-                  i == 0 ? "" : formatDate(widget.history[i - 1]['date']);
+              final String prevdate =
+                  i == 0 ? '' : formatDate(widget.history[i - 1]['date']);
               return DonationHistoryItem(item: widget.history[i], previousDate: prevdate,);
             },
           );

@@ -1,3 +1,5 @@
+// ignore_for_file: always_specify_types
+
 import 'dart:convert';
 
 import '../../../services/api_service.dart';
@@ -75,7 +77,7 @@ class Industry {
       timestamp: map['timestamp'],
       active: map['active'],
       categoryId: map['categoryId'],
-      joinedUsers: List<String>.from(map['joinedUsers'] ?? []),
+      joinedUsers: List<String>.from(map['joinedUsers'] ?? <String>[]),
       criteria: map['criteria'],
       award: map['award'],
       createTitle: map['createTitle'],

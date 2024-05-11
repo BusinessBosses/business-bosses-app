@@ -36,7 +36,7 @@ class PostGridItem extends StatelessWidget {
   }) : super(key: key);
 
   List<PopupMenuEntry<String>> getPopupItems() {
-    List<PopupMenuEntry<String>> items = [];
+    List<PopupMenuEntry<String>> items = <PopupMenuEntry<String>>[];
 
     if (post.livedata == null) {
       items.add(
@@ -77,7 +77,7 @@ class PostGridItem extends StatelessWidget {
   }
 
   List<PopupMenuEntry<String>> getRepostItems() {
-    List<PopupMenuEntry<String>> items = [];
+    List<PopupMenuEntry<String>> items = <PopupMenuEntry<String>>[];
 
     items.add(
       const PopupMenuItem<String>(
@@ -204,7 +204,7 @@ class PostGridItem extends StatelessWidget {
                 ),
               ),
             if (hasMore &&
-                (_profileController.myProfile.uid == post.user?.uid)) ...[
+                (_profileController.myProfile.uid == post.user?.uid)) ...<Widget>[
               Positioned(
                 top: 10.0,
                 right: 10.0,
@@ -250,7 +250,7 @@ class PostGridItem extends StatelessWidget {
                   ),
                 ),
               )
-            ] else if (hasMore) ...[
+            ] else if (hasMore) ...<Widget>[
               Positioned(
                 top: 10.0,
                 right: 10.0,

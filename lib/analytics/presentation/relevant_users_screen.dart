@@ -30,7 +30,7 @@ class RelevantUsersScreen extends StatefulWidget {
 class _RelevantUsersScreenState extends State<RelevantUsersScreen> {
   final UserModel _user = UserModel();
   ProfileController profileController = Get.find();
-  String _filtertitle = "";
+  String _filtertitle = '';
 
   @override
   Widget build(BuildContext context) {
@@ -40,12 +40,12 @@ class _RelevantUsersScreenState extends State<RelevantUsersScreen> {
           controller.recommendedConnections.toList();
       final List<UserModel> filteredConnectionsbytitle = controller
           .recommendedConnections
-          .where((element) => element.category.toString() == _filtertitle)
+          .where((UserModel element) => element.category.toString() == _filtertitle)
           .toList();
 
       void _refreshScreen() {
         setState(() {
-          _filtertitle = "";
+          _filtertitle = '';
         });
       }
 
@@ -100,7 +100,7 @@ class _RelevantUsersScreenState extends State<RelevantUsersScreen> {
             textAlign: TextAlign.center,
             style: TextStyle(fontSize: 20),
           ),
-          actions: [
+          actions: <Widget>[
             IconButton(
               onPressed: () {
                 showModalBottomSheet(
@@ -115,9 +115,9 @@ class _RelevantUsersScreenState extends State<RelevantUsersScreen> {
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
+                              children: <Widget>[
                                 Row(
-                                  children: [
+                                  children: <Widget>[
                                     SvgPicture.asset(
                                       'assets/svgs/filternoback.svg',
                                     ),
@@ -166,7 +166,7 @@ class _RelevantUsersScreenState extends State<RelevantUsersScreen> {
                                 ),
                                 const SizedBox(height: 15),
                                 Row(
-                                  children: [
+                                  children: <Widget>[
                                     Expanded(
                                         flex: 1,
                                         child: MCustomButton(
@@ -328,7 +328,7 @@ class _RelevantUsersScreenState extends State<RelevantUsersScreen> {
       if (analyser == Analyser.category) {
         MyTitle category = res.data;
         setState(() {
-          _filtertitle = category.title ?? "";
+          _filtertitle = category.title ?? '';
         });
       } else {
         // debugPrint('CATEGORY FALE');

@@ -104,7 +104,7 @@ class _CourseReviewScreenState extends State<CourseReviewScreen> {
                                       widget.course.title!,
                                       style: Theme.of(context)
                                           .textTheme
-                                          .bodyText1
+                                          .bodyLarge
                                           ?.copyWith(
                                             fontWeight: FontWeight.w700,
                                             color: Colors.black,

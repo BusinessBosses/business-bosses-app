@@ -297,7 +297,6 @@ class _ServiceTileState extends State<ServiceTile> {
                                                       _marketController
                                                           .removeListing(
                                                               _post.marketId);
-                                                      ;
                                                       // setState(() {
                                                       //   hide = true;
                                                       // });

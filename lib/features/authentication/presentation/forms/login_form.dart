@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 import 'dart:io';
 import 'dart:math';
 // import 'package:apple_sign_in_safety/apple_sign_in.dart';
@@ -7,7 +6,6 @@ import 'package:business_bosses_v2/common/widgets/buttons/custom_button.dart';
 
 import 'package:business_bosses_v2/common/widgets/text_widget.dart'
     show TextWidget;
-import 'package:business_bosses_v2/features/authentication/controller/auth_controller.dart';
 import 'package:country_picker/country_picker.dart';
 import 'package:crypto/crypto.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
@@ -100,7 +98,7 @@ class _LoginFormState extends State<LoginForm> {
           _authCred!,
           _password ?? DateTime.now().millisecondsSinceEpoch.toString(),
           _authusername!,
-          "");
+          '');
       return user;
       // }
     }
@@ -124,7 +122,6 @@ class _LoginFormState extends State<LoginForm> {
         nonce: nonce,
       );
 
-
       _authCred = appleCredential.email;
       _authusername =
           '${appleCredential.givenName} ${appleCredential.familyName}';
@@ -140,7 +137,7 @@ class _LoginFormState extends State<LoginForm> {
       } else {
         saveToSharedPreferences(_authCred!, '_authCred');
         saveToSharedPreferences(_authusername!, '_authusername');
-        dynamic user = await _handleRegister();
+        await _handleRegister();
         Get.snackbar('Success', 'Authentication completed');
         await logEvents('signup', 'email');
         Get.toNamed(
@@ -152,9 +149,7 @@ class _LoginFormState extends State<LoginForm> {
         );
       }
 
-      print(_authCred! + ' ' + _authusername!);
-
-   
+      print('${_authCred!} ${_authusername!}');
     } catch (error) {
       // Error occurred during sign in
       // log('Here ->>>>>> $error');
@@ -448,7 +443,7 @@ class _LoginFormState extends State<LoginForm> {
     return user;
   }
 
-   Future<dynamic> _handleAppleLogin() async {
+  Future<dynamic> _handleAppleLogin() async {
     dynamic user = await _apiService.googleLogin(
       _authCred!,
       _password ?? DateTime.now().millisecondsSinceEpoch.toString(),

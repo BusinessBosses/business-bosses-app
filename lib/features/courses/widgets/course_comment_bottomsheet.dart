@@ -1,14 +1,9 @@
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
-import 'package:business_bosses_v2/common/models/comment_model.dart';
 import 'package:business_bosses_v2/features/courses/controller/course_comment_controller.dart';
 import 'package:business_bosses_v2/features/courses/models/course_comment_model.dart';
 import 'package:business_bosses_v2/features/courses/models/course_model.dart';
 import 'package:business_bosses_v2/features/courses/widgets/course_comment_item.dart';
 import 'package:business_bosses_v2/features/courses/widgets/write_coursecomment.dart';
-import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
-import 'package:business_bosses_v2/features/posts/models/post_model.dart';
-import 'package:business_bosses_v2/features/posts/widgets/comment_item.dart';
-import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -17,7 +12,6 @@ import '../../../../common/widgets/safety_model.dart';
 import '../../../../common/widgets/user_avatar_with_badge.dart';
 import '../../../../utils/theme/theme.dart';
 
-import '../../../common/controllers/comment_controller.dart';
 import '../../../services/api_service.dart';
 
 class CourseCommentBottomSheet extends StatefulWidget {
@@ -175,7 +169,7 @@ class _CourseCommentBottomSheetState extends State<CourseCommentBottomSheet> {
   }
 
   Future<void> _loadCommentWithDetails() async {
-    await _commentController.fetchComments(widget.course.id!);
+    await _commentController.fetchComments(widget.course.id);
     setState(() {
       _isLoadingComments = _commentController.loading.value;
     });

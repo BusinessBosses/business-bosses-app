@@ -23,7 +23,7 @@ class ChallengeController extends GetxController {
 
       categories = responseData
           .map((categoryMap) => Industry.fromMap(categoryMap))
-          .where((category) =>
+          .where((Industry category) =>
               category.categoryId == '-Mos1VMlx3oxZFRaw_BH' &&
               (category.endedAt == null ||
                   category.endedAt!.isAfter(DateTime.now()) ||

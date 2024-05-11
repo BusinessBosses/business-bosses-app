@@ -21,12 +21,12 @@ class CallInvitationPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Call'),
+        title: const Text('Call'),
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [
+          children: <Widget>[
             ElevatedButton(
               onPressed: () {
                 showDialog(
@@ -37,9 +37,9 @@ class CallInvitationPage extends StatelessWidget {
                   ),
                 );
               },
-              child: Text('Start Call'),
+              child: const Text('Start Call'),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
                 showDialog(
@@ -50,7 +50,7 @@ class CallInvitationPage extends StatelessWidget {
                   ),
                 );
               },
-              child: Text('Join Call'),
+              child: const Text('Join Call'),
             ),
           ],
         ),
@@ -68,35 +68,35 @@ class StartCallDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text('Start Call'),
+      title: const Text('Start Call'),
       content: FutureBuilder(
-        future: startCall({
+        future: startCall(<String, dynamic>{
           'callerId': callerId,
           'recipientId': recipientId,
         }),
-        builder: (context, snapshot) {
+        builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return CircularProgressIndicator();
+            return const CircularProgressIndicator();
           } else if (snapshot.hasError) {
             return Text('Failed to start call: ${snapshot.error}');
           } else {
-            final callId = snapshot.data as String?;
+            final String? callId = snapshot.data;
             return Column(
               mainAxisSize: MainAxisSize.min,
-              children: [
+              children: <Widget>[
                 Text('Call ID: $callId'),
                 IconButton(
                   onPressed: () {
                     // Copy call ID to clipboard
                     Clipboard.setData(ClipboardData(text: callId!));
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
+                      const SnackBar(
                         content: Text('Call ID copied to clipboard'),
                         duration: Duration(seconds: 1),
                       ),
                     );
                   },
-                  icon: Icon(Icons.content_copy),
+                  icon: const Icon(Icons.content_copy),
                 ),
               ],
             );
@@ -109,10 +109,10 @@ class StartCallDialog extends StatelessWidget {
   Future<String> startCall(Map<String, dynamic> data) async {
     final String? token = sandBox.read(Constants.ACCESS_TOKEN);
     // Call your backend API to start the call
-    final response = await http.post(
+    final http.Response response = await http.post(
       Uri.parse(
           'https://orca-app-5dg8w.ondigitalocean.app/share/initiate-call'),
-      headers: {
+      headers: <String, String>{
         'Content-Type': 'application/json',
         'Authorization': 'bearer $token',
         'Accept': 'application/json',
@@ -123,7 +123,8 @@ class StartCallDialog extends StatelessWidget {
     if (response.statusCode == 200) {
       // Parse the response to get the call ID
       // final data = json.decode(response.body);
-      final data = ApiResponseModel.fromMap(jsonDecode(response.body));
+      final ApiResponseModel data =
+          ApiResponseModel.fromMap(jsonDecode(response.body));
       return data.data['callId'] as String;
     } else {
       throw Exception('Failed to start call');
@@ -141,22 +142,22 @@ class JoinCallDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text('Join Call'),
+      title: const Text('Join Call'),
       content: TextField(
         controller: _callIdController,
-        decoration: InputDecoration(
+        decoration: const InputDecoration(
           hintText: 'Enter Call ID',
         ),
       ),
-      actions: [
+      actions: <Widget>[
         ElevatedButton(
           onPressed: () {
-            final callId = _callIdController.text.trim();
+            final String callId = _callIdController.text.trim();
             // Navigate to the call page with the call ID
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => CallPage(
+                builder: (BuildContext context) => CallPage(
                   callID: callId,
                   userId: userId,
                   username: username,
@@ -164,13 +165,13 @@ class JoinCallDialog extends StatelessWidget {
               ),
             );
           },
-          child: Text('Join'),
+          child: const Text('Join'),
         ),
         ElevatedButton(
           onPressed: () {
             Navigator.pop(context); // Close the dialog
           },
-          child: Text('Cancel'),
+          child: const Text('Cancel'),
         ),
       ],
     );

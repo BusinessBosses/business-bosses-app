@@ -164,7 +164,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                           Expanded(
                             child: TabBarView(children: <Widget>[
                               NotificationListener<ScrollNotification>(
-                                onNotification: (notification) {
+                                onNotification: (ScrollNotification notification) {
                                   if (notification
                                       is ScrollUpdateNotification) {
                                     if (notification.dragDetails != null &&
@@ -206,7 +206,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                 ),
                               ),
                               NotificationListener<ScrollNotification>(
-                                onNotification: (notification) {
+                                onNotification: (ScrollNotification notification) {
                                   if (notification
                                       is ScrollUpdateNotification) {
                                     if (notification.dragDetails != null &&
@@ -242,7 +242,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                               ),
 
                               ///Marketplace
-                              Container(
+                              SizedBox(
                                   height: double.infinity,
                                   width: double.infinity,
                                   child: Obx(() {
@@ -256,7 +256,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                                 MainAxisAlignment.center,
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.center,
-                                            children: [
+                                            children: <Widget>[
                                               SvgPicture.asset(
                                                 'assets/svgs/store.svg',
                                                 height: 40,
@@ -280,7 +280,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                         : Container(
                                             child: ListView.builder(
                                               physics:
-                                                  NeverScrollableScrollPhysics(),
+                                                  const NeverScrollableScrollPhysics(),
                                               shrinkWrap: true,
                                               itemCount: marketController
                                                   .markets
@@ -325,7 +325,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                   })),
 
                               ///Forum or Resources
-                              Container(
+                              SizedBox(
                                   height: double.infinity,
                                   width: double.infinity,
                                   child: Obx(() {
@@ -335,7 +335,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                                 MainAxisAlignment.center,
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.center,
-                                            children: [
+                                            children: <Widget>[
                                               SvgPicture.asset(
                                                 'assets/svgs/courses.svg',
                                                 height: 40,
@@ -359,7 +359,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                         : Container(
                                             child: ListView.builder(
                                               physics:
-                                                  NeverScrollableScrollPhysics(),
+                                                  const NeverScrollableScrollPhysics(),
                                               shrinkWrap: true,
                                               itemCount: homeController
                                                   .userresources.length,

@@ -8,7 +8,6 @@ import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import '../../../common/widgets/safety_model.dart';
 
 Widget profilepostsdisplay(
     BuildContext context, UserModel publicUser, List<PostModel> posts,
@@ -20,7 +19,7 @@ Widget profilepostsdisplay(
       ? Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
+          children: <Widget>[
             SvgPicture.asset(
               'assets/svgs/text.svg',
               height: 40,

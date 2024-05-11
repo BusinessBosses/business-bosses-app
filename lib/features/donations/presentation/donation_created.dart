@@ -32,8 +32,8 @@ class _DonationCreatedState extends State<DonationCreated> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Stack(children: [
+        children: <Widget>[
+          Stack(children: <Widget>[
             Lottie.asset(
               'assets/anim/waiting.json',
               height: 100,

@@ -101,7 +101,7 @@ class _EventItemState extends State<EventItem> {
             animationCurve: Curves.elasticInOut,
             isOpenOnStart: false,
             shape: const CircleBorder(),
-            children: [
+            children: <SpeedDialChild>[
               SpeedDialChild(
                 child: Padding(
                   padding: const EdgeInsets.all(10.0),
@@ -270,7 +270,7 @@ class _EventItemState extends State<EventItem> {
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
+                              children: <Widget>[
                                 Row(
                                   children: <Widget>[
                                     const Icon(

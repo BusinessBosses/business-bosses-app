@@ -127,7 +127,7 @@ class _CreateBossUpScreenState extends State<CreateBossUpScreen> {
                   ),
                   const SizedBox(height: 12.0),
                   Row(
-                    children: [
+                    children: <Widget>[
                       Container(
                           decoration: BoxDecoration(
                               color: Colors.white,

@@ -1,4 +1,4 @@
-// ignore_for_file: always_specify_types
+// ignore_for_file: always_specify_types, deprecated_member_use
 
 import 'package:business_bosses_v2/action/action.dart';
 import 'package:business_bosses_v2/common/models/comment_model.dart';
@@ -104,6 +104,7 @@ class _DonationItemState extends State<DonationItem> {
     Duration difference = DateTime.now().difference(dateTime);
 
     // Format the duration
+    // ignore: unused_local_variable
     String formattedDifference = formatDuration(difference);
 
     return GestureDetector(
@@ -210,7 +211,7 @@ class _DonationItemState extends State<DonationItem> {
                                 ),
                                 widget.donation.user?.isSubscribed == true
                                     ? Wrap(children: [
-                                        SizedBox(width: 3),
+                                        const SizedBox(width: 3),
                                         SvgPicture.asset(
                                           'assets/svgs/premiumbadge.svg',
                                           height: 7,
@@ -246,7 +247,7 @@ class _DonationItemState extends State<DonationItem> {
                           widget.donation.description!,
                           style: const TextStyle(color: Colors.black45),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 10,
                         ),
                         Row(
@@ -273,7 +274,7 @@ class _DonationItemState extends State<DonationItem> {
                                             widget.donation.amountRecieved == 1
                                                 ? ' coin raised'
                                                 : ' coins raised',
-                                            style: TextStyle(
+                                            style: const TextStyle(
                                                 fontSize: 10,
                                                 color: subtextColor),
                                           ),
@@ -352,7 +353,7 @@ class _DonationItemState extends State<DonationItem> {
                                                     1
                                                 ? ' Supporter'
                                                 : ' Supporters',
-                                            style: TextStyle(
+                                            style: const TextStyle(
                                                 fontSize: 10,
                                                 color: subtextColor),
                                           ),

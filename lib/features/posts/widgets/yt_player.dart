@@ -6,7 +6,7 @@ import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 class YoutubeVideo extends StatefulWidget {
   final String youtubeUrl;
 
-  YoutubeVideo(this.youtubeUrl);
+  const YoutubeVideo(this.youtubeUrl, {super.key});
 
   @override
   _YoutubeVideoState createState() => _YoutubeVideoState();
@@ -14,7 +14,7 @@ class YoutubeVideo extends StatefulWidget {
 
 class _YoutubeVideoState extends State<YoutubeVideo> {
   late YoutubePlayerController _controller;
-  bool _isPlayerReady = false;
+  final bool _isPlayerReady = false;
   late String videoId;
 
   @override
@@ -57,7 +57,7 @@ class _YoutubeVideoState extends State<YoutubeVideo> {
   @override
   Widget build(BuildContext context) {
     return OrientationBuilder(
-      builder: (context, orientation) {
+      builder: (BuildContext context, Orientation orientation) {
         if (orientation == Orientation.portrait) {
           SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
         } else {
@@ -69,7 +69,7 @@ class _YoutubeVideoState extends State<YoutubeVideo> {
             child: Column(
               mainAxisSize: MainAxisSize.max,
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
+              children: <Widget>[
                 if (orientation == Orientation.portrait)
                   const SizedBox(
                     height: 50,
@@ -86,11 +86,11 @@ class _YoutubeVideoState extends State<YoutubeVideo> {
                       ),
                       child: YoutubePlayer(
                         showVideoProgressIndicator: true,
-                        onEnded: (metaData) {},
+                        onEnded: (YoutubeMetaData metaData) {},
                         controller: _controller,
                         aspectRatio: 1.5,
                         progressIndicatorColor: Colors.red,
-                        bottomActions: [
+                        bottomActions: <Widget>[
                           const SizedBox(width: 14.0),
                           CurrentPosition(),
                           const SizedBox(width: 8.0),
@@ -129,14 +129,14 @@ class _YoutubeVideoState extends State<YoutubeVideo> {
   }
 
   void portraitModeOnly() {
-    SystemChrome.setPreferredOrientations([
+    SystemChrome.setPreferredOrientations(<DeviceOrientation>[
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
   }
 
   void landscapeModeOnly() {
-    SystemChrome.setPreferredOrientations([
+    SystemChrome.setPreferredOrientations(<DeviceOrientation>[
       DeviceOrientation.landscapeLeft,
       DeviceOrientation.landscapeRight,
     ]);

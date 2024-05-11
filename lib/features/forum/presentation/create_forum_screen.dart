@@ -225,7 +225,7 @@ class _CreateForumScreenState extends State<CreateForumScreen> {
                     // ),
 
                     child: Row(
-                      children: [
+                      children: <Widget>[
                         Container(
                             decoration: BoxDecoration(
                                 color: Colors.white,

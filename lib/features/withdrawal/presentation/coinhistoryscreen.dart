@@ -103,7 +103,7 @@ class _CoinHistoryScreenState extends State<CoinHistoryScreen> {
                   child: CupertinoSlidingSegmentedControl<int>(
                     backgroundColor: Colors.grey[200]!,
                     padding: const EdgeInsets.all(5),
-                    children: <int, Widget>{
+                    children: const <int, Widget>{
                       0: Text('Withdrawals'),
                       1: Text('Coin Purchases'),
                     },
@@ -113,7 +113,7 @@ class _CoinHistoryScreenState extends State<CoinHistoryScreen> {
                           _currentIndex = value;
                           _pageController.animateToPage(
                             _currentIndex,
-                            duration: Duration(milliseconds: 300),
+                            duration: const Duration(milliseconds: 300),
                             curve: Curves.ease,
                           );
                         });
@@ -124,7 +124,7 @@ class _CoinHistoryScreenState extends State<CoinHistoryScreen> {
                 ),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 5,
             ),
             Expanded(
@@ -136,7 +136,7 @@ class _CoinHistoryScreenState extends State<CoinHistoryScreen> {
                       _currentIndex = index;
                     });
                   },
-                  children: <Widget>[
+                  children: const <Widget>[
                     WithdrawalScreen(),
                     DepositsScreen(),
                   ],

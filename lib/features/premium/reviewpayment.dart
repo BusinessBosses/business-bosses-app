@@ -1,3 +1,5 @@
+// ignore_for_file: always_specify_types
+
 import 'dart:io';
 
 import 'package:business_bosses_v2/common/widgets/buttons/custom_button.dart';
@@ -11,7 +13,6 @@ import 'package:url_launcher/url_launcher_string.dart';
 import '../../action/action.dart';
 import '../../common/dialogs/snackbar.dart';
 import '../../common/models/api_response_model.dart';
-import '../../common/widgets/buttons/my_button.dart';
 import '../../common/widgets/text_widget.dart';
 import '../../navigation/routes.dart';
 import '../../services/api_service.dart';
@@ -62,14 +63,12 @@ class _ReviewPaymentState extends State<ReviewPayment> {
     if (response.success) {
       Get.toNamed(Routes.subscriptionconfirmation);
     } else {
-      print(response);
       showSnackbar(
           title: 'OOPS!',
           message: 'An error occurred, please try again!',
           error: true);
     }
   }
-
 
   ///intialize the payment
   Future<void> makePayPallPayment(String plan) async {
@@ -88,6 +87,7 @@ class _ReviewPaymentState extends State<ReviewPayment> {
         showSnackBar(context, message: res.message);
       }
       setState(() {});
+      // ignore: empty_catches
     } catch (e) {}
   }
 
@@ -96,7 +96,7 @@ class _ReviewPaymentState extends State<ReviewPayment> {
     try {
       setState(() {});
       final ApiResponseModel res =
-          await ApiService.post(path: 'paystack', body: {
+          await ApiService.post(path: 'paystack', body: <String, dynamic>{
         'plan': argument['plan'],
       });
 
@@ -109,6 +109,7 @@ class _ReviewPaymentState extends State<ReviewPayment> {
         showSnackBar(context, message: res.message);
       }
       setState(() {});
+      // ignore: empty_catches
     } catch (e) {}
   }
 
@@ -346,76 +347,81 @@ class _ReviewPaymentState extends State<ReviewPayment> {
                   const SizedBox(
                     height: 10,
                   ),
-                  Platform.isIOS ? Padding(
-                    padding: const EdgeInsets.only(left: 8.0, right: 20),
-                    child: CustomButton(
-                        label: 'Subscribe now',
-                        onPressed: () async {
-                          argument;
-                          setState(() {
-                            _isProcessing = true;
-                          });
-                          try {
-                            await Purchases.purchaseProduct(
-                                argument.toString().contains('annually')
-                                    ? 'xyz.codexia.businessbosses.annual'
-                                    : 'xyz.codexia.businessbosses.monthly');
-                            Map<String, dynamic> data = <String, dynamic>{
-                              'price': argument['price'],
-                              'plan': argument['plan'],
-                            };
-                            sendapplePaymentData(data);
-                          } catch (e) {
-                            showSnackbar(
-                              title: 'OOPS!',
-                              message:
-                                  'An error occurred while making payment, please try again!',
-                              error: true,
-                            );
-                            setState(() {
-                              _isProcessing = false;
-                            });
-                          }
-                        },
-                        isProcessing: _isProcessing,
-                        buttonType: ButtonType.elevated,
-                        child: Container()),
-                  ) : 
-                   Padding(
-                    padding: const EdgeInsets.only(left: 8.0, right: 20),
-                    child: CustomButton(
-                        label: 'Subscribe now',
-                        onPressed: () async {
-                          argument;
-                          setState(() {
-                            _isProcessing = true;
-                          });
-                          try {
-                            await Purchases.purchaseProduct(
-                                argument.toString().contains('annually')
-                                    ? 'xyz.codexia.businessbosses.annual:premium-yearly'
-                                    : 'xyz.codexia.businessbosses.monthly:monthly-premium');
-                            Map<String, dynamic> data = <String, dynamic>{
-                              'price': argument['price'],
-                              'plan': argument['plan'],
-                            };
-                            sendapplePaymentData(data);
-                          } catch (e) {
-                            showSnackbar(
-                              title: 'OOPS!',
-                              message:
-                                  'An error occurred while making payment, please try again!',
-                              error: true,
-                            );
-                            setState(() {
-                              _isProcessing = false;
-                            });
-                          }
-                        },
-                        isProcessing: _isProcessing,
-                        buttonType: ButtonType.elevated,
-                        child: Container()),
-                  ),
+                  Platform.isIOS
+                      ? Padding(
+                          padding: const EdgeInsets.only(left: 8.0, right: 20),
+                          child: CustomButton(
+                              label: 'Subscribe now',
+                              onPressed: () async {
+                                argument;
+                                setState(() {
+                                  _isProcessing = true;
+                                });
+                                try {
+                                  // ignore: deprecated_member_use
+                                  await Purchases.purchaseProduct(argument
+                                          .toString()
+                                          .contains('annually')
+                                      ? 'xyz.codexia.businessbosses.annual'
+                                      : 'xyz.codexia.businessbosses.monthly');
+                                  Map<String, dynamic> data = <String, dynamic>{
+                                    'price': argument['price'],
+                                    'plan': argument['plan'],
+                                  };
+                                  sendapplePaymentData(data);
+                                } catch (e) {
+                                  showSnackbar(
+                                    title: 'OOPS!',
+                                    message:
+                                        'An error occurred while making payment, please try again!',
+                                    error: true,
+                                  );
+                                  setState(() {
+                                    _isProcessing = false;
+                                  });
+                                }
+                              },
+                              isProcessing: _isProcessing,
+                              buttonType: ButtonType.elevated,
+                              child: Container()),
+                        )
+                      : Padding(
+                          padding: const EdgeInsets.only(left: 8.0, right: 20),
+                          child: CustomButton(
+                              label: 'Subscribe now',
+                              onPressed: () async {
+                                argument;
+                                setState(() {
+                                  _isProcessing = true;
+                                });
+                                try {
+                                  // ignore: deprecated_member_use
+                                  await Purchases.purchaseProduct(argument
+                                          .toString()
+                                          .contains('annually')
+                                      ? 'xyz.codexia.businessbosses.annual:premium-yearly'
+                                      : 'xyz.codexia.businessbosses.monthly:monthly-premium');
+                                  Map<String, dynamic> data = <String, dynamic>{
+                                    'price': argument['price'],
+                                    'plan': argument['plan'],
+                                  };
+                                  sendapplePaymentData(data);
+                                } catch (e) {
+                                  showSnackbar(
+                                    title: 'OOPS!',
+                                    message:
+                                        'An error occurred while making payment, please try again!',
+                                    error: true,
+                                  );
+                                  setState(() {
+                                    _isProcessing = false;
+                                  });
+                                }
+                              },
+                              isProcessing: _isProcessing,
+                              buttonType: ButtonType.elevated,
+                              child: Container()),
+                        ),
 
                   // Padding(
                   //     padding: const EdgeInsets.only(left: 10.0, right: 20),
@@ -436,12 +442,12 @@ class _ReviewPaymentState extends State<ReviewPayment> {
                   //           .toList(),
                   //     ),
                   //   ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 10, right: 20),
+                  const Padding(
+                    padding: EdgeInsets.only(left: 10, right: 20),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        const SizedBox(
+                        SizedBox(
                           height: 20,
                         ),
                         // if (initPlan == 'Card Payment') ...<Widget>[

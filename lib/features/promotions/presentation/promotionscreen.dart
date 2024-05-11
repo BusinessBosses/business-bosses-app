@@ -1,20 +1,12 @@
-import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
-import 'package:business_bosses_v2/features/promotions/widgets/buycoinslist_item.dart';
 import 'package:business_bosses_v2/features/promotions/widgets/coinpopup.dart';
 import 'package:business_bosses_v2/features/withdrawal/presentation/depositscreen.dart';
 import 'package:business_bosses_v2/features/withdrawal/presentation/withdrawalscreen.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:purchases_flutter/purchases_flutter.dart';
-import 'package:zego_uikit_prebuilt_live_audio_room/zego_uikit_prebuilt_live_audio_room.dart';
-
-import '../../../action/action.dart';
-import '../../../navigation/routes.dart';
 
 class PromotionScreen extends StatefulWidget {
   static const String routeName = '/promotion-screen';
@@ -27,11 +19,12 @@ class PromotionScreen extends StatefulWidget {
 }
 
 class _PromotionScreenState extends State<PromotionScreen> {
+  // ignore: unused_field
   late String _referralId;
   final ProfileController _profileController = Get.find();
-  List<String> coinAmounts = ['100', '200', '500', '1000', '10000'];
-  List<String> coinPrices = ['0.99', '1.99', '4.99', '9.99', '99.99'];
-  List<String> coinIDs = [
+  List<String> coinAmounts = <String>['100', '200', '500', '1000', '10000'];
+  List<String> coinPrices = <String>['0.99', '1.99', '4.99', '9.99', '99.99'];
+  List<String> coinIDs = <String>[
     '100_bb_coins',
     '200_bb_coins',
     '500_bb_coins',
@@ -44,7 +37,6 @@ class _PromotionScreenState extends State<PromotionScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _referralId = _profileController.myProfile.inviteId!;
     _pageController = PageController(initialPage: _currentIndex);
@@ -52,6 +44,7 @@ class _PromotionScreenState extends State<PromotionScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // ignore: unused_local_variable
     ProfileController profileController = Get.find();
     return Scaffold(
         appBar: AppBar(
@@ -61,7 +54,7 @@ class _PromotionScreenState extends State<PromotionScreen> {
               },
               icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
             ),
-            actions: [
+            actions: <Widget>[
               GestureDetector(
                 onTap: () {
                   showDialog(
@@ -87,7 +80,7 @@ class _PromotionScreenState extends State<PromotionScreen> {
                     const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                 child: Wrap(
                     crossAxisAlignment: WrapCrossAlignment.center,
-                    children: [
+                    children: <Widget>[
                       const Text(
                         'My Coin Balance',
                         style: TextStyle(
@@ -112,7 +105,7 @@ class _PromotionScreenState extends State<PromotionScreen> {
         backgroundColor: Colors.white,
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+          children: <Widget>[
             Container(
               color: Colors.white,
               child: Padding(
@@ -123,7 +116,7 @@ class _PromotionScreenState extends State<PromotionScreen> {
                   child: CupertinoSlidingSegmentedControl<int>(
                     backgroundColor: Colors.grey[200]!,
                     padding: const EdgeInsets.all(5),
-                    children: {
+                    children: <int, Widget>{
                       0: Text('Earn',
                           style: _currentIndex == 0
                               ? const TextStyle(fontWeight: FontWeight.bold)
@@ -166,19 +159,17 @@ class _PromotionScreenState extends State<PromotionScreen> {
               ),
             ),
             Expanded(
-              child: Container(
-                child: PageView(
-                  controller: _pageController,
-                  onPageChanged: (int index) {
-                    setState(() {
-                      _currentIndex = index;
-                    });
-                  },
-                  children: const [
-                    DepositsScreen(),
-                    WithdrawalScreen(),
-                  ],
-                ),
+              child: PageView(
+                controller: _pageController,
+                onPageChanged: (int index) {
+                  setState(() {
+                    _currentIndex = index;
+                  });
+                },
+                children: const <Widget>[
+                  DepositsScreen(),
+                  WithdrawalScreen(),
+                ],
               ),
             ),
           ],

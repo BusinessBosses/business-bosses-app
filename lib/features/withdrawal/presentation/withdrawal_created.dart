@@ -1,7 +1,4 @@
 import 'package:business_bosses_v2/common/widgets/safety_model.dart';
-import 'package:business_bosses_v2/features/home/all_communities_screen.dart';
-import 'package:business_bosses_v2/features/profile/presentation/myprofilescreen.dart';
-import 'package:business_bosses_v2/features/promotions/presentation/promotionscreen.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -33,8 +30,8 @@ class _WithdrawalCreatedState extends State<WithdrawalCreated> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Stack(children: [
+        children: <Widget>[
+          Stack(children: <Widget>[
             Lottie.asset(
               'assets/anim/waiting.json',
               height: 100,

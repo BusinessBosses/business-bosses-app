@@ -345,7 +345,7 @@ class _DonationsPageState extends State<DonationsPage> {
               builder: (DonationsController controller) {
                 return Container(
                   child: Column(
-                    children: [
+                    children: <Widget>[
                       Padding(
                         padding: const EdgeInsets.only(
                             right: 15, left: 15, bottom: 10, top: 10),
@@ -375,7 +375,7 @@ class _DonationsPageState extends State<DonationsPage> {
                                     child: Container(
                                       width: 142,
                                       padding:
-                                          EdgeInsets.symmetric(vertical: 1),
+                                          const EdgeInsets.symmetric(vertical: 1),
                                       decoration: BoxDecoration(
                                           color: backgroundColor,
                                           borderRadius:
@@ -430,7 +430,7 @@ class _DonationsPageState extends State<DonationsPage> {
                             )),
                       ),
                       controller.loading.value
-                          ? Expanded(
+                          ? const Expanded(
                               child: Center(
                                 child: CircularProgressIndicator(),
                               ),

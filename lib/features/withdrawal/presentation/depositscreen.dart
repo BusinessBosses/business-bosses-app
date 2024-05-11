@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use, always_specify_types
+
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/features/home/all_communities_screen.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
@@ -32,6 +34,7 @@ class _DepositsScreenState extends State<DepositsScreen> {
   final ProfileController _profileController = Get.find();
   final CoinHistoryController coinHistoryController =
       Get.put(CoinHistoryController());
+  // ignore: unused_field
   String? _paymentmethods;
   late String _referralId;
   List<String> coinAmounts = <String>['100', '200', '500', '1000', '10000'];
@@ -480,7 +483,7 @@ class _DepositsScreenState extends State<DepositsScreen> {
             },
             body: SingleChildScrollView(
               child: Column(
-                children: [
+                children: <Widget>[
                   Theme(
                     data: theme,
                     child: ExpansionTile(
@@ -494,7 +497,7 @@ class _DepositsScreenState extends State<DepositsScreen> {
                       title: const Text('Top up history',
                           style: TextStyle(
                               fontWeight: FontWeight.w700, fontSize: 16)),
-                      children: [
+                      children: <Widget>[
                         FutureBuilder<void>(
                           future: coinHistoryController.initHistory(),
                           builder: (BuildContext context,
@@ -510,7 +513,6 @@ class _DepositsScreenState extends State<DepositsScreen> {
                               // If an error occurs during data fetching, handle it accordingly
                               return Text('Error: ${snapshot.error}');
                             } else {
-                              print(coinHistoryController.coindepositsHistory);
                               // If data fetching is successful, build your UI with the fetched data
                               return Container(
                                 child: coinHistoryController
@@ -522,16 +524,16 @@ class _DepositsScreenState extends State<DepositsScreen> {
                                               MainAxisAlignment.center,
                                           crossAxisAlignment:
                                               CrossAxisAlignment.center,
-                                          children: [
+                                          children: <Widget>[
                                             SvgPicture.asset(
                                               'assets/svgs/coinnn.svg',
                                               height: 40,
                                               color: Colors.grey,
                                             ),
-                                            SizedBox(
+                                            const SizedBox(
                                               height: 10,
                                             ),
-                                            Text(
+                                            const Text(
                                               'No Coin Deposits Found',
                                               style: TextStyle(
                                                   fontWeight: FontWeight.w700,
@@ -541,32 +543,29 @@ class _DepositsScreenState extends State<DepositsScreen> {
                                         ),
                                       )
                                     : Column(
-                                        children: [
-                                          WithdrawalHeaderItem(),
-                                          Container(
-                                            child: ListView.builder(
-                                              physics:
-                                                  NeverScrollableScrollPhysics(),
-                                              shrinkWrap: true,
-                                              itemCount: coinHistoryController
-                                                  .coindepositsHistory.length,
-                                              itemBuilder:
-                                                  (BuildContext context,
-                                                      int i) {
-                                                coinHistoryController
-                                                    .coindepositsHistory
-                                                    .sort((a, b) => DateTime
-                                                            .parse(b['date'])
-                                                        .compareTo(
-                                                            DateTime.parse(
-                                                                a['date'])));
+                                        children: <Widget>[
+                                          const WithdrawalHeaderItem(),
+                                          ListView.builder(
+                                            physics:
+                                                const NeverScrollableScrollPhysics(),
+                                            shrinkWrap: true,
+                                            itemCount: coinHistoryController
+                                                .coindepositsHistory.length,
+                                            itemBuilder:
+                                                (BuildContext context, int i) {
+                                              coinHistoryController
+                                                  .coindepositsHistory
+                                                  .sort((a, b) =>
+                                                      DateTime.parse(b['date'])
+                                                          .compareTo(
+                                                              DateTime.parse(
+                                                                  a['date'])));
 
-                                                return WithdrawalItem(
-                                                  item: coinHistoryController
-                                                      .coinwithdrawalHistory[i],
-                                                );
-                                              },
-                                            ),
+                                              return WithdrawalItem(
+                                                item: coinHistoryController
+                                                    .coinwithdrawalHistory[i],
+                                              );
+                                            },
                                           ),
                                         ],
                                       ),
