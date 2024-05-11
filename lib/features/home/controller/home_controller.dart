@@ -37,12 +37,16 @@ class HomeController extends GetxController {
   //     Get.put(CommunitiesController());
 
   RxBool error = RxBool(false);
+  RxBool dError = RxBool(false);
+  RxBool cError = RxBool(false);
   RxBool noConnection = RxBool(false);
   List<Industry> industries = [];
   List<UserModel> bossupMembers = [];
 
   RxInt paginationPage = RxInt(1);
   RxBool loading = RxBool(false);
+  RxBool dLoading = RxBool(false);
+  RxBool cLoading = RxBool(false);
   RxBool loadingMore = RxBool(false);
   List<Map<String, dynamic>>? bossUp = [];
   RxBool refreshing = RxBool(false);
@@ -118,7 +122,7 @@ class HomeController extends GetxController {
 
   Future<void> fetchuserCourses(String userId) async {
     try {
-      loading(true); // Set loading to true before fetching data
+      cLoading(true); // Set loading to true before fetching data
 
       ApiResponseModel response =
           await ApiService.get(path: 'courses/get-user-courses/$userId');
@@ -130,27 +134,24 @@ class HomeController extends GetxController {
           for (int i = 0; i < response.data['Courses']['rows'].length; i++) {
             CourseModel usercourse = CourseModel.fromMap(<String, dynamic>{
               ...response.data['Courses']['rows'][i],
-              'likes': response.data['Courses']['rows'][i]['likes']
-                  .map((dynamic like) => like['userId'].toString())
-                  .toList(),
             });
             usercourses.add(usercourse);
           }
         }
       } else {
-        error(true);
+        cError(true);
       }
     } catch (e) {
-      error(true); // Set error to true if there's an error
+      cError(true); // Set error to true if there's an error
     } finally {
-      loading(false); // Set loading back to false after fetching data
+      cLoading(false); // Set loading back to false after fetching data
     }
     update();
   }
 
   Future<void> fetchuserResources(String userId) async {
     try {
-      loading(true); // Set loading to true before fetching data
+      dLoading(true); // Set loading to true before fetching data
 
       ApiResponseModel response = await ApiService.get(
           path: 'forum/get-user-forum/$userId?page=0&size=20');
@@ -169,12 +170,12 @@ class HomeController extends GetxController {
           }
         }
       } else {
-        error(true); // Set error to true if there's an error
+        dError(true); // Set error to true if there's an error
       }
     } catch (e) {
-      error(true); // Set error to true if there's an error
+      dError(true); // Set error to true if there's an error
     } finally {
-      loading(false); // Set loading back to false after fetching data
+      dLoading(false); // Set loading back to false after fetching data
     }
     update();
   }

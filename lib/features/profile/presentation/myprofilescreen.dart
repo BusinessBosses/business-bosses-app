@@ -49,8 +49,8 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
   void initState() {
     super.initState();
     donationsController.fetchuserDonations(profileController.myProfile.uid);
-    homeController.fetchuserCourses(profileController.myProfile.uid);
     homeController.fetchuserResources(profileController.myProfile.uid);
+    homeController.fetchuserCourses(profileController.myProfile.uid);
   }
 
   @override
@@ -164,7 +164,8 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                           Expanded(
                             child: TabBarView(children: <Widget>[
                               NotificationListener<ScrollNotification>(
-                                onNotification: (ScrollNotification notification) {
+                                onNotification:
+                                    (ScrollNotification notification) {
                                   if (notification
                                       is ScrollUpdateNotification) {
                                     if (notification.dragDetails != null &&
@@ -206,7 +207,8 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                 ),
                               ),
                               NotificationListener<ScrollNotification>(
-                                onNotification: (ScrollNotification notification) {
+                                onNotification:
+                                    (ScrollNotification notification) {
                                   if (notification
                                       is ScrollUpdateNotification) {
                                     if (notification.dragDetails != null &&
@@ -277,50 +279,46 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                               ),
                                             ],
                                           )
-                                        : Container(
-                                            child: ListView.builder(
-                                              physics:
-                                                  const NeverScrollableScrollPhysics(),
-                                              shrinkWrap: true,
-                                              itemCount: marketController
-                                                  .markets
-                                                  .where((MarketModel market) =>
-                                                      market.userId ==
-                                                      profileController
-                                                          .myProfile.uid)
-                                                  .length,
-                                              itemBuilder:
-                                                  (BuildContext context,
-                                                      int index) {
-                                                final List<MarketModel>
-                                                    filteredMarkets =
-                                                    marketController.markets
-                                                        .where((MarketModel
-                                                                market) =>
-                                                            market.userId ==
-                                                            profileController
-                                                                .myProfile.uid)
-                                                        .toList();
-                                                final MarketModel market =
-                                                    filteredMarkets[index];
+                                        : ListView.builder(
+                                            physics:
+                                                const NeverScrollableScrollPhysics(),
+                                            shrinkWrap: true,
+                                            itemCount: marketController.markets
+                                                .where((MarketModel market) =>
+                                                    market.userId ==
+                                                    profileController
+                                                        .myProfile.uid)
+                                                .length,
+                                            itemBuilder: (BuildContext context,
+                                                int index) {
+                                              final List<MarketModel>
+                                                  filteredMarkets =
+                                                  marketController.markets
+                                                      .where((MarketModel
+                                                              market) =>
+                                                          market.userId ==
+                                                          profileController
+                                                              .myProfile.uid)
+                                                      .toList();
+                                              final MarketModel market =
+                                                  filteredMarkets[index];
 
-                                                return market.isProduct
-                                                    ? MarketTile(
-                                                        post: market,
-                                                        controller:
-                                                            marketController,
-                                                        key: ValueKey(
-                                                            market.marketId),
-                                                      )
-                                                    : ServiceTile(
-                                                        post: market,
-                                                        controller:
-                                                            marketController,
-                                                        key: ValueKey(
-                                                            market.marketId),
-                                                      );
-                                              },
-                                            ),
+                                              return market.isProduct
+                                                  ? MarketTile(
+                                                      post: market,
+                                                      controller:
+                                                          marketController,
+                                                      key: ValueKey(
+                                                          market.marketId),
+                                                    )
+                                                  : ServiceTile(
+                                                      post: market,
+                                                      controller:
+                                                          marketController,
+                                                      key: ValueKey(
+                                                          market.marketId),
+                                                    );
+                                            },
                                           );
                                   })),
 
@@ -329,51 +327,86 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                   height: double.infinity,
                                   width: double.infinity,
                                   child: Obx(() {
-                                    return homeController.userresources.isEmpty
-                                        ? Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            children: <Widget>[
-                                              SvgPicture.asset(
-                                                'assets/svgs/courses.svg',
-                                                height: 40,
-                                                color: Colors.grey,
-                                              ),
-                                              const SizedBox(
-                                                height: 10,
-                                              ),
-                                              const Text(
-                                                'No Resources Found',
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.w700,
-                                                  fontSize: 15,
-                                                ),
-                                              ),
-                                              const SizedBox(
-                                                height: 50,
-                                              ),
-                                            ],
+                                    return homeController.dLoading.value
+                                        ? const Center(
+                                            child: CircularProgressIndicator(),
                                           )
-                                        : Container(
-                                            child: ListView.builder(
-                                              physics:
-                                                  const NeverScrollableScrollPhysics(),
-                                              shrinkWrap: true,
-                                              itemCount: homeController
-                                                  .userresources.length,
-                                              itemBuilder:
-                                                  (BuildContext context,
-                                                      int i) {
-                                                return ForumItem(
-                                                  forum: homeController
-                                                      .userresources[i],
-                                                  controller: homeController,
-                                                );
-                                              },
-                                            ),
-                                          );
+                                        : homeController.dError.value
+                                            ? Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
+                                                children: <Widget>[
+                                                  SvgPicture.asset(
+                                                    'assets/svgs/courses.svg',
+                                                    height: 40,
+                                                    color: Colors.grey,
+                                                  ),
+                                                  const SizedBox(
+                                                    height: 10,
+                                                  ),
+                                                  const Text(
+                                                    'Error Loading Resourses!',
+                                                    style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w700,
+                                                      fontSize: 15,
+                                                    ),
+                                                  ),
+                                                  const SizedBox(
+                                                    height: 50,
+                                                  ),
+                                                ],
+                                              )
+                                            : homeController
+                                                    .userresources.isEmpty
+                                                ? Column(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .center,
+                                                    children: <Widget>[
+                                                      SvgPicture.asset(
+                                                        'assets/svgs/courses.svg',
+                                                        height: 40,
+                                                        color: Colors.grey,
+                                                      ),
+                                                      const SizedBox(
+                                                        height: 10,
+                                                      ),
+                                                      const Text(
+                                                        'No Resources Found',
+                                                        style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.w700,
+                                                          fontSize: 15,
+                                                        ),
+                                                      ),
+                                                      const SizedBox(
+                                                        height: 50,
+                                                      ),
+                                                    ],
+                                                  )
+                                                : ListView.builder(
+                                                    physics:
+                                                        const NeverScrollableScrollPhysics(),
+                                                    shrinkWrap: true,
+                                                    itemCount: homeController
+                                                        .userresources.length,
+                                                    itemBuilder:
+                                                        (BuildContext context,
+                                                            int i) {
+                                                      return ForumItem(
+                                                        forum: homeController
+                                                            .userresources[i],
+                                                        controller:
+                                                            homeController,
+                                                      );
+                                                    },
+                                                  );
                                   })),
 
                               ///Donations
@@ -445,47 +478,80 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                 height: double.infinity,
                                 width: double.infinity,
                                 child: Obx(() {
-                                  return homeController.usercourses.isEmpty
-                                      ? Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: <Widget>[
-                                            SvgPicture.asset(
-                                              'assets/svgs/courses.svg',
-                                              height: 40,
-                                              color: Colors.grey,
-                                            ),
-                                            const SizedBox(
-                                              height: 10,
-                                            ),
-                                            const Text(
-                                              'No Courses Found',
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.w700,
-                                                fontSize: 15,
-                                              ),
-                                            ),
-                                            const SizedBox(
-                                              height: 50,
-                                            ),
-                                          ],
+                                  return homeController.cLoading.value
+                                      ? const Center(
+                                          child: CircularProgressIndicator(),
                                         )
-                                      : ListView.builder(
-                                          physics:
-                                              const NeverScrollableScrollPhysics(),
-                                          shrinkWrap: true,
-                                          itemCount:
-                                              homeController.usercourses.length,
-                                          itemBuilder:
-                                              (BuildContext context, int i) {
-                                            return CourseItem(
-                                              course:
-                                                  homeController.usercourses[i],
-                                            );
-                                          },
-                                        );
+                                      : homeController.cError.value
+                                          ? Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              children: <Widget>[
+                                                SvgPicture.asset(
+                                                  'assets/svgs/courses.svg',
+                                                  height: 40,
+                                                  color: Colors.grey,
+                                                ),
+                                                const SizedBox(
+                                                  height: 10,
+                                                ),
+                                                const Text(
+                                                  'Error Loading Courses!',
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.w700,
+                                                    fontSize: 15,
+                                                  ),
+                                                ),
+                                                const SizedBox(
+                                                  height: 50,
+                                                ),
+                                              ],
+                                            )
+                                          : homeController.usercourses.isEmpty
+                                              ? Column(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
+                                                  children: <Widget>[
+                                                    SvgPicture.asset(
+                                                      'assets/svgs/courses.svg',
+                                                      height: 40,
+                                                      color: Colors.grey,
+                                                    ),
+                                                    const SizedBox(
+                                                      height: 10,
+                                                    ),
+                                                    const Text(
+                                                      'No Courses Found',
+                                                      style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.w700,
+                                                        fontSize: 15,
+                                                      ),
+                                                    ),
+                                                    const SizedBox(
+                                                      height: 50,
+                                                    ),
+                                                  ],
+                                                )
+                                              : ListView.builder(
+                                                  physics:
+                                                      const NeverScrollableScrollPhysics(),
+                                                  shrinkWrap: true,
+                                                  itemCount: homeController
+                                                      .usercourses.length,
+                                                  itemBuilder:
+                                                      (BuildContext context,
+                                                          int i) {
+                                                    return CourseItem(
+                                                      course: homeController
+                                                          .usercourses[i],
+                                                    );
+                                                  },
+                                                );
                                 }),
                               )
                             ]),

@@ -23,6 +23,7 @@ class Ranking {
     };
   }
 
+  // ignore: always_specify_types
   factory Ranking.fromMap(Map map) {
     return Ranking(
       uid: map['uid'] as String,

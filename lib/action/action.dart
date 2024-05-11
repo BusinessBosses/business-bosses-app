@@ -33,6 +33,7 @@ Future<dynamic> navigateTo(
     return await Navigator.of(context).pushNamedAndRemoveUntil(
         // ignore: always_specify_types
         routeName,
+        // ignore: always_specify_types
         (Route route) => false,
         arguments: arguments);
   } else {
