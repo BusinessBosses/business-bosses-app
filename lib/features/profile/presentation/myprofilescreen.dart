@@ -1,6 +1,7 @@
 import 'package:business_bosses_v2/features/courses/controller/course_controller.dart';
 import 'package:business_bosses_v2/features/courses/presentation/course_item.dart';
 import 'package:business_bosses_v2/features/donations/controller/donations_controller.dart';
+import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/donations/widgets/donation_item.dart';
 import 'package:business_bosses_v2/features/forum/controller/forum_controller.dart';
 import 'package:business_bosses_v2/features/home/widgets/bottom_bar.dart';
@@ -15,7 +16,6 @@ import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:business_bosses_v2/features/live_event/widgets/my_events.dart';
 import 'package:get/get.dart';
-import '../../../common/widgets/safety_model.dart';
 import '../../../common/widgets/tiles/outlinebuttonheader.dart';
 import '../../../navigation/routes.dart';
 import '../../marketplace/controllers/market_controller.dart';
@@ -41,19 +41,20 @@ class MyProfileScreen extends StatefulWidget {
 class _MyProfileScreenState extends State<MyProfileScreen> {
   final ProfileController profileController = Get.find();
   final MarketController marketController = Get.find();
+  final HomeController homeController = Get.find();
   final LiveController liveEventController = Get.put(LiveController());
   final DonationsController donationsController =
       Get.put(DonationsController());
-  // final ForumController forumController = Get.put(ForumController());
-  // final CourseController courseController = Get.put(CourseController());
+  final ForumController forumController = Get.put(ForumController());
+  final CourseController courseController = Get.put(CourseController());
   bool isScrolled = true;
 
   @override
   void initState() {
     super.initState();
     donationsController.fetchuserDonations(profileController.myProfile.uid);
-    // courseController.fetchuserCourses(profileController.myProfile.uid);
-    // forumController.fetchuserResources(profileController.myProfile.uid);
+    courseController.fetchuserCourses(profileController.myProfile.uid);
+    forumController.fetchuserResources(profileController.myProfile.uid);
   }
 
   @override
@@ -328,56 +329,56 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                   })),
 
                               ///Forum or Resources
-                              // Container(
-                              //     height: double.infinity,
-                              //     width: double.infinity,
-                              //     child: Obx(() {
-                              //       return forumController.userresources.isEmpty
-                              //           ? Column(
-                              //               mainAxisAlignment:
-                              //                   MainAxisAlignment.center,
-                              //               crossAxisAlignment:
-                              //                   CrossAxisAlignment.center,
-                              //               children: [
-                              //                 SvgPicture.asset(
-                              //                   'assets/svgs/courses.svg',
-                              //                   height: 40,
-                              //                   color: Colors.grey,
-                              //                 ),
-                              //                 const SizedBox(
-                              //                   height: 10,
-                              //                 ),
-                              //                 const Text(
-                              //                   'No Resources Found',
-                              //                   style: TextStyle(
-                              //                     fontWeight: FontWeight.w700,
-                              //                     fontSize: 15,
-                              //                   ),
-                              //                 ),
-                              //                 const SizedBox(
-                              //                   height: 50,
-                              //                 ),
-                              //               ],
-                              //             )
-                              //           : Container(
-                              //               child: ListView.builder(
-                              //                 physics:
-                              //                     NeverScrollableScrollPhysics(),
-                              //                 shrinkWrap: true,
-                              //                 itemCount: forumController
-                              //                     .userresources.length,
-                              //                 itemBuilder:
-                              //                     (BuildContext context,
-                              //                         int i) {
-                              //                   return ForumItem(
-                              //                     forum: forumController
-                              //                         .userresources[i],
-                              //                     controller: null!,
-                              //                   );
-                              //                 },
-                              //               ),
-                              //             );
-                              //     })),
+                              Container(
+                                  height: double.infinity,
+                                  width: double.infinity,
+                                  child: Obx(() {
+                                    return forumController.userresources.isEmpty
+                                        ? Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: [
+                                              SvgPicture.asset(
+                                                'assets/svgs/courses.svg',
+                                                height: 40,
+                                                color: Colors.grey,
+                                              ),
+                                              const SizedBox(
+                                                height: 10,
+                                              ),
+                                              const Text(
+                                                'No Resources Found',
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.w700,
+                                                  fontSize: 15,
+                                                ),
+                                              ),
+                                              const SizedBox(
+                                                height: 50,
+                                              ),
+                                            ],
+                                          )
+                                        : Container(
+                                            child: ListView.builder(
+                                              physics:
+                                                  NeverScrollableScrollPhysics(),
+                                              shrinkWrap: true,
+                                              itemCount: forumController
+                                                  .userresources.length,
+                                              itemBuilder:
+                                                  (BuildContext context,
+                                                      int i) {
+                                                return ForumItem(
+                                                  forum: forumController
+                                                      .userresources[i],
+                                                  controller: homeController,
+                                                );
+                                              },
+                                            ),
+                                          );
+                                  })),
 
                               ///Donations
                               Container(
@@ -446,58 +447,56 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                           );
                                   })),
 
-                           
-
                               ///Courses
-                              // Container(
-                              //   height: double.infinity,
-                              //   width: double.infinity,
-                              //   child: Obx(() {
-                              //     return courseController.usercourses.isEmpty
-                              //         ? Column(
-                              //             mainAxisAlignment:
-                              //                 MainAxisAlignment.center,
-                              //             crossAxisAlignment:
-                              //                 CrossAxisAlignment.center,
-                              //             children: [
-                              //               SvgPicture.asset(
-                              //                 'assets/svgs/courses.svg',
-                              //                 height: 40,
-                              //                 color: Colors.grey,
-                              //               ),
-                              //               const SizedBox(
-                              //                 height: 10,
-                              //               ),
-                              //               const Text(
-                              //                 'No Courses Found',
-                              //                 style: TextStyle(
-                              //                   fontWeight: FontWeight.w700,
-                              //                   fontSize: 15,
-                              //                 ),
-                              //               ),
-                              //               const SizedBox(
-                              //                 height: 50,
-                              //               ),
-                              //             ],
-                              //           )
-                              //         : Container(
-                              //             child: ListView.builder(
-                              //               physics:
-                              //                   NeverScrollableScrollPhysics(),
-                              //               shrinkWrap: true,
-                              //               itemCount: courseController
-                              //                   .usercourses.length,
-                              //               itemBuilder:
-                              //                   (BuildContext context, int i) {
-                              //                 return CourseItem(
-                              //                   course: courseController
-                              //                       .usercourses[i],
-                              //                 );
-                              //               },
-                              //             ),
-                              //           );
-                              //   }),
-                              // )
+                              Container(
+                                height: double.infinity,
+                                width: double.infinity,
+                                child: Obx(() {
+                                  return courseController.usercourses.isEmpty
+                                      ? Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            SvgPicture.asset(
+                                              'assets/svgs/courses.svg',
+                                              height: 40,
+                                              color: Colors.grey,
+                                            ),
+                                            const SizedBox(
+                                              height: 10,
+                                            ),
+                                            const Text(
+                                              'No Courses Found',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.w700,
+                                                fontSize: 15,
+                                              ),
+                                            ),
+                                            const SizedBox(
+                                              height: 50,
+                                            ),
+                                          ],
+                                        )
+                                      : Container(
+                                          child: ListView.builder(
+                                            physics:
+                                                NeverScrollableScrollPhysics(),
+                                            shrinkWrap: true,
+                                            itemCount: courseController
+                                                .usercourses.length,
+                                            itemBuilder:
+                                                (BuildContext context, int i) {
+                                              return CourseItem(
+                                                course: courseController
+                                                    .usercourses[i],
+                                              );
+                                            },
+                                          ),
+                                        );
+                                }),
+                              )
                             ]),
                           ),
                         ],
