@@ -6,6 +6,7 @@ import 'package:business_bosses_v2/features/home/controller/commumities_controll
 import 'package:business_bosses_v2/features/home/widgets/bottom_bar.dart';
 import 'package:business_bosses_v2/features/home/widgets/floatingbutton.dart';
 import 'package:business_bosses_v2/features/live_event/controller/live_event_controller.dart';
+import 'package:business_bosses_v2/features/donations/controller/donations_controller.dart';
 import 'package:business_bosses_v2/features/live_event/presentation/live_event.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -42,9 +43,12 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   final ProfileController _profileController = Get.find();
+  final HomeController homeController = Get.put(HomeController());
   final LiveController liveEventController = Get.put(LiveController());
   final ChallengeController challengeController =
       Get.put(ChallengeController());
+  final DonationsController donationsController =
+      Get.put(DonationsController());
   late IO.Socket socket;
   bool isScrolled = true;
   // List<TargetFocus> targets = [];

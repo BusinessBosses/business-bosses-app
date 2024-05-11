@@ -127,7 +127,7 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
               title: Text(
                 widget.course.title!,
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 20),
+                style: const TextStyle(fontSize: 20),
               ),
               expandedHeight: 300.0,
               collapsedHeight: 300.0,
@@ -137,7 +137,7 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
                 background: Padding(
                   padding: const EdgeInsets.only(top: 120.0),
                   child: Stack(
-                    children: [
+                    children: <Widget>[
                       YoutubeDisplay(
                         widget.course.youtubeUrls![selectedVideo],
                         corner: BorderRadius.circular(0),
@@ -168,18 +168,18 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
             ),
           ];
         },
-        body: Stack(children: [
+        body: Stack(children: <Widget>[
           SingleChildScrollView(
             child: Container(
               color: Colors.white,
               child: Column(
-                children: [
+                children: <Widget>[
                   Padding(
                     padding: const EdgeInsets.all(15.0),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
+                      children: <Widget>[
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -495,13 +495,14 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
                         ),
                         Text(
                           widget.course.description!,
-                          style: TextStyle(fontSize: 15, color: textColor),
+                          style:
+                              const TextStyle(fontSize: 15, color: textColor),
                         ),
                         Row(
                           children: <Widget>[
-                            Stack(children: [
+                            Stack(children: <Widget>[
                               Row(
-                                children: [
+                                children: <Widget>[
                                   SizedBox(
                                     height: 30.0,
                                     width: 30.0,
@@ -536,7 +537,7 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
                                   ),
                                   widget.course.user?.isSubscribed == true
                                       ? Wrap(children: [
-                                          SizedBox(width: 3),
+                                          const SizedBox(width: 3),
                                           SvgPicture.asset(
                                             'assets/svgs/premiumbadge.svg',
                                             height: 7,
@@ -547,7 +548,7 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
                                 ],
                               ),
                               SpeedDial(
-                                buttonSize: Size(100, 30),
+                                buttonSize: const Size(100, 30),
                                 backgroundColor: Colors.transparent,
                                 iconTheme: const IconThemeData(
                                     color: Colors.transparent),
@@ -567,7 +568,7 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
                                 elevation: 0.0,
                                 animationCurve: Curves.elasticInOut,
                                 isOpenOnStart: false,
-                                children: [
+                                children: <SpeedDialChild>[
                                   SpeedDialChild(
                                       child: Padding(
                                         padding: const EdgeInsets.all(10.0),
@@ -623,7 +624,7 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
                                     CourseReviewScreen(course: widget.course));
                               },
                               child: Wrap(
-                                children: [
+                                children: <Widget>[
                                   const Icon(
                                     Icons.star,
                                     color: Color.fromRGBO(255, 202, 40, 1),
@@ -658,7 +659,7 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
                           ],
                         ),
                         widget.course.youtubeUrls!.length > 1
-                            ? Container(
+                            ? SizedBox(
                                 height: 90,
                                 child: ListView.builder(
                                     scrollDirection: Axis.horizontal,
@@ -667,9 +668,9 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
                                     itemBuilder:
                                         (BuildContext context, int index) {
                                       return Row(
-                                        children: [
-                                          Stack(children: [
-                                            Container(
+                                        children: <Widget>[
+                                          Stack(children: <Widget>[
+                                            SizedBox(
                                               height: 90,
                                               width: 160,
                                               child: ClipRRect(
@@ -715,7 +716,7 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
                                               },
                                               child: Stack(
                                                 alignment: Alignment.center,
-                                                children: [
+                                                children: <Widget>[
                                                   Container(
                                                     height: 90,
                                                     width: 160,
@@ -799,8 +800,8 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
                                         runAlignment: WrapAlignment.center,
                                         crossAxisAlignment:
                                             WrapCrossAlignment.center,
-                                        children: [
-                                          Text('Buy Course for '),
+                                        children: <Widget>[
+                                          const Text('Buy Course for '),
                                           SvgPicture.asset(
                                               'assets/svgs/coin.svg'),
                                           Text(' ${widget.course.price!}')
@@ -918,7 +919,7 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
                         horizontal: 15.0, vertical: 15),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
+                      children: <Widget>[
                         GestureDetector(
                           onTap: () {
                             showModalBottomSheet(
@@ -933,7 +934,7 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
                           },
                           child: Wrap(
                             crossAxisAlignment: WrapCrossAlignment.center,
-                            children: [
+                            children: <Widget>[
                               SvgPicture.asset('assets/svgs/comment.svg'),
                               const SizedBox(
                                 width: 10,

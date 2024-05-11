@@ -6,6 +6,7 @@ import 'package:business_bosses_v2/common/models/comment_model.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/common/widgets/text_widget.dart';
 import 'package:business_bosses_v2/features/chat/controllers/chat_controller.dart';
+import 'package:business_bosses_v2/features/courses/models/course_model.dart';
 import 'package:business_bosses_v2/features/forum/models/forum_model.dart';
 import 'package:business_bosses_v2/features/forum/models/industry.dart';
 import 'package:business_bosses_v2/features/home/repository/home_repository.dart';
@@ -60,6 +61,8 @@ class HomeController extends GetxController {
   RxList<UserModel> marketMembers = RxList<UserModel>(<UserModel>[]);
   Set<dynamic> itemsWithIncrementedViews = {};
   Map<String, String> votes = {};
+  RxList<ForumModel> userresources = <ForumModel>[].obs;
+  RxList<CourseModel> usercourses = <CourseModel>[].obs;
 
   void addIndustries(List<Industry> data) {
     industries = data;
@@ -111,6 +114,129 @@ class HomeController extends GetxController {
       }
     }
     update();
+  }
+
+  Future<void> fetchuserCourses(String userId) async {
+    try {
+      loading(true); // Set loading to true before fetching data
+
+      ApiResponseModel response =
+          await ApiService.get(path: 'courses/get-user-courses/$userId');
+
+      if (response.success) {
+        usercourses.clear();
+        if (response.data['Courses']['rows'] != null) {
+          // Check if response.data['rows'] is not null
+          for (int i = 0; i < response.data['Courses']['rows'].length; i++) {
+            CourseModel usercourse = CourseModel.fromMap(<String, dynamic>{
+              ...response.data['Courses']['rows'][i],
+              'likes': response.data['Courses']['rows'][i]['likes']
+                  .map((dynamic like) => like['userId'].toString())
+                  .toList(),
+            });
+            usercourses.add(usercourse);
+          }
+        }
+      } else {
+        error(true);
+      }
+    } catch (e) {
+      error(true); // Set error to true if there's an error
+    } finally {
+      loading(false); // Set loading back to false after fetching data
+    }
+    update();
+  }
+
+  Future<void> fetchuserResources(String userId) async {
+    try {
+      loading(true); // Set loading to true before fetching data
+
+      ApiResponseModel response = await ApiService.get(
+          path: 'forum/get-user-forum/$userId?page=0&size=20');
+
+      if (response.success) {
+        userresources.clear();
+        for (int i = 0; i < response.data['rows'].length; i++) {
+          if (response.data['rows'] != null) {
+            ForumModel userresource = ForumModel.fromMap(<String, dynamic>{
+              ...response.data['rows'][i],
+              'likes': response.data['rows'][i]['likes']
+                  .map((dynamic like) => like['userId'].toString())
+                  .toList(),
+            });
+            userresources.add(userresource);
+          }
+        }
+      } else {
+        error(true); // Set error to true if there's an error
+      }
+    } catch (e) {
+      error(true); // Set error to true if there's an error
+    } finally {
+      loading(false); // Set loading back to false after fetching data
+    }
+    update();
+  }
+
+  Future<void> updateCourse(Map<String, dynamic> course, String id) async {
+    final ApiResponseModel response =
+        await ApiService.put(path: 'courses/update-course/$id', body: course);
+
+    if (response.success) {
+      int index = usercourses.indexWhere((CourseModel c) => c.id == id);
+      if (index != -1) {
+        usercourses[index] = CourseModel.fromMap(course);
+        Get.back();
+        showSnackbar(message: 'Course updated successfully', title: 'Success');
+      } else {
+        showSnackbar(
+            message: 'Course not found in the list',
+            title: 'Error',
+            error: true);
+      }
+      update();
+    }
+  }
+
+  void onDeleteCourse(String courseId) async {
+    try {
+      final ApiResponseModel response = await ApiService.delete(
+        path: 'courses/delete-course/$courseId',
+      );
+
+      if (response.success) {
+        showSnackbar(message: 'Course deleted successfully!', title: 'Success');
+        usercourses.removeWhere((CourseModel course) => course.id == courseId);
+        update();
+        return;
+      } else {
+        showSnackbar(
+            message: 'Failed to delete course.', title: 'O0PS!', error: true);
+        return;
+      }
+    } catch (e) {
+      rethrow;
+      // showSnackbar(
+      //     message: 'Error deleting post.', title: 'O0PS!', error: true);
+    }
+  }
+
+  Future<void> updateCourseViews(String id, int views) async {
+    Map<String, dynamic> course = <String, dynamic>{'views': views};
+    final ApiResponseModel response =
+        await ApiService.put(path: 'courses/update-course/$id', body: course);
+
+    if (response.success) {
+      int index = usercourses.indexWhere((CourseModel c) => c.id == id);
+      if (index != -1) {
+        usercourses[index] = CourseModel.fromMap(<String, dynamic>{
+          ...usercourses[index].toMap(),
+          ...course,
+        });
+      }
+      update();
+    }
   }
 
   /// PROCESS RAW API DATA, MODELIZE AND SAVE TO STATE

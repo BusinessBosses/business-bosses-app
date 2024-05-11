@@ -3,7 +3,6 @@
 import 'package:business_bosses_v2/action/action.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/common/widgets/popup/my_popup_menu_button.dart';
-import 'package:business_bosses_v2/features/courses/controller/course_controller.dart';
 import 'package:business_bosses_v2/common/widgets/typography/text_widget.dart';
 import 'package:business_bosses_v2/features/courses/models/course_comment_model.dart';
 import 'package:business_bosses_v2/features/courses/models/course_model.dart';
@@ -86,7 +85,6 @@ class _CourseItemState extends State<CourseItem> {
     )
   ];
 
-  final CourseController courseController = Get.find();
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -94,8 +92,6 @@ class _CourseItemState extends State<CourseItem> {
         setState(() {
           widget.course.setViews();
         });
-        courseController.updateCourseViews(
-            widget.course.id, widget.course.views + 1);
         homeController.updateCourseViews(
             widget.course.id, widget.course.views + 1);
         Get.to(() => ExpandedCourseScreen(course: widget.course));
@@ -186,8 +182,6 @@ class _CourseItemState extends State<CourseItem> {
                         setState(() {
                           widget.course.setViews();
                         });
-                        courseController.updateCourseViews(
-                            widget.course.id, widget.course.views + 1);
                         homeController.updateCourseViews(
                             widget.course.id, widget.course.views + 1);
                         Get.to(
@@ -379,8 +373,6 @@ class _CourseItemState extends State<CourseItem> {
                                     ),
                                     TextButton(
                                       onPressed: () {
-                                        courseController
-                                            .onDeleteCourse(widget.course.id);
                                         homeController
                                             .onDeleteCourse(widget.course.id);
                                         Get.back();
@@ -656,9 +648,10 @@ class _CourseItemState extends State<CourseItem> {
               children: <Widget>[
                 TextButton.icon(
                   onPressed: () async {
-                    courseController.postLike(
+                    homeController.postLike(
                       profileController.myProfile.uid,
                       widget.course.id,
+                      '',
                       widget.course.user!.uid,
                     );
                     setState(() {});

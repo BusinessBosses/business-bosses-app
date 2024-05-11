@@ -1,10 +1,8 @@
-import 'package:business_bosses_v2/features/courses/controller/course_controller.dart';
-import 'package:business_bosses_v2/features/courses/presentation/course_item.dart';
 import 'package:business_bosses_v2/features/donations/controller/donations_controller.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/donations/widgets/donation_item.dart';
-import 'package:business_bosses_v2/features/forum/controller/forum_controller.dart';
 import 'package:business_bosses_v2/features/home/widgets/bottom_bar.dart';
+import 'package:business_bosses_v2/features/home/widgets/course_item.dart';
 import 'package:business_bosses_v2/features/home/widgets/forum_item.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/features/profile/widgets/profileinfodisplay.dart';
@@ -43,18 +41,16 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
   final MarketController marketController = Get.find();
   final HomeController homeController = Get.find();
   final LiveController liveEventController = Get.put(LiveController());
-  final DonationsController donationsController =
-      Get.put(DonationsController());
-  final ForumController forumController = Get.put(ForumController());
-  final CourseController courseController = Get.put(CourseController());
+  final DonationsController donationsController = Get.find();
+
   bool isScrolled = true;
 
   @override
   void initState() {
     super.initState();
     donationsController.fetchuserDonations(profileController.myProfile.uid);
-    courseController.fetchuserCourses(profileController.myProfile.uid);
-    forumController.fetchuserResources(profileController.myProfile.uid);
+    homeController.fetchuserCourses(profileController.myProfile.uid);
+    homeController.fetchuserResources(profileController.myProfile.uid);
   }
 
   @override
@@ -333,7 +329,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                   height: double.infinity,
                                   width: double.infinity,
                                   child: Obx(() {
-                                    return forumController.userresources.isEmpty
+                                    return homeController.userresources.isEmpty
                                         ? Column(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.center,
@@ -365,13 +361,13 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                               physics:
                                                   NeverScrollableScrollPhysics(),
                                               shrinkWrap: true,
-                                              itemCount: forumController
+                                              itemCount: homeController
                                                   .userresources.length,
                                               itemBuilder:
                                                   (BuildContext context,
                                                       int i) {
                                                 return ForumItem(
-                                                  forum: forumController
+                                                  forum: homeController
                                                       .userresources[i],
                                                   controller: homeController,
                                                 );
@@ -381,7 +377,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                   })),
 
                               ///Donations
-                              Container(
+                              SizedBox(
                                   height: double.infinity,
                                   width: double.infinity,
                                   child: Obx(() {
@@ -392,7 +388,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                                 MainAxisAlignment.center,
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.center,
-                                            children: [
+                                            children: <Widget>[
                                               SvgPicture.asset(
                                                 'assets/svgs/supporter.svg',
                                                 height: 40,
@@ -413,52 +409,49 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                               ),
                                             ],
                                           )
-                                        : Container(
-                                            child: ListView.builder(
-                                              physics:
-                                                  NeverScrollableScrollPhysics(),
-                                              shrinkWrap: true,
-                                              itemCount: donationsController
-                                                  .userdonations.length,
-                                              itemBuilder:
-                                                  (BuildContext context,
-                                                      int i) {
-                                                bool isLastItem =
-                                                    donationsController
-                                                                .userdonations
-                                                                .length !=
-                                                            1
-                                                        ? i ==
-                                                            donationsController
-                                                                    .userdonations
-                                                                    .length -
-                                                                1
-                                                        : i ==
-                                                            donationsController
-                                                                .userdonations
-                                                                .length;
-                                                return DonationItem(
-                                                  donation: donationsController
-                                                      .userdonations[i],
-                                                  isLastItem: isLastItem,
-                                                );
-                                              },
-                                            ),
+                                        : ListView.builder(
+                                            physics:
+                                                const NeverScrollableScrollPhysics(),
+                                            shrinkWrap: true,
+                                            itemCount: donationsController
+                                                .userdonations.length,
+                                            itemBuilder:
+                                                (BuildContext context, int i) {
+                                              bool isLastItem =
+                                                  donationsController
+                                                              .userdonations
+                                                              .length !=
+                                                          1
+                                                      ? i ==
+                                                          donationsController
+                                                                  .userdonations
+                                                                  .length -
+                                                              1
+                                                      : i ==
+                                                          donationsController
+                                                              .userdonations
+                                                              .length;
+                                              return DonationItem(
+                                                donation: donationsController
+                                                    .userdonations[i],
+                                                isLastItem: isLastItem,
+                                              );
+                                            },
                                           );
                                   })),
 
                               ///Courses
-                              Container(
+                              SizedBox(
                                 height: double.infinity,
                                 width: double.infinity,
                                 child: Obx(() {
-                                  return courseController.usercourses.isEmpty
+                                  return homeController.usercourses.isEmpty
                                       ? Column(
                                           mainAxisAlignment:
                                               MainAxisAlignment.center,
                                           crossAxisAlignment:
                                               CrossAxisAlignment.center,
-                                          children: [
+                                          children: <Widget>[
                                             SvgPicture.asset(
                                               'assets/svgs/courses.svg',
                                               height: 40,
@@ -479,21 +472,19 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                             ),
                                           ],
                                         )
-                                      : Container(
-                                          child: ListView.builder(
-                                            physics:
-                                                NeverScrollableScrollPhysics(),
-                                            shrinkWrap: true,
-                                            itemCount: courseController
-                                                .usercourses.length,
-                                            itemBuilder:
-                                                (BuildContext context, int i) {
-                                              return CourseItem(
-                                                course: courseController
-                                                    .usercourses[i],
-                                              );
-                                            },
-                                          ),
+                                      : ListView.builder(
+                                          physics:
+                                              const NeverScrollableScrollPhysics(),
+                                          shrinkWrap: true,
+                                          itemCount:
+                                              homeController.usercourses.length,
+                                          itemBuilder:
+                                              (BuildContext context, int i) {
+                                            return CourseItem(
+                                              course:
+                                                  homeController.usercourses[i],
+                                            );
+                                          },
                                         );
                                 }),
                               )
