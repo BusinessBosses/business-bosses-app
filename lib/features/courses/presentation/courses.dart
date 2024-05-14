@@ -33,10 +33,8 @@ class _CoursesPageState extends State<CoursesPage> {
 
   List<String> preferenceslist = <String>[
     'All Courses',
-    'Free Courses',
-    'Paid Courses',
-    'Free Course Bundles',
-    'Paid Course Bundles',
+    'Single Courses',
+    'Course Bundles',
   ];
 
   @override

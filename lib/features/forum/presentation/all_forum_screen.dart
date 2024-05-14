@@ -5,6 +5,7 @@ import 'package:business_bosses_v2/features/courses/models/course_model.dart';
 import 'package:business_bosses_v2/features/courses/presentation/courses.dart';
 import 'package:business_bosses_v2/features/forum/controller/forum_controller.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
+import 'package:business_bosses_v2/features/search/widgets/search_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -23,7 +24,8 @@ class AllForumScreen extends StatefulWidget {
   State<AllForumScreen> createState() => _AllForumScreenState();
 }
 
-class _AllForumScreenState extends State<AllForumScreen> {
+class _AllForumScreenState extends State<AllForumScreen>
+    with TickerProviderStateMixin {
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   late Industry industry;
   // ignore: unused_field
@@ -31,6 +33,12 @@ class _AllForumScreenState extends State<AllForumScreen> {
   final HomeController homeController = Get.find();
   late ForumController forumController;
   final CourseController courseController = Get.put(CourseController());
+  bool _isSearching = false;
+  bool _iscouseSearching = false;
+  late final TabController _searchTabController;
+  late final TabController _coursesearchTabController;
+  late final TabController _pageTabController;
+  late final TabController _coursespageTabController;
 
   int currentTabIndex = 0; // Track the current tab index
   String _filtercourses = '';
@@ -38,6 +46,10 @@ class _AllForumScreenState extends State<AllForumScreen> {
   @override
   void initState() {
     super.initState();
+    _searchTabController = TabController(length: 1, vsync: this);
+    _coursesearchTabController = TabController(length: 1, vsync: this);
+    _pageTabController = TabController(length: 1, vsync: this);
+    _coursespageTabController = TabController(length: 1, vsync: this);
     if (Get.arguments == null) {
       Get.back();
     } else {
@@ -68,136 +80,276 @@ class _AllForumScreenState extends State<AllForumScreen> {
               },
               icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
             ),
-            centerTitle: true,
-            title: Text(
-              industry.industry ?? 'Topic',
-              textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: 20),
-            ),
-            actions: <Widget>[
-              if (currentTabIndex ==
-                  0) // Show preferences button only for Courses tab
-                GestureDetector(
-                  onTap: () {
-                    showModalBottomSheet(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
+            centerTitle: _isSearching ? false : true,
+            title: _isSearching
+                ? Searchbar(
+                    hintText: 'Search ${industry.industry!}',
+                    onChange: (String query) {
+                      // if (_searchTabController.index == 0) {
+                      //   controller.onSearch(
+                      //       _searchTabController.index, query);
+                      // }
+                    },
+                    onSubmit: (String query) {
+                      // if (_searchTabController.index == 1) {
+                      //   controller.onSearch(
+                      //       _searchTabController.index, query);
+                      // }
+                    },
+                  )
+                : _iscouseSearching
+                    ? Searchbar(
+                        hintText: 'Search Courses',
+                        onChange: (String query) {
+                          // if (_searchTabController.index == 0) {
+                          //   controller.onSearch(
+                          //       _searchTabController.index, query);
+                          // }
+                        },
+                        onSubmit: (String query) {
+                          // if (_searchTabController.index == 1) {
+                          //   controller.onSearch(
+                          //       _searchTabController.index, query);
+                          // }
+                        },
+                      )
+                    : Text(
+                        industry.industry ?? 'Topic',
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(fontSize: 20),
                       ),
-                      backgroundColor: Colors.white,
-                      context: context,
-                      builder: (BuildContext context) {
-                        return Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            const Padding(
-                              padding: EdgeInsets.symmetric(
-                                vertical: 40.0,
-                                horizontal: 20,
-                              ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Text(
-                                    'Filter Courses',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 18,
-                                    ),
-                                  ),
-                                ],
-                              ),
+            actions: <Widget>[
+              currentTabIndex == 0
+                  ? IconButton(
+                      icon: _iscouseSearching
+                          ? const Icon(Icons.close)
+                          : SvgPicture.asset(
+                              'assets/svgs/preferences.svg',
+                              color: Colors.black,
+                              height: 20,
                             ),
-                            Expanded(
-                              child: ListView.builder(
-                                itemCount: preferenceslist.length,
-                                itemBuilder: (BuildContext context, int index) {
-                                  return GestureDetector(
-                                    onTap: () {
-                                      onPreferencesTap(preferenceslist[index]);
-                                      Get.back();
-                                    },
-                                    child: Column(
-                                      children: <Widget>[
-                                        Container(
-                                          width:
-                                              MediaQuery.of(context).size.width,
-                                          padding: const EdgeInsets.symmetric(
-                                            horizontal: 20,
-                                            vertical: 20,
-                                          ),
-                                          color: Colors.white,
-                                          child: Text(
-                                            preferenceslist[index] +
-                                                preferencesnumber[index],
-                                            style: const TextStyle(
-                                              fontWeight: FontWeight.bold,
+                      onPressed: () {
+                        _iscouseSearching
+                            ? {
+                                _iscouseSearching = !_iscouseSearching,
+                                setState(() {})
+                              }
+                            : showModalBottomSheet(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                backgroundColor: Colors.white,
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 20.0, vertical: 20),
+                                        child: GestureDetector(
+                                          onTap: () {
+                                            Get.back();
+                                            _iscouseSearching =
+                                                !_iscouseSearching;
+                                            setState(() {});
+                                          },
+                                          child: SizedBox(
+                                            height: 42,
+                                            width: double.infinity,
+                                            child: TextFormField(
+                                              // key: searchkey,
+                                              style:
+                                                  const TextStyle(fontSize: 20),
+                                              decoration:
+                                                  inputDecoration.copyWith(
+                                                border: OutlineInputBorder(
+                                                  borderSide: BorderSide.none,
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                ),
+                                                fillColor:
+                                                    backgroundcolorinterface,
+                                                filled: true,
+                                                enabled: false,
+                                                prefixIcon: Container(
+                                                  padding: const EdgeInsets
+                                                      .symmetric(
+                                                      vertical: 10.0),
+                                                  child: SvgPicture.asset(
+                                                    'assets/svgs/search.svg',
+                                                    color: hintColor,
+                                                  ),
+                                                ),
+                                                hintText: 'Search Courses',
+                                              ),
                                             ),
                                           ),
                                         ),
-                                        const Divider(
-                                          height: 1,
-                                          color: backgroundColor,
+                                      ),
+                                      const Padding(
+                                        padding: EdgeInsets.only(
+                                            left: 20, top: 15, bottom: 15),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: <Widget>[
+                                            Text(
+                                              'Filter Courses',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 18,
+                                              ),
+                                            ),
+                                          ],
                                         ),
-                                      ],
-                                    ),
+                                      ),
+                                      const Divider(
+                                        height: 1,
+                                        color: backgroundColor,
+                                      ),
+                                      Expanded(
+                                        child: ListView.builder(
+                                          itemCount: preferenceslist.length,
+                                          itemBuilder: (BuildContext context,
+                                              int index) {
+                                            return GestureDetector(
+                                              onTap: () {
+                                                onPreferencesTap(
+                                                    preferenceslist[index]);
+                                                Get.back();
+                                              },
+                                              child: Column(
+                                                children: <Widget>[
+                                                  Container(
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                            .size
+                                                            .width,
+                                                    padding: const EdgeInsets
+                                                        .symmetric(
+                                                      horizontal: 20,
+                                                      vertical: 20,
+                                                    ),
+                                                    color: Colors.white,
+                                                    child: Text(
+                                                      preferenceslist[index] +
+                                                          preferencesnumber[
+                                                              index],
+                                                      style: const TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  const Divider(
+                                                    height: 1,
+                                                    color: backgroundColor,
+                                                  ),
+                                                ],
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                    ],
                                   );
                                 },
-                              ),
-                            ),
-                          ],
-                        );
+                              );
                       },
-                    );
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.only(right: 15.0),
-                    child: Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: SvgPicture.asset(
-                        'assets/svgs/preferences.svg',
-                        color: Colors.black,
-                        height: 20,
+                    )
+                  : IconButton(
+                      icon: _isSearching
+                          ? const Icon(Icons.close)
+                          : SvgPicture.asset(
+                              'assets/svgs/search.svg',
+                              color: Colors.black,
+                            ),
+                      onPressed: () {
+                        _isSearching = !_isSearching;
+
+                        setState(() {});
+                      })
+            ],
+            bottom: !_isSearching && !_iscouseSearching
+                ? const PreferredSize(
+                    preferredSize: Size.fromHeight(0.0),
+                    child: SizedBox(height: 0),
+                  )
+                : _iscouseSearching
+                    ? TabBar(
+                        controller: _coursesearchTabController,
+                        labelStyle:
+                            const TextStyle(fontWeight: FontWeight.w500),
+                        labelColor: Colors.black,
+                        indicatorColor: Colors.transparent,
+                        tabs: const <Widget>[
+                          Tab(
+                            text: 'Search Results',
+                          ),
+                        ],
+                      )
+                    : TabBar(
+                        controller: _searchTabController,
+                        labelStyle:
+                            const TextStyle(fontWeight: FontWeight.w500),
+                        labelColor: Colors.black,
+                        indicatorColor: Colors.transparent,
+                        tabs: const <Widget>[
+                          Tab(
+                            text: 'Search Results',
+                          ),
+                        ],
+                      ),
+          ),
+          body: _isSearching
+              ? TabBarView(
+                  controller: _pageTabController,
+                  children: [],
+                )
+              : _iscouseSearching
+                  ? TabBarView(
+                      controller: _pageTabController,
+                      children: [],
+                    )
+                  : DefaultTabController(
+                      length: 2,
+                      child: Column(
+                        children: <Widget>[
+                          Container(
+                            color: Colors.white,
+                            constraints:
+                                const BoxConstraints.expand(height: 50),
+                            child: TabBar(
+                              tabs: const <Widget>[
+                                Tab(text: 'Courses'),
+                                Tab(text: 'Resources'),
+                              ],
+                              onTap: (int index) {
+                                setState(() {
+                                  currentTabIndex =
+                                      index; // Update the current tab index
+                                });
+                              },
+                            ),
+                          ),
+                          Expanded(
+                            child: TabBarView(
+                              physics: const NeverScrollableScrollPhysics(),
+                              children: <Widget>[
+                                CoursesPage(
+                                  industryId: industry.industryId!,
+                                  filter: _filtercourses,
+                                ),
+                                const TopicsPage(),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                  ),
-                ),
-            ],
-          ),
-          body: DefaultTabController(
-            length: 2,
-            child: Column(
-              children: <Widget>[
-                Container(
-                  color: Colors.white,
-                  constraints: const BoxConstraints.expand(height: 50),
-                  child: TabBar(
-                    tabs: const <Widget>[
-                      Tab(text: 'Courses'),
-                      Tab(text: 'Resources'),
-                    ],
-                    onTap: (int index) {
-                      setState(() {
-                        currentTabIndex = index; // Update the current tab index
-                      });
-                    },
-                  ),
-                ),
-                Expanded(
-                  child: TabBarView(
-                    physics: const NeverScrollableScrollPhysics(),
-                    children: <Widget>[
-                      CoursesPage(
-                        industryId: industry.industryId!,
-                        filter: _filtercourses,
-                      ),
-                      const TopicsPage(),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
         );
       },
     );
@@ -211,17 +363,13 @@ class _AllForumScreenState extends State<AllForumScreen> {
 
   List<String> get preferenceslist => <String>[
         'All Courses',
-        'Free Courses',
-        'Paid Courses',
-        'Free Course Bundles',
-        'Paid Course Bundles',
+        'Single Courses',
+        'Course Bundles',
       ];
 
   List<String> get preferencesnumber => <String>[
         ' (${courseController.courses.length})',
-        ' (${courseController.courses.where((CourseModel course) => course.courseType == 'free').length})',
-        ' (${courseController.courses.where((CourseModel course) => course.courseType == 'paid').length})',
-        ' (${courseController.courses.where((CourseModel course) => course.courseType == 'free' && course.youtubeUrls!.length > 1).length})',
-        ' (${courseController.courses.where((CourseModel course) => course.courseType == 'paid' && course.youtubeUrls!.length > 1).length})',
+        ' (${courseController.courses.where((CourseModel course) => course.youtubeUrls!.length <= 1).length})',
+        ' (${courseController.courses.where((CourseModel course) => course.youtubeUrls!.length > 1).length})',
       ];
 }

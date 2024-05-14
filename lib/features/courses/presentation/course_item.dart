@@ -228,117 +228,101 @@ class _CourseItemState extends State<CourseItem> {
                         ),
                         Row(
                           children: [
-                            Container(
-                              decoration: BoxDecoration(
-                                  color: backgroundcolorinterface,
-                                  borderRadius: BorderRadius.circular(50)),
-                              child: Padding(
-                                padding: const EdgeInsets.only(
-                                    left: 8, top: 5, right: 8, bottom: 5),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: <Widget>[
-                                    widget.course.courseType == 'free'
-                                        ? Container()
-                                        : SvgPicture.asset(
-                                            'assets/svgs/coin.svg',
-                                            height: 22,
-                                          ),
-                                    widget.course.courseType == 'free'
-                                        ? Container()
-                                        : const SizedBox(
-                                            width: 5,
-                                          ),
-                                    Text(
-                                      widget.course.courseType == 'free'
-                                          ? 'Free'
-                                          : widget.course.price!,
-                                      style: const TextStyle(
-                                        color: Color.fromRGBO(133, 133, 133, 1),
-                                        fontSize: 13,
-                                        fontWeight: FontWeight.w700,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            const SizedBox(
-                              width: 7,
-                            ),
                             GestureDetector(
                               onTap: () {
                                 Get.to(
                                     CourseReviewScreen(course: widget.course));
                               },
-                              child: Wrap(
-                                children: [
-                                  const Icon(
-                                    Icons.star,
-                                    color: Color.fromRGBO(255, 202, 40, 1),
-                                    size: 16,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    color: backgroundcolorinterface,
+                                    borderRadius: BorderRadius.circular(50)),
+                                child: Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 5, top: 5, right: 8, bottom: 5),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: <Widget>[
+                                      Wrap(
+                                        crossAxisAlignment:
+                                            WrapCrossAlignment.center,
+                                        children: [
+                                          const Icon(
+                                            Icons.star,
+                                            color:
+                                                Color.fromRGBO(255, 202, 40, 1),
+                                            size: 16,
+                                          ),
+                                          const SizedBox(
+                                            width: 3,
+                                          ),
+                                          Text(
+                                            widget.course.averageRating!
+                                                .toStringAsFixed(2),
+                                            style: const TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 13,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
                                   ),
-                                  const SizedBox(
-                                    width: 3,
-                                  ),
-                                  Text(
-                                    widget.course.averageRating!
-                                        .toStringAsFixed(2),
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 13,
-                                    ),
-                                  ),
-                                ],
+                                ),
                               ),
-                            ),
-                            const SizedBox(
-                              width: 8,
                             ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 if (widget.course.transcript != null)
-                                  SvgPicture.asset(
-                                    'assets/svgs/transcript.svg',
-                                    height: 16,
-                                  ),
-                                const SizedBox(
-                                  width: 8,
-                                ),
-                                if (widget.course.documents != null)
-                                  Stack(children: [
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                          right: 15.0, top: 5, bottom: 5),
-                                      child: SvgPicture.asset(
-                                        'assets/svgs/downloadables.svg',
-                                        height: 16,
-                                      ),
+                                  Wrap(children: [
+                                    const SizedBox(
+                                      width: 8,
                                     ),
-                                    Positioned(
-                                      right: 5,
-                                      top: 0,
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                            color: Colors.black54,
-                                            borderRadius:
-                                                BorderRadius.circular(50)),
-                                        child: Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 6.0),
-                                          child: Text(
-                                            widget.course.documents!.length
-                                                .toString(),
-                                            style: const TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 10,
-                                                fontWeight: FontWeight.w700),
-                                          ),
+                                    SvgPicture.asset(
+                                      'assets/svgs/transcript.svg',
+                                      height: 16,
+                                    ),
+                                  ]),
+                                if (widget.course.documents != null)
+                                  Wrap(children: [
+                                    const SizedBox(
+                                      width: 8,
+                                    ),
+                                    Stack(children: [
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                            right: 15.0, top: 5, bottom: 5),
+                                        child: SvgPicture.asset(
+                                          'assets/svgs/downloadables.svg',
+                                          height: 16,
                                         ),
                                       ),
-                                    )
+                                      Positioned(
+                                        right: 5,
+                                        top: 0,
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                              color: Colors.black54,
+                                              borderRadius:
+                                                  BorderRadius.circular(50)),
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 6.0),
+                                            child: Text(
+                                              widget.course.documents!.length
+                                                  .toString(),
+                                              style: const TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 10,
+                                                  fontWeight: FontWeight.w700),
+                                            ),
+                                          ),
+                                        ),
+                                      )
+                                    ]),
                                   ]),
                               ],
                             ),
