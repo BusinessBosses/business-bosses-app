@@ -27,8 +27,25 @@ class ForumController extends GetxController {
   RxBool loading = RxBool(false);
   RxBool error = RxBool(false);
   RxBool loadingMembers = RxBool(false);
+   RxBool loadingPosts = RxBool(false);
   RxBool errorMembers = RxBool(false);
   RxList<ForumModel> userresources = <ForumModel>[].obs;
+  List<UserModel> searchedUsers = <UserModel>[];
+  List<ForumModel> searchedPosts = <ForumModel>[];
+  RxBool isUserSearch = RxBool(false);
+  RxBool isPostSearch = RxBool(false);
+  late List<String> connecteds =
+      _profileController.myProfile.connecteds ?? <String>[];
+
+  void clearUserSearch() {
+    isUserSearch(false);
+    update();
+  }
+
+  void clearPostSearch() {
+    isPostSearch(false);
+    update();
+  }
 
   void updateForum(int index, Map<String, dynamic> data) {
     if (index != -1) {
@@ -98,15 +115,14 @@ class ForumController extends GetxController {
     try {
       loading(true); // Set loading to true before fetching data
 
-      ApiResponseModel response =
-          await ApiService.get(path: 'forum/get-user-forum/$userId?page=0&size=20');
+      ApiResponseModel response = await ApiService.get(
+          path: 'forum/get-user-forum/$userId?page=0&size=20');
 
       if (response.success) {
         userresources.clear();
         for (int i = 0; i < response.data['rows'].length; i++) {
           if (response.data['rows'] != null) {
-            ForumModel userresource =
-                ForumModel.fromMap(<String, dynamic>{
+            ForumModel userresource = ForumModel.fromMap(<String, dynamic>{
               ...response.data['rows'][i],
               'likes': response.data['rows'][i]['likes']
                   .map((dynamic like) => like['userId'].toString())
@@ -124,8 +140,6 @@ class ForumController extends GetxController {
       loading(false); // Set loading back to false after fetching data
     }
   }
-
-  
 
   void updateForumViews(ForumModel post) {
     final int postIndex = forums
@@ -197,6 +211,113 @@ class ForumController extends GetxController {
         'type': type,
       });
     }
+  }
+
+  Future<void> searchUsers(String industryId, {bool isNext = false}) async {
+    members.clear();
+    membersPage(0);
+    if (isNext && loadingNextMembers.value) return;
+    if (isNext) {
+      loadingNextMembers(true);
+    } else {
+      loadingMembers(true);
+      errorMembers(false);
+    }
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      update();
+    });
+    final ApiResponseModel response =
+        await ForumRepository.getForumMembers(membersPage.value, industryId);
+    if (response.success) {
+      membersPage(membersPage.value + 1);
+      for (int i = 0; i < response.data.length; i++) {
+        // if(response.data[i].)
+        searchedUsers.add(UserModel.fromMap(response.data[i]));
+      }
+
+      // _homeController.addBossupMembers(members);
+    } else {
+      errorMembers(true);
+    }
+    loadingNextMembers(false);
+    loadingMembers(false);
+
+    update();
+  }
+
+  Future<void> searchPosts(String industryId, {bool isNext = false}) async {
+    members.clear();
+    membersPage(0);
+    if (isNext && loadingNextMembers.value) return;
+    if (isNext) {
+      loadingNextMembers(true);
+    } else {
+      loadingMembers(true);
+      errorMembers(false);
+    }
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      update();
+    });
+    final ApiResponseModel response =
+        await ForumRepository.getForumMembers(membersPage.value, industryId);
+    if (response.success) {
+      membersPage(membersPage.value + 1);
+      for (int i = 0; i < response.data.length; i++) {
+        // if(response.data[i].)
+        searchedUsers.add(UserModel.fromMap(response.data[i]));
+      }
+
+      // _homeController.addBossupMembers(members);
+    } else {
+      errorMembers(true);
+    }
+    loadingNextMembers(false);
+    loadingMembers(false);
+
+    update();
+  }
+
+  void connectToUser(UserModel user) async {
+    final int checkConnected =
+        connecteds.indexWhere((String element) => element == user.uid);
+    _profileController.updateConnections(user.uid);
+    update();
+    if (isUserSearch.value) {
+      final int checkConnectedSearch =
+          connecteds.indexWhere((String element) => element == user.uid);
+      if (checkConnectedSearch == -1) {
+        connecteds.add(user.uid);
+      } else {
+        connecteds.removeAt(checkConnectedSearch);
+      }
+    }
+    if (checkConnected == -1) {
+      connecteds.add(user.uid);
+      await connect(user.uid);
+    } else {
+      connecteds.removeAt(checkConnected);
+      await disconnect(user.uid);
+    }
+
+    update();
+  }
+
+  Future<void> connect(String userId) async {
+    await ApiService.post(path: '/connection/connect', body: <String, dynamic>{
+      'userId': _profileController.myProfile.uid,
+      'connectedId': userId,
+      'timestamp': DateTime.now().millisecondsSinceEpoch
+    });
+  }
+
+  Future<void> disconnect(String userId) async {
+    await ApiService.post(
+        path: '/connection/disconnect',
+        body: <String, dynamic>{
+          'userId': _profileController.myProfile.uid,
+          'connectedId': userId,
+          'timestamp': DateTime.now().millisecondsSinceEpoch
+        });
   }
 
   void joinAndLeaveIndustry(String userId, String industryId) {

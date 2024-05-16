@@ -1,11 +1,14 @@
 import 'package:business_bosses_v2/features/donations/controller/donations_controller.dart';
 import 'package:business_bosses_v2/features/donations/presentation/donations.dart';
+import 'package:business_bosses_v2/features/donations/presentation/filterdonationposts.dart';
+import 'package:business_bosses_v2/features/donations/presentation/filterdonationusers.dart';
 import 'package:business_bosses_v2/features/forum/presentation/bossup_challenge.dart';
 import 'package:business_bosses_v2/features/forum/widgets/forum_item.dart';
 import 'package:business_bosses_v2/features/home/controller/commumities_controller.dart';
 import 'package:business_bosses_v2/features/home/widgets/bottom_bar.dart';
 import 'package:business_bosses_v2/features/home/widgets/industriessearch.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
+import 'package:business_bosses_v2/features/search/widgets/filterusers.dart';
 import 'package:business_bosses_v2/utils/constants/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -78,10 +81,10 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
   void initState() {
     super.initState();
     _searchTabController = TabController(length: 2, vsync: this);
-    _donationsearchTabController = TabController(length: 1, vsync: this);
+    _donationsearchTabController = TabController(length: 2, vsync: this);
     _pageTabController = TabController(
         length: 3, vsync: this, initialIndex: widget.initialTabIndex ?? 0);
-    _donationspageTabController = TabController(length: 1, vsync: this);
+    _donationspageTabController = TabController(length: 2, vsync: this);
 
     // Adding listener to update state on tab change
     _pageTabController.addListener(() {
@@ -128,18 +131,25 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
                             : _isSearchingDonations &&
                                     _pageTabController.index == 2
                                 ? Searchbar(
-                                    hintText: 'Search Donations',
+                                    hintText:
+                                        'Search Donations Members or Posts',
                                     onChange: (String query) {
-                                      if (_searchTabController.index == 0) {
-                                        controller.onSearch(
-                                            _searchTabController.index, query);
+                                      if (query.isEmpty) {
+                                        _donationsearchTabController.index == 0
+                                            ? donationsController
+                                                .clearUserSearch()
+                                            : donationsController
+                                                .clearPostSearch();
                                       }
+                                      setState(() {});
                                     },
                                     onSubmit: (String query) {
-                                      if (_searchTabController.index == 1) {
-                                        controller.onSearch(
-                                            _searchTabController.index, query);
-                                      }
+                                      _donationsearchTabController.index == 0
+                                          ? donationsController
+                                              .searchUsers(query)
+                                          : donationsController
+                                              .searchPosts(query);
+                                      setState(() {});
                                     },
                                   )
                                 : const Text('Boss Up'),
@@ -162,9 +172,10 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
                                     labelStyle: const TextStyle(
                                         fontWeight: FontWeight.w500),
                                     labelColor: Colors.black,
-                                    indicatorColor: Colors.transparent,
+                                    indicatorColor: primaryColorLT,
                                     tabs: const <Widget>[
-                                      Tab(text: 'Search results'),
+                                      Tab(text: 'People'),
+                                      Tab(text: 'Posts'),
                                     ],
                                   )
                                 : TabBar(
@@ -174,7 +185,7 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
                                     labelColor: Colors.black,
                                     tabs: const <Widget>[
                                       Tab(text: 'Groups'),
-                                      Tab(text: 'Topics'),
+                                      Tab(text: 'Posts'),
                                     ],
                                   ),
                       ),
@@ -252,8 +263,33 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
                             )
                           : _isSearchingDonations
                               ? TabBarView(
-                                  controller: _donationspageTabController,
-                                  children: [Text('data')],
+                                  controller: _donationsearchTabController,
+                                  children: [
+                                    Obx(() => FilterDonationsUsers(
+                                          members:
+                                              donationsController.usersMembers,
+                                          filterItems:
+                                              donationsController.searchedUsers,
+                                          isLoading: donationsController
+                                                  .loading.value ||
+                                              donationsController
+                                                  .loadingSearch.value,
+                                          onConnectionChange:
+                                              donationsController.connectToUser,
+                                          isSearch: donationsController
+                                              .isUserSearch.value,
+                                        )),
+                                    Obx(
+                                      () => FilterDonationPosts(
+                                        filterItems:
+                                            donationsController.searchedPosts,
+                                        isLoading:
+                                            donationsController.loading.value ||
+                                                donationsController
+                                                    .loadingPostsSearch.value,
+                                      ),
+                                    )
+                                  ],
                                 )
                               : TabBarView(
                                   controller: _searchTabController,

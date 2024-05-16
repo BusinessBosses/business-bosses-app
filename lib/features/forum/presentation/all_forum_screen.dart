@@ -3,7 +3,11 @@
 import 'package:business_bosses_v2/features/courses/controller/course_controller.dart';
 import 'package:business_bosses_v2/features/courses/models/course_model.dart';
 import 'package:business_bosses_v2/features/courses/presentation/courses.dart';
+import 'package:business_bosses_v2/features/courses/presentation/filtercoursesposts.dart';
+import 'package:business_bosses_v2/features/courses/presentation/filtercoursesusers.dart';
 import 'package:business_bosses_v2/features/forum/controller/forum_controller.dart';
+import 'package:business_bosses_v2/features/forum/presentation/filterchallengeposts.dart';
+import 'package:business_bosses_v2/features/forum/presentation/filterchallengeusers.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/features/search/widgets/search_bar.dart';
 import 'package:flutter/material.dart';
@@ -46,10 +50,10 @@ class _AllForumScreenState extends State<AllForumScreen>
   @override
   void initState() {
     super.initState();
-    _searchTabController = TabController(length: 1, vsync: this);
-    _coursesearchTabController = TabController(length: 1, vsync: this);
-    _pageTabController = TabController(length: 1, vsync: this);
-    _coursespageTabController = TabController(length: 1, vsync: this);
+    _searchTabController = TabController(length: 2, vsync: this);
+    _coursesearchTabController = TabController(length: 2, vsync: this);
+    _pageTabController = TabController(length: 2, vsync: this);
+    _coursespageTabController = TabController(length: 2, vsync: this);
     if (Get.arguments == null) {
       Get.back();
     } else {
@@ -284,11 +288,10 @@ class _AllForumScreenState extends State<AllForumScreen>
                         labelStyle:
                             const TextStyle(fontWeight: FontWeight.w500),
                         labelColor: Colors.black,
-                        indicatorColor: Colors.transparent,
+                        indicatorColor: primaryColorLT,
                         tabs: const <Widget>[
-                          Tab(
-                            text: 'Search Results',
-                          ),
+                          Tab(text: 'People'),
+                          Tab(text: 'Posts'),
                         ],
                       )
                     : TabBar(
@@ -296,23 +299,56 @@ class _AllForumScreenState extends State<AllForumScreen>
                         labelStyle:
                             const TextStyle(fontWeight: FontWeight.w500),
                         labelColor: Colors.black,
-                        indicatorColor: Colors.transparent,
+                        indicatorColor: primaryColorLT,
                         tabs: const <Widget>[
-                          Tab(
-                            text: 'Search Results',
-                          ),
+                          Tab(text: 'People'),
+                          Tab(text: 'Posts'),
                         ],
                       ),
           ),
           body: _isSearching
               ? TabBarView(
                   controller: _pageTabController,
-                  children: [],
+                  children: [
+                    Obx(() => FilterChallengeUsers(
+                              members: controller.members,
+                              filterItems: controller.searchedUsers,
+                              isLoading: controller.loading.value ||
+                                  controller.loadingMembers.value,
+                              onConnectionChange:
+                                  controller.connectToUser,
+                              isSearch: controller.isUserSearch.value,
+                            )),
+                        Obx(
+                          () => FilterChallengePosts(
+                            filterItems: controller.searchedPosts,
+                            isLoading: controller.loading.value ||
+                                controller.loadingPosts.value,
+                          ),
+                        )
+                  ],
                 )
               : _iscouseSearching
                   ? TabBarView(
-                      controller: _pageTabController,
-                      children: [],
+                      controller: _coursesearchTabController,
+                      children: [
+                        Obx(() => FilterCoursesUsers(
+                              members: courseController.usersMembers,
+                              filterItems: courseController.searchedUsers,
+                              isLoading: courseController.loading.value ||
+                                  courseController.loadingSearch.value,
+                              onConnectionChange:
+                                  courseController.connectToUser,
+                              isSearch: courseController.isUserSearch.value,
+                            )),
+                        Obx(
+                          () => FilterCoursesPosts(
+                            filterItems: courseController.searchedPosts,
+                            isLoading: courseController.loading.value ||
+                                courseController.loadingSearch.value,
+                          ),
+                        )
+                      ],
                     )
                   : DefaultTabController(
                       length: 2,

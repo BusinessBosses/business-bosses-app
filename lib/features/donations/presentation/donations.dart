@@ -1,5 +1,6 @@
 import 'package:business_bosses_v2/features/donations/controller/donations_controller.dart';
 import 'package:business_bosses_v2/features/donations/presentation/donation_members.dart';
+import 'package:business_bosses_v2/features/donations/presentation/donationpopup.dart';
 import 'package:business_bosses_v2/features/donations/presentation/donations_history.dart';
 import 'package:business_bosses_v2/features/donations/widgets/donation_item.dart';
 import 'package:business_bosses_v2/features/forum/widgets/joinedbutton.dart';
@@ -75,7 +76,13 @@ class _DonationsPageState extends State<DonationsPage> {
                               Row(
                                 children: <Widget>[
                                   GestureDetector(
-                                    onTap: () => <Future>{},
+                                    onTap: () {
+                                      showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) =>
+                                            const DonationPopup(),
+                                      );
+                                    },
                                     child: Padding(
                                       padding:
                                           const EdgeInsets.only(left: 15.0),
@@ -374,8 +381,8 @@ class _DonationsPageState extends State<DonationsPage> {
                                     padding: const EdgeInsets.only(left: 10.0),
                                     child: Container(
                                       width: 142,
-                                      padding:
-                                          const EdgeInsets.symmetric(vertical: 1),
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 1),
                                       decoration: BoxDecoration(
                                           color: backgroundColor,
                                           borderRadius:

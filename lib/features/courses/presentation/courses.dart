@@ -1,5 +1,6 @@
 import 'package:business_bosses_v2/features/courses/controller/course_controller.dart';
 import 'package:business_bosses_v2/features/courses/models/course_model.dart';
+import 'package:business_bosses_v2/features/courses/presentation/coursespopup.dart';
 import 'package:business_bosses_v2/features/courses/presentation/create_course.dart';
 import 'package:business_bosses_v2/features/forum/models/industry.dart';
 import 'package:business_bosses_v2/features/courses/presentation/course_item.dart';
@@ -71,7 +72,13 @@ class _CoursesPageState extends State<CoursesPage> {
                       Row(
                         children: <Widget>[
                           GestureDetector(
-                            onTap: () {},
+                            onTap: () {
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) =>
+                                    const CoursesPopup(),
+                              );
+                            },
                             child: Padding(
                               padding: const EdgeInsets.only(left: 15.0),
                               child: Row(
@@ -109,7 +116,7 @@ class _CoursesPageState extends State<CoursesPage> {
                                     mainAxisSize: MainAxisSize.min,
                                     children: <Widget>[
                                       const Text(
-                                        'Start a Course',
+                                        'Create a Course',
                                         style: TextStyle(
                                             fontSize: 15,
                                             color: Colors.white,

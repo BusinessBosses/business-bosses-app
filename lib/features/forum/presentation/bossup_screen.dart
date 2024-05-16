@@ -1,5 +1,7 @@
 import 'package:business_bosses_v2/features/forum/controller/create_bossup_controller.dart';
 import 'package:business_bosses_v2/features/forum/presentation/create_bossup_screen.dart';
+import 'package:business_bosses_v2/features/forum/presentation/filterchallengeposts.dart';
+import 'package:business_bosses_v2/features/forum/presentation/filterchallengeusers.dart';
 import 'package:business_bosses_v2/features/home/widgets/floatingbutton.dart';
 import 'package:business_bosses_v2/features/search/widgets/search_bar.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -79,8 +81,7 @@ class _BossUpSectionState extends State<BossUpSection>
   void initState() {
     super.initState();
     bossUpController.fetchForums(widget.industry.industryId!);
-    _searchTabController = TabController(length: 1, vsync: this);
-    _pageTabController = TabController(length: 1, vsync: this);
+    _searchTabController = TabController(length: 2, vsync: this);
     scrollController.addListener(() {
       double percentageScrolled =
           scrollController.offset / scrollController.position.maxScrollExtent;
@@ -122,18 +123,20 @@ class _BossUpSectionState extends State<BossUpSection>
         centerTitle: _isSearching ? false : true,
         title: _isSearching
             ? Searchbar(
-                hintText: 'Search ${widget.industry.industry!}',
+                hintText: 'Search Members or Posts',
                 onChange: (String query) {
-                  // if (_searchTabController.index == 0) {
-                  //   controller.onSearch(
-                  //       _searchTabController.index, query);
-                  // }
+                  if (query.isEmpty) {
+                    _searchTabController.index == 0
+                        ? bossUpController.clearUserSearch()
+                        : bossUpController.clearPostSearch();
+                  }
+                  setState(() {});
                 },
                 onSubmit: (String query) {
-                  // if (_searchTabController.index == 1) {
-                  //   controller.onSearch(
-                  //       _searchTabController.index, query);
-                  // }
+                  _searchTabController.index == 0
+                      ? bossUpController.searchUsers(query)
+                      : bossUpController.searchPosts(query);
+                  setState(() {});
                 },
               )
             : Text(
@@ -166,19 +169,32 @@ class _BossUpSectionState extends State<BossUpSection>
                 controller: _searchTabController,
                 labelStyle: const TextStyle(fontWeight: FontWeight.w500),
                 labelColor: Colors.black,
-                indicatorColor: Colors.transparent,
+                indicatorColor: primaryColorLT,
                 tabs: const <Widget>[
-                  Tab(
-                    text: 'Search Results',
-                  ),
+                  Tab(text: 'People'),
+                  Tab(text: 'Posts'),
                 ],
               ),
       ),
       body: _isSearching
           ? TabBarView(
-              controller: _pageTabController,
+              controller: _searchTabController,
               children: [
-                
+                Obx(() => FilterChallengeUsers(
+                      members: bossUpController.members,
+                      filterItems: bossUpController.searchedUsers,
+                      isLoading: bossUpController.loading.value ||
+                          bossUpController.loadingMembers.value,
+                      onConnectionChange: bossUpController.connectToUser,
+                      isSearch: bossUpController.isUserSearch.value,
+                    )),
+                Obx(
+                  () => FilterChallengePosts(
+                    filterItems: bossUpController.searchedPosts,
+                    isLoading: bossUpController.loading.value ||
+                        bossUpController.loadingPosts.value,
+                  ),
+                )
               ],
             )
           : GetBuilder<BossUpController>(

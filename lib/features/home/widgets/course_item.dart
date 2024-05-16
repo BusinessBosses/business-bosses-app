@@ -123,10 +123,19 @@ class _CourseItemState extends State<CourseItem> {
                             children: <Widget>[
                               GestureDetector(
                                   onTap: () {},
-                                  child: YoutubeDisplay(
-                                      widget.course.youtubeUrls != null
-                                          ? widget.course.youtubeUrls![0]
-                                          : '')),
+                                  child: widget.course.thumbnail != null
+                                      ? NetworkImageWithPlaceHolder(
+                                          imageUrl:
+                                              widget.course.thumbnail ?? '',
+                                          height: 90.0,
+                                          width: 160.0,
+                                          cacheHeight: 120,
+                                          cacheWidth: 120,
+                                        )
+                                      : YoutubeDisplay(
+                                          widget.course.youtubeUrls != null
+                                              ? widget.course.youtubeUrls![0]
+                                              : '')),
                               Positioned(
                                 top: 0,
                                 bottom: 0,

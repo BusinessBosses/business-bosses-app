@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
+import 'package:business_bosses_v2/common/widgets/gallery_screen.dart';
 import 'package:business_bosses_v2/features/courses/models/course_model.dart';
 import 'package:business_bosses_v2/features/forum/models/industry.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
@@ -10,6 +11,7 @@ import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:business_bosses_v2/utils/constants/constants.dart';
 import 'package:http/http.dart' as http;
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class CourseController extends GetxController {
@@ -28,6 +30,16 @@ class CourseController extends GetxController {
   RxList<CourseModel> usercourses = <CourseModel>[].obs;
   final ProfileController profileController = Get.find();
   late IO.Socket socket;
+  late List<String> connecteds =
+      profileController.myProfile.connecteds ?? <String>[];
+  List<UserModel> searchedUsers = <UserModel>[];
+  List<CourseModel> searchedPosts = <CourseModel>[];
+  RxBool loadingSearch = RxBool(false);
+  RxBool loadingPostsSearch = RxBool(false);
+  RxList<String> userIds = <String>[].obs;
+  RxBool isUserSearch = RxBool(false);
+  RxList<UserModel> usersMembers = <UserModel>[].obs;
+  late ImagePicker _picker;
 
   @override
   void onInit() async {
@@ -41,6 +53,22 @@ class CourseController extends GetxController {
         industry = Get.arguments;
         initCourses();
       }
+    }
+  }
+
+  /// PICK IMAGE FROM DEVICE GALLERY
+  Future<void> onPickImage(GalleryType type, {bool isUpdating = false}) async {
+    // print(" $updatingImageFileList $isUpdating");
+
+    try {
+      final XFile? pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+      if (pickedFile != null) {
+        
+      }
+      
+      update();
+    } catch (e) {
+      // handle error
     }
   }
 
@@ -222,6 +250,133 @@ class CourseController extends GetxController {
     }
   }
 
+  Future<void> searchUsers(String query) async {
+    loadingSearch(true);
+    update();
+
+    searchedUsers.clear();
+
+    String path =
+        'donation/get-joined-users/6463a069-657d-47ae-b937-9a5d4c336811';
+
+    ApiResponseModel response = await ApiService.get(path: path);
+
+    if (response.success) {
+      List<dynamic> rows = response.data['rows'];
+
+      userIds
+          .addAll(rows.map((dynamic row) => row['userId'].toString()).toList());
+      searchedUsers.clear();
+
+      for (var row in rows) {
+        if (row['user'] != null) {
+          UserModel user = UserModel.fromMap(row['user']);
+          if (user.username.toLowerCase().contains(query.toLowerCase()) ||
+              user.name!.toLowerCase().contains(query.toLowerCase())) {
+            searchedUsers.add(user);
+          }
+        }
+      }
+
+      loadingSearch(false);
+      update();
+    } else {
+      loadingSearch(false);
+      update();
+    }
+  }
+
+  Future<void> searchPosts(
+    String query,
+  ) async {
+    loadingPostsSearch(true);
+    update();
+    searchedPosts.clear();
+    String path = '/courses/get-industry-courses/${industry.industryId}';
+    ApiResponseModel response = await ApiService.get(path: path);
+    print('API Response: $response');
+    if (response.success) {
+      print('Response Data: ${response.data}');
+      List<dynamic> rows = response.data['rows'];
+      print('Rows: $rows');
+      for (var row in rows) {
+        print('Row: $row');
+        if (row['userId'] != null) {
+          if ((row['title'] != null &&
+                  row['title'].toLowerCase().contains(query.toLowerCase())) ||
+              (row['user']['username'] != null &&
+                  row['user']['username']
+                      .toLowerCase()
+                      .contains(query.toLowerCase())) ||
+              (row['user']['name'] != null &&
+                  row['user']['name']
+                      .toLowerCase()
+                      .contains(query.toLowerCase())) ||
+              (row['description'] != null &&
+                  row['description']
+                      .toLowerCase()
+                      .contains(query.toLowerCase()))) {
+            searchedPosts.add(CourseModel.fromMap(<String, dynamic>{
+              ...row,
+              'likes': row['likes']
+                  .map((dynamic like) => like['userId'].toString())
+                  .toList(),
+            }));
+          }
+        }
+      }
+      loadingPostsSearch(false);
+      update();
+    } else {
+      print('Failed API Response: $response');
+      loadingPostsSearch(false);
+      update();
+    }
+  }
+
+  void connectToUser(UserModel user) async {
+    final int checkConnected =
+        connecteds.indexWhere((String element) => element == user.uid);
+    profileController.updateConnections(user.uid);
+    update();
+    if (isUserSearch.value) {
+      final int checkConnectedSearch =
+          connecteds.indexWhere((String element) => element == user.uid);
+      if (checkConnectedSearch == -1) {
+        connecteds.add(user.uid);
+      } else {
+        connecteds.removeAt(checkConnectedSearch);
+      }
+    }
+    if (checkConnected == -1) {
+      connecteds.add(user.uid);
+      await connect(user.uid);
+    } else {
+      connecteds.removeAt(checkConnected);
+      await disconnect(user.uid);
+    }
+
+    update();
+  }
+
+  Future<void> connect(String userId) async {
+    await ApiService.post(path: '/connection/connect', body: <String, dynamic>{
+      'userId': profileController.myProfile.uid,
+      'connectedId': userId,
+      'timestamp': DateTime.now().millisecondsSinceEpoch
+    });
+  }
+
+  Future<void> disconnect(String userId) async {
+    await ApiService.post(
+        path: '/connection/disconnect',
+        body: <String, dynamic>{
+          'userId': profileController.myProfile.uid,
+          'connectedId': userId,
+          'timestamp': DateTime.now().millisecondsSinceEpoch
+        });
+  }
+
   Future<void> initHistory(UserModel user) async {
     hLoading(true);
     hError(false);
@@ -274,9 +429,6 @@ class CourseController extends GetxController {
       });
     }
   }
-
-
-  
 
   void initSocket() {
     socket = IO.io(Constants.socketUrl, <String, dynamic>{
