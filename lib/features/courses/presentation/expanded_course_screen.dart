@@ -22,7 +22,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 int selectedVideo = 0;
 
@@ -139,28 +138,12 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
                   padding: const EdgeInsets.only(top: 120.0),
                   child: Stack(
                     children: <Widget>[
-                      !widget.course.youtubeUrls![selectedVideo]
-                              .contains('youtube')
-                          ? GestureDetector(
-                              onTap: () async {
-                                if (await canLaunchUrl(Uri.parse(widget
-                                    .course.youtubeUrls![selectedVideo]))) {
-                                  await launchUrl(Uri.parse(widget
-                                      .course.youtubeUrls![selectedVideo]));
-                                }
-                              },
-                              child: NetworkImageWithPlaceHolder(
-                                imageUrl: widget.course.thumbnail ?? '',
-                                height: 300.0,
-                                width: 300.0,
-                                // cacheHeight: 120,
-                                // cacheWidth: 120,
-                              ),
-                            )
-                          : YoutubeDisplay(
+                      isValidYoutubeUrl(widget.course.youtubeUrls![0])
+                          ? YoutubeDisplay(
                               widget.course.youtubeUrls![selectedVideo],
                               corner: BorderRadius.circular(0),
-                            ),
+                            )
+                          : SizedBox(),
                       Visibility(
                         visible: widget.course.courseType == 'paid',
                         child: GestureDetector(
@@ -699,11 +682,15 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
                                                   fit: BoxFit.fill,
                                                   child: Stack(
                                                     children: <Widget>[
-                                                      YoutubeDisplay(
-                                                        widget.course
-                                                                .youtubeUrls![
-                                                            index],
-                                                      ),
+                                                      isValidYoutubeUrl(widget
+                                                              .course
+                                                              .youtubeUrls![0])
+                                                          ? YoutubeDisplay(
+                                                              widget.course
+                                                                      .youtubeUrls![
+                                                                  index],
+                                                            )
+                                                          : const SizedBox(),
                                                       Positioned(
                                                         top: 0,
                                                         bottom: 0,
@@ -1015,5 +1002,14 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
         'https://businessbosses.onelink.me/xLWk/36a2ff16';
     logEvent(widget.course.id, 'course');
     socialShare(message);
+  }
+
+  bool isValidYoutubeUrl(String url) {
+    final RegExp youtubeRegExp = RegExp(
+      r'^(https?\:\/\/)?(www\.youtube\.com\/watch\?v=|youtu\.be\/).+$',
+      caseSensitive: false,
+      multiLine: false,
+    );
+    return youtubeRegExp.hasMatch(url);
   }
 }
