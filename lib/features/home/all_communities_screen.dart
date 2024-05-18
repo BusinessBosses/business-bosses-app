@@ -119,10 +119,16 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
                                   if (_searchTabController.index == 0) {
                                     controller.onSearch(
                                         _searchTabController.index, query);
+                                  } else {
+                                    controller.onSearch(
+                                        _searchTabController.index, query);
                                   }
                                 },
                                 onSubmit: (String query) {
-                                  if (_searchTabController.index == 1) {
+                                  if (_searchTabController.index == 0) {
+                                    controller.onSearch(
+                                        _searchTabController.index, query);
+                                  } else {
                                     controller.onSearch(
                                         _searchTabController.index, query);
                                   }
