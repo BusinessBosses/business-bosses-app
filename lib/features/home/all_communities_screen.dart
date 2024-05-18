@@ -86,10 +86,10 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
         length: 3, vsync: this, initialIndex: widget.initialTabIndex ?? 0);
     _donationspageTabController = TabController(length: 2, vsync: this);
 
-    // Adding listener to update state on tab change
-    _pageTabController.addListener(() {
-      setState(() {}); // Update state when tab changes
-    });
+    // // Adding listener to update state on tab change
+    // _pageTabController.addListener(() {
+    //   setState(() {}); // Update state when tab changes
+    // });
   }
 
   @override
@@ -135,7 +135,7 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
                                         'Search Donations Members or Posts',
                                     onChange: (String query) {
                                       if (query.isEmpty) {
-                                        _donationsearchTabController.index == 0
+                                        _donationsearchTabController.index == 1
                                             ? donationsController
                                                 .clearUserSearch()
                                             : donationsController
@@ -144,7 +144,7 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
                                       setState(() {});
                                     },
                                     onSubmit: (String query) {
-                                      _donationsearchTabController.index == 0
+                                      _donationsearchTabController.index == 1
                                           ? donationsController
                                               .searchUsers(query)
                                           : donationsController
@@ -174,8 +174,8 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
                                     labelColor: Colors.black,
                                     indicatorColor: primaryColorLT,
                                     tabs: const <Widget>[
-                                      Tab(text: 'People'),
-                                      Tab(text: 'Posts'),
+                                      Tab(text: 'Projects'),
+                                      Tab(text: 'Members'),
                                     ],
                                   )
                                 : TabBar(
@@ -184,8 +184,8 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
                                         fontWeight: FontWeight.w500),
                                     labelColor: Colors.black,
                                     tabs: const <Widget>[
-                                      Tab(text: 'Groups'),
                                       Tab(text: 'Posts'),
+                                      Tab(text: 'Groups'),
                                     ],
                                   ),
                       ),
@@ -265,6 +265,16 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
                               ? TabBarView(
                                   controller: _donationsearchTabController,
                                   children: [
+                                    Obx(
+                                      () => FilterDonationPosts(
+                                        filterItems:
+                                            donationsController.searchedPosts,
+                                        isLoading:
+                                            donationsController.loading.value ||
+                                                donationsController
+                                                    .loadingPostsSearch.value,
+                                      ),
+                                    ),
                                     Obx(() => FilterDonationsUsers(
                                           members:
                                               donationsController.usersMembers,
@@ -279,30 +289,11 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
                                           isSearch: donationsController
                                               .isUserSearch.value,
                                         )),
-                                    Obx(
-                                      () => FilterDonationPosts(
-                                        filterItems:
-                                            donationsController.searchedPosts,
-                                        isLoading:
-                                            donationsController.loading.value ||
-                                                donationsController
-                                                    .loadingPostsSearch.value,
-                                      ),
-                                    )
                                   ],
                                 )
                               : TabBarView(
                                   controller: _searchTabController,
                                   children: <Widget>[
-                                    Container(
-                                      color: Theme.of(context)
-                                          .scaffoldBackgroundColor,
-                                      height: double.infinity,
-                                      width: double.infinity,
-                                      child: MySearchIndustries(
-                                          searchIndustries:
-                                              controller.searchedIndustries),
-                                    ),
                                     Container(
                                       color: Theme.of(context)
                                           .scaffoldBackgroundColor,
@@ -319,9 +310,9 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
                                                   color: hintColor,
                                                   height: 80.0,
                                                   width: 80.0),
-                                              title: 'Search for Category name',
+                                              title: 'Search for Posts',
                                               subTitle:
-                                                  'Search for specific topic of Category name',
+                                                  'Search for specific topics ',
                                             )
                                           : ListView.builder(
                                               key: const ValueKey(
@@ -342,6 +333,15 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
                                                     controller: controller);
                                               },
                                             ),
+                                    ),
+                                    Container(
+                                      color: Theme.of(context)
+                                          .scaffoldBackgroundColor,
+                                      height: double.infinity,
+                                      width: double.infinity,
+                                      child: MySearchIndustries(
+                                          searchIndustries:
+                                              controller.searchedIndustries),
                                     ),
                                   ],
                                 ),

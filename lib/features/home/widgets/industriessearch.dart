@@ -27,8 +27,8 @@ class MySearchIndustries extends StatelessWidget {
             isLoading: isLoading,
             icon: SvgPicture.asset('assets/svgs/search.svg',
                 color: hintColor, height: 80.0, width: 80.0),
-            title: 'Search for industries',
-            subTitle: 'Search for specific industry!',
+            title: 'Search for groups',
+            subTitle: 'Search for specific groups!',
           )
         : ListView.builder(
             padding: const EdgeInsets.only(

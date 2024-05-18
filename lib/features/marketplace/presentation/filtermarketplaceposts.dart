@@ -1,6 +1,7 @@
-import 'package:business_bosses_v2/features/donations/controller/donations_controller.dart';
-import 'package:business_bosses_v2/features/donations/models/donations_model.dart';
-import 'package:business_bosses_v2/features/donations/widgets/donation_item.dart';
+
+import 'package:business_bosses_v2/features/marketplace/controllers/market_controller.dart';
+import 'package:business_bosses_v2/features/marketplace/models/market_model.dart';
+import 'package:business_bosses_v2/features/marketplace/widgets/marketplace_item.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -8,15 +9,15 @@ import '../../../common/widgets/safety_model.dart';
 import '../../../utils/theme/theme.dart';
 import '../../home/controller/home_controller.dart';
 
-class FilterDonationPosts extends StatelessWidget {
-  final List<DonationModel> filterItems;
+class FilterMarketplacePosts extends StatelessWidget {
+  final List<MarketModel> filterItems;
   final bool isLoading;
   final bool isSearch;
 
   /// CONSTRUCTOR
-  const FilterDonationPosts({
+  const FilterMarketplacePosts({
     Key? key,
-    this.filterItems = const <DonationModel>[],
+    this.filterItems = const <MarketModel>[],
     this.isLoading = false,
     this.isSearch = false,
   }) : super(key: key);
@@ -24,7 +25,7 @@ class FilterDonationPosts extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final HomeController homeController = Get.find();
-    final DonationsController controller = Get.find();
+    final MarketController controller = Get.find();
 
     return GestureDetector(
       onTap: () {
@@ -33,12 +34,12 @@ class FilterDonationPosts extends StatelessWidget {
       child: filterItems.isEmpty
           ? SafetyModel(
               icon: const Icon(
-                Icons.edit,
+                Icons.search,
                 size: 80.0,
                 color: hintColor,
               ),
-              title: 'No projects found',
-              subTitle: 'Your searched projects will be displayed here!',
+              title: 'No results found',
+              subTitle: 'Your results will be displayed here!',
               isLoading: isLoading,
             )
           : NotificationListener<ScrollNotification>(
@@ -49,12 +50,11 @@ class FilterDonationPosts extends StatelessWidget {
               child: ListView.separated(
                 key: key,
                 separatorBuilder: (_, __) => const SizedBox(height: 0.0),
-                padding: const EdgeInsets.all(16.0),
+                padding: const EdgeInsets.all(0.0),
                 itemCount: filterItems.length,
                 itemBuilder: (BuildContext context, int i) {
-                  return DonationItem(
-                    isLastItem: false,
-                    donation: filterItems[i],
+                  return MarketTile(
+                    post: filterItems[i], controller: controller,
                   );
                 },
               ),

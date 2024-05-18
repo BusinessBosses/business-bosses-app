@@ -290,8 +290,9 @@ class _AllForumScreenState extends State<AllForumScreen>
                         labelColor: Colors.black,
                         indicatorColor: primaryColorLT,
                         tabs: const <Widget>[
+                           Tab(text: 'Posts'),
                           Tab(text: 'People'),
-                          Tab(text: 'Posts'),
+                         
                         ],
                       )
                     : TabBar(
@@ -301,8 +302,9 @@ class _AllForumScreenState extends State<AllForumScreen>
                         labelColor: Colors.black,
                         indicatorColor: primaryColorLT,
                         tabs: const <Widget>[
-                          Tab(text: 'People'),
                           Tab(text: 'Posts'),
+                          Tab(text: 'People'),
+                          
                         ],
                       ),
           ),

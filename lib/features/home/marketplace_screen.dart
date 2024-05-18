@@ -1,9 +1,11 @@
+import 'package:business_bosses_v2/features/donations/presentation/filterdonationposts.dart';
 import 'package:business_bosses_v2/features/donations/presentation/filterdonationusers.dart';
 import 'package:business_bosses_v2/features/forum/models/industry.dart';
 import 'package:business_bosses_v2/features/home/widgets/bottom_bar.dart';
 import 'package:business_bosses_v2/features/home/widgets/floatingbutton.dart';
 import 'package:business_bosses_v2/features/home/widgets/sellingpopup.dart';
 import 'package:business_bosses_v2/features/marketplace/models/market_model.dart';
+import 'package:business_bosses_v2/features/marketplace/presentation/filtermarketplaceposts.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/market_members.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/sell_screen.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/sell_services.dart';
@@ -60,11 +62,12 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
   bool showFloatingButton = false;
   bool _ismarketplaceSearching = false;
   late final TabController _marketplacesearchTabController;
+  bool isfiltervisible = false;
 
   @override
   void initState() {
     super.initState();
-    _marketplacesearchTabController = TabController(length: 2, vsync: this);
+    _marketplacesearchTabController = TabController(length: 3, vsync: this);
     _scrollController.addListener(() {
       double percentageScrolled =
           _scrollController.offset / _scrollController.position.maxScrollExtent;
@@ -114,16 +117,22 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                   hintText: 'Search Marketplace',
                   onChange: (String query) {
                     if (query.isEmpty) {
-                      _marketplacesearchTabController.index == 0
+                      _marketplacesearchTabController.index == 2
                           ? _marketController.clearUserSearch()
-                          : _marketController.clearPostSearch();
+                          : _marketplacesearchTabController.index == 1
+                              ? _marketController.clearPostSearch()
+                              : _marketController.clearServiceSearch();
                     }
                     setState(() {});
                   },
                   onSubmit: (String query) {
-                    _marketplacesearchTabController.index == 0
+                    _marketplacesearchTabController.index == 2
                         ? _marketController.searchUsers(query)
-                        : null;
+                        : _marketplacesearchTabController.index == 1
+                            ? _marketController.searchServices(query)
+                            : _marketController.searchPosts(
+                                query,
+                              );
                     setState(() {});
                   },
                 )
@@ -135,8 +144,9 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                   labelColor: Colors.black,
                   indicatorColor: primaryColorLT,
                   tabs: const <Widget>[
-                    Tab(text: 'People'),
-                    Tab(text: 'Posts'),
+                    Tab(text: 'Products'),
+                    Tab(text: 'Services'),
+                    Tab(text: 'Sellers'),
                   ],
                 )
               : const PreferredSize(
@@ -145,278 +155,541 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                 ),
           actions: <Widget>[
             IconButton(
-                icon: _ismarketplaceSearching
-                    ? const Icon(Icons.close)
-                    : SvgPicture.asset(
-                        'assets/svgs/search.svg',
-                       
-                      ),
-                onPressed: () {
-                  _ismarketplaceSearching
-                      ? {
-                          _ismarketplaceSearching = !_ismarketplaceSearching,
-                          setState(() {})
-                        }
-                      : showModalBottomSheet(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          backgroundColor: Colors.white,
-                          context: context,
-                          builder: (BuildContext context) {
-                            return Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 20.0, vertical: 20),
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      Get.back();
-                                      _ismarketplaceSearching =
-                                          !_ismarketplaceSearching;
-                                      setState(() {});
-                                    },
-                                    child: SizedBox(
-                                      height: 42,
-                                      width: double.infinity,
-                                      child: TextFormField(
-                                        // key: searchkey,
-                                        style: const TextStyle(fontSize: 20),
-                                        decoration: inputDecoration.copyWith(
-                                          border: OutlineInputBorder(
-                                            borderSide: BorderSide.none,
+              icon: _ismarketplaceSearching
+                  ? const Icon(Icons.close)
+                  : SvgPicture.asset(
+                      'assets/svgs/search.svg',
+                    ),
+              onPressed: () {
+                _ismarketplaceSearching = !_ismarketplaceSearching;
+                setState(() {});
+              },
+            )
+          ]
+          // showDialog(
+          //   context: context,
+          //   builder: (BuildContext context) {
+          //     return Center(
+          //       child: StatefulBuilder(builder:
+          //           (BuildContext context, StateSetter setState) {
+          //         return AlertDialog(
+          //           shape: RoundedRectangleBorder(
+          //             borderRadius: BorderRadius.circular(16.0),
+          //           ),
+          //           title: Row(
+          //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //             children: <Widget>[
+          //               const Text('Filter'),
+          //               IconButton(
+          //                 icon: const Icon(Icons.close),
+          //                 color: Colors.red,
+          //                 onPressed: () {
+          //                   Navigator.of(context).pop();
+          //                 },
+          //               ),
+          //             ],
+          //           ),
+          //           content: SingleChildScrollView(
+          //             child: Column(
+          //               children: <Widget>[
+          //                 Column(
+          //                   children: <Widget>[
+          //                     filteredCategory == null ||
+          //                             filteredCategory == 'Products'
+          //                         ? GestureDetector(
+          //                             onTap: () {
+          //                               setState(() {
+          //                                 if (filteredCategory ==
+          //                                     'Products') {
+          //                                   _selectedLocation = null;
+          //                                   _selectedCategory = null;
+          //                                   filteredCategory = null;
+          //                                 } else {
+          //                                   filteredCategory =
+          //                                       'Products';
+          //                                 }
+          //                               });
+          //                             },
+          //                             child: Container(
+          //                               alignment: Alignment.bottomLeft,
+          //                               decoration: BoxDecoration(
+          //                                 color:
+          //                                     backgroundcolorinterface,
+          //                                 borderRadius:
+          //                                     BorderRadius.circular(
+          //                                         radiusValue),
+          //                               ),
+          //                               padding: const EdgeInsets.only(
+          //                                 left: 16.0,
+          //                                 right: 16,
+          //                                 top: 15,
+          //                                 bottom: 15,
+          //                               ),
+          //                               margin: const EdgeInsets.only(
+          //                                 left: 10,
+          //                                 right: 10,
+          //                               ),
+          //                               child: const Row(
+          //                                 mainAxisAlignment:
+          //                                     MainAxisAlignment
+          //                                         .spaceBetween,
+          //                                 children: <Widget>[
+          //                                   Text(
+          //                                     'Products',
+          //                                     style: TextStyle(
+          //                                       fontSize: 16,
+          //                                     ),
+          //                                   ),
+          //                                   Icon(
+          //                                     Icons.arrow_forward_ios,
+          //                                     size: 10,
+          //                                   ),
+          //                                 ],
+          //                               ),
+          //                             ),
+          //                           )
+          //                         : Container(),
+          //                     const SizedBox(height: 10),
+          //                     filteredCategory == null ||
+          //                             filteredCategory == 'Services'
+          //                         ? GestureDetector(
+          //                             onTap: () {
+          //                               setState(() {
+          //                                 if (filteredCategory ==
+          //                                     'Services') {
+          //                                   _selectedLocation = null;
+          //                                   _selectedCategory = null;
+          //                                   filteredCategory = null;
+          //                                 } else {
+          //                                   filteredCategory =
+          //                                       'Services';
+          //                                 }
+          //                               });
+          //                             },
+          //                             child: Container(
+          //                               alignment: Alignment.bottomLeft,
+          //                               decoration: BoxDecoration(
+          //                                 color:
+          //                                     backgroundcolorinterface,
+          //                                 borderRadius:
+          //                                     BorderRadius.circular(
+          //                                         radiusValue),
+          //                               ),
+          //                               padding: const EdgeInsets.only(
+          //                                 left: 16.0,
+          //                                 right: 16,
+          //                                 top: 15,
+          //                                 bottom: 15,
+          //                               ),
+          //                               margin: const EdgeInsets.only(
+          //                                 left: 10,
+          //                                 right: 10,
+          //                               ),
+          //                               child: const Row(
+          //                                 mainAxisAlignment:
+          //                                     MainAxisAlignment
+          //                                         .spaceBetween,
+          //                                 children: <Widget>[
+          //                                   Text(
+          //                                     'Services',
+          //                                     style: TextStyle(
+          //                                       fontSize: 16,
+          //                                     ),
+          //                                   ),
+          //                                   Icon(
+          //                                     Icons.arrow_forward_ios,
+          //                                     size: 10,
+          //                                   ),
+          //                                 ],
+          //                               ),
+          //                             ),
+          //                           )
+          //                         : Container(),
+          //                   ],
+          //                 ),
+          //                 const SizedBox(height: 12.0),
+          //                 filteredCategory == 'Products'
+          //                     ? Container(
+          //                         decoration: BoxDecoration(
+          //                           color: backgroundcolorinterface,
+          //                           borderRadius: BorderRadius.circular(
+          //                               radiusValue),
+          //                         ),
+          //                         padding: const EdgeInsets.only(
+          //                           left: 16.0,
+          //                           right: 16,
+          //                           top: 4,
+          //                           bottom: 5,
+          //                         ),
+          //                         margin: const EdgeInsets.only(
+          //                           left: 10,
+          //                           right: 10,
+          //                         ),
+          //                         child: DropdownButton<String>(
+          //                           underline: Container(),
+          //                           value: _selectedCategory,
+          //                           isExpanded: true,
+          //                           icon: const Icon(
+          //                             Icons.keyboard_arrow_right,
+          //                           ),
+          //                           iconSize: 24,
+          //                           elevation: 16,
+          //                           onChanged: (String? newValue) {
+          //                             setState(() {
+          //                               _selectedCategory = newValue!;
+          //                             });
+          //                           },
+          //                           items: <String?>[
+          //                             null,
+          //                             'Home, Garden & Outdoors',
+          //                             'Fashion & Beauty',
+          //                             'Sports & Entertainment',
+          //                             'Books & Education',
+          //                             'Jewellery & Timepieces',
+          //                             'Security, Safety & Equipment',
+          //                             'Video Games & Electronics',
+          //                             'Agriculture, Food, Beverage',
+          //                             'Construction & Real Estate',
+          //                             'Vehicle & Transportation',
+          //                             'Business Services & Events',
+          //                             'Other',
+          //                           ].map<DropdownMenuItem<String>>(
+          //                               (String? value) {
+          //                             return DropdownMenuItem<String>(
+          //                               value: value,
+          //                               child: value != null
+          //                                   ? Text(value)
+          //                                   : Text(
+          //                                       value ??
+          //                                           'Select Category',
+          //                                       style:
+          //                                           bodyText2.copyWith(
+          //                                         color: hintColor,
+          //                                       ),
+          //                                     ),
+          //                             );
+          //                           }).toList(),
+          //                         ),
+          //                       )
+          //                     : filteredCategory == 'Services'
+          //                         ? Container(
+          //                             decoration: BoxDecoration(
+          //                               color: backgroundcolorinterface,
+          //                               borderRadius:
+          //                                   BorderRadius.circular(
+          //                                       radiusValue),
+          //                             ),
+          //                             padding: const EdgeInsets.only(
+          //                               left: 16.0,
+          //                               right: 16,
+          //                               top: 4,
+          //                               bottom: 5,
+          //                             ),
+          //                             margin: const EdgeInsets.only(
+          //                               left: 10,
+          //                               right: 10,
+          //                             ),
+          //                             child: DropdownButton<String>(
+          //                               underline: Container(),
+          //                               value: _selectedCategory,
+          //                               isExpanded: true,
+          //                               icon: const Icon(
+          //                                 Icons.keyboard_arrow_right,
+          //                               ),
+          //                               iconSize: 24,
+          //                               elevation: 16,
+          //                               onChanged: (String? newValue) {
+          //                                 setState(() {
+          //                                   _selectedCategory =
+          //                                       newValue!;
+          //                                 });
+          //                               },
+          //                               items: <String?>[
+          //                                 null,
+          //                                 'Write 1 Page Business Plan',
+          //                                 'Build 1 Page Website',
+          //                                 'Create Social Media AD',
+          //                                 'Monthly Account Book Keeping',
+          //                                 'Logo & Branding Guidelines',
+          //                                 'Test, Review & Feedback',
+          //                               ].map<DropdownMenuItem<String>>(
+          //                                   (String? value) {
+          //                                 return DropdownMenuItem<
+          //                                     String>(
+          //                                   value: value,
+          //                                   child: value != null
+          //                                       ? Text(value)
+          //                                       : Text(
+          //                                           value ??
+          //                                               'Select Service Type',
+          //                                           style: bodyText2
+          //                                               .copyWith(
+          //                                             color: hintColor,
+          //                                           ),
+          //                                         ),
+          //                                 );
+          //                               }).toList(),
+          //                             ),
+          //                           )
+          //                         : Container(),
+          //                 const SizedBox(height: 12.0),
+          //                 filteredCategory == 'Products'
+          //                     ? CountryListPick(
+          //                         appBar: AppBar(
+          //                           leading: IconButton(
+          //                             onPressed: () {
+          //                               Navigator.pop(context);
+          //                             },
+          //                             icon: SvgPicture.asset(
+          //                                 'assets/svgs/backbutton.svg'),
+          //                           ),
+          //                           centerTitle: true,
+          //                           // ignore: prefer_const_constructors
+          //                           title: Text(
+          //                             'Select Location',
+          //                             textAlign: TextAlign.center,
+          //                             style:
+          //                                 const TextStyle(fontSize: 20),
+          //                           ),
+          //                         ),
+          //                         initialSelection: filterCode ?? 'GB',
+          //                         pickerBuilder: (BuildContext context,
+          //                             CountryCode? countryCode) {
+          //                           return Container(
+          //                             decoration: BoxDecoration(
+          //                               color: backgroundcolorinterface,
+          //                               borderRadius:
+          //                                   BorderRadius.circular(
+          //                                       radiusValue),
+          //                             ),
+          //                             child: ListTile(
+          //                               leading: _selectedLocation !=
+          //                                       null
+          //                                   ? Text(_selectedLocation!)
+          //                                   : Text(
+          //                                       'Location',
+          //                                       style:
+          //                                           bodyText2.copyWith(
+          //                                               color:
+          //                                                   hintColor),
+          //                                     ),
+          //                               trailing: const Icon(
+          //                                   Icons.keyboard_arrow_right),
+          //                             ),
+          //                           );
+          //                         },
+          //                         onChanged: (CountryCode? code) {
+          //                           setState(
+          //                             () {
+          //                               _selectedLocation = code?.name;
+          //                               filterCode = code?.code;
+          //                             },
+          //                           );
+          //                         },
+          //                         useSafeArea: false,
+          //                       )
+          //                     : filteredCategory == 'Services'
+          //                         ? Container(
+          //                             decoration: BoxDecoration(
+          //                               color: backgroundcolorinterface,
+          //                               borderRadius:
+          //                                   BorderRadius.circular(
+          //                                       radiusValue),
+          //                             ),
+          //                             padding: const EdgeInsets.only(
+          //                               left: 16.0,
+          //                               right: 16,
+          //                               top: 4,
+          //                               bottom: 5,
+          //                             ),
+          //                             margin: const EdgeInsets.only(
+          //                               left: 10,
+          //                               right: 10,
+          //                             ),
+          //                             child: DropdownButton<String>(
+          //                               underline: Container(),
+          //                               value: _selectedLocation,
+          //                               isExpanded: true,
+          //                               icon: const Icon(
+          //                                 Icons.keyboard_arrow_right,
+          //                               ),
+          //                               iconSize: 24,
+          //                               elevation: 16,
+          //                               onChanged: (String? newValue) {
+          //                                 setState(() {
+          //                                   _selectedLocation =
+          //                                       newValue!;
+          //                                 });
+          //                               },
+          //                               items: <String?>[
+          //                                 null,
+          //                                 '1 Day Delivery',
+          //                                 '2 Day Delivery',
+          //                                 '3 Day Delivery',
+          //                                 '4 Day Delivery',
+          //                                 '5 Day Delivery',
+          //                                 '6 Day Delivery',
+          //                                 '7 Day Delivery',
+          //                                 '8 Day Delivery',
+          //                                 '9 Day Delivery',
+          //                                 '10 Day Delivery',
+          //                                 '11 Day Delivery',
+          //                                 '12 Day Delivery',
+          //                                 '13 Day Delivery',
+          //                                 '14 Day Delivery',
+          //                                 '15 Day Delivery',
+          //                               ].map<DropdownMenuItem<String>>(
+          //                                   (String? value) {
+          //                                 return DropdownMenuItem<
+          //                                     String>(
+          //                                   value: value,
+          //                                   child: value != null
+          //                                       ? Text(value)
+          //                                       : Text(
+          //                                           value ??
+          //                                               'Select Delivery Time',
+          //                                           style: bodyText2
+          //                                               .copyWith(
+          //                                             color: hintColor,
+          //                                           ),
+          //                                         ),
+          //                                 );
+          //                               }).toList(),
+          //                             ),
+          //                           )
+          //                         : Container(),
+          //               ],
+          //             ),
+          //           ),
+          //           actions: <Widget>[
+          //             Padding(
+          //               padding: const EdgeInsets.only(
+          //                   right: 25.0, bottom: 10),
+          //               child: Row(
+          //                 mainAxisAlignment: MainAxisAlignment.end,
+          //                 children: <Widget>[
+          //                   TextButton(
+          //                     child: const Text('Reset'),
+          //                     onPressed: () {
+          //                       setState(() {
+          //                         filterLocation = null;
+          //                         filterCode = null;
+          //                         filterCategory = null;
+          //                         _selectedLocation = null;
+          //                         _selectedCategory = null;
+          //                         filteredCategory = null;
+          //                         _marketController.updateFiltered();
+          //                         _marketController.initMarket();
+          //                         Navigator.of(context).pop();
+          //                       });
+          //                     },
+          //                   ),
+          //                   ElevatedButton(
+          //                     child: const Text('Search'),
+          //                     onPressed: () {
+          //                       setState(() {
+          //                         filterLocation = _selectedLocation;
+          //                         filterCategory = _selectedCategory;
+          //                         _marketController.filterMarket(
+          //                             filterLocation, filterCategory);
+          //                       });
+          //                       Navigator.of(context).pop();
+          //                     },
+          //                   ),
+          //                 ],
+          //               ),
+          //             )
+          //           ],
+          //         );
+          //       }),
+          //     );
+          //   },
+          // );
+
+          ),
+      body: _marketController.isLoading
+          ? const CircularProgressIndicator()
+          : _ismarketplaceSearching
+              ? TabBarView(
+                  controller: _marketplacesearchTabController,
+                  children: [
+                    Obx(
+                      () => Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                  padding: EdgeInsets.only(left: 15),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      const Text(
+                                        'Filter results',
+                                        style: TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.w700),
+                                      ),
+                                      Wrap(
+                                          crossAxisAlignment:
+                                              WrapCrossAlignment.center,
+                                          children: [
+                                            GestureDetector(
+                                              onTap: (){
+                                                setState(() {
+                                                  // _selectedLocation='';
+                                                  // _selectedCategory='';
+                                                });
+                                              },
+                                              child: const Text(
+                                                'Clear Filter',
+                                                style: TextStyle(
+                                                    color: Colors.red,
+                                                    fontSize: 12,
+                                                    fontWeight: FontWeight.w700),
+                                              ),
+                                            ),
+                                            IconButton(
+                                                onPressed: () {
+                                                  setState(() {
+                                                    isfiltervisible =
+                                                        !isfiltervisible;
+                                                  });
+                                                },
+                                                icon: Icon(isfiltervisible
+                                                    ? Icons.cancel
+                                                    : Icons
+                                                        .keyboard_arrow_down))
+                                          ]),
+                                    ],
+                                  )),
+                              Visibility(
+                                visible: isfiltervisible,
+                                child: SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 15.0),
+                                    child: Row(
+                                      children: [
+                                        Container(
+                                          width: 250,
+                                          padding: EdgeInsets.symmetric(
+                                            horizontal: 15,
+                                          ),
+                                          decoration: BoxDecoration(
+                                            color: Colors.white,
                                             borderRadius:
                                                 BorderRadius.circular(10),
                                           ),
-                                          fillColor: backgroundcolorinterface,
-                                          filled: true,
-                                          enabled: false,
-                                          prefixIcon: Container(
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 10.0),
-                                            child: SvgPicture.asset(
-                                              'assets/svgs/search.svg',
-                                              color: hintColor,
-                                            ),
-                                          ),
-                                          hintText: 'Search Marketplace',
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                const Padding(
-                                  padding: EdgeInsets.only(
-                                      left: 20, top: 15, bottom: 15),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: <Widget>[
-                                      Text(
-                                        'Filter Marketplace',
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 18,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                const Divider(
-                                  height: 1,
-                                  color: backgroundColor,
-                                ),
-                                filteredCategory == null ||
-                                        filteredCategory == 'Products'
-                                    ? GestureDetector(
-                                        onTap: () {
-                                          setState(() {
-                                            if (filteredCategory ==
-                                                'Products') {
-                                              _selectedLocation = null;
-                                              _selectedCategory = null;
-                                              filteredCategory = null;
-                                            } else {
-                                              filteredCategory = 'Products';
-                                            }
-                                          });
-                                        },
-                                        child: Container(
-                                          alignment: Alignment.bottomLeft,
-                                          decoration: BoxDecoration(
-                                            color: backgroundcolorinterface,
-                                            borderRadius: BorderRadius.circular(
-                                                radiusValue),
-                                          ),
-                                          padding: const EdgeInsets.only(
-                                            left: 16.0,
-                                            right: 16,
-                                            top: 15,
-                                            bottom: 15,
-                                          ),
-                                          margin: const EdgeInsets.only(
-                                            left: 10,
-                                            right: 10,
-                                          ),
-                                          child: const Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: <Widget>[
-                                              Text(
-                                                'Products',
-                                                style: TextStyle(
-                                                  fontSize: 16,
-                                                ),
-                                              ),
-                                              Icon(
-                                                Icons.arrow_forward_ios,
-                                                size: 10,
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      )
-                                    : Container(),
-                                filteredCategory == null ||
-                                        filteredCategory == 'Services'
-                                    ? GestureDetector(
-                                        onTap: () {
-                                          setState(() {
-                                            if (filteredCategory ==
-                                                'Services') {
-                                              _selectedLocation = null;
-                                              _selectedCategory = null;
-                                              filteredCategory = null;
-                                            } else {
-                                              filteredCategory = 'Services';
-                                            }
-                                          });
-                                        },
-                                        child: Container(
-                                          alignment: Alignment.bottomLeft,
-                                          decoration: BoxDecoration(
-                                            color: backgroundcolorinterface,
-                                            borderRadius: BorderRadius.circular(
-                                                radiusValue),
-                                          ),
-                                          padding: const EdgeInsets.only(
-                                            left: 16.0,
-                                            right: 16,
-                                            top: 15,
-                                            bottom: 15,
-                                          ),
-                                          margin: const EdgeInsets.only(
-                                            left: 10,
-                                            right: 10,
-                                          ),
-                                          child: const Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: <Widget>[
-                                              Text(
-                                                'Services',
-                                                style: TextStyle(
-                                                  fontSize: 16,
-                                                ),
-                                              ),
-                                              Icon(
-                                                Icons.arrow_forward_ios,
-                                                size: 10,
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      )
-                                    : Container(),
-                                const SizedBox(height: 12.0),
-                                filteredCategory == 'Products'
-                                    ? Container(
-                                        decoration: BoxDecoration(
-                                          color: backgroundcolorinterface,
-                                          borderRadius: BorderRadius.circular(
-                                              radiusValue),
-                                        ),
-                                        padding: const EdgeInsets.only(
-                                          left: 16.0,
-                                          right: 16,
-                                          top: 4,
-                                          bottom: 5,
-                                        ),
-                                        margin: const EdgeInsets.only(
-                                          left: 10,
-                                          right: 10,
-                                        ),
-                                        child: DropdownButton<String>(
-                                          underline: Container(),
-                                          value: _selectedCategory,
-                                          isExpanded: true,
-                                          icon: const Icon(
-                                            Icons.keyboard_arrow_right,
-                                          ),
-                                          iconSize: 24,
-                                          elevation: 16,
-                                          onChanged: (String? newValue) {
-                                            setState(() {
-                                              _selectedCategory = newValue!;
-                                            });
-                                          },
-                                          items: <String?>[
-                                            null,
-                                            'Home, Garden & Outdoors',
-                                            'Fashion & Beauty',
-                                            'Sports & Entertainment',
-                                            'Books & Education',
-                                            'Jewellery & Timepieces',
-                                            'Security, Safety & Equipment',
-                                            'Video Games & Electronics',
-                                            'Agriculture, Food, Beverage',
-                                            'Construction & Real Estate',
-                                            'Vehicle & Transportation',
-                                            'Business Services & Events',
-                                            'Other',
-                                          ].map<DropdownMenuItem<String>>(
-                                              (String? value) {
-                                            return DropdownMenuItem<String>(
-                                              value: value,
-                                              child: value != null
-                                                  ? Text(value)
-                                                  : Text(
-                                                      value ??
-                                                          'Select Category',
-                                                      style: bodyText2.copyWith(
-                                                        color: hintColor,
-                                                      ),
-                                                    ),
-                                            );
-                                          }).toList(),
-                                        ),
-                                      )
-                                    : filteredCategory == 'Services'
-                                        ? Container(
-                                            decoration: BoxDecoration(
-                                              color: backgroundcolorinterface,
-                                              borderRadius:
-                                                  BorderRadius.circular(
-                                                      radiusValue),
-                                            ),
-                                            padding: const EdgeInsets.only(
-                                              left: 16.0,
-                                              right: 16,
-                                              top: 4,
-                                              bottom: 5,
-                                            ),
-                                            margin: const EdgeInsets.only(
-                                              left: 10,
-                                              right: 10,
-                                            ),
+                                          child: DropdownButtonHideUnderline(
                                             child: DropdownButton<String>(
-                                              underline: Container(),
                                               value: _selectedCategory,
                                               isExpanded: true,
                                               icon: const Icon(
-                                                Icons.keyboard_arrow_right,
+                                                Icons.keyboard_arrow_down,
                                               ),
                                               iconSize: 24,
                                               elevation: 16,
@@ -427,21 +700,36 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                                               },
                                               items: <String?>[
                                                 null,
-                                                'Write 1 Page Business Plan',
-                                                'Build 1 Page Website',
-                                                'Create Social Media AD',
-                                                'Monthly Account Book Keeping',
-                                                'Logo & Branding Guidelines',
-                                                'Test, Review & Feedback',
+                                                'Home, Garden & Outdoors',
+                                                'Fashion & Beauty',
+                                                'Sports & Entertainment',
+                                                'Books & Education',
+                                                'Jewellery & Timepieces',
+                                                'Security, Safety & Equipment',
+                                                'Video Games & Electronics',
+                                                'Agriculture, Food, Beverage',
+                                                'Construction & Real Estate',
+                                                'Vehicle & Transportation',
+                                                'Business Services & Events',
+                                                'Other',
                                               ].map<DropdownMenuItem<String>>(
                                                   (String? value) {
                                                 return DropdownMenuItem<String>(
                                                   value: value,
                                                   child: value != null
-                                                      ? Text(value)
+                                                      ? Text(
+                                                          value,
+                                                          overflow: TextOverflow
+                                                              .ellipsis, // Prevent text overflow
+                                                          maxLines:
+                                                              1, // Ensure single line
+                                                        )
                                                       : Text(
-                                                          value ??
-                                                              'Select Service Type',
+                                                          'Select Category',
+                                                          overflow: TextOverflow
+                                                              .ellipsis, // Prevent text overflow
+                                                          maxLines:
+                                                              1, // Ensure single line
                                                           style: bodyText2
                                                               .copyWith(
                                                             color: hintColor,
@@ -450,625 +738,132 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                                                 );
                                               }).toList(),
                                             ),
-                                          )
-                                        : Container(),
-                                const SizedBox(height: 12.0),
-                                filteredCategory == 'Products'
-                                    ? CountryListPick(
-                                        appBar: AppBar(
-                                          leading: IconButton(
-                                            onPressed: () {
-                                              Navigator.pop(context);
-                                            },
-                                            icon: SvgPicture.asset(
-                                                'assets/svgs/backbutton.svg'),
-                                          ),
-                                          centerTitle: true,
-                                          // ignore: prefer_const_constructors
-                                          title: Text(
-                                            'Select Location',
-                                            textAlign: TextAlign.center,
-                                            style:
-                                                const TextStyle(fontSize: 20),
                                           ),
                                         ),
-                                        initialSelection: filterCode ?? 'GB',
-                                        pickerBuilder: (BuildContext context,
-                                            CountryCode? countryCode) {
-                                          return Container(
-                                            decoration: BoxDecoration(
-                                              color: backgroundcolorinterface,
-                                              borderRadius:
-                                                  BorderRadius.circular(
-                                                      radiusValue),
-                                            ),
-                                            child: ListTile(
-                                              leading: _selectedLocation != null
-                                                  ? Text(_selectedLocation!)
-                                                  : Text(
-                                                      'Location',
-                                                      style: bodyText2.copyWith(
-                                                          color: hintColor),
-                                                    ),
-                                              trailing: const Icon(
-                                                  Icons.keyboard_arrow_right),
-                                            ),
-                                          );
-                                        },
-                                        onChanged: (CountryCode? code) {
-                                          setState(
-                                            () {
-                                              _selectedLocation = code?.name;
-                                              filterCode = code?.code;
-                                            },
-                                          );
-                                        },
-                                        useSafeArea: false,
-                                      )
-                                    : filteredCategory == 'Services'
-                                        ? Container(
-                                            decoration: BoxDecoration(
-                                              color: backgroundcolorinterface,
-                                              borderRadius:
-                                                  BorderRadius.circular(
-                                                      radiusValue),
-                                            ),
-                                            padding: const EdgeInsets.only(
-                                              left: 16.0,
-                                              right: 16,
-                                              top: 4,
-                                              bottom: 5,
-                                            ),
-                                            margin: const EdgeInsets.only(
-                                              left: 10,
-                                              right: 10,
-                                            ),
-                                            child: DropdownButton<String>(
-                                              underline: Container(),
-                                              value: _selectedLocation,
-                                              isExpanded: true,
-                                              icon: const Icon(
-                                                Icons.keyboard_arrow_right,
+                                        Container(
+                                          width: 250,
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 8.0),
+                                            child: CountryListPick(
+                                              appBar: AppBar(
+                                                leading: IconButton(
+                                                  onPressed: () {
+                                                    Navigator.pop(context);
+                                                  },
+                                                  icon: SvgPicture.asset(
+                                                      'assets/svgs/backbutton.svg'),
+                                                ),
+                                                centerTitle: true,
+                                                // ignore: prefer_const_constructors
+                                                title: Text(
+                                                  'Select Location',
+                                                  textAlign: TextAlign.center,
+                                                  style: const TextStyle(
+                                                      fontSize: 20),
+                                                ),
                                               ),
-                                              iconSize: 24,
-                                              elevation: 16,
-                                              onChanged: (String? newValue) {
-                                                setState(() {
-                                                  _selectedLocation = newValue!;
-                                                });
+                                              initialSelection:
+                                                  filterCode ?? 'GB',
+                                              pickerBuilder: (BuildContext
+                                                      context,
+                                                  CountryCode? countryCode) {
+                                                return Container(
+                                                    decoration: BoxDecoration(
+                                                      color: Colors.white,
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              radiusValue),
+                                                    ),
+                                                    child: DropdownMenuItem<
+                                                        String>(
+                                                      value: _selectedLocation,
+                                                      child:
+                                                          _selectedLocation !=
+                                                                  null
+                                                              ? Padding(
+                                                                  padding: const EdgeInsets
+                                                                      .symmetric(
+                                                                      horizontal:
+                                                                          15.0),
+                                                                  child: Text(
+                                                                    _selectedLocation!,
+                                                                    style: bodyText2.copyWith(
+                                                                        color:
+                                                                            textColor,
+                                                                        fontSize:
+                                                                            16),
+                                                                    overflow:
+                                                                        TextOverflow
+                                                                            .ellipsis, // Prevent text overflow
+                                                                    maxLines:
+                                                                        1, // Ensure single line
+                                                                  ),
+                                                                )
+                                                              : Padding(
+                                                                  padding: const EdgeInsets
+                                                                      .symmetric(
+                                                                      horizontal:
+                                                                          15),
+                                                                  child: Text(
+                                                                    'Select Location',
+                                                                    overflow:
+                                                                        TextOverflow
+                                                                            .ellipsis, // Prevent text overflow
+                                                                    maxLines:
+                                                                        1, // Ensure single line
+                                                                    style: bodyText2
+                                                                        .copyWith(
+                                                                      color:
+                                                                          hintColor,
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                    ));
                                               },
-                                              items: <String?>[
-                                                null,
-                                                '1 Day Delivery',
-                                                '2 Day Delivery',
-                                                '3 Day Delivery',
-                                                '4 Day Delivery',
-                                                '5 Day Delivery',
-                                                '6 Day Delivery',
-                                                '7 Day Delivery',
-                                                '8 Day Delivery',
-                                                '9 Day Delivery',
-                                                '10 Day Delivery',
-                                                '11 Day Delivery',
-                                                '12 Day Delivery',
-                                                '13 Day Delivery',
-                                                '14 Day Delivery',
-                                                '15 Day Delivery',
-                                              ].map<DropdownMenuItem<String>>(
-                                                  (String? value) {
-                                                return DropdownMenuItem<String>(
-                                                  value: value,
-                                                  child: value != null
-                                                      ? Text(value)
-                                                      : Text(
-                                                          value ??
-                                                              'Select Delivery Time',
-                                                          style: bodyText2
-                                                              .copyWith(
-                                                            color: hintColor,
-                                                          ),
-                                                        ),
+                                              onChanged: (CountryCode? code) {
+                                                setState(
+                                                  () {
+                                                    _selectedLocation =
+                                                        code?.name;
+                                                    filterCode = code?.code;
+                                                  },
                                                 );
-                                              }).toList(),
+                                              },
+                                              useSafeArea: false,
                                             ),
-                                          )
-                                        : Container(),
-                              ],
-
-                              // Expanded(
-                              //   child: ListView.builder(
-                              //     itemCount: preferenceslist.length,
-                              //     itemBuilder: (BuildContext context,
-                              //         int index) {
-                              //       return GestureDetector(
-                              //         onTap: () {
-                              //           onPreferencesTap(
-                              //               preferenceslist[index]);
-                              //           Get.back();
-                              //         },
-                              //         child: Column(
-                              //           children: <Widget>[
-                              //             Container(
-                              //               width:
-                              //                   MediaQuery.of(context)
-                              //                       .size
-                              //                       .width,
-                              //               padding: const EdgeInsets
-                              //                   .symmetric(
-                              //                 horizontal: 20,
-                              //                 vertical: 20,
-                              //               ),
-                              //               color: Colors.white,
-                              //               child: Text(
-                              //                 preferenceslist[index] +
-                              //                     preferencesnumber[
-                              //                         index],
-                              //                 style: const TextStyle(
-                              //                   fontWeight:
-                              //                       FontWeight.bold,
-                              //                 ),
-                              //               ),
-                              //             ),
-                              //             const Divider(
-                              //               height: 1,
-                              //               color: backgroundColor,
-                              //             ),
-                              //           ],
-                              //         ),
-                              //       );
-                              //     },
-                              //   ),
-                              // ),
-                            );
-                          },
-                        );
-                  // showDialog(
-                  //   context: context,
-                  //   builder: (BuildContext context) {
-                  //     return Center(
-                  //       child: StatefulBuilder(builder:
-                  //           (BuildContext context, StateSetter setState) {
-                  //         return AlertDialog(
-                  //           shape: RoundedRectangleBorder(
-                  //             borderRadius: BorderRadius.circular(16.0),
-                  //           ),
-                  //           title: Row(
-                  //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  //             children: <Widget>[
-                  //               const Text('Filter'),
-                  //               IconButton(
-                  //                 icon: const Icon(Icons.close),
-                  //                 color: Colors.red,
-                  //                 onPressed: () {
-                  //                   Navigator.of(context).pop();
-                  //                 },
-                  //               ),
-                  //             ],
-                  //           ),
-                  //           content: SingleChildScrollView(
-                  //             child: Column(
-                  //               children: <Widget>[
-                  //                 Column(
-                  //                   children: <Widget>[
-                  //                     filteredCategory == null ||
-                  //                             filteredCategory == 'Products'
-                  //                         ? GestureDetector(
-                  //                             onTap: () {
-                  //                               setState(() {
-                  //                                 if (filteredCategory ==
-                  //                                     'Products') {
-                  //                                   _selectedLocation = null;
-                  //                                   _selectedCategory = null;
-                  //                                   filteredCategory = null;
-                  //                                 } else {
-                  //                                   filteredCategory =
-                  //                                       'Products';
-                  //                                 }
-                  //                               });
-                  //                             },
-                  //                             child: Container(
-                  //                               alignment: Alignment.bottomLeft,
-                  //                               decoration: BoxDecoration(
-                  //                                 color:
-                  //                                     backgroundcolorinterface,
-                  //                                 borderRadius:
-                  //                                     BorderRadius.circular(
-                  //                                         radiusValue),
-                  //                               ),
-                  //                               padding: const EdgeInsets.only(
-                  //                                 left: 16.0,
-                  //                                 right: 16,
-                  //                                 top: 15,
-                  //                                 bottom: 15,
-                  //                               ),
-                  //                               margin: const EdgeInsets.only(
-                  //                                 left: 10,
-                  //                                 right: 10,
-                  //                               ),
-                  //                               child: const Row(
-                  //                                 mainAxisAlignment:
-                  //                                     MainAxisAlignment
-                  //                                         .spaceBetween,
-                  //                                 children: <Widget>[
-                  //                                   Text(
-                  //                                     'Products',
-                  //                                     style: TextStyle(
-                  //                                       fontSize: 16,
-                  //                                     ),
-                  //                                   ),
-                  //                                   Icon(
-                  //                                     Icons.arrow_forward_ios,
-                  //                                     size: 10,
-                  //                                   ),
-                  //                                 ],
-                  //                               ),
-                  //                             ),
-                  //                           )
-                  //                         : Container(),
-                  //                     const SizedBox(height: 10),
-                  //                     filteredCategory == null ||
-                  //                             filteredCategory == 'Services'
-                  //                         ? GestureDetector(
-                  //                             onTap: () {
-                  //                               setState(() {
-                  //                                 if (filteredCategory ==
-                  //                                     'Services') {
-                  //                                   _selectedLocation = null;
-                  //                                   _selectedCategory = null;
-                  //                                   filteredCategory = null;
-                  //                                 } else {
-                  //                                   filteredCategory =
-                  //                                       'Services';
-                  //                                 }
-                  //                               });
-                  //                             },
-                  //                             child: Container(
-                  //                               alignment: Alignment.bottomLeft,
-                  //                               decoration: BoxDecoration(
-                  //                                 color:
-                  //                                     backgroundcolorinterface,
-                  //                                 borderRadius:
-                  //                                     BorderRadius.circular(
-                  //                                         radiusValue),
-                  //                               ),
-                  //                               padding: const EdgeInsets.only(
-                  //                                 left: 16.0,
-                  //                                 right: 16,
-                  //                                 top: 15,
-                  //                                 bottom: 15,
-                  //                               ),
-                  //                               margin: const EdgeInsets.only(
-                  //                                 left: 10,
-                  //                                 right: 10,
-                  //                               ),
-                  //                               child: const Row(
-                  //                                 mainAxisAlignment:
-                  //                                     MainAxisAlignment
-                  //                                         .spaceBetween,
-                  //                                 children: <Widget>[
-                  //                                   Text(
-                  //                                     'Services',
-                  //                                     style: TextStyle(
-                  //                                       fontSize: 16,
-                  //                                     ),
-                  //                                   ),
-                  //                                   Icon(
-                  //                                     Icons.arrow_forward_ios,
-                  //                                     size: 10,
-                  //                                   ),
-                  //                                 ],
-                  //                               ),
-                  //                             ),
-                  //                           )
-                  //                         : Container(),
-                  //                   ],
-                  //                 ),
-                  //                 const SizedBox(height: 12.0),
-                  //                 filteredCategory == 'Products'
-                  //                     ? Container(
-                  //                         decoration: BoxDecoration(
-                  //                           color: backgroundcolorinterface,
-                  //                           borderRadius: BorderRadius.circular(
-                  //                               radiusValue),
-                  //                         ),
-                  //                         padding: const EdgeInsets.only(
-                  //                           left: 16.0,
-                  //                           right: 16,
-                  //                           top: 4,
-                  //                           bottom: 5,
-                  //                         ),
-                  //                         margin: const EdgeInsets.only(
-                  //                           left: 10,
-                  //                           right: 10,
-                  //                         ),
-                  //                         child: DropdownButton<String>(
-                  //                           underline: Container(),
-                  //                           value: _selectedCategory,
-                  //                           isExpanded: true,
-                  //                           icon: const Icon(
-                  //                             Icons.keyboard_arrow_right,
-                  //                           ),
-                  //                           iconSize: 24,
-                  //                           elevation: 16,
-                  //                           onChanged: (String? newValue) {
-                  //                             setState(() {
-                  //                               _selectedCategory = newValue!;
-                  //                             });
-                  //                           },
-                  //                           items: <String?>[
-                  //                             null,
-                  //                             'Home, Garden & Outdoors',
-                  //                             'Fashion & Beauty',
-                  //                             'Sports & Entertainment',
-                  //                             'Books & Education',
-                  //                             'Jewellery & Timepieces',
-                  //                             'Security, Safety & Equipment',
-                  //                             'Video Games & Electronics',
-                  //                             'Agriculture, Food, Beverage',
-                  //                             'Construction & Real Estate',
-                  //                             'Vehicle & Transportation',
-                  //                             'Business Services & Events',
-                  //                             'Other',
-                  //                           ].map<DropdownMenuItem<String>>(
-                  //                               (String? value) {
-                  //                             return DropdownMenuItem<String>(
-                  //                               value: value,
-                  //                               child: value != null
-                  //                                   ? Text(value)
-                  //                                   : Text(
-                  //                                       value ??
-                  //                                           'Select Category',
-                  //                                       style:
-                  //                                           bodyText2.copyWith(
-                  //                                         color: hintColor,
-                  //                                       ),
-                  //                                     ),
-                  //                             );
-                  //                           }).toList(),
-                  //                         ),
-                  //                       )
-                  //                     : filteredCategory == 'Services'
-                  //                         ? Container(
-                  //                             decoration: BoxDecoration(
-                  //                               color: backgroundcolorinterface,
-                  //                               borderRadius:
-                  //                                   BorderRadius.circular(
-                  //                                       radiusValue),
-                  //                             ),
-                  //                             padding: const EdgeInsets.only(
-                  //                               left: 16.0,
-                  //                               right: 16,
-                  //                               top: 4,
-                  //                               bottom: 5,
-                  //                             ),
-                  //                             margin: const EdgeInsets.only(
-                  //                               left: 10,
-                  //                               right: 10,
-                  //                             ),
-                  //                             child: DropdownButton<String>(
-                  //                               underline: Container(),
-                  //                               value: _selectedCategory,
-                  //                               isExpanded: true,
-                  //                               icon: const Icon(
-                  //                                 Icons.keyboard_arrow_right,
-                  //                               ),
-                  //                               iconSize: 24,
-                  //                               elevation: 16,
-                  //                               onChanged: (String? newValue) {
-                  //                                 setState(() {
-                  //                                   _selectedCategory =
-                  //                                       newValue!;
-                  //                                 });
-                  //                               },
-                  //                               items: <String?>[
-                  //                                 null,
-                  //                                 'Write 1 Page Business Plan',
-                  //                                 'Build 1 Page Website',
-                  //                                 'Create Social Media AD',
-                  //                                 'Monthly Account Book Keeping',
-                  //                                 'Logo & Branding Guidelines',
-                  //                                 'Test, Review & Feedback',
-                  //                               ].map<DropdownMenuItem<String>>(
-                  //                                   (String? value) {
-                  //                                 return DropdownMenuItem<
-                  //                                     String>(
-                  //                                   value: value,
-                  //                                   child: value != null
-                  //                                       ? Text(value)
-                  //                                       : Text(
-                  //                                           value ??
-                  //                                               'Select Service Type',
-                  //                                           style: bodyText2
-                  //                                               .copyWith(
-                  //                                             color: hintColor,
-                  //                                           ),
-                  //                                         ),
-                  //                                 );
-                  //                               }).toList(),
-                  //                             ),
-                  //                           )
-                  //                         : Container(),
-                  //                 const SizedBox(height: 12.0),
-                  //                 filteredCategory == 'Products'
-                  //                     ? CountryListPick(
-                  //                         appBar: AppBar(
-                  //                           leading: IconButton(
-                  //                             onPressed: () {
-                  //                               Navigator.pop(context);
-                  //                             },
-                  //                             icon: SvgPicture.asset(
-                  //                                 'assets/svgs/backbutton.svg'),
-                  //                           ),
-                  //                           centerTitle: true,
-                  //                           // ignore: prefer_const_constructors
-                  //                           title: Text(
-                  //                             'Select Location',
-                  //                             textAlign: TextAlign.center,
-                  //                             style:
-                  //                                 const TextStyle(fontSize: 20),
-                  //                           ),
-                  //                         ),
-                  //                         initialSelection: filterCode ?? 'GB',
-                  //                         pickerBuilder: (BuildContext context,
-                  //                             CountryCode? countryCode) {
-                  //                           return Container(
-                  //                             decoration: BoxDecoration(
-                  //                               color: backgroundcolorinterface,
-                  //                               borderRadius:
-                  //                                   BorderRadius.circular(
-                  //                                       radiusValue),
-                  //                             ),
-                  //                             child: ListTile(
-                  //                               leading: _selectedLocation !=
-                  //                                       null
-                  //                                   ? Text(_selectedLocation!)
-                  //                                   : Text(
-                  //                                       'Location',
-                  //                                       style:
-                  //                                           bodyText2.copyWith(
-                  //                                               color:
-                  //                                                   hintColor),
-                  //                                     ),
-                  //                               trailing: const Icon(
-                  //                                   Icons.keyboard_arrow_right),
-                  //                             ),
-                  //                           );
-                  //                         },
-                  //                         onChanged: (CountryCode? code) {
-                  //                           setState(
-                  //                             () {
-                  //                               _selectedLocation = code?.name;
-                  //                               filterCode = code?.code;
-                  //                             },
-                  //                           );
-                  //                         },
-                  //                         useSafeArea: false,
-                  //                       )
-                  //                     : filteredCategory == 'Services'
-                  //                         ? Container(
-                  //                             decoration: BoxDecoration(
-                  //                               color: backgroundcolorinterface,
-                  //                               borderRadius:
-                  //                                   BorderRadius.circular(
-                  //                                       radiusValue),
-                  //                             ),
-                  //                             padding: const EdgeInsets.only(
-                  //                               left: 16.0,
-                  //                               right: 16,
-                  //                               top: 4,
-                  //                               bottom: 5,
-                  //                             ),
-                  //                             margin: const EdgeInsets.only(
-                  //                               left: 10,
-                  //                               right: 10,
-                  //                             ),
-                  //                             child: DropdownButton<String>(
-                  //                               underline: Container(),
-                  //                               value: _selectedLocation,
-                  //                               isExpanded: true,
-                  //                               icon: const Icon(
-                  //                                 Icons.keyboard_arrow_right,
-                  //                               ),
-                  //                               iconSize: 24,
-                  //                               elevation: 16,
-                  //                               onChanged: (String? newValue) {
-                  //                                 setState(() {
-                  //                                   _selectedLocation =
-                  //                                       newValue!;
-                  //                                 });
-                  //                               },
-                  //                               items: <String?>[
-                  //                                 null,
-                  //                                 '1 Day Delivery',
-                  //                                 '2 Day Delivery',
-                  //                                 '3 Day Delivery',
-                  //                                 '4 Day Delivery',
-                  //                                 '5 Day Delivery',
-                  //                                 '6 Day Delivery',
-                  //                                 '7 Day Delivery',
-                  //                                 '8 Day Delivery',
-                  //                                 '9 Day Delivery',
-                  //                                 '10 Day Delivery',
-                  //                                 '11 Day Delivery',
-                  //                                 '12 Day Delivery',
-                  //                                 '13 Day Delivery',
-                  //                                 '14 Day Delivery',
-                  //                                 '15 Day Delivery',
-                  //                               ].map<DropdownMenuItem<String>>(
-                  //                                   (String? value) {
-                  //                                 return DropdownMenuItem<
-                  //                                     String>(
-                  //                                   value: value,
-                  //                                   child: value != null
-                  //                                       ? Text(value)
-                  //                                       : Text(
-                  //                                           value ??
-                  //                                               'Select Delivery Time',
-                  //                                           style: bodyText2
-                  //                                               .copyWith(
-                  //                                             color: hintColor,
-                  //                                           ),
-                  //                                         ),
-                  //                                 );
-                  //                               }).toList(),
-                  //                             ),
-                  //                           )
-                  //                         : Container(),
-                  //               ],
-                  //             ),
-                  //           ),
-                  //           actions: <Widget>[
-                  //             Padding(
-                  //               padding: const EdgeInsets.only(
-                  //                   right: 25.0, bottom: 10),
-                  //               child: Row(
-                  //                 mainAxisAlignment: MainAxisAlignment.end,
-                  //                 children: <Widget>[
-                  //                   TextButton(
-                  //                     child: const Text('Reset'),
-                  //                     onPressed: () {
-                  //                       setState(() {
-                  //                         filterLocation = null;
-                  //                         filterCode = null;
-                  //                         filterCategory = null;
-                  //                         _selectedLocation = null;
-                  //                         _selectedCategory = null;
-                  //                         filteredCategory = null;
-                  //                         _marketController.updateFiltered();
-                  //                         _marketController.initMarket();
-                  //                         Navigator.of(context).pop();
-                  //                       });
-                  //                     },
-                  //                   ),
-                  //                   ElevatedButton(
-                  //                     child: const Text('Search'),
-                  //                     onPressed: () {
-                  //                       setState(() {
-                  //                         filterLocation = _selectedLocation;
-                  //                         filterCategory = _selectedCategory;
-                  //                         _marketController.filterMarket(
-                  //                             filterLocation, filterCategory);
-                  //                       });
-                  //                       Navigator.of(context).pop();
-                  //                     },
-                  //                   ),
-                  //                 ],
-                  //               ),
-                  //             )
-                  //           ],
-                  //         );
-                  //       }),
-                  //     );
-                  //   },
-                  // );
-                }),
-          ]),
-      body: _marketController.isLoading
-          ? const CircularProgressIndicator()
-          : _ismarketplaceSearching
-              ? TabBarView(
-                  controller: _marketplacesearchTabController,
-                  children: [
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Visibility(
+                            visible: isfiltervisible,
+                            child: SizedBox(
+                              height: 10,
+                            ),
+                          ),
+                          Expanded(
+                            child: FilterMarketplacePosts(
+                              filterItems: _marketController.searchedPosts,
+                              isLoading: _marketController.loading.value ||
+                                  _marketController.loadingPostSearch.value,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Obx(
+                      () => FilterMarketplacePosts(
+                        filterItems: _marketController.searchedServices,
+                        isLoading: _marketController.loading.value ||
+                            _marketController.loadingServicesSearch.value,
+                      ),
+                    ),
                     Obx(() => FilterDonationsUsers(
                           members: _marketController.users,
                           filterItems: _marketController.searchedUsers,
@@ -1077,13 +872,6 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                           onConnectionChange: _marketController.connectToUser,
                           isSearch: _marketController.isUserSearch.value,
                         )),
-                    Obx(() => Text('data')
-                        // FilterDonationPosts(
-                        //   filterItems: donationsController.searchedPosts,
-                        //   isLoading: donationsController.loading.value ||
-                        //       donationsController.loadingPostsSearch.value,
-                        // ),
-                        )
                   ],
                 )
               : SizedBox(

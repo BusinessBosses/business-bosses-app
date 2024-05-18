@@ -159,33 +159,18 @@ class BossUpController extends GetxController {
     update();
   }
 
-  Future<void> searchUsers(String industryId, {bool isNext = false}) async {
+  Future<void> searchUsers(String query) async {
+    loadingMembers(true);
+    update();
     members.clear();
-    membersPage(0);
-    if (isNext && loadingNextMembers.value) return;
-    if (isNext) {
-      loadingNextMembers(true);
-    } else {
-      loadingMembers(true);
-      errorMembers(false);
-    }
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      update();
-    });
-    final ApiResponseModel response =
-        await ForumRepository.getForumMembers(membersPage.value, industryId);
-    if (response.success) {
-      membersPage(membersPage.value + 1);
-      for (int i = 0; i < response.data.length; i++) {
-        // if(response.data[i].)
-        searchedUsers.add(UserModel.fromMap(response.data[i]));
-      }
 
-      // _homeController.addBossupMembers(members);
-    } else {
-      errorMembers(true);
+    for (var user in members) {
+      if (user.username.toLowerCase().contains(query.toLowerCase()) ||
+          user.name!.toLowerCase().contains(query.toLowerCase())) {
+        searchedUsers.add(user);
+      }
     }
-    loadingNextMembers(false);
+
     loadingMembers(false);
 
     update();
@@ -222,7 +207,6 @@ class BossUpController extends GetxController {
 
     update();
   }
-
 
   void connectToUser(UserModel user) async {
     final int checkConnected =

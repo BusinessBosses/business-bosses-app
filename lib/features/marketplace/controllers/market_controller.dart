@@ -21,11 +21,16 @@ class MarketController extends GetxController {
   RxList<MarketModel> searchResult = RxList<MarketModel>(<MarketModel>[]);
   RxList<UserModel> users = RxList<UserModel>(<UserModel>[]);
   List<UserModel> searchedUsers = <UserModel>[];
+  List<MarketModel> searchedPosts = <MarketModel>[];
+  List<MarketModel> searchedServices = <MarketModel>[];
   RxBool loadingSearch = RxBool(false);
+  RxBool loadingPostSearch = RxBool(false);
+  RxBool loadingServicesSearch = RxBool(false);
   RxInt paginationPage = RxInt(1);
   final int postsSize = 20;
   RxBool isUserSearch = RxBool(false);
   RxBool isPostSearch = RxBool(false);
+  RxBool isServiceSearch = RxBool(false);
   RxBool error = RxBool(false);
   String marketDescription = '';
   RxBool loading = RxBool(false);
@@ -61,13 +66,18 @@ class MarketController extends GetxController {
     update();
   }
 
-    void clearUserSearch() {
+  void clearUserSearch() {
     isUserSearch(false);
     update();
   }
 
   void clearPostSearch() {
     isPostSearch(false);
+    update();
+  }
+
+  void clearServiceSearch() {
+    isServiceSearch(false);
     update();
   }
 
@@ -437,31 +447,48 @@ class MarketController extends GetxController {
 
     searchedUsers.clear();
 
-    String path = '/members/marketplace';
-
-    ApiResponseModel response = await ApiService.get(path: path);
-
-    if (response.success) {
-      List<dynamic> rows = response.data['rows'];
-
-      searchedUsers.clear();
-
-      for (var row in rows) {
-        if (row['user'] != null) {
-          UserModel user = UserModel.fromMap(row['user']);
-          if (user.username.toLowerCase().contains(query.toLowerCase()) ||
-              user.name!.toLowerCase().contains(query.toLowerCase())) {
-            searchedUsers.add(user);
-          }
-        }
+    for (var user in users) {
+      if (user.username.toLowerCase().contains(query.toLowerCase()) ||
+          user.name!.toLowerCase().contains(query.toLowerCase())) {
+        searchedUsers.add(user);
       }
-
-      loadingSearch(false);
-      update();
-    } else {
-      loadingSearch(false);
-      update();
     }
+    loadingSearch(false);
+    update();
+  }
+
+  Future<void> searchPosts(String query) async {
+    loadingPostSearch(true);
+    update();
+
+    searchedPosts.clear();
+
+    // Assuming products is the list of already fetched products
+    for (var product in products) {
+      if (product.description.toLowerCase().contains(query.toLowerCase())) {
+        searchedPosts.add(product);
+      }
+    }
+
+    loadingPostSearch(false);
+    update();
+  }
+
+  Future<void> searchServices(String query) async {
+    loadingServicesSearch(true);
+    update();
+
+    searchedServices.clear();
+
+    // Assuming products is the list of already fetched products
+    for (var service in services) {
+      if (service.description.toLowerCase().contains(query.toLowerCase())) {
+        searchedServices.add(service);
+      }
+    }
+
+    loadingServicesSearch(false);
+    update();
   }
 
   Future<void> loadMore(int size, int page) async {

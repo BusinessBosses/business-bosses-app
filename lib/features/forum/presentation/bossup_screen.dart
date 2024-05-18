@@ -1,3 +1,4 @@
+import 'package:business_bosses_v2/features/donations/presentation/filterdonationusers.dart';
 import 'package:business_bosses_v2/features/forum/controller/create_bossup_controller.dart';
 import 'package:business_bosses_v2/features/forum/presentation/create_bossup_screen.dart';
 import 'package:business_bosses_v2/features/forum/presentation/filterchallengeposts.dart';
@@ -123,17 +124,17 @@ class _BossUpSectionState extends State<BossUpSection>
         centerTitle: _isSearching ? false : true,
         title: _isSearching
             ? Searchbar(
-                hintText: 'Search Members or Posts',
+                hintText: 'Search Posts or Members',
                 onChange: (String query) {
                   if (query.isEmpty) {
-                    _searchTabController.index == 0
+                    _searchTabController.index == 1
                         ? bossUpController.clearUserSearch()
                         : bossUpController.clearPostSearch();
                   }
                   setState(() {});
                 },
                 onSubmit: (String query) {
-                  _searchTabController.index == 0
+                  _searchTabController.index == 1
                       ? bossUpController.searchUsers(query)
                       : bossUpController.searchPosts(query);
                   setState(() {});
@@ -171,8 +172,8 @@ class _BossUpSectionState extends State<BossUpSection>
                 labelColor: Colors.black,
                 indicatorColor: primaryColorLT,
                 tabs: const <Widget>[
-                  Tab(text: 'People'),
                   Tab(text: 'Posts'),
+                  Tab(text: 'Members'),
                 ],
               ),
       ),
@@ -180,7 +181,14 @@ class _BossUpSectionState extends State<BossUpSection>
           ? TabBarView(
               controller: _searchTabController,
               children: [
-                Obx(() => FilterChallengeUsers(
+                Obx(
+                  () => FilterChallengePosts(
+                    filterItems: bossUpController.searchedPosts,
+                    isLoading: bossUpController.loading.value ||
+                        bossUpController.loadingPosts.value,
+                  ),
+                ),
+                Obx(() => FilterDonationsUsers(
                       members: bossUpController.members,
                       filterItems: bossUpController.searchedUsers,
                       isLoading: bossUpController.loading.value ||
@@ -188,13 +196,6 @@ class _BossUpSectionState extends State<BossUpSection>
                       onConnectionChange: bossUpController.connectToUser,
                       isSearch: bossUpController.isUserSearch.value,
                     )),
-                Obx(
-                  () => FilterChallengePosts(
-                    filterItems: bossUpController.searchedPosts,
-                    isLoading: bossUpController.loading.value ||
-                        bossUpController.loadingPosts.value,
-                  ),
-                )
               ],
             )
           : GetBuilder<BossUpController>(
