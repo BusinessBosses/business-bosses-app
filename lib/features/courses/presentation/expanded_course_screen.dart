@@ -22,6 +22,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 int selectedVideo = 0;
 
@@ -110,6 +111,9 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
   @override
   Widget build(BuildContext context) {
     ScrollController scrollController = ScrollController();
+    final List<String> urlslist = widget.course.youtubeUrls ?? [];
+    final List<String> fileslist = widget.course.documents ?? [];
+    List<String> combinedList = List.from(urlslist)..addAll(fileslist);
     return Scaffold(
       backgroundColor: Colors.white,
       body: NestedScrollView(
@@ -143,7 +147,72 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
                               widget.course.youtubeUrls![selectedVideo],
                               corner: BorderRadius.circular(0),
                             )
-                          : SizedBox(),
+                          : Stack(children: [
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.black,
+                                ),
+                              ),
+                              Positioned(
+                                left: 0,
+                                right: 0,
+                                top: 0,
+                                bottom: 0,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    SvgPicture.asset(
+                                      'assets/svgs/videolink.svg',
+                                      height: 50,
+                                    ),
+                                    const SizedBox(height: 10),
+                                    GestureDetector(
+                                      onTap: () async {
+                                        widget.course.courseType == 'video'
+                                            ? {
+                                                if (await canLaunchUrl(
+                                                    Uri.parse(widget.course
+                                                            .youtubeUrls![
+                                                        selectedVideo])))
+                                                  {
+                                                    await launchUrl(Uri.parse(
+                                                        widget.course
+                                                                .youtubeUrls![
+                                                            selectedVideo]))
+                                                  }
+                                              }
+                                            : {};
+                                      },
+                                      child: Container(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 20, vertical: 10),
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(50),
+                                          color: Colors.white,
+                                        ),
+                                        child:
+                                            widget.course.contentType == 'video'
+                                                ? const Text(
+                                                    'Watch Video',
+                                                    style: TextStyle(
+                                                        color: Colors.black,
+                                                        fontWeight:
+                                                            FontWeight.w700),
+                                                  )
+                                                : const Text(
+                                                    'Open File',
+                                                    style: TextStyle(
+                                                        color: Colors.black,
+                                                        fontWeight:
+                                                            FontWeight.w700),
+                                                  ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ]),
                       Visibility(
                         visible: widget.course.courseType == 'paid',
                         child: GestureDetector(
@@ -157,10 +226,12 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
                               ),
                             );
                           },
-                          child: Container(
-                            color: Colors.transparent,
-                            height: 200,
-                          ),
+                          child: Stack(children: [
+                            Container(
+                              color: Colors.transparent,
+                              height: 200,
+                            ),
+                          ]),
                         ),
                       )
                     ],
@@ -665,8 +736,7 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
                                 height: 90,
                                 child: ListView.builder(
                                     scrollDirection: Axis.horizontal,
-                                    itemCount:
-                                        widget.course.youtubeUrls!.length,
+                                    itemCount: combinedList!.length,
                                     itemBuilder:
                                         (BuildContext context, int index) {
                                       return Row(
@@ -690,7 +760,84 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
                                                                       .youtubeUrls![
                                                                   index],
                                                             )
-                                                          : const SizedBox(),
+                                                          : Center(
+                                                              child: Stack(
+                                                                children: [
+                                                                  NetworkImageWithPlaceHolder(
+                                                                    imageUrl: widget
+                                                                            .course
+                                                                            .thumbnail ??
+                                                                        '',
+                                                                    height: 90,
+                                                                    width: 160,
+                                                                    radius: 10,
+                                                                    cacheHeight:
+                                                                        90,
+                                                                    cacheWidth:
+                                                                        90,
+                                                                    placeHolder:
+                                                                        Icons
+                                                                            .person,
+                                                                    iconSize:
+                                                                        30,
+                                                                  ),
+                                                                  Positioned
+                                                                      .fill(
+                                                                    child:
+                                                                        Center(
+                                                                      child: SvgPicture
+                                                                          .asset(
+                                                                        'assets/svgs/videolink.svg',
+                                                                        height:
+                                                                            20,
+                                                                        width:
+                                                                            20,
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                  Positioned(
+                                                                      bottom: 5,
+                                                                      right: 5,
+                                                                      child:
+                                                                          Container(
+                                                                        decoration: BoxDecoration(
+                                                                            color:
+                                                                                Colors.black.withAlpha(150),
+                                                                            borderRadius: BorderRadius.circular(5)),
+                                                                        child:
+                                                                            Padding(
+                                                                          padding: const EdgeInsets
+                                                                              .all(
+                                                                              4.0),
+                                                                          child:
+                                                                              Row(
+                                                                            mainAxisAlignment:
+                                                                                MainAxisAlignment.center,
+                                                                            crossAxisAlignment:
+                                                                                CrossAxisAlignment.center,
+                                                                            children: [
+                                                                              SvgPicture.asset(
+                                                                                'assets/svgs/coursebundle.svg',
+                                                                                height: 8,
+                                                                              ),
+                                                                              const SizedBox(
+                                                                                width: 5,
+                                                                              ),
+                                                                              Text(
+                                                                                '${widget.course.youtubeUrls?.length.toString()} ${widget.course.youtubeUrls!.length > 1 ? 'Videos' : 'Video'}',
+                                                                                style: const TextStyle(
+                                                                                  fontSize: 9,
+                                                                                  color: Colors.white,
+                                                                                  fontWeight: FontWeight.w700,
+                                                                                ),
+                                                                              ),
+                                                                            ],
+                                                                          ),
+                                                                        ),
+                                                                      )),
+                                                                ],
+                                                              ),
+                                                            ),
                                                       Positioned(
                                                         top: 0,
                                                         bottom: 0,
@@ -854,13 +1001,13 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
                         const SizedBox(
                           height: 30,
                         ),
-                        widget.course.documents != null
-                            ? const Text(
-                                'Downloadable Resources',
-                                style: TextStyle(
-                                    fontSize: 18, fontWeight: FontWeight.bold),
-                              )
-                            : Container(),
+                        // widget.course.documents != null
+                        //     ? const Text(
+                        //         'Downloadable Resources',
+                        //         style: TextStyle(
+                        //             fontSize: 18, fontWeight: FontWeight.bold),
+                        //       )
+                        //     : Container(),
                         widget.course.documents != null
                             ? SizedBox(
                                 height: 150,

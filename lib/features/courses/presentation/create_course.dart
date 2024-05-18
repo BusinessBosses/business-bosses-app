@@ -612,7 +612,7 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                           'isApproved': false,
                           'subtitle': false,
                           'thumbnail':'kkkmmm',
-                          'content': _selectedContentType.toString().split('.').last,
+                          'contentType': _selectedContentType.toString().split('.').last,
                           'documents': selectedFileNames.isEmpty
                               ? null
                               : selectedFileNames,

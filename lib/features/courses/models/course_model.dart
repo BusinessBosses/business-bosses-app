@@ -8,7 +8,7 @@ class CourseModel {
   final String? description;
   final String? title;
   final String? thumbnail;
-  final String? content;
+  final String? contentType;
   final String userId;
   final String? price;
   final dynamic promotionDuration;
@@ -34,7 +34,7 @@ class CourseModel {
     this.description,
     this.title,
     this.thumbnail,
-    this.content,
+    this.contentType,
     this.averageRating = 0.0,
     this.documents,
     this.timestamp,
@@ -61,7 +61,7 @@ class CourseModel {
     String? title,
     String? userId,
     String? thumbnail,
-    String? content,
+    String? contentType,
     List<String>? documents,
     int? timestamp,
     List<CourseCommentModel>? comments,
@@ -87,7 +87,7 @@ class CourseModel {
       userId: userId ?? this.userId,
       title: title ?? this.title,
       thumbnail: thumbnail ?? this.thumbnail,
-      content: content ?? this.content,
+      contentType: contentType ?? this.contentType,
       documents: documents ?? this.documents,
       timestamp: timestamp ?? this.timestamp,
       comments: comments ?? this.comments,
@@ -115,7 +115,7 @@ class CourseModel {
       'description': description,
       'title': title,
       'thumbnail': thumbnail,
-      'content': content,
+      'contentType': contentType,
       'averageRating': averageRating,
       'userId': userId,
       'documents': documents,
@@ -145,7 +145,7 @@ class CourseModel {
           map['description'] != null ? map['description'] as String : null,
       title: map['title'] != null ? map['title'] as String : null,
       thumbnail: map['thumbnail'] != null ? map['thumbnail'] as String : null,
-      content: map['content'] != null ? map['content'] as String : null,
+      contentType: map['contentType'] != null ? map['contentType'] as String : null,
       userId: map['userId'] as String,
       price: map['price'] != null ? map['price'] as String : null,
       courseType:

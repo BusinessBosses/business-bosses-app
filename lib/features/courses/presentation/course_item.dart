@@ -111,50 +111,36 @@ class _CourseItemState extends State<CourseItem> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Stack(children: [
-                    SizedBox(
-                      height: 90,
-                      width: 160,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(12.0),
-                        child: FittedBox(
-                          fit: BoxFit.fill,
+                  !isValidYoutubeUrl(widget.course.youtubeUrls![0])
+                      ? Center(
                           child: Stack(
-                            children: <Widget>[
-                              GestureDetector(
-                                onTap: () {},
-                                child: isValidYoutubeUrl(
-                                        widget.course.youtubeUrls![0])
-                                    ? YoutubeDisplay(
-                                        widget.course.youtubeUrls != null
-                                            ? widget.course.youtubeUrls![0]
-                                            : '')
-                                    : const SizedBox(),
+                            children: [
+                              NetworkImageWithPlaceHolder(
+                                imageUrl: widget.course.thumbnail ?? '',
+                                height: 90,
+                                width: 160,
+                                radius: 10,
+                                cacheHeight: 90,
+                                cacheWidth: 90,
                               ),
-                              Positioned(
-                                top: 0,
-                                bottom: 0,
-                                right: 0,
-                                left: 0,
-                                child: GestureDetector(
-                                  onTap: () {},
-                                  child: Icon(
-                                    Icons.play_circle_outlined,
-                                    color: Colors.white.withOpacity(0.5),
-                                    size: 70,
+                              Positioned.fill(
+                                child: Center(
+                                  child: SvgPicture.asset(
+                                    'assets/svgs/videolink.svg',
+                                    height: 20,
+                                    width: 20,
                                   ),
                                 ),
                               ),
                               Positioned(
-                                  bottom: 12,
-                                  right: 12,
+                                  bottom: 5,
+                                  right: 5,
                                   child: Container(
                                     decoration: BoxDecoration(
                                         color: Colors.black.withAlpha(150),
-                                        borderRadius:
-                                            BorderRadius.circular(10)),
+                                        borderRadius: BorderRadius.circular(5)),
                                     child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
+                                      padding: const EdgeInsets.all(4.0),
                                       child: Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,
@@ -163,7 +149,7 @@ class _CourseItemState extends State<CourseItem> {
                                         children: [
                                           SvgPicture.asset(
                                             'assets/svgs/coursebundle.svg',
-                                            height: 20,
+                                            height: 8,
                                           ),
                                           const SizedBox(
                                             width: 5,
@@ -171,7 +157,7 @@ class _CourseItemState extends State<CourseItem> {
                                           Text(
                                             '${widget.course.youtubeUrls?.length.toString()} ${widget.course.youtubeUrls!.length > 1 ? 'Videos' : 'Video'}',
                                             style: const TextStyle(
-                                              fontSize: 20,
+                                              fontSize: 9,
                                               color: Colors.white,
                                               fontWeight: FontWeight.w700,
                                             ),
@@ -182,30 +168,103 @@ class _CourseItemState extends State<CourseItem> {
                                   )),
                             ],
                           ),
-                        ),
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          widget.course.setViews();
-                        });
-                        courseController.updateCourseViews(
-                            widget.course.id, widget.course.views + 1);
-                        homeController.updateCourseViews(
-                            widget.course.id, widget.course.views + 1);
-                        Get.to(
-                            () => ExpandedCourseScreen(course: widget.course));
-                      },
-                      child: Container(
-                        height: 90,
-                        width: 160,
-                        decoration: BoxDecoration(
-                            color: Colors.transparent,
-                            borderRadius: BorderRadius.circular(12.0)),
-                      ),
-                    )
-                  ]),
+                        )
+                      : Stack(children: [
+                          SizedBox(
+                            height: 90,
+                            width: 160,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(12.0),
+                              child: FittedBox(
+                                fit: BoxFit.fill,
+                                child: Stack(
+                                  children: <Widget>[
+                                    GestureDetector(
+                                        onTap: () {},
+                                        child: isValidYoutubeUrl(
+                                                widget.course.youtubeUrls![0])
+                                            ? YoutubeDisplay(widget
+                                                        .course.youtubeUrls !=
+                                                    null
+                                                ? widget.course.youtubeUrls![0]
+                                                : '')
+                                            : Container()),
+                                    Positioned(
+                                      top: 0,
+                                      bottom: 0,
+                                      right: 0,
+                                      left: 0,
+                                      child: GestureDetector(
+                                        onTap: () {},
+                                        child: Icon(
+                                          Icons.play_circle_outlined,
+                                          color: Colors.white.withOpacity(0.5),
+                                          size: 70,
+                                        ),
+                                      ),
+                                    ),
+                                    Positioned(
+                                        bottom: 12,
+                                        right: 12,
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                              color:
+                                                  Colors.black.withAlpha(150),
+                                              borderRadius:
+                                                  BorderRadius.circular(10)),
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              children: [
+                                                SvgPicture.asset(
+                                                  'assets/svgs/coursebundle.svg',
+                                                  height: 20,
+                                                ),
+                                                const SizedBox(
+                                                  width: 5,
+                                                ),
+                                                Text(
+                                                  '${widget.course.youtubeUrls?.length.toString()} ${widget.course.youtubeUrls!.length > 1 ? 'Videos' : 'Video'}',
+                                                  style: const TextStyle(
+                                                    fontSize: 20,
+                                                    color: Colors.white,
+                                                    fontWeight: FontWeight.w700,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        )),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                widget.course.setViews();
+                              });
+                              courseController.updateCourseViews(
+                                  widget.course.id, widget.course.views + 1);
+                              homeController.updateCourseViews(
+                                  widget.course.id, widget.course.views + 1);
+                              Get.to(() =>
+                                  ExpandedCourseScreen(course: widget.course));
+                            },
+                            child: Container(
+                              height: 90,
+                              width: 160,
+                              decoration: BoxDecoration(
+                                  color: Colors.transparent,
+                                  borderRadius: BorderRadius.circular(12.0)),
+                            ),
+                          )
+                        ]),
                   const SizedBox(
                     width: 10,
                   ),
@@ -238,7 +297,7 @@ class _CourseItemState extends State<CourseItem> {
                                   borderRadius: BorderRadius.circular(50)),
                               child: Padding(
                                 padding: const EdgeInsets.only(
-                                    left: 10, top: 5, right: 10, bottom: 5),
+                                    left: 8, top: 5, right: 8, bottom: 5),
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -246,14 +305,36 @@ class _CourseItemState extends State<CourseItem> {
                                     Wrap(
                                       crossAxisAlignment:
                                           WrapCrossAlignment.center,
-                                      children: [Text('free', style: TextStyle(fontWeight: FontWeight.w700),)],
+                                      children: [
+                                        widget.course.courseType == 'free'
+                                            ? Text(
+                                                'Free',
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.w700),
+                                              )
+                                            : Row(
+                                                children: [
+                                                  SvgPicture.asset(
+                                                    'assets/svgs/coin.svg',
+                                                    height: 15,
+                                                  ),
+                                                  Text(
+                                                    ' ${widget.course.price}',
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.w700),
+                                                  )
+                                                ],
+                                              ),
+                                      ],
                                     ),
                                   ],
                                 ),
                               ),
                             ),
-                            const SizedBox(
-                              height: 10,
+                            SizedBox(
+                              width: 6,
                             ),
                             GestureDetector(
                               onTap: () {
@@ -313,44 +394,44 @@ class _CourseItemState extends State<CourseItem> {
                                       height: 16,
                                     ),
                                   ]),
-                                if (widget.course.documents != null)
-                                  Wrap(children: [
-                                    const SizedBox(
-                                      width: 8,
-                                    ),
-                                    Stack(children: [
-                                      Padding(
-                                        padding: const EdgeInsets.only(
-                                            right: 15.0, top: 5, bottom: 5),
-                                        child: SvgPicture.asset(
-                                          'assets/svgs/downloadables.svg',
-                                          height: 16,
-                                        ),
-                                      ),
-                                      Positioned(
-                                        right: 5,
-                                        top: 0,
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                              color: Colors.black54,
-                                              borderRadius:
-                                                  BorderRadius.circular(50)),
-                                          child: Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 6.0),
-                                            child: Text(
-                                              widget.course.documents!.length
-                                                  .toString(),
-                                              style: const TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 10,
-                                                  fontWeight: FontWeight.w700),
-                                            ),
-                                          ),
-                                        ),
-                                      )
-                                    ]),
-                                  ]),
+                                // if (widget.course.documents != null)
+                                //   Wrap(children: [
+                                //     const SizedBox(
+                                //       width: 8,
+                                //     ),
+                                //     Stack(children: [
+                                //       Padding(
+                                //         padding: const EdgeInsets.only(
+                                //             right: 15.0, top: 5, bottom: 5),
+                                //         child: SvgPicture.asset(
+                                //           'assets/svgs/downloadables.svg',
+                                //           height: 16,
+                                //         ),
+                                //       ),
+                                //       Positioned(
+                                //         right: 5,
+                                //         top: 0,
+                                //         child: Container(
+                                //           decoration: BoxDecoration(
+                                //               color: Colors.black54,
+                                //               borderRadius:
+                                //                   BorderRadius.circular(50)),
+                                //           child: Padding(
+                                //             padding: const EdgeInsets.symmetric(
+                                //                 horizontal: 6.0),
+                                //             child: Text(
+                                //               widget.course.documents!.length
+                                //                   .toString(),
+                                //               style: const TextStyle(
+                                //                   color: Colors.white,
+                                //                   fontSize: 10,
+                                //                   fontWeight: FontWeight.w700),
+                                //             ),
+                                //           ),
+                                //         ),
+                                //       )
+                                //     ]),
+                                //   ]),
                               ],
                             ),
                           ],
