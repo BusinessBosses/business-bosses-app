@@ -122,14 +122,15 @@ class _CourseItemState extends State<CourseItem> {
                           child: Stack(
                             children: <Widget>[
                               GestureDetector(
-                                  onTap: () {},
-                                  child: isValidYoutubeUrl(
-                                          widget.course.youtubeUrls![0])
-                                      ? YoutubeDisplay(
-                                          widget.course.youtubeUrls != null
-                                              ? widget.course.youtubeUrls![0]
-                                              : '')
-                                      : const SizedBox()),
+                                onTap: () {},
+                                child: isValidYoutubeUrl(
+                                        widget.course.youtubeUrls![0])
+                                    ? YoutubeDisplay(
+                                        widget.course.youtubeUrls != null
+                                            ? widget.course.youtubeUrls![0]
+                                            : '')
+                                    : const SizedBox(),
+                              ),
                               Positioned(
                                 top: 0,
                                 bottom: 0,
@@ -806,10 +807,11 @@ class _CourseItemState extends State<CourseItem> {
   }
 
   bool isValidYoutubeUrl(String url) {
-    final youtubeUrlPattern = RegExp(
-      r'^(https?\:\/\/)?(www\.youtube\.com|youtu\.?be)\/.+$',
+    final RegExp youtubeRegExp = RegExp(
+      r'^(https?\:\/\/)?(www\.youtube\.com\/watch\?v=|youtu\.be\/).+$',
       caseSensitive: false,
+      multiLine: false,
     );
-    return youtubeUrlPattern.hasMatch(url);
+    return youtubeRegExp.hasMatch(url);
   }
 }
