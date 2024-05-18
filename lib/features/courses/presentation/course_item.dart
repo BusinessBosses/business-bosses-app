@@ -228,6 +228,29 @@ class _CourseItemState extends State<CourseItem> {
                         ),
                         Row(
                           children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                  color: backgroundcolorinterface,
+                                  borderRadius: BorderRadius.circular(50)),
+                              child: Padding(
+                                padding: const EdgeInsets.only(
+                                    left: 10, top: 5, right: 10, bottom: 5),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: <Widget>[
+                                    Wrap(
+                                      crossAxisAlignment:
+                                          WrapCrossAlignment.center,
+                                      children: [Text('free', style: TextStyle(fontWeight: FontWeight.w700),)],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
                             GestureDetector(
                               onTap: () {
                                 Get.to(
