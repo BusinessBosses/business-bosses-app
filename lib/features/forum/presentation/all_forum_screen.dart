@@ -311,21 +311,20 @@ class _AllForumScreenState extends State<AllForumScreen>
                   controller: _pageTabController,
                   children: [
                     Obx(() => FilterChallengeUsers(
-                              members: controller.members,
-                              filterItems: controller.searchedUsers,
-                              isLoading: controller.loading.value ||
-                                  controller.loadingMembers.value,
-                              onConnectionChange:
-                                  controller.connectToUser,
-                              isSearch: controller.isUserSearch.value,
-                            )),
-                        Obx(
-                          () => FilterChallengePosts(
-                            filterItems: controller.searchedPosts,
-                            isLoading: controller.loading.value ||
-                                controller.loadingPosts.value,
-                          ),
-                        )
+                          members: controller.members,
+                          filterItems: controller.searchedUsers,
+                          isLoading: controller.loading.value ||
+                              controller.loadingMembers.value,
+                          onConnectionChange: controller.connectToUser,
+                          isSearch: controller.isUserSearch.value,
+                        )),
+                    Obx(
+                      () => FilterChallengePosts(
+                        filterItems: controller.searchedPosts,
+                        isLoading: controller.loading.value ||
+                            controller.loadingPosts.value,
+                      ),
+                    )
                   ],
                 )
               : _iscouseSearching
@@ -399,13 +398,17 @@ class _AllForumScreenState extends State<AllForumScreen>
 
   List<String> get preferenceslist => <String>[
         'All Courses',
-        'Single Courses',
-        'Course Bundles',
+        'Free Courses',
+        'Paid Courses',
+        'Free Course Bundles',
+        'Paid Course Bundles',
       ];
 
   List<String> get preferencesnumber => <String>[
         ' (${courseController.courses.length})',
-        ' (${courseController.courses.where((CourseModel course) => course.youtubeUrls!.length <= 1).length})',
-        ' (${courseController.courses.where((CourseModel course) => course.youtubeUrls!.length > 1).length})',
+        ' (${courseController.courses.where((CourseModel course) => course.courseType == 'free').length})',
+        ' (${courseController.courses.where((CourseModel course) => course.courseType == 'paid').length})',
+        ' (${courseController.courses.where((CourseModel course) => course.courseType == 'free' && course.youtubeUrls!.length > 1).length})',
+        ' (${courseController.courses.where((CourseModel course) => course.courseType == 'paid' && course.youtubeUrls!.length > 1).length})',
       ];
 }

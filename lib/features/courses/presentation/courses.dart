@@ -32,11 +32,14 @@ class _CoursesPageState extends State<CoursesPage> {
   late Industry industry;
   final CourseController courseController = Get.put(CourseController());
 
-  List<String> preferenceslist = <String>[
-    'All Courses',
-    'Single Courses',
-    'Course Bundles',
-  ];
+   List<String> get preferenceslist => <String>[
+        'All Courses',
+        'Free Courses',
+        'Paid Courses',
+        'Free Course Bundles',
+        'Paid Course Bundles',
+      ];
+
 
   @override
   void initState() {
