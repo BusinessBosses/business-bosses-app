@@ -77,8 +77,8 @@ class DonationsController extends GetxController {
             donations.add(donation);
           }
         }
-        ApiResponseModel responseNot =
-            await ApiService.get(path: 'donation/query?isActive=false');
+        ApiResponseModel responseNot = await ApiService.get(
+            path: 'donation/query?isActive=false&isDeleted=false');
 
         // Clear previous donations before adding new ones
         donationsNotApproved.clear();
@@ -156,6 +156,7 @@ class DonationsController extends GetxController {
     } catch (e) {
       Get.snackbar('Error', 'Failed to Delete Donation');
     }
+    update();
   }
 
   bool doesUserDonationExist() {
@@ -213,6 +214,7 @@ class DonationsController extends GetxController {
         'amountRecieved': 0,
       }));
     }
+    update();
   }
 
   Future<void> updateDonation(Map<String, dynamic> donation, String id) async {
@@ -444,6 +446,7 @@ class DonationsController extends GetxController {
         error: true,
       );
     }
+    update();
   }
 
   Future<void> initHistory() async {

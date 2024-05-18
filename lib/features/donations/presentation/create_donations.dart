@@ -411,6 +411,7 @@ class _CreateDonationScreenState extends State<CreateDonationScreen> {
                         backgroundColor: Colors.red,
                         colorText: Colors.white,
                       );
+                      return;
                     }
                     if (_ytUrl != null && !_isValidYoutubeUrl(_ytUrl!)) {
                       if (_selectedImage == null &&
@@ -422,6 +423,7 @@ class _CreateDonationScreenState extends State<CreateDonationScreen> {
                           backgroundColor: Colors.red,
                           colorText: Colors.white,
                         );
+                        return;
                       }
                     }
                     setState(() {

@@ -19,7 +19,6 @@ class DownloadableItem extends StatefulWidget {
       {super.key, required this.link, required this.filename});
 
   @override
-
   _DownloadableItemState createState() => _DownloadableItemState();
 }
 
@@ -33,7 +32,6 @@ class _DownloadableItemState extends State<DownloadableItem> {
 
   static void downloadCallback(String id, int status, int progress) {
     // print(progress);
-   
   }
 
   @override
