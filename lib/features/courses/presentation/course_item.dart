@@ -123,10 +123,13 @@ class _CourseItemState extends State<CourseItem> {
                             children: <Widget>[
                               GestureDetector(
                                   onTap: () {},
-                                  child: YoutubeDisplay(
-                                      widget.course.youtubeUrls != null
-                                          ? widget.course.youtubeUrls![0]
-                                          : '')),
+                                  child: isValidYoutubeUrl(
+                                          widget.course.youtubeUrls![0])
+                                      ? YoutubeDisplay(
+                                          widget.course.youtubeUrls != null
+                                              ? widget.course.youtubeUrls![0]
+                                              : '')
+                                      : const SizedBox()),
                               Positioned(
                                 top: 0,
                                 bottom: 0,
@@ -800,5 +803,13 @@ class _CourseItemState extends State<CourseItem> {
         'https://businessbosses.onelink.me/xLWk/36a2ff16';
     logEvent(widget.course.id, 'course');
     socialShare(message);
+  }
+
+  bool isValidYoutubeUrl(String url) {
+    final youtubeUrlPattern = RegExp(
+      r'^(https?\:\/\/)?(www\.youtube\.com|youtu\.?be)\/.+$',
+      caseSensitive: false,
+    );
+    return youtubeUrlPattern.hasMatch(url);
   }
 }

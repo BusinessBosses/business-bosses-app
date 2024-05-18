@@ -75,10 +75,7 @@ class CourseController extends GetxController {
         Get.back();
         showSnackbar(message: 'Course updated successfully', title: 'Success');
       } else {
-        showSnackbar(
-            message: 'Course not found in the list',
-            title: 'Error',
-            error: true);
+        showSnackbar(message: 'Course not found', title: 'Error', error: true);
       }
       update();
     }
@@ -274,9 +271,6 @@ class CourseController extends GetxController {
       });
     }
   }
-
-
-  
 
   void initSocket() {
     socket = IO.io(Constants.socketUrl, <String, dynamic>{
