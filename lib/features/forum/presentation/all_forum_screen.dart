@@ -110,16 +110,18 @@ class _AllForumScreenState extends State<AllForumScreen>
                     ? Searchbar(
                         hintText: 'Search Courses',
                         onChange: (String query) {
-                          // if (_searchTabController.index == 0) {
-                          //   controller.onSearch(
-                          //       _searchTabController.index, query);
-                          // }
+                          if (query.isEmpty) {
+                            _searchTabController.index == 1
+                                ? courseController.clearUserSearch()
+                                : courseController.clearPostSearch();
+                          }
+                          setState(() {});
                         },
                         onSubmit: (String query) {
-                          // if (_searchTabController.index == 1) {
-                          //   controller.onSearch(
-                          //       _searchTabController.index, query);
-                          // }
+                          _searchTabController.index == 1
+                              ? courseController.searchUsers(query)
+                              : courseController.searchPosts(query);
+                          setState(() {});
                         },
                       )
                     : Text(
@@ -315,7 +317,7 @@ class _AllForumScreenState extends State<AllForumScreen>
               ? TabBarView(
                   controller: _searchTabController,
                   children: [
-                     Obx(
+                    Obx(
                       () => FilterChallengePosts(
                         filterItems: controller.searchedPosts,
                         isLoading: controller.loading.value ||
@@ -330,13 +332,19 @@ class _AllForumScreenState extends State<AllForumScreen>
                           onConnectionChange: controller.connectToUser,
                           isSearch: controller.isUserSearch.value,
                         )),
-                   
                   ],
                 )
               : _iscouseSearching
                   ? TabBarView(
                       controller: _coursesearchTabController,
                       children: [
+                        Obx(
+                          () => FilterCoursesPosts(
+                            filterItems: courseController.searchedPosts,
+                            isLoading: courseController.loading.value ||
+                                courseController.loadingSearch.value,
+                          ),
+                        ),
                         Obx(() => FilterCoursesUsers(
                               members: courseController.usersMembers,
                               filterItems: courseController.searchedUsers,
@@ -346,13 +354,6 @@ class _AllForumScreenState extends State<AllForumScreen>
                                   courseController.connectToUser,
                               isSearch: courseController.isUserSearch.value,
                             )),
-                        Obx(
-                          () => FilterCoursesPosts(
-                            filterItems: courseController.searchedPosts,
-                            isLoading: courseController.loading.value ||
-                                courseController.loadingSearch.value,
-                          ),
-                        )
                       ],
                     )
                   : DefaultTabController(
