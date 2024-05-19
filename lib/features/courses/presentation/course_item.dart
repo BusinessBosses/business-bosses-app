@@ -123,22 +123,22 @@ class _CourseItemState extends State<CourseItem> {
                                 child: Stack(
                                   children: <Widget>[
                                     NetworkImageWithPlaceHolder(
-                                    imageUrl: widget.course.thumbnail ?? '',
-                                    height: 90,
-                                    width: 160,
-                                    radius: 10,
-                                    cacheHeight: 90,
-                                    cacheWidth: 90,
-                                  ),
-                                  Positioned.fill(
-                                    child: Center(
-                                      child: SvgPicture.asset(
-                                        'assets/svgs/file.svg',
-                                        height: 20,
-                                        width: 20,
+                                      imageUrl: widget.course.thumbnail ?? '',
+                                      height: 90,
+                                      width: 160,
+                                      radius: 10,
+                                      cacheHeight: 90,
+                                      cacheWidth: 90,
+                                    ),
+                                    Positioned.fill(
+                                      child: Center(
+                                        child: SvgPicture.asset(
+                                          'assets/svgs/pdf.svg',
+                                          height: 22,
+                                          color: Colors.white,
+                                        ),
                                       ),
                                     ),
-                                  ),
                                     Positioned(
                                         bottom: 12,
                                         right: 12,
