@@ -563,7 +563,7 @@ class _DepositsScreenState extends State<DepositsScreen> {
 
                                               return WithdrawalItem(
                                                 item: coinHistoryController
-                                                    .coinwithdrawalHistory[i],
+                                                    .coindepositsHistory[i],
                                               );
                                             },
                                           ),
