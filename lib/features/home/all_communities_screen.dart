@@ -86,10 +86,9 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
         length: 3, vsync: this, initialIndex: widget.initialTabIndex ?? 0);
     _donationspageTabController = TabController(length: 2, vsync: this);
 
-    // // Adding listener to update state on tab change
-    // _pageTabController.addListener(() {
-    //   setState(() {}); // Update state when tab changes
-    // });
+    _pageTabController.addListener(() {
+      setState(() {});
+    });
   }
 
   @override
