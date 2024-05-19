@@ -92,7 +92,6 @@ class FilterCoursesPosts extends StatelessWidget {
         : ListView.separated(
             key: key,
             separatorBuilder: (_, __) => const SizedBox(height: 0.0),
-            padding: const EdgeInsets.all(16.0),
             itemCount: filterItems.length,
             itemBuilder: (BuildContext context, int i) {
               return CourseItem(
