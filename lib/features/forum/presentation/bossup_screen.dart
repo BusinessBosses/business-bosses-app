@@ -83,6 +83,10 @@ class _BossUpSectionState extends State<BossUpSection>
     super.initState();
     bossUpController.fetchForums(widget.industry.industryId!);
     _searchTabController = TabController(length: 2, vsync: this);
+    _pageTabController = TabController(
+      length: 2,
+      vsync: this,
+    );
     scrollController.addListener(() {
       double percentageScrolled =
           scrollController.offset / scrollController.position.maxScrollExtent;
@@ -96,6 +100,9 @@ class _BossUpSectionState extends State<BossUpSection>
           showFloatingButton = false;
         });
       }
+    });
+    _pageTabController.addListener(() {
+      setState(() {});
     });
   }
 
@@ -185,7 +192,7 @@ class _BossUpSectionState extends State<BossUpSection>
                   () => FilterChallengePosts(
                     filterItems: bossUpController.searchedPosts,
                     isLoading: bossUpController.loading.value ||
-                        bossUpController.loadingPosts.value,
+                        bossUpController.loadingPostSearch.value,
                   ),
                 ),
                 Obx(() => FilterDonationsUsers(

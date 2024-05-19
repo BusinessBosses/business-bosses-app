@@ -31,6 +31,7 @@ class BossUpController extends GetxController {
   RxBool errorMembers = RxBool(false);
   RxBool isUserSearch = RxBool(false);
   RxBool isPostSearch = RxBool(false);
+   RxBool loadingPostSearch = RxBool(false);
   late List<String> connecteds =
       _profileController.myProfile.connecteds ?? <String>[];
 
@@ -162,7 +163,7 @@ class BossUpController extends GetxController {
   Future<void> searchUsers(String query) async {
     loadingMembers(true);
     update();
-    members.clear();
+    searchedUsers.clear();
 
     for (var user in members) {
       if (user.username.toLowerCase().contains(query.toLowerCase()) ||
@@ -176,36 +177,22 @@ class BossUpController extends GetxController {
     update();
   }
 
-  Future<void> searchPosts(String industryId, {bool isNext = false}) async {
-    members.clear();
-    membersPage(0);
-    if (isNext && loadingNextMembers.value) return;
-    if (isNext) {
-      loadingNextMembers(true);
-    } else {
-      loadingMembers(true);
-      errorMembers(false);
-    }
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      update();
-    });
-    final ApiResponseModel response =
-        await ForumRepository.getForumMembers(membersPage.value, industryId);
-    if (response.success) {
-      membersPage(membersPage.value + 1);
-      for (int i = 0; i < response.data.length; i++) {
-        // if(response.data[i].)
-        searchedUsers.add(UserModel.fromMap(response.data[i]));
-      }
-
-      // _homeController.addBossupMembers(members);
-    } else {
-      errorMembers(true);
-    }
-    loadingNextMembers(false);
-    loadingMembers(false);
-
+  Future<void> searchPosts(String query) async {
+    loadingPostSearch(true);
     update();
+
+    searchedPosts.clear();
+
+     for (var forum in forums) {
+      if (forum.description!.toLowerCase().contains(query.toLowerCase())) {
+        searchedPosts.add(forum);
+      }
+    }
+
+
+    loadingPostSearch(false);
+    update();
+
   }
 
   void connectToUser(UserModel user) async {
