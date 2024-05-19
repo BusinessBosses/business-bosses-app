@@ -128,19 +128,17 @@ class _CoinHistoryScreenState extends State<CoinHistoryScreen> {
               height: 5,
             ),
             Expanded(
-              child: Container(
-                child: PageView(
-                  controller: _pageController,
-                  onPageChanged: (int index) {
-                    setState(() {
-                      _currentIndex = index;
-                    });
-                  },
-                  children: const <Widget>[
-                    WithdrawalScreen(),
-                    DepositsScreen(),
-                  ],
-                ),
+              child: PageView(
+                controller: _pageController,
+                onPageChanged: (int index) {
+                  setState(() {
+                    _currentIndex = index;
+                  });
+                },
+                children: const <Widget>[
+                  WithdrawalScreen(),
+                  DepositsScreen(),
+                ],
               ),
             ),
           ],
