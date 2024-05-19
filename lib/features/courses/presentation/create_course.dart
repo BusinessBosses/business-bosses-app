@@ -270,7 +270,7 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                     ),
                   ),
                   Visibility(
-                    visible: !_validateVideoLinks(),
+                    visible: true,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
@@ -634,7 +634,7 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                             return;
                           }
                         }
-                        if (_selectedImage != null) {
+                        if (_selectedImage == null) {
                           Get.snackbar(
                             'Error',
                             'Please add an image for your course',
