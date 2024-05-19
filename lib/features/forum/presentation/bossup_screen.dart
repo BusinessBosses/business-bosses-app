@@ -142,7 +142,7 @@ class _BossUpSectionState extends State<BossUpSection>
                 },
                 onSubmit: (String query) {
                   _searchTabController.index == 1
-                      ? bossUpController.searchUsers(query)
+                      ? bossUpController.searchUsers(query, widget.industry.industryId)
                       : bossUpController.searchPosts(query);
                   setState(() {});
                 },

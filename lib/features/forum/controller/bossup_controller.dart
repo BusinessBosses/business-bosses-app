@@ -159,10 +159,14 @@ class BossUpController extends GetxController {
     update();
   }
 
-  Future<void> searchUsers(String query) async {
+  Future<void> searchUsers(String query, industryid) async {
     loadingMembers(true);
     update();
     searchedUsers.clear();
+
+    if (members == null || members.isEmpty){
+      await fetchIndustryUsers(industryid);
+    }
 
     for (var user in members) {
       if (user.username.toLowerCase().contains(query.toLowerCase()) ||
