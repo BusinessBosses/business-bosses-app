@@ -1,17 +1,19 @@
+import 'dart:io';
+
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/widgets/buttons/my_outlined_button.dart';
-import 'package:business_bosses_v2/common/widgets/gallery_screen.dart';
-import 'package:business_bosses_v2/common/widgets/typography/text_widget.dart';
 import 'package:business_bosses_v2/features/courses/controller/course_controller.dart';
 import 'package:business_bosses_v2/features/courses/models/course_model.dart';
 import 'package:business_bosses_v2/features/courses/models/video_link_data.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
+import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
 import 'package:detectable_text_field/widgets/detectable_text_field.dart';
+import 'package:image_picker/image_picker.dart';
 import '../../../action/action.dart';
 import '../../../utils/theme/theme.dart';
 
@@ -43,6 +45,8 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
   final ProfileController profileController = Get.find();
   TextEditingController? desccontroller = TextEditingController();
   ContentType _selectedContentType = ContentType.videos;
+  File? _selectedImage;
+  String? photo;
 
   List<Map<String, dynamic>> types = <Map<String, dynamic>>[
     <String, dynamic>{
@@ -231,7 +235,7 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                         _selectedContentType.toString() == 'ContentType.both',
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
+                      children: <Widget>[
                         const Text(
                           'Add Youtube or Video links',
                           style: TextStyle(
@@ -263,7 +267,7 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                     visible: !_validateVideoLinks(),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
+                      children: <Widget>[
                         const Text(
                           'Add a Thumbnail for your Course',
                           style: TextStyle(
@@ -274,8 +278,7 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                         ),
                         GestureDetector(
                           onTap: () {
-                            controller.onPickImage(GalleryType.images,
-                                isUpdating: false);
+                            _pickImage(context);
                           },
                           child: Container(
                             height: 55,
@@ -290,9 +293,11 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
-                                const Text(
-                                  'Add an image',
-                                  style: TextStyle(
+                                Text(
+                                  _selectedImage == null
+                                      ? 'Add an image'
+                                      : _selectedImage!.path.split('/').last,
+                                  style: const TextStyle(
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
@@ -318,7 +323,7 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                         _selectedContentType.toString() == 'ContentType.both',
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
+                      children: <Widget>[
                         InkWell(
                           onTap: (() async {
                             final FilePickerResult? result =
@@ -363,7 +368,7 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                                 ]),
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 8,
                         ),
                         Column(
@@ -558,12 +563,21 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                         setState(() {
                           isProcessing = true;
                         });
-                        if (selectedFilePaths.isNotEmpty) {
-                          for (String filePath in selectedFilePaths) {
-                            await courseController.uploadFile(filePath);
+                        if (_selectedImage != null) {
+                          dynamic response =
+                              await ApiService.uploadFile(_selectedImage!);
+                          if (response['success']) {
+                            photo = response['fileUrl'];
+                          } else {
+                            showSnackbar(
+                                message: 'Error Uploading Thumbnail!',
+                                error: true);
+                            setState(() {
+                              isProcessing = false;
+                            });
+                            return;
                           }
                         }
-
                         if (title == null || title == '') {
                           Get.snackbar(
                             'Error',
@@ -611,8 +625,9 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                           'isActive': true,
                           'isApproved': false,
                           'subtitle': false,
-                          'thumbnail':'kkkmmm',
-                          'contentType': _selectedContentType.toString().split('.').last,
+                          'thumbnail': photo,
+                          'contentType':
+                              _selectedContentType.toString().split('.').last,
                           'documents': selectedFileNames.isEmpty
                               ? null
                               : selectedFileNames,
@@ -783,6 +798,19 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
       }
     }
     return true;
+  }
+
+  Future<void> _pickImage(BuildContext context) async {
+    final ImagePicker imagePicker = ImagePicker();
+    final XFile? image =
+        await imagePicker.pickImage(source: ImageSource.gallery);
+
+    if (image != null) {
+      // Handle the selected image. You can save it, display it, or upload it.
+      setState(() {
+        _selectedImage = File(image.path);
+      });
+    }
   }
 
   bool _isValidYoutubeUrl(String url) {

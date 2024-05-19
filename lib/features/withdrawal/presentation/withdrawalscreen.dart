@@ -23,8 +23,10 @@ class WithdrawalScreen extends StatefulWidget {
 class _WithdrawalScreenState extends State<WithdrawalScreen> {
   final ScrollController scrollController = ScrollController();
   late ProfileController _profileController;
-  final TextEditingController _withdrawlAmountController = TextEditingController();
-  final TextEditingController _walletAddressController = TextEditingController();
+  final TextEditingController _withdrawlAmountController =
+      TextEditingController();
+  final TextEditingController _walletAddressController =
+      TextEditingController();
   String? _paymentMethods;
   bool paymentSelected = false;
   bool isProcessing = false;
@@ -41,7 +43,8 @@ class _WithdrawalScreenState extends State<WithdrawalScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeData theme = Theme.of(context).copyWith(dividerColor: Colors.transparent);
+    final ThemeData theme =
+        Theme.of(context).copyWith(dividerColor: Colors.transparent);
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -275,22 +278,17 @@ class _WithdrawalScreenState extends State<WithdrawalScreen> {
                               error: true,
                             );
                           } else {
-                            print('object');
                             setState(() {
                               isProcessing = true;
                             });
                             await coinHistoryController
                                 .makeWithdrawal(<String, dynamic>{
                               'status': 'Pending',
-                              'approved': false,
-                              'duration': null,
                               'description': _walletAddressController.text,
-                              'deleted': false,
-                              'deletedAt': null,
                               'userId': _profileController.myProfile.uid,
                               'transactionType': 'debit',
                               'amount': _withdrawlAmountController.text,
-                              'paymentMethod': _paymentMethods,
+                              'paymentMethod': transformText(_paymentMethods!),
                               'date': DateTime.now().toString(),
                             });
                             setState(() {
@@ -379,30 +377,27 @@ class _WithdrawalScreenState extends State<WithdrawalScreen> {
                                 : Column(
                                     children: <Widget>[
                                       const WithdrawalHeaderItem(),
-                                      Container(
-                                        child: ListView.builder(
-                                          physics:
-                                              const NeverScrollableScrollPhysics(),
-                                          shrinkWrap: true,
-                                          itemCount: coinHistoryController
-                                              .coinwithdrawalHistory.length,
-                                          itemBuilder:
-                                              (BuildContext context, int i) {
-                                            // Sort the list based on the 'date' key in each map in descending order
-                                            coinHistoryController
-                                                .coinwithdrawalHistory
-                                                .sort((a, b) =>
-                                                    DateTime.parse(b['date'])
-                                                        .compareTo(
-                                                            DateTime.parse(
-                                                                a['date'])));
+                                      ListView.builder(
+                                        physics:
+                                            const NeverScrollableScrollPhysics(),
+                                        shrinkWrap: true,
+                                        itemCount: coinHistoryController
+                                            .coinwithdrawalHistory.length,
+                                        itemBuilder:
+                                            (BuildContext context, int i) {
+                                          // Sort the list based on the 'date' key in each map in descending order
+                                          coinHistoryController
+                                              .coinwithdrawalHistory
+                                              .sort((a, b) =>
+                                                  DateTime.parse(b['date'])
+                                                      .compareTo(DateTime.parse(
+                                                          a['date'])));
 
-                                            return WithdrawalItem(
-                                              item: coinHistoryController
-                                                  .coinwithdrawalHistory[i],
-                                            );
-                                          },
-                                        ),
+                                          return WithdrawalItem(
+                                            item: coinHistoryController
+                                                .coinwithdrawalHistory[i],
+                                          );
+                                        },
                                       ),
                                     ],
                                   ),
@@ -422,5 +417,13 @@ class _WithdrawalScreenState extends State<WithdrawalScreen> {
         ),
       ),
     );
+  }
+
+  String transformText(String input) {
+    String lowercased = input.toLowerCase();
+    if (lowercased == 'mobile money') {
+      return 'mobile_money';
+    }
+    return lowercased;
   }
 }

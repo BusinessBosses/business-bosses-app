@@ -421,6 +421,8 @@ class DonationsController extends GetxController {
     if (response.success) {
       profileController.myProfile
           .incrementCoinsCount(donationModel.amountRecieved);
+      showSnackbar(message: 'Withdrawal Successful!');
+      Get.back();
     } else {
       showSnackbar(
         title: 'OOPS!',

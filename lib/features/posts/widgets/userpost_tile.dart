@@ -478,6 +478,7 @@ class _PostTileState extends State<PostTile> {
                                                     .onDeletePost(
                                                         widget.post.postId);
                                                 Get.back();
+                                                setState(() {});
                                               },
                                               child: const Text('Yes'),
                                             ),
