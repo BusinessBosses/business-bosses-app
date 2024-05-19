@@ -1,3 +1,4 @@
+import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/features/donations/models/donations_model.dart';
@@ -38,7 +39,10 @@ class CoinHistoryController extends GetxController {
         path: 'transaction-history', body: coinTransaction);
     if (response.success) {
       Get.off(() => const WithdrawalCreated());
-    } else {}
+    } else {
+      showSnackbar(
+          message: 'Error While Withdrawing!', title: 'Failed!', error: true);
+    }
   }
 
   Future<void> initHistory() async {

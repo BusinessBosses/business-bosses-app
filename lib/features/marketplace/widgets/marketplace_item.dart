@@ -304,6 +304,7 @@ class _MarketTileState extends State<MarketTile> {
                                                       //   hide = true;
                                                       // });
                                                       Get.back();
+                                                      setState(() {});
                                                     },
                                                     child: const Text('Yes'),
                                                   ),
