@@ -624,7 +624,7 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                           if (!_validateVideoLinks()) {
                             Get.snackbar(
                               'Error',
-                              'Video link must be a Youtube link!',
+                              'Enter a valid link!',
                               backgroundColor: Colors.redAccent,
                               colorText: Colors.white,
                             );
@@ -841,7 +841,7 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
 
   bool _validateVideoLinks() {
     for (dynamic videoLink in videoLinks) {
-      if (!_isValidYoutubeUrl(videoLink.url)) {
+      if (!_isValidUrl(videoLink.url)) {
         return false;
       }
     }
