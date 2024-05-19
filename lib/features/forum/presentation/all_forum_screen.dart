@@ -118,7 +118,7 @@ class _AllForumScreenState extends State<AllForumScreen>
                           setState(() {});
                         },
                         onSubmit: (String query) {
-                          _searchTabController.index == 0
+                          _searchTabController.index == 1
                               ? courseController.searchUsers(query)
                               : courseController.searchPosts(query);
                           setState(() {});
