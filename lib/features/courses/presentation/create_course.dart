@@ -620,7 +620,10 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                           });
                           return;
                         }
-                        if (videoLinks.isNotEmpty) {
+                        if (videoLinks.isNotEmpty &&
+                            _selectedContentType.toString().split('.').last ==
+                                'videos' &&  _selectedContentType.toString().split('.').last ==
+                                'both' ) {
                           if (!_validateVideoLinks()) {
                             Get.snackbar(
                               'Error',
