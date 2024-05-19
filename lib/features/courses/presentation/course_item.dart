@@ -111,8 +111,68 @@ class _CourseItemState extends State<CourseItem> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  widget.course.youtubeUrls == null
-                      ? Stack(children: [
+                  widget.course.youtubeUrls == null ||
+                          !isValidYoutubeUrl(widget.course.youtubeUrls![0])
+                      ? Center(
+                          child: Stack(
+                            children: [
+                              NetworkImageWithPlaceHolder(
+                                imageUrl: widget.course.thumbnail ?? '',
+                                height: 90,
+                                width: 160,
+                                radius: 10,
+                                cacheHeight: 90,
+                                cacheWidth: 90,
+                              ),
+                              Positioned.fill(
+                                child: Center(
+                                  child: SvgPicture.asset(
+                                    'assets/svgs/videolink.svg',
+                                    height: 20,
+                                    width: 20,
+                                  ),
+                                ),
+                              ),
+                              if (widget.course.youtubeUrls != null)
+                                Positioned(
+                                    bottom: 5,
+                                    right: 5,
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                          color: Colors.black.withAlpha(150),
+                                          borderRadius:
+                                              BorderRadius.circular(5)),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(4.0),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            SvgPicture.asset(
+                                              'assets/svgs/coursebundle.svg',
+                                              height: 8,
+                                            ),
+                                            const SizedBox(
+                                              width: 5,
+                                            ),
+                                            Text(
+                                              '${widget.course.youtubeUrls?.length.toString()} ${widget.course.youtubeUrls!.length > 1 ? 'Videos' : 'Video'}',
+                                              style: const TextStyle(
+                                                fontSize: 9,
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.w700,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    )),
+                            ],
+                          ),
+                        )
+                      : Stack(children: [
                           SizedBox(
                             height: 90,
                             width: 160,
@@ -122,20 +182,27 @@ class _CourseItemState extends State<CourseItem> {
                                 fit: BoxFit.fill,
                                 child: Stack(
                                   children: <Widget>[
-                                    NetworkImageWithPlaceHolder(
-                                      imageUrl: widget.course.thumbnail ?? '',
-                                      height: 90,
-                                      width: 160,
-                                      radius: 10,
-                                      cacheHeight: 90,
-                                      cacheWidth: 90,
-                                    ),
-                                    Positioned.fill(
-                                      child: Center(
-                                        child: SvgPicture.asset(
-                                          'assets/svgs/pdf.svg',
-                                          height: 22,
-                                          color: Colors.white,
+                                    GestureDetector(
+                                        onTap: () {},
+                                        child: isValidYoutubeUrl(
+                                                widget.course.youtubeUrls![0])
+                                            ? YoutubeDisplay(widget
+                                                        .course.youtubeUrls !=
+                                                    null
+                                                ? widget.course.youtubeUrls![0]
+                                                : '')
+                                            : Container()),
+                                    Positioned(
+                                      top: 0,
+                                      bottom: 0,
+                                      right: 0,
+                                      left: 0,
+                                      child: GestureDetector(
+                                        onTap: () {},
+                                        child: Icon(
+                                          Icons.play_circle_outlined,
+                                          color: Colors.white.withOpacity(0.5),
+                                          size: 70,
                                         ),
                                       ),
                                     ),
@@ -163,14 +230,14 @@ class _CourseItemState extends State<CourseItem> {
                                                 const SizedBox(
                                                   width: 5,
                                                 ),
-                                                // Text(
-                                                //   '${widget.course.documents?.length.toString()} ${widget.course.documents!.length > 1 ? 'Files' : 'File'}',
-                                                //   style: const TextStyle(
-                                                //     fontSize: 20,
-                                                //     color: Colors.white,
-                                                //     fontWeight: FontWeight.w700,
-                                                //   ),
-                                                // ),
+                                                Text(
+                                                  '${widget.course.youtubeUrls?.length.toString()} ${widget.course.youtubeUrls!.length > 1 ? 'Videos' : 'Video'}',
+                                                  style: const TextStyle(
+                                                    fontSize: 20,
+                                                    color: Colors.white,
+                                                    fontWeight: FontWeight.w700,
+                                                  ),
+                                                ),
                                               ],
                                             ),
                                           ),
@@ -200,170 +267,7 @@ class _CourseItemState extends State<CourseItem> {
                                   borderRadius: BorderRadius.circular(12.0)),
                             ),
                           )
-                        ])
-                      : !isValidYoutubeUrl(widget.course.youtubeUrls![0])
-                          ? Center(
-                              child: Stack(
-                                children: [
-                                  NetworkImageWithPlaceHolder(
-                                    imageUrl: widget.course.thumbnail ?? '',
-                                    height: 90,
-                                    width: 160,
-                                    radius: 10,
-                                    cacheHeight: 90,
-                                    cacheWidth: 90,
-                                  ),
-                                  Positioned.fill(
-                                    child: Center(
-                                      child: SvgPicture.asset(
-                                        'assets/svgs/videolink.svg',
-                                        height: 20,
-                                        width: 20,
-                                      ),
-                                    ),
-                                  ),
-                                  Positioned(
-                                      bottom: 5,
-                                      right: 5,
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                            color: Colors.black.withAlpha(150),
-                                            borderRadius:
-                                                BorderRadius.circular(5)),
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(4.0),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            children: [
-                                              SvgPicture.asset(
-                                                'assets/svgs/coursebundle.svg',
-                                                height: 8,
-                                              ),
-                                              const SizedBox(
-                                                width: 5,
-                                              ),
-                                              Text(
-                                                '${widget.course.youtubeUrls?.length.toString()} ${widget.course.youtubeUrls!.length > 1 ? 'Videos' : 'Video'}',
-                                                style: const TextStyle(
-                                                  fontSize: 9,
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.w700,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      )),
-                                ],
-                              ),
-                            )
-                          : Stack(children: [
-                              SizedBox(
-                                height: 90,
-                                width: 160,
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(12.0),
-                                  child: FittedBox(
-                                    fit: BoxFit.fill,
-                                    child: Stack(
-                                      children: <Widget>[
-                                        GestureDetector(
-                                            onTap: () {},
-                                            child: isValidYoutubeUrl(widget
-                                                    .course.youtubeUrls![0])
-                                                ? YoutubeDisplay(
-                                                    widget.course.youtubeUrls !=
-                                                            null
-                                                        ? widget.course
-                                                            .youtubeUrls![0]
-                                                        : '')
-                                                : Container()),
-                                        Positioned(
-                                          top: 0,
-                                          bottom: 0,
-                                          right: 0,
-                                          left: 0,
-                                          child: GestureDetector(
-                                            onTap: () {},
-                                            child: Icon(
-                                              Icons.play_circle_outlined,
-                                              color:
-                                                  Colors.white.withOpacity(0.5),
-                                              size: 70,
-                                            ),
-                                          ),
-                                        ),
-                                        Positioned(
-                                            bottom: 12,
-                                            right: 12,
-                                            child: Container(
-                                              decoration: BoxDecoration(
-                                                  color: Colors.black
-                                                      .withAlpha(150),
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          10)),
-                                              child: Padding(
-                                                padding:
-                                                    const EdgeInsets.all(8.0),
-                                                child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.center,
-                                                  children: [
-                                                    SvgPicture.asset(
-                                                      'assets/svgs/coursebundle.svg',
-                                                      height: 20,
-                                                    ),
-                                                    const SizedBox(
-                                                      width: 5,
-                                                    ),
-                                                    Text(
-                                                      '${widget.course.youtubeUrls?.length.toString()} ${widget.course.youtubeUrls!.length > 1 ? 'Videos' : 'Video'}',
-                                                      style: const TextStyle(
-                                                        fontSize: 20,
-                                                        color: Colors.white,
-                                                        fontWeight:
-                                                            FontWeight.w700,
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            )),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    widget.course.setViews();
-                                  });
-                                  courseController.updateCourseViews(
-                                      widget.course.id,
-                                      widget.course.views + 1);
-                                  homeController.updateCourseViews(
-                                      widget.course.id,
-                                      widget.course.views + 1);
-                                  Get.to(() => ExpandedCourseScreen(
-                                      course: widget.course));
-                                },
-                                child: Container(
-                                  height: 90,
-                                  width: 160,
-                                  decoration: BoxDecoration(
-                                      color: Colors.transparent,
-                                      borderRadius:
-                                          BorderRadius.circular(12.0)),
-                                ),
-                              )
-                            ]),
+                        ]),
                   const SizedBox(
                     width: 10,
                   ),

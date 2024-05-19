@@ -864,14 +864,14 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
     }
   }
 
-  bool _isValidYoutubeUrl(String url) {
-    final RegExp youtubeRegExp = RegExp(
-      r'^(https?\:\/\/)?(www\.youtube\.com\/watch\?v=|youtu\.be\/).+$',
-      caseSensitive: false,
-      multiLine: false,
-    );
-    return youtubeRegExp.hasMatch(url);
-  }
+  // bool _isValidYoutubeUrl(String url) {
+  //   final RegExp youtubeRegExp = RegExp(
+  //     r'^(https?\:\/\/)?(www\.youtube\.com\/watch\?v=|youtu\.be\/).+$',
+  //     caseSensitive: false,
+  //     multiLine: false,
+  //   );
+  //   return youtubeRegExp.hasMatch(url);
+  // }
 
   Widget buildAddButton() {
     return GestureDetector(
