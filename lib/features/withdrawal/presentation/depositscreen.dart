@@ -241,7 +241,7 @@ class _DepositsScreenState extends State<DepositsScreen> {
                                 onTap: () {
                                   !profileController.myProfile.isSubscribed
                                       ? Get.toNamed(Routes.premiumscreen)
-                                      :  Get.toNamed(Routes.premiumscreen);
+                                      :  null;
                                 },
                                 child: Container(
                                   padding: const EdgeInsets.symmetric(
