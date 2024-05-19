@@ -179,6 +179,8 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                             onChanged: (ContentType? value) {
                               setState(() {
                                 _selectedContentType = value!;
+                                selectedFileNames = [];
+                                selectedFilePaths = [];
                               });
                             },
                           ),
@@ -200,6 +202,10 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                             onChanged: (ContentType? value) {
                               setState(() {
                                 _selectedContentType = value!;
+                                VideoLinkData videolin =
+                                    VideoLinkData(url: '', transcript: '');
+                                videoLinks.clear();
+                                videoLinks.add(videolin);
                               });
                             },
                           ),
@@ -602,7 +608,7 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                           });
                           return;
                         }
-                        if (videoLinks.isEmpty || selectedFileNames.isEmpty) {
+                        if (videoLinks.isEmpty && selectedFileNames.isEmpty) {
                           Get.snackbar(
                             'Error',
                             'You must upload a file or input video link to proceed!',
