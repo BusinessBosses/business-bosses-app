@@ -602,7 +602,7 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                           });
                           return;
                         }
-                        if (!_validateVideoLinks()) {
+                        if (_selectedImage != null) {
                           Get.snackbar(
                             'Error',
                             'Please add a thumbnail for your course',
