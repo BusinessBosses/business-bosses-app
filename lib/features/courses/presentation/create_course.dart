@@ -646,7 +646,6 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                           });
                           return;
                         }
-                        return;
                         Map<String, dynamic> course = <String, dynamic>{
                           'title': title,
                           'industryId': widget.industryId,
