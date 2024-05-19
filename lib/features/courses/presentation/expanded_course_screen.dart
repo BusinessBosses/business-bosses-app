@@ -168,7 +168,7 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
                                     const SizedBox(height: 10),
                                     GestureDetector(
                                       onTap: () async {
-                                        widget.course.courseType == 'video'
+                                        widget.course.contentType == 'videos'
                                             ? {
                                                 if (await canLaunchUrl(
                                                     Uri.parse(widget.course
@@ -191,22 +191,22 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
                                               BorderRadius.circular(50),
                                           color: Colors.white,
                                         ),
-                                        child:
-                                            widget.course.contentType == 'video'
-                                                ? const Text(
-                                                    'Watch Video',
-                                                    style: TextStyle(
-                                                        color: Colors.black,
-                                                        fontWeight:
-                                                            FontWeight.w700),
-                                                  )
-                                                : const Text(
-                                                    'Open File',
-                                                    style: TextStyle(
-                                                        color: Colors.black,
-                                                        fontWeight:
-                                                            FontWeight.w700),
-                                                  ),
+                                        child: widget.course.contentType ==
+                                                'videos'
+                                            ? const Text(
+                                                'Watch Video',
+                                                style: TextStyle(
+                                                    color: Colors.black,
+                                                    fontWeight:
+                                                        FontWeight.w700),
+                                              )
+                                            : const Text(
+                                                'Open File',
+                                                style: TextStyle(
+                                                    color: Colors.black,
+                                                    fontWeight:
+                                                        FontWeight.w700),
+                                              ),
                                       ),
                                     ),
                                   ],
