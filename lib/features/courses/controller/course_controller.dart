@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
+import 'package:business_bosses_v2/common/models/comment_model.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/common/widgets/gallery_screen.dart';
 import 'package:business_bosses_v2/features/courses/models/course_model.dart';
@@ -100,7 +101,7 @@ class CourseController extends GetxController {
       if (index != -1) {
         courses[index] = CourseModel.fromMap(<String, dynamic>{
           ...response.data,
-          'comments': [],
+          'comments': <CommentModel>[],
           'user': profileController.myProfile.toMap()
         });
         Get.back();
