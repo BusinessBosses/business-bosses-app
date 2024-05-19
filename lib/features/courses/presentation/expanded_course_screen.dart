@@ -142,12 +142,8 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
                   padding: const EdgeInsets.only(top: 120.0),
                   child: Stack(
                     children: <Widget>[
-                      isValidYoutubeUrl(widget.course.youtubeUrls![0])
-                          ? YoutubeDisplay(
-                              widget.course.youtubeUrls![selectedVideo],
-                              corner: BorderRadius.circular(0),
-                            )
-                          : Stack(children: [
+                      widget.course.youtubeUrls == null
+                          ? Stack(children: [
                               NetworkImageWithPlaceHolder(
                                 imageUrl: widget.course.thumbnail ?? '',
                                 height: 300,
@@ -175,18 +171,7 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
                                     GestureDetector(
                                       onTap: () async {
                                         widget.course.contentType == 'videos'
-                                            ? {
-                                                if (await canLaunchUrl(
-                                                    Uri.parse(widget.course
-                                                            .youtubeUrls![
-                                                        selectedVideo])))
-                                                  {
-                                                    await launchUrl(Uri.parse(
-                                                        widget.course
-                                                                .youtubeUrls![
-                                                            selectedVideo]))
-                                                  }
-                                              }
+                                            ? {}
                                             : {};
                                       },
                                       child: Container(
@@ -218,7 +203,87 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
                                   ],
                                 ),
                               ),
-                            ]),
+                            ])
+                          : isValidYoutubeUrl(widget.course.youtubeUrls![0])
+                              ? YoutubeDisplay(
+                                  widget.course.youtubeUrls![selectedVideo],
+                                  corner: BorderRadius.circular(0),
+                                )
+                              : Stack(children: [
+                                  NetworkImageWithPlaceHolder(
+                                    imageUrl: widget.course.thumbnail ?? '',
+                                    height: 300,
+                                    radius: 0,
+                                    width: double.infinity,
+                                    cacheHeight: 120,
+                                    cacheWidth: 120,
+                                  ),
+                                  Container(
+                                    color: Colors.black54,
+                                  ),
+                                  Positioned(
+                                    left: 0,
+                                    right: 0,
+                                    top: 0,
+                                    bottom: 0,
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        SvgPicture.asset(
+                                          'assets/svgs/videolink.svg',
+                                          height: 50,
+                                        ),
+                                        const SizedBox(height: 10),
+                                        GestureDetector(
+                                          onTap: () async {
+                                            widget.course.contentType ==
+                                                    'videos'
+                                                ? {
+                                                    if (await canLaunchUrl(
+                                                        Uri.parse(widget.course
+                                                                .youtubeUrls![
+                                                            selectedVideo])))
+                                                      {
+                                                        await launchUrl(
+                                                            Uri.parse(widget
+                                                                    .course
+                                                                    .youtubeUrls![
+                                                                selectedVideo]))
+                                                      }
+                                                  }
+                                                : {};
+                                          },
+                                          child: Container(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 20, vertical: 10),
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(50),
+                                              color: Colors.white,
+                                            ),
+                                            child: widget.course.contentType ==
+                                                    'videos'
+                                                ? const Text(
+                                                    'Watch Video',
+                                                    style: TextStyle(
+                                                        color: Colors.black,
+                                                        fontWeight:
+                                                            FontWeight.w700),
+                                                  )
+                                                : const Text(
+                                                    'Open File',
+                                                    style: TextStyle(
+                                                        color: Colors.black,
+                                                        fontWeight:
+                                                            FontWeight.w700),
+                                                  ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ]),
                       Visibility(
                         visible: widget.course.courseType == 'paid',
                         child: GestureDetector(
@@ -737,191 +802,198 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
                             ),
                           ],
                         ),
-                        widget.course.youtubeUrls!.length > 1
-                            ? SizedBox(
-                                height: 90,
-                                child: ListView.builder(
-                                    scrollDirection: Axis.horizontal,
-                                    itemCount: combinedList!.length,
-                                    itemBuilder:
-                                        (BuildContext context, int index) {
-                                      return Row(
-                                        children: <Widget>[
-                                          Stack(children: <Widget>[
-                                            SizedBox(
-                                              height: 90,
-                                              width: 160,
-                                              child: ClipRRect(
-                                                borderRadius:
-                                                    BorderRadius.circular(12.0),
-                                                child: FittedBox(
-                                                  fit: BoxFit.fill,
-                                                  child: Stack(
-                                                    children: <Widget>[
-                                                      isValidYoutubeUrl(widget
-                                                              .course
-                                                              .youtubeUrls![0])
-                                                          ? YoutubeDisplay(
-                                                              widget.course
-                                                                      .youtubeUrls![
-                                                                  index],
-                                                            )
-                                                          : Center(
-                                                              child: Stack(
-                                                                children: [
-                                                                  NetworkImageWithPlaceHolder(
-                                                                    imageUrl: widget
-                                                                            .course
-                                                                            .thumbnail ??
-                                                                        '',
-                                                                    height: 90,
-                                                                    width: 160,
-                                                                    radius: 10,
-                                                                    cacheHeight:
-                                                                        90,
-                                                                    cacheWidth:
-                                                                        90,
-                                                                    placeHolder:
-                                                                        Icons
-                                                                            .person,
-                                                                    iconSize:
-                                                                        30,
-                                                                  ),
-                                                                  Positioned
-                                                                      .fill(
-                                                                    child:
-                                                                        Center(
-                                                                      child: SvgPicture
-                                                                          .asset(
-                                                                        'assets/svgs/videolink.svg',
-                                                                        height:
-                                                                            20,
-                                                                        width:
-                                                                            20,
+                        if (widget.course.youtubeUrls != null)
+                          widget.course.youtubeUrls!.length > 1
+                              ? SizedBox(
+                                  height: 90,
+                                  child: ListView.builder(
+                                      scrollDirection: Axis.horizontal,
+                                      itemCount: combinedList!.length,
+                                      itemBuilder:
+                                          (BuildContext context, int index) {
+                                        return Row(
+                                          children: <Widget>[
+                                            Stack(children: <Widget>[
+                                              SizedBox(
+                                                height: 90,
+                                                width: 160,
+                                                child: ClipRRect(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          12.0),
+                                                  child: FittedBox(
+                                                    fit: BoxFit.fill,
+                                                    child: Stack(
+                                                      children: <Widget>[
+                                                        isValidYoutubeUrl(widget
+                                                                .course
+                                                                .youtubeUrls![0])
+                                                            ? YoutubeDisplay(
+                                                                widget.course
+                                                                        .youtubeUrls![
+                                                                    index],
+                                                              )
+                                                            : Center(
+                                                                child: Stack(
+                                                                  children: [
+                                                                    NetworkImageWithPlaceHolder(
+                                                                      imageUrl:
+                                                                          widget.course.thumbnail ??
+                                                                              '',
+                                                                      height:
+                                                                          90,
+                                                                      width:
+                                                                          160,
+                                                                      radius:
+                                                                          10,
+                                                                      cacheHeight:
+                                                                          90,
+                                                                      cacheWidth:
+                                                                          90,
+                                                                      placeHolder:
+                                                                          Icons
+                                                                              .person,
+                                                                      iconSize:
+                                                                          30,
+                                                                    ),
+                                                                    Positioned
+                                                                        .fill(
+                                                                      child:
+                                                                          Center(
+                                                                        child: SvgPicture
+                                                                            .asset(
+                                                                          'assets/svgs/videolink.svg',
+                                                                          height:
+                                                                              20,
+                                                                          width:
+                                                                              20,
+                                                                        ),
                                                                       ),
                                                                     ),
-                                                                  ),
-                                                                  Positioned(
-                                                                      bottom: 5,
-                                                                      right: 5,
-                                                                      child:
-                                                                          Container(
-                                                                        decoration: BoxDecoration(
-                                                                            color:
-                                                                                Colors.black.withAlpha(150),
-                                                                            borderRadius: BorderRadius.circular(5)),
-                                                                        child:
-                                                                            Padding(
-                                                                          padding: const EdgeInsets
-                                                                              .all(
-                                                                              4.0),
+                                                                    if (widget
+                                                                            .course
+                                                                            .youtubeUrls !=
+                                                                        null)
+                                                                      Positioned(
+                                                                          bottom:
+                                                                              5,
+                                                                          right:
+                                                                              5,
                                                                           child:
-                                                                              Row(
-                                                                            mainAxisAlignment:
-                                                                                MainAxisAlignment.center,
-                                                                            crossAxisAlignment:
-                                                                                CrossAxisAlignment.center,
-                                                                            children: [
-                                                                              SvgPicture.asset(
-                                                                                'assets/svgs/coursebundle.svg',
-                                                                                height: 8,
+                                                                              Container(
+                                                                            decoration:
+                                                                                BoxDecoration(color: Colors.black.withAlpha(150), borderRadius: BorderRadius.circular(5)),
+                                                                            child:
+                                                                                Padding(
+                                                                              padding: const EdgeInsets.all(4.0),
+                                                                              child: Row(
+                                                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                                                crossAxisAlignment: CrossAxisAlignment.center,
+                                                                                children: [
+                                                                                  SvgPicture.asset(
+                                                                                    'assets/svgs/coursebundle.svg',
+                                                                                    height: 8,
+                                                                                  ),
+                                                                                  const SizedBox(
+                                                                                    width: 5,
+                                                                                  ),
+                                                                                  Text(
+                                                                                    '${widget.course.youtubeUrls?.length.toString()} ${widget.course.youtubeUrls!.length > 1 ? 'Videos' : 'Video'}',
+                                                                                    style: const TextStyle(
+                                                                                      fontSize: 9,
+                                                                                      color: Colors.white,
+                                                                                      fontWeight: FontWeight.w700,
+                                                                                    ),
+                                                                                  ),
+                                                                                ],
                                                                               ),
-                                                                              const SizedBox(
-                                                                                width: 5,
-                                                                              ),
-                                                                              Text(
-                                                                                '${widget.course.youtubeUrls?.length.toString()} ${widget.course.youtubeUrls!.length > 1 ? 'Videos' : 'Video'}',
-                                                                                style: const TextStyle(
-                                                                                  fontSize: 9,
-                                                                                  color: Colors.white,
-                                                                                  fontWeight: FontWeight.w700,
-                                                                                ),
-                                                                              ),
-                                                                            ],
-                                                                          ),
-                                                                        ),
-                                                                      )),
-                                                                ],
+                                                                            ),
+                                                                          )),
+                                                                  ],
+                                                                ),
                                                               ),
-                                                            ),
-                                                      Positioned(
-                                                        top: 0,
-                                                        bottom: 0,
-                                                        right: 0,
-                                                        left: 0,
-                                                        child: selectedVideo ==
-                                                                index
-                                                            ? Container()
-                                                            : Icon(
-                                                                Icons
-                                                                    .play_circle_outlined,
-                                                                color: Colors
-                                                                    .black
-                                                                    .withOpacity(
-                                                                        0.5),
-                                                                size: 70,
-                                                              ),
-                                                      ),
-                                                    ],
+                                                        Positioned(
+                                                          top: 0,
+                                                          bottom: 0,
+                                                          right: 0,
+                                                          left: 0,
+                                                          child:
+                                                              selectedVideo ==
+                                                                      index
+                                                                  ? Container()
+                                                                  : Icon(
+                                                                      Icons
+                                                                          .play_circle_outlined,
+                                                                      color: Colors
+                                                                          .black
+                                                                          .withOpacity(
+                                                                              0.5),
+                                                                      size: 70,
+                                                                    ),
+                                                        ),
+                                                      ],
+                                                    ),
                                                   ),
                                                 ),
                                               ),
-                                            ),
-                                            InkWell(
-                                              onTap: () {
-                                                setState(() {
-                                                  selectedVideo = index;
-                                                });
-                                              },
-                                              child: Stack(
-                                                alignment: Alignment.center,
-                                                children: <Widget>[
-                                                  Container(
-                                                    height: 90,
-                                                    width: 160,
-                                                    decoration: BoxDecoration(
-                                                      color: selectedVideo ==
-                                                              index
-                                                          ? Colors.black
-                                                              .withAlpha(150)
-                                                          : Colors.transparent,
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              12),
+                                              InkWell(
+                                                onTap: () {
+                                                  setState(() {
+                                                    selectedVideo = index;
+                                                  });
+                                                },
+                                                child: Stack(
+                                                  alignment: Alignment.center,
+                                                  children: <Widget>[
+                                                    Container(
+                                                      height: 90,
+                                                      width: 160,
+                                                      decoration: BoxDecoration(
+                                                        color: selectedVideo ==
+                                                                index
+                                                            ? Colors.black
+                                                                .withAlpha(150)
+                                                            : Colors
+                                                                .transparent,
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(12),
+                                                      ),
                                                     ),
-                                                  ),
-                                                  selectedVideo == index
-                                                      ? const Center(
-                                                          child: Text(
-                                                            'Playing',
-                                                            style: TextStyle(
-                                                              color:
-                                                                  Colors.white,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w700,
-                                                              fontSize: 12,
+                                                    selectedVideo == index
+                                                        ? const Center(
+                                                            child: Text(
+                                                              'Playing',
+                                                              style: TextStyle(
+                                                                color: Colors
+                                                                    .white,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w700,
+                                                                fontSize: 12,
+                                                              ),
                                                             ),
-                                                          ),
-                                                        )
-                                                      : Container(),
-                                                ],
+                                                          )
+                                                        : Container(),
+                                                  ],
+                                                ),
                                               ),
-                                            ),
-                                          ]),
-                                          const SizedBox(
-                                            width: 10,
-                                          )
-                                        ],
-                                      );
-                                    }),
-                              )
-                            : Container(),
-                        widget.course.youtubeUrls!.length > 1
-                            ? const SizedBox(
-                                height: 20,
-                              )
-                            : Container(),
+                                            ]),
+                                            const SizedBox(
+                                              width: 10,
+                                            )
+                                          ],
+                                        );
+                                      }),
+                                )
+                              : Container(),
+
+                        if (widget.course.youtubeUrls != null)
+                          widget.course.youtubeUrls!.length > 1
+                              ? const SizedBox(
+                                  height: 20,
+                                )
+                              : Container(),
                         widget.course.courseType == 'free'
                             ? Container()
                             : Center(
