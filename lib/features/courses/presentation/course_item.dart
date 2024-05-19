@@ -111,7 +111,8 @@ class _CourseItemState extends State<CourseItem> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  !isValidYoutubeUrl(widget.course.youtubeUrls![0])
+                  widget.course.youtubeUrls == null ||
+                          !isValidYoutubeUrl(widget.course.youtubeUrls![0])
                       ? Center(
                           child: Stack(
                             children: [
@@ -132,40 +133,42 @@ class _CourseItemState extends State<CourseItem> {
                                   ),
                                 ),
                               ),
-                              Positioned(
-                                  bottom: 5,
-                                  right: 5,
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                        color: Colors.black.withAlpha(150),
-                                        borderRadius: BorderRadius.circular(5)),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(4.0),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: [
-                                          SvgPicture.asset(
-                                            'assets/svgs/coursebundle.svg',
-                                            height: 8,
-                                          ),
-                                          const SizedBox(
-                                            width: 5,
-                                          ),
-                                          Text(
-                                            '${widget.course.youtubeUrls?.length.toString()} ${widget.course.youtubeUrls!.length > 1 ? 'Videos' : 'Video'}',
-                                            style: const TextStyle(
-                                              fontSize: 9,
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.w700,
+                              if (widget.course.youtubeUrls != null)
+                                Positioned(
+                                    bottom: 5,
+                                    right: 5,
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                          color: Colors.black.withAlpha(150),
+                                          borderRadius:
+                                              BorderRadius.circular(5)),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(4.0),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            SvgPicture.asset(
+                                              'assets/svgs/coursebundle.svg',
+                                              height: 8,
                                             ),
-                                          ),
-                                        ],
+                                            const SizedBox(
+                                              width: 5,
+                                            ),
+                                            Text(
+                                              '${widget.course.youtubeUrls?.length.toString()} ${widget.course.youtubeUrls!.length > 1 ? 'Videos' : 'Video'}',
+                                              style: const TextStyle(
+                                                fontSize: 9,
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.w700,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
                                       ),
-                                    ),
-                                  )),
+                                    )),
                             ],
                           ),
                         )
