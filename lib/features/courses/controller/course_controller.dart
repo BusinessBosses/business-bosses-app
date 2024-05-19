@@ -39,6 +39,7 @@ class CourseController extends GetxController {
   RxBool loadingPostsSearch = RxBool(false);
   RxList<String> userIds = <String>[].obs;
   RxBool isUserSearch = RxBool(false);
+  RxBool isPostSearch = RxBool(false);
   RxList<UserModel> usersMembers = <UserModel>[].obs;
   late ImagePicker _picker;
 
@@ -55,6 +56,16 @@ class CourseController extends GetxController {
         initCourses();
       }
     }
+  }
+
+  void clearUserSearch() {
+    isUserSearch(false);
+    update();
+  }
+
+  void clearPostSearch() {
+    isPostSearch(false);
+    update();
   }
 
   /// PICK IMAGE FROM DEVICE GALLERY
@@ -292,47 +303,19 @@ class CourseController extends GetxController {
   ) async {
     loadingPostsSearch(true);
     update();
+
     searchedPosts.clear();
-    String path = '/courses/get-industry-courses/${industry.industryId}';
-    ApiResponseModel response = await ApiService.get(path: path);
-    print('API Response: $response');
-    if (response.success) {
-      print('Response Data: ${response.data}');
-      List<dynamic> rows = response.data['rows'];
-      print('Rows: $rows');
-      for (var row in rows) {
-        print('Row: $row');
-        if (row['userId'] != null) {
-          if ((row['title'] != null &&
-                  row['title'].toLowerCase().contains(query.toLowerCase())) ||
-              (row['user']['username'] != null &&
-                  row['user']['username']
-                      .toLowerCase()
-                      .contains(query.toLowerCase())) ||
-              (row['user']['name'] != null &&
-                  row['user']['name']
-                      .toLowerCase()
-                      .contains(query.toLowerCase())) ||
-              (row['description'] != null &&
-                  row['description']
-                      .toLowerCase()
-                      .contains(query.toLowerCase()))) {
-            searchedPosts.add(CourseModel.fromMap(<String, dynamic>{
-              ...row,
-              'likes': row['likes']
-                  .map((dynamic like) => like['userId'].toString())
-                  .toList(),
-            }));
-          }
-        }
+
+    // Assuming products is the list of already fetched products
+    for (var row in courses) {
+      if (row.description!.toLowerCase().contains(query.toLowerCase()) ||
+          row.title!.toLowerCase().contains(query.toLowerCase())) {
+        searchedPosts.add(row);
       }
-      loadingPostsSearch(false);
-      update();
-    } else {
-      print('Failed API Response: $response');
-      loadingPostsSearch(false);
-      update();
     }
+
+    loadingPostsSearch(false);
+    update();
   }
 
   void connectToUser(UserModel user) async {

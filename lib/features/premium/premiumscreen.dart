@@ -264,7 +264,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
                                                     height: 30),
                                                 const SizedBox(width: 10),
                                                 const Text(
-                                                  'Get 100 coins per month',
+                                                  'Earn 100 coins per month',
                                                   style: TextStyle(
                                                       fontSize: 14,
                                                       fontWeight:
@@ -312,7 +312,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
                                                     height: 23),
                                                 const SizedBox(width: 15),
                                                 const Text(
-                                                  'Rank higher on posts & listing',
+                                                  'Recognition on posts search',
                                                   style: TextStyle(
                                                       fontSize: 14,
                                                       fontWeight:
@@ -324,11 +324,11 @@ class _PremiumScreenState extends State<PremiumScreen> {
                                             Row(
                                               children: <Widget>[
                                                 SvgPicture.asset(
-                                                    'assets/svgs/liveevent.svg',
-                                                    height: 23),
+                                                    'assets/svgs/handshake.svg',
+                                                    height: 20),
                                                 const SizedBox(width: 18),
                                                 const Text(
-                                                  'Create Live Events',
+                                                  'Exclusive Partner Offers',
                                                   style: TextStyle(
                                                       fontSize: 14,
                                                       fontWeight:

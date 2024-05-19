@@ -271,8 +271,6 @@ class DonationsController extends GetxController {
 
     searchedUsers.clear();
 
-    searchedUsers.clear();
-
     for (var user in usersMembers) {
       if (user.username.toLowerCase().contains(query.toLowerCase()) ||
           user.name!.toLowerCase().contains(query.toLowerCase())) {

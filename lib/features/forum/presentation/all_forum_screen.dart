@@ -5,6 +5,7 @@ import 'package:business_bosses_v2/features/courses/models/course_model.dart';
 import 'package:business_bosses_v2/features/courses/presentation/courses.dart';
 import 'package:business_bosses_v2/features/courses/presentation/filtercoursesposts.dart';
 import 'package:business_bosses_v2/features/courses/presentation/filtercoursesusers.dart';
+import 'package:business_bosses_v2/features/forum/controller/bossup_controller.dart';
 import 'package:business_bosses_v2/features/forum/controller/forum_controller.dart';
 import 'package:business_bosses_v2/features/forum/presentation/filterchallengeposts.dart';
 import 'package:business_bosses_v2/features/forum/presentation/filterchallengeusers.dart';
@@ -43,6 +44,7 @@ class _AllForumScreenState extends State<AllForumScreen>
   late final TabController _coursesearchTabController;
   late final TabController _pageTabController;
   late final TabController _coursespageTabController;
+  late BossUpController bossUpController;
 
   int currentTabIndex = 0; // Track the current tab index
   String _filtercourses = '';
@@ -60,6 +62,7 @@ class _AllForumScreenState extends State<AllForumScreen>
       industry = Get.arguments as Industry;
     }
     forumController = Get.put(ForumController());
+    bossUpController = Get.put(BossUpController());
   }
 
   void onPreferencesTap(String filterOption) {
@@ -89,32 +92,36 @@ class _AllForumScreenState extends State<AllForumScreen>
                 ? Searchbar(
                     hintText: 'Search ${industry.industry!}',
                     onChange: (String query) {
-                      // if (_searchTabController.index == 0) {
-                      //   controller.onSearch(
-                      //       _searchTabController.index, query);
-                      // }
+                      if (query.isEmpty) {
+                        _searchTabController.index == 1
+                            ? controller.clearUserSearch()
+                            : controller.clearPostSearch();
+                      }
+                      setState(() {});
                     },
                     onSubmit: (String query) {
-                      // if (_searchTabController.index == 1) {
-                      //   controller.onSearch(
-                      //       _searchTabController.index, query);
-                      // }
+                      _searchTabController.index == 1
+                          ? controller.searchUsers(query, industry.industryId!)
+                          : controller.searchPosts(query);
+                      setState(() {});
                     },
                   )
                 : _iscouseSearching
                     ? Searchbar(
                         hintText: 'Search Courses',
                         onChange: (String query) {
-                          // if (_searchTabController.index == 0) {
-                          //   controller.onSearch(
-                          //       _searchTabController.index, query);
-                          // }
+                          if (query.isEmpty) {
+                            _searchTabController.index == 1
+                                ? courseController.clearUserSearch()
+                                : courseController.clearPostSearch();
+                          }
+                          setState(() {});
                         },
                         onSubmit: (String query) {
-                          // if (_searchTabController.index == 1) {
-                          //   controller.onSearch(
-                          //       _searchTabController.index, query);
-                          // }
+                          _searchTabController.index == 0
+                              ? courseController.searchUsers(query)
+                              : courseController.searchPosts(query);
+                          setState(() {});
                         },
                       )
                     : Text(
@@ -290,9 +297,8 @@ class _AllForumScreenState extends State<AllForumScreen>
                         labelColor: Colors.black,
                         indicatorColor: primaryColorLT,
                         tabs: const <Widget>[
-                           Tab(text: 'Posts'),
+                          Tab(text: 'Posts'),
                           Tab(text: 'People'),
-                         
                         ],
                       )
                     : TabBar(
@@ -304,14 +310,20 @@ class _AllForumScreenState extends State<AllForumScreen>
                         tabs: const <Widget>[
                           Tab(text: 'Posts'),
                           Tab(text: 'People'),
-                          
                         ],
                       ),
           ),
           body: _isSearching
               ? TabBarView(
-                  controller: _pageTabController,
+                  controller: _searchTabController,
                   children: [
+                    Obx(
+                      () => FilterChallengePosts(
+                        filterItems: controller.searchedPosts,
+                        isLoading: controller.loading.value ||
+                            controller.loadingPosts.value,
+                      ),
+                    ),
                     Obx(() => FilterChallengeUsers(
                           members: controller.members,
                           filterItems: controller.searchedUsers,
@@ -320,19 +332,19 @@ class _AllForumScreenState extends State<AllForumScreen>
                           onConnectionChange: controller.connectToUser,
                           isSearch: controller.isUserSearch.value,
                         )),
-                    Obx(
-                      () => FilterChallengePosts(
-                        filterItems: controller.searchedPosts,
-                        isLoading: controller.loading.value ||
-                            controller.loadingPosts.value,
-                      ),
-                    )
                   ],
                 )
               : _iscouseSearching
                   ? TabBarView(
                       controller: _coursesearchTabController,
                       children: [
+                        Obx(
+                          () => FilterCoursesPosts(
+                            filterItems: courseController.searchedPosts,
+                            isLoading: courseController.loading.value ||
+                                courseController.loadingPostsSearch.value,
+                          ),
+                        ),
                         Obx(() => FilterCoursesUsers(
                               members: courseController.usersMembers,
                               filterItems: courseController.searchedUsers,
@@ -342,13 +354,6 @@ class _AllForumScreenState extends State<AllForumScreen>
                                   courseController.connectToUser,
                               isSearch: courseController.isUserSearch.value,
                             )),
-                        Obx(
-                          () => FilterCoursesPosts(
-                            filterItems: courseController.searchedPosts,
-                            isLoading: courseController.loading.value ||
-                                courseController.loadingSearch.value,
-                          ),
-                        )
                       ],
                     )
                   : DefaultTabController(

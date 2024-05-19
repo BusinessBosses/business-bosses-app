@@ -230,7 +230,7 @@ class _DepositsScreenState extends State<DepositsScreen> {
                                         fontSize: 16),
                                   ),
                                   Text(
-                                    'Get 100 coins monthly',
+                                    'Earn 100 coins monthly',
                                     style: TextStyle(
                                         color: Colors.grey,
                                         fontWeight: FontWeight.w700),
@@ -241,7 +241,7 @@ class _DepositsScreenState extends State<DepositsScreen> {
                                 onTap: () {
                                   !profileController.myProfile.isSubscribed
                                       ? Get.toNamed(Routes.premiumscreen)
-                                      : null;
+                                      :  null;
                                 },
                                 child: Container(
                                   padding: const EdgeInsets.symmetric(

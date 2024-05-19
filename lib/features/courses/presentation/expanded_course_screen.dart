@@ -148,10 +148,16 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
                               corner: BorderRadius.circular(0),
                             )
                           : Stack(children: [
+                              NetworkImageWithPlaceHolder(
+                                imageUrl: widget.course.thumbnail ?? '',
+                                height: 300,
+                                radius: 0,
+                                width: double.infinity,
+                                cacheHeight: 120,
+                                cacheWidth: 120,
+                              ),
                               Container(
-                                decoration: BoxDecoration(
-                                  color: Colors.black,
-                                ),
+                                color: Colors.black54,
                               ),
                               Positioned(
                                 left: 0,

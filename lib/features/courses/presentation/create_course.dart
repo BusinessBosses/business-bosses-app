@@ -270,12 +270,12 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                     ),
                   ),
                   Visibility(
-                    visible: !_validateVideoLinks(),
+                    visible: true,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         const Text(
-                          'Add a Thumbnail for your Course',
+                          'Add an image for your Course',
                           style: TextStyle(
                               fontWeight: FontWeight.w700, fontSize: 16),
                         ),
@@ -634,10 +634,10 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                             return;
                           }
                         }
-                        if (_selectedImage != null) {
+                        if (_selectedImage == null) {
                           Get.snackbar(
                             'Error',
-                            'Please add a thumbnail for your course',
+                            'Please add an image for your course',
                             backgroundColor: Colors.redAccent,
                             colorText: Colors.white,
                           );
