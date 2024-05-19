@@ -64,7 +64,6 @@ class CoinHistoryController extends GetxController {
             coinwithdrawalHistory.add(item);
           } else {
             coindepositsHistory.add(item);
-            print(item);
           }
         }
       } else {
