@@ -635,10 +635,26 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                           'youtubeUrls': _extractYoutubeUrls(),
                           'transcript': _extractTranscripts(),
                         };
+                        Map<String, dynamic> courseUpdate = <String, dynamic>{
+                          'title': title,
+                          'industryId': widget.industryId,
+                          'description': description ?? desccontroller!.text,
+                          'price': _courseprice,
+                          'subtitle': false,
+                          'thumbnail': photo,
+                          'contentType':
+                              _selectedContentType.toString().split('.').last,
+                          'documents': selectedFileNames.isEmpty
+                              ? null
+                              : selectedFileNames,
+                          'courseType': _paidCourse ? 'paid' : 'free',
+                          'youtubeUrls': _extractYoutubeUrls(),
+                          'transcript': _extractTranscripts(),
+                        };
                         widget.course == null
                             ? await courseController.createCourse(course)
                             : await courseController.updateCourse(
-                                course, widget.course!.id);
+                                courseUpdate, widget.course!.id);
                         setState(() {
                           isProcessing = false;
                         });

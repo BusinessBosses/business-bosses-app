@@ -61,11 +61,10 @@ class CourseController extends GetxController {
     // print(" $updatingImageFileList $isUpdating");
 
     try {
-      final XFile? pickedFile = await _picker.pickImage(source: ImageSource.gallery);
-      if (pickedFile != null) {
-        
-      }
-      
+      final XFile? pickedFile =
+          await _picker.pickImage(source: ImageSource.gallery);
+      if (pickedFile != null) {}
+
       update();
     } catch (e) {
       // handle error
@@ -99,7 +98,11 @@ class CourseController extends GetxController {
     if (response.success) {
       int index = courses.indexWhere((CourseModel c) => c.id == id);
       if (index != -1) {
-        courses[index] = CourseModel.fromMap(course);
+        courses[index] = CourseModel.fromMap(<String, dynamic>{
+          ...response.data,
+          'comments': [],
+          'user': profileController.myProfile.toMap()
+        });
         Get.back();
         showSnackbar(message: 'Course updated successfully', title: 'Success');
       } else {
