@@ -139,42 +139,6 @@ class _CourseItemState extends State<CourseItem> {
                                         ),
                                       ),
                                     ),
-                                    Positioned(
-                                        bottom: 12,
-                                        right: 12,
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                              color:
-                                                  Colors.black.withAlpha(150),
-                                              borderRadius:
-                                                  BorderRadius.circular(10)),
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                              children: [
-                                                SvgPicture.asset(
-                                                  'assets/svgs/coursebundle.svg',
-                                                  height: 20,
-                                                ),
-                                                const SizedBox(
-                                                  width: 5,
-                                                ),
-                                                // Text(
-                                                //   '${widget.course.documents?.length.toString()} ${widget.course.documents!.length > 1 ? 'Files' : 'File'}',
-                                                //   style: const TextStyle(
-                                                //     fontSize: 20,
-                                                //     color: Colors.white,
-                                                //     fontWeight: FontWeight.w700,
-                                                //   ),
-                                                // ),
-                                              ],
-                                            ),
-                                          ),
-                                        )),
                                   ],
                                 ),
                               ),
@@ -199,7 +163,40 @@ class _CourseItemState extends State<CourseItem> {
                                   color: Colors.transparent,
                                   borderRadius: BorderRadius.circular(12.0)),
                             ),
-                          )
+                          ),
+                          Positioned(
+                              bottom: 5,
+                              right: 5,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    color: Colors.black.withAlpha(150),
+                                    borderRadius: BorderRadius.circular(5)),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(4.0),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      SvgPicture.asset(
+                                        'assets/svgs/coursebundle.svg',
+                                        height: 10,
+                                      ),
+                                      const SizedBox(
+                                        width: 5,
+                                      ),
+                                      Text(
+                                        'Files',
+                                        style: const TextStyle(
+                                          fontSize: 9,
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              )),
                         ])
                       : !isValidYoutubeUrl(widget.course.youtubeUrls![0])
                           ? Center(
@@ -240,13 +237,13 @@ class _CourseItemState extends State<CourseItem> {
                                             children: [
                                               SvgPicture.asset(
                                                 'assets/svgs/coursebundle.svg',
-                                                height: 8,
+                                                height: 10,
                                               ),
                                               const SizedBox(
                                                 width: 5,
                                               ),
                                               Text(
-                                                '${widget.course.youtubeUrls?.length.toString()} ${widget.course.youtubeUrls!.length > 1 ? 'Videos' : 'Video'}',
+                                                'Files',
                                                 style: const TextStyle(
                                                   fontSize: 9,
                                                   color: Colors.white,
@@ -296,45 +293,6 @@ class _CourseItemState extends State<CourseItem> {
                                             ),
                                           ),
                                         ),
-                                        Positioned(
-                                            bottom: 12,
-                                            right: 12,
-                                            child: Container(
-                                              decoration: BoxDecoration(
-                                                  color: Colors.black
-                                                      .withAlpha(150),
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          10)),
-                                              child: Padding(
-                                                padding:
-                                                    const EdgeInsets.all(8.0),
-                                                child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.center,
-                                                  children: [
-                                                    SvgPicture.asset(
-                                                      'assets/svgs/coursebundle.svg',
-                                                      height: 20,
-                                                    ),
-                                                    const SizedBox(
-                                                      width: 5,
-                                                    ),
-                                                    Text(
-                                                      '${widget.course.youtubeUrls?.length.toString()} ${widget.course.youtubeUrls!.length > 1 ? 'Videos' : 'Video'}',
-                                                      style: const TextStyle(
-                                                        fontSize: 20,
-                                                        color: Colors.white,
-                                                        fontWeight:
-                                                            FontWeight.w700,
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            )),
                                       ],
                                     ),
                                   ),
@@ -362,7 +320,44 @@ class _CourseItemState extends State<CourseItem> {
                                       borderRadius:
                                           BorderRadius.circular(12.0)),
                                 ),
-                              )
+                              ),
+                              Positioned(
+                                  bottom: 5,
+                                  right: 5,
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                        color: Colors.black.withAlpha(150),
+                                        borderRadius: BorderRadius.circular(5)),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(4.0),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          SvgPicture.asset(
+                                            'assets/svgs/coursebundle.svg',
+                                            height: 10,
+                                          ),
+                                          const SizedBox(
+                                            width: 5,
+                                          ),
+                                          Text(
+                                            widget.course.youtubeUrls!.length >
+                                                    1
+                                                ? '${widget.course.youtubeUrls!.length} Video'
+                                                : '${widget.course.youtubeUrls!.length} Videos',
+                                            style: const TextStyle(
+                                              fontSize: 9,
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w700,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  )),
                             ]),
                   const SizedBox(
                     width: 10,
