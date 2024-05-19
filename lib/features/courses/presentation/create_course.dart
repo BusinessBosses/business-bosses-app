@@ -602,6 +602,32 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                           });
                           return;
                         }
+                        if (videoLinks.isEmpty || selectedFileNames.isEmpty) {
+                          Get.snackbar(
+                            'Error',
+                            'You must upload a file or input video link to proceed!',
+                            backgroundColor: Colors.redAccent,
+                            colorText: Colors.white,
+                          );
+                          setState(() {
+                            isProcessing = false;
+                          });
+                          return;
+                        }
+                        if (videoLinks.isNotEmpty) {
+                          if (!_validateVideoLinks()) {
+                            Get.snackbar(
+                              'Error',
+                              'Video link must be a Youtube link!',
+                              backgroundColor: Colors.redAccent,
+                              colorText: Colors.white,
+                            );
+                            setState(() {
+                              isProcessing = false;
+                            });
+                            return;
+                          }
+                        }
                         if (_selectedImage != null) {
                           Get.snackbar(
                             'Error',
