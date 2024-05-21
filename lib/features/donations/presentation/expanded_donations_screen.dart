@@ -825,15 +825,15 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
                                           fontWeight: FontWeight.w700),
                                     ),
                                     widget.donation.user?.isSubscribed == true
-                                    ? Wrap(children: <Widget>[
-                                        const SizedBox(width: 5),
-                                        SvgPicture.asset(
-                                          'assets/svgs/premiumbadge.svg',
-                                          height: 9,
-                                          color: primaryColorLT,
-                                        )
-                                      ])
-                                    : Container()
+                                        ? Wrap(children: <Widget>[
+                                            const SizedBox(width: 5),
+                                            SvgPicture.asset(
+                                              'assets/svgs/premiumbadge.svg',
+                                              height: 9,
+                                              color: primaryColorLT,
+                                            )
+                                          ])
+                                        : Container()
                                   ]),
                               Text(
                                 formattedDifference,
@@ -892,6 +892,7 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
                                 widget.donation.id,
                                 widget.donation.user!.uid,
                               );
+                              setState(() {});
                             },
                             icon: widget.donation.likes?.contains(
                                         profileController.myProfile.uid) ==
@@ -931,7 +932,8 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
                               height: 15,
                             ),
                             label: Text(
-                              formatter.format(widget.donation.comments?.length),
+                              formatter
+                                  .format(widget.donation.comments?.length),
                               style: Theme.of(context)
                                   .textTheme
                                   .bodyMedium
