@@ -5,11 +5,11 @@ import '../../../utils/size_config.dart';
 import '../../../utils/theme/theme.dart';
 
 /// Boss Up Challenge Pop Up
-class BossUpChallangePopUpcopy extends StatelessWidget {
+class BossUpChallangePopUp extends StatelessWidget {
   final Industry? industry;
 
   /// Boss Up Challenge Pop Up
-  const BossUpChallangePopUpcopy({Key? key, this.industry}) : super(key: key);
+  const BossUpChallangePopUp({Key? key, this.industry}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

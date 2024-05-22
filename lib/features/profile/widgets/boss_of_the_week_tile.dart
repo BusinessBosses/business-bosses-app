@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
+import 'package:business_bosses_v2/common/widgets/popup/bossup_challenge_popuphome.dart';
 import 'package:business_bosses_v2/features/moreinfoscreens/bossuppartner.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -120,7 +121,7 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                           showDialog(
                             context: context,
                             builder: (BuildContext context) =>
-                                const BossUpChallangePopUpcopy(),
+                                const BossUpChallangePopUpHome(),
                           );
                         },
                         child: Container(
