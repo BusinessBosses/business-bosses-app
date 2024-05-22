@@ -42,7 +42,6 @@ class _DonationItemState extends State<DonationItem> {
   final DonationsController donationsController = Get.find();
   List<String> blocked = <String>[];
   NumberFormat formatter = NumberFormat.compact();
-  late DonationModel _donation;
 
   final List<PopupMenuEntry<String>> myPopupMore = <PopupMenuEntry<String>>[
     const PopupMenuItem<String>(
@@ -93,21 +92,6 @@ class _DonationItemState extends State<DonationItem> {
       ),
     )
   ];
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    _donation = widget.donation;
-  }
-
-  @override
-  void didUpdateWidget(DonationItem oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (widget.isLastItem != oldWidget.isLastItem) {
-      setState(() {});
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -641,7 +625,6 @@ class _DonationItemState extends State<DonationItem> {
             // const SizedBox(
             //   height: 10,
             // ),
-
             Row(
               children: <Widget>[
                 TextButton.icon(
@@ -677,9 +660,7 @@ class _DonationItemState extends State<DonationItem> {
                       context: context,
                       builder: (BuildContext context) => DonationCommentItem(
                         donation: widget.donation,
-                        onComment: (CommentModel newComment) async {
-                          setState(() {});
-                        },
+                        onComment: (CommentModel newComment) async {},
                       ),
                     );
                   },
@@ -688,7 +669,7 @@ class _DonationItemState extends State<DonationItem> {
                     height: 15,
                   ),
                   label: Text(
-                    '${widget.donation.comments?.length ?? 0}',
+                    '${widget.donation.comments?.length.toString()}',
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           fontWeight: FontWeight.w700,
                           color: textColor.withOpacity(0.8),

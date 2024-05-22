@@ -51,6 +51,11 @@ class _DonationCommentItemState extends State<DonationCommentItem> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 2,
@@ -119,11 +124,13 @@ class _DonationCommentItemState extends State<DonationCommentItem> {
                           setState(() {
                             _commentController.comments.add(comment);
                           });
-
-                          _donationsController.comment(
-                            widget.donation.id,
-                            comment,
-                          );
+                          if (widget.type != null && widget.type == 'forum') {
+                            _homeController.comment(
+                              widget.donation.id,
+                              comment,
+                              'donation',
+                            );
+                          }
                         },
                         postId: widget.donation.id,
                       )
@@ -204,10 +211,5 @@ class _DonationCommentItemState extends State<DonationCommentItem> {
         _isLoadingLikes = false;
       });
     }
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
   }
 }

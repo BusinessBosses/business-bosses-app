@@ -109,7 +109,7 @@ class DonationsController extends GetxController {
   Future<void> fetchuserDonations(String userId) async {
     try {
       loading(true); // Set loading to true before fetching data
-      update();
+
       ApiResponseModel response =
           await ApiService.get(path: 'donation/user-donations/$userId');
 
@@ -136,7 +136,6 @@ class DonationsController extends GetxController {
     } finally {
       loading(false); // Set loading back to false after fetching data
     }
-    update();
   }
 
   Future<void> deleteDonation(String donationId) async {
@@ -502,14 +501,17 @@ class DonationsController extends GetxController {
   }
 
   /// COMMENT FUNCTION
-  void comment(String postId, dynamic comment) {
+  void comment(String postId, dynamic comment, String type) {
     final int donationIndex =
         donations.indexWhere((DonationModel donation) => donation.id == postId);
     if (donationIndex != -1) {
-      donations[donationIndex].comments?.add(comment);
+      if (type == 'post') {
+        donations[donationIndex].comments?.add(comment);
+      } else {
+        // Handle comment for forum posts or other types if needed
+      }
+      update();
     }
-
-    update();
   }
 
   void initSocket() {

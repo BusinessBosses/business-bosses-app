@@ -464,7 +464,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                                           donationsController
                                                               .userdonations
                                                               .length;
-                                              return  DonationItem(
+                                              return DonationItem(
                                                 donation: donationsController
                                                     .userdonations[i],
                                                 isLastItem: isLastItem,
