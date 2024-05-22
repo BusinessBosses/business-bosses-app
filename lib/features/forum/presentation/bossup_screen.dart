@@ -312,7 +312,7 @@ class _BossUpSectionState extends State<BossUpSection>
                                                   context: context,
                                                   builder: (BuildContext
                                                           context) =>
-                                                      BossUpChallangePopUpcopy(
+                                                      BossUpChallangePopUp(
                                                           industry:
                                                               widget.industry),
                                                 );

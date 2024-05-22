@@ -55,7 +55,9 @@ class _DonationCreatedState extends State<DonationCreated> {
                 children: <Widget>[
                   GestureDetector(
                     onTap: () {
-                      Get.back();
+                      Get.to(() => const AllCommunitiesScreen(
+                            initialTabIndex: 2,
+                          ));
                     },
                     child: const Text(
                       'Go Back',
