@@ -33,23 +33,46 @@ class _DonationCreatedState extends State<DonationCreated> {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          Stack(children: <Widget>[
-            Lottie.asset(
-              'assets/anim/waiting.json',
-              height: 100,
-            ),
-            Container(
-              width: 100,
-              height: 100,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(200),
-                  border: Border.all(width: 10, color: backgroundColor)),
-            )
-          ]),
+          Container(
+            width: 100,
+            height: 100,
+            child: SvgPicture.asset('assets/svgs/waiting.svg'),
+          ),
           const SafetyModel(
             isLoading: false,
             title: 'Donation Created!',
             subTitle: 'Your Donation is awaiting approval from the admin!',
+          ),
+          Container(
+            decoration: BoxDecoration(
+              color: backgroundcolorinterface,
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Wrap(
+                crossAxisAlignment: WrapCrossAlignment.center,
+                children: <Widget>[
+                  GestureDetector(
+                    onTap: () {
+                      Get.back();
+                    },
+                    child: const Text(
+                      'Go Back',
+                      style: TextStyle(
+                        color: primaryColorLT,
+                        fontSize: 13,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  SvgPicture.asset('assets/svgs/nexticon.svg'),
+                ],
+              ),
+            ),
           ),
         ],
       ),
