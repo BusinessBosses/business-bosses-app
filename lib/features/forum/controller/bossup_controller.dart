@@ -31,7 +31,7 @@ class BossUpController extends GetxController {
   RxBool errorMembers = RxBool(false);
   RxBool isUserSearch = RxBool(false);
   RxBool isPostSearch = RxBool(false);
-   RxBool loadingPostSearch = RxBool(false);
+  RxBool loadingPostSearch = RxBool(false);
   late List<String> connecteds =
       _profileController.myProfile.connecteds ?? <String>[];
 
@@ -159,16 +159,16 @@ class BossUpController extends GetxController {
     update();
   }
 
-  Future<void> searchUsers(String query, industryid) async {
+  Future<void> searchUsers(String query, String? industryid) async {
     loadingMembers(true);
     update();
     searchedUsers.clear();
 
-    if (members == null || members.isEmpty){
-      await fetchIndustryUsers(industryid);
+    if (members.isEmpty) {
+      await fetchIndustryUsers(industryid!);
     }
 
-    for (var user in members) {
+    for (dynamic user in members) {
       if (user.username.toLowerCase().contains(query.toLowerCase()) ||
           user.name!.toLowerCase().contains(query.toLowerCase())) {
         searchedUsers.add(user);
@@ -186,16 +186,14 @@ class BossUpController extends GetxController {
 
     searchedPosts.clear();
 
-     for (var forum in forums) {
+    for (dynamic forum in forums) {
       if (forum.description!.toLowerCase().contains(query.toLowerCase())) {
         searchedPosts.add(forum);
       }
     }
 
-
     loadingPostSearch(false);
     update();
-
   }
 
   void connectToUser(UserModel user) async {
