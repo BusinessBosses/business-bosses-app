@@ -263,39 +263,19 @@ class CourseController extends GetxController {
   }
 
   Future<void> searchUsers(String query) async {
-    loadingSearch(true);
+   loadingSearch(true);
     update();
 
     searchedUsers.clear();
 
-    String path =
-        'donation/get-joined-users/6463a069-657d-47ae-b937-9a5d4c336811';
-
-    ApiResponseModel response = await ApiService.get(path: path);
-
-    if (response.success) {
-      List<dynamic> rows = response.data['rows'];
-
-      userIds
-          .addAll(rows.map((dynamic row) => row['userId'].toString()).toList());
-      searchedUsers.clear();
-
-      for (var row in rows) {
-        if (row['user'] != null) {
-          UserModel user = UserModel.fromMap(row['user']);
-          if (user.username.toLowerCase().contains(query.toLowerCase()) ||
-              user.name!.toLowerCase().contains(query.toLowerCase())) {
-            searchedUsers.add(user);
-          }
-        }
+    for (var user in usersMembers) {
+      if (user.username.toLowerCase().contains(query.toLowerCase()) ||
+          user.name!.toLowerCase().contains(query.toLowerCase())) {
+        searchedUsers.add(user);
       }
-
-      loadingSearch(false);
-      update();
-    } else {
-      loadingSearch(false);
-      update();
     }
+    loadingSearch(false);
+    update();
   }
 
   Future<void> searchPosts(

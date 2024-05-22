@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:business_bosses_v2/action/action.dart';
 import 'package:business_bosses_v2/common/models/comment_model.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
@@ -923,7 +925,9 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
                                 builder: (BuildContext context) =>
                                     DonationCommentItem(
                                   donation: widget.donation,
-                                  onComment: (CommentModel newComment) async {},
+                                  onComment: (CommentModel newComment) async {
+                                    setState(() {});
+                                  },
                                 ),
                               );
                             },
