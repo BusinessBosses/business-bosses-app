@@ -271,7 +271,7 @@ class DonationsController extends GetxController {
 
     searchedUsers.clear();
 
-    for (var user in usersMembers) {
+    for (dynamic user in usersMembers) {
       if (user.username.toLowerCase().contains(query.toLowerCase()) ||
           user.name!.toLowerCase().contains(query.toLowerCase())) {
         searchedUsers.add(user);
@@ -287,13 +287,9 @@ class DonationsController extends GetxController {
     searchedPosts.clear();
     String path = 'donation/all';
     ApiResponseModel response = await ApiService.get(path: path);
-    print('API Response: $response');
     if (response.success) {
-      print('Response Data: ${response.data}');
       List<dynamic> rows = response.data['rows'];
-      print('Rows: $rows');
-      for (var row in rows) {
-        print('Row: $row');
+      for (dynamic row in rows) {
         if (row['userId'] != null) {
           if ((row['title'] != null &&
                   row['title'].toLowerCase().contains(query.toLowerCase())) ||
@@ -321,7 +317,6 @@ class DonationsController extends GetxController {
       loadingPostsSearch(false);
       update();
     } else {
-      print('Failed API Response: $response');
       loadingPostsSearch(false);
       update();
     }
@@ -402,6 +397,15 @@ class DonationsController extends GetxController {
             .setRecievedAmount(int.tryParse(data['amount'])!);
         profileController.myProfile
             .incrementCoinsCount(-(int.tryParse(data['amount'])!));
+        donations[donationIndex]
+            .transactions!
+            .add(DonationTransaction.fromMap(<String, dynamic>{
+              'id': response.data['id'],
+              'date': response.data['date'],
+              'amount': data['amount'],
+              'description': '',
+              'type': 'donated'
+            }));
         update();
         return true;
       }

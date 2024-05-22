@@ -584,6 +584,11 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                             return;
                           }
                         }
+                        if (selectedFilePaths.isNotEmpty) {
+                          for (String filePath in selectedFilePaths) {
+                            await courseController.uploadFile(filePath);
+                          }
+                        }
                         if (title == null || title == '') {
                           Get.snackbar(
                             'Error',
@@ -622,8 +627,9 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                         }
                         if (videoLinks.isNotEmpty &&
                             _selectedContentType.toString().split('.').last ==
-                                'videos' &&  _selectedContentType.toString().split('.').last ==
-                                'both' ) {
+                                'videos' &&
+                            _selectedContentType.toString().split('.').last ==
+                                'both') {
                           if (!_validateVideoLinks()) {
                             Get.snackbar(
                               'Error',
