@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api, deprecated_member_use
+
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/common/models/comment_model.dart';
 import 'package:business_bosses_v2/features/donations/controller/donations_controller.dart';
@@ -34,6 +36,7 @@ class DonationCommentItem extends StatefulWidget {
 
 class _DonationCommentItemState extends State<DonationCommentItem> {
   bool _isLoadingLikes = true, _isLoadingComments = true;
+  // ignore: unused_field
   final DonationsController _donationsController =
       Get.put(DonationsController());
   final HomeController _homeController = Get.find();
@@ -137,7 +140,7 @@ class _DonationCommentItemState extends State<DonationCommentItem> {
                       ? SafetyModel(
                           isLoading: _isLoadingLikes,
                           icon: const Icon(
-                            Icons.favorite,
+                            Icons.thumb_up,
                             size: 80.0,
                             color: hintColor,
                           ),

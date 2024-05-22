@@ -6,14 +6,14 @@ class ProfilePictureDisplay extends StatelessWidget {
   final String photoUrl;
   static const String heroTag = 'profile_picture';
 
-  ProfilePictureDisplay(this.photoUrl);
+  const ProfilePictureDisplay(this.photoUrl, {super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
-        leading: BackButton(color: Colors.white),
+        leading: const BackButton(color: Colors.white),
         backgroundColor: Colors.transparent,
         elevation: 0, // Remove the shadow
       ),
@@ -21,7 +21,7 @@ class ProfilePictureDisplay extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.max,
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+          children: <Widget>[
             Expanded(
               child: Center(
                 child: Padding(
@@ -64,7 +64,7 @@ class ProfilePictureDisplay extends StatelessWidget {
         width: 300.0,
         height: 300.0,
         color: Colors.grey, // Placeholder color
-        child: Center(
+        child: const Center(
           child: Text(
             'Photo Unavailable',
             style: TextStyle(

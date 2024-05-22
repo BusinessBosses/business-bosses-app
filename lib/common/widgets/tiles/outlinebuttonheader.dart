@@ -62,7 +62,7 @@ Container OutlineButtonHeader(BuildContext context, UserModel myProfile) {
                 const SizedBox(
                   width: 5,
                 ),
-                Text(
+                const Text(
                   'Earn',
                   style: TextStyle(
                       fontSize: 15,

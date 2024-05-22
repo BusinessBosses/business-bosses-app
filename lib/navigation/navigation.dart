@@ -66,7 +66,7 @@ var routes = [
   ),
   GetPage(
     name: Routes.registration,
-    page: () => RegisterScreen(),
+    page: () => const RegisterScreen(),
   ),
   GetPage(
     name: Routes.createPost,
@@ -144,7 +144,7 @@ var routes = [
   ),
   GetPage(
     name: Routes.allforumscreen,
-    page: () => AllForumScreen(),
+    page: () => const AllForumScreen(),
     binding: BindingsBuilder.put(() => ForumController()),
   ),
   GetPage(

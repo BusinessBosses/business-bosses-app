@@ -225,7 +225,7 @@ class _CreateForumScreenState extends State<CreateForumScreen> {
                     // ),
 
                     child: Row(
-                      children: [
+                      children: <Widget>[
                         Container(
                             decoration: BoxDecoration(
                                 color: Colors.white,
@@ -383,6 +383,7 @@ class _CreateForumScreenState extends State<CreateForumScreen> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
                     child: MCustomButton(
+                      buttonType: ButtonType.elevated,
                       onPressed: () {
                         if (isUpdating) {
                           controller.editForum(<String, dynamic>{

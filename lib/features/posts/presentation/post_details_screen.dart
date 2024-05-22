@@ -117,11 +117,11 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
                       height: 10,
                     ),
                     if (widget.post.reposts?.length != null &&
-                        widget.post.reposts?.length != 0) ...[
+                        widget.post.reposts!.isNotEmpty) ...<Widget>[
                       Padding(
                         padding: const EdgeInsets.only(left: 15.0, top: 10),
                         child: Row(
-                          children: [
+                          children: <Widget>[
                             SvgPicture.asset(
                               'assets/svgs/repost.svg',
                               height: 13,
@@ -133,7 +133,7 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
                                         profileController.myProfile.uid) ==
                                     true
                                 ? Row(
-                                    children: [
+                                    children: <Widget>[
                                       const Text(
                                         'You Reposted',
                                         style: TextStyle(fontSize: 12),
@@ -159,7 +159,7 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
                               onTap: () {},
                               child: Text(
                                 '${widget.post.reposts?.length.toString()} Reposts',
-                                style: TextStyle(fontSize: 12),
+                                style: const TextStyle(fontSize: 12),
                               ),
                             ),
                           ],

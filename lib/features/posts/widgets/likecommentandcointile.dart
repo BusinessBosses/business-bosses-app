@@ -134,7 +134,7 @@ class PostInteractionsWidget extends StatelessWidget {
                               top: Radius.circular(25.0),
                             ),
                           ),
-                          builder: (context) {
+                          builder: (BuildContext context) {
                             return SizedBox(
                               height: 250,
                               child: Padding(

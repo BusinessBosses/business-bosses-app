@@ -31,7 +31,10 @@ Future<dynamic> navigateTo(
     Navigator.of(context).pop(arguments);
   } else if (isRemoveUntil) {
     return await Navigator.of(context).pushNamedAndRemoveUntil(
-        routeName, (Route route) => false,
+        // ignore: always_specify_types
+        routeName,
+        // ignore: always_specify_types
+        (Route route) => false,
         arguments: arguments);
   } else {
     return await Get.toNamed(routeName, arguments: arguments);
@@ -66,6 +69,7 @@ Future<void> onDetectableTextTap(
     MyResponse res = await MyNativeFunctions.onUrlLaunch(val);
     {
       if (!res.success) {
+        // ignore: use_build_context_synchronously
         showSnackBar(context, message: res.message);
       }
     }

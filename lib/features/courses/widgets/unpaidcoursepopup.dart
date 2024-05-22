@@ -8,7 +8,6 @@ import '../../../common/dialogs/snackbar.dart';
 import '../../../common/widgets/network_image_with_placeholder.dart';
 import '../../../features/courses/models/course_model.dart';
 import '../../../features/profile/controller/profile_controller.dart';
-import '../../../navigation/routes.dart';
 import '../../../utils/size_config.dart';
 import '../../../utils/theme/theme.dart';
 
@@ -22,9 +21,9 @@ class UnpaidCoursePopUp extends StatefulWidget {
 }
 
 class _UnpaidCoursePopUpState extends State<UnpaidCoursePopUp> {
-  List<String> coinAmounts = ['100', '200', '500', '1000', '10000'];
-  List<String> coinPrices = ['0.99', '1.99', '4.99', '9.99', '99.99'];
-  List<String> coinIDs = [
+  List<String> coinAmounts = <String>['100', '200', '500', '1000', '10000'];
+  List<String> coinPrices = <String>['0.99', '1.99', '4.99', '9.99', '99.99'];
+  List<String> coinIDs = <String>[
     '100_bb_coins',
     '200_bb_coins',
     '500_bb_coins',
@@ -37,11 +36,11 @@ class _UnpaidCoursePopUpState extends State<UnpaidCoursePopUp> {
   @override
   Widget build(BuildContext context) {
     return Stack(
-      children: [
+      children: <Widget>[
         Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [
+          children: <Widget>[
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20.0),
               child: Dialog(
@@ -63,7 +62,7 @@ class _UnpaidCoursePopUpState extends State<UnpaidCoursePopUp> {
                       ),
                       Text(
                         widget.course.title!,
-                        style: Theme.of(context).textTheme.bodyText1?.copyWith(
+                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                               fontWeight: FontWeight.w700,
                               color: Colors.black,
                               fontSize: 18,
@@ -165,7 +164,7 @@ class _UnpaidCoursePopUpState extends State<UnpaidCoursePopUp> {
                 child: Wrap(
                   runAlignment: WrapAlignment.center,
                   crossAxisAlignment: WrapCrossAlignment.center,
-                  children: [
+                  children: <Widget>[
                     const Text('Buy Course for '),
                     SvgPicture.asset('assets/svgs/coin.svg'),
                     Text('${widget.course.price}'),
@@ -180,7 +179,7 @@ class _UnpaidCoursePopUpState extends State<UnpaidCoursePopUp> {
           right: 0,
           bottom: 10,
           child: Padding(
-            padding: EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(8.0),
             child: GestureDetector(
               onTap: () {
                 showModalBottomSheet(
@@ -193,13 +192,13 @@ class _UnpaidCoursePopUpState extends State<UnpaidCoursePopUp> {
                     return Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
+                      children: <Widget>[
                         const Padding(
                           padding: EdgeInsets.symmetric(
                               vertical: 40.0, horizontal: 20),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
+                            children: <Widget>[
                               Text(
                                 'Buy more BB Coins',
                                 style: TextStyle(

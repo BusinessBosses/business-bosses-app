@@ -54,7 +54,7 @@ class _MyEventsState extends State<MyEvents> {
               ? const Center(child: CircularProgressIndicator())
               : liveController.joined.isNotEmpty
                   ? Column(
-                      children: [
+                      children: <Widget>[
                         Expanded(
                           child: ListView.builder(
                             itemCount: liveController.joined.length,
@@ -73,7 +73,7 @@ class _MyEventsState extends State<MyEvents> {
                       ? Center(
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
+                            children: <Widget>[
                               const Text(
                                 'You Have Not Chosen To Attend Any Event!',
                               ),

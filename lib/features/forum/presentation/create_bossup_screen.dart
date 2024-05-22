@@ -127,7 +127,7 @@ class _CreateBossUpScreenState extends State<CreateBossUpScreen> {
                   ),
                   const SizedBox(height: 12.0),
                   Row(
-                    children: [
+                    children: <Widget>[
                       Container(
                           decoration: BoxDecoration(
                               color: Colors.white,
@@ -261,6 +261,8 @@ class _CreateBossUpScreenState extends State<CreateBossUpScreen> {
                   Preview(controller: controller),
                   const SizedBox(height: 24.0),
                   MCustomButton(
+
+                    buttonType: ButtonType.elevated,
                     onPressed: () async {
                       controller.createForum(<String, dynamic>{
                         'title': title.trim(),

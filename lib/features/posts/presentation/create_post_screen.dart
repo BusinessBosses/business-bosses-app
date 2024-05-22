@@ -141,9 +141,9 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                         : Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 20),
                             child: Column(
-                              children: [
+                              children: <Widget>[
                                 Row(
-                                  children: [
+                                  children: <Widget>[
                                     Container(
                                         decoration: BoxDecoration(
                                             color: backgroundColor,

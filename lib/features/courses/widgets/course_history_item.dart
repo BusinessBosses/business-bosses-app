@@ -1,15 +1,8 @@
 // ignore_for_file: always_specify_types
 
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
-import 'package:business_bosses_v2/features/courses/models/course_model.dart';
-import 'package:business_bosses_v2/features/courses/presentation/expanded_course_screen.dart';
-import 'package:business_bosses_v2/features/posts/widgets/youtube_display.dart';
-import 'package:business_bosses_v2/features/posts/widgets/yt_player.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
-import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
-import 'package:business_bosses_v2/utils/time_format.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -33,7 +26,7 @@ class _CourseHistoryItemState extends State<CourseHistoryItem> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(
+            const SizedBox(
               height: 5,
             ),
             Padding(
@@ -45,27 +38,27 @@ class _CourseHistoryItemState extends State<CourseHistoryItem> {
                     fontWeight: FontWeight.w700),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 5,
             ),
             Container(
               height: 1,
               color: backgroundcolorinterface,
             ),
-            SizedBox(
+            const SizedBox(
               height: 5,
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15.0),
               child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 7, vertical: 3),
+                padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
                 decoration: BoxDecoration(
                     color: backgroundcolorinterface,
                     borderRadius: BorderRadius.circular(30)),
-                child: Text('Course Sale'),
+                child: const Text('Course Sale'),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 5,
             ),
             Padding(
@@ -74,10 +67,10 @@ class _CourseHistoryItemState extends State<CourseHistoryItem> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
-                  Expanded(
+                  const Expanded(
                     child: Text(
                       'What does investment ',
                       style:
@@ -87,17 +80,17 @@ class _CourseHistoryItemState extends State<CourseHistoryItem> {
                           TextOverflow.ellipsis, // Optional: Handle overflow
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 50,
                   ),
                   Wrap(
                     crossAxisAlignment: WrapCrossAlignment.center,
                     children: [
-                      Text('+',
+                      const Text('+',
                           style: TextStyle(
                               fontWeight: FontWeight.w900, fontSize: 18)),
                       SvgPicture.asset('assets/svgs/coin.svg'),
-                      Text('200',
+                      const Text('200',
                           style: TextStyle(
                               fontWeight: FontWeight.w900, fontSize: 18)),
                       Text('(\$200)',
@@ -127,10 +120,10 @@ class _CourseHistoryItemState extends State<CourseHistoryItem> {
                           iconSize: 20.0,
                           fit: BoxFit.cover,
                         ),
-                        SizedBox(
+                        const SizedBox(
                           width: 5,
                         ),
-                        Text('data')
+                        const Text('data')
                       ]),
                   Text(
                     '2hr ago',
@@ -141,7 +134,7 @@ class _CourseHistoryItemState extends State<CourseHistoryItem> {
                 ],
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
           ],

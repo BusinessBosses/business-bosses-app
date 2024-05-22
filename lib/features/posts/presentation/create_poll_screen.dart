@@ -86,10 +86,10 @@ class _CreatePollScreenState extends State<CreatePollScreen> {
 
   Widget _buildOptionRow(int index) {
     if (index < 0 || index >= optionsValues.length) {
-      return SizedBox(); // Return an empty widget if index is out of bounds
+      return const SizedBox(); // Return an empty widget if index is out of bounds
     }
     return Row(
-      children: [
+      children: <Widget>[
         Expanded(
           child: Container(
             margin: const EdgeInsets.only(bottom: 9),
@@ -196,7 +196,7 @@ class _CreatePollScreenState extends State<CreatePollScreen> {
                               child: Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
-                                  children: [
+                                  children: <Widget>[
                                     const Text(
                                       'Add Options',
                                       style: TextStyle(

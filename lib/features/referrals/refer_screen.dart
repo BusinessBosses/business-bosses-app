@@ -101,7 +101,7 @@ class _ReferScreenState extends State<ReferScreen> {
       floatingActionButton: (_selectedUsers.isEmpty)
           ? null
           : FloatingActionButton.extended(
-              heroTag: "referralButton",
+              heroTag: 'referralButton',
               onPressed: _onReferringToYourConnections,
               icon: const Icon(Icons.check),
               label: _isProcessing

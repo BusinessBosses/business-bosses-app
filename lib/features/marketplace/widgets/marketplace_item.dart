@@ -304,6 +304,7 @@ class _MarketTileState extends State<MarketTile> {
                                                       //   hide = true;
                                                       // });
                                                       Get.back();
+                                                      setState(() {});
                                                     },
                                                     child: const Text('Yes'),
                                                   ),
@@ -440,6 +441,7 @@ class _MarketTileState extends State<MarketTile> {
                                       left: 15.0, right: 15),
                                   child: DetectableText(
                                     text: _post.description,
+                                    trimLength: 100,
                                     detectionRegExp:
                                         detectionRegExp(hashtag: false)!,
                                     detectedStyle: bodyText2.copyWith(

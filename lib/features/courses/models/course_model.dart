@@ -7,11 +7,15 @@ class CourseModel {
   final String industryId;
   final String? description;
   final String? title;
+  final String? thumbnail;
+  final String? contentType;
   final String userId;
   final String? price;
   final dynamic promotionDuration;
   final List<String>? documents;
   final int? timestamp;
+  late final List<String>? likes;
+  final List<String>? coins;
   final List<CourseCommentModel>? comments;
   final List<String>? purchases;
   final UserModel? user;
@@ -29,11 +33,15 @@ class CourseModel {
     required this.userId,
     this.description,
     this.title,
+    this.thumbnail,
+    this.contentType,
     this.averageRating = 0.0,
     this.documents,
     this.timestamp,
     this.purchases,
     this.views = 0,
+    this.likes,
+    this.coins,
     this.comments,
     this.user,
     this.isPromoted,
@@ -52,6 +60,8 @@ class CourseModel {
     String? description,
     String? title,
     String? userId,
+    String? thumbnail,
+    String? contentType,
     List<String>? documents,
     int? timestamp,
     List<CourseCommentModel>? comments,
@@ -60,6 +70,8 @@ class CourseModel {
     bool? isPromoted,
     int? views,
     String? price,
+    List<String>? likes,
+    List<String>? coins,
     double? averageRating,
     dynamic promotionDuration,
     bool? isApproved,
@@ -74,11 +86,15 @@ class CourseModel {
       description: description ?? this.description,
       userId: userId ?? this.userId,
       title: title ?? this.title,
+      thumbnail: thumbnail ?? this.thumbnail,
+      contentType: contentType ?? this.contentType,
       documents: documents ?? this.documents,
       timestamp: timestamp ?? this.timestamp,
       comments: comments ?? this.comments,
       purchases: purchases ?? this.purchases,
       user: user ?? this.user,
+      likes: likes ?? this.likes,
+      coins: coins ?? this.coins,
       averageRating: averageRating ?? this.averageRating,
       views: views ?? this.views,
       isPromoted: isPromoted ?? this.isPromoted,
@@ -98,6 +114,8 @@ class CourseModel {
       'industryId': industryId,
       'description': description,
       'title': title,
+      'thumbnail': thumbnail,
+      'contentType': contentType,
       'averageRating': averageRating,
       'userId': userId,
       'documents': documents,
@@ -105,6 +123,8 @@ class CourseModel {
       'comments': comments!.map((CourseCommentModel x) => x.toMap()).toList(),
       'user': user!.toMap(),
       'views': views,
+      'likes': likes,
+      'coins': coins,
       'purchases': purchases,
       'isPromoted': isPromoted,
       'price': price,
@@ -124,6 +144,8 @@ class CourseModel {
       description:
           map['description'] != null ? map['description'] as String : null,
       title: map['title'] != null ? map['title'] as String : null,
+      thumbnail: map['thumbnail'] != null ? map['thumbnail'] as String : null,
+      contentType: map['contentType'] != null ? map['contentType'] as String : null,
       userId: map['userId'] as String,
       price: map['price'] != null ? map['price'] as String : null,
       courseType:
@@ -133,6 +155,11 @@ class CourseModel {
               ? (map['averageRating'] as int).toDouble()
               : map['averageRating'] as double)
           : null,
+      likes: map['likes'] != null
+          ? List<String>.from(
+              map['likes'].map((like) => like['userId'].toString()))
+          : null,
+      coins: map['coins'] != null ? List<String>.from((map['coins'])) : null,
       paymentMethod:
           map['paymentMethod'] != null ? map['paymentMethod'] as String : null,
       promotionDuration: map['promotionDuration'] != null

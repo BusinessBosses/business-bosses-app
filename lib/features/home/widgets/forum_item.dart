@@ -614,6 +614,7 @@ class _ForumItemState extends State<ForumItem> {
                                 bottom: 0.0, left: 15, right: 15),
                             child: DetectableText(
                               text: widget.forum.description!,
+                              trimLength: 100,
                               detectionRegExp: detectionRegExp(hashtag: false)!,
                               detectedStyle: bodyText2.copyWith(
                                 color: Colors.blue,

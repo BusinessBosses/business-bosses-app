@@ -1,14 +1,19 @@
+import 'dart:io';
+
+import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/widgets/buttons/my_outlined_button.dart';
 import 'package:business_bosses_v2/features/courses/controller/course_controller.dart';
 import 'package:business_bosses_v2/features/courses/models/course_model.dart';
 import 'package:business_bosses_v2/features/courses/models/video_link_data.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
+import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
 import 'package:detectable_text_field/widgets/detectable_text_field.dart';
+import 'package:image_picker/image_picker.dart';
 import '../../../action/action.dart';
 import '../../../utils/theme/theme.dart';
 
@@ -29,6 +34,8 @@ class CreateCourseScreen extends StatefulWidget {
   State<CreateCourseScreen> createState() => _CreateCourseScreenState();
 }
 
+enum ContentType { videos, files, both }
+
 class _CreateCourseScreenState extends State<CreateCourseScreen> {
   int optionCode = 1;
   String? title;
@@ -37,6 +44,21 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
   final CourseController courseController = Get.put(CourseController());
   final ProfileController profileController = Get.find();
   TextEditingController? desccontroller = TextEditingController();
+  ContentType _selectedContentType = ContentType.videos;
+  File? _selectedImage;
+  String? photo;
+
+  List<Map<String, dynamic>> types = <Map<String, dynamic>>[
+    <String, dynamic>{
+      'type': 'files',
+    },
+    <String, dynamic>{
+      'type': 'videos',
+    },
+    <String, dynamic>{
+      'type': 'both',
+    },
+  ];
 
   @override
   void initState() {
@@ -84,7 +106,7 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
           backgroundColor: backgroundcolorinterface,
           appBar: AppBar(
             title: Text(widget.course == null
-                ? 'Start a Course'
+                ? 'Create a Course'
                 : 'Update Your Course'),
             automaticallyImplyLeading: false,
             actions: <Widget>[
@@ -137,94 +159,251 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                   ),
                   const SizedBox(height: 20.0),
                   const Text(
-                    'Add Youtube or Video links',
+                    'Select Course Content type',
                     style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
                   ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  ListView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: videoLinks.length + 1,
-                    itemBuilder: (BuildContext context, int index) {
-                      if (index < videoLinks.length) {
-                        return buildVideoLinkContainer(
-                            videoLinks[index], index);
-                      } else {
-                        return buildAddButton();
-                      }
-                    },
-                  ),
-                  const SizedBox(
-                    height: 30,
-                  ),
-                  InkWell(
-                    onTap: (() async {
-                      final FilePickerResult? result =
-                          await FilePicker.platform.pickFiles(
-                        allowMultiple: true,
-                      );
-                      if (result != null) {
-                        result.files
-                            .map((PlatformFile file) => setState(() {
-                                  selectedFileNames.add(file.name);
-
-                                  selectedFilePaths.add(file.path!);
-                                }))
-                            .toList();
-                      }
-                    }),
-                    child: Container(
-                      height: 55,
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 9,
+                  const SizedBox(height: 8.0),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: <Widget>[
+                      Expanded(
+                        child: Container(
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(10)),
+                          child: RadioListTile<ContentType>(
+                            contentPadding: const EdgeInsets.all(0),
+                            title: const Text('Videos'),
+                            value: ContentType.videos,
+                            groupValue: _selectedContentType,
+                            onChanged: (ContentType? value) {
+                              setState(() {
+                                _selectedContentType = value!;
+                                selectedFileNames = [];
+                                selectedFilePaths = [];
+                              });
+                            },
+                          ),
+                        ),
                       ),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(10),
+                      const SizedBox(
+                        width: 10,
                       ),
-                      child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            const Text(
-                              'Additional Course Materials (pdf,docx,doc,xls,etc)',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            Container(
-                              alignment: Alignment.center,
-                              child: SvgPicture.asset(
-                                'assets/svgs/fileresources.svg',
-                              ),
-                            ),
-                          ]),
+                      Expanded(
+                        child: Container(
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(10)),
+                          child: RadioListTile<ContentType>(
+                            contentPadding: const EdgeInsets.all(0),
+                            title: const Text('Files'),
+                            value: ContentType.files,
+                            groupValue: _selectedContentType,
+                            onChanged: (ContentType? value) {
+                              setState(() {
+                                _selectedContentType = value!;
+                                VideoLinkData videolin =
+                                    VideoLinkData(url: '', transcript: '');
+                                videoLinks.clear();
+                                videoLinks.add(videolin);
+                              });
+                            },
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      Expanded(
+                        child: Container(
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(10)),
+                          child: RadioListTile<ContentType>(
+                            contentPadding: const EdgeInsets.all(0),
+                            title: const Text('Both'),
+                            value: ContentType.both,
+                            groupValue: _selectedContentType,
+                            onChanged: (ContentType? value) {
+                              setState(() {
+                                _selectedContentType = value!;
+                              });
+                            },
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 20.0),
+                  Visibility(
+                    visible: _selectedContentType.toString() ==
+                            'ContentType.videos' ||
+                        _selectedContentType.toString() == 'ContentType.both',
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        const Text(
+                          'Add Youtube or Video links',
+                          style: TextStyle(
+                              fontWeight: FontWeight.w700, fontSize: 16),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        ListView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: videoLinks.length + 1,
+                          itemBuilder: (BuildContext context, int index) {
+                            if (index < videoLinks.length) {
+                              return buildVideoLinkContainer(
+                                  videoLinks[index], index);
+                            } else {
+                              return buildAddButton();
+                            }
+                          },
+                        ),
+                        const SizedBox(
+                          height: 30,
+                        ),
+                      ],
                     ),
                   ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: selectedFileNames
-                        .map(
-                          (String fileName) => Container(
-                            margin: const EdgeInsets.symmetric(vertical: 6),
-                            padding: const EdgeInsets.all(6),
+                  Visibility(
+                    visible: true,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        const Text(
+                          'Add an image for your Course',
+                          style: TextStyle(
+                              fontWeight: FontWeight.w700, fontSize: 16),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            _pickImage(context);
+                          },
+                          child: Container(
+                            height: 55,
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 9,
+                            ),
                             decoration: BoxDecoration(
-                                color: Colors.black12,
-                                borderRadius: BorderRadius.circular(10)),
+                              border:
+                                  Border.all(color: Colors.black.withAlpha(20)),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
                             child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
-                                const Icon(Icons.insert_drive_file),
-                                const SizedBox(width: 8),
-                                Text(fileName),
+                                Text(
+                                  _selectedImage == null
+                                      ? 'Add an image'
+                                      : _selectedImage!.path.split('/').last,
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                Container(
+                                  alignment: Alignment.center,
+                                  child: const Icon(
+                                    Icons.add_circle,
+                                  ),
+                                ),
                               ],
                             ),
                           ),
-                        )
-                        .toList(),
+                        ),
+                        const SizedBox(
+                          height: 30,
+                        ),
+                      ],
+                    ),
                   ),
-                  const SizedBox(
-                    height: 30,
+                  Visibility(
+                    visible: _selectedContentType.toString() ==
+                            'ContentType.files' ||
+                        _selectedContentType.toString() == 'ContentType.both',
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        InkWell(
+                          onTap: (() async {
+                            final FilePickerResult? result =
+                                await FilePicker.platform.pickFiles(
+                              allowMultiple: true,
+                            );
+                            if (result != null) {
+                              result.files
+                                  .map((PlatformFile file) => setState(() {
+                                        selectedFileNames.add(file.name);
+
+                                        selectedFilePaths.add(file.path!);
+                                      }))
+                                  .toList();
+                            }
+                          }),
+                          child: Container(
+                            height: 55,
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 9,
+                            ),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: <Widget>[
+                                  const Text(
+                                    'Add Files (pdf,docx,doc,xls,etc)',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  Container(
+                                    alignment: Alignment.center,
+                                    child: SvgPicture.asset(
+                                      'assets/svgs/fileresources.svg',
+                                    ),
+                                  ),
+                                ]),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 8,
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: selectedFileNames
+                              .map(
+                                (String fileName) => Container(
+                                  margin:
+                                      const EdgeInsets.symmetric(vertical: 6),
+                                  padding: const EdgeInsets.all(6),
+                                  decoration: BoxDecoration(
+                                      color: Colors.black12,
+                                      borderRadius: BorderRadius.circular(10)),
+                                  child: Row(
+                                    children: <Widget>[
+                                      const Icon(Icons.insert_drive_file),
+                                      const SizedBox(width: 8),
+                                      Text(fileName),
+                                    ],
+                                  ),
+                                ),
+                              )
+                              .toList(),
+                        ),
+                        const SizedBox(
+                          height: 30,
+                        ),
+                      ],
+                    ),
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -390,12 +569,26 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                         setState(() {
                           isProcessing = true;
                         });
+                        if (_selectedImage != null) {
+                          dynamic response =
+                              await ApiService.uploadFile(_selectedImage!);
+                          if (response['success']) {
+                            photo = response['fileUrl'];
+                          } else {
+                            showSnackbar(
+                                message: 'Error Uploading Thumbnail!',
+                                error: true);
+                            setState(() {
+                              isProcessing = false;
+                            });
+                            return;
+                          }
+                        }
                         if (selectedFilePaths.isNotEmpty) {
                           for (String filePath in selectedFilePaths) {
                             await courseController.uploadFile(filePath);
                           }
                         }
-
                         if (title == null || title == '') {
                           Get.snackbar(
                             'Error',
@@ -420,10 +613,40 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                           });
                           return;
                         }
-                        if (!_validateVideoLinks()) {
+                        if (videoLinks.isEmpty && selectedFileNames.isEmpty) {
                           Get.snackbar(
                             'Error',
-                            'Please enter valid youtube URLs for video links!',
+                            'You must upload a file or input video link to proceed!',
+                            backgroundColor: Colors.redAccent,
+                            colorText: Colors.white,
+                          );
+                          setState(() {
+                            isProcessing = false;
+                          });
+                          return;
+                        }
+                        if (videoLinks.isNotEmpty &&
+                            _selectedContentType.toString().split('.').last ==
+                                'videos' &&
+                            _selectedContentType.toString().split('.').last ==
+                                'both') {
+                          if (!_validateVideoLinks()) {
+                            Get.snackbar(
+                              'Error',
+                              'Enter a valid link!',
+                              backgroundColor: Colors.redAccent,
+                              colorText: Colors.white,
+                            );
+                            setState(() {
+                              isProcessing = false;
+                            });
+                            return;
+                          }
+                        }
+                        if (_selectedImage == null) {
+                          Get.snackbar(
+                            'Error',
+                            'Please add an image for your course',
                             backgroundColor: Colors.redAccent,
                             colorText: Colors.white,
                           );
@@ -443,6 +666,25 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                           'isActive': true,
                           'isApproved': false,
                           'subtitle': false,
+                          'thumbnail': photo,
+                          'contentType':
+                              _selectedContentType.toString().split('.').last,
+                          'documents': selectedFileNames.isEmpty
+                              ? null
+                              : selectedFileNames,
+                          'courseType': _paidCourse ? 'paid' : 'free',
+                          'youtubeUrls': _extractYoutubeUrls(),
+                          'transcript': _extractTranscripts(),
+                        };
+                        Map<String, dynamic> courseUpdate = <String, dynamic>{
+                          'title': title,
+                          'industryId': widget.industryId,
+                          'description': description ?? desccontroller!.text,
+                          'price': _courseprice,
+                          'subtitle': false,
+                          'thumbnail': photo,
+                          'contentType':
+                              _selectedContentType.toString().split('.').last,
                           'documents': selectedFileNames.isEmpty
                               ? null
                               : selectedFileNames,
@@ -453,7 +695,7 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                         widget.course == null
                             ? await courseController.createCourse(course)
                             : await courseController.updateCourse(
-                                course, widget.course!.id);
+                                courseUpdate, widget.course!.id);
                         setState(() {
                           isProcessing = false;
                         });
@@ -609,13 +851,33 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
   bool _validateVideoLinks() {
     for (dynamic videoLink in videoLinks) {
       if (!_isValidUrl(videoLink.url)) {
-        if (!_isValidYoutubeUrl(videoLink.url)) {
-          return false;
-        }
+        return false;
       }
     }
     return true;
   }
+
+  Future<void> _pickImage(BuildContext context) async {
+    final ImagePicker imagePicker = ImagePicker();
+    final XFile? image =
+        await imagePicker.pickImage(source: ImageSource.gallery);
+
+    if (image != null) {
+      // Handle the selected image. You can save it, display it, or upload it.
+      setState(() {
+        _selectedImage = File(image.path);
+      });
+    }
+  }
+
+  // bool _isValidYoutubeUrl(String url) {
+  //   final RegExp youtubeRegExp = RegExp(
+  //     r'^(https?\:\/\/)?(www\.youtube\.com\/watch\?v=|youtu\.be\/).+$',
+  //     caseSensitive: false,
+  //     multiLine: false,
+  //   );
+  //   return youtubeRegExp.hasMatch(url);
+  // }
 
   Widget buildAddButton() {
     return GestureDetector(
@@ -655,13 +917,64 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
       ),
     );
   }
-
-  bool _isValidYoutubeUrl(String url) {
-    final RegExp youtubeRegExp = RegExp(
-      r'^(https?\:\/\/)?(www\.youtube\.com|youtu\.?be)\/.+$',
-      caseSensitive: false,
-      multiLine: false,
-    );
-    return youtubeRegExp.hasMatch(url);
-  }
 }
+
+// /// Coursetype CARD
+// class CourseTypeSelect extends StatelessWidget {
+//   /// CONSTRUCTOR
+//   const CourseTypeSelect({
+//     Key? key,
+//     required this.type,
+//     required this.activetype,
+//     required this.onTap,
+//   }) : super(key: key);
+//   final String type;
+//   final String activetype;
+//   final Function(String) onTap;
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return GestureDetector(
+//       onTap: () {
+    
+//         // print(activetype);
+//       },
+//       child: Container(
+//         margin: const EdgeInsets.symmetric(vertical: 15),
+//         padding: const EdgeInsets.all(15.0),
+//         decoration: BoxDecoration(
+//           color: Colors.white,
+//           border: Border.all(
+//             color:  const Color.fromRGBO(0, 0, 0, 0.0530),
+//             width: 3,
+//           ),
+//           borderRadius: BorderRadius.circular(13),
+//         ),
+//         child: Column(
+//           crossAxisAlignment: CrossAxisAlignment.start,
+//           children: <Widget>[
+//             Row(
+//               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//               children: <Widget>[
+               
+//                   const CircleAvatar(
+//                     radius: 9,
+//                     backgroundColor: Color(0xFFF01C29),
+//                     child: CircleAvatar(
+//                       radius: 5,
+//                       backgroundColor: Colors.white,
+//                     ),
+//                   ),
+//                 TextWidget(
+//                   text: 'llnln',
+//                   size: 15,
+//                   fontWeight: FontWeight.w700,
+//                 ),
+//               ],
+//             ),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+// }

@@ -254,7 +254,7 @@ class AllImagesItem extends StatelessWidget {
                   Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: (BuildContext context) => YoutubeVideo(
-                        post?.ytUrl ?? "",
+                        post?.ytUrl ?? '',
                       ),
                     ),
                   );
@@ -270,7 +270,7 @@ class AllImagesItem extends StatelessWidget {
                 }
               },
               child: isYt
-                  ? YoutubeDisplay(post?.ytUrl ?? "")
+                  ? YoutubeDisplay(post?.ytUrl ?? '')
                   : Padding(
                       padding: const EdgeInsets.only(left: 0, right: 0),
                       child: NetworkImageWithPlaceHolder(
@@ -294,7 +294,7 @@ class AllImagesItem extends StatelessWidget {
                     Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (BuildContext context) => YoutubeVideo(
-                          post?.ytUrl ?? "",
+                          post?.ytUrl ?? '',
                         ),
                       ),
                     );

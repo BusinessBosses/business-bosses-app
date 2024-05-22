@@ -238,7 +238,7 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
                       child: Container(
                         alignment: Alignment.center,
                         child: FloatingActionButton(
-                          heroTag: "postButton",
+                          heroTag: 'postButton',
                           child: const Icon(Icons.add),
                           onPressed: () async {
                             // log("Hello world");

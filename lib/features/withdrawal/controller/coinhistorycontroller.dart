@@ -1,9 +1,7 @@
+import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/features/donations/models/donations_model.dart';
-import 'package:business_bosses_v2/features/donations/presentation/donation_created.dart';
-import 'package:business_bosses_v2/features/forum/models/industry.dart';
-import 'package:business_bosses_v2/features/withdrawal/model/cointransactionmodel.dart';
 import 'package:business_bosses_v2/features/withdrawal/presentation/withdrawal_created.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
@@ -40,9 +38,10 @@ class CoinHistoryController extends GetxController {
     ApiResponseModel response = await ApiService.post(
         path: 'transaction-history', body: coinTransaction);
     if (response.success) {
-      Get.to(() => const WithdrawalCreated());
+      Get.off(() => const WithdrawalCreated());
     } else {
-      print(response.toString());
+      showSnackbar(
+          message: 'Error While Withdrawing!', title: 'Failed!', error: true);
     }
   }
 
@@ -51,8 +50,7 @@ class CoinHistoryController extends GetxController {
       hLoading(true);
 
       ApiResponseModel response = await ApiService.get(
-          path:
-              'transaction-history/user/${profileController.myProfile.uid}');
+          path: 'transaction-history/user/${profileController.myProfile.uid}');
       if (response.success) {
         myHistory.clear();
         coindepositsHistory.clear();
@@ -62,7 +60,7 @@ class CoinHistoryController extends GetxController {
             responseData.cast<Map<String, dynamic>>();
         myHistory.addAll(mappedData);
         for (Map<String, dynamic> item in mappedData) {
-          if (item['transactionType'] == "credit") {
+          if (item['transactionType'] == 'debit') {
             coinwithdrawalHistory.add(item);
           } else {
             coindepositsHistory.add(item);
@@ -77,18 +75,19 @@ class CoinHistoryController extends GetxController {
       hError(true);
     } finally {
       hLoading(false); // Set loading back to false after fetching data
-   // Update the UI after data fetch completes
+      // Update the UI after data fetch completes
     }
-      update();
+    update();
   }
 
-  initSocket() {
+  void initSocket() {
     socket = IO.io(Constants.socketUrl, <String, dynamic>{
       'autoConnect': false,
-      'transports': ['websocket'],
+      'transports': <String>['websocket'],
     });
     socket.connect();
     socket.onConnect((_) {
+      // ignore: avoid_print
       print('Connection established');
     });
 
@@ -98,8 +97,10 @@ class CoinHistoryController extends GetxController {
 
     socket.on('new-notification', (data) {
       // print(data);
-      profileController.updateProfile(
-          {...profileController.myProfile.toMap(), 'unReadCount': 1});
+      profileController.updateProfile(<String, dynamic>{
+        ...profileController.myProfile.toMap(),
+        'unReadCount': 1
+      });
     });
 
     socket.onReconnect((_) {

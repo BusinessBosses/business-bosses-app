@@ -38,7 +38,7 @@ class _BoostDonationState extends State<BoostDonation> {
   bool isCoin = false;
   late Map<String, dynamic>? paymantIntent;
   final ProfileController profileController = Get.find();
-  final payStackClient = PaystackPlugin();
+  final PaystackPlugin payStackClient = PaystackPlugin();
 
   late String duration;
   List<Map<String, dynamic>> plans = <Map<String, dynamic>>[

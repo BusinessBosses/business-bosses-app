@@ -36,7 +36,7 @@ class _BottomNavigationExampleState extends State<BottomNavigationScreen> {
 
   final PageController _pageController = PageController(initialPage: 0);
 
-  final List<Widget> _pages = [
+  final List<Widget> _pages = <Widget>[
     const HomeScreen(),
     const AllCommunitiesScreen(),
     const LiveEvent(),
@@ -53,7 +53,7 @@ class _BottomNavigationExampleState extends State<BottomNavigationScreen> {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge,
-        overlays: [SystemUiOverlay.bottom]);
+        overlays: <SystemUiOverlay>[SystemUiOverlay.bottom]);
     Get.put(ProfileController());
     Get.put(HomeController());
     return Scaffold(
@@ -62,7 +62,7 @@ class _BottomNavigationExampleState extends State<BottomNavigationScreen> {
         physics: const NeverScrollableScrollPhysics(),
         children: _pages,
       ),
-      bottomNavigationBar: Stack(children: [
+      bottomNavigationBar: Stack(children: <Widget>[
         // Padding(
         //   padding: const EdgeInsets.only(top: 20.0),
         //   child: Row(
@@ -124,7 +124,7 @@ class _BottomNavigationExampleState extends State<BottomNavigationScreen> {
           selectedLabelStyle:
               const TextStyle(fontSize: 12, fontWeight: FontWeight.w700),
           type: BottomNavigationBarType.fixed,
-          items: [
+          items: <BottomNavigationBarItem>[
             BottomNavigationBarItem(
               icon: SvgPicture.asset(
                 'assets/svgs/hom.svg',
@@ -156,7 +156,7 @@ class _BottomNavigationExampleState extends State<BottomNavigationScreen> {
                 height: 23,
                 color: Colors.grey,
               ),
-              label: "Events",
+              label: 'Events',
               activeIcon: SvgPicture.asset(
                 'assets/svgs/liveevent.svg',
                 height: 23,

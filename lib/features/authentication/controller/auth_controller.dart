@@ -267,7 +267,7 @@ class AuthController extends GetxController {
           _authCred!,
           _password ?? DateTime.now().millisecondsSinceEpoch.toString(),
           _authusername!,
-          "");
+          '');
       return user;
       // }
     }

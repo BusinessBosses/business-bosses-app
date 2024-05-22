@@ -104,7 +104,7 @@ class _CourseReviewScreenState extends State<CourseReviewScreen> {
                                       widget.course.title!,
                                       style: Theme.of(context)
                                           .textTheme
-                                          .bodyText1
+                                          .bodyLarge
                                           ?.copyWith(
                                             fontWeight: FontWeight.w700,
                                             color: Colors.black,
@@ -204,8 +204,8 @@ class _CourseReviewScreenState extends State<CourseReviewScreen> {
                                                 MainAxisAlignment.start,
                                             children: <Widget>[
                                               Text(
-                                                  widget.course.averageRating
-                                                      .toString(),
+                                                  widget.course.averageRating!
+                                                      .toStringAsFixed(2),
                                                   style: const TextStyle(
                                                     fontWeight: FontWeight.bold,
                                                     fontSize: 20,

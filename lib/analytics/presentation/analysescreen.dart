@@ -17,6 +17,7 @@ class AnalyserScreen extends StatefulWidget {
   const AnalyserScreen({Key? key}) : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _AnalyserScreenState createState() => _AnalyserScreenState();
 }
 
@@ -71,63 +72,65 @@ class _AnalyserScreenState extends State<AnalyserScreen> {
             padding: const EdgeInsets.only(
               left: 20,
             ),
-            child:
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
-              Row(
+            child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  const Text(
-                    'Hi',
-                    style: TextStyle(
-                        fontSize: 25,
-                        color: textColor,
-                        fontWeight: FontWeight.w700),
-                  ),
-                  const Spacer(),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 15.0),
-                    child: GestureDetector(
-                      onTap: () {
-                        Get.toNamed(Routes.premiumscreen);
-                      },
-                      child: Column(
-                        children: <Widget>[
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Container(
-                              decoration: BoxDecoration(
-                                boxShadow: <BoxShadow>[
-                                  BoxShadow(
-                                    color: Colors.black.withOpacity(0.09),
-                                    blurRadius: 500.0,
-                                    spreadRadius: 0.0,
-                                  ),
-                                ],
-                              ),
-                              child: !profileController.myProfile.isSubscribed
-                                  ? subscribetopremiumbutton()
-                                  : Container()),
-                        ],
+                  Row(
+                    children: <Widget>[
+                      const Text(
+                        'Hi',
+                        style: TextStyle(
+                            fontSize: 25,
+                            color: textColor,
+                            fontWeight: FontWeight.w700),
                       ),
-                    ),
-                  )
-                ],
-              ),
-              Text(
-                '@${profileController.myProfile.username}',
-                style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w700,
-                    color: primaryColorLT),
-              ),
-              const SizedBox(
-                height: 5,
-              ),
-              const Text(
-                'how may I help you?',
-                style: TextStyle(fontSize: 15, fontWeight: FontWeight.w100),
-              ),
-            ]),
+                      const Spacer(),
+                      Padding(
+                        padding: const EdgeInsets.only(right: 15.0),
+                        child: GestureDetector(
+                          onTap: () {
+                            Get.toNamed(Routes.premiumscreen);
+                          },
+                          child: Column(
+                            children: <Widget>[
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              Container(
+                                  decoration: BoxDecoration(
+                                    boxShadow: <BoxShadow>[
+                                      BoxShadow(
+                                        color: Colors.black.withOpacity(0.09),
+                                        blurRadius: 500.0,
+                                        spreadRadius: 0.0,
+                                      ),
+                                    ],
+                                  ),
+                                  child:
+                                      !profileController.myProfile.isSubscribed
+                                          ? subscribetopremiumbutton()
+                                          : Container()),
+                            ],
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                  Text(
+                    '@${profileController.myProfile.username}',
+                    style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w700,
+                        color: primaryColorLT),
+                  ),
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  const Text(
+                    'how may I help you?',
+                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.w100),
+                  ),
+                ]),
           ),
           const SizedBox(
             height: 30,

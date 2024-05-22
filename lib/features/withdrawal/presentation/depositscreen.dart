@@ -1,6 +1,6 @@
+// ignore_for_file: deprecated_member_use, always_specify_types
+
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
-import 'package:business_bosses_v2/common/widgets/buttons/custom_button.dart';
-import 'package:business_bosses_v2/common/widgets/safety_model.dart';
 import 'package:business_bosses_v2/features/home/all_communities_screen.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/features/promotions/widgets/buycoinslist_item.dart';
@@ -9,7 +9,6 @@ import 'package:business_bosses_v2/features/withdrawal/widgets/withdrawal_header
 import 'package:business_bosses_v2/features/withdrawal/widgets/withdrawal_item.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -35,11 +34,12 @@ class _DepositsScreenState extends State<DepositsScreen> {
   final ProfileController _profileController = Get.find();
   final CoinHistoryController coinHistoryController =
       Get.put(CoinHistoryController());
+  // ignore: unused_field
   String? _paymentmethods;
   late String _referralId;
-  List<String> coinAmounts = ['100', '200', '500', '1000', '10000'];
-  List<String> coinPrices = ['0.99', '1.99', '4.99', '9.99', '99.99'];
-  List<String> coinIDs = [
+  List<String> coinAmounts = <String>['100', '200', '500', '1000', '10000'];
+  List<String> coinPrices = <String>['0.99', '1.99', '4.99', '9.99', '99.99'];
+  List<String> coinIDs = <String>[
     '100_bb_coins',
     '200_bb_coins',
     '500_bb_coins',
@@ -49,7 +49,6 @@ class _DepositsScreenState extends State<DepositsScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _referralId = _profileController.myProfile.inviteId!;
   }
@@ -57,12 +56,14 @@ class _DepositsScreenState extends State<DepositsScreen> {
   @override
   Widget build(BuildContext context) {
     ProfileController profileController = Get.find();
-    final theme = Theme.of(context).copyWith(dividerColor: Colors.transparent);
+    final ThemeData theme =
+        Theme.of(context).copyWith(dividerColor: Colors.transparent);
     return Scaffold(
         backgroundColor: Colors.white,
         body: NestedScrollView(
             controller: scrollController,
-            headerSliverBuilder: (context, innerBoxIsScrolled) {
+            headerSliverBuilder:
+                (BuildContext context, bool innerBoxIsScrolled) {
               return <Widget>[
                 SliverStickyHeader(
                   sticky: false,
@@ -70,7 +71,7 @@ class _DepositsScreenState extends State<DepositsScreen> {
                     padding: const EdgeInsets.only(top: 20),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
+                      children: <Widget>[
                         Container(
                           height: 1,
                           color: backgroundcolorinterface,
@@ -80,10 +81,10 @@ class _DepositsScreenState extends State<DepositsScreen> {
                               horizontal: 15.0, vertical: 10),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
+                            children: <Widget>[
                               const Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
+                                children: <Widget>[
                                   Text(
                                     'Top up balance',
                                     style: TextStyle(
@@ -98,7 +99,7 @@ class _DepositsScreenState extends State<DepositsScreen> {
                                   )
                                 ],
                               ),
-                              Container(
+                              SizedBox(
                                 width: 120,
                                 height: 43,
                                 child: ElevatedButton(
@@ -115,18 +116,17 @@ class _DepositsScreenState extends State<DepositsScreen> {
                                                   MainAxisAlignment.start,
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.start,
-                                              children: [
-                                                Padding(
-                                                  padding: const EdgeInsets
-                                                      .symmetric(
+                                              children: <Widget>[
+                                                const Padding(
+                                                  padding: EdgeInsets.symmetric(
                                                       vertical: 40.0,
                                                       horizontal: 20),
                                                   child: Column(
                                                     crossAxisAlignment:
                                                         CrossAxisAlignment
                                                             .start,
-                                                    children: [
-                                                      const Text(
+                                                    children: <Widget>[
+                                                      Text(
                                                         'Buy more BB Coins',
                                                         style: TextStyle(
                                                             fontWeight:
@@ -137,71 +137,62 @@ class _DepositsScreenState extends State<DepositsScreen> {
                                                     ],
                                                   ),
                                                 ),
-                                                Container(
-                                                  child: Expanded(
-                                                    child: Column(
-                                                      children: [
-                                                        Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .symmetric(
-                                                                  horizontal:
-                                                                      10.0),
-                                                          child: Container(
-                                                            color:
-                                                                backgroundcolorinterface,
-                                                            height: 1,
-                                                          ),
+                                                Expanded(
+                                                  child: Column(
+                                                    children: <Widget>[
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .symmetric(
+                                                                horizontal:
+                                                                    10.0),
+                                                        child: Container(
+                                                          color:
+                                                              backgroundcolorinterface,
+                                                          height: 1,
                                                         ),
-                                                        Container(
-                                                          child: Expanded(
-                                                            child: ListView
-                                                                .builder(
-                                                              itemCount:
-                                                                  coinAmounts
-                                                                      .length,
-                                                              itemBuilder:
-                                                                  (BuildContext
-                                                                          context,
-                                                                      int index) {
-                                                                return GestureDetector(
-                                                                  onTap:
-                                                                      () async {
-                                                                    try {
-                                                                      await Purchases
-                                                                          .purchaseProduct(
-                                                                              coinIDs[index]);
-                                                                      print(
-                                                                          'coin increase');
+                                                      ),
+                                                      Expanded(
+                                                        child: ListView.builder(
+                                                          itemCount: coinAmounts
+                                                              .length,
+                                                          itemBuilder:
+                                                              (BuildContext
+                                                                      context,
+                                                                  int index) {
+                                                            return GestureDetector(
+                                                              onTap: () async {
+                                                                try {
+                                                                  await Purchases
+                                                                      .purchaseProduct(
+                                                                          coinIDs[
+                                                                              index]);
 
-                                                                      /// update coin here
-                                                                    } catch (e) {
-                                                                      showSnackbar(
-                                                                        title:
-                                                                            'OOPS!',
-                                                                        message:
-                                                                            'An error occurred while making payment, please try again!',
-                                                                        error:
-                                                                            true,
-                                                                      );
-                                                                    }
-                                                                  },
-                                                                  child:
-                                                                      BuyCoinsListItem(
-                                                                    coinamount:
-                                                                        coinAmounts[
-                                                                            index],
-                                                                    coinprice:
-                                                                        coinPrices[
-                                                                            index],
-                                                                  ),
-                                                                );
+                                                                  /// update coin here
+                                                                } catch (e) {
+                                                                  showSnackbar(
+                                                                    title:
+                                                                        'OOPS!',
+                                                                    message:
+                                                                        'An error occurred while making payment, please try again!',
+                                                                    error: true,
+                                                                  );
+                                                                }
                                                               },
-                                                            ),
-                                                          ),
+                                                              child:
+                                                                  BuyCoinsListItem(
+                                                                coinamount:
+                                                                    coinAmounts[
+                                                                        index],
+                                                                coinprice:
+                                                                    coinPrices[
+                                                                        index],
+                                                              ),
+                                                            );
+                                                          },
                                                         ),
-                                                      ],
-                                                    ),
+                                                      ),
+                                                    ],
                                                   ),
                                                 ),
                                               ],
@@ -228,10 +219,10 @@ class _DepositsScreenState extends State<DepositsScreen> {
                               horizontal: 15.0, vertical: 10),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
+                            children: <Widget>[
                               const Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
+                                children: <Widget>[
                                   Text(
                                     'Become a premium user',
                                     style: TextStyle(
@@ -239,7 +230,7 @@ class _DepositsScreenState extends State<DepositsScreen> {
                                         fontSize: 16),
                                   ),
                                   Text(
-                                    'Get 100 coins monthly',
+                                    'Earn 100 coins monthly',
                                     style: TextStyle(
                                         color: Colors.grey,
                                         fontWeight: FontWeight.w700),
@@ -250,7 +241,7 @@ class _DepositsScreenState extends State<DepositsScreen> {
                                 onTap: () {
                                   !profileController.myProfile.isSubscribed
                                       ? Get.toNamed(Routes.premiumscreen)
-                                      : null;
+                                      :  null;
                                 },
                                 child: Container(
                                   padding: const EdgeInsets.symmetric(
@@ -268,7 +259,7 @@ class _DepositsScreenState extends State<DepositsScreen> {
                                   child: Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
-                                    children: [
+                                    children: <Widget>[
                                       Text(
                                         !profileController
                                                 .myProfile.isSubscribed
@@ -302,10 +293,10 @@ class _DepositsScreenState extends State<DepositsScreen> {
                               horizontal: 15.0, vertical: 10),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
+                            children: <Widget>[
                               const Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
+                                children: <Widget>[
                                   Text(
                                     'Sell on Marketplace',
                                     style: TextStyle(
@@ -338,8 +329,8 @@ class _DepositsScreenState extends State<DepositsScreen> {
                                   child: Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
+                                    children: <Widget>[
+                                      const Text(
                                         'Sell',
                                         style: TextStyle(
                                             color: primaryColorLT,
@@ -364,10 +355,10 @@ class _DepositsScreenState extends State<DepositsScreen> {
                               horizontal: 15.0, vertical: 10),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
+                            children: <Widget>[
                               const Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
+                                children: <Widget>[
                                   Text(
                                     'Create Premium Courses',
                                     style: TextStyle(
@@ -400,7 +391,7 @@ class _DepositsScreenState extends State<DepositsScreen> {
                                   child: Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
-                                    children: [
+                                    children: <Widget>[
                                       const Text(
                                         'Create',
                                         style: TextStyle(
@@ -426,10 +417,10 @@ class _DepositsScreenState extends State<DepositsScreen> {
                               horizontal: 15.0, vertical: 10),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
+                            children: <Widget>[
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
+                                children: <Widget>[
                                   const Text(
                                     'Invite friends to get 10 coins',
                                     style: TextStyle(
@@ -449,7 +440,7 @@ class _DepositsScreenState extends State<DepositsScreen> {
                                   _shareWithFriends();
                                 },
                                 child: Container(
-                                  padding: EdgeInsets.symmetric(
+                                  padding: const EdgeInsets.symmetric(
                                       horizontal: 10, vertical: 10),
                                   width: 120,
                                   decoration: BoxDecoration(
@@ -460,7 +451,7 @@ class _DepositsScreenState extends State<DepositsScreen> {
                                   child: Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
-                                    children: [
+                                    children: <Widget>[
                                       const Text(
                                         'Invite',
                                         style: TextStyle(
@@ -490,60 +481,73 @@ class _DepositsScreenState extends State<DepositsScreen> {
                 )
               ];
             },
-            body: Column(
-              children: [
-                Theme(
-                  data: theme,
-                  child: ExpansionTile(
-                    trailing: isExpanded
-                        ? SvgPicture.asset(
-                            'assets/svgs/dropdownexpansionup.svg',
-                          )
-                        : SvgPicture.asset(
-                            'assets/svgs/dropdownexpansion.svg',
-                          ),
-                    title: const Text('Top up history',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w700, fontSize: 16)),
-                    children: [
-                      FutureBuilder<void>(
-                        future: coinHistoryController.initHistory(),
-                        builder: (BuildContext context,
-                            AsyncSnapshot<void> snapshot) {
-                          if (snapshot.connectionState ==
-                              ConnectionState.waiting) {
-                            // While data is being fetched, show a loading indicator
-                            return const Padding(
-                              padding: EdgeInsets.all(80.0),
-                              child: CircularProgressIndicator(),
-                            );
-                          } else if (snapshot.hasError) {
-                            // If an error occurs during data fetching, handle it accordingly
-                            return Text('Error: ${snapshot.error}');
-                          } else {
-                            print(coinHistoryController.coindepositsHistory);
-                            // If data fetching is successful, build your UI with the fetched data
-                            return Container(
-                              child: coinHistoryController
-                                      .coindepositsHistory.isEmpty
-                                  ? Padding(
-                                    padding: const EdgeInsets.all(80.0),
-                                    child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                      children: [
-                                        SvgPicture.asset('assets/svgs/coinnn.svg', height: 40, color: Colors.grey,),
-                                        SizedBox(height: 10,),
-                                        Text('No Coin Deposits Found', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15),)
-                                        
-                                      ],
-                                    ),
-                                  )
-                                  : Column(
-                                      children: [
-                                        WithdrawalHeaderItem(),
-                                        Container(
-                                          child: ListView.builder(
+            body: SingleChildScrollView(
+              child: Column(
+                children: <Widget>[
+                  Theme(
+                    data: theme,
+                    child: ExpansionTile(
+                      trailing: isExpanded
+                          ? SvgPicture.asset(
+                              'assets/svgs/dropdownexpansionup.svg',
+                            )
+                          : SvgPicture.asset(
+                              'assets/svgs/dropdownexpansion.svg',
+                            ),
+                      title: const Text('Top up history',
+                          style: TextStyle(
+                              fontWeight: FontWeight.w700, fontSize: 16)),
+                      children: <Widget>[
+                        FutureBuilder<void>(
+                          future: coinHistoryController.initHistory(),
+                          builder: (BuildContext context,
+                              AsyncSnapshot<void> snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              // While data is being fetched, show a loading indicator
+                              return const Padding(
+                                padding: EdgeInsets.all(80.0),
+                                child: CircularProgressIndicator(),
+                              );
+                            } else if (snapshot.hasError) {
+                              // If an error occurs during data fetching, handle it accordingly
+                              return Text('Error: ${snapshot.error}');
+                            } else {
+                              // If data fetching is successful, build your UI with the fetched data
+                              return Container(
+                                child: coinHistoryController
+                                        .coindepositsHistory.isEmpty
+                                    ? Padding(
+                                        padding: const EdgeInsets.all(80.0),
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: <Widget>[
+                                            SvgPicture.asset(
+                                              'assets/svgs/coinnn.svg',
+                                              height: 40,
+                                              color: Colors.grey,
+                                            ),
+                                            const SizedBox(
+                                              height: 10,
+                                            ),
+                                            const Text(
+                                              'No Coin Deposits Found',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.w700,
+                                                  fontSize: 15),
+                                            )
+                                          ],
+                                        ),
+                                      )
+                                    : Column(
+                                        children: <Widget>[
+                                          const WithdrawalHeaderItem(),
+                                          ListView.builder(
+                                            physics:
+                                                const NeverScrollableScrollPhysics(),
                                             shrinkWrap: true,
                                             itemCount: coinHistoryController
                                                 .coindepositsHistory.length,
@@ -559,25 +563,25 @@ class _DepositsScreenState extends State<DepositsScreen> {
 
                                               return WithdrawalItem(
                                                 item: coinHistoryController
-                                                    .coinwithdrawalHistory[i],
+                                                    .coindepositsHistory[i],
                                               );
                                             },
                                           ),
-                                        ),
-                                      ],
-                                    ),
-                            );
-                          }
-                        },
-                      )
-                    ],
+                                        ],
+                                      ),
+                              );
+                            }
+                          },
+                        )
+                      ],
+                    ),
                   ),
-                ),
-                Container(
-                  height: 1,
-                  color: backgroundcolorinterface,
-                ),
-              ],
+                  Container(
+                    height: 1,
+                    color: backgroundcolorinterface,
+                  ),
+                ],
+              ),
             )));
   }
 

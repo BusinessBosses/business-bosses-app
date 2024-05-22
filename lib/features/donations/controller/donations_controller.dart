@@ -16,6 +16,12 @@ class DonationsController extends GetxController {
   RxList<DonationModel> donations = <DonationModel>[].obs;
   RxList<DonationModel> donationsNotApproved = <DonationModel>[].obs;
   RxList<UserModel> users = <UserModel>[].obs;
+  List<UserModel> searchedUsers = <UserModel>[];
+  List<DonationModel> searchedPosts = <DonationModel>[];
+  RxBool loadingSearch = RxBool(false);
+  RxBool loadingPostsSearch = RxBool(false);
+  RxBool isUserSearch = RxBool(false);
+  RxBool isPostSearch = RxBool(false);
   RxList<UserModel> usersMembers = <UserModel>[].obs;
   RxList<dynamic> times = <dynamic>[].obs;
   RxList<dynamic> amounts = <dynamic>[].obs;
@@ -23,12 +29,15 @@ class DonationsController extends GetxController {
   List<dynamic> myHistory = <dynamic>[];
   List<dynamic> myHistoryReceived = <dynamic>[];
   List<dynamic> myHistoryOut = <dynamic>[];
-  RxBool loading = RxBool(false);
+  RxBool loading = RxBool(true);
   RxBool error = RxBool(false);
   RxBool hLoading = RxBool(false);
   RxBool hError = RxBool(false);
   RxBool tLoading = RxBool(false);
   RxBool tError = RxBool(false);
+  RxList<DonationModel> userdonations = <DonationModel>[].obs;
+  late List<String> connecteds =
+      profileController.myProfile.connecteds ?? <String>[];
 
   @override
   void onInit() async {
@@ -36,6 +45,16 @@ class DonationsController extends GetxController {
     await initUsers();
     fetchDonations();
     super.onInit();
+  }
+
+  void clearUserSearch() {
+    isUserSearch(false);
+    update();
+  }
+
+  void clearPostSearch() {
+    isPostSearch(false);
+    update();
   }
 
   Future<void> fetchDonations() async {
@@ -58,8 +77,8 @@ class DonationsController extends GetxController {
             donations.add(donation);
           }
         }
-        ApiResponseModel responseNot =
-            await ApiService.get(path: 'donation/query?isActive=false');
+        ApiResponseModel responseNot = await ApiService.get(
+            path: 'donation/query?isActive=false&isDeleted=false');
 
         // Clear previous donations before adding new ones
         donationsNotApproved.clear();
@@ -87,6 +106,38 @@ class DonationsController extends GetxController {
     update();
   }
 
+  Future<void> fetchuserDonations(String userId) async {
+    try {
+      loading(true); // Set loading to true before fetching data
+
+      ApiResponseModel response =
+          await ApiService.get(path: 'donation/user-donations/$userId');
+
+      if (response.success) {
+        userdonations.clear();
+        for (int i = 0; i < response.data['rows'].length; i++) {
+          if (response.data['rows'] != null) {
+            DonationModel userdonation =
+                DonationModel.fromMap(<String, dynamic>{
+              ...response.data['rows'][i],
+              'likes': response.data['rows'][i]['likes']
+                  .map((dynamic like) => like['userId'].toString())
+                  .toList(),
+            });
+
+            userdonations.add(userdonation);
+          }
+        }
+      } else {
+        error(true); // Set error to true if there's an error
+      }
+    } catch (e) {
+      error(true); // Set error to true if there's an error
+    } finally {
+      loading(false); // Set loading back to false after fetching data
+    }
+  }
+
   Future<void> deleteDonation(String donationId) async {
     try {
       ApiResponseModel response =
@@ -105,6 +156,7 @@ class DonationsController extends GetxController {
     } catch (e) {
       Get.snackbar('Error', 'Failed to Delete Donation');
     }
+    update();
   }
 
   bool doesUserDonationExist() {
@@ -162,6 +214,7 @@ class DonationsController extends GetxController {
         'amountRecieved': 0,
       }));
     }
+    update();
   }
 
   Future<void> updateDonation(Map<String, dynamic> donation, String id) async {
@@ -173,7 +226,7 @@ class DonationsController extends GetxController {
 
       // Update the donation in the list with the updated data
       if (donationIndex != -1) {
-        Map<String, dynamic> mergedData = {
+        Map<String, dynamic> mergedData = <String, dynamic>{
           ...donations[donationIndex].toMap(),
           ...donation
         };
@@ -212,9 +265,110 @@ class DonationsController extends GetxController {
     update();
   }
 
+  Future<void> searchUsers(String query) async {
+    loadingSearch(true);
+    update();
+
+    searchedUsers.clear();
+
+    for (dynamic user in usersMembers) {
+      if (user.username.toLowerCase().contains(query.toLowerCase()) ||
+          user.name!.toLowerCase().contains(query.toLowerCase())) {
+        searchedUsers.add(user);
+      }
+    }
+    loadingSearch(false);
+    update();
+  }
+
+  Future<void> searchPosts(String query) async {
+    loadingPostsSearch(true);
+    update();
+    searchedPosts.clear();
+    String path = 'donation/all';
+    ApiResponseModel response = await ApiService.get(path: path);
+    if (response.success) {
+      List<dynamic> rows = response.data['rows'];
+      for (dynamic row in rows) {
+        if (row['userId'] != null) {
+          if ((row['title'] != null &&
+                  row['title'].toLowerCase().contains(query.toLowerCase())) ||
+              (row['user']['username'] != null &&
+                  row['user']['username']
+                      .toLowerCase()
+                      .contains(query.toLowerCase())) ||
+              (row['user']['name'] != null &&
+                  row['user']['name']
+                      .toLowerCase()
+                      .contains(query.toLowerCase())) ||
+              (row['description'] != null &&
+                  row['description']
+                      .toLowerCase()
+                      .contains(query.toLowerCase()))) {
+            searchedPosts.add(DonationModel.fromMap(<String, dynamic>{
+              ...row,
+              'likes': row['likes']
+                  .map((dynamic like) => like['userId'].toString())
+                  .toList(),
+            }));
+          }
+        }
+      }
+      loadingPostsSearch(false);
+      update();
+    } else {
+      loadingPostsSearch(false);
+      update();
+    }
+  }
+
+  void connectToUser(UserModel user) async {
+    final int checkConnected =
+        connecteds.indexWhere((String element) => element == user.uid);
+    profileController.updateConnections(user.uid);
+    update();
+    if (isUserSearch.value) {
+      final int checkConnectedSearch =
+          connecteds.indexWhere((String element) => element == user.uid);
+      if (checkConnectedSearch == -1) {
+        connecteds.add(user.uid);
+      } else {
+        connecteds.removeAt(checkConnectedSearch);
+      }
+    }
+    if (checkConnected == -1) {
+      connecteds.add(user.uid);
+      await connect(user.uid);
+    } else {
+      connecteds.removeAt(checkConnected);
+      await disconnect(user.uid);
+    }
+
+    update();
+  }
+
+  Future<void> connect(String userId) async {
+    await ApiService.post(path: '/connection/connect', body: <String, dynamic>{
+      'userId': profileController.myProfile.uid,
+      'connectedId': userId,
+      'timestamp': DateTime.now().millisecondsSinceEpoch
+    });
+  }
+
+  Future<void> disconnect(String userId) async {
+    await ApiService.post(
+        path: '/connection/disconnect',
+        body: <String, dynamic>{
+          'userId': profileController.myProfile.uid,
+          'connectedId': userId,
+          'timestamp': DateTime.now().millisecondsSinceEpoch
+        });
+  }
+
   Future<void> initUsers() async {
     ApiResponseModel response = await ApiService.get(
-        path: 'donation/get-joined-users/6463a069-657d-47ae-b937-9a5d4c336811');
+      path: 'donation/get-joined-users/6463a069-657d-47ae-b937-9a5d4c336811',
+    );
     if (response.success) {
       List<dynamic> rows = response.data['rows'];
       userIds
@@ -243,6 +397,15 @@ class DonationsController extends GetxController {
             .setRecievedAmount(int.tryParse(data['amount'])!);
         profileController.myProfile
             .incrementCoinsCount(-(int.tryParse(data['amount'])!));
+        donations[donationIndex]
+            .transactions!
+            .add(DonationTransaction.fromMap(<String, dynamic>{
+              'id': response.data['id'],
+              'date': response.data['date'],
+              'amount': data['amount'],
+              'description': '',
+              'type': 'donated'
+            }));
         update();
         return true;
       }
@@ -260,6 +423,8 @@ class DonationsController extends GetxController {
     if (response.success) {
       profileController.myProfile
           .incrementCoinsCount(donationModel.amountRecieved);
+      showSnackbar(message: 'Withdrawal Successful!');
+      Get.back();
     } else {
       showSnackbar(
         title: 'OOPS!',
@@ -267,6 +432,7 @@ class DonationsController extends GetxController {
         error: true,
       );
     }
+    update();
   }
 
   Future<void> initHistory() async {
@@ -307,7 +473,7 @@ class DonationsController extends GetxController {
   /// LIKE AND UNLIKE FUNCTION
   void postLike(String userId, String postId, String receiverUid) {
     final int donationIndex =
-        donations.indexWhere((donation) => donation.id == postId);
+        donations.indexWhere((DonationModel donation) => donation.id == postId);
     if (donationIndex != -1) {
       final bool checkLiked = donations[donationIndex].likes!.contains(userId);
       if (checkLiked) {
@@ -319,14 +485,14 @@ class DonationsController extends GetxController {
     }
 
     if (profileController.myProfile.uid != receiverUid) {
-      socket.emit('like', {
+      socket.emit('like', <String, dynamic>{
         'postId': postId,
         'userId': userId,
         'timestamp': DateTime.now().millisecondsSinceEpoch,
         'receiverUid': receiverUid,
       });
     } else {
-      socket.emit('like', {
+      socket.emit('like', <String, dynamic>{
         'postId': postId,
         'userId': userId,
         'timestamp': DateTime.now().millisecondsSinceEpoch,
@@ -337,7 +503,7 @@ class DonationsController extends GetxController {
   /// COMMENT FUNCTION
   void comment(String postId, dynamic comment, String type) {
     final int donationIndex =
-        donations.indexWhere((donation) => donation.id == postId);
+        donations.indexWhere((DonationModel donation) => donation.id == postId);
     if (donationIndex != -1) {
       if (type == 'post') {
         donations[donationIndex].comments?.add(comment);
@@ -351,7 +517,7 @@ class DonationsController extends GetxController {
   void initSocket() {
     socket = IO.io(Constants.socketUrl, <String, dynamic>{
       'autoConnect': false,
-      'transports': ['websocket'],
+      'transports': <String>['websocket'],
     });
     socket.connect();
     socket.onConnect((_) {
@@ -364,8 +530,10 @@ class DonationsController extends GetxController {
 
     socket.on('new-notification', (data) {
       // print(data);
-      profileController.updateProfile(
-          {...profileController.myProfile.toMap(), 'unReadCount': 1});
+      profileController.updateProfile(<String, dynamic>{
+        ...profileController.myProfile.toMap(),
+        'unReadCount': 1
+      });
     });
 
     socket.onReconnect((_) {

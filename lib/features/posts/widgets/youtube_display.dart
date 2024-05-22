@@ -82,8 +82,8 @@ class _YoutubeDisplayState extends State<YoutubeDisplay> {
       ),
       height: 200,
       child: VisibilityDetector(
-        key: const Key("unique key"),
-        onVisibilityChanged: (info) {
+        key: const Key('unique key'),
+        onVisibilityChanged: (VisibilityInfo info) {
           if (info.visibleFraction == 0) {
             _controller.pause();
           } else {
@@ -122,12 +122,12 @@ class _YoutubeDisplayState extends State<YoutubeDisplay> {
               onReady: () {
                 _controller.addListener(listener);
               },
-              onEnded: (data) {},
+              onEnded: (YoutubeMetaData data) {},
             ),
-            builder: (context, player) => Scaffold(
+            builder: (BuildContext context, Widget player) => Scaffold(
               key: _scaffoldKey,
               body: ListView(
-                children: [
+                children: <Widget>[
                   player,
                 ],
               ),

@@ -24,8 +24,8 @@ class _OutgoneDonationsState extends State<OutgoneDonations> {
             itemCount: widget.history.length,
             itemBuilder: (BuildContext context, int i) {
               final item = widget.history[i];
-              final prevdate =
-                  i == 0 ? "" : formatDate(widget.history[i - 1]['date']);
+              final String prevdate =
+                  i == 0 ? '' : formatDate(widget.history[i - 1]['date']);
               return DonationHistoryItem(
                 item: item, previousDate: prevdate,
               );

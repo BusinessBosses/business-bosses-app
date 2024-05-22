@@ -1,6 +1,6 @@
 {
-    "java.configuration.updateBuildConfiguration": "interactive",
-    "cmake.configureOnOpen": true,
-    "editor.inlineSuggest.showToolbar": "always",
-    "dart.flutterSdkPath": "~/fvm/versions/3.13.5"
+  "java.configuration.updateBuildConfiguration": "interactive",
+  "cmake.configureOnOpen": true,
+  "editor.inlineSuggest.showToolbar": "always",
+  "dart.flutterSdkPath": ".fvm/versions/3.13.5"
 }

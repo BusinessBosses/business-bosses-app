@@ -32,7 +32,7 @@ class CommunitiesController extends GetxController {
   }
 
   Future<void> onSearch(int index, String query) async {
-    if (index == 0) {
+    if (index == 1) {
       searchedIndustries = industries
           .where((Industry element) =>
               element.industry!.toLowerCase().contains(query.toLowerCase()) ||

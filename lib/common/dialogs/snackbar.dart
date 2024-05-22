@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-showSnackbar({String? message, String? title, bool error = false}) {
+void showSnackbar({String? message, String? title, bool error = false}) {
   Get.showSnackbar(
     GetSnackBar(
       snackPosition: SnackPosition.TOP,

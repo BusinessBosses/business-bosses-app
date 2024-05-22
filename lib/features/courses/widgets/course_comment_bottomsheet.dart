@@ -1,14 +1,9 @@
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
-import 'package:business_bosses_v2/common/models/comment_model.dart';
 import 'package:business_bosses_v2/features/courses/controller/course_comment_controller.dart';
 import 'package:business_bosses_v2/features/courses/models/course_comment_model.dart';
 import 'package:business_bosses_v2/features/courses/models/course_model.dart';
 import 'package:business_bosses_v2/features/courses/widgets/course_comment_item.dart';
 import 'package:business_bosses_v2/features/courses/widgets/write_coursecomment.dart';
-import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
-import 'package:business_bosses_v2/features/posts/models/post_model.dart';
-import 'package:business_bosses_v2/features/posts/widgets/comment_item.dart';
-import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -17,9 +12,7 @@ import '../../../../common/widgets/safety_model.dart';
 import '../../../../common/widgets/user_avatar_with_badge.dart';
 import '../../../../utils/theme/theme.dart';
 
-import '../../../common/controllers/comment_controller.dart';
 import '../../../services/api_service.dart';
-
 
 class CourseCommentBottomSheet extends StatefulWidget {
   final Function(CourseCommentModel comment) onComment;
@@ -32,35 +25,44 @@ class CourseCommentBottomSheet extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _CourseCommentBottomSheetState createState() => _CourseCommentBottomSheetState();
+  _CourseCommentBottomSheetState createState() =>
+      _CourseCommentBottomSheetState();
 }
 
 class _CourseCommentBottomSheetState extends State<CourseCommentBottomSheet> {
-  bool _isLoadingComments = true;
+  bool _isLoadingComments = true, _isLoadingLikes = true;
 
-  final CourseCommentController _commentController = Get.put(CourseCommentController());
+  final CourseCommentController _commentController =
+      Get.put(CourseCommentController());
 
   @override
   void initState() {
     _loadCommentWithDetails();
+    _loadLikesWithDetails(widget.course.id);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 1,
+      length: 2,
       child: Scaffold(
         body: Column(
           children: <Widget>[
             Material(
               color: Colors.grey.withOpacity(0.1),
               child: TabBar(
-                indicatorColor: Colors.transparent,
+                indicatorColor: primaryColorLT,
                 tabs: <Widget>[
                   Tab(
                     child: Text(
                       'Comments',
+                      style: Theme.of(context).textTheme.bodyLarge,
+                    ),
+                  ),
+                  Tab(
+                    child: Text(
+                      'Likes',
                       style: Theme.of(context).textTheme.bodyLarge,
                     ),
                   ),
@@ -94,7 +96,7 @@ class _CourseCommentBottomSheetState extends State<CourseCommentBottomSheet> {
                                 return CourseCommentItem(
                                     _commentController.comments[j]);
                               },
-                             itemCount: _commentController.comments.length,
+                              itemCount: _commentController.comments.length,
                             ),
                     ),
                     WriteAComment(
@@ -109,15 +111,57 @@ class _CourseCommentBottomSheetState extends State<CourseCommentBottomSheet> {
                         setState(() {
                           _commentController.comments.add(comment);
                         });
-                       
                       },
                       courseId: widget.course.id,
                       receiverUid: widget.course.userId,
                     )
                   ],
                 ),
+                _users.isEmpty
+                ? SafetyModel(
+                    isLoading: _isLoadingLikes,
+                    icon: const Icon(
+                      Icons.thumb_up,
+                      size: 80.0,
+                      color: hintColor,
+                    ),
+                    title: 'There is no like for now',
+                    subTitle: 'Be the first one to like!',
+                  )
+                : ListView.builder(
+                    itemCount: _users.length,
+                    itemBuilder: (BuildContext context, int i) {
+                      return ListTile(
+                        leading: UserAvatarWithBadge(
+                          user: _users[i],
+                          height: 48.0,
+                          width: 48.0,
+                          radius: 30.0,
+                          placeHolder: Icons.person,
+                        ),
+                        title: _users[i].isSubscribed == true
+                            ? Row(
+                                children: <Widget>[
+                                  Text('${_users[i].name}'),
+                                  const SizedBox(width: 5),
+                                  SvgPicture.asset(
+                                    'assets/svgs/premiumbadge.svg',
+                                    height: 9,
+                                    color: primaryColorLT,
+                                  )
+                                ],
+                              )
+                            : Text('${_users[i].name}'),
+                        subtitle: Text(
+                          '${_users[i].bio}',
+                          maxLines: 1,
+                        ),
+                      );
+                    },
+                  )
               ]),
             ),
+            
           ],
         ),
       ),
@@ -125,11 +169,26 @@ class _CourseCommentBottomSheetState extends State<CourseCommentBottomSheet> {
   }
 
   Future<void> _loadCommentWithDetails() async {
-    await _commentController.fetchComments(widget.course.id!);
+    await _commentController.fetchComments(widget.course.id);
     setState(() {
       _isLoadingComments = _commentController.loading.value;
     });
   }
 
   final List<UserModel> _users = <UserModel>[];
+  
+  Future<void> _loadLikesWithDetails(String forumId) async {
+    final ApiResponseModel response =
+        await ApiService.get(path: 'likes/post/$forumId');
+    if (response.success) {
+      for (int i = 0; i < response.data['rows'].length; i++) {
+        _users.add(UserModel.fromMap(response.data['rows'][i]['user']));
+      }
+    }
+    if (mounted) {
+      setState(() {
+        _isLoadingLikes = false;
+      });
+    }
+  }
 }

@@ -239,6 +239,7 @@ class _CourseReviewTileState extends State<CourseReviewTile> {
                               lessStyle: bodyText2.copyWith(
                                 color: Colors.redAccent,
                               ),
+                              trimLength: 100,
                               trimExpandedText: '  show less',
                               basicStyle: bodyText2.copyWith(color: textColor),
                               onTap: (_) {},

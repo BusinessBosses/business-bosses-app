@@ -88,7 +88,7 @@ class _GalleryPhotosScreenState extends State<GalleryPhotosScreen> {
         title: const Text('Gallery'),
       ),
       floatingActionButton: FloatingActionButton(
-        heroTag: "gallaryButton",
+        heroTag: 'gallaryButton',
         child: (const Icon(Icons.done_all)),
         onPressed: () {
           Navigator.of(context).pop(_selectedAssetEntities);

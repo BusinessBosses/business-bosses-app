@@ -419,6 +419,7 @@ class _PostTileState extends State<PostTile> {
                                 child: const RankingBadge(),
                               ),
                         Container(
+                          padding: const EdgeInsets.only(right: 15),
                           height: double.infinity,
                           color: Colors.white,
                           child: widget.post.user!.uid ==
@@ -477,6 +478,7 @@ class _PostTileState extends State<PostTile> {
                                                     .onDeletePost(
                                                         widget.post.postId);
                                                 Get.back();
+                                                setState(() {});
                                               },
                                               child: const Text('Yes'),
                                             ),
@@ -518,7 +520,8 @@ class _PostTileState extends State<PostTile> {
                                     )
                                   : Padding(
                                       padding: const EdgeInsets.only(
-                                          left: 14, right: 15.0),
+                                        left: 14,
+                                      ),
                                       child: InkWell(
                                         onTap: () {
                                           _showDialog();
@@ -570,6 +573,7 @@ class _PostTileState extends State<PostTile> {
                           children: <Widget>[
                             DetectableText(
                               text: widget.post.title,
+                              trimLength: 100,
                               detectionRegExp: detectionRegExp(hashtag: false)!,
                               detectedStyle: bodyText2.copyWith(
                                 color: Colors.blue,
