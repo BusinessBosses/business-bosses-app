@@ -5,6 +5,8 @@ import 'package:business_bosses_v2/common/widgets/buttons/my_outlined_button.dar
 import 'package:business_bosses_v2/features/courses/controller/course_controller.dart';
 import 'package:business_bosses_v2/features/courses/models/course_model.dart';
 import 'package:business_bosses_v2/features/courses/models/video_link_data.dart';
+import 'package:business_bosses_v2/features/posts/widgets/image_item.dart';
+import 'package:business_bosses_v2/features/posts/widgets/preview.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:file_picker/file_picker.dart';
@@ -299,11 +301,9 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
-                                Text(
-                                  _selectedImage == null
-                                      ? 'Add an image'
-                                      : _selectedImage!.path.split('/').last,
-                                  style: const TextStyle(
+                                const Text(
+                                  'Add an image',
+                                  style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
@@ -317,6 +317,19 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                             ),
                           ),
                         ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        _selectedImage == null
+                            ? Container()
+                            : ImageItem(
+                                file: _selectedImage,
+                                onRemove: () {
+                                  setState(() {
+                                    _selectedImage = null;
+                                  });
+                                },
+                              ),
                         const SizedBox(
                           height: 30,
                         ),
@@ -569,27 +582,8 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                         setState(() {
                           isProcessing = true;
                         });
-                        if (_selectedImage != null) {
-                          dynamic response =
-                              await ApiService.uploadFile(_selectedImage!);
-                          if (response['success']) {
-                            photo = response['fileUrl'];
-                          } else {
-                            showSnackbar(
-                                message: 'Error Uploading Thumbnail!',
-                                error: true);
-                            setState(() {
-                              isProcessing = false;
-                            });
-                            return;
-                          }
-                        }
-                        if (selectedFilePaths.isNotEmpty) {
-                          for (String filePath in selectedFilePaths) {
-                            await courseController.uploadFile(filePath);
-                          }
-                        }
-                        if (title == null || title == '') {
+
+                        if (title == null || title!.isEmpty) {
                           Get.snackbar(
                             'Error',
                             'Title cannot be empty!',
@@ -601,7 +595,8 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                           });
                           return;
                         }
-                        if (description == null || description == '') {
+
+                        if (description == null || description!.isEmpty) {
                           Get.snackbar(
                             'Error',
                             'Description cannot be empty!',
@@ -613,6 +608,7 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                           });
                           return;
                         }
+
                         if (videoLinks.isEmpty && selectedFileNames.isEmpty) {
                           Get.snackbar(
                             'Error',
@@ -625,24 +621,28 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                           });
                           return;
                         }
+
                         if (videoLinks.isNotEmpty &&
-                            _selectedContentType.toString().split('.').last ==
-                                'videos' &&
-                            _selectedContentType.toString().split('.').last ==
-                                'both') {
-                          if (!_validateVideoLinks()) {
-                            Get.snackbar(
-                              'Error',
-                              'Enter a valid link!',
-                              backgroundColor: Colors.redAccent,
-                              colorText: Colors.white,
-                            );
-                            setState(() {
-                              isProcessing = false;
-                            });
-                            return;
-                          }
+                            (_selectedContentType.toString().split('.').last ==
+                                    'videos' ||
+                                _selectedContentType
+                                        .toString()
+                                        .split('.')
+                                        .last ==
+                                    'both') &&
+                            !_validateVideoLinks()) {
+                          Get.snackbar(
+                            'Error',
+                            'Enter a valid link!',
+                            backgroundColor: Colors.redAccent,
+                            colorText: Colors.white,
+                          );
+                          setState(() {
+                            isProcessing = false;
+                          });
+                          return;
                         }
+
                         if (_selectedImage == null) {
                           Get.snackbar(
                             'Error',
@@ -655,6 +655,60 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                           });
                           return;
                         }
+
+                        if (_selectedContentType.toString() ==
+                                'ContentType.files' &&
+                            selectedFilePaths.isEmpty) {
+                          Get.snackbar(
+                            'Error',
+                            'You must upload a file to continue',
+                            backgroundColor: Colors.redAccent,
+                            colorText: Colors.white,
+                          );
+                          setState(() {
+                            isProcessing = false;
+                          });
+                          return;
+                        }
+
+                        if (_selectedContentType.toString() ==
+                                'ContentType.both' &&
+                            selectedFilePaths.isEmpty) {
+                          Get.snackbar(
+                            'Error',
+                            'You must upload a file to continue',
+                            backgroundColor: Colors.redAccent,
+                            colorText: Colors.white,
+                          );
+                          setState(() {
+                            isProcessing = false;
+                          });
+                          return;
+                        }
+
+                        if (_selectedImage != null) {
+                          dynamic response =
+                              await ApiService.uploadFile(_selectedImage!);
+                          if (response['success']) {
+                            photo = response['fileUrl'];
+                          } else {
+                            showSnackbar(
+                              message: 'Error Uploading Thumbnail!',
+                              error: true,
+                            );
+                            setState(() {
+                              isProcessing = false;
+                            });
+                            return;
+                          }
+                        }
+
+                        if (selectedFilePaths.isNotEmpty) {
+                          for (String filePath in selectedFilePaths) {
+                            await courseController.uploadFile(filePath);
+                          }
+                        }
+
                         Map<String, dynamic> course = <String, dynamic>{
                           'title': title,
                           'industryId': widget.industryId,
@@ -676,6 +730,7 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                           'youtubeUrls': _extractYoutubeUrls(),
                           'transcript': _extractTranscripts(),
                         };
+
                         Map<String, dynamic> courseUpdate = <String, dynamic>{
                           'title': title,
                           'industryId': widget.industryId,
@@ -692,10 +747,14 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                           'youtubeUrls': _extractYoutubeUrls(),
                           'transcript': _extractTranscripts(),
                         };
-                        widget.course == null
-                            ? await courseController.createCourse(course)
-                            : await courseController.updateCourse(
-                                courseUpdate, widget.course!.id);
+
+                        if (widget.course == null) {
+                          await courseController.createCourse(course);
+                        } else {
+                          await courseController.updateCourse(
+                              courseUpdate, widget.course!.id);
+                        }
+
                         setState(() {
                           isProcessing = false;
                         });

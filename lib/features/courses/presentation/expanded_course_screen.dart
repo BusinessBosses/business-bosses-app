@@ -164,8 +164,11 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     SvgPicture.asset(
-                                      'assets/svgs/videolink.svg',
+                                      widget.course.contentType == 'videos'
+                                          ? 'assets/svgs/videolink.svg'
+                                          : 'assets/svgs/pdf.svg',
                                       height: 50,
+                                      color: Colors.white,
                                     ),
                                     const SizedBox(height: 10),
                                     GestureDetector(
