@@ -57,6 +57,27 @@ class DonationsController extends GetxController {
     update();
   }
 
+  Future<DonationModel> fetchaDonation(String id) async {
+    var donation;
+    try {
+      loading(true);
+      update();
+      ApiResponseModel response = await ApiService.get(path: 'donation/$id');
+      if (response.success) {
+        donation = DonationModel.fromMap(<String, dynamic>{
+          ...response.data,
+        });
+      }
+      error(false);
+    } catch (e) {
+      error(true);
+    } finally {
+      loading(false);
+    }
+    update();
+    return donation;
+  }
+
   Future<void> fetchDonations() async {
     try {
       loading(true); // Set loading to true before fetching data

@@ -1,5 +1,7 @@
 import 'dart:convert';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
+import 'package:business_bosses_v2/features/donations/controller/donations_controller.dart';
+import 'package:business_bosses_v2/features/donations/models/donations_model.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/live_event/controller/live_event_controller.dart';
 import 'package:business_bosses_v2/features/live_event/models/events_model.dart';
@@ -22,6 +24,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_polls/flutter_polls.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import '../../../action/action.dart';
@@ -62,6 +65,8 @@ class _PostTileState extends State<PostTile> {
   final HomeController homeController = Get.find();
   final LiveController liveController = Get.put(LiveController());
   String? selectedValue;
+  NumberFormat formatter = NumberFormat.compact();
+  DonationsController donationsController = Get.put(DonationsController());
 
   Future<void> connect(String userId) async {
     // ignore: unused_local_variable
@@ -137,6 +142,9 @@ class _PostTileState extends State<PostTile> {
   Widget build(BuildContext context) {
     String? title, roomid, date, starttime, host, photourl, startat, endat;
     int? eventId;
+
+    String? donationtitle, donationid, donationcategoryid, photo;
+    int? targetAmount, amountRecieved;
     // Get the vote counts for each option
     Map<String, int> voteCounts = countVotes(widget.post);
     bool hasVoted = userHasVoted(widget.post, profileController);
@@ -157,17 +165,26 @@ class _PostTileState extends State<PostTile> {
     );
     if (widget.post.livedata != null) {
       try {
-        final jsonData = jsonDecode(widget.post.livedata!.toString());
-        eventId = jsonData['id'];
-        title = jsonData['title'];
-        roomid = jsonData['roomId'];
-
-        date = jsonData['date'];
-        starttime = jsonData['starttime'];
-        host = jsonData['host'];
-        photourl = jsonData['photourl'];
-        startat = jsonData['startat'];
-        endat = jsonData['endat'];
+        if (widget.post.livedata!.toString().contains('roomId')) {
+          final jsonData = jsonDecode(widget.post.livedata!.toString());
+          eventId = jsonData['id'];
+          title = jsonData['title'];
+          roomid = jsonData['roomId'];
+          date = jsonData['date'];
+          starttime = jsonData['starttime'];
+          host = jsonData['host'];
+          photourl = jsonData['photourl'];
+          startat = jsonData['startat'];
+          endat = jsonData['endat'];
+        } else {
+          final jsonData = jsonDecode(widget.post.livedata!.toString());
+          donationid = jsonData['id'];
+          donationtitle = jsonData['title'];
+          donationcategoryid = jsonData['categoryId'];
+          photo = jsonData['photo'] ?? '';
+          targetAmount = jsonData['targetAmount'];
+          amountRecieved = jsonData['amountRecieved'];
+        }
       } catch (e) {}
     } else {}
 
@@ -180,6 +197,13 @@ class _PostTileState extends State<PostTile> {
       startTime: starttime ?? '',
       user: widget.post.user,
     );
+
+    DonationModel donationModel = DonationModel(
+        id: donationid ?? '',
+        categoryId: donationcategoryid ?? '',
+        amountRecieved: amountRecieved ?? 0,
+        targetAmount: targetAmount,
+        images: []);
 
     if (hide == false) {
       final List<PopupMenuEntry<String>> myPopupMore = <PopupMenuEntry<String>>[
@@ -635,24 +659,219 @@ class _PostTileState extends State<PostTile> {
                           ],
                         ),
                       if (widget.post.livedata != null) ...<Widget>[
-                        GestureDetector(
-                          onTap: () {
-                            // Add2Calendar.addEvent2Cal(Event(
-                            //     title: '$title',
-                            //     startDate: DateTime.parse(startat!),
-                            //     endDate: DateTime.parse(endat!)));
-                          },
-                          child: Container(
+                        if (widget.post.livedata!
+                            .toString()
+                            .contains('roomId')) ...{
+                          GestureDetector(
+                            onTap: () {
+                              // Add2Calendar.addEvent2Cal(Event(
+                              //     title: '$title',
+                              //     startDate: DateTime.parse(startat!),
+                              //     endDate: DateTime.parse(endat!)));
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(12),
+                                image: const DecorationImage(
+                                  image: AssetImage(
+                                      'assets/images/liveeventt.png'),
+                                  fit: BoxFit.cover,
+                                ),
+                                // You can also add other properties like boxShadow for a more realistic effect
+                              ),
+                              child: Stack(children: <Widget>[
+                                Padding(
+                                  padding: const EdgeInsets.all(10.0),
+                                  child: Column(
+                                    children: <Widget>[
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: <Widget>[
+                                          Container(
+                                            decoration: BoxDecoration(
+                                              color: Colors.white.withAlpha(70),
+                                              borderRadius:
+                                                  BorderRadius.circular(5),
+                                            ),
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(5.0),
+                                              child: Row(
+                                                children: <Widget>[
+                                                  (DateTime.now().isAfter(DateTime
+                                                              .parse(startat ??
+                                                                  '2023-11-07T10:45:00.000Z')) &&
+                                                          DateTime.now().isBefore(
+                                                              DateTime.parse(endat ??
+                                                                  DateTime.now()
+                                                                      .toIso8601String())))
+                                                      ? Lottie.asset(
+                                                          'assets/anim/liveeventwhite.json',
+                                                          height: 12,
+                                                        )
+                                                      : SvgPicture.asset(
+                                                          'assets/svgs/liveeventt.svg',
+                                                          height: 12,
+                                                          // ignore: deprecated_member_use
+                                                          color: Colors.white,
+                                                        ),
+                                                  const SizedBox(
+                                                    width: 5,
+                                                  ),
+                                                  Text(
+                                                    (DateTime.now().isAfter(
+                                                                DateTime.parse(
+                                                                    startat ??
+                                                                        '2023-11-07T10:45:00.000Z')) &&
+                                                            DateTime.now().isBefore(
+                                                                DateTime.parse(endat ??
+                                                                    DateTime.now()
+                                                                        .toIso8601String())))
+                                                        ? 'Ongoing Live Event'
+                                                        : DateTime.now().isAfter(
+                                                                DateTime.parse(
+                                                                    startat ??
+                                                                        '2023-11-07T10:45:00.000Z'))
+                                                            ? 'Ended event'
+                                                            : 'Upcoming Live event',
+                                                    style: const TextStyle(
+                                                      color: Colors.white,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                          Text(
+                                            'ID: $roomid',
+                                            style: const TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.w900),
+                                          )
+                                        ],
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Text(
+                                          '$title',
+                                          style: const TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.w700),
+                                        ),
+                                      ),
+                                      Center(
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: <Widget>[
+                                            NetworkImageWithPlaceHolder(
+                                              imageUrl: '$photourl',
+                                              height: 25,
+                                              width: 25,
+                                            ),
+                                            const SizedBox(
+                                              width: 10,
+                                            ),
+                                            Text(
+                                              '$host',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.w500,
+                                                  color: Colors.white
+                                                      .withAlpha(200)),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      Text(
+                                        DateTime.now().isAfter(DateTime.parse(
+                                                endat ??
+                                                    DateTime.now()
+                                                        .toIso8601String()))
+                                            ? 'Ended'
+                                            : DateTime.now().isAfter(DateTime
+                                                        .parse(startat ??
+                                                            '2023-11-07T10:45:00.000Z')) &&
+                                                    DateTime.now().isBefore(
+                                                        DateTime.parse(endat ??
+                                                            DateTime.now()
+                                                                .toIso8601String()))
+                                                ? 'Happening now'
+                                                : '$date, $starttime',
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.w700,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                      if (eventId != null)
+                                        AttendeesCountWidget(
+                                          events: homeController.events,
+                                          currentEventId: eventId,
+                                        ),
+                                      isJoinedEvent()
+                                          ? ElevatedButton(
+                                              style: ElevatedButton.styleFrom(
+                                                backgroundColor: Colors.grey,
+                                                foregroundColor: Colors.white,
+                                                minimumSize: const Size(55, 32),
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          12), // Set the border radius
+                                                ),
+                                              ),
+                                              onPressed: () async {
+                                                Get.to(() => AttendanceList(
+                                                      eventId: eventId!,
+                                                    ));
+                                              },
+                                              child: const Text(
+                                                'Attending',
+                                                style: TextStyle(
+                                                  fontSize: 10,
+                                                  fontWeight: FontWeight.w500,
+                                                ),
+                                              ),
+                                            )
+                                          : ElevatedButton(
+                                              onPressed: () async {
+                                                await homeController
+                                                    .attendEvent(event);
+                                                liveController.joined
+                                                    .add(event);
+
+                                                setState(() {});
+                                              },
+                                              child: const Text('Attend'),
+                                            ),
+                                    ],
+                                  ),
+                                ),
+                              ]),
+                            ),
+                          )
+                        } else ...{
+                          Container(
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(12),
                               image: const DecorationImage(
                                 image:
-                                    AssetImage('assets/images/liveeventt.png'),
+                                    AssetImage('assets/images/donationph.png'),
                                 fit: BoxFit.cover,
                               ),
-                              // You can also add other properties like boxShadow for a more realistic effect
                             ),
                             child: Stack(children: <Widget>[
+                              Positioned.fill(
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(12),
+                                    color: Color.fromARGB(255, 0, 0, 0)
+                                        .withOpacity(
+                                            0.5), // Adjust the opacity as needed
+                                  ),
+                                ),
+                              ),
                               Padding(
                                 padding: const EdgeInsets.all(10.0),
                                 child: Column(
@@ -667,46 +886,13 @@ class _PostTileState extends State<PostTile> {
                                             borderRadius:
                                                 BorderRadius.circular(5),
                                           ),
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(5.0),
+                                          child: const Padding(
+                                            padding: EdgeInsets.all(5.0),
                                             child: Row(
                                               children: <Widget>[
-                                                (DateTime.now().isAfter(DateTime
-                                                            .parse(startat ??
-                                                                '2023-11-07T10:45:00.000Z')) &&
-                                                        DateTime.now().isBefore(
-                                                            DateTime.parse(endat ??
-                                                                DateTime.now()
-                                                                    .toIso8601String())))
-                                                    ? Lottie.asset(
-                                                        'assets/anim/liveeventwhite.json',
-                                                        height: 12,
-                                                      )
-                                                    : SvgPicture.asset(
-                                                        'assets/svgs/liveeventt.svg',
-                                                        height: 12,
-                                                        // ignore: deprecated_member_use
-                                                        color: Colors.white,
-                                                      ),
-                                                const SizedBox(
-                                                  width: 5,
-                                                ),
                                                 Text(
-                                                  (DateTime.now().isAfter(DateTime
-                                                              .parse(startat ??
-                                                                  '2023-11-07T10:45:00.000Z')) &&
-                                                          DateTime.now().isBefore(
-                                                              DateTime.parse(endat ??
-                                                                  DateTime.now()
-                                                                      .toIso8601String())))
-                                                      ? 'Ongoing Live Event'
-                                                      : DateTime.now().isAfter(
-                                                              DateTime.parse(
-                                                                  startat ??
-                                                                      '2023-11-07T10:45:00.000Z'))
-                                                          ? 'Ended event'
-                                                          : 'Upcoming Live event',
-                                                  style: const TextStyle(
+                                                  'Ongoing Donation',
+                                                  style: TextStyle(
                                                     color: Colors.white,
                                                   ),
                                                 ),
@@ -714,18 +900,18 @@ class _PostTileState extends State<PostTile> {
                                             ),
                                           ),
                                         ),
-                                        Text(
-                                          'ID: $roomid',
-                                          style: const TextStyle(
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.w900),
-                                        )
+                                        // Text(
+                                        //   'ID: $roomid',
+                                        //   style: const TextStyle(
+                                        //       color: Colors.white,
+                                        //       fontWeight: FontWeight.w900),
+                                        // )
                                       ],
                                     ),
                                     Padding(
                                       padding: const EdgeInsets.all(8.0),
                                       child: Text(
-                                        '$title',
+                                        '$donationtitle',
                                         style: const TextStyle(
                                             color: Colors.white,
                                             fontSize: 18,
@@ -738,7 +924,7 @@ class _PostTileState extends State<PostTile> {
                                             MainAxisAlignment.center,
                                         children: <Widget>[
                                           NetworkImageWithPlaceHolder(
-                                            imageUrl: '$photourl',
+                                            imageUrl: '',
                                             height: 25,
                                             width: 25,
                                           ),
@@ -746,7 +932,7 @@ class _PostTileState extends State<PostTile> {
                                             width: 10,
                                           ),
                                           Text(
-                                            '$host',
+                                            'posted by',
                                             style: TextStyle(
                                                 fontWeight: FontWeight.w500,
                                                 color: Colors.white
@@ -755,71 +941,92 @@ class _PostTileState extends State<PostTile> {
                                         ],
                                       ),
                                     ),
-                                    Text(
-                                      DateTime.now().isAfter(DateTime.parse(
-                                              endat ??
-                                                  DateTime.now()
-                                                      .toIso8601String()))
-                                          ? 'Ended'
-                                          : DateTime.now().isAfter(
-                                                      DateTime.parse(startat ??
-                                                          '2023-11-07T10:45:00.000Z')) &&
-                                                  DateTime.now().isBefore(
-                                                      DateTime.parse(endat ??
-                                                          DateTime.now()
-                                                              .toIso8601String()))
-                                              ? 'Happening now'
-                                              : '$date, $starttime',
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.w700,
-                                        color: Colors.white,
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                    ClipRRect(
+                                      borderRadius: BorderRadius.circular(15),
+                                      child: LinearProgressIndicator(
+                                        value:
+                                            (amountRecieved! / targetAmount!),
+                                        minHeight: 4,
+                                        backgroundColor:
+                                            backgroundcolorinterface
+                                                .withOpacity(0.1),
+                                        valueColor:
+                                            const AlwaysStoppedAnimation<Color>(
+                                                primaryColorLT),
                                       ),
                                     ),
-                                    if (eventId != null)
-                                      AttendeesCountWidget(
-                                        events: homeController.events,
-                                        currentEventId: eventId,
-                                      ),
-                                    isJoinedEvent()
-                                        ? ElevatedButton(
-                                            style: ElevatedButton.styleFrom(
-                                              backgroundColor: Colors.grey,
-                                              foregroundColor: Colors.white,
-                                              minimumSize: const Size(55, 32),
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.circular(
-                                                    12), // Set the border radius
-                                              ),
-                                            ),
-                                            onPressed: () async {
-                                              Get.to(() => AttendanceList(
-                                                    eventId: eventId!,
-                                                  ));
-                                            },
-                                            child: const Text(
-                                              'Attending',
-                                              style: TextStyle(
-                                                fontSize: 10,
-                                                fontWeight: FontWeight.w500,
-                                              ),
-                                            ),
-                                          )
-                                        : ElevatedButton(
-                                            onPressed: () async {
-                                              await homeController
-                                                  .attendEvent(event);
-                                              liveController.joined.add(event);
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        SvgPicture.asset(
+                                          'assets/svgs/coin.svg',
+                                          height: 20,
+                                        ),
+                                        const SizedBox(
+                                          width: 3,
+                                        ),
+                                        Text(
+                                          formatter.format(amountRecieved),
+                                          style: const TextStyle(
+                                              fontSize: 14,
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w700),
+                                        ),
+                                        Text(
+                                          amountRecieved == 1
+                                              ? ' coin raised'
+                                              : ' coins raised',
+                                          style: const TextStyle(
+                                              fontSize: 12,
+                                              color: Colors.white),
+                                        ),
+                                        const Text(
+                                          ' out of ',
+                                          style: TextStyle(
+                                              fontSize: 12,
+                                              color: Colors.white),
+                                        ),
+                                        Text(
+                                          formatter.format(targetAmount!),
+                                          style: const TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w700,
+                                              fontSize: 12),
+                                        ),
+                                        const Text(
+                                          ' Target',
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 12),
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                    ElevatedButton(
+                                      onPressed: () async {
+                                        // await homeController
+                                        //     .attendEvent(event);
+                                        // liveController.joined.add(event);
 
-                                              setState(() {});
-                                            },
-                                            child: const Text('Attend'),
-                                          ),
+                                        // setState(() {});
+                                      },
+                                      child: const Text('Donate'),
+                                    ),
                                   ],
                                 ),
                               ),
                             ]),
                           ),
-                        )
+                        }
                       ],
                       if (widget.post.images?.isNotEmpty ?? false)
                         PostImages(
@@ -1404,6 +1611,10 @@ class _PostTileState extends State<PostTile> {
     }
     // If the event is not found, set currentEvent to null
     return false;
+  }
+
+  Future<DonationModel> _getDonation(String id) async {
+    return await donationsController.fetchaDonation(id);
   }
 }
 
