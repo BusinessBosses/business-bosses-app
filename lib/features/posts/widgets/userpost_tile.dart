@@ -903,28 +903,24 @@ class _PostTileState extends State<PostTile> {
                                           fontWeight: FontWeight.w700),
                                     ),
                                   ),
-                                  Center(
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: <Widget>[
-                                        NetworkImageWithPlaceHolder(
-                                          imageUrl:
-                                              widget.post.donation!.images[0],
-                                          height: 25,
-                                          width: 25,
-                                        ),
-                                        const SizedBox(
-                                          width: 10,
-                                        ),
-                                      ],
+                                  const SizedBox(
+                                    height: 5,
+                                  ),
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(15),
+                                    child: LinearProgressIndicator(
+                                      value: (widget
+                                              .post.donation!.amountRecieved /
+                                          widget.post.donation!.targetAmount!),
+                                      minHeight: 4,
+                                      backgroundColor: Colors.white24,
+                                      valueColor:
+                                          const AlwaysStoppedAnimation<Color>(
+                                              Colors.white),
                                     ),
                                   ),
                                   const SizedBox(
-                                    height: 10,
-                                  ),
-                                  const SizedBox(
-                                    height: 10,
+                                    height: 15,
                                   ),
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
@@ -937,15 +933,26 @@ class _PostTileState extends State<PostTile> {
                                         width: 3,
                                       ),
                                       Text(
-                                        '${widget.post.donation!.amountRecieved} out of ',
+                                        '${formatter.format(widget.post.donation!.amountRecieved)} out of ',
                                         style: const TextStyle(
-                                            fontSize: 12, color: Colors.white),
+                                          fontWeight: FontWeight.w700,
+                                            fontSize: 14, color: Colors.white),
                                       ),
                                       Text(
-                                        widget.post.donation!.targetAmount
+                                        formatter
+                                            .format(widget
+                                                .post.donation!.targetAmount)
                                             .toString(),
                                         style: const TextStyle(
-                                            color: Colors.white, fontSize: 12),
+                                          fontWeight: FontWeight.w700,
+                                            color: Colors.white, fontSize: 14),
+                                      ),
+                                      
+                                      const Text(
+                                        ' Target',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w700,
+                                            color: Colors.white, fontSize: 14),
                                       ),
                                     ],
                                   ),
