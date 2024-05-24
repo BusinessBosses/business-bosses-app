@@ -468,6 +468,7 @@ class _CreateDonationScreenState extends State<CreateDonationScreen> {
                             photo != null ? <String?>[photo] : <dynamic>[],
                         'comments': <CommentModel>[],
                         'likes': <dynamic>[],
+                        'user': profileController.myProfile.toMap(),
                       });
                     }
                     setState(() {

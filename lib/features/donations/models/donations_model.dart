@@ -133,9 +133,11 @@ class DonationModel {
           : null,
       likes: map['likes'] != null ? List<String>.from((map['likes'])) : null,
       coins: map['coins'] != null ? List<String>.from((map['coins'])) : null,
-      comments: List.from(map['comments'])
-          .map((e) => CommentModel.fromMap(e as Map<String, dynamic>))
-          .toList(),
+      comments: map['comments'] != null
+          ? List.from(map['comments'])
+              .map((e) => CommentModel.fromMap(e as Map<String, dynamic>))
+              .toList()
+          : null,
       user: map['user'] != null
           ? UserModel.fromMap(map['user'] as Map<String, dynamic>)
           : null,
@@ -144,9 +146,12 @@ class DonationModel {
       isSuspended: map['isSuspended'] ?? false,
       isCashoutApproved: map['isCashoutApproved'] ?? false,
       images: List<String>.from((map['images'])),
-      transactions: List.from(map['transactions'])
-          .map((t) => DonationTransaction.fromMap(t as Map<String, dynamic>))
-          .toList(),
+      transactions: map['transactions'] != null
+          ? List.from(map['transactions'])
+              .map(
+                  (t) => DonationTransaction.fromMap(t as Map<String, dynamic>))
+              .toList()
+          : null,
     );
   }
 

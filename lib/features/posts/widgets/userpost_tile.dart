@@ -66,7 +66,6 @@ class _PostTileState extends State<PostTile> {
   final LiveController liveController = Get.put(LiveController());
   String? selectedValue;
   NumberFormat formatter = NumberFormat.compact();
-  DonationsController donationsController = Get.put(DonationsController());
 
   Future<void> connect(String userId) async {
     // ignore: unused_local_variable
@@ -142,9 +141,6 @@ class _PostTileState extends State<PostTile> {
   Widget build(BuildContext context) {
     String? title, roomid, date, starttime, host, photourl, startat, endat;
     int? eventId;
-
-    String? donationtitle, donationid, donationcategoryid, photo;
-    int? targetAmount, amountRecieved;
     // Get the vote counts for each option
     Map<String, int> voteCounts = countVotes(widget.post);
     bool hasVoted = userHasVoted(widget.post, profileController);
@@ -178,12 +174,6 @@ class _PostTileState extends State<PostTile> {
           endat = jsonData['endat'];
         } else {
           final jsonData = jsonDecode(widget.post.livedata!.toString());
-          donationid = jsonData['id'];
-          donationtitle = jsonData['title'];
-          donationcategoryid = jsonData['categoryId'];
-          photo = jsonData['photo'] ?? '';
-          targetAmount = jsonData['targetAmount'];
-          amountRecieved = jsonData['amountRecieved'];
         }
       } catch (e) {}
     } else {}
@@ -198,12 +188,7 @@ class _PostTileState extends State<PostTile> {
       user: widget.post.user,
     );
 
-    DonationModel donationModel = DonationModel(
-        id: donationid ?? '',
-        categoryId: donationcategoryid ?? '',
-        amountRecieved: amountRecieved ?? 0,
-        targetAmount: targetAmount,
-        images: []);
+    DonationModel? donationModel = widget.post.donation;
 
     if (hide == false) {
       final List<PopupMenuEntry<String>> myPopupMore = <PopupMenuEntry<String>>[
@@ -661,7 +646,7 @@ class _PostTileState extends State<PostTile> {
                       if (widget.post.livedata != null) ...<Widget>[
                         if (widget.post.livedata!
                             .toString()
-                            .contains('roomId')) ...{
+                            .contains('roomId')) ...<Widget>{
                           GestureDetector(
                             onTap: () {
                               // Add2Calendar.addEvent2Cal(Event(
@@ -851,7 +836,8 @@ class _PostTileState extends State<PostTile> {
                               ]),
                             ),
                           )
-                        } else ...{
+                        },
+                        if (widget.post.donation != null) ...<Widget>{
                           Container(
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(12),
@@ -866,7 +852,7 @@ class _PostTileState extends State<PostTile> {
                                 child: Container(
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(12),
-                                    color: Color.fromARGB(255, 0, 0, 0)
+                                    color: const Color.fromARGB(255, 0, 0, 0)
                                         .withOpacity(
                                             0.5), // Adjust the opacity as needed
                                   ),
@@ -900,18 +886,12 @@ class _PostTileState extends State<PostTile> {
                                             ),
                                           ),
                                         ),
-                                        // Text(
-                                        //   'ID: $roomid',
-                                        //   style: const TextStyle(
-                                        //       color: Colors.white,
-                                        //       fontWeight: FontWeight.w900),
-                                        // )
                                       ],
                                     ),
                                     Padding(
                                       padding: const EdgeInsets.all(8.0),
                                       child: Text(
-                                        '$donationtitle',
+                                        widget.post.donation!.title!,
                                         style: const TextStyle(
                                             color: Colors.white,
                                             fontSize: 18,
@@ -924,19 +904,14 @@ class _PostTileState extends State<PostTile> {
                                             MainAxisAlignment.center,
                                         children: <Widget>[
                                           NetworkImageWithPlaceHolder(
-                                            imageUrl: '',
+                                            imageUrl:
+                                                widget.post.donation!.photo ??
+                                                    '',
                                             height: 25,
                                             width: 25,
                                           ),
                                           const SizedBox(
                                             width: 10,
-                                          ),
-                                          Text(
-                                            'posted by',
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.w500,
-                                                color: Colors.white
-                                                    .withAlpha(200)),
                                           ),
                                         ],
                                       ),
@@ -947,8 +922,10 @@ class _PostTileState extends State<PostTile> {
                                     ClipRRect(
                                       borderRadius: BorderRadius.circular(15),
                                       child: LinearProgressIndicator(
-                                        value:
-                                            (amountRecieved! / targetAmount!),
+                                        value: (widget
+                                                .post.donation!.amountRecieved /
+                                            widget
+                                                .post.donation!.targetAmount!),
                                         minHeight: 4,
                                         backgroundColor:
                                             backgroundcolorinterface
@@ -964,7 +941,7 @@ class _PostTileState extends State<PostTile> {
                                     Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
-                                      children: [
+                                      children: <Widget>[
                                         SvgPicture.asset(
                                           'assets/svgs/coin.svg',
                                           height: 20,
@@ -973,14 +950,17 @@ class _PostTileState extends State<PostTile> {
                                           width: 3,
                                         ),
                                         Text(
-                                          formatter.format(amountRecieved),
+                                          formatter.format(widget
+                                              .post.donation!.amountRecieved),
                                           style: const TextStyle(
                                               fontSize: 14,
                                               color: Colors.white,
                                               fontWeight: FontWeight.w700),
                                         ),
                                         Text(
-                                          amountRecieved == 1
+                                          widget.post.donation!
+                                                      .amountRecieved ==
+                                                  1
                                               ? ' coin raised'
                                               : ' coins raised',
                                           style: const TextStyle(
@@ -994,7 +974,8 @@ class _PostTileState extends State<PostTile> {
                                               color: Colors.white),
                                         ),
                                         Text(
-                                          formatter.format(targetAmount!),
+                                          formatter.format(widget
+                                              .post.donation!.targetAmount!),
                                           style: const TextStyle(
                                               color: Colors.white,
                                               fontWeight: FontWeight.w700,
@@ -1611,10 +1592,6 @@ class _PostTileState extends State<PostTile> {
     }
     // If the event is not found, set currentEvent to null
     return false;
-  }
-
-  Future<DonationModel> _getDonation(String id) async {
-    return await donationsController.fetchaDonation(id);
   }
 }
 
