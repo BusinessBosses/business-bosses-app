@@ -643,7 +643,8 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                           return;
                         }
 
-                        if (_selectedImage == null && _extractYoutubeUrls() == false) {
+                        if (_selectedImage == null &&
+                            _validateytVideoLinks() == false) {
                           Get.snackbar(
                             'Error',
                             'Please add an image for your course',
@@ -910,6 +911,16 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
   bool _validateVideoLinks() {
     for (dynamic videoLink in videoLinks) {
       if (!_isValidUrl(videoLink.url)) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  bool _validateytVideoLinks() {
+    for (dynamic videoLink in videoLinks) {
+      if (!_isValidUrl(videoLink.url) ||
+          !videoLink.url.toString().contains('youtu.be')) {
         return false;
       }
     }
