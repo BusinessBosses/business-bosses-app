@@ -1040,7 +1040,7 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
                   arguments: <String, String?>{
                     'sharemessage': 'Hey there! Support this donation',
                     'title': widget.donation.title,
-                    'donationdata': jsonData,
+                    'donationdata': jsonEncode(widget.donation.toMap()),
                   },
                 ),
                 child: Container(

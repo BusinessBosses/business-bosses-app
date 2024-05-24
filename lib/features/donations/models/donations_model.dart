@@ -101,8 +101,8 @@ class DonationModel {
       'timestamp': timestamp,
       'likes': likes,
       'coins': coins,
-      'comments': comments!.map((CommentModel x) => x.toMap()).toList(),
-      'user': user!.toMap(),
+      'comments': comments?.map((CommentModel x) => x.toMap()).toList() ?? [],
+      'user': user?.toMap() ?? {},
       'views': views,
       'isApproved': isApproved,
       'isSuspended': isSuspended,
@@ -110,7 +110,8 @@ class DonationModel {
       'youtubeUrls': youtubeUrls,
       'images': images,
       'transactions':
-          transactions!.map((DonationTransaction t) => t.toMap()).toList(),
+          transactions?.map((DonationTransaction t) => t.toMap()).toList() ??
+              [],
     };
   }
 
@@ -145,7 +146,7 @@ class DonationModel {
       isApproved: map['isApproved'] ?? false,
       isSuspended: map['isSuspended'] ?? false,
       isCashoutApproved: map['isCashoutApproved'] ?? false,
-      images: List<String>.from((map['images'])),
+      images: map['images'] != null ? List<String>.from(map['images']) : [],
       transactions: map['transactions'] != null
           ? List.from(map['transactions'])
               .map(

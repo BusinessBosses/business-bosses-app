@@ -14,7 +14,7 @@ class PDFScreen extends StatefulWidget {
 }
 
 class _PDFScreenState extends State<PDFScreen> {
-  final _pdfController = PdfController(
+  final PdfController _pdfController = PdfController(
     document: PdfDocument.openData(InternetFile.get(
         'https://github.com/ScerIO/packages.flutter/raw/fd0c92ac83ee355255acb306251b1adfeb2f2fd6/packages/native_pdf_renderer/example/assets/sample.pdf')),
   );

@@ -234,6 +234,27 @@ class CourseController extends GetxController {
     }
   }
 
+  Future<void> payforcourse(String courseid) async {
+    loading(true);
+    update();
+    final ApiResponseModel response = await ApiService.post(
+        path: '/course-transactions',
+        body: <String, dynamic>{
+          'userId': profileController.myProfile.uid,
+          'courseId': courseid,
+          'date': DateTime.now().millisecondsSinceEpoch
+        });
+
+    if (response.success) {
+      Get.snackbar('Success', 'Course purchased successfully');
+    } else {
+      showSnackbar(
+          message: 'An error occurred. Please try again',
+          title: 'O0PS!',
+          error: true);
+    }
+  }
+
   Future<void> fetchuserCourses(String userId) async {
     try {
       loading(true); // Set loading to true before fetching data

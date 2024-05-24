@@ -56,6 +56,7 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
   bool otherfilesview = false;
 
   ProfileController profileController = Get.find();
+  CourseController courseController = Get.find();
   final List<PopupMenuEntry<String>> myPopupMore = <PopupMenuEntry<String>>[
     const PopupMenuItem<String>(
       value: 'Edit',
@@ -259,7 +260,10 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
                                                                 selectedVideo]))
                                                       }
                                                   }
-                                                : {Get.to(PDFScreen(url: 'url'))};
+                                                : {
+                                                    Get.to(
+                                                        PDFScreen(url: 'url'))
+                                                  };
                                           },
                                           child: Container(
                                             padding: const EdgeInsets.symmetric(
@@ -341,19 +345,17 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
                                 const SizedBox(height: 10),
                                 GestureDetector(
                                   onTap: () async {
-                                   
                                     widget.course.contentType == 'videos'
                                         ? {
-                                         
                                             // PDFViewer(document: document)
 
                                             if (await canLaunchUrl(Uri.parse(
                                                 widget.course.youtubeUrls![
                                                     selectedVideo])))
                                               {
-                                                await launchUrl(Uri.parse(widget
-                                                    .course
-                                                    .youtubeUrls![selectedVideo]))
+                                                await launchUrl(Uri.parse(
+                                                    widget.course.youtubeUrls![
+                                                        selectedVideo]))
                                               }
                                           }
                                         : {Get.to(PDFScreen(url: 'url'))};
@@ -1081,15 +1083,8 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
                                           insufficientBalance = true;
                                         });
                                       } else {
-                                        // if (widget.post.user!.uid !=
-                                        //     profileController.myProfile.uid) {
-                                        //   homeController.postCoin(
-                                        //       profileController.myProfile.uid,
-                                        //       widget.post.postId,
-                                        //       profileController,
-                                        //       'post',
-                                        //       widget.post.user!.uid);
-                                        // }
+                                        courseController
+                                            .payforcourse(widget.course.id);
                                       }
                                     },
                                     child: Padding(

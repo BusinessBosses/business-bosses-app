@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
+import 'package:business_bosses_v2/features/donations/models/donations_model.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/posts/repository/post_repository.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
@@ -177,8 +178,14 @@ class CreatePostController extends GetxController {
         final ApiResponseModel response = await PostRepository.createPost(body);
 
         if (response.success) {
-          _homeController.addNewPost(response.data, profileController);
-          profileController.addNewPost(response.data);
+          _homeController.addNewPost(<String, dynamic>{
+            ...response.data,
+            'donation': body['donation'],
+          }, profileController);
+          profileController.addNewPost(<String, dynamic>{
+            ...response.data,
+            'donation': body['donation'],
+          });
 
           if (shouldPromote.value == true) {
             Get.to(() => BoostPost(
@@ -206,10 +213,17 @@ class CreatePostController extends GetxController {
 
           if (response.success) {
             imageFileList.clear();
-            _homeController.addNewPost(response.data, profileController);
-            profileController.addNewPost(response.data);
+            _homeController.addNewPost(<String, dynamic>{
+              ...response.data,
+              'donation': body['donation'],
+            }, profileController);
+            profileController.addNewPost(<String, dynamic>{
+              ...response.data,
+              'donation': body['donation'],
+            });
             // Emit a WebSocket event to notify other users of the new post
-            socket.emit('newPostEvent', <String, String>{'newPost': 'this is the new posts'});
+            socket.emit('newPostEvent',
+                <String, String>{'newPost': 'this is the new posts'});
 
             if (shouldPromote.value == true) {
               Get.to(() => BoostPost(
@@ -241,8 +255,14 @@ class CreatePostController extends GetxController {
 
           if (response.success) {
             imageFileList.clear();
-            _homeController.addNewPost(response.data, profileController);
-            profileController.addNewPost(response.data);
+            _homeController.addNewPost(<String, dynamic>{
+              ...response.data,
+              'donation': body['donation'],
+            }, profileController);
+            profileController.addNewPost(<String, dynamic>{
+              ...response.data,
+              'donation': body['donation'],
+            });
 
             if (shouldPromote.value == true) {
               Get.to(() => BoostPost(

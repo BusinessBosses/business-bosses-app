@@ -44,7 +44,6 @@ class _DonationItemState extends State<DonationItem> {
   final DonationsController donationsController = Get.find();
   List<String> blocked = <String>[];
   NumberFormat formatter = NumberFormat.compact();
-  late DonationModel _donation;
 
   final List<PopupMenuEntry<String>> myPopupMore = <PopupMenuEntry<String>>[
     const PopupMenuItem<String>(
@@ -100,7 +99,6 @@ class _DonationItemState extends State<DonationItem> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _donation = widget.donation;
   }
 
   @override
@@ -798,20 +796,7 @@ class _DonationItemState extends State<DonationItem> {
 
   void _sharePost() {
     Map<String, dynamic> dataa = <String, dynamic>{
-      'id': widget.donation.id,
-      'categoryId': widget.donation.categoryId,
-      'description': widget.donation.description,
-      'targetAmount': widget.donation.targetAmount,
-      'amountRecieved': widget.donation.amountRecieved,
-      'title': widget.donation.title,
-      'youtubeUrls': widget.donation.youtubeUrls,
-      'photo': widget.donation.photo,
-      // 'timestamp': widget.donation.timestamp,
-      // 'host': widget.event.user?.name,
-      // 'photourl': widget.event.user?.photoUrl,
-      // 'startat': widget.event.startAt.toString(),
-      // 'endat': widget.event.endAt.toString(),
-      // 'image': widget.event.image,
+      ...widget.donation.toMap(),
     };
 
     String? jsonData = jsonEncode(dataa);
@@ -879,7 +864,7 @@ class _DonationItemState extends State<DonationItem> {
                         color: textColor,
                         height: 16,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 10,
                       ),
                       const Text(

@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/widgets/buttons/custom_button.dart';
 import 'package:business_bosses_v2/common/widgets/gallery_screen.dart';
 import 'package:business_bosses_v2/common/widgets/text_widget.dart';
+import 'package:business_bosses_v2/features/donations/models/donations_model.dart';
 import 'package:business_bosses_v2/features/posts/controllers/create_post_controller.dart';
 import 'package:business_bosses_v2/features/posts/widgets/preview.dart';
 import 'package:business_bosses_v2/features/posts/widgets/promote_section.dart';
@@ -47,7 +50,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   String? sharemessage;
   String? title;
   String? livedata;
-  String? donationdata;
+  DonationModel? donationModel;
 
   void onDetectionFinished() {
     _overlayEntry?.remove();
@@ -67,7 +70,13 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
     sharemessage = arguments?['sharemessage'];
     title = arguments?['title'];
     livedata = arguments?['livedata'];
-    donationdata = arguments?['donationdata'];
+
+    if (arguments?['donationdata'] != null) {
+      final donationData =
+          jsonDecode(arguments!['donationdata']) as Map<String, dynamic>;
+
+      donationModel = DonationModel.fromMap(donationData);
+    }
 
     if (widget.postId != null) {
       _titleCtrl.text = widget.post!;
@@ -318,14 +327,14 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                           } else {
                             /// Otherwise, create the post
                             if (widget.postId == null) {
-                              // await controller.createPost(<String, dynamic>{
-                              //   'title': _titleCtrl.text.trim(),
-                              //   'ytUrl': _ytUrl,
-                              //   'timestamp':
-                              //       DateTime.now().millisecondsSinceEpoch,
-                              // }, _profileController);
                               await controller.createPost(<String, dynamic>{
-                                'livedata': livedata ?? donationdata,
+                                'livedata': livedata,
+                                'donationId': donationModel != null
+                                    ? donationModel!.id
+                                    : null,
+                                'donation': donationModel != null
+                                    ? donationModel!.toMap()
+                                    : null,
                                 'title': _titleCtrl.text.trim(),
                                 'ytUrl': _ytUrl,
                                 'images': _ytUrl != null && _ytUrl != ''
