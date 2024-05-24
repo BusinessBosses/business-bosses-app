@@ -60,7 +60,6 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
     // Format the duration
     String formattedDifference = formatDuration(difference);
 
-    
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
@@ -1006,12 +1005,12 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
   void _sharePost() {
     Map<String, dynamic> dataa = <String, dynamic>{
       'id': widget.donation.id,
-      'categoryId' : widget.donation.categoryId,
-      'description': widget.donation.description ,
+      'categoryId': widget.donation.categoryId,
+      'description': widget.donation.description,
       'targetAmount': widget.donation.targetAmount,
       'amountRecieved': widget.donation.amountRecieved,
       'title': widget.donation.title,
-      'youtubeUrls': widget.donation.youtubeUrls ,
+      'youtubeUrls': widget.donation.youtubeUrls,
       'photo': widget.donation.photo,
       // 'timestamp': widget.donation.timestamp,
       // 'host': widget.event.user?.name,
@@ -1023,72 +1022,93 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
 
     String? jsonData = jsonEncode(dataa);
 
-    showModalBottomSheet(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-      context: context,
-      backgroundColor: Colors.white,
-      builder: (BuildContext context) => Padding(
-        padding: const EdgeInsets.all(15.0),
-        child: SizedBox(
-          height: 150,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              GestureDetector(
-                onTap: () => Get.toNamed(
-                  Routes.createPost,
-                  arguments: <String, String?>{
-                    'sharemessage': 'Hey there! Support this donation',
-                    'title': widget.donation.title,
-                    'donationdata': jsonEncode(widget.donation.toMap()),
-                  },
-                ),
-                child: Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.symmetric(vertical: 15),
-                  child: Row(
-                    children: [
-                      SvgPicture.asset('assets/svgs/text.svg', color: textColor,),
-                      const SizedBox(width: 10,),
-                      const Text(
-                        'Post on Business Bosses',
-                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+    String message =
+        'Have a look at ${widget.donation.user?.username ?? 'Business Bosses'}\'s donation post on Business Bosses\n'
+        'https://businessbosses.onelink.me/xLWk/36a2ff16';
+    logEvent(widget.donation.id, 'donation');
+
+    widget.donation.user?.uid != profileController.myProfile.uid
+        ? socialShare(message)
+        : showModalBottomSheet(
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+            context: context,
+            backgroundColor: Colors.white,
+            builder: (BuildContext context) => Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: SizedBox(
+                height: 150,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    GestureDetector(
+                      onTap: () => Get.toNamed(
+                        Routes.createPost,
+                        arguments: <String, String?>{
+                          'sharemessage': 'Hey there! Support this donation',
+                          'title': widget.donation.title,
+                          'donationdata': jsonEncode(widget.donation.toMap()),
+                        },
                       ),
-                    ],
-                  ),
+                      child: Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.symmetric(vertical: 15),
+                        child: Row(
+                          children: [
+                            SvgPicture.asset(
+                              'assets/svgs/text.svg',
+                              color: textColor,
+                            ),
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            const Text(
+                              'Post on Business Bosses',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 18),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Container(
+                      height: 1,
+                      color: backgroundColor,
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        String message =
+                            'Have a look at ${widget.donation.user?.username ?? 'Business Bosses'}\'s donation post on Business Bosses\n'
+                            'https://businessbosses.onelink.me/xLWk/36a2ff16';
+                        logEvent(widget.donation.id, 'donation');
+                        socialShare(message);
+                      },
+                      child: Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.symmetric(vertical: 15),
+                        child: Row(
+                          children: [
+                            SvgPicture.asset(
+                              'assets/svgs/share.svg',
+                              color: textColor,
+                              height: 16,
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            const Text(
+                              'Share',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 18),
+                            ),
+                          ],
+                        ),
+                      ),
+                    )
+                  ],
                 ),
               ),
-              Container(
-                height: 1,
-                color: backgroundColor,
-              ),
-              GestureDetector(
-                onTap: () {
-                  String message =
-                      'Have a look at ${widget.donation.user?.username ?? 'Business Bosses'}\'s donation post on Business Bosses\n'
-                      'https://businessbosses.onelink.me/xLWk/36a2ff16';
-                  logEvent(widget.donation.id, 'donation');
-                  socialShare(message);
-                },
-                child: Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.symmetric(vertical: 15),
-                  child: Row(
-                    children: [
-                      SvgPicture.asset('assets/svgs/share.svg',color: textColor, height: 16,),
-                      SizedBox(width: 10,),
-                      const Text(
-                        'Share',
-                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-                      ),
-                    ],
-                  ),
-                ),
-              )
-            ],
-          ),
-        ),
-      ),
-    );
+            ),
+          );
   }
 }
