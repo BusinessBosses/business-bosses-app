@@ -1,3 +1,4 @@
+import 'package:business_bosses_v2/features/courses/controller/course_controller.dart';
 import 'package:business_bosses_v2/features/promotions/widgets/buycoinslist_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -32,6 +33,7 @@ class _UnpaidCoursePopUpState extends State<UnpaidCoursePopUp> {
   ];
   bool insufficientBalance = false;
   ProfileController profileController = Get.find();
+  CourseController courseController = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -84,7 +86,7 @@ class _UnpaidCoursePopUpState extends State<UnpaidCoursePopUp> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
                           NetworkImageWithPlaceHolder(
-                            imageUrl: widget.course.user!.photoUrl!,
+                            imageUrl: widget.course.user?.photoUrl ?? '',
                             radius: 200,
                             width: 25,
                             height: 25,
@@ -145,7 +147,8 @@ class _UnpaidCoursePopUpState extends State<UnpaidCoursePopUp> {
             ElevatedButton(
               onPressed: () {
                 if (num.parse(widget.course.price!) >
-                    num.parse(profileController.myProfile.coinscount.toString())) {
+                    num.parse(
+                        profileController.myProfile.coinscount.toString())) {
                   showSnackbar(
                     title: 'OOPS!',
                     message: 'Insufficient Coin balance, please top up!',
@@ -156,7 +159,7 @@ class _UnpaidCoursePopUpState extends State<UnpaidCoursePopUp> {
                     insufficientBalance = true;
                   });
                 } else {
-                  // Proceed with course purchase
+                  courseController.payforcourse(widget.course.id);
                 }
               },
               child: Padding(
