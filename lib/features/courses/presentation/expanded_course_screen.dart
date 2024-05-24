@@ -341,7 +341,7 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
                                     fontSize: 18, fontWeight: FontWeight.bold),
                               ),
                             ),
-                            widget.course.user!.uid ==
+                            widget.course.user?.uid ==
                                     profileController.myProfile.uid
                                 ? MyPopupMenuButton(
                                     popupItems: myPopupMore,

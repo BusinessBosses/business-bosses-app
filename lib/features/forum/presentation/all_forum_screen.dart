@@ -100,9 +100,8 @@ class _AllForumScreenState extends State<AllForumScreen>
                       setState(() {});
                     },
                     onSubmit: (String query) {
-                      _searchTabController.index == 1
-                          ? controller.searchUsers(query, industry.industryId!)
-                          : controller.searchPosts(query);
+                      controller.searchUsers(query, industry.industryId!);
+                      controller.searchPosts(query);
                       setState(() {});
                     },
                   )
@@ -118,9 +117,8 @@ class _AllForumScreenState extends State<AllForumScreen>
                           setState(() {});
                         },
                         onSubmit: (String query) {
-                          _searchTabController.index == 1
-                              ? courseController.searchUsers(query)
-                              : courseController.searchPosts(query);
+                          courseController.searchUsers(query);
+                          courseController.searchPosts(query);
                           setState(() {});
                         },
                       )

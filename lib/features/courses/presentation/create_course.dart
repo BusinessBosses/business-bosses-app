@@ -643,7 +643,7 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                           return;
                         }
 
-                        if (_selectedImage == null) {
+                        if (_selectedImage == null && _extractYoutubeUrls() == false) {
                           Get.snackbar(
                             'Error',
                             'Please add an image for your course',

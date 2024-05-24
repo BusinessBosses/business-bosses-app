@@ -126,13 +126,11 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                     setState(() {});
                   },
                   onSubmit: (String query) {
-                    _marketplacesearchTabController.index == 2
-                        ? _marketController.searchUsers(query)
-                        : _marketplacesearchTabController.index == 1
-                            ? _marketController.searchServices(query)
-                            : _marketController.searchPosts(
-                                query,
-                              );
+                    _marketController.searchUsers(query);
+                    _marketController.searchServices(query);
+                    _marketController.searchPosts(
+                      query,
+                    );
                     setState(() {});
                   },
                 )

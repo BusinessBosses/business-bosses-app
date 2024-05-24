@@ -14,6 +14,7 @@ import 'package:business_bosses_v2/features/courses/widgets/course_comment_botto
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/posts/presentation/boost_post_screen.dart';
 import 'package:business_bosses_v2/features/posts/widgets/youtube_display.dart';
+import 'package:business_bosses_v2/features/posts/widgets/youtube_display_item.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
@@ -185,9 +186,9 @@ class _CourseItemState extends State<CourseItem> {
                                       const SizedBox(
                                         width: 5,
                                       ),
-                                      Text(
+                                      const Text(
                                         'Files',
-                                        style: const TextStyle(
+                                        style: TextStyle(
                                           fontSize: 9,
                                           color: Colors.white,
                                           fontWeight: FontWeight.w700,
@@ -271,7 +272,8 @@ class _CourseItemState extends State<CourseItem> {
                                             onTap: () {},
                                             child: isValidYoutubeUrl(widget
                                                     .course.youtubeUrls![0])
-                                                ? YoutubeDisplay(
+                                                ?
+                                                 YoutubeDisplayItem(
                                                     widget.course.youtubeUrls !=
                                                             null
                                                         ? widget.course
@@ -461,8 +463,8 @@ class _CourseItemState extends State<CourseItem> {
                                             width: 3,
                                           ),
                                           Text(
-                                            widget.course.averageRating!
-                                                .toStringAsFixed(2),
+                                           widget.course.averageRating != null ? widget.course.averageRating!
+                                                .toStringAsFixed(2) : '0.00',
                                             style: const TextStyle(
                                               fontWeight: FontWeight.bold,
                                               fontSize: 13,
@@ -533,7 +535,7 @@ class _CourseItemState extends State<CourseItem> {
                       ],
                     ),
                   ),
-                  widget.course.user!.uid == profileController.myProfile.uid
+                  widget.course.user?.uid == profileController.myProfile.uid
                       ? MyPopupMenuButton(
                           popupItems: myPopupMore,
                           icon: const Icon(
