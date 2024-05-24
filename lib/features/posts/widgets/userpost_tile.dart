@@ -141,6 +141,7 @@ class _PostTileState extends State<PostTile> {
   Widget build(BuildContext context) {
     String? title, roomid, date, starttime, host, photourl, startat, endat;
     int? eventId;
+    
     // Get the vote counts for each option
     Map<String, int> voteCounts = countVotes(widget.post);
     bool hasVoted = userHasVoted(widget.post, profileController);
@@ -173,7 +174,8 @@ class _PostTileState extends State<PostTile> {
           startat = jsonData['startat'];
           endat = jsonData['endat'];
         } else {
-          final jsonData = jsonDecode(widget.post.livedata!.toString());
+          final jsonData = jsonDecode(widget.post.donation!.toString());
+          title = jsonData['title'];
         }
       } catch (e) {}
     } else {}
@@ -187,8 +189,6 @@ class _PostTileState extends State<PostTile> {
       startTime: starttime ?? '',
       user: widget.post.user,
     );
-
-    DonationModel? donationModel = widget.post.donation;
 
     if (hide == false) {
       final List<PopupMenuEntry<String>> myPopupMore = <PopupMenuEntry<String>>[
@@ -837,178 +837,172 @@ class _PostTileState extends State<PostTile> {
                             ),
                           )
                         },
-                        if (widget.post.donation != null) ...<Widget>{
-                          Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(12),
-                              image: const DecorationImage(
-                                image:
-                                    AssetImage('assets/images/donationph.png'),
-                                fit: BoxFit.cover,
-                              ),
+                      ],
+                      if (title == null) ...<Widget>{
+                        Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12),
+                            image: const DecorationImage(
+                              image: AssetImage('assets/images/donationph.png'),
+                              fit: BoxFit.cover,
                             ),
-                            child: Stack(children: <Widget>[
-                              Positioned.fill(
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(12),
-                                    color: const Color.fromARGB(255, 0, 0, 0)
-                                        .withOpacity(
-                                            0.5), // Adjust the opacity as needed
-                                  ),
+                          ),
+                          child: Stack(children: <Widget>[
+                            Positioned.fill(
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(12),
+                                  color: const Color.fromARGB(255, 0, 0, 0)
+                                      .withOpacity(
+                                          0.5), // Adjust the opacity as needed
                                 ),
                               ),
-                              Padding(
-                                padding: const EdgeInsets.all(10.0),
-                                child: Column(
-                                  children: <Widget>[
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: <Widget>[
-                                        Container(
-                                          decoration: BoxDecoration(
-                                            color: Colors.white.withAlpha(70),
-                                            borderRadius:
-                                                BorderRadius.circular(5),
-                                          ),
-                                          child: const Padding(
-                                            padding: EdgeInsets.all(5.0),
-                                            child: Row(
-                                              children: <Widget>[
-                                                Text(
-                                                  'Ongoing Donation',
-                                                  style: TextStyle(
-                                                    color: Colors.white,
-                                                  ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: Column(
+                                children: <Widget>[
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: <Widget>[
+                                      Container(
+                                        decoration: BoxDecoration(
+                                          color: Colors.white.withAlpha(70),
+                                          borderRadius:
+                                              BorderRadius.circular(5),
+                                        ),
+                                        child: const Padding(
+                                          padding: EdgeInsets.all(5.0),
+                                          child: Row(
+                                            children: <Widget>[
+                                              Text(
+                                                'Ongoing Donation',
+                                                style: TextStyle(
+                                                  color: Colors.white,
                                                 ),
-                                              ],
-                                            ),
+                                              ),
+                                            ],
                                           ),
                                         ),
-                                      ],
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Text(
-                                        widget.post.donation!.title!,
-                                        style: const TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.w700),
                                       ),
+                                    ],
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      widget.post.donation?.title ?? '',
+                                      style: const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.w700),
                                     ),
-                                    Center(
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: <Widget>[
-                                          NetworkImageWithPlaceHolder(
-                                            imageUrl:
-                                                widget.post.donation!.photo ??
-                                                    '',
-                                            height: 25,
-                                            width: 25,
-                                          ),
-                                          const SizedBox(
-                                            width: 10,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      height: 10,
-                                    ),
-                                    ClipRRect(
-                                      borderRadius: BorderRadius.circular(15),
-                                      child: LinearProgressIndicator(
-                                        value: (widget
-                                                .post.donation!.amountRecieved /
-                                            widget
-                                                .post.donation!.targetAmount!),
-                                        minHeight: 4,
-                                        backgroundColor:
-                                            backgroundcolorinterface
-                                                .withOpacity(0.1),
-                                        valueColor:
-                                            const AlwaysStoppedAnimation<Color>(
-                                                primaryColorLT),
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      height: 10,
-                                    ),
-                                    Row(
+                                  ),
+                                  Center(
+                                    child: Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
                                       children: <Widget>[
-                                        SvgPicture.asset(
-                                          'assets/svgs/coin.svg',
-                                          height: 20,
+                                        NetworkImageWithPlaceHolder(
+                                          imageUrl: '',
+                                          height: 25,
+                                          width: 25,
                                         ),
                                         const SizedBox(
-                                          width: 3,
-                                        ),
-                                        Text(
-                                          formatter.format(widget
-                                              .post.donation!.amountRecieved),
-                                          style: const TextStyle(
-                                              fontSize: 14,
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.w700),
-                                        ),
-                                        Text(
-                                          widget.post.donation!
-                                                      .amountRecieved ==
-                                                  1
-                                              ? ' coin raised'
-                                              : ' coins raised',
-                                          style: const TextStyle(
-                                              fontSize: 12,
-                                              color: Colors.white),
-                                        ),
-                                        const Text(
-                                          ' out of ',
-                                          style: TextStyle(
-                                              fontSize: 12,
-                                              color: Colors.white),
-                                        ),
-                                        Text(
-                                          formatter.format(widget
-                                              .post.donation!.targetAmount!),
-                                          style: const TextStyle(
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.w700,
-                                              fontSize: 12),
-                                        ),
-                                        const Text(
-                                          ' Target',
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 12),
+                                          width: 10,
                                         ),
                                       ],
                                     ),
-                                    const SizedBox(
-                                      height: 10,
-                                    ),
-                                    ElevatedButton(
-                                      onPressed: () async {
-                                        // await homeController
-                                        //     .attendEvent(event);
-                                        // liveController.joined.add(event);
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  // ClipRRect(
+                                  //   borderRadius: BorderRadius.circular(15),
+                                  //   child: LinearProgressIndicator(
+                                  //     value: (widget
+                                  //             .post.donation!.amountRecieved /
+                                  //         widget
+                                  //             .post.donation!.targetAmount!),
+                                  //     minHeight: 4,
+                                  //     backgroundColor:
+                                  //         backgroundcolorinterface
+                                  //             .withOpacity(0.1),
+                                  //     valueColor:
+                                  //         const AlwaysStoppedAnimation<Color>(
+                                  //             primaryColorLT),
+                                  //   ),
+                                  // ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: <Widget>[
+                                      SvgPicture.asset(
+                                        'assets/svgs/coin.svg',
+                                        height: 20,
+                                      ),
+                                      const SizedBox(
+                                        width: 3,
+                                      ),
+                                      // Text(
+                                      //   formatter.format(widget
+                                      //       .post.donation!.amountRecieved),
+                                      //   style: const TextStyle(
+                                      //       fontSize: 14,
+                                      //       color: Colors.white,
+                                      //       fontWeight: FontWeight.w700),
+                                      // ),
+                                      // Text(
+                                      //   widget.post.donation!
+                                      //               .amountRecieved ==
+                                      //           1
+                                      //       ? ' coin raised'
+                                      //       : ' coins raised',
+                                      //   style: const TextStyle(
+                                      //       fontSize: 12,
+                                      //       color: Colors.white),
+                                      // ),
+                                      const Text(
+                                        ' out of ',
+                                        style: TextStyle(
+                                            fontSize: 12, color: Colors.white),
+                                      ),
+                                      // Text(
+                                      //   formatter.format(widget
+                                      //       .post.donation!.targetAmount!),
+                                      //   style: const TextStyle(
+                                      //       color: Colors.white,
+                                      //       fontWeight: FontWeight.w700,
+                                      //       fontSize: 12),
+                                      // ),
+                                      const Text(
+                                        ' Target',
+                                        style: TextStyle(
+                                            color: Colors.white, fontSize: 12),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  ElevatedButton(
+                                    onPressed: () async {
+                                      // await homeController
+                                      //     .attendEvent(event);
+                                      // liveController.joined.add(event);
 
-                                        // setState(() {});
-                                      },
-                                      child: const Text('Donate'),
-                                    ),
-                                  ],
-                                ),
+                                      // setState(() {});
+                                    },
+                                    child: const Text('Donate'),
+                                  ),
+                                ],
                               ),
-                            ]),
-                          ),
-                        }
-                      ],
+                            ),
+                          ]),
+                        ),
+                      },
                       if (widget.post.images?.isNotEmpty ?? false)
                         PostImages(
                           post: widget.post,
