@@ -115,22 +115,15 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
                             ? Searchbar(
                                 hintText: 'Search',
                                 onChange: (String query) {
-                                  if (_searchTabController.index == 0) {
-                                    controller.onSearch(
-                                        _searchTabController.index, query);
-                                  } else {
-                                    controller.onSearch(
-                                        _searchTabController.index, query);
+                                  if (query.isEmpty) {
+                                    controller.clearIIndustriesSearch();
+                                    controller.clearIndustriesPostSearch();
                                   }
+                                  setState(() {});
                                 },
                                 onSubmit: (String query) {
-                                  if (_searchTabController.index == 0) {
-                                    controller.onSearch(
-                                        _searchTabController.index, query);
-                                  } else {
-                                    controller.onSearch(
-                                        _searchTabController.index, query);
-                                  }
+                                  controller.onsearchIndustries(query);
+                                  controller.onsearchPosts(query);
                                 },
                               )
                             : _isSearchingDonations &&
@@ -140,11 +133,8 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
                                         'Search Donations Members or Posts',
                                     onChange: (String query) {
                                       if (query.isEmpty) {
-                                        _donationsearchTabController.index == 1
-                                            ? donationsController
-                                                .clearUserSearch()
-                                            : donationsController
-                                                .clearPostSearch();
+                                        donationsController.clearUserSearch();
+                                        donationsController.clearPostSearch();
                                       }
                                       setState(() {});
                                     },
