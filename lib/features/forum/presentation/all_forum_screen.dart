@@ -3,8 +3,8 @@
 import 'package:business_bosses_v2/features/courses/controller/course_controller.dart';
 import 'package:business_bosses_v2/features/courses/models/course_model.dart';
 import 'package:business_bosses_v2/features/courses/presentation/courses.dart';
-import 'package:business_bosses_v2/features/courses/presentation/filtercoursesposts.dart';
-import 'package:business_bosses_v2/features/courses/presentation/filtercoursesusers.dart';
+import 'package:business_bosses_v2/features/courses/widgets/filtercoursesposts.dart';
+import 'package:business_bosses_v2/features/courses/widgets/filtercoursesusers.dart';
 import 'package:business_bosses_v2/features/forum/controller/bossup_controller.dart';
 import 'package:business_bosses_v2/features/forum/controller/forum_controller.dart';
 import 'package:business_bosses_v2/features/forum/presentation/filterchallengeposts.dart';

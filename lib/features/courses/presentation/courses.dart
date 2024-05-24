@@ -1,9 +1,9 @@
 import 'package:business_bosses_v2/features/courses/controller/course_controller.dart';
 import 'package:business_bosses_v2/features/courses/models/course_model.dart';
-import 'package:business_bosses_v2/features/courses/presentation/coursespopup.dart';
+import 'package:business_bosses_v2/features/courses/widgets/coursespopup.dart';
 import 'package:business_bosses_v2/features/courses/presentation/create_course.dart';
 import 'package:business_bosses_v2/features/forum/models/industry.dart';
-import 'package:business_bosses_v2/features/courses/presentation/course_item.dart';
+import 'package:business_bosses_v2/features/courses/widgets/course_item.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
@@ -32,14 +32,13 @@ class _CoursesPageState extends State<CoursesPage> {
   late Industry industry;
   final CourseController courseController = Get.put(CourseController());
 
-   List<String> get preferenceslist => <String>[
+  List<String> get preferenceslist => <String>[
         'All Courses',
         'Free Courses',
         'Paid Courses',
         'Free Course Bundles',
         'Paid Course Bundles',
       ];
-
 
   @override
   void initState() {
