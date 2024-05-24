@@ -47,6 +47,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   String? sharemessage;
   String? title;
   String? livedata;
+  String? donationdata;
 
   void onDetectionFinished() {
     _overlayEntry?.remove();
@@ -66,6 +67,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
     sharemessage = arguments?['sharemessage'];
     title = arguments?['title'];
     livedata = arguments?['livedata'];
+    donationdata = arguments?['donationdata'];
 
     if (widget.postId != null) {
       _titleCtrl.text = widget.post!;
@@ -323,7 +325,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                               //       DateTime.now().millisecondsSinceEpoch,
                               // }, _profileController);
                               await controller.createPost(<String, dynamic>{
-                                'livedata': livedata,
+                                'livedata': livedata ?? donationdata,
                                 'title': _titleCtrl.text.trim(),
                                 'ytUrl': _ytUrl,
                                 'images': _ytUrl != null && _ytUrl != ''

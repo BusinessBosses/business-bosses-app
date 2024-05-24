@@ -149,11 +149,8 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
                                       setState(() {});
                                     },
                                     onSubmit: (String query) {
-                                      _donationsearchTabController.index == 1
-                                          ? donationsController
-                                              .searchUsers(query)
-                                          : donationsController
-                                              .searchPosts(query);
+                                      donationsController.searchUsers(query);
+                                      donationsController.searchPosts(query);
                                       setState(() {});
                                     },
                                   )

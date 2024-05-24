@@ -133,7 +133,7 @@ class _DepositsScreenState extends State<DepositsScreen> {
                                                                 FontWeight.bold,
                                                             fontSize: 18),
                                                       ),
-                                                      Text('Promotional Text')
+                                                      // Text('Promotional Text')
                                                     ],
                                                   ),
                                                 ),
