@@ -84,7 +84,7 @@ class _UnpaidCoursePopUpState extends State<UnpaidCoursePopUp> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
                           NetworkImageWithPlaceHolder(
-                            imageUrl: widget.course.user!.photoUrl!,
+                            imageUrl: widget.course.user!.photoUrl ?? '',
                             radius: 200,
                             width: 25,
                             height: 25,
