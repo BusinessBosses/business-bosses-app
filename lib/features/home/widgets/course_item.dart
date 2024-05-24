@@ -13,6 +13,7 @@ import 'package:business_bosses_v2/features/courses/widgets/course_comment_botto
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/posts/presentation/boost_post_screen.dart';
 import 'package:business_bosses_v2/features/posts/widgets/youtube_display.dart';
+import 'package:business_bosses_v2/features/posts/widgets/youtube_display_item.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
@@ -265,7 +266,7 @@ class _CourseItemState extends State<CourseItem> {
                                             onTap: () {},
                                             child: isValidYoutubeUrl(widget
                                                     .course.youtubeUrls![0])
-                                                ? YoutubeDisplay(
+                                                ? YoutubeDisplayItem(
                                                     widget.course.youtubeUrls !=
                                                             null
                                                         ? widget.course
