@@ -405,15 +405,15 @@ class _AllForumScreenState extends State<AllForumScreen>
         'All Courses',
         'Free Courses',
         'Paid Courses',
-        'Free Course Bundles',
-        'Paid Course Bundles',
+        // 'Free Course Bundles',
+        // 'Paid Course Bundles',
       ];
 
   List<String> get preferencesnumber => <String>[
         ' (${courseController.courses.length})',
         ' (${courseController.courses.where((CourseModel course) => course.courseType == 'free').length})',
         ' (${courseController.courses.where((CourseModel course) => course.courseType == 'paid').length})',
-        ' (${courseController.courses.where((CourseModel course) => course.courseType == 'free' && course.youtubeUrls!.length > 1).length})',
-        ' (${courseController.courses.where((CourseModel course) => course.courseType == 'paid' && course.youtubeUrls!.length > 1).length})',
+        // ' (${courseController.courses.where((CourseModel course) => course.courseType == 'free' && course.youtubeUrls!.length > 1).length})',
+        // ' (${courseController.courses.where((CourseModel course) => course.courseType == 'paid' && course.youtubeUrls!.length > 1).length})',
       ];
 }
