@@ -116,8 +116,8 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
   @override
   Widget build(BuildContext context) {
     ScrollController scrollController = ScrollController();
-    final List<String> urlslist = widget.course.youtubeUrls ?? [];
-    final List<String> fileslist = widget.course.documents ?? [];
+    final List<String> urlslist = widget.course.youtubeUrls ?? <String>[];
+    final List<String> fileslist = widget.course.documents ?? <String>[];
     List<String> combinedList = List.from(urlslist)..addAll(fileslist);
     return Scaffold(
       backgroundColor: Colors.white,
@@ -148,7 +148,7 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
                   child: Stack(
                     children: <Widget>[
                       widget.course.youtubeUrls == null
-                          ? Stack(children: [
+                          ? Stack(children: <Widget>[
                               NetworkImageWithPlaceHolder(
                                 imageUrl: widget.course.thumbnail ?? '',
                                 height: 300,
@@ -167,7 +167,7 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
                                 bottom: 0,
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
+                                  children: <Widget>[
                                     SvgPicture.asset(
                                       widget.course.contentType == 'videos'
                                           ? 'assets/svgs/videolink.svg'
@@ -180,7 +180,9 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
                                       onTap: () async {
                                         widget.course.contentType == 'videos'
                                             ? {}
-                                            : {Get.to(PDFScreen(url: 'url'))};
+                                            : <Future?>{
+                                                Get.to(PDFScreen(url: 'url'))
+                                              };
                                       },
                                       child: Container(
                                         padding: const EdgeInsets.symmetric(
@@ -217,7 +219,7 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
                                   widget.course.youtubeUrls![selectedVideo],
                                   corner: BorderRadius.circular(0),
                                 )
-                              : Stack(children: [
+                              : Stack(children: <Widget>[
                                   NetworkImageWithPlaceHolder(
                                     imageUrl: widget.course.thumbnail ?? '',
                                     height: 300,
@@ -237,7 +239,7 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
                                     child: Column(
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
-                                      children: [
+                                      children: <Widget>[
                                         SvgPicture.asset(
                                           'assets/svgs/videolink.svg',
                                           height: 50,
@@ -247,12 +249,12 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
                                           onTap: () async {
                                             widget.course.contentType ==
                                                     'videos'
-                                                ? {
+                                                ? <Set<bool>>{
                                                     if (await canLaunchUrl(
                                                         Uri.parse(widget.course
                                                                 .youtubeUrls![
                                                             selectedVideo])))
-                                                      {
+                                                      <bool>{
                                                         await launchUrl(
                                                             Uri.parse(widget
                                                                     .course
@@ -260,9 +262,10 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
                                                                 selectedVideo]))
                                                       }
                                                   }
-                                                : {
-                                                    Get.to(
-                                                        PDFScreen(url: 'url'))
+                                                : <Future?>{
+                                                    Get.to(PDFScreen(
+                                                        url: widget.course
+                                                            .documents![0]))
                                                   };
                                           },
                                           child: Container(
@@ -308,7 +311,7 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
                               ),
                             );
                           },
-                          child: Stack(children: [
+                          child: Stack(children: <Widget>[
                             Container(
                               color: Colors.transparent,
                               height: 200,
@@ -318,7 +321,7 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
                       ),
                       Visibility(
                         visible: otherfilesview,
-                        child: Stack(children: [
+                        child: Stack(children: <Widget>[
                           NetworkImageWithPlaceHolder(
                             imageUrl: widget.course.thumbnail ?? '',
                             height: 300,
@@ -337,7 +340,7 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
                             bottom: 0,
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
+                              children: <Widget>[
                                 SvgPicture.asset(
                                   'assets/svgs/videolink.svg',
                                   height: 50,
@@ -346,19 +349,23 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
                                 GestureDetector(
                                   onTap: () async {
                                     widget.course.contentType == 'videos'
-                                        ? {
+                                        ? <Set<bool>>{
                                             // PDFViewer(document: document)
 
                                             if (await canLaunchUrl(Uri.parse(
                                                 widget.course.youtubeUrls![
                                                     selectedVideo])))
-                                              {
+                                              <bool>{
                                                 await launchUrl(Uri.parse(
                                                     widget.course.youtubeUrls![
                                                         selectedVideo]))
                                               }
                                           }
-                                        : {Get.to(PDFScreen(url: 'url'))};
+                                        : <Future?>{
+                                            Get.to(PDFScreen(
+                                                url: widget
+                                                    .course.documents![0]))
+                                          };
                                   },
                                   child: Container(
                                     padding: const EdgeInsets.symmetric(
@@ -890,7 +897,7 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
                                   height: 90,
                                   child: ListView.builder(
                                       scrollDirection: Axis.horizontal,
-                                      itemCount: combinedList!.length,
+                                      itemCount: combinedList.length,
                                       itemBuilder:
                                           (BuildContext context, int index) {
                                         return Row(
@@ -925,7 +932,7 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
                                                               )
                                                             : Center(
                                                                 child: Stack(
-                                                                  children: [
+                                                                  children: <Widget>[
                                                                     NetworkImageWithPlaceHolder(
                                                                       imageUrl:
                                                                           widget.course.thumbnail ??
