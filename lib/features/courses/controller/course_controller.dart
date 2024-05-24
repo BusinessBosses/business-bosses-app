@@ -95,6 +95,10 @@ class CourseController extends GetxController {
           CourseModel.fromMap(<String, dynamic>{
             ...course,
             'id': response.data['id'],
+            'coins': <String>[],
+            'likes': <String>[],
+            'comments': <CommentModel>[],
+            'user': profileController.myProfile.toMap()
           }));
       Get.back();
       Get.snackbar('Success', 'Course created successfully');
@@ -263,7 +267,7 @@ class CourseController extends GetxController {
   }
 
   Future<void> searchUsers(String query) async {
-   loadingSearch(true);
+    loadingSearch(true);
     update();
 
     searchedUsers.clear();

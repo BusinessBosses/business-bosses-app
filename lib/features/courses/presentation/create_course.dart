@@ -48,6 +48,7 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
   ContentType _selectedContentType = ContentType.videos;
   File? _selectedImage;
   String? photo;
+  bool _isCustomPriceSelected = false;
 
   List<Map<String, dynamic>> types = <Map<String, dynamic>>[
     <String, dynamic>{
@@ -510,7 +511,11 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                                   if (newValue != null) {
                                     if (newValue != -1) {
                                       _courseprice = newValue;
-                                    } else {}
+                                      _isCustomPriceSelected = false;
+                                    } else {
+                                      _courseprice = null;
+                                      _isCustomPriceSelected = true;
+                                    }
                                   }
                                 });
                               },
@@ -535,6 +540,26 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                       ),
                     ),
                   ),
+                  if (_paidCourse && _isCustomPriceSelected)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 9, vertical: 10),
+                      child: TextField(
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          labelText: 'Custom Price',
+                          hintText: 'Enter price in coins',
+                        ),
+                        keyboardType: TextInputType.number,
+                        onChanged: (String value) {
+                          setState(() {
+                            _courseprice = int.parse(value);
+                          });
+                        },
+                      ),
+                    ),
                   const SizedBox(
                     height: 30,
                   ),
@@ -956,15 +981,6 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
     }
   }
 
-  // bool _isValidYoutubeUrl(String url) {
-  //   final RegExp youtubeRegExp = RegExp(
-  //     r'^(https?\:\/\/)?(www\.youtube\.com\/watch\?v=|youtu\.be\/).+$',
-  //     caseSensitive: false,
-  //     multiLine: false,
-  //   );
-  //   return youtubeRegExp.hasMatch(url);
-  // }
-
   Widget buildAddButton() {
     return GestureDetector(
       onTap: () {
@@ -1004,63 +1020,3 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
     );
   }
 }
-
-// /// Coursetype CARD
-// class CourseTypeSelect extends StatelessWidget {
-//   /// CONSTRUCTOR
-//   const CourseTypeSelect({
-//     Key? key,
-//     required this.type,
-//     required this.activetype,
-//     required this.onTap,
-//   }) : super(key: key);
-//   final String type;
-//   final String activetype;
-//   final Function(String) onTap;
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return GestureDetector(
-//       onTap: () {
-    
-//         // print(activetype);
-//       },
-//       child: Container(
-//         margin: const EdgeInsets.symmetric(vertical: 15),
-//         padding: const EdgeInsets.all(15.0),
-//         decoration: BoxDecoration(
-//           color: Colors.white,
-//           border: Border.all(
-//             color:  const Color.fromRGBO(0, 0, 0, 0.0530),
-//             width: 3,
-//           ),
-//           borderRadius: BorderRadius.circular(13),
-//         ),
-//         child: Column(
-//           crossAxisAlignment: CrossAxisAlignment.start,
-//           children: <Widget>[
-//             Row(
-//               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//               children: <Widget>[
-               
-//                   const CircleAvatar(
-//                     radius: 9,
-//                     backgroundColor: Color(0xFFF01C29),
-//                     child: CircleAvatar(
-//                       radius: 5,
-//                       backgroundColor: Colors.white,
-//                     ),
-//                   ),
-//                 TextWidget(
-//                   text: 'llnln',
-//                   size: 15,
-//                   fontWeight: FontWeight.w700,
-//                 ),
-//               ],
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
