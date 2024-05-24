@@ -46,6 +46,54 @@ class _BossupChallengeState extends State<BossupChallenge> {
                 final Industry category = controller.categories[index];
                 return GestureDetector(
                   onTap: () {
+                    DateTime now = DateTime.now();
+                    if (category.startAt != null &&
+                        now.isBefore(category.startAt!)) {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: const Text(
+                              'How It Works!',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                decoration: TextDecoration.underline,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                            content: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: <Widget>[
+                                Text(
+                                  category.criteria!,
+                                  textAlign: TextAlign.center,
+                                ),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                Text(
+                                  _calculateStartDate(category.startAt!),
+                                  style: const TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ],
+                            ),
+                            actions: <Widget>[
+                              TextButton(
+                                child: const Text('OK'),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                      return;
+                    }
                     Get.to(() => BossUpSection(
                           industry: category,
                           bossUp: controller.categories[0],
@@ -147,10 +195,7 @@ class _BossupChallengeState extends State<BossupChallenge> {
                                           category.industry ==
                                                   'Boss Up Challenge '
                                               ? 'Every Monday'
-                                              : category.endedAt != null
-                                                  ? _calculateEndsDate(
-                                                      category.endedAt!)
-                                                  : 'Ends',
+                                              : _getChallengeStatus(category),
                                           style: const TextStyle(
                                               color: Colors.grey,
                                               fontWeight: FontWeight.w700),
@@ -168,22 +213,7 @@ class _BossupChallengeState extends State<BossupChallenge> {
                                         borderRadius: BorderRadius.circular(
                                             20), // Adjust the radius as needed
                                       ),
-                                      child: category.endedAt != null
-                                          ? Text(
-                                              _calculateTimeLeft(
-                                                  category.endedAt!),
-                                              style: const TextStyle(
-                                                  color: Colors.black54,
-                                                  fontSize: 12,
-                                                  fontWeight: FontWeight.w700),
-                                            )
-                                          : const Text(
-                                              'Ongoing',
-                                              style: TextStyle(
-                                                  color: Colors.black54,
-                                                  fontSize: 12,
-                                                  fontWeight: FontWeight.w700),
-                                            ),
+                                      child: _getChallengeTimeLeft(category),
                                     ),
                                   ],
                                 )
@@ -216,9 +246,69 @@ class _BossupChallengeState extends State<BossupChallenge> {
     }
   }
 
+  Widget _getChallengeTimeLeft(Industry category) {
+    DateTime now = DateTime.now();
+    if (category.startAt != null && now.isBefore(category.startAt!)) {
+      return Text(
+        _calculateTimeLeftToStart(category.startAt!),
+        style: const TextStyle(
+          color: Colors.black54,
+          fontSize: 12,
+          fontWeight: FontWeight.w700,
+        ),
+      );
+    } else if (category.endedAt != null) {
+      return Text(
+        _calculateTimeLeft(category.endedAt!),
+        style: const TextStyle(
+          color: Colors.black54,
+          fontSize: 12,
+          fontWeight: FontWeight.w700,
+        ),
+      );
+    } else {
+      return const Text(
+        'Ongoing',
+        style: TextStyle(
+          color: Colors.black54,
+          fontSize: 12,
+          fontWeight: FontWeight.w700,
+        ),
+      );
+    }
+  }
+
+  String _calculateTimeLeftToStart(DateTime startTime) {
+    DateTime now = DateTime.now();
+    Duration difference = startTime.difference(now);
+
+    if (difference.inDays > 0) {
+      return "Starts in ${difference.inDays} day${difference.inDays > 1 ? 's' : ''}";
+    } else {
+      return 'Starts in 1 day';
+    }
+  }
+
   String _calculateEndsDate(DateTime endedAt) {
     // Format the endedAt date using DateFormat
     String formattedDate = DateFormat('d MMM').format(endedAt);
     return 'Ends $formattedDate';
+  }
+
+  String _calculateStartDate(DateTime startAt) {
+    // Format the endedAt date using DateFormat
+    String formattedDate = DateFormat('d MMM').format(startAt);
+    return 'Starts $formattedDate';
+  }
+
+  String _getChallengeStatus(Industry category) {
+    DateTime now = DateTime.now();
+    if (category.startAt != null && now.isBefore(category.startAt!)) {
+      return _calculateStartDate(category.startAt!);
+    } else if (category.endedAt != null) {
+      return _calculateEndsDate(category.endedAt!);
+    } else {
+      return 'Ends';
+    }
   }
 }

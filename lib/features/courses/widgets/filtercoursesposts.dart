@@ -1,5 +1,5 @@
 import 'package:business_bosses_v2/features/courses/models/course_model.dart';
-import 'package:business_bosses_v2/features/courses/presentation/course_item.dart';
+import 'package:business_bosses_v2/features/courses/widgets/course_item.dart';
 import 'package:business_bosses_v2/features/donations/controller/donations_controller.dart';
 import 'package:business_bosses_v2/features/donations/models/donations_model.dart';
 import 'package:business_bosses_v2/features/donations/widgets/donation_item.dart';

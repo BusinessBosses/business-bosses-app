@@ -803,6 +803,7 @@ class HomeController extends GetxController {
         var reposted = response.data['repost']['reposted'];
         if (reposted) {
           profileController.addRePost(response.data);
+          addNewRePost(response.data, profileController);
           final ApiResponseModel timeresponse = await ApiService.put(
               path: 'post/update-post/$postId',
               body: oldtimestamp == 0 ? timestampData : timestampDataoldpost);
@@ -853,6 +854,29 @@ class HomeController extends GetxController {
         'name': profileController.myProfile.name,
         'bio': profileController.myProfile.bio
       }
+    });
+  }
+
+  void addNewRePost(
+      Map<String, dynamic> newPost, ProfileController profileController) async {
+    PostModel modelizedNewPost = PostModel.fromMap({
+      ...newPost,
+      'coins': <String>[],
+      'likes': <String>[],
+      'reposts': <String>[],
+      'comments': <CommentModel>[],
+    });
+    mixedPosts.insert(
+        1, {'isForum': false, 'data': modelizedNewPost, 'isSponsored': false});
+
+    // posts.insert(0, modelizedNewPost);
+    update();
+    socket.emit('newPostEvent', {
+      'newPost': newPost,
+      'coins': <String>[],
+      'likes': <String>[],
+      'reposts': <String>[],
+      'comments': <CommentModel>[],
     });
   }
 

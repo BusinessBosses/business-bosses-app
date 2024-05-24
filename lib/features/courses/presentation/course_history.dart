@@ -1,8 +1,8 @@
 import 'package:business_bosses_v2/common/widgets/safety_model.dart';
 import 'package:business_bosses_v2/features/courses/controller/course_controller.dart';
 import 'package:business_bosses_v2/features/courses/presentation/alltransactions.dart';
-import 'package:business_bosses_v2/features/courses/presentation/purchases.dart';
-import 'package:business_bosses_v2/features/courses/presentation/sales.dart';
+import 'package:business_bosses_v2/features/courses/widgets/purchases.dart';
+import 'package:business_bosses_v2/features/courses/widgets/sales.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
