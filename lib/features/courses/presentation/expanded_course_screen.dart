@@ -10,6 +10,7 @@ import 'package:business_bosses_v2/features/courses/models/course_model.dart';
 import 'package:business_bosses_v2/features/courses/models/reviews_model.dart';
 import 'package:business_bosses_v2/features/courses/presentation/course_reviews.dart';
 import 'package:business_bosses_v2/features/courses/presentation/create_course.dart';
+import 'package:business_bosses_v2/features/courses/presentation/pdfscreen.dart';
 import 'package:business_bosses_v2/features/courses/widgets/course_comment_bottomsheet.dart';
 import 'package:business_bosses_v2/features/courses/widgets/downloadable_item.dart';
 import 'package:business_bosses_v2/features/courses/widgets/unpaidcoursepopup.dart';
@@ -178,7 +179,7 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
                                       onTap: () async {
                                         widget.course.contentType == 'videos'
                                             ? {}
-                                            : {};
+                                            : {Get.to(PDFScreen(url: 'url'))};
                                       },
                                       child: Container(
                                         padding: const EdgeInsets.symmetric(
@@ -258,7 +259,7 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
                                                                 selectedVideo]))
                                                       }
                                                   }
-                                                : {};
+                                                : {Get.to(PDFScreen(url: 'url'))};
                                           },
                                           child: Container(
                                             padding: const EdgeInsets.symmetric(
@@ -340,18 +341,22 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
                                 const SizedBox(height: 10),
                                 GestureDetector(
                                   onTap: () async {
+                                   
                                     widget.course.contentType == 'videos'
                                         ? {
-                                            // if (await canLaunchUrl(Uri.parse(
-                                            //     widget.course.youtubeUrls![
-                                            //         selectedVideo])))
-                                            //   {
-                                            //     await launchUrl(Uri.parse(widget
-                                            //         .course
-                                            //         .youtubeUrls![selectedVideo]))
-                                            //   }
+                                         
+                                            // PDFViewer(document: document)
+
+                                            if (await canLaunchUrl(Uri.parse(
+                                                widget.course.youtubeUrls![
+                                                    selectedVideo])))
+                                              {
+                                                await launchUrl(Uri.parse(widget
+                                                    .course
+                                                    .youtubeUrls![selectedVideo]))
+                                              }
                                           }
-                                        : {};
+                                        : {Get.to(PDFScreen(url: 'url'))};
                                   },
                                   child: Container(
                                     padding: const EdgeInsets.symmetric(
@@ -962,7 +967,6 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
                                                           selectedVideo = index;
                                                         })
                                                       : setState(() {
-                                                      
                                                           otherfilesview =
                                                               !otherfilesview;
                                                         });
