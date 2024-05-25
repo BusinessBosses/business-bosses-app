@@ -344,7 +344,7 @@ class _CourseItemState extends State<CourseItem> {
                                             width: 5,
                                           ),
                                           Text(
-                                             'Videos',
+                                            'Videos',
                                             style: const TextStyle(
                                               fontSize: 9,
                                               color: Colors.white,
@@ -568,6 +568,7 @@ class _CourseItemState extends State<CourseItem> {
                                             .onDeleteCourse(widget.course.id);
                                         homeController
                                             .onDeleteCourse(widget.course.id);
+                                        setState(() {});
                                         Get.back();
                                       },
                                       child: const Text('Yes'),

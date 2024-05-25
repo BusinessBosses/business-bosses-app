@@ -251,8 +251,12 @@ class CourseController extends GetxController {
       if (response.success) {
         showSnackbar(message: 'Course deleted successfully!', title: 'Success');
         courses.removeWhere((CourseModel course) => course.id == courseId);
-        homeController.usercourses
-            .removeWhere((CourseModel course) => course.id == courseId);
+        int homeIndex = homeController.usercourses
+            .indexWhere((CourseModel c) => c.id == courseId);
+        if (homeIndex >= -1) {
+          homeController.usercourses
+              .removeWhere((CourseModel course) => course.id == courseId);
+        }
         update();
         return;
       } else {
