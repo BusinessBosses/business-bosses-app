@@ -366,12 +366,12 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                                 await FilePicker.platform.pickFiles(
                               allowMultiple: true,
                               type: FileType.custom,
-                              allowedExtensions: ['pdf'],
+                              allowedExtensions: <String>['pdf'],
                             );
 
                             if (result != null) {
                               setState(() {
-                                for (var file in result.files) {
+                                for (dynamic file in result.files) {
                                   selectedFileNames.add(file.name);
                                   selectedFilePaths.add(file.path!);
                                 }
