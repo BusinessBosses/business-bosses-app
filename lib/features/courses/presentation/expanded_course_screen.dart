@@ -57,7 +57,7 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
   bool otherfilesview = false;
 
   ProfileController profileController = Get.find();
-  CourseController courseController = Get.find();
+  CourseController courseController = Get.put(CourseController());
   final List<PopupMenuEntry<String>> myPopupMore = <PopupMenuEntry<String>>[
     const PopupMenuItem<String>(
       value: 'Edit',
