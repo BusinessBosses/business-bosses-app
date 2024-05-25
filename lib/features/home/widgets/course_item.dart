@@ -335,10 +335,7 @@ class _CourseItemState extends State<CourseItem> {
                                             width: 5,
                                           ),
                                           Text(
-                                            widget.course.youtubeUrls!.length >
-                                                    1
-                                                ? '${widget.course.youtubeUrls!.length} Video'
-                                                : '${widget.course.youtubeUrls!.length} Videos',
+                                            'Videos',
                                             style: const TextStyle(
                                               fontSize: 9,
                                               color: Colors.white,
@@ -864,6 +861,7 @@ class _CourseItemState extends State<CourseItem> {
                         },
                       ),
                     );
+                    setState(() {});
                   },
                   icon: SvgPicture.asset(
                     'assets/svgs/comment.svg',

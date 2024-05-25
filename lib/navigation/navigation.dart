@@ -283,6 +283,6 @@ var routes = [
   ),
    GetPage(
     name: Routes.pdfscreen,
-    page: () => const PDFScreen(url: '',),
+    page: () => const PDFScreen(url: '', filename: '',),
   ),
 ];

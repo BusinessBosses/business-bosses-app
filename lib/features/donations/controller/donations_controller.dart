@@ -516,6 +516,7 @@ class DonationsController extends GetxController {
         donations[donationIndex].likes?.add(userId);
       }
     }
+    update();
 
     final int userDonationIndex = userdonations
         .indexWhere((DonationModel donation) => donation.id == postId);
