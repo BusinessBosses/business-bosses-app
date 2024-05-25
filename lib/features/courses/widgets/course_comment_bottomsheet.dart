@@ -4,6 +4,7 @@ import 'package:business_bosses_v2/features/courses/models/course_comment_model.
 import 'package:business_bosses_v2/features/courses/models/course_model.dart';
 import 'package:business_bosses_v2/features/courses/widgets/course_comment_item.dart';
 import 'package:business_bosses_v2/features/courses/widgets/write_coursecomment.dart';
+import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -34,6 +35,7 @@ class _CourseCommentBottomSheetState extends State<CourseCommentBottomSheet> {
 
   final CourseCommentController _commentController =
       Get.put(CourseCommentController());
+  final ProfileController profileController = Get.find();
 
   @override
   void initState() {
@@ -109,7 +111,16 @@ class _CourseCommentBottomSheetState extends State<CourseCommentBottomSheet> {
                               'receiverUid': widget.course.user?.uid
                             });
                         setState(() {
-                          _commentController.comments.add(comment);
+                          _commentController.comments
+                              .add(CourseCommentModel.fromMap(<String, dynamic>{
+                            ...comment.toMap(),
+                            'user': profileController.myProfile.toMap(),
+                          }));
+                          widget.course.comments?.add(
+                              CourseCommentModel.fromMap(<String, dynamic>{
+                            ...comment.toMap(),
+                            'user': profileController.myProfile.toMap(),
+                          }));
                         });
                       },
                       courseId: widget.course.id,
@@ -118,50 +129,49 @@ class _CourseCommentBottomSheetState extends State<CourseCommentBottomSheet> {
                   ],
                 ),
                 _users.isEmpty
-                ? SafetyModel(
-                    isLoading: _isLoadingLikes,
-                    icon: const Icon(
-                      Icons.thumb_up,
-                      size: 80.0,
-                      color: hintColor,
-                    ),
-                    title: 'There is no like for now',
-                    subTitle: 'Be the first one to like!',
-                  )
-                : ListView.builder(
-                    itemCount: _users.length,
-                    itemBuilder: (BuildContext context, int i) {
-                      return ListTile(
-                        leading: UserAvatarWithBadge(
-                          user: _users[i],
-                          height: 48.0,
-                          width: 48.0,
-                          radius: 30.0,
-                          placeHolder: Icons.person,
+                    ? SafetyModel(
+                        isLoading: _isLoadingLikes,
+                        icon: const Icon(
+                          Icons.thumb_up,
+                          size: 80.0,
+                          color: hintColor,
                         ),
-                        title: _users[i].isSubscribed == true
-                            ? Row(
-                                children: <Widget>[
-                                  Text('${_users[i].name}'),
-                                  const SizedBox(width: 5),
-                                  SvgPicture.asset(
-                                    'assets/svgs/premiumbadge.svg',
-                                    height: 9,
-                                    color: primaryColorLT,
+                        title: 'There is no like for now',
+                        subTitle: 'Be the first one to like!',
+                      )
+                    : ListView.builder(
+                        itemCount: _users.length,
+                        itemBuilder: (BuildContext context, int i) {
+                          return ListTile(
+                            leading: UserAvatarWithBadge(
+                              user: _users[i],
+                              height: 48.0,
+                              width: 48.0,
+                              radius: 30.0,
+                              placeHolder: Icons.person,
+                            ),
+                            title: _users[i].isSubscribed == true
+                                ? Row(
+                                    children: <Widget>[
+                                      Text('${_users[i].name}'),
+                                      const SizedBox(width: 5),
+                                      SvgPicture.asset(
+                                        'assets/svgs/premiumbadge.svg',
+                                        height: 9,
+                                        color: primaryColorLT,
+                                      )
+                                    ],
                                   )
-                                ],
-                              )
-                            : Text('${_users[i].name}'),
-                        subtitle: Text(
-                          '${_users[i].bio}',
-                          maxLines: 1,
-                        ),
-                      );
-                    },
-                  )
+                                : Text('${_users[i].name}'),
+                            subtitle: Text(
+                              '${_users[i].bio}',
+                              maxLines: 1,
+                            ),
+                          );
+                        },
+                      )
               ]),
             ),
-            
           ],
         ),
       ),
@@ -176,7 +186,7 @@ class _CourseCommentBottomSheetState extends State<CourseCommentBottomSheet> {
   }
 
   final List<UserModel> _users = <UserModel>[];
-  
+
   Future<void> _loadLikesWithDetails(String forumId) async {
     final ApiResponseModel response =
         await ApiService.get(path: 'likes/post/$forumId');

@@ -651,6 +651,7 @@ class _DonationItemState extends State<DonationItem> {
                       widget.donation.id,
                       widget.donation.user!.uid,
                     );
+                    setState(() {});
                   },
                   icon: widget.donation.likes
                               ?.contains(profileController.myProfile.uid) ==

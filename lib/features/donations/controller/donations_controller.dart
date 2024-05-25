@@ -254,6 +254,18 @@ class DonationsController extends GetxController {
         };
         donations[donationIndex] = DonationModel.fromMap(mergedData);
       }
+
+      final int userDonationIndex = userdonations
+          .indexWhere((DonationModel donation) => donation.id == id);
+
+      // Update the donation in the list with the updated data
+      if (donationIndex != -1) {
+        Map<String, dynamic> mergedData = <String, dynamic>{
+          ...userdonations[userDonationIndex].toMap(),
+          ...donation
+        };
+        userdonations[userDonationIndex] = DonationModel.fromMap(mergedData);
+      }
       update();
       Get.back();
       Get.snackbar('Success', 'Donation Updated Succesfully!');
@@ -503,8 +515,20 @@ class DonationsController extends GetxController {
       } else {
         donations[donationIndex].likes?.add(userId);
       }
-      update();
     }
+
+    final int userDonationIndex = userdonations
+        .indexWhere((DonationModel donation) => donation.id == postId);
+    if (userDonationIndex != -1) {
+      final bool checkLiked =
+          userdonations[userDonationIndex].likes!.contains(userId);
+      if (checkLiked) {
+        userdonations[userDonationIndex].likes?.remove(userId);
+      } else {
+        userdonations[userDonationIndex].likes?.add(userId);
+      }
+    }
+    update();
 
     if (profileController.myProfile.uid != receiverUid) {
       socket.emit('like', <String, dynamic>{
@@ -528,6 +552,12 @@ class DonationsController extends GetxController {
         donations.indexWhere((DonationModel donation) => donation.id == postId);
     if (donationIndex != -1) {
       donations[donationIndex].comments?.add(comment);
+    }
+
+    final int userDonationIndex = userdonations
+        .indexWhere((DonationModel donation) => donation.id == postId);
+    if (donationIndex != -1) {
+      userdonations[userDonationIndex].comments?.add(comment);
     }
 
     update();
