@@ -864,6 +864,7 @@ class _CourseItemState extends State<CourseItem> {
                         },
                       ),
                     );
+                    setState(() {});
                   },
                   icon: SvgPicture.asset(
                     'assets/svgs/comment.svg',

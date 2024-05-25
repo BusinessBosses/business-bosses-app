@@ -503,8 +503,8 @@ class DonationsController extends GetxController {
       } else {
         donations[donationIndex].likes?.add(userId);
       }
-      update();
     }
+    update();
 
     if (profileController.myProfile.uid != receiverUid) {
       socket.emit('like', <String, dynamic>{

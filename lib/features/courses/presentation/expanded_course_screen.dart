@@ -181,7 +181,12 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
                                         widget.course.contentType == 'videos'
                                             ? {}
                                             : <Future?>{
-                                                Get.to(PDFScreen(url: 'url'))
+                                                Get.to(PDFScreen(
+                                                  url:
+                                                      'https://businessbosses.com.ng/documents/${widget.course.documents![0]}',
+                                                  filename:
+                                                      '${widget.course.documents![0]}',
+                                                ))
                                               };
                                       },
                                       child: Container(
@@ -264,8 +269,11 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
                                                   }
                                                 : <Future?>{
                                                     Get.to(PDFScreen(
-                                                        url: widget.course
-                                                            .documents![0]))
+                                                      url:
+                                                          'https://businessbosses.com.ng/documents/${widget.course.documents![0]}',
+                                                      filename:
+                                                          '${widget.course.documents![0]}',
+                                                    ))
                                                   };
                                           },
                                           child: Container(
@@ -363,8 +371,11 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
                                           }
                                         : <Future?>{
                                             Get.to(PDFScreen(
-                                                url: widget
-                                                    .course.documents![0]))
+                                              url:
+                                                  'https://businessbosses.com.ng/documents/${widget.course.documents![0]}',
+                                              filename:
+                                                  '${widget.course.documents![0]}',
+                                            ))
                                           };
                                   },
                                   child: Container(
