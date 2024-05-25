@@ -204,8 +204,12 @@ class _CourseReviewScreenState extends State<CourseReviewScreen> {
                                                 MainAxisAlignment.start,
                                             children: <Widget>[
                                               Text(
-                                                  widget.course.averageRating!
-                                                      .toStringAsFixed(2),
+                                                  widget.course.averageRating !=
+                                                          null
+                                                      ? widget
+                                                          .course.averageRating!
+                                                          .toStringAsFixed(2)
+                                                      : '0',
                                                   style: const TextStyle(
                                                     fontWeight: FontWeight.bold,
                                                     fontSize: 20,
@@ -225,8 +229,12 @@ class _CourseReviewScreenState extends State<CourseReviewScreen> {
                                             children: <Widget>[
                                               Icon(
                                                 Icons.star,
-                                                color: widget.course
-                                                            .averageRating! >=
+                                                color: (widget.course
+                                                                    .averageRating !=
+                                                                null
+                                                            ? widget.course
+                                                                .averageRating!
+                                                            : 0) >=
                                                         1
                                                     ? const Color.fromRGBO(
                                                         255, 202, 40, 1)
@@ -236,8 +244,12 @@ class _CourseReviewScreenState extends State<CourseReviewScreen> {
                                               ),
                                               Icon(
                                                 Icons.star,
-                                                color: widget.course
-                                                            .averageRating! >=
+                                                color: (widget.course
+                                                                    .averageRating !=
+                                                                null
+                                                            ? widget.course
+                                                                .averageRating!
+                                                            : 0) >=
                                                         2
                                                     ? const Color.fromRGBO(
                                                         255, 202, 40, 1)
@@ -247,8 +259,12 @@ class _CourseReviewScreenState extends State<CourseReviewScreen> {
                                               ),
                                               Icon(
                                                 Icons.star,
-                                                color: widget.course
-                                                            .averageRating! >=
+                                                color: (widget.course
+                                                                    .averageRating !=
+                                                                null
+                                                            ? widget.course
+                                                                .averageRating!
+                                                            : 0) >=
                                                         3
                                                     ? const Color.fromRGBO(
                                                         255, 202, 40, 1)
@@ -258,8 +274,12 @@ class _CourseReviewScreenState extends State<CourseReviewScreen> {
                                               ),
                                               Icon(
                                                 Icons.star,
-                                                color: widget.course
-                                                            .averageRating! >=
+                                                color: (widget.course
+                                                                    .averageRating !=
+                                                                null
+                                                            ? widget.course
+                                                                .averageRating!
+                                                            : 0) >=
                                                         4
                                                     ? const Color.fromRGBO(
                                                         255, 202, 40, 1)
@@ -269,8 +289,12 @@ class _CourseReviewScreenState extends State<CourseReviewScreen> {
                                               ),
                                               Icon(
                                                 Icons.star,
-                                                color: widget.course
-                                                            .averageRating! ==
+                                                color: (widget.course
+                                                                    .averageRating !=
+                                                                null
+                                                            ? widget.course
+                                                                .averageRating!
+                                                            : 0) ==
                                                         5
                                                     ? const Color.fromRGBO(
                                                         255, 202, 40, 1)

@@ -851,8 +851,10 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
                                     size: 16,
                                   ),
                                   Text(
-                                    widget.course.averageRating!
-                                        .toStringAsFixed(2),
+                                    widget.course.averageRating != null
+                                        ? widget.course.averageRating!
+                                            .toStringAsFixed(2)
+                                        : '0',
                                     style: const TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 13,

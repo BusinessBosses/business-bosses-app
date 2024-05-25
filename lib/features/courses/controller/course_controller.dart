@@ -7,6 +7,7 @@ import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/common/widgets/gallery_screen.dart';
 import 'package:business_bosses_v2/features/courses/models/course_model.dart';
 import 'package:business_bosses_v2/features/forum/models/industry.dart';
+import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:business_bosses_v2/utils/constants/constants.dart';
@@ -17,6 +18,7 @@ import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class CourseController extends GetxController {
   RxList<CourseModel> courses = RxList<CourseModel>(<CourseModel>[]);
+  final HomeController homeController = Get.find();
   RxBool loading = RxBool(false);
   RxBool error = RxBool(false);
   late Industry industry;
@@ -100,6 +102,16 @@ class CourseController extends GetxController {
             'comments': <CommentModel>[],
             'user': profileController.myProfile.toMap()
           }));
+      homeController.usercourses.insert(
+          0,
+          CourseModel.fromMap(<String, dynamic>{
+            ...course,
+            'id': response.data['id'],
+            'coins': <String>[],
+            'likes': <String>[],
+            'comments': <CommentModel>[],
+            'user': profileController.myProfile.toMap()
+          }));
       Get.back();
       Get.snackbar('Success', 'Course created successfully');
     }
@@ -119,6 +131,16 @@ class CourseController extends GetxController {
           'comments': <CommentModel>[],
           'user': profileController.myProfile.toMap()
         });
+        int homeIndex = homeController.usercourses
+            .indexWhere((CourseModel c) => c.id == id);
+        if (homeIndex != -1) {
+          homeController.usercourses[homeIndex] =
+              CourseModel.fromMap(<String, dynamic>{
+            ...response.data,
+            'comments': <CommentModel>[],
+            'user': profileController.myProfile.toMap()
+          });
+        }
         Get.back();
         showSnackbar(message: 'Course updated successfully', title: 'Success');
       } else {
@@ -137,6 +159,15 @@ class CourseController extends GetxController {
       int index = courses.indexWhere((CourseModel c) => c.id == id);
       if (index != -1) {
         courses[index] = CourseModel.fromMap(<String, dynamic>{
+          ...courses[index].toMap(),
+          ...course,
+        });
+      }
+      int homeIndex =
+          homeController.usercourses.indexWhere((CourseModel c) => c.id == id);
+      if (homeIndex != -1) {
+        homeController.usercourses[homeIndex] =
+            CourseModel.fromMap(<String, dynamic>{
           ...courses[index].toMap(),
           ...course,
         });
@@ -172,7 +203,7 @@ class CourseController extends GetxController {
     update();
 
     final ApiResponseModel response = await ApiService.get(
-        path: '/courses/get-industry-courses/${industry.industryId}');
+        path: '/courses/get-industry-courses/${industry.industryId}?size=1000');
     if (response.success) {
       for (int i = 0; i < response.data['rows'].length; i++) {
         if (response.data['rows'][i]['user'] != null) {
@@ -220,6 +251,8 @@ class CourseController extends GetxController {
       if (response.success) {
         showSnackbar(message: 'Course deleted successfully!', title: 'Success');
         courses.removeWhere((CourseModel course) => course.id == courseId);
+        homeController.usercourses
+            .removeWhere((CourseModel course) => course.id == courseId);
         update();
         return;
       } else {
@@ -399,6 +432,19 @@ class CourseController extends GetxController {
         courses[courseIndex].likes?.remove(userId);
       } else {
         courses[courseIndex].likes?.add(userId);
+      }
+      update();
+    }
+
+    final int homeCourseIndex = homeController.usercourses
+        .indexWhere((CourseModel course) => course.id == postId);
+    if (homeCourseIndex != -1) {
+      final bool checkLiked =
+          homeController.usercourses[homeCourseIndex].likes!.contains(userId);
+      if (checkLiked) {
+        homeController.usercourses[homeCourseIndex].likes?.remove(userId);
+      } else {
+        homeController.usercourses[homeCourseIndex].likes?.add(userId);
       }
       update();
     }
