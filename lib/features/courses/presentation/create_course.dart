@@ -365,15 +365,17 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                             final FilePickerResult? result =
                                 await FilePicker.platform.pickFiles(
                               allowMultiple: true,
+                              type: FileType.custom,
+                              allowedExtensions: ['pdf'],
                             );
-                            if (result != null) {
-                              result.files
-                                  .map((PlatformFile file) => setState(() {
-                                        selectedFileNames.add(file.name);
 
-                                        selectedFilePaths.add(file.path!);
-                                      }))
-                                  .toList();
+                            if (result != null) {
+                              setState(() {
+                                for (var file in result.files) {
+                                  selectedFileNames.add(file.name);
+                                  selectedFilePaths.add(file.path!);
+                                }
+                              });
                             }
                           }),
                           child: Container(
@@ -390,7 +392,7 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                                     MainAxisAlignment.spaceBetween,
                                 children: <Widget>[
                                   const Text(
-                                    'Add Files (pdf,docx,doc,xls,etc)',
+                                    'Add PDF Files',
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                     ),
