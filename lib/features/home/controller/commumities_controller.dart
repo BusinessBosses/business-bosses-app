@@ -47,7 +47,6 @@ class CommunitiesController extends GetxController {
     loadingSearch(true);
     searchError(false);
     searchedForums.clear();
-    searchedIndustries.clear();
     update();
     final ApiResponseModel response =
         await HomeRepository.searchIndustries(query.trim());
