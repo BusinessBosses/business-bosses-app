@@ -452,6 +452,18 @@ class HomeController extends GetxController {
           sponsoredPosts[spIndex]['data'].likes!.add(userId);
         }
       }
+    } else if (type == 'course') {
+      final int courseIndex =
+          usercourses.indexWhere((CourseModel course) => course.id == postId);
+      if (courseIndex != -1) {
+        final bool checkLiked =
+            usercourses[courseIndex].likes!.contains(userId);
+        if (checkLiked) {
+          usercourses[courseIndex].likes?.remove(userId);
+        } else {
+          usercourses[courseIndex].likes?.add(userId);
+        }
+      }
     } else {
       final int postIndex = mixedPosts.indexWhere((Map<String, dynamic> post) =>
           post['shouldCount'] == null &&

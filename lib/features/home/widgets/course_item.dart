@@ -832,6 +832,9 @@ class _CourseItemState extends State<CourseItem> {
               children: <Widget>[
                 TextButton.icon(
                   onPressed: () async {
+                    homeController.postLike(profileController.myProfile.uid,
+                        widget.course.id, 'course', widget.course.user!.uid);
+
                     setState(() {});
                   },
                   icon: widget.course.likes
