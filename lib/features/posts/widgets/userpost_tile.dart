@@ -605,6 +605,7 @@ class _PostTileState extends State<PostTile> {
                                 (widget.post.options != null &&
                                     widget.post.options!.isNotEmpty))
                               FlutterPolls(
+                                leadingVotedProgessColor: Colors.black38,
                                 pollId: widget.post.postId,
                                 onVoted: (PollOption pollOption,
                                     int newTotalVotes) async {
@@ -935,8 +936,9 @@ class _PostTileState extends State<PostTile> {
                                       Text(
                                         '${formatter.format(widget.post.donation!.amountRecieved)} out of ',
                                         style: const TextStyle(
-                                          fontWeight: FontWeight.w700,
-                                            fontSize: 14, color: Colors.white),
+                                            fontWeight: FontWeight.w700,
+                                            fontSize: 14,
+                                            color: Colors.white),
                                       ),
                                       Text(
                                         formatter
@@ -944,15 +946,16 @@ class _PostTileState extends State<PostTile> {
                                                 .post.donation!.targetAmount)
                                             .toString(),
                                         style: const TextStyle(
-                                          fontWeight: FontWeight.w700,
-                                            color: Colors.white, fontSize: 14),
+                                            fontWeight: FontWeight.w700,
+                                            color: Colors.white,
+                                            fontSize: 14),
                                       ),
-                                      
                                       const Text(
                                         ' Target',
                                         style: TextStyle(
-                                          fontWeight: FontWeight.w700,
-                                            color: Colors.white, fontSize: 14),
+                                            fontWeight: FontWeight.w700,
+                                            color: Colors.white,
+                                            fontSize: 14),
                                       ),
                                     ],
                                   ),
