@@ -259,8 +259,11 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
                                       children: <Widget>[
-                                        SvgPicture.asset('assets/svgs/pdf.svg',
-                                            height: 50, color: Colors.white),
+                                        SvgPicture.asset(
+                                          'assets/svgs/pdf.svg',
+                                          height: 50,
+                                          color: Colors.white,
+                                        ),
                                         const SizedBox(height: 10),
                                         GestureDetector(
                                           onTap: () async {
