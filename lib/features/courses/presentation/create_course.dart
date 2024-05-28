@@ -391,12 +391,21 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: <Widget>[
-                                  const Text(
-                                    'Add PDF Files',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
+                                  const Wrap(children: [
+                                    Text(
+                                      'Add Files',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
-                                  ),
+                                    Text(
+                                      ' (Only PDFs are supported)',
+                                      style: TextStyle(
+                                        color: primaryColorLT,
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                  ]),
                                   Container(
                                     alignment: Alignment.center,
                                     child: SvgPicture.asset(
