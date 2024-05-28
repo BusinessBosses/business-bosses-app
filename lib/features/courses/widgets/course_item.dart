@@ -127,8 +127,8 @@ class _CourseItemState extends State<CourseItem> {
                                       height: 90,
                                       width: 160,
                                       radius: 10,
-                                      cacheHeight: 90,
-                                      cacheWidth: 90,
+                                      // cacheHeight: 90,
+                                      // cacheWidth: 90,
                                     ),
                                     Positioned.fill(
                                       child: Center(
@@ -207,8 +207,8 @@ class _CourseItemState extends State<CourseItem> {
                                     height: 90,
                                     width: 160,
                                     radius: 10,
-                                    cacheHeight: 90,
-                                    cacheWidth: 90,
+                                    // cacheHeight: 90,
+                                    // cacheWidth: 90,
                                   ),
                                   Positioned.fill(
                                     child: Center(
