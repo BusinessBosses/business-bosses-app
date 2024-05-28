@@ -387,7 +387,10 @@ class _DonationItemState extends State<DonationItem> {
                   // const SizedBox(
                   //   width: 10,
                   // ),
-                  widget.donation.user!.uid == profileController.myProfile.uid
+                  (widget.donation.user!.uid ==
+                              profileController.myProfile.uid &&
+                          widget.donation.amountRecieved <
+                              widget.donation.targetAmount!)
                       ? MyPopupMenuButton(
                           popupItems: myPopupMore,
                           icon: const Icon(

@@ -456,7 +456,7 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
                             /// for when its your own post
                             (widget.donation.user?.uid ==
                                         profileController.myProfile.uid &&
-                                    widget.donation.amountRecieved !=
+                                    widget.donation.amountRecieved <
                                         widget.donation.targetAmount!)
                                 ? Row(
                                     mainAxisAlignment:

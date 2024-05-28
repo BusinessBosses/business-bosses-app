@@ -38,11 +38,14 @@ class CoinHistoryController extends GetxController {
     ApiResponseModel response = await ApiService.post(
         path: 'transaction-history', body: coinTransaction);
     if (response.success) {
+      profileController.myProfile
+          .incrementCoinsCount(-int.parse(coinTransaction['amount']));
       Get.off(() => const WithdrawalCreated());
     } else {
       showSnackbar(
           message: 'Error While Withdrawing!', title: 'Failed!', error: true);
     }
+    update();
   }
 
   Future<void> initHistory() async {
