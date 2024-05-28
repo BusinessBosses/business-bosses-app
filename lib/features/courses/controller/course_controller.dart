@@ -469,6 +469,37 @@ class CourseController extends GetxController {
     }
   }
 
+  /// COIN AND UNCOIN FUNCTION
+  void postCoin(String userId, String postId,
+      ProfileController profileController, String receiverUid) {
+    final int courseIndex =
+        courses.indexWhere((CourseModel course) => course.id == postId);
+    if (courseIndex != -1) {
+      final bool checkCoin = courses[courseIndex].coins!.contains(userId);
+      if (checkCoin) {
+        courses[courseIndex].coins?.remove(userId);
+      } else {
+        courses[courseIndex].coins?.add(userId);
+      }
+      update();
+    }
+    update();
+    if (profileController.myProfile.uid != receiverUid) {
+      socket.emit('coin', {
+        'postId': postId,
+        'userId': userId,
+        'timestamp': DateTime.now().millisecondsSinceEpoch,
+        'receiverUid': receiverUid,
+      });
+    } else {
+      socket.emit('coin', {
+        'postId': postId,
+        'userId': userId,
+        'timestamp': DateTime.now().millisecondsSinceEpoch,
+      });
+    }
+  }
+
   void initSocket() {
     socket = IO.io(Constants.socketUrl, <String, dynamic>{
       'autoConnect': false,

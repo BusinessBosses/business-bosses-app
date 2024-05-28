@@ -1,3 +1,5 @@
+// ignore_for_file: unused_field
+
 import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:visibility_detector/visibility_detector.dart';
