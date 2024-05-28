@@ -115,7 +115,7 @@ class _DonationsHistoryState extends State<DonationsHistory> {
                               children: const {
                                 0: Text('All'),
                                 1: Text('Received'),
-                                2: Text('Outgone'),
+                                2: Text('Given'),
                               },
                               onValueChanged: (int? value) {
                                 if (value != null) {

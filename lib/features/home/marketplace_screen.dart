@@ -134,7 +134,42 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                     setState(() {});
                   },
                 )
-              : const Text('Marketplace'),
+              : Column(
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        _ismarketplaceSearching = !_ismarketplaceSearching;
+                        setState(() {});
+                      },
+                      child: SizedBox(
+                        height: 42,
+                        width: double.infinity,
+                        child: TextFormField(
+                          // key: searchkey,
+                          style: const TextStyle(fontSize: 20),
+                          decoration: inputDecoration.copyWith(
+                            border: OutlineInputBorder(
+                              borderSide: BorderSide.none,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            fillColor: backgroundcolorinterface,
+                            filled: true,
+                            enabled: false,
+                            prefixIcon: Container(
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 10.0),
+                              child: SvgPicture.asset(
+                                'assets/svgs/search.svg',
+                                color: hintColor,
+                              ),
+                            ),
+                            hintText: 'Search Marketplace',
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
           bottom: _ismarketplaceSearching
               ? TabBar(
                   controller: _marketplacesearchTabController,
@@ -151,19 +186,19 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                   preferredSize: Size.fromHeight(0.0),
                   child: SizedBox(height: 0),
                 ),
-          actions: <Widget>[
-            IconButton(
-              icon: _ismarketplaceSearching
-                  ? const Icon(Icons.close)
-                  : SvgPicture.asset(
-                      'assets/svgs/search.svg',
-                    ),
-              onPressed: () {
-                _ismarketplaceSearching = !_ismarketplaceSearching;
-                setState(() {});
-              },
-            )
-          ]
+                actions: _ismarketplaceSearching
+    ? <Widget>[
+        IconButton(
+          icon: const Icon(Icons.close),
+          onPressed: () {
+            setState(() {
+              _ismarketplaceSearching = !_ismarketplaceSearching;
+            });
+          },
+        ),
+      ]
+    : null,
+
           // showDialog(
           //   context: context,
           //   builder: (BuildContext context) {

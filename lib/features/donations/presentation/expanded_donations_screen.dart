@@ -679,7 +679,7 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
                                               data, widget.donation.id);
                                   if (response) {
                                     Get.snackbar(
-                                        'Success', 'Donation Successfull',
+                                        'Success', 'Donation Successful',
                                         backgroundColor: Colors.green,
                                         colorText: Colors.white);
                                     // ignore: use_build_context_synchronously

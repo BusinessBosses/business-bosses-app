@@ -205,16 +205,7 @@ class _BossupChallengeState extends State<BossupChallenge> {
                                     const SizedBox(
                                       height: 5,
                                     ),
-                                    Container(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 10, vertical: 5),
-                                      decoration: BoxDecoration(
-                                        color: Colors.grey[300],
-                                        borderRadius: BorderRadius.circular(
-                                            20), // Adjust the radius as needed
-                                      ),
-                                      child: _getChallengeTimeLeft(category),
-                                    ),
+                                    _getChallengeTimeLeft(category),
                                   ],
                                 )
                               ],
@@ -240,7 +231,7 @@ class _BossupChallengeState extends State<BossupChallenge> {
     if (difference.isNegative) {
       return "Time's up"; // Or handle accordingly if time is already passed
     } else if (difference.inDays > 0) {
-      return "${difference.inDays} day${difference.inDays > 1 ? 's' : ''} left";
+      return "Ends in ${difference.inDays} day${difference.inDays > 1 ? 's' : ''}";
     } else {
       return '1 day left';
     }
@@ -249,30 +240,54 @@ class _BossupChallengeState extends State<BossupChallenge> {
   Widget _getChallengeTimeLeft(Industry category) {
     DateTime now = DateTime.now();
     if (category.startAt != null && now.isBefore(category.startAt!)) {
-      return Text(
-        _calculateTimeLeftToStart(category.startAt!),
-        style: const TextStyle(
-          color: Colors.black54,
-          fontSize: 12,
-          fontWeight: FontWeight.w700,
+      return Container(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+        decoration: BoxDecoration(
+          color: Colors.amber.withAlpha(40),
+          borderRadius:
+              BorderRadius.circular(20), // Adjust the radius as needed
+        ),
+        child: Text(
+          _calculateTimeLeftToStart(category.startAt!),
+          style: const TextStyle(
+            color: Colors.amber,
+            fontSize: 12,
+            fontWeight: FontWeight.w700,
+          ),
         ),
       );
     } else if (category.endedAt != null) {
-      return Text(
-        _calculateTimeLeft(category.endedAt!),
-        style: const TextStyle(
-          color: Colors.black54,
-          fontSize: 12,
-          fontWeight: FontWeight.w700,
+      return Container(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+        decoration: BoxDecoration(
+          color: Colors.green.withAlpha(40),
+          borderRadius:
+              BorderRadius.circular(20), // Adjust the radius as needed
+        ),
+        child: Text(
+          _calculateTimeLeft(category.endedAt!),
+          style: const TextStyle(
+            color: Colors.green,
+            fontSize: 12,
+            fontWeight: FontWeight.w700,
+          ),
         ),
       );
     } else {
-      return const Text(
-        'Ongoing',
-        style: TextStyle(
-          color: Colors.black54,
-          fontSize: 12,
-          fontWeight: FontWeight.w700,
+      return Container(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+        decoration: BoxDecoration(
+          color: Colors.green.withAlpha(40),
+          borderRadius:
+              BorderRadius.circular(20), // Adjust the radius as needed
+        ),
+        child: const Text(
+          'Ongoing',
+          style: TextStyle(
+            color: Colors.green,
+            fontSize: 12,
+            fontWeight: FontWeight.w700,
+          ),
         ),
       );
     }
