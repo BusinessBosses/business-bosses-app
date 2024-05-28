@@ -243,14 +243,14 @@ class _BossupChallengeState extends State<BossupChallenge> {
       return Container(
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
         decoration: BoxDecoration(
-          color: Colors.amber.withAlpha(40),
+          color: Colors.grey.withAlpha(40),
           borderRadius:
               BorderRadius.circular(20), // Adjust the radius as needed
         ),
         child: Text(
           _calculateTimeLeftToStart(category.startAt!),
           style: const TextStyle(
-            color: Colors.amber,
+            color: Colors.black54,
             fontSize: 12,
             fontWeight: FontWeight.w700,
           ),

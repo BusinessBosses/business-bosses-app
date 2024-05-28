@@ -30,6 +30,8 @@ import '../marketplace/models/market_model.dart';
 import 'models/my_message.dart';
 import 'package:http/http.dart' as http;
 
+UserModel chatargs = UserModel();
+
 class ChatRoomScreen extends StatefulWidget {
   static const String routeName = '/chat-room-screen';
   final bool frommarketplace;
@@ -74,6 +76,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
     } else {
       _textEditingController = TextEditingController();
       args = Get.arguments;
+      chatargs = args;
       // print(widget.market!.toMap());
       // _chatController.seen(args.uid);
     }
@@ -155,6 +158,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                                                         int index) {
                                                   return ListTile(
                                                       onTap: () {
+                                                        Navigator.pop(context);
                                                         index == 0
                                                             ? showDialog(
                                                                 context:
@@ -180,6 +184,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                                                                       .username,
                                                                 ),
                                                               );
+
                                                         ;
                                                       },
                                                       leading: Icon(
@@ -679,119 +684,251 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                                 return Column(
                                   children: <Widget>[
                                     InkWell(
-                                      onLongPress: () {
-                                        FocusScopeNode currentFocus =
-                                            FocusScope.of(context);
-                                        if (!currentFocus.hasPrimaryFocus) {
-                                          currentFocus.unfocus();
-                                        }
-
-                                        showDialog(
-                                          context: context,
-                                          builder: (BuildContext context) =>
-                                              AlertDialog(
-                                            content: Column(
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: <Widget>[
-                                                ListTile(
-                                                  onTap: () async {
-                                                    navigateTo(context);
-                                                    await Clipboard.setData(
-                                                      ClipboardData(
-                                                        text: message
-                                                            .messageText!,
-                                                      ),
-                                                    );
-                                                    // ignore: use_build_context_synchronously
-                                                    showSnackBar(context,
-                                                        message:
-                                                            'Text Copied!');
-                                                  },
-                                                  contentPadding:
-                                                      EdgeInsets.zero,
-                                                  title: const TextWidget(
-                                                    text: 'Copy Text',
+                                      onTap: () {
+                                        message.messageText
+                                                .toString()
+                                                .contains('ccaalliidd')
+                                            ? Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder:
+                                                      (BuildContext context) =>
+                                                          CallPage(
+                                                    callID: message.messageText!
+                                                        .substring(
+                                                            0,
+                                                            message.messageText!
+                                                                .indexOf(
+                                                                    'ccaalliidd')),
+                                                    userId: _profileController
+                                                        .myProfile.uid,
+                                                    username: _profileController
+                                                        .myProfile.username,
                                                   ),
                                                 ),
-                                                ListTile(
-                                                  onTap: () {
-                                                    Navigator.of(context)
-                                                        .pop(context);
-                                                    showDialog(
-                                                      context: context,
-                                                      builder: (BuildContext
-                                                          context) {
-                                                        return AlertDialog(
-                                                          title: const TextWidget(
-                                                              text:
-                                                                  'Delete this Message'),
-                                                          actions: <Widget>[
-                                                            TextButton(
-                                                                onPressed: () {
-                                                                  Navigator.of(
-                                                                          context)
-                                                                      .pop();
-                                                                },
-                                                                child:
-                                                                    const TextWidget(
-                                                                  text:
-                                                                      'Cancel',
-                                                                )),
-                                                            TextButton(
-                                                                onPressed: () {
-                                                                  Navigator.of(
-                                                                          context)
-                                                                      .pop();
-                                                                  controller
-                                                                      .deleteMessage(
-                                                                          message
-                                                                              .messageId);
-                                                                },
-                                                                child:
-                                                                    const TextWidget(
-                                                                  text:
-                                                                      'Delete',
-                                                                  color:
-                                                                      primaryColorLT,
-                                                                ))
-                                                          ],
-                                                        );
-                                                      },
-                                                    );
-                                                    // optionsDialog(context, () {
-                                                    //   // _isLoading = true;
-                                                    //   print('sdf');
-                                                    //   Navigator.pop(context);
-                                                    //   controller.deleteMessage(
-                                                    //       message.messageId);
-                                                    //   // deleteMessage(
-                                                    //   //     _messages[reversedIndex],
-                                                    //   //     reversedIndex);
-                                                    //   // if (reversedIndex ==
-                                                    //   //     _messages.length - 1) {
-                                                    //   //   DeleteLastMessage(_messages[
-                                                    //   //       reversedIndex]);
-                                                    //   // }
-                                                    // });
-                                                  },
-                                                  contentPadding:
-                                                      EdgeInsets.zero,
-                                                  title: const TextWidget(
-                                                    text: 'Delete Message',
-                                                    color: Colors.red,
+                                              )
+                                            : null;
+                                      },
+                                      onLongPress: () {
+                                        if (message.messageText
+                                            .toString()
+                                            .contains('ccaalliidd')) {
+                                          FocusScopeNode currentFocus =
+                                              FocusScope.of(context);
+                                          if (!currentFocus.hasPrimaryFocus) {
+                                            currentFocus.unfocus();
+                                          }
+
+                                          showDialog(
+                                            context: context,
+                                            builder: (BuildContext context) =>
+                                                AlertDialog(
+                                              content: Column(
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: <Widget>[
+                                                  ListTile(
+                                                    onTap: () async {
+                                                      navigateTo(context);
+                                                      await Clipboard.setData(
+                                                        ClipboardData(
+                                                          text: message
+                                                              .messageText!,
+                                                        ),
+                                                      );
+                                                      // ignore: use_build_context_synchronously
+                                                      showSnackBar(context,
+                                                          message:
+                                                              'Text Copied!');
+                                                    },
+                                                    contentPadding:
+                                                        EdgeInsets.zero,
+                                                    title: const TextWidget(
+                                                      text: 'Copy Text',
+                                                    ),
                                                   ),
-                                                )
-                                              ],
+                                                  ListTile(
+                                                    onTap: () {
+                                                      Navigator.of(context)
+                                                          .pop(context);
+                                                      showDialog(
+                                                        context: context,
+                                                        builder: (BuildContext
+                                                            context) {
+                                                          return AlertDialog(
+                                                            title: const TextWidget(
+                                                                text:
+                                                                    'Delete this Message'),
+                                                            actions: <Widget>[
+                                                              TextButton(
+                                                                  onPressed:
+                                                                      () {
+                                                                    Navigator.of(
+                                                                            context)
+                                                                        .pop();
+                                                                  },
+                                                                  child:
+                                                                      const TextWidget(
+                                                                    text:
+                                                                        'Cancel',
+                                                                  )),
+                                                              TextButton(
+                                                                  onPressed:
+                                                                      () {
+                                                                    Navigator.of(
+                                                                            context)
+                                                                        .pop();
+                                                                    controller.deleteMessage(
+                                                                        message
+                                                                            .messageId);
+                                                                  },
+                                                                  child:
+                                                                      const TextWidget(
+                                                                    text:
+                                                                        'Delete',
+                                                                    color:
+                                                                        primaryColorLT,
+                                                                  ))
+                                                            ],
+                                                          );
+                                                        },
+                                                      );
+                                                      // optionsDialog(context, () {
+                                                      //   // _isLoading = true;
+                                                      //   print('sdf');
+                                                      //   Navigator.pop(context);
+                                                      //   controller.deleteMessage(
+                                                      //       message.messageId);
+                                                      //   // deleteMessage(
+                                                      //   //     _messages[reversedIndex],
+                                                      //   //     reversedIndex);
+                                                      //   // if (reversedIndex ==
+                                                      //   //     _messages.length - 1) {
+                                                      //   //   DeleteLastMessage(_messages[
+                                                      //   //       reversedIndex]);
+                                                      //   // }
+                                                      // });
+                                                    },
+                                                    contentPadding:
+                                                        EdgeInsets.zero,
+                                                    title: const TextWidget(
+                                                      text: 'Delete Message',
+                                                      color: Colors.red,
+                                                    ),
+                                                  )
+                                                ],
+                                              ),
                                             ),
-                                          ),
-                                        );
+                                          );
+                                        }
 
                                         // deleteMessage(_messages[reversedIndex]);
                                       },
-                                      child: ChatBox(
-                                        message,
-                                        myUid: _profileController.myProfile.uid,
-                                      ),
+                                      child: message.messageText
+                                              .toString()
+                                              .contains('ccaalliidd')
+                                          ? Column(
+                                              children: [
+                                                Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    Container(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .symmetric(
+                                                                horizontal: 20,
+                                                                vertical: 10),
+                                                        decoration: BoxDecoration(
+                                                          border: Border.all(width: 4, color: Colors.white),
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        10),
+                                                            color:
+                                                                Colors.white70.withAlpha(120)),
+                                                        child: Wrap(
+                                                          crossAxisAlignment:
+                                                              WrapCrossAlignment
+                                                                  .center,
+                                                          alignment:
+                                                              WrapAlignment.end,
+                                                          children: [
+                                                            Stack(children: [
+                                                              Container(
+                                                                height: 50,
+                                                                width: 50,
+                                                              ),
+                                                              UserAvatarWithBadge(
+                                                                user: args,
+                                                                height: 32.0,
+                                                                width: 32.0,
+                                                                radius: 50.0,
+                                                                placeHolder:
+                                                                    Icons
+                                                                        .person,
+                                                                iconSize: 36.0,
+                                                              ),
+                                                              Positioned(
+                                                                left: 15,
+                                                                top: 15,
+                                                                child:
+                                                                    UserAvatarWithBadge(
+                                                                  user: _profileController
+                                                                      .myProfile,
+                                                                  height: 32.0,
+                                                                  width: 32.0,
+                                                                  radius: 50.0,
+                                                                  placeHolder:
+                                                                      Icons
+                                                                          .person,
+                                                                  iconSize:
+                                                                      36.0,
+                                                                ),
+                                                              ),
+                                                            ]),
+                                                            SizedBox(
+                                                              width: 10,
+                                                            ),
+                                                            Container(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .all(10),
+                                                              decoration: BoxDecoration(
+                                                                  color: Colors
+                                                                      .green
+                                                                      .withAlpha(
+                                                                          50),
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              30)),
+                                                              child: const Icon(
+                                                                  Icons.call, color: Colors.green,),
+                                                            ),
+                                                            const SizedBox(
+                                                              width: 10,
+                                                            ),
+                                                            const Text(
+                                                              'Join Call',
+                                                              style: TextStyle(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w700),
+                                                            ),
+                                                          ],
+                                                        )),
+                                                  ],
+                                                ),
+                                                const SizedBox(
+                                                  height: 10,
+                                                )
+                                              ],
+                                            )
+                                          : ChatBox(
+                                              message,
+                                              myUid: _profileController
+                                                  .myProfile.uid,
+                                            ),
                                     ),
                                   ],
                                 );
@@ -979,6 +1116,8 @@ class StartCallDialog extends StatelessWidget {
       {super.key, required this.callerId, required this.recipientId});
   @override
   Widget build(BuildContext context) {
+    final ProfileController _profileController = Get.find();
+    final ChatController _chatController = Get.find();
     return AlertDialog(
       title: const Text('Start Instant Call'),
       content: FutureBuilder(
@@ -994,7 +1133,7 @@ class StartCallDialog extends StatelessWidget {
               child: CircularProgressIndicator(),
             );
           } else if (snapshot.hasError) {
-            return Text('Failed to start call: ${snapshot.error}');
+            return Text('Failed to start call: An Error Occured');
           } else {
             final String? callId = snapshot.data;
             return Column(
@@ -1014,6 +1153,27 @@ class StartCallDialog extends StatelessWidget {
                   },
                   icon: const Icon(Icons.content_copy),
                 ),
+                GestureDetector(
+                    onTap: () {
+                      _chatController.addNewChat(
+                        <String, dynamic>{
+                          'senderUid': _profileController.myProfile.uid,
+                          'receiverUid': chatargs.uid,
+                          'messageText': '$callId' + 'ccaalliidd'
+                        },
+                        chatargs,
+                      );
+                      Get.back();
+                      // print(chatargs);
+                    },
+                    child: Container(
+                        padding: const EdgeInsetsDirectional.symmetric(
+                            horizontal: 15, vertical: 10),
+                        decoration: BoxDecoration(
+                            color: primaryColorLT,
+                            borderRadius: BorderRadius.circular(10)),
+                        child: const Text('Send Call ID',
+                            style: TextStyle(color: Colors.white))))
               ],
             );
           }
