@@ -1,7 +1,3 @@
-// ignore_for_file: always_specify_types, deprecated_member_use
-
-import 'dart:convert';
-
 import 'package:business_bosses_v2/action/action.dart';
 import 'package:business_bosses_v2/common/models/comment_model.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
@@ -796,14 +792,10 @@ class _DonationItemState extends State<DonationItem> {
   }
 
   void _sharePost() {
-    Map<String, dynamic> dataa = <String, dynamic>{
-      ...widget.donation.toMap(),
-    };
     String message =
         'Have a look at ${widget.donation.user?.username ?? 'Business Bosses'}\'s donation post on Business Bosses\n'
         'https://businessbosses.onelink.me/xLWk/36a2ff16';
     logEvent(widget.donation.id, 'donation');
-    String? jsonData = jsonEncode(dataa);
     widget.donation.user?.uid != profileController.myProfile.uid
         ? socialShare(message)
         : showModalBottomSheet(
@@ -821,10 +813,10 @@ class _DonationItemState extends State<DonationItem> {
                     GestureDetector(
                       onTap: () => Get.toNamed(
                         Routes.createPost,
-                        arguments: <String, String?>{
+                        arguments: <String, dynamic>{
                           'sharemessage': 'Hey there! Support this donation',
                           'title': widget.donation.title,
-                          'donationdata': jsonData,
+                          'donationdata': widget.donation,
                         },
                       ),
                       child: Container(

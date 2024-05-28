@@ -72,10 +72,9 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
     livedata = arguments?['livedata'];
 
     if (arguments?['donationdata'] != null) {
-      final donationData =
-          jsonDecode(arguments!['donationdata']) as Map<String, dynamic>;
+      final dynamic donationData = arguments?['donationdata'];
 
-      donationModel = DonationModel.fromMap(donationData);
+      donationModel = donationData;
     }
 
     if (widget.postId != null) {

@@ -1,6 +1,3 @@
-import 'dart:collection';
-import 'dart:convert';
-
 import 'package:business_bosses_v2/action/action.dart';
 import 'package:business_bosses_v2/common/models/comment_model.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
@@ -1003,25 +1000,6 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
   }
 
   void _sharePost() {
-    Map<String, dynamic> dataa = <String, dynamic>{
-      'id': widget.donation.id,
-      'categoryId': widget.donation.categoryId,
-      'description': widget.donation.description,
-      'targetAmount': widget.donation.targetAmount,
-      'amountRecieved': widget.donation.amountRecieved,
-      'title': widget.donation.title,
-      'youtubeUrls': widget.donation.youtubeUrls,
-      'photo': widget.donation.photo,
-      // 'timestamp': widget.donation.timestamp,
-      // 'host': widget.event.user?.name,
-      // 'photourl': widget.event.user?.photoUrl,
-      // 'startat': widget.event.startAt.toString(),
-      // 'endat': widget.event.endAt.toString(),
-      // 'image': widget.event.image,
-    };
-
-    String? jsonData = jsonEncode(dataa);
-
     String message =
         'Have a look at ${widget.donation.user?.username ?? 'Business Bosses'}\'s donation post on Business Bosses\n'
         'https://businessbosses.onelink.me/xLWk/36a2ff16';
@@ -1044,10 +1022,10 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
                     GestureDetector(
                       onTap: () => Get.toNamed(
                         Routes.createPost,
-                        arguments: <String, String?>{
+                        arguments: <String, dynamic>{
                           'sharemessage': 'Hey there! Support this donation',
                           'title': widget.donation.title,
-                          'donationdata': jsonEncode(widget.donation.toMap()),
+                          'donationdata': widget.donation,
                         },
                       ),
                       child: Container(

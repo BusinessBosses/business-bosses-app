@@ -149,10 +149,11 @@ class DonationModel {
       images: map['images'] != null ? List<String>.from(map['images']) : [],
       transactions: map['transactions'] != null
           ? List.from(map['transactions'])
+              .where((t) => t != null) // Filter out null elements
               .map(
                   (t) => DonationTransaction.fromMap(t as Map<String, dynamic>))
               .toList()
-          : null,
+          : [],
     );
   }
 
