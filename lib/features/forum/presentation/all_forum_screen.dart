@@ -141,7 +141,9 @@ class _AllForumScreenState extends State<AllForumScreen>
                         _iscouseSearching
                             ? {
                                 _iscouseSearching = !_iscouseSearching,
-                                setState(() {})
+                                setState(() {}),
+                                courseController.searchedPosts.clear(),
+                                courseController.searchedUsers.clear(),
                               }
                             : showModalBottomSheet(
                                 shape: RoundedRectangleBorder(
@@ -278,8 +280,9 @@ class _AllForumScreenState extends State<AllForumScreen>
                             ),
                       onPressed: () {
                         _isSearching = !_isSearching;
-
                         setState(() {});
+                        controller.searchedPosts.clear();
+                        controller.searchedUsers.clear();
                       })
             ],
             bottom: !_isSearching && !_iscouseSearching

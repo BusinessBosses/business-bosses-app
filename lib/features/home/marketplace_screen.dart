@@ -111,535 +111,536 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
     return Scaffold(
       backgroundColor: backgroundcolorinterface,
       appBar: AppBar(
-          automaticallyImplyLeading: false,
-          title: _ismarketplaceSearching
-              ? Searchbar(
-                  hintText: 'Search Marketplace',
-                  onChange: (String query) {
-                    if (query.isEmpty) {
-                      _marketplacesearchTabController.index == 2
-                          ? _marketController.clearUserSearch()
-                          : _marketplacesearchTabController.index == 1
-                              ? _marketController.clearPostSearch()
-                              : _marketController.clearServiceSearch();
-                    }
-                    setState(() {});
-                  },
-                  onSubmit: (String query) {
-                    _marketController.searchUsers(query);
-                    _marketController.searchServices(query);
-                    _marketController.searchPosts(
-                      query,
-                    );
-                    setState(() {});
-                  },
-                )
-              : Column(
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        _ismarketplaceSearching = !_ismarketplaceSearching;
-                        setState(() {});
-                      },
-                      child: SizedBox(
-                        height: 42,
-                        width: double.infinity,
-                        child: TextFormField(
-                          // key: searchkey,
-                          style: const TextStyle(fontSize: 20),
-                          decoration: inputDecoration.copyWith(
-                            border: OutlineInputBorder(
-                              borderSide: BorderSide.none,
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            fillColor: backgroundcolorinterface,
-                            filled: true,
-                            enabled: false,
-                            prefixIcon: Container(
-                              padding:
-                                  const EdgeInsets.symmetric(vertical: 10.0),
-                              child: SvgPicture.asset(
-                                'assets/svgs/search.svg',
-                                color: hintColor,
-                              ),
-                            ),
-                            hintText: 'Search Marketplace',
+        automaticallyImplyLeading: false,
+        title: _ismarketplaceSearching
+            ? Searchbar(
+                hintText: 'Search Marketplace',
+                onChange: (String query) {
+                  if (query.isEmpty) {
+                    _marketplacesearchTabController.index == 2
+                        ? _marketController.clearUserSearch()
+                        : _marketplacesearchTabController.index == 1
+                            ? _marketController.clearPostSearch()
+                            : _marketController.clearServiceSearch();
+                  }
+                  setState(() {});
+                },
+                onSubmit: (String query) {
+                  _marketController.searchUsers(query);
+                  _marketController.searchServices(query);
+                  _marketController.searchPosts(
+                    query,
+                  );
+                  setState(() {});
+                },
+              )
+            : Column(
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      _ismarketplaceSearching = !_ismarketplaceSearching;
+                      setState(() {});
+                    },
+                    child: SizedBox(
+                      height: 42,
+                      width: double.infinity,
+                      child: TextFormField(
+                        // key: searchkey,
+                        style: const TextStyle(fontSize: 20),
+                        decoration: inputDecoration.copyWith(
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide.none,
+                            borderRadius: BorderRadius.circular(10),
                           ),
+                          fillColor: backgroundcolorinterface,
+                          filled: true,
+                          enabled: false,
+                          prefixIcon: Container(
+                            padding: const EdgeInsets.symmetric(vertical: 10.0),
+                            child: SvgPicture.asset(
+                              'assets/svgs/search.svg',
+                              color: hintColor,
+                            ),
+                          ),
+                          hintText: 'Search Marketplace',
                         ),
                       ),
                     ),
-                  ],
+                  ),
+                ],
+              ),
+        bottom: _ismarketplaceSearching
+            ? TabBar(
+                controller: _marketplacesearchTabController,
+                labelStyle: const TextStyle(fontWeight: FontWeight.w500),
+                labelColor: Colors.black,
+                indicatorColor: primaryColorLT,
+                tabs: const <Widget>[
+                  Tab(text: 'Products'),
+                  Tab(text: 'Services'),
+                  Tab(text: 'Sellers'),
+                ],
+              )
+            : const PreferredSize(
+                preferredSize: Size.fromHeight(0.0),
+                child: SizedBox(height: 0),
+              ),
+        actions: _ismarketplaceSearching
+            ? <Widget>[
+                IconButton(
+                  icon: const Icon(Icons.close),
+                  onPressed: () {
+                    setState(() {
+                      _ismarketplaceSearching = !_ismarketplaceSearching;
+                      _marketController.searchedPosts.clear();
+                      _marketController.searchedServices.clear();
+                      _marketController.searchedUsers.clear();
+                    });
+                  },
                 ),
-          bottom: _ismarketplaceSearching
-              ? TabBar(
-                  controller: _marketplacesearchTabController,
-                  labelStyle: const TextStyle(fontWeight: FontWeight.w500),
-                  labelColor: Colors.black,
-                  indicatorColor: primaryColorLT,
-                  tabs: const <Widget>[
-                    Tab(text: 'Products'),
-                    Tab(text: 'Services'),
-                    Tab(text: 'Sellers'),
-                  ],
-                )
-              : const PreferredSize(
-                  preferredSize: Size.fromHeight(0.0),
-                  child: SizedBox(height: 0),
-                ),
-                actions: _ismarketplaceSearching
-    ? <Widget>[
-        IconButton(
-          icon: const Icon(Icons.close),
-          onPressed: () {
-            setState(() {
-              _ismarketplaceSearching = !_ismarketplaceSearching;
-            });
-          },
-        ),
-      ]
-    : null,
+              ]
+            : null,
 
-          // showDialog(
-          //   context: context,
-          //   builder: (BuildContext context) {
-          //     return Center(
-          //       child: StatefulBuilder(builder:
-          //           (BuildContext context, StateSetter setState) {
-          //         return AlertDialog(
-          //           shape: RoundedRectangleBorder(
-          //             borderRadius: BorderRadius.circular(16.0),
-          //           ),
-          //           title: Row(
-          //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //             children: <Widget>[
-          //               const Text('Filter'),
-          //               IconButton(
-          //                 icon: const Icon(Icons.close),
-          //                 color: Colors.red,
-          //                 onPressed: () {
-          //                   Navigator.of(context).pop();
-          //                 },
-          //               ),
-          //             ],
-          //           ),
-          //           content: SingleChildScrollView(
-          //             child: Column(
-          //               children: <Widget>[
-          //                 Column(
-          //                   children: <Widget>[
-          //                     filteredCategory == null ||
-          //                             filteredCategory == 'Products'
-          //                         ? GestureDetector(
-          //                             onTap: () {
-          //                               setState(() {
-          //                                 if (filteredCategory ==
-          //                                     'Products') {
-          //                                   _selectedLocation = null;
-          //                                   _selectedCategory = null;
-          //                                   filteredCategory = null;
-          //                                 } else {
-          //                                   filteredCategory =
-          //                                       'Products';
-          //                                 }
-          //                               });
-          //                             },
-          //                             child: Container(
-          //                               alignment: Alignment.bottomLeft,
-          //                               decoration: BoxDecoration(
-          //                                 color:
-          //                                     backgroundcolorinterface,
-          //                                 borderRadius:
-          //                                     BorderRadius.circular(
-          //                                         radiusValue),
-          //                               ),
-          //                               padding: const EdgeInsets.only(
-          //                                 left: 16.0,
-          //                                 right: 16,
-          //                                 top: 15,
-          //                                 bottom: 15,
-          //                               ),
-          //                               margin: const EdgeInsets.only(
-          //                                 left: 10,
-          //                                 right: 10,
-          //                               ),
-          //                               child: const Row(
-          //                                 mainAxisAlignment:
-          //                                     MainAxisAlignment
-          //                                         .spaceBetween,
-          //                                 children: <Widget>[
-          //                                   Text(
-          //                                     'Products',
-          //                                     style: TextStyle(
-          //                                       fontSize: 16,
-          //                                     ),
-          //                                   ),
-          //                                   Icon(
-          //                                     Icons.arrow_forward_ios,
-          //                                     size: 10,
-          //                                   ),
-          //                                 ],
-          //                               ),
-          //                             ),
-          //                           )
-          //                         : Container(),
-          //                     const SizedBox(height: 10),
-          //                     filteredCategory == null ||
-          //                             filteredCategory == 'Services'
-          //                         ? GestureDetector(
-          //                             onTap: () {
-          //                               setState(() {
-          //                                 if (filteredCategory ==
-          //                                     'Services') {
-          //                                   _selectedLocation = null;
-          //                                   _selectedCategory = null;
-          //                                   filteredCategory = null;
-          //                                 } else {
-          //                                   filteredCategory =
-          //                                       'Services';
-          //                                 }
-          //                               });
-          //                             },
-          //                             child: Container(
-          //                               alignment: Alignment.bottomLeft,
-          //                               decoration: BoxDecoration(
-          //                                 color:
-          //                                     backgroundcolorinterface,
-          //                                 borderRadius:
-          //                                     BorderRadius.circular(
-          //                                         radiusValue),
-          //                               ),
-          //                               padding: const EdgeInsets.only(
-          //                                 left: 16.0,
-          //                                 right: 16,
-          //                                 top: 15,
-          //                                 bottom: 15,
-          //                               ),
-          //                               margin: const EdgeInsets.only(
-          //                                 left: 10,
-          //                                 right: 10,
-          //                               ),
-          //                               child: const Row(
-          //                                 mainAxisAlignment:
-          //                                     MainAxisAlignment
-          //                                         .spaceBetween,
-          //                                 children: <Widget>[
-          //                                   Text(
-          //                                     'Services',
-          //                                     style: TextStyle(
-          //                                       fontSize: 16,
-          //                                     ),
-          //                                   ),
-          //                                   Icon(
-          //                                     Icons.arrow_forward_ios,
-          //                                     size: 10,
-          //                                   ),
-          //                                 ],
-          //                               ),
-          //                             ),
-          //                           )
-          //                         : Container(),
-          //                   ],
-          //                 ),
-          //                 const SizedBox(height: 12.0),
-          //                 filteredCategory == 'Products'
-          //                     ? Container(
-          //                         decoration: BoxDecoration(
-          //                           color: backgroundcolorinterface,
-          //                           borderRadius: BorderRadius.circular(
-          //                               radiusValue),
-          //                         ),
-          //                         padding: const EdgeInsets.only(
-          //                           left: 16.0,
-          //                           right: 16,
-          //                           top: 4,
-          //                           bottom: 5,
-          //                         ),
-          //                         margin: const EdgeInsets.only(
-          //                           left: 10,
-          //                           right: 10,
-          //                         ),
-          //                         child: DropdownButton<String>(
-          //                           underline: Container(),
-          //                           value: _selectedCategory,
-          //                           isExpanded: true,
-          //                           icon: const Icon(
-          //                             Icons.keyboard_arrow_right,
-          //                           ),
-          //                           iconSize: 24,
-          //                           elevation: 16,
-          //                           onChanged: (String? newValue) {
-          //                             setState(() {
-          //                               _selectedCategory = newValue!;
-          //                             });
-          //                           },
-          //                           items: <String?>[
-          //                             null,
-          //                             'Home, Garden & Outdoors',
-          //                             'Fashion & Beauty',
-          //                             'Sports & Entertainment',
-          //                             'Books & Education',
-          //                             'Jewellery & Timepieces',
-          //                             'Security, Safety & Equipment',
-          //                             'Video Games & Electronics',
-          //                             'Agriculture, Food, Beverage',
-          //                             'Construction & Real Estate',
-          //                             'Vehicle & Transportation',
-          //                             'Business Services & Events',
-          //                             'Other',
-          //                           ].map<DropdownMenuItem<String>>(
-          //                               (String? value) {
-          //                             return DropdownMenuItem<String>(
-          //                               value: value,
-          //                               child: value != null
-          //                                   ? Text(value)
-          //                                   : Text(
-          //                                       value ??
-          //                                           'Select Category',
-          //                                       style:
-          //                                           bodyText2.copyWith(
-          //                                         color: hintColor,
-          //                                       ),
-          //                                     ),
-          //                             );
-          //                           }).toList(),
-          //                         ),
-          //                       )
-          //                     : filteredCategory == 'Services'
-          //                         ? Container(
-          //                             decoration: BoxDecoration(
-          //                               color: backgroundcolorinterface,
-          //                               borderRadius:
-          //                                   BorderRadius.circular(
-          //                                       radiusValue),
-          //                             ),
-          //                             padding: const EdgeInsets.only(
-          //                               left: 16.0,
-          //                               right: 16,
-          //                               top: 4,
-          //                               bottom: 5,
-          //                             ),
-          //                             margin: const EdgeInsets.only(
-          //                               left: 10,
-          //                               right: 10,
-          //                             ),
-          //                             child: DropdownButton<String>(
-          //                               underline: Container(),
-          //                               value: _selectedCategory,
-          //                               isExpanded: true,
-          //                               icon: const Icon(
-          //                                 Icons.keyboard_arrow_right,
-          //                               ),
-          //                               iconSize: 24,
-          //                               elevation: 16,
-          //                               onChanged: (String? newValue) {
-          //                                 setState(() {
-          //                                   _selectedCategory =
-          //                                       newValue!;
-          //                                 });
-          //                               },
-          //                               items: <String?>[
-          //                                 null,
-          //                                 'Write 1 Page Business Plan',
-          //                                 'Build 1 Page Website',
-          //                                 'Create Social Media AD',
-          //                                 'Monthly Account Book Keeping',
-          //                                 'Logo & Branding Guidelines',
-          //                                 'Test, Review & Feedback',
-          //                               ].map<DropdownMenuItem<String>>(
-          //                                   (String? value) {
-          //                                 return DropdownMenuItem<
-          //                                     String>(
-          //                                   value: value,
-          //                                   child: value != null
-          //                                       ? Text(value)
-          //                                       : Text(
-          //                                           value ??
-          //                                               'Select Service Type',
-          //                                           style: bodyText2
-          //                                               .copyWith(
-          //                                             color: hintColor,
-          //                                           ),
-          //                                         ),
-          //                                 );
-          //                               }).toList(),
-          //                             ),
-          //                           )
-          //                         : Container(),
-          //                 const SizedBox(height: 12.0),
-          //                 filteredCategory == 'Products'
-          //                     ? CountryListPick(
-          //                         appBar: AppBar(
-          //                           leading: IconButton(
-          //                             onPressed: () {
-          //                               Navigator.pop(context);
-          //                             },
-          //                             icon: SvgPicture.asset(
-          //                                 'assets/svgs/backbutton.svg'),
-          //                           ),
-          //                           centerTitle: true,
-          //                           // ignore: prefer_const_constructors
-          //                           title: Text(
-          //                             'Select Location',
-          //                             textAlign: TextAlign.center,
-          //                             style:
-          //                                 const TextStyle(fontSize: 20),
-          //                           ),
-          //                         ),
-          //                         initialSelection: filterCode ?? 'GB',
-          //                         pickerBuilder: (BuildContext context,
-          //                             CountryCode? countryCode) {
-          //                           return Container(
-          //                             decoration: BoxDecoration(
-          //                               color: backgroundcolorinterface,
-          //                               borderRadius:
-          //                                   BorderRadius.circular(
-          //                                       radiusValue),
-          //                             ),
-          //                             child: ListTile(
-          //                               leading: _selectedLocation !=
-          //                                       null
-          //                                   ? Text(_selectedLocation!)
-          //                                   : Text(
-          //                                       'Location',
-          //                                       style:
-          //                                           bodyText2.copyWith(
-          //                                               color:
-          //                                                   hintColor),
-          //                                     ),
-          //                               trailing: const Icon(
-          //                                   Icons.keyboard_arrow_right),
-          //                             ),
-          //                           );
-          //                         },
-          //                         onChanged: (CountryCode? code) {
-          //                           setState(
-          //                             () {
-          //                               _selectedLocation = code?.name;
-          //                               filterCode = code?.code;
-          //                             },
-          //                           );
-          //                         },
-          //                         useSafeArea: false,
-          //                       )
-          //                     : filteredCategory == 'Services'
-          //                         ? Container(
-          //                             decoration: BoxDecoration(
-          //                               color: backgroundcolorinterface,
-          //                               borderRadius:
-          //                                   BorderRadius.circular(
-          //                                       radiusValue),
-          //                             ),
-          //                             padding: const EdgeInsets.only(
-          //                               left: 16.0,
-          //                               right: 16,
-          //                               top: 4,
-          //                               bottom: 5,
-          //                             ),
-          //                             margin: const EdgeInsets.only(
-          //                               left: 10,
-          //                               right: 10,
-          //                             ),
-          //                             child: DropdownButton<String>(
-          //                               underline: Container(),
-          //                               value: _selectedLocation,
-          //                               isExpanded: true,
-          //                               icon: const Icon(
-          //                                 Icons.keyboard_arrow_right,
-          //                               ),
-          //                               iconSize: 24,
-          //                               elevation: 16,
-          //                               onChanged: (String? newValue) {
-          //                                 setState(() {
-          //                                   _selectedLocation =
-          //                                       newValue!;
-          //                                 });
-          //                               },
-          //                               items: <String?>[
-          //                                 null,
-          //                                 '1 Day Delivery',
-          //                                 '2 Day Delivery',
-          //                                 '3 Day Delivery',
-          //                                 '4 Day Delivery',
-          //                                 '5 Day Delivery',
-          //                                 '6 Day Delivery',
-          //                                 '7 Day Delivery',
-          //                                 '8 Day Delivery',
-          //                                 '9 Day Delivery',
-          //                                 '10 Day Delivery',
-          //                                 '11 Day Delivery',
-          //                                 '12 Day Delivery',
-          //                                 '13 Day Delivery',
-          //                                 '14 Day Delivery',
-          //                                 '15 Day Delivery',
-          //                               ].map<DropdownMenuItem<String>>(
-          //                                   (String? value) {
-          //                                 return DropdownMenuItem<
-          //                                     String>(
-          //                                   value: value,
-          //                                   child: value != null
-          //                                       ? Text(value)
-          //                                       : Text(
-          //                                           value ??
-          //                                               'Select Delivery Time',
-          //                                           style: bodyText2
-          //                                               .copyWith(
-          //                                             color: hintColor,
-          //                                           ),
-          //                                         ),
-          //                                 );
-          //                               }).toList(),
-          //                             ),
-          //                           )
-          //                         : Container(),
-          //               ],
-          //             ),
-          //           ),
-          //           actions: <Widget>[
-          //             Padding(
-          //               padding: const EdgeInsets.only(
-          //                   right: 25.0, bottom: 10),
-          //               child: Row(
-          //                 mainAxisAlignment: MainAxisAlignment.end,
-          //                 children: <Widget>[
-          //                   TextButton(
-          //                     child: const Text('Reset'),
-          //                     onPressed: () {
-          //                       setState(() {
-          //                         filterLocation = null;
-          //                         filterCode = null;
-          //                         filterCategory = null;
-          //                         _selectedLocation = null;
-          //                         _selectedCategory = null;
-          //                         filteredCategory = null;
-          //                         _marketController.updateFiltered();
-          //                         _marketController.initMarket();
-          //                         Navigator.of(context).pop();
-          //                       });
-          //                     },
-          //                   ),
-          //                   ElevatedButton(
-          //                     child: const Text('Search'),
-          //                     onPressed: () {
-          //                       setState(() {
-          //                         filterLocation = _selectedLocation;
-          //                         filterCategory = _selectedCategory;
-          //                         _marketController.filterMarket(
-          //                             filterLocation, filterCategory);
-          //                       });
-          //                       Navigator.of(context).pop();
-          //                     },
-          //                   ),
-          //                 ],
-          //               ),
-          //             )
-          //           ],
-          //         );
-          //       }),
-          //     );
-          //   },
-          // );
-
-          ),
+        // showDialog(
+        //   context: context,
+        //   builder: (BuildContext context) {
+        //     return Center(
+        //       child: StatefulBuilder(builder:
+        //           (BuildContext context, StateSetter setState) {
+        //         return AlertDialog(
+        //           shape: RoundedRectangleBorder(
+        //             borderRadius: BorderRadius.circular(16.0),
+        //           ),
+        //           title: Row(
+        //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        //             children: <Widget>[
+        //               const Text('Filter'),
+        //               IconButton(
+        //                 icon: const Icon(Icons.close),
+        //                 color: Colors.red,
+        //                 onPressed: () {
+        //                   Navigator.of(context).pop();
+        //                 },
+        //               ),
+        //             ],
+        //           ),
+        //           content: SingleChildScrollView(
+        //             child: Column(
+        //               children: <Widget>[
+        //                 Column(
+        //                   children: <Widget>[
+        //                     filteredCategory == null ||
+        //                             filteredCategory == 'Products'
+        //                         ? GestureDetector(
+        //                             onTap: () {
+        //                               setState(() {
+        //                                 if (filteredCategory ==
+        //                                     'Products') {
+        //                                   _selectedLocation = null;
+        //                                   _selectedCategory = null;
+        //                                   filteredCategory = null;
+        //                                 } else {
+        //                                   filteredCategory =
+        //                                       'Products';
+        //                                 }
+        //                               });
+        //                             },
+        //                             child: Container(
+        //                               alignment: Alignment.bottomLeft,
+        //                               decoration: BoxDecoration(
+        //                                 color:
+        //                                     backgroundcolorinterface,
+        //                                 borderRadius:
+        //                                     BorderRadius.circular(
+        //                                         radiusValue),
+        //                               ),
+        //                               padding: const EdgeInsets.only(
+        //                                 left: 16.0,
+        //                                 right: 16,
+        //                                 top: 15,
+        //                                 bottom: 15,
+        //                               ),
+        //                               margin: const EdgeInsets.only(
+        //                                 left: 10,
+        //                                 right: 10,
+        //                               ),
+        //                               child: const Row(
+        //                                 mainAxisAlignment:
+        //                                     MainAxisAlignment
+        //                                         .spaceBetween,
+        //                                 children: <Widget>[
+        //                                   Text(
+        //                                     'Products',
+        //                                     style: TextStyle(
+        //                                       fontSize: 16,
+        //                                     ),
+        //                                   ),
+        //                                   Icon(
+        //                                     Icons.arrow_forward_ios,
+        //                                     size: 10,
+        //                                   ),
+        //                                 ],
+        //                               ),
+        //                             ),
+        //                           )
+        //                         : Container(),
+        //                     const SizedBox(height: 10),
+        //                     filteredCategory == null ||
+        //                             filteredCategory == 'Services'
+        //                         ? GestureDetector(
+        //                             onTap: () {
+        //                               setState(() {
+        //                                 if (filteredCategory ==
+        //                                     'Services') {
+        //                                   _selectedLocation = null;
+        //                                   _selectedCategory = null;
+        //                                   filteredCategory = null;
+        //                                 } else {
+        //                                   filteredCategory =
+        //                                       'Services';
+        //                                 }
+        //                               });
+        //                             },
+        //                             child: Container(
+        //                               alignment: Alignment.bottomLeft,
+        //                               decoration: BoxDecoration(
+        //                                 color:
+        //                                     backgroundcolorinterface,
+        //                                 borderRadius:
+        //                                     BorderRadius.circular(
+        //                                         radiusValue),
+        //                               ),
+        //                               padding: const EdgeInsets.only(
+        //                                 left: 16.0,
+        //                                 right: 16,
+        //                                 top: 15,
+        //                                 bottom: 15,
+        //                               ),
+        //                               margin: const EdgeInsets.only(
+        //                                 left: 10,
+        //                                 right: 10,
+        //                               ),
+        //                               child: const Row(
+        //                                 mainAxisAlignment:
+        //                                     MainAxisAlignment
+        //                                         .spaceBetween,
+        //                                 children: <Widget>[
+        //                                   Text(
+        //                                     'Services',
+        //                                     style: TextStyle(
+        //                                       fontSize: 16,
+        //                                     ),
+        //                                   ),
+        //                                   Icon(
+        //                                     Icons.arrow_forward_ios,
+        //                                     size: 10,
+        //                                   ),
+        //                                 ],
+        //                               ),
+        //                             ),
+        //                           )
+        //                         : Container(),
+        //                   ],
+        //                 ),
+        //                 const SizedBox(height: 12.0),
+        //                 filteredCategory == 'Products'
+        //                     ? Container(
+        //                         decoration: BoxDecoration(
+        //                           color: backgroundcolorinterface,
+        //                           borderRadius: BorderRadius.circular(
+        //                               radiusValue),
+        //                         ),
+        //                         padding: const EdgeInsets.only(
+        //                           left: 16.0,
+        //                           right: 16,
+        //                           top: 4,
+        //                           bottom: 5,
+        //                         ),
+        //                         margin: const EdgeInsets.only(
+        //                           left: 10,
+        //                           right: 10,
+        //                         ),
+        //                         child: DropdownButton<String>(
+        //                           underline: Container(),
+        //                           value: _selectedCategory,
+        //                           isExpanded: true,
+        //                           icon: const Icon(
+        //                             Icons.keyboard_arrow_right,
+        //                           ),
+        //                           iconSize: 24,
+        //                           elevation: 16,
+        //                           onChanged: (String? newValue) {
+        //                             setState(() {
+        //                               _selectedCategory = newValue!;
+        //                             });
+        //                           },
+        //                           items: <String?>[
+        //                             null,
+        //                             'Home, Garden & Outdoors',
+        //                             'Fashion & Beauty',
+        //                             'Sports & Entertainment',
+        //                             'Books & Education',
+        //                             'Jewellery & Timepieces',
+        //                             'Security, Safety & Equipment',
+        //                             'Video Games & Electronics',
+        //                             'Agriculture, Food, Beverage',
+        //                             'Construction & Real Estate',
+        //                             'Vehicle & Transportation',
+        //                             'Business Services & Events',
+        //                             'Other',
+        //                           ].map<DropdownMenuItem<String>>(
+        //                               (String? value) {
+        //                             return DropdownMenuItem<String>(
+        //                               value: value,
+        //                               child: value != null
+        //                                   ? Text(value)
+        //                                   : Text(
+        //                                       value ??
+        //                                           'Select Category',
+        //                                       style:
+        //                                           bodyText2.copyWith(
+        //                                         color: hintColor,
+        //                                       ),
+        //                                     ),
+        //                             );
+        //                           }).toList(),
+        //                         ),
+        //                       )
+        //                     : filteredCategory == 'Services'
+        //                         ? Container(
+        //                             decoration: BoxDecoration(
+        //                               color: backgroundcolorinterface,
+        //                               borderRadius:
+        //                                   BorderRadius.circular(
+        //                                       radiusValue),
+        //                             ),
+        //                             padding: const EdgeInsets.only(
+        //                               left: 16.0,
+        //                               right: 16,
+        //                               top: 4,
+        //                               bottom: 5,
+        //                             ),
+        //                             margin: const EdgeInsets.only(
+        //                               left: 10,
+        //                               right: 10,
+        //                             ),
+        //                             child: DropdownButton<String>(
+        //                               underline: Container(),
+        //                               value: _selectedCategory,
+        //                               isExpanded: true,
+        //                               icon: const Icon(
+        //                                 Icons.keyboard_arrow_right,
+        //                               ),
+        //                               iconSize: 24,
+        //                               elevation: 16,
+        //                               onChanged: (String? newValue) {
+        //                                 setState(() {
+        //                                   _selectedCategory =
+        //                                       newValue!;
+        //                                 });
+        //                               },
+        //                               items: <String?>[
+        //                                 null,
+        //                                 'Write 1 Page Business Plan',
+        //                                 'Build 1 Page Website',
+        //                                 'Create Social Media AD',
+        //                                 'Monthly Account Book Keeping',
+        //                                 'Logo & Branding Guidelines',
+        //                                 'Test, Review & Feedback',
+        //                               ].map<DropdownMenuItem<String>>(
+        //                                   (String? value) {
+        //                                 return DropdownMenuItem<
+        //                                     String>(
+        //                                   value: value,
+        //                                   child: value != null
+        //                                       ? Text(value)
+        //                                       : Text(
+        //                                           value ??
+        //                                               'Select Service Type',
+        //                                           style: bodyText2
+        //                                               .copyWith(
+        //                                             color: hintColor,
+        //                                           ),
+        //                                         ),
+        //                                 );
+        //                               }).toList(),
+        //                             ),
+        //                           )
+        //                         : Container(),
+        //                 const SizedBox(height: 12.0),
+        //                 filteredCategory == 'Products'
+        //                     ? CountryListPick(
+        //                         appBar: AppBar(
+        //                           leading: IconButton(
+        //                             onPressed: () {
+        //                               Navigator.pop(context);
+        //                             },
+        //                             icon: SvgPicture.asset(
+        //                                 'assets/svgs/backbutton.svg'),
+        //                           ),
+        //                           centerTitle: true,
+        //                           // ignore: prefer_const_constructors
+        //                           title: Text(
+        //                             'Select Location',
+        //                             textAlign: TextAlign.center,
+        //                             style:
+        //                                 const TextStyle(fontSize: 20),
+        //                           ),
+        //                         ),
+        //                         initialSelection: filterCode ?? 'GB',
+        //                         pickerBuilder: (BuildContext context,
+        //                             CountryCode? countryCode) {
+        //                           return Container(
+        //                             decoration: BoxDecoration(
+        //                               color: backgroundcolorinterface,
+        //                               borderRadius:
+        //                                   BorderRadius.circular(
+        //                                       radiusValue),
+        //                             ),
+        //                             child: ListTile(
+        //                               leading: _selectedLocation !=
+        //                                       null
+        //                                   ? Text(_selectedLocation!)
+        //                                   : Text(
+        //                                       'Location',
+        //                                       style:
+        //                                           bodyText2.copyWith(
+        //                                               color:
+        //                                                   hintColor),
+        //                                     ),
+        //                               trailing: const Icon(
+        //                                   Icons.keyboard_arrow_right),
+        //                             ),
+        //                           );
+        //                         },
+        //                         onChanged: (CountryCode? code) {
+        //                           setState(
+        //                             () {
+        //                               _selectedLocation = code?.name;
+        //                               filterCode = code?.code;
+        //                             },
+        //                           );
+        //                         },
+        //                         useSafeArea: false,
+        //                       )
+        //                     : filteredCategory == 'Services'
+        //                         ? Container(
+        //                             decoration: BoxDecoration(
+        //                               color: backgroundcolorinterface,
+        //                               borderRadius:
+        //                                   BorderRadius.circular(
+        //                                       radiusValue),
+        //                             ),
+        //                             padding: const EdgeInsets.only(
+        //                               left: 16.0,
+        //                               right: 16,
+        //                               top: 4,
+        //                               bottom: 5,
+        //                             ),
+        //                             margin: const EdgeInsets.only(
+        //                               left: 10,
+        //                               right: 10,
+        //                             ),
+        //                             child: DropdownButton<String>(
+        //                               underline: Container(),
+        //                               value: _selectedLocation,
+        //                               isExpanded: true,
+        //                               icon: const Icon(
+        //                                 Icons.keyboard_arrow_right,
+        //                               ),
+        //                               iconSize: 24,
+        //                               elevation: 16,
+        //                               onChanged: (String? newValue) {
+        //                                 setState(() {
+        //                                   _selectedLocation =
+        //                                       newValue!;
+        //                                 });
+        //                               },
+        //                               items: <String?>[
+        //                                 null,
+        //                                 '1 Day Delivery',
+        //                                 '2 Day Delivery',
+        //                                 '3 Day Delivery',
+        //                                 '4 Day Delivery',
+        //                                 '5 Day Delivery',
+        //                                 '6 Day Delivery',
+        //                                 '7 Day Delivery',
+        //                                 '8 Day Delivery',
+        //                                 '9 Day Delivery',
+        //                                 '10 Day Delivery',
+        //                                 '11 Day Delivery',
+        //                                 '12 Day Delivery',
+        //                                 '13 Day Delivery',
+        //                                 '14 Day Delivery',
+        //                                 '15 Day Delivery',
+        //                               ].map<DropdownMenuItem<String>>(
+        //                                   (String? value) {
+        //                                 return DropdownMenuItem<
+        //                                     String>(
+        //                                   value: value,
+        //                                   child: value != null
+        //                                       ? Text(value)
+        //                                       : Text(
+        //                                           value ??
+        //                                               'Select Delivery Time',
+        //                                           style: bodyText2
+        //                                               .copyWith(
+        //                                             color: hintColor,
+        //                                           ),
+        //                                         ),
+        //                                 );
+        //                               }).toList(),
+        //                             ),
+        //                           )
+        //                         : Container(),
+        //               ],
+        //             ),
+        //           ),
+        //           actions: <Widget>[
+        //             Padding(
+        //               padding: const EdgeInsets.only(
+        //                   right: 25.0, bottom: 10),
+        //               child: Row(
+        //                 mainAxisAlignment: MainAxisAlignment.end,
+        //                 children: <Widget>[
+        //                   TextButton(
+        //                     child: const Text('Reset'),
+        //                     onPressed: () {
+        //                       setState(() {
+        //                         filterLocation = null;
+        //                         filterCode = null;
+        //                         filterCategory = null;
+        //                         _selectedLocation = null;
+        //                         _selectedCategory = null;
+        //                         filteredCategory = null;
+        //                         _marketController.updateFiltered();
+        //                         _marketController.initMarket();
+        //                         Navigator.of(context).pop();
+        //                       });
+        //                     },
+        //                   ),
+        //                   ElevatedButton(
+        //                     child: const Text('Search'),
+        //                     onPressed: () {
+        //                       setState(() {
+        //                         filterLocation = _selectedLocation;
+        //                         filterCategory = _selectedCategory;
+        //                         _marketController.filterMarket(
+        //                             filterLocation, filterCategory);
+        //                       });
+        //                       Navigator.of(context).pop();
+        //                     },
+        //                   ),
+        //                 ],
+        //               ),
+        //             )
+        //           ],
+        //         );
+        //       }),
+        //     );
+        //   },
+        // );
+      ),
       body: _marketController.isLoading
           ? const CircularProgressIndicator()
           : _ismarketplaceSearching
