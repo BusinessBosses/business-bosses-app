@@ -96,8 +96,6 @@ class _CourseItemState extends State<CourseItem> {
         });
         courseController.updateCourseViews(
             widget.course.id, widget.course.views + 1);
-        homeController.updateCourseViews(
-            widget.course.id, widget.course.views + 1);
         Get.to(() => ExpandedCourseScreen(course: widget.course));
       },
       child: Container(
@@ -150,8 +148,6 @@ class _CourseItemState extends State<CourseItem> {
                                 widget.course.setViews();
                               });
                               courseController.updateCourseViews(
-                                  widget.course.id, widget.course.views + 1);
-                              homeController.updateCourseViews(
                                   widget.course.id, widget.course.views + 1);
                               Get.to(() =>
                                   ExpandedCourseScreen(course: widget.course));
@@ -242,9 +238,9 @@ class _CourseItemState extends State<CourseItem> {
                                               const SizedBox(
                                                 width: 5,
                                               ),
-                                              Text(
+                                              const Text(
                                                 'Files',
-                                                style: const TextStyle(
+                                                style: TextStyle(
                                                   fontSize: 9,
                                                   color: Colors.white,
                                                   fontWeight: FontWeight.w700,
@@ -306,9 +302,6 @@ class _CourseItemState extends State<CourseItem> {
                                   courseController.updateCourseViews(
                                       widget.course.id,
                                       widget.course.views + 1);
-                                  homeController.updateCourseViews(
-                                      widget.course.id,
-                                      widget.course.views + 1);
                                   Get.to(() => ExpandedCourseScreen(
                                       course: widget.course));
                                 },
@@ -343,9 +336,9 @@ class _CourseItemState extends State<CourseItem> {
                                           const SizedBox(
                                             width: 5,
                                           ),
-                                          Text(
+                                          const Text(
                                             'Videos',
-                                            style: const TextStyle(
+                                            style: TextStyle(
                                               fontSize: 9,
                                               color: Colors.white,
                                               fontWeight: FontWeight.w700,
@@ -398,7 +391,7 @@ class _CourseItemState extends State<CourseItem> {
                                           WrapCrossAlignment.center,
                                       children: [
                                         widget.course.courseType == 'free'
-                                            ? Text(
+                                            ? const Text(
                                                 'Free',
                                                 style: TextStyle(
                                                     fontWeight:
@@ -412,7 +405,7 @@ class _CourseItemState extends State<CourseItem> {
                                                   ),
                                                   Text(
                                                     ' ${widget.course.price}',
-                                                    style: TextStyle(
+                                                    style: const TextStyle(
                                                         fontWeight:
                                                             FontWeight.w700),
                                                   )
@@ -424,7 +417,7 @@ class _CourseItemState extends State<CourseItem> {
                                 ),
                               ),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               width: 6,
                             ),
                             GestureDetector(

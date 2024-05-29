@@ -35,10 +35,7 @@ class _YoutubeDisplayState extends State<YoutubeDisplayItem> {
 
   Future<void> _loadThumbnail() async {
     if (videoId != null) {
-      await Future.delayed(Duration(seconds: 2)); // Simulate network delay
-      setState(() {
-        _thumbnailUrl = 'https://img.youtube.com/vi/$videoId/0.jpg';
-      });
+      _thumbnailUrl = 'https://img.youtube.com/vi/$videoId/0.jpg';
     }
   }
 
@@ -63,8 +60,7 @@ class _YoutubeDisplayState extends State<YoutubeDisplayItem> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: VisibilityDetector(
+    return  VisibilityDetector(
         key: const Key('unique key'),
         onVisibilityChanged: (VisibilityInfo info) {},
         child: ClipRRect(
@@ -77,7 +73,7 @@ class _YoutubeDisplayState extends State<YoutubeDisplayItem> {
                 )
               : Image.network(_thumbnailUrl!),
         ),
-      ),
-    );
+      )
+    ;
   }
 }

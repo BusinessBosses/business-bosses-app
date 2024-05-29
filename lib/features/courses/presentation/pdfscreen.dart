@@ -5,7 +5,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:internet_file/internet_file.dart';
 import 'package:pdfx/pdfx.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
-import 'package:syncfusion_flutter_charts/charts.dart';
 
 class PDFScreen extends StatefulWidget {
   final String url;

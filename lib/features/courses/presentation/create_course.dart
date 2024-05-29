@@ -49,6 +49,7 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
   File? _selectedImage;
   String? photo;
   bool _isCustomPriceSelected = false;
+  List<String>? editDocuments;
 
   List<Map<String, dynamic>> types = <Map<String, dynamic>>[
     <String, dynamic>{
@@ -83,6 +84,12 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
             ),
           );
         }
+        if (widget.course?.contentType == 'both') {
+          editDocuments = List<String>.from(widget.course!.documents!);
+        }
+      } else if (widget.course != null &&
+          widget.course?.contentType == 'files') {
+        editDocuments = List<String>.from(widget.course!.documents!);
       }
       _selectedContentType = widget.course!.contentType == 'files'
           ? ContentType.files
@@ -391,7 +398,7 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: <Widget>[
-                                  const Wrap(children: [
+                                  const Wrap(children: <Widget>[
                                     Text(
                                       'Add Files',
                                       style: TextStyle(
@@ -418,27 +425,80 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                         const SizedBox(
                           height: 8,
                         ),
+                        editDocuments != null && editDocuments!.isNotEmpty
+                            ? Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: editDocuments!
+                                    .asMap()
+                                    .entries
+                                    .map((MapEntry<int, String> entry) {
+                                  int index = entry.key;
+                                  String fileName = entry.value;
+
+                                  return Container(
+                                    margin:
+                                        const EdgeInsets.symmetric(vertical: 6),
+                                    padding: const EdgeInsets.all(6),
+                                    decoration: BoxDecoration(
+                                      color: Colors.black12,
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: Row(
+                                      children: <Widget>[
+                                        const Icon(Icons.insert_drive_file),
+                                        const SizedBox(width: 8),
+                                        Flexible(
+                                          child: Text(
+                                            fileName,
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                        ),
+                                        IconButton(
+                                          icon: const Icon(Icons.close,
+                                              color: Colors.red),
+                                          onPressed: () => _removeFile(index),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                }).toList(),
+                              )
+                            : const SizedBox(),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: selectedFileNames
-                              .map(
-                                (String fileName) => Container(
-                                  margin:
-                                      const EdgeInsets.symmetric(vertical: 6),
-                                  padding: const EdgeInsets.all(6),
-                                  decoration: BoxDecoration(
-                                      color: Colors.black12,
-                                      borderRadius: BorderRadius.circular(10)),
-                                  child: Row(
-                                    children: <Widget>[
-                                      const Icon(Icons.insert_drive_file),
-                                      const SizedBox(width: 8),
-                                      Text(fileName),
-                                    ],
+                              .asMap()
+                              .entries
+                              .map((MapEntry<int, String> entry) {
+                            int index = entry.key;
+                            String fileName = entry.value;
+
+                            return Container(
+                              margin: const EdgeInsets.symmetric(vertical: 6),
+                              padding: const EdgeInsets.all(6),
+                              decoration: BoxDecoration(
+                                color: Colors.black12,
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Row(
+                                children: <Widget>[
+                                  const Icon(Icons.insert_drive_file),
+                                  const SizedBox(width: 8),
+                                  Flexible(
+                                    child: Text(
+                                      fileName,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
                                   ),
-                                ),
-                              )
-                              .toList(),
+                                  IconButton(
+                                    icon: const Icon(Icons.close,
+                                        color: Colors.red),
+                                    onPressed: () => _removeFileUpload(index),
+                                  ),
+                                ],
+                              ),
+                            );
+                          }).toList(),
                         ),
                         const SizedBox(
                           height: 30,
@@ -647,6 +707,24 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                           });
                           return;
                         }
+                        if (widget.course != null &&
+                            widget.course?.thumbnail != null) {
+                          photo = widget.course?.thumbnail;
+                        }
+                        if (_selectedImage == null ||
+                            (widget.course != null &&
+                                widget.course?.thumbnail == null)) {
+                          Get.snackbar(
+                            'Error',
+                            'No thumbnail selected!!',
+                            backgroundColor: Colors.redAccent,
+                            colorText: Colors.white,
+                          );
+                          setState(() {
+                            isProcessing = false;
+                          });
+                          return;
+                        }
 
                         if (description == null || description!.isEmpty) {
                           Get.snackbar(
@@ -762,6 +840,15 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                           }
                         }
 
+                        List<String> allDocuments = <String>[];
+
+                        if (widget.course != null &&
+                            (widget.course?.contentType == 'files' ||
+                                widget.course?.contentType == 'both')) {
+                          allDocuments = List<String>.from(editDocuments!)
+                            ..addAll(selectedFileNames);
+                        }
+
                         Map<String, dynamic> course = <String, dynamic>{
                           'title': title,
                           'industryId': widget.industryId,
@@ -793,9 +880,7 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                           'thumbnail': photo,
                           'contentType':
                               _selectedContentType.toString().split('.').last,
-                          'documents': selectedFileNames.isEmpty
-                              ? null
-                              : selectedFileNames,
+                          'documents': allDocuments,
                           'courseType': _paidCourse ? 'paid' : 'free',
                           'youtubeUrls': _extractYoutubeUrls(),
                           'transcript': _extractTranscripts(),
@@ -823,6 +908,18 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
           ),
         ),
       );
+    });
+  }
+
+  void _removeFile(int index) {
+    setState(() {
+      editDocuments!.removeAt(index);
+    });
+  }
+
+  void _removeFileUpload(int index) {
+    setState(() {
+      selectedFileNames.removeAt(index);
     });
   }
 
