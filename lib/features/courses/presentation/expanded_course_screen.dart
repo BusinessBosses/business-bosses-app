@@ -1028,112 +1028,141 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
                                 )
                               : Container(),
                         ] else ...[
-                          SizedBox(
-                            height: 90,
-                            child: ListView.builder(
-                                scrollDirection: Axis.horizontal,
-                                itemCount: fileslist.length,
-                                itemBuilder: (BuildContext context, int index) {
-                                  return Row(
-                                    children: <Widget>[
-                                      Stack(children: <Widget>[
-                                        SizedBox(
-                                          height: 90,
-                                          width: 160,
-                                          child: ClipRRect(
-                                            borderRadius:
-                                                BorderRadius.circular(12.0),
-                                            child: FittedBox(
-                                              fit: BoxFit.fill,
-                                              child: Stack(
-                                                children: <Widget>[
-                                                  Center(
+                          fileslist.length > 1
+                              ? Column(
+                                  children: [
+                                    SizedBox(
+                                      height: 90,
+                                      child: ListView.builder(
+                                          scrollDirection: Axis.horizontal,
+                                          itemCount: fileslist.length,
+                                          itemBuilder: (BuildContext context,
+                                              int index) {
+                                            return Row(
+                                              children: <Widget>[
+                                                Stack(children: <Widget>[
+                                                  SizedBox(
+                                                    height: 90,
+                                                    width: 160,
+                                                    child: ClipRRect(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              12.0),
+                                                      child: FittedBox(
+                                                        fit: BoxFit.fill,
+                                                        child: Stack(
+                                                          children: <Widget>[
+                                                            Center(
+                                                              child: Stack(
+                                                                children: <Widget>[
+                                                                  NetworkImageWithPlaceHolder(
+                                                                    imageUrl: widget
+                                                                            .course
+                                                                            .thumbnail ??
+                                                                        '',
+                                                                    height: 90,
+                                                                    width: 160,
+                                                                    radius: 10,
+                                                                    placeHolder:
+                                                                        Icons
+                                                                            .person,
+                                                                    iconSize:
+                                                                        30,
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  InkWell(
+                                                    onTap: () {
+                                                      setState(() {
+                                                        selectedFile = index;
+                                                      });
+                                                    },
                                                     child: Stack(
+                                                      alignment:
+                                                          Alignment.center,
                                                       children: <Widget>[
-                                                        NetworkImageWithPlaceHolder(
-                                                          imageUrl: widget
-                                                                  .course
-                                                                  .thumbnail ??
-                                                              '',
+                                                        Container(
                                                           height: 90,
                                                           width: 160,
-                                                          radius: 10,
-                                                          placeHolder:
-                                                              Icons.person,
-                                                          iconSize: 30,
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            color: selectedFile ==
+                                                                    index
+                                                                ? Colors.black
+                                                                    .withAlpha(
+                                                                        150)
+                                                                : Colors
+                                                                    .transparent,
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        12),
+                                                          ),
                                                         ),
+                                                        selectedFile == index
+                                                            ? const Center(
+                                                                child: Text(
+                                                                  'Viewing',
+                                                                  style:
+                                                                      TextStyle(
+                                                                    color: Colors
+                                                                        .white,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w700,
+                                                                    fontSize:
+                                                                        12,
+                                                                  ),
+                                                                ),
+                                                              )
+                                                            : Container(),
+                                                        Positioned(
+                                                            top: 0,
+                                                            bottom: 0,
+                                                            right: 0,
+                                                            left: 0,
+                                                            child:
+                                                                selectedFile ==
+                                                                        index
+                                                                    ? Container()
+                                                                    : SizedBox(
+                                                                        width:
+                                                                            30,
+                                                                        height:
+                                                                            30,
+                                                                        child:
+                                                                            Center(
+                                                                          child:
+                                                                              SvgPicture.asset(
+                                                                            'assets/svgs/pdf.svg',
+                                                                            color:
+                                                                                Colors.white,
+                                                                          ),
+                                                                        ),
+                                                                      )),
                                                       ],
                                                     ),
                                                   ),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        InkWell(
-                                          onTap: () {
-                                            setState(() {
-                                              selectedFile = index;
-                                            });
-                                          },
-                                          child: Stack(
-                                            alignment: Alignment.center,
-                                            children: <Widget>[
-                                              Container(
-                                                height: 90,
-                                                width: 160,
-                                                decoration: BoxDecoration(
-                                                  color: selectedFile == index
-                                                      ? Colors.black
-                                                          .withAlpha(150)
-                                                      : Colors.transparent,
-                                                  borderRadius:
-                                                      BorderRadius.circular(12),
-                                                ),
-                                              ),
-                                              selectedFile == index
-                                                  ? const Center(
-                                                      child: Text(
-                                                        'Viewing',
-                                                        style: TextStyle(
-                                                          color: Colors.white,
-                                                          fontWeight:
-                                                              FontWeight.w700,
-                                                          fontSize: 12,
-                                                        ),
-                                                      ),
-                                                    )
-                                                  : Container(),
-                                              Positioned(
-                                                  top: 0,
-                                                  bottom: 0,
-                                                  right: 0,
-                                                  left: 0,
-                                                  child: selectedFile == index
-                                                      ? Container()
-                                                      : SizedBox(
-                                                          width: 30,
-                                                          height: 30,
-                                                          child: Center(
-                                                            child: SvgPicture
-                                                                .asset(
-                                                              'assets/svgs/pdf.svg',
-                                                              color:
-                                                                  Colors.white,
-                                                            ),
-                                                          ),
-                                                        )),
-                                            ],
-                                          ),
-                                        ),
-                                      ]),
-                                      const SizedBox(
-                                        width: 10,
-                                      )
-                                    ],
-                                  );
-                                }),
-                          ),
+                                                ]),
+                                                const SizedBox(
+                                                  width: 10,
+                                                )
+                                              ],
+                                            );
+                                          }),
+                                    ),
+                                    const SizedBox(
+                                      height: 20,
+                                    )
+                                  ],
+                                )
+                              : Container(),
                         ],
                         combinedList.length > 1
                             ? const SizedBox(
