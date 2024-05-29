@@ -21,12 +21,15 @@ class CourseController extends GetxController {
   final HomeController homeController = Get.find();
   RxBool loading = RxBool(false);
   RxBool error = RxBool(false);
+  RxBool courseLoading = RxBool(false);
+  RxBool courseError = RxBool(false);
   late Industry industry;
   List<dynamic> myHistory = <dynamic>[];
   List<dynamic> myHistoryReceived = <dynamic>[];
   List<dynamic> myHistoryOut = <dynamic>[];
   RxBool hLoading = RxBool(false);
   RxBool hError = RxBool(false);
+  RxBool courseAccess = RxBool(false);
   RxBool rLoading = RxBool(true);
   RxBool rError = RxBool(false);
   RxList<dynamic> reviews = <dynamic>[].obs;
@@ -158,19 +161,7 @@ class CourseController extends GetxController {
     if (response.success) {
       int index = courses.indexWhere((CourseModel c) => c.id == id);
       if (index != -1) {
-        courses[index] = CourseModel.fromMap(<String, dynamic>{
-          ...courses[index].toMap(),
-          ...course,
-        });
-      }
-      int homeIndex =
-          homeController.usercourses.indexWhere((CourseModel c) => c.id == id);
-      if (homeIndex != -1) {
-        homeController.usercourses[homeIndex] =
-            CourseModel.fromMap(<String, dynamic>{
-          ...courses[index].toMap(),
-          ...course,
-        });
+        courses[index].setViews();
       }
       update();
     }
@@ -271,9 +262,7 @@ class CourseController extends GetxController {
     }
   }
 
-  Future<void> payforcourse(String courseid) async {
-    loading(true);
-    update();
+  Future<void> payforcourse(String courseid, num amount) async {
     final ApiResponseModel response = await ApiService.post(
         path: '/course-transactions',
         body: <String, dynamic>{
@@ -283,13 +272,17 @@ class CourseController extends GetxController {
         });
 
     if (response.success) {
+      profileController.myProfile
+          .incrementCoinsCount(-int.parse(amount.toString()));
       Get.snackbar('Success', 'Course purchased successfully');
+      courseAccess(true);
     } else {
       showSnackbar(
           message: 'An error occurred. Please try again',
           title: 'O0PS!',
           error: true);
     }
+    update();
   }
 
   Future<void> fetchuserCourses(String userId) async {
@@ -485,19 +478,35 @@ class CourseController extends GetxController {
     }
     update();
     if (profileController.myProfile.uid != receiverUid) {
-      socket.emit('coin', {
+      socket.emit('coin', <String, dynamic>{
         'postId': postId,
         'userId': userId,
         'timestamp': DateTime.now().millisecondsSinceEpoch,
         'receiverUid': receiverUid,
       });
     } else {
-      socket.emit('coin', {
+      socket.emit('coin', <String, dynamic>{
         'postId': postId,
         'userId': userId,
         'timestamp': DateTime.now().millisecondsSinceEpoch,
       });
     }
+  }
+
+  Future<void> checkUserAccess(CourseModel course) async {
+    courseLoading(true);
+
+    final ApiResponseModel response = await ApiService.get(
+      path:
+          'course-transactions/user-access?userId=${profileController.myProfile.uid}&courseId=${course.id}',
+    );
+    if (response.success) {
+      courseAccess(true);
+    } else {
+      courseAccess(false);
+    }
+    courseLoading(false);
+    update();
   }
 
   void initSocket() {

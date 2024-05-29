@@ -159,7 +159,8 @@ class _UnpaidCoursePopUpState extends State<UnpaidCoursePopUp> {
                     insufficientBalance = true;
                   });
                 } else {
-                  courseController.payforcourse(widget.course.id);
+                  courseController.payforcourse(
+                      widget.course.id, num.parse(widget.course.price!));
                 }
               },
               child: Padding(
