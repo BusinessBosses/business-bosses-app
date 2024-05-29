@@ -1106,9 +1106,9 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
                                                           ),
                                                         ),
                                                         selectedFile == index
-                                                            ? const Center(
+                                                            ? Center(
                                                                 child: Text(
-                                                                  'Viewing',
+                                                                  'Viewing File ${(selectedFile + 1).toString()}',
                                                                   style:
                                                                       TextStyle(
                                                                     color: Colors
