@@ -12,7 +12,6 @@ import 'package:business_bosses_v2/features/courses/presentation/course_reviews.
 import 'package:business_bosses_v2/features/courses/presentation/create_course.dart';
 import 'package:business_bosses_v2/features/courses/presentation/pdfscreen.dart';
 import 'package:business_bosses_v2/features/courses/widgets/course_comment_bottomsheet.dart';
-import 'package:business_bosses_v2/features/courses/widgets/downloadable_item.dart';
 import 'package:business_bosses_v2/features/courses/widgets/unpaidcoursepopup.dart';
 import 'package:business_bosses_v2/features/posts/presentation/boost_post_screen.dart';
 import 'package:business_bosses_v2/features/posts/widgets/youtube_display.dart';
@@ -149,9 +148,9 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
                   child: Stack(
                     children: <Widget>[
                       widget.course.contentType == 'both'
-                          ? isValidYoutubeUrl(combinedList![selectedVideo])
+                          ? isValidYoutubeUrl(combinedList[selectedVideo])
                               ? YoutubeDisplay(
-                                  combinedList![selectedVideo],
+                                  combinedList[selectedVideo],
                                   corner: BorderRadius.circular(0),
                                 )
                               : Stack(children: <Widget>[
@@ -199,14 +198,12 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
                                               if (fileIndex >= 0 &&
                                                   fileIndex <
                                                       fileslist.length) {
-                                                print(
-                                                    'https://businessbosses.com.ng/documents/${fileslist[fileIndex]}');
-                                                Get.to(PDFScreen(
-                                                  url:
-                                                      'https://businessbosses.com.ng/documents/${fileslist[fileIndex]}',
-                                                  filename:
-                                                      fileslist[fileIndex],
-                                                ));
+                                                Get.to(() => PDFScreen(
+                                                      url:
+                                                          'https://businessbosses.com.ng/documents/${fileslist[fileIndex]}',
+                                                      filename:
+                                                          fileslist[fileIndex],
+                                                    ));
                                               }
                                             }
                                           },
@@ -262,18 +259,20 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
                                       children: <Widget>[
-                                        SvgPicture.asset('assets/svgs/pdf.svg',
-                                            height: 50, color: Colors.white),
+                                        SvgPicture.asset(
+                                          'assets/svgs/pdf.svg',
+                                          height: 50,
+                                          color: Colors.white,
+                                        ),
                                         const SizedBox(height: 10),
                                         GestureDetector(
                                           onTap: () async {
-                                            print(
-                                                'https://businessbosses.com.ng/documents/${fileslist[selectedFile]}');
-                                            Get.to(PDFScreen(
-                                              url:
-                                                  'https://businessbosses.com.ng/documents/${fileslist[selectedFile]}',
-                                              filename: fileslist[selectedFile],
-                                            ));
+                                            Get.to(() => PDFScreen(
+                                                  url:
+                                                      'https://businessbosses.com.ng/documents/${fileslist[selectedFile]}',
+                                                  filename:
+                                                      fileslist[selectedFile],
+                                                ));
                                           },
                                           child: Container(
                                             padding: const EdgeInsets.symmetric(
@@ -295,9 +294,9 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
                                     ),
                                   ),
                                 ])
-                              : isValidYoutubeUrl(combinedList![selectedVideo])
+                              : isValidYoutubeUrl(combinedList[selectedVideo])
                                   ? YoutubeDisplay(
-                                      combinedList![selectedVideo],
+                                      combinedList[selectedVideo],
                                       corner: BorderRadius.circular(0),
                                     )
                                   : Stack(children: <Widget>[
@@ -840,7 +839,7 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
                             ),
                             GestureDetector(
                               onTap: () {
-                                Get.to(
+                                Get.to(() =>
                                     CourseReviewScreen(course: widget.course));
                               },
                               child: Wrap(
@@ -903,12 +902,11 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
                                                     fit: BoxFit.fill,
                                                     child: Stack(
                                                       children: <Widget>[
-                                                        (combinedList != null &&
-                                                                index <
-                                                                    combinedList!
+                                                        (index <
+                                                                    combinedList
                                                                         .length &&
                                                                 isValidYoutubeUrl(
-                                                                    combinedList![
+                                                                    combinedList[
                                                                         index]))
                                                             ? YoutubeDisplayItem(
                                                                 widget.course
@@ -997,13 +995,11 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
                                                         child: selectedVideo ==
                                                                 index
                                                             ? Container()
-                                                            : (combinedList !=
-                                                                        null &&
-                                                                    index <
-                                                                        combinedList!
+                                                            : (index <
+                                                                        combinedList
                                                                             .length &&
                                                                     isValidYoutubeUrl(
-                                                                        combinedList![
+                                                                        combinedList[
                                                                             index]))
                                                                 ? Icon(
                                                                     Icons
@@ -1036,12 +1032,11 @@ class _ExpandedCourseScreenState extends State<ExpandedCourseScreen> {
                                       }),
                                 )
                               : Container(),
-                        if (combinedList != null)
-                          combinedList!.length > 1
-                              ? const SizedBox(
-                                  height: 20,
-                                )
-                              : Container(),
+                        combinedList.length > 1
+                            ? const SizedBox(
+                                height: 20,
+                              )
+                            : Container(),
                         widget.course.courseType == 'free'
                             ? Container()
                             : Center(

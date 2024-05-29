@@ -896,11 +896,10 @@ class _CourseItemState extends State<CourseItem> {
                     onPressed: () async {
                       if (widget.course.user!.uid !=
                           profileController.myProfile.uid) {
-                        homeController.postCoin(
+                        courseController.postCoin(
                             profileController.myProfile.uid,
                             widget.course.id,
                             profileController,
-                            'post',
                             widget.course.user!.uid);
                       }
                       setState(() {});
