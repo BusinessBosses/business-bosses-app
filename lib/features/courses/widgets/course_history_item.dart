@@ -6,10 +6,13 @@ import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 class CourseHistoryItem extends StatefulWidget {
+  final dynamic history;
   const CourseHistoryItem({
     super.key,
+    required this.history,
   });
 
   @override
@@ -32,7 +35,7 @@ class _CourseHistoryItemState extends State<CourseHistoryItem> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15.0),
               child: Text(
-                '22nd Jan 2024',
+                formatDate(widget.history['date']),
                 style: TextStyle(
                     color: textColor.withOpacity(0.4),
                     fontWeight: FontWeight.w700),
@@ -48,19 +51,19 @@ class _CourseHistoryItemState extends State<CourseHistoryItem> {
             const SizedBox(
               height: 5,
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15.0),
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
-                decoration: BoxDecoration(
-                    color: backgroundcolorinterface,
-                    borderRadius: BorderRadius.circular(30)),
-                child: const Text('Course Sale'),
-              ),
-            ),
-            const SizedBox(
-              height: 5,
-            ),
+            // Padding(
+            //   padding: const EdgeInsets.symmetric(horizontal: 15.0),
+            //   child: Container(
+            //     padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
+            //     decoration: BoxDecoration(
+            //         color: backgroundcolorinterface,
+            //         borderRadius: BorderRadius.circular(30)),
+            //     child: const Text('Course Sale'),
+            //   ),
+            // ),
+            // const SizedBox(
+            //   height: 5,
+            // ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15.0),
               child: Row(
@@ -70,11 +73,11 @@ class _CourseHistoryItemState extends State<CourseHistoryItem> {
                   const SizedBox(
                     height: 20,
                   ),
-                  const Expanded(
+                  Expanded(
                     child: Text(
-                      'What does investment ',
-                      style:
-                          TextStyle(fontWeight: FontWeight.w700, fontSize: 18),
+                      widget.history['course']['title'],
+                      style: const TextStyle(
+                          fontWeight: FontWeight.w700, fontSize: 18),
                       maxLines: 2,
                       overflow:
                           TextOverflow.ellipsis, // Optional: Handle overflow
@@ -86,14 +89,19 @@ class _CourseHistoryItemState extends State<CourseHistoryItem> {
                   Wrap(
                     crossAxisAlignment: WrapCrossAlignment.center,
                     children: [
-                      const Text('+',
-                          style: TextStyle(
+                      Text(
+                          widget.history['course']['userId'] ==
+                                  profileController.myProfile.uid
+                              ? '+'
+                              : '-',
+                          style: const TextStyle(
                               fontWeight: FontWeight.w900, fontSize: 18)),
                       SvgPicture.asset('assets/svgs/coin.svg'),
-                      const Text('200',
-                          style: TextStyle(
+                      Text(widget.history['course']['price'],
+                          style: const TextStyle(
                               fontWeight: FontWeight.w900, fontSize: 18)),
-                      Text('(\$200)',
+                      Text(
+                          ' (\$${(num.parse(widget.history['course']['price']) / 100).toString()})',
                           style: TextStyle(
                               fontWeight: FontWeight.w700,
                               fontSize: 18,
@@ -123,10 +131,11 @@ class _CourseHistoryItemState extends State<CourseHistoryItem> {
                         const SizedBox(
                           width: 5,
                         ),
-                        const Text('data')
+                        Text(widget.history['user']['name'] ??
+                            widget.history['user']['username'])
                       ]),
                   Text(
-                    '2hr ago',
+                    formatDateTimeToAgo(widget.history['date']),
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           color: textColor.withOpacity(0.4),
                         ),
@@ -139,5 +148,51 @@ class _CourseHistoryItemState extends State<CourseHistoryItem> {
             ),
           ],
         ));
+  }
+
+  String formatDateTimeToAgo(String dateTimeString) {
+    DateTime dateTime = DateTime.parse(dateTimeString);
+    Duration difference = DateTime.now().difference(dateTime);
+
+    if (difference.inDays > 365) {
+      return '${(difference.inDays / 365).floor()} yrs ago';
+    } else if (difference.inDays > 30) {
+      return '${(difference.inDays / 30).floor()} mon ago';
+    } else if (difference.inDays > 0) {
+      return '${difference.inDays} d ago';
+    } else if (difference.inHours > 0) {
+      return '${difference.inHours} hrs ago';
+    } else if (difference.inMinutes > 0) {
+      return '${difference.inMinutes} mins ago';
+    } else {
+      return 'just now';
+    }
+  }
+
+  String _getDaySuffix(int day) {
+    if (day >= 11 && day <= 13) {
+      return 'th';
+    }
+    switch (day % 10) {
+      case 1:
+        return 'st';
+      case 2:
+        return 'nd';
+      case 3:
+        return 'rd';
+      default:
+        return 'th';
+    }
+  }
+
+  String formatDate(String dateString) {
+    DateTime dateTime = DateTime.parse(dateString);
+    String day = DateFormat('d').format(dateTime);
+    String month = DateFormat('MMM').format(dateTime);
+    String year = DateFormat('y').format(dateTime);
+
+    String suffix = _getDaySuffix(int.parse(day));
+
+    return '$day$suffix $month $year';
   }
 }

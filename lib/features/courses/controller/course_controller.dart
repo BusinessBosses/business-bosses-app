@@ -27,7 +27,7 @@ class CourseController extends GetxController {
   List<dynamic> myHistory = <dynamic>[];
   List<dynamic> myHistoryReceived = <dynamic>[];
   List<dynamic> myHistoryOut = <dynamic>[];
-  RxBool hLoading = RxBool(false);
+  RxBool hLoading = RxBool(true);
   RxBool hError = RxBool(false);
   RxBool courseAccess = RxBool(false);
   RxBool rLoading = RxBool(true);
@@ -399,10 +399,9 @@ class CourseController extends GetxController {
   Future<void> initHistory(UserModel user) async {
     hLoading(true);
     hError(false);
-    update();
     myHistory.clear();
-    final ApiResponseModel response =
-        await ApiService.get(path: 'course-transactions/user/${user.uid}');
+    final ApiResponseModel response = await ApiService.get(
+        path: 'course-transactions/user/${user.uid}?size=10000');
     if (response.success) {
       for (int i = 0; i < response.data['rows'].length; i++) {
         myHistory.add(response.data['rows'][i]);

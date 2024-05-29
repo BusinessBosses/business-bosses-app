@@ -27,13 +27,13 @@ class _CourseHistoryState extends State<CourseHistory> {
   void initState() {
     super.initState();
     _pageController = PageController(initialPage: _currentIndex);
+    courseController.initHistory(profileController.myProfile);
   }
 
   @override
   void dispose() {
     _pageController.dispose();
     super.dispose();
-    courseController.initHistory(profileController.myProfile);
   }
 
   @override

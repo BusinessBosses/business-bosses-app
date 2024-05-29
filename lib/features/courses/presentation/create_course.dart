@@ -49,6 +49,7 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
   File? _selectedImage;
   String? photo;
   bool _isCustomPriceSelected = false;
+  String? customPrice;
   List<String>? editDocuments;
 
   List<Map<String, dynamic>> types = <Map<String, dynamic>>[
@@ -626,7 +627,7 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                         keyboardType: TextInputType.number,
                         onChanged: (String value) {
                           setState(() {
-                            _courseprice = int.parse(value);
+                            customPrice = value;
                           });
                         },
                       ),
@@ -855,7 +856,9 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                           'description': description ?? desccontroller!.text,
                           'userId': profileController.myProfile.uid,
                           'timestamp': DateTime.now().millisecondsSinceEpoch,
-                          'price': _courseprice,
+                          'price': _isCustomPriceSelected
+                              ? customPrice
+                              : _courseprice,
                           'isPromoted': false,
                           'isActive': true,
                           'isApproved': false,
