@@ -839,13 +839,18 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                                                                 horizontal: 20,
                                                                 vertical: 10),
                                                         decoration: BoxDecoration(
-                                                          border: Border.all(width: 4, color: Colors.white),
+                                                            border: Border.all(
+                                                                width: 4,
+                                                                color: Colors
+                                                                    .white),
                                                             borderRadius:
                                                                 BorderRadius
                                                                     .circular(
                                                                         10),
-                                                            color:
-                                                                Colors.white70.withAlpha(120)),
+                                                            color: Colors
+                                                                .white70
+                                                                .withAlpha(
+                                                                    120)),
                                                         child: Wrap(
                                                           crossAxisAlignment:
                                                               WrapCrossAlignment
@@ -903,7 +908,10 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                                                                           .circular(
                                                                               30)),
                                                               child: const Icon(
-                                                                  Icons.call, color: Colors.green,),
+                                                                Icons.call,
+                                                                color: Colors
+                                                                    .green,
+                                                              ),
                                                             ),
                                                             const SizedBox(
                                                               width: 10,
@@ -1119,7 +1127,13 @@ class StartCallDialog extends StatelessWidget {
     final ProfileController _profileController = Get.find();
     final ChatController _chatController = Get.find();
     return AlertDialog(
-      title: const Text('Start Instant Call'),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20), // Set the corner radius here
+      ),
+      title: const Text(
+        'Start Instant Call',
+        style: TextStyle(fontWeight: FontWeight.w700),
+      ),
       content: FutureBuilder(
         future: startCall(<String, dynamic>{
           'callerId': callerId,
@@ -1127,10 +1141,11 @@ class StartCallDialog extends StatelessWidget {
         }),
         builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const SizedBox(
-              height: 24.0,
-              width: 24.0,
-              child: CircularProgressIndicator(),
+            return Container(
+              height: 40,
+              child: Center(
+                child: CircularProgressIndicator(),
+              ),
             );
           } else if (snapshot.hasError) {
             return Text('Failed to start call: An Error Occured');
@@ -1140,40 +1155,61 @@ class StartCallDialog extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 Text('Call ID: $callId'),
-                IconButton(
-                  onPressed: () {
-                    // Copy call ID to clipboard
-                    Clipboard.setData(ClipboardData(text: callId!));
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Call ID copied to clipboard'),
-                        duration: Duration(seconds: 1),
-                      ),
-                    );
-                  },
-                  icon: const Icon(Icons.content_copy),
+                SizedBox(
+                  height: 20,
                 ),
-                GestureDetector(
-                    onTap: () {
-                      _chatController.addNewChat(
-                        <String, dynamic>{
-                          'senderUid': _profileController.myProfile.uid,
-                          'receiverUid': chatargs.uid,
-                          'messageText': '$callId' + 'ccaalliidd'
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    GestureDetector(
+                        onTap: () {
+                          _chatController.addNewChat(
+                            <String, dynamic>{
+                              'senderUid': _profileController.myProfile.uid,
+                              'receiverUid': chatargs.uid,
+                              'messageText': '$callId' + 'ccaalliidd'
+                            },
+                            chatargs,
+                          );
+                          Get.back();
+                          // print(chatargs);
                         },
-                        chatargs,
-                      );
-                      Get.back();
-                      // print(chatargs);
-                    },
-                    child: Container(
-                        padding: const EdgeInsetsDirectional.symmetric(
-                            horizontal: 15, vertical: 10),
-                        decoration: BoxDecoration(
-                            color: primaryColorLT,
-                            borderRadius: BorderRadius.circular(10)),
-                        child: const Text('Send Call ID',
-                            style: TextStyle(color: Colors.white))))
+                        child: Container(
+                            padding: const EdgeInsetsDirectional.symmetric(
+                                horizontal: 20, vertical: 14),
+                            decoration: BoxDecoration(
+                                color: primaryColorLT,
+                                borderRadius: BorderRadius.circular(10)),
+                            child: const Text(
+                              'Send Call ID',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w700),
+                            ))),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Container(
+                      decoration: BoxDecoration(
+                          color: backgroundColor,
+                          borderRadius: BorderRadius.circular(10)),
+                      child: IconButton(
+                        onPressed: () {
+                          // Copy call ID to clipboard
+                          Clipboard.setData(ClipboardData(text: callId!));
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Call ID copied to clipboard'),
+                              duration: Duration(seconds: 1),
+                            ),
+                          );
+                        },
+                        icon: const Icon(Icons.content_copy),
+                      ),
+                    ),
+                  ],
+                )
               ],
             );
           }
@@ -1218,38 +1254,89 @@ class JoinCallDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('Join Call'),
-      content: TextField(
-        controller: _callIdController,
-        decoration: const InputDecoration(
-          hintText: 'Enter Call ID',
-        ),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20), // Set the corner radius here
       ),
-      actions: <Widget>[
-        ElevatedButton(
-          onPressed: () {
-            final String callId = _callIdController.text.trim();
-            // Navigate to the call page with the call ID
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (BuildContext context) => CallPage(
-                  callID: callId,
-                  userId: userId,
-                  username: username,
+      title: const Text(
+        'Join Call',
+        style: TextStyle(fontWeight: FontWeight.w700),
+      ),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 15),
+                decoration: BoxDecoration(
+                  color: const Color.fromRGBO(
+                      244, 244, 244, 1), // Background color
+                  borderRadius: BorderRadius.circular(10.0), // Border radius
+                  border: Border.all(
+                    color:
+                        const Color.fromRGBO(224, 224, 224, 1), // Border color
+                    width: 1.0, // Border width
+                  ),
                 ),
+            child: TextField(
+              controller: _callIdController,
+              decoration: const InputDecoration(
+                hintText: 'Enter Call ID',
+                border: InputBorder.none,
               ),
-            );
-          },
-          child: const Text('Join'),
-        ),
-        ElevatedButton(
-          onPressed: () {
-            Navigator.pop(context); // Close the dialog
-          },
-          child: const Text('Cancel'),
-        ),
-      ],
+            ),
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          Container(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                GestureDetector(
+                    onTap: () {
+                      final String callId = _callIdController.text.trim();
+                      // Navigate to the call page with the call ID
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (BuildContext context) => CallPage(
+                            callID: callId,
+                            userId: userId,
+                            username: username,
+                          ),
+                        ),
+                      );
+                    },
+                    child: Container(
+                        padding: const EdgeInsetsDirectional.symmetric(
+                            horizontal: 20, vertical: 14),
+                        decoration: BoxDecoration(
+                            color: primaryColorLT,
+                            borderRadius: BorderRadius.circular(10)),
+                        child: const Text(
+                          'Join',
+                          style: TextStyle(
+                              color: Colors.white, fontWeight: FontWeight.w700),
+                        ))),
+                SizedBox(
+                  width: 10,
+                ),
+                Container(
+                  decoration: BoxDecoration(
+                      color: backgroundColor,
+                      borderRadius: BorderRadius.circular(10)),
+                  child: IconButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    icon: const Icon(Icons.close),
+                  ),
+                ),
+              ],
+            ),
+          )
+        ],
+      ),
     );
   }
 }
