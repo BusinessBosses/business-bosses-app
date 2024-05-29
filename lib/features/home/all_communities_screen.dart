@@ -72,6 +72,8 @@ class _AllCommunitiesScreenState extends State<AllCommunitiesScreen>
               onPressed: () {
                 _isSearchingDonations = !_isSearchingDonations;
                 setState(() {});
+                donationsController.searchedPosts.clear();
+                donationsController.searchedUsers.clear();
               },
             ),
     ];
