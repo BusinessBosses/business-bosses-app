@@ -154,10 +154,22 @@ class _FilterUsersState extends State<FilterUsers> {
                                       ? Row(
                                           children: <Widget>[
                                             Text(profileController
-                                                    .bossOfTheWeek?.name ??
-                                                profileController
-                                                    .bossOfTheWeek?.username ??
-                                                ''),
+                                                        .bossOfTheWeek!
+                                                        .name!
+                                                        .length <=
+                                                    20
+                                                ? profileController
+                                                        .bossOfTheWeek?.name ??
+                                                    profileController
+                                                        .bossOfTheWeek
+                                                        ?.username ??
+                                                    ''
+                                                : profileController
+                                                            .bossOfTheWeek!
+                                                            .name !=
+                                                        null
+                                                    ? '${profileController.bossOfTheWeek!.name!.substring(0, 12)}...}'
+                                                    : '${profileController.bossOfTheWeek!.username.substring(0, 12)}...)}'),
                                             const SizedBox(width: 5),
                                             SvgPicture.asset(
                                               'assets/svgs/premiumbadge.svg',
@@ -166,11 +178,19 @@ class _FilterUsersState extends State<FilterUsers> {
                                             )
                                           ],
                                         )
-                                      : Text(profileController
-                                              .bossOfTheWeek?.name ??
-                                          profileController
-                                              .bossOfTheWeek?.username ??
-                                          ''),
+                                      : Text(profileController.bossOfTheWeek!
+                                                  .name!.length <=
+                                              20
+                                          ? profileController
+                                                  .bossOfTheWeek?.name ??
+                                              profileController
+                                                  .bossOfTheWeek?.username ??
+                                              ''
+                                          : profileController
+                                                      .bossOfTheWeek!.name !=
+                                                  null
+                                              ? '${profileController.bossOfTheWeek!.name!.substring(0, 12)}...}'
+                                              : '${profileController.bossOfTheWeek!.username.substring(0, 12)}...)}'),
                                   subtitle: Text(
                                     profileController.bossOfTheWeek?.bio ??
                                         profileController
@@ -251,7 +271,7 @@ class _FilterUsersState extends State<FilterUsers> {
                                                     : widget.filterItems[i]
                                                                 .name !=
                                                             null
-                                                        ? '${widget.filterItems[i].name!.substring(0, 20)}...'
+                                                        ? '${widget.filterItems[i].name!.substring(0, 15)}...'
                                                         : widget.filterItems[i]
                                                             .username),
                                                 const SizedBox(width: 5),
@@ -270,7 +290,7 @@ class _FilterUsersState extends State<FilterUsers> {
                                               ? widget.filterItems[i].name!
                                               : widget.filterItems[i].name !=
                                                       null
-                                                  ? '${widget.filterItems[i].name!.substring(0, 20)}...'
+                                                  ? '${widget.filterItems[i].name!.substring(0, 15)}...'
                                                   : widget
                                                       .filterItems[i].username),
                                       subtitle: Text(
