@@ -497,7 +497,7 @@ class CourseController extends GetxController {
 
     final ApiResponseModel response = await ApiService.get(
       path:
-          'course-transactions/user-access?userId=${profileController.myProfile.uid}&courseId=${course.id}',
+          'course-transactions/user-access/${profileController.myProfile.uid}/${course.id}',
     );
     if (response.success) {
       courseAccess(true);
