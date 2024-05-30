@@ -131,6 +131,32 @@ class _WithdrawalScreenState extends State<WithdrawalScreen> {
                         ),
                       ],
                     ),
+                    Center(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          SvgPicture.asset(
+                            'assets/svgs/report.svg',
+                            color: primaryColorLT,
+                            height: 18,
+                          ),
+                          const SizedBox(
+                            width: 5,
+                          ),
+                          const Expanded(
+                            child: Text(
+                              'Withdrawals are subject to transfer charges',
+                              style: TextStyle(color: primaryColorLT),
+                              overflow: TextOverflow
+                                  .visible, // or TextOverflow.ellipsis if you want an ellipsis when it overflows
+                              softWrap:
+                                  true, // This allows the text to wrap to the next line
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                     const SizedBox(height: 10),
                     const Text('Payment Method'),
                     Container(
@@ -307,32 +333,6 @@ class _WithdrawalScreenState extends State<WithdrawalScreen> {
                     ),
                     SizedBox(
                       height: 5,
-                    ),
-                    Center(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: <Widget>[
-                          SvgPicture.asset(
-                            'assets/svgs/report.svg',
-                            color: primaryColorLT,
-                            height: 18,
-                          ),
-                          const SizedBox(
-                            width: 5,
-                          ),
-                          const Expanded(
-                            child: Text(
-                              'Withdrawals are subject transfer charges',
-                              style: TextStyle(color: primaryColorLT),
-                              overflow: TextOverflow
-                                  .visible, // or TextOverflow.ellipsis if you want an ellipsis when it overflows
-                              softWrap:
-                                  true, // This allows the text to wrap to the next line
-                            ),
-                          ),
-                        ],
-                      ),
                     ),
                   ],
                 ),
