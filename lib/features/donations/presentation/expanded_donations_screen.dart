@@ -722,7 +722,9 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
                       if (widget.donation.user?.uid ==
                               profileController.myProfile.uid &&
                           widget.donation.amountRecieved >=
-                              widget.donation.targetAmount!)
+                              widget.donation.targetAmount! &&
+                          (widget.donation.isCashoutApproved != null &&
+                              !widget.donation.isCashoutApproved!))
                         Positioned(
                           left: 0,
                           right: 0,

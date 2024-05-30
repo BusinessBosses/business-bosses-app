@@ -1302,7 +1302,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                                                                   () {
                                                                     int postCount =
                                                                         _marketController
-                                                                            .products
+                                                                            .markets
                                                                             .length;
                                                                     String
                                                                         formattedpostCount =

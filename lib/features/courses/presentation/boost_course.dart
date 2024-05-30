@@ -77,7 +77,7 @@ class _BoostCourseState extends State<BoostCourse> {
         path: 'courses/update-course/${widget.postId}',
         body: <String, dynamic>{
           'isPromoted': true,
-          'promotionDuration': '$initPlan dollars',
+          'plan': '$initPlan dollars',
           'paymentMethod': method,
         });
   }
