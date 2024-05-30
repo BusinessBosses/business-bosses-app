@@ -21,7 +21,7 @@ class DonationModel {
   final List<String> images;
   final bool? isApproved;
   final bool? isSuspended;
-  final bool? isCashoutApproved;
+  bool? isCashoutApproved;
   final List<DonationTransaction>? transactions;
   DonationModel({
     required this.id,

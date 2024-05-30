@@ -492,39 +492,39 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
                                           ),
                                         ),
                                       ),
-                                      GestureDetector(
-                                        onTap: () {
-                                          Get.to(() => BoostDonation(
-                                                donationId: widget.donation.id,
-                                                donationTitle:
-                                                    widget.donation.title!,
-                                              ));
-                                        },
-                                        child: Container(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 20, vertical: 10),
-                                          decoration: BoxDecoration(
-                                              border: Border.all(
-                                                  width: 2, color: Colors.grey),
-                                              borderRadius:
-                                                  BorderRadius.circular(10)),
-                                          child: Wrap(
-                                            crossAxisAlignment:
-                                                WrapCrossAlignment.center,
-                                            children: <Widget>[
-                                              const Text('Boost'),
-                                              const SizedBox(
-                                                width: 5,
-                                              ),
-                                              SvgPicture.asset(
-                                                'assets/svgs/rocket.svg',
-                                                height: 20,
-                                                color: subtextColor,
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                      ),
+                                      // GestureDetector(
+                                      //   onTap: () {
+                                      //     Get.to(() => BoostDonation(
+                                      //           donationId: widget.donation.id,
+                                      //           donationTitle:
+                                      //               widget.donation.title!,
+                                      //         ));
+                                      //   },
+                                      //   child: Container(
+                                      //     padding: const EdgeInsets.symmetric(
+                                      //         horizontal: 20, vertical: 10),
+                                      //     decoration: BoxDecoration(
+                                      //         border: Border.all(
+                                      //             width: 2, color: Colors.grey),
+                                      //         borderRadius:
+                                      //             BorderRadius.circular(10)),
+                                      //     child: Wrap(
+                                      //       crossAxisAlignment:
+                                      //           WrapCrossAlignment.center,
+                                      //       children: <Widget>[
+                                      //         const Text('Boost'),
+                                      //         const SizedBox(
+                                      //           width: 5,
+                                      //         ),
+                                      //         SvgPicture.asset(
+                                      //           'assets/svgs/rocket.svg',
+                                      //           height: 20,
+                                      //           color: subtextColor,
+                                      //         )
+                                      //       ],
+                                      //     ),
+                                      //   ),
+                                      // ),
                                       GestureDetector(
                                         onTap: () => _sharePost(),
                                         child: Container(
@@ -722,7 +722,9 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
                       if (widget.donation.user?.uid ==
                               profileController.myProfile.uid &&
                           widget.donation.amountRecieved >=
-                              widget.donation.targetAmount!)
+                              widget.donation.targetAmount! &&
+                          (widget.donation.isCashoutApproved != null &&
+                              !widget.donation.isCashoutApproved!))
                         Positioned(
                           left: 0,
                           right: 0,
