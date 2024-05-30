@@ -123,7 +123,7 @@ class _WithdrawalScreenState extends State<WithdrawalScreen> {
                             children: <Widget>[
                               Text(
                                 _withdrawlAmountController.text.isNotEmpty
-                                    ? ' \$${num.parse(_withdrawlAmountController.text) / 100}'
+                                    ? ' \$${(0.7 * (num.parse(_withdrawlAmountController.text) / 100)).toStringAsFixed(2)}'
                                     : '\$0',
                               ),
                             ],
@@ -281,13 +281,15 @@ class _WithdrawalScreenState extends State<WithdrawalScreen> {
                             setState(() {
                               isProcessing = true;
                             });
+
                             await coinHistoryController
                                 .makeWithdrawal(<String, dynamic>{
                               'status': 'Pending',
                               'description': _walletAddressController.text,
                               'userId': _profileController.myProfile.uid,
                               'transactionType': 'debit',
-                              'amount': _withdrawlAmountController.text,
+                              'amount':
+                                  '\$${(0.7 * (num.parse(_withdrawlAmountController.text) / 100)).toStringAsFixed(2)}',
                               'paymentMethod': transformText(_paymentMethods!),
                               'date': DateTime.now().toString(),
                             });
@@ -303,7 +305,9 @@ class _WithdrawalScreenState extends State<WithdrawalScreen> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 5,),
+                    SizedBox(
+                      height: 5,
+                    ),
                     Center(
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -319,7 +323,7 @@ class _WithdrawalScreenState extends State<WithdrawalScreen> {
                           ),
                           const Expanded(
                             child: Text(
-                              'Withdrawals are subject to a 30% deduction',
+                              'Withdrawals are subject transfer charges',
                               style: TextStyle(color: primaryColorLT),
                               overflow: TextOverflow
                                   .visible, // or TextOverflow.ellipsis if you want an ellipsis when it overflows

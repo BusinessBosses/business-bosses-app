@@ -124,7 +124,7 @@ class CoinPopup extends StatelessWidget {
                 Expanded(
                   child: Center(
                     child: Text(
-                      'Use the withdraw button to withdraw your coins to cash. The minimum withdrawal amount is 5,000 Coins (\$50 USD). The payment processor will apply withdrawal fees, and transfers may take up to 7 business days.',
+                      'Use the withdraw button to withdraw your coins to cash. The minimum withdrawal amount is 5,000 Coins. The payment processor will apply withdrawal fees, and transfers may take up to 7 business days.',
                       style: bodyText2,
                       textAlign: TextAlign.start,
                     ),
