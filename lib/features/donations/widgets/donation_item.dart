@@ -59,16 +59,16 @@ class _DonationItemState extends State<DonationItem> {
         style: bodyText2,
       ),
     ),
-    const PopupMenuDivider(
-      height: 0.0,
-    ),
-    const PopupMenuItem<String>(
-      value: 'Boost',
-      child: Text(
-        'Boost',
-        style: bodyText2,
-      ),
-    ),
+    // const PopupMenuDivider(
+    //   height: 0.0,
+    // ),
+    // const PopupMenuItem<String>(
+    //   value: 'Boost',
+    //   child: Text(
+    //     'Boost',
+    //     style: bodyText2,
+    //   ),
+    // ),
   ];
 
   final List<PopupMenuEntry<String>> myPopup = <PopupMenuEntry<String>>[
@@ -431,12 +431,13 @@ class _DonationItemState extends State<DonationItem> {
                                   ],
                                 ),
                               );
-                            } else if (val == 'Boost') {
-                              Get.to(() => BoostDonation(
-                                    donationId: widget.donation.id,
-                                    donationTitle: widget.donation.title!,
-                                  ));
                             }
+                            // else if (val == 'Boost') {
+                            //   Get.to(() => BoostDonation(
+                            //         donationId: widget.donation.id,
+                            //         donationTitle: widget.donation.title!,
+                            //       ));
+                            // }
                           },
                         )
                       : GestureDetector(

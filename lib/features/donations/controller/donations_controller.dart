@@ -455,6 +455,7 @@ class DonationsController extends GetxController {
           'userId': profileController.myProfile.uid
         });
     if (response.success) {
+      donationModel.isCashoutApproved = true;
       profileController.myProfile
           .incrementCoinsCount(donationModel.amountRecieved);
       showSnackbar(message: 'Withdrawal Successful!');
