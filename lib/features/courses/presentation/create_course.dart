@@ -635,59 +635,59 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                   const SizedBox(
                     height: 30,
                   ),
-                  Row(
-                    children: <Widget>[
-                      SvgPicture.asset('assets/svgs/rocket.svg'),
-                      const SizedBox(width: 15),
-                      const Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text(
-                              'Boost this listing?',
-                              style: TextStyle(
-                                fontWeight: FontWeight.w600,
-                                fontSize: 18,
-                              ),
-                            ),
-                            Text(
-                              'Reach a wider audience and get more views',
-                              style: TextStyle(
-                                fontWeight: FontWeight.w600,
-                                fontSize: 11,
-                                color: Color(0xFF777777),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Row(
-                        children: <Widget>[
-                          const Text(
-                            'No',
-                            style: TextStyle(
-                                fontSize: 8, fontWeight: FontWeight.w700),
-                          ),
-                          Switch(
-                            value: _shouldPromote,
-                            onChanged: (bool value) {
-                              setState(() {
-                                _shouldPromote = value;
-                              });
-                            },
-                          ),
-                          const Text(
-                            'Yes',
-                            style: TextStyle(
-                                fontSize: 8, fontWeight: FontWeight.w700),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
+                  // Row(
+                  //   children: <Widget>[
+                  //     SvgPicture.asset('assets/svgs/rocket.svg'),
+                  //     const SizedBox(width: 15),
+                  //     const Expanded(
+                  //       child: Column(
+                  //         crossAxisAlignment: CrossAxisAlignment.start,
+                  //         children: <Widget>[
+                  //           Text(
+                  //             'Boost this listing?',
+                  //             style: TextStyle(
+                  //               fontWeight: FontWeight.w600,
+                  //               fontSize: 18,
+                  //             ),
+                  //           ),
+                  //           Text(
+                  //             'Reach a wider audience and get more views',
+                  //             style: TextStyle(
+                  //               fontWeight: FontWeight.w600,
+                  //               fontSize: 11,
+                  //               color: Color(0xFF777777),
+                  //             ),
+                  //           ),
+                  //         ],
+                  //       ),
+                  //     ),
+                  //     Row(
+                  //       children: <Widget>[
+                  //         const Text(
+                  //           'No',
+                  //           style: TextStyle(
+                  //               fontSize: 8, fontWeight: FontWeight.w700),
+                  //         ),
+                  //         Switch(
+                  //           value: _shouldPromote,
+                  //           onChanged: (bool value) {
+                  //             setState(() {
+                  //               _shouldPromote = value;
+                  //             });
+                  //           },
+                  //         ),
+                  //         const Text(
+                  //           'Yes',
+                  //           style: TextStyle(
+                  //               fontSize: 8, fontWeight: FontWeight.w700),
+                  //         ),
+                  //       ],
+                  //     ),
+                  //   ],
+                  // ),
+                  // const SizedBox(
+                  //   height: 20,
+                  // ),
                   Padding(
                     padding: const EdgeInsets.only(bottom: 50.0),
                     child: MCustomButton(
