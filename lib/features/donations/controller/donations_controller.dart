@@ -57,6 +57,27 @@ class DonationsController extends GetxController {
     update();
   }
 
+  Future<DonationModel> fetchaDonation(String id) async {
+    var donation;
+    try {
+      loading(true);
+      update();
+      ApiResponseModel response = await ApiService.get(path: 'donation/$id');
+      if (response.success) {
+        donation = DonationModel.fromMap(<String, dynamic>{
+          ...response.data,
+        });
+      }
+      error(false);
+    } catch (e) {
+      error(true);
+    } finally {
+      loading(false);
+    }
+    update();
+    return donation;
+  }
+
   Future<void> fetchDonations() async {
     try {
       loading(true); // Set loading to true before fetching data
@@ -232,6 +253,18 @@ class DonationsController extends GetxController {
           ...donation
         };
         donations[donationIndex] = DonationModel.fromMap(mergedData);
+      }
+
+      final int userDonationIndex = userdonations
+          .indexWhere((DonationModel donation) => donation.id == id);
+
+      // Update the donation in the list with the updated data
+      if (donationIndex != -1) {
+        Map<String, dynamic> mergedData = <String, dynamic>{
+          ...userdonations[userDonationIndex].toMap(),
+          ...donation
+        };
+        userdonations[userDonationIndex] = DonationModel.fromMap(mergedData);
       }
       update();
       Get.back();
@@ -422,6 +455,7 @@ class DonationsController extends GetxController {
           'userId': profileController.myProfile.uid
         });
     if (response.success) {
+      donationModel.isCashoutApproved = true;
       profileController.myProfile
           .incrementCoinsCount(donationModel.amountRecieved);
       showSnackbar(message: 'Withdrawal Successful!');
@@ -482,8 +516,21 @@ class DonationsController extends GetxController {
       } else {
         donations[donationIndex].likes?.add(userId);
       }
-      update();
     }
+    update();
+
+    final int userDonationIndex = userdonations
+        .indexWhere((DonationModel donation) => donation.id == postId);
+    if (userDonationIndex != -1) {
+      final bool checkLiked =
+          userdonations[userDonationIndex].likes!.contains(userId);
+      if (checkLiked) {
+        userdonations[userDonationIndex].likes?.remove(userId);
+      } else {
+        userdonations[userDonationIndex].likes?.add(userId);
+      }
+    }
+    update();
 
     if (profileController.myProfile.uid != receiverUid) {
       socket.emit('like', <String, dynamic>{
@@ -507,6 +554,12 @@ class DonationsController extends GetxController {
         donations.indexWhere((DonationModel donation) => donation.id == postId);
     if (donationIndex != -1) {
       donations[donationIndex].comments?.add(comment);
+    }
+
+    final int userDonationIndex = userdonations
+        .indexWhere((DonationModel donation) => donation.id == postId);
+    if (donationIndex != -1) {
+      userdonations[userDonationIndex].comments?.add(comment);
     }
 
     update();

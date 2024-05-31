@@ -452,6 +452,18 @@ class HomeController extends GetxController {
           sponsoredPosts[spIndex]['data'].likes!.add(userId);
         }
       }
+    } else if (type == 'course') {
+      final int courseIndex =
+          usercourses.indexWhere((CourseModel course) => course.id == postId);
+      if (courseIndex != -1) {
+        final bool checkLiked =
+            usercourses[courseIndex].likes!.contains(userId);
+        if (checkLiked) {
+          usercourses[courseIndex].likes?.remove(userId);
+        } else {
+          usercourses[courseIndex].likes?.add(userId);
+        }
+      }
     } else {
       final int postIndex = mixedPosts.indexWhere((Map<String, dynamic> post) =>
           post['shouldCount'] == null &&
@@ -803,6 +815,7 @@ class HomeController extends GetxController {
         var reposted = response.data['repost']['reposted'];
         if (reposted) {
           profileController.addRePost(response.data);
+          addNewRePost(response.data, profileController);
           final ApiResponseModel timeresponse = await ApiService.put(
               path: 'post/update-post/$postId',
               body: oldtimestamp == 0 ? timestampData : timestampDataoldpost);
@@ -853,6 +866,29 @@ class HomeController extends GetxController {
         'name': profileController.myProfile.name,
         'bio': profileController.myProfile.bio
       }
+    });
+  }
+
+  void addNewRePost(
+      Map<String, dynamic> newPost, ProfileController profileController) async {
+    PostModel modelizedNewPost = PostModel.fromMap({
+      ...newPost,
+      'coins': <String>[],
+      'likes': <String>[],
+      'reposts': <String>[],
+      'comments': <CommentModel>[],
+    });
+    mixedPosts.insert(
+        1, {'isForum': false, 'data': modelizedNewPost, 'isSponsored': false});
+
+    // posts.insert(0, modelizedNewPost);
+    update();
+    socket.emit('newPostEvent', {
+      'newPost': newPost,
+      'coins': <String>[],
+      'likes': <String>[],
+      'reposts': <String>[],
+      'comments': <CommentModel>[],
     });
   }
 

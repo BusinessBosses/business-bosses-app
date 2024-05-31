@@ -145,7 +145,8 @@ class CourseModel {
           map['description'] != null ? map['description'] as String : null,
       title: map['title'] != null ? map['title'] as String : null,
       thumbnail: map['thumbnail'] != null ? map['thumbnail'] as String : null,
-      contentType: map['contentType'] != null ? map['contentType'] as String : null,
+      contentType:
+          map['contentType'] != null ? map['contentType'] as String : null,
       userId: map['userId'] as String,
       price: map['price'] != null ? map['price'] as String : null,
       courseType:
@@ -154,12 +155,15 @@ class CourseModel {
           ? (map['averageRating'] is int
               ? (map['averageRating'] as int).toDouble()
               : map['averageRating'] as double)
-          : null,
+          : 0.0,
       likes: map['likes'] != null
           ? List<String>.from(
               map['likes'].map((like) => like['userId'].toString()))
           : null,
-      coins: map['coins'] != null ? List<String>.from((map['coins'])) : null,
+      coins: map['coins'] != null
+          ? List<String>.from(
+              map['coins'].map((coin) => coin['userId'].toString()))
+          : null,
       paymentMethod:
           map['paymentMethod'] != null ? map['paymentMethod'] as String : null,
       promotionDuration: map['promotionDuration'] != null

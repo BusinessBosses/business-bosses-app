@@ -6,7 +6,6 @@ import 'package:business_bosses_v2/features/courses/controller/course_controller
 import 'package:business_bosses_v2/features/courses/models/course_model.dart';
 import 'package:business_bosses_v2/features/courses/models/video_link_data.dart';
 import 'package:business_bosses_v2/features/posts/widgets/image_item.dart';
-import 'package:business_bosses_v2/features/posts/widgets/preview.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:file_picker/file_picker.dart';
@@ -49,6 +48,9 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
   ContentType _selectedContentType = ContentType.videos;
   File? _selectedImage;
   String? photo;
+  bool _isCustomPriceSelected = false;
+  String? customPrice;
+  List<String>? editDocuments;
 
   List<Map<String, dynamic>> types = <Map<String, dynamic>>[
     <String, dynamic>{
@@ -68,18 +70,33 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
         text: widget.course != null ? widget.course!.description : '');
     if (widget.course != null) {
       videoLinks.clear();
-      int minLength = widget.course!.youtubeUrls!.length;
-      for (int i = 0; i < minLength; i++) {
-        videoLinks.add(
-          VideoLinkData(
-            hasTranscript: widget.course!.transcript == null ? false : true,
-            url: widget.course!.youtubeUrls![i],
-            transcript: widget.course!.transcript == null
-                ? ''
-                : widget.course!.transcript![i],
-          ),
-        );
+      if (widget.course != null &&
+          (widget.course?.contentType == 'videos' ||
+              widget.course?.contentType == 'both')) {
+        int minLength = widget.course!.youtubeUrls!.length;
+        for (int i = 0; i < minLength; i++) {
+          videoLinks.add(
+            VideoLinkData(
+              hasTranscript: widget.course!.transcript == null ? false : true,
+              url: widget.course!.youtubeUrls![i],
+              transcript: widget.course!.transcript == null
+                  ? ''
+                  : widget.course!.transcript![i],
+            ),
+          );
+        }
+        if (widget.course?.contentType == 'both') {
+          editDocuments = List<String>.from(widget.course!.documents!);
+        }
+      } else if (widget.course != null &&
+          widget.course?.contentType == 'files') {
+        editDocuments = List<String>.from(widget.course!.documents!);
       }
+      _selectedContentType = widget.course!.contentType == 'files'
+          ? ContentType.files
+          : widget.course!.contentType == 'videos'
+              ? ContentType.videos
+              : ContentType.both;
     } else {
       VideoLinkData videolin = VideoLinkData(url: '', transcript: '');
       videoLinks.add(videolin);
@@ -320,16 +337,24 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                         const SizedBox(
                           height: 10,
                         ),
-                        _selectedImage == null
+                        _selectedImage == null &&
+                                (widget.course == null &&
+                                    widget.course?.thumbnail == null)
                             ? Container()
-                            : ImageItem(
-                                file: _selectedImage,
-                                onRemove: () {
-                                  setState(() {
-                                    _selectedImage = null;
-                                  });
-                                },
-                              ),
+                            : ((widget.course == null &&
+                                    widget.course?.thumbnail == null))
+                                ? ImageItem(
+                                    file: _selectedImage,
+                                    onRemove: () {
+                                      setState(() {
+                                        _selectedImage = null;
+                                      });
+                                    },
+                                  )
+                                : ImageItem(
+                                    onRemove: () {},
+                                    imageUrl: widget.course!.thumbnail,
+                                  ),
                         const SizedBox(
                           height: 30,
                         ),
@@ -348,15 +373,17 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                             final FilePickerResult? result =
                                 await FilePicker.platform.pickFiles(
                               allowMultiple: true,
+                              type: FileType.custom,
+                              allowedExtensions: <String>['pdf'],
                             );
-                            if (result != null) {
-                              result.files
-                                  .map((PlatformFile file) => setState(() {
-                                        selectedFileNames.add(file.name);
 
-                                        selectedFilePaths.add(file.path!);
-                                      }))
-                                  .toList();
+                            if (result != null) {
+                              setState(() {
+                                for (dynamic file in result.files) {
+                                  selectedFileNames.add(file.name);
+                                  selectedFilePaths.add(file.path!);
+                                }
+                              });
                             }
                           }),
                           child: Container(
@@ -372,12 +399,21 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: <Widget>[
-                                  const Text(
-                                    'Add Files (pdf,docx,doc,xls,etc)',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
+                                  const Wrap(children: <Widget>[
+                                    Text(
+                                      'Add Files',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
-                                  ),
+                                    Text(
+                                      ' (Only PDFs are supported)',
+                                      style: TextStyle(
+                                        color: primaryColorLT,
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                  ]),
                                   Container(
                                     alignment: Alignment.center,
                                     child: SvgPicture.asset(
@@ -390,27 +426,80 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                         const SizedBox(
                           height: 8,
                         ),
+                        editDocuments != null && editDocuments!.isNotEmpty
+                            ? Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: editDocuments!
+                                    .asMap()
+                                    .entries
+                                    .map((MapEntry<int, String> entry) {
+                                  int index = entry.key;
+                                  String fileName = entry.value;
+
+                                  return Container(
+                                    margin:
+                                        const EdgeInsets.symmetric(vertical: 6),
+                                    padding: const EdgeInsets.all(6),
+                                    decoration: BoxDecoration(
+                                      color: Colors.black12,
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: Row(
+                                      children: <Widget>[
+                                        const Icon(Icons.insert_drive_file),
+                                        const SizedBox(width: 8),
+                                        Flexible(
+                                          child: Text(
+                                            fileName,
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                        ),
+                                        IconButton(
+                                          icon: const Icon(Icons.close,
+                                              color: Colors.red),
+                                          onPressed: () => _removeFile(index),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                }).toList(),
+                              )
+                            : const SizedBox(),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: selectedFileNames
-                              .map(
-                                (String fileName) => Container(
-                                  margin:
-                                      const EdgeInsets.symmetric(vertical: 6),
-                                  padding: const EdgeInsets.all(6),
-                                  decoration: BoxDecoration(
-                                      color: Colors.black12,
-                                      borderRadius: BorderRadius.circular(10)),
-                                  child: Row(
-                                    children: <Widget>[
-                                      const Icon(Icons.insert_drive_file),
-                                      const SizedBox(width: 8),
-                                      Text(fileName),
-                                    ],
+                              .asMap()
+                              .entries
+                              .map((MapEntry<int, String> entry) {
+                            int index = entry.key;
+                            String fileName = entry.value;
+
+                            return Container(
+                              margin: const EdgeInsets.symmetric(vertical: 6),
+                              padding: const EdgeInsets.all(6),
+                              decoration: BoxDecoration(
+                                color: Colors.black12,
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Row(
+                                children: <Widget>[
+                                  const Icon(Icons.insert_drive_file),
+                                  const SizedBox(width: 8),
+                                  Flexible(
+                                    child: Text(
+                                      fileName,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
                                   ),
-                                ),
-                              )
-                              .toList(),
+                                  IconButton(
+                                    icon: const Icon(Icons.close,
+                                        color: Colors.red),
+                                    onPressed: () => _removeFileUpload(index),
+                                  ),
+                                ],
+                              ),
+                            );
+                          }).toList(),
                         ),
                         const SizedBox(
                           height: 30,
@@ -494,7 +583,11 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                                   if (newValue != null) {
                                     if (newValue != -1) {
                                       _courseprice = newValue;
-                                    } else {}
+                                      _isCustomPriceSelected = false;
+                                    } else {
+                                      _courseprice = null;
+                                      _isCustomPriceSelected = true;
+                                    }
                                   }
                                 });
                               },
@@ -519,6 +612,26 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                       ),
                     ),
                   ),
+                  if (_paidCourse && _isCustomPriceSelected)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 9, vertical: 10),
+                      child: TextField(
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          labelText: 'Custom Price',
+                          hintText: 'Enter price in coins',
+                        ),
+                        keyboardType: TextInputType.number,
+                        onChanged: (String value) {
+                          setState(() {
+                            customPrice = value;
+                          });
+                        },
+                      ),
+                    ),
                   const SizedBox(
                     height: 30,
                   ),
@@ -595,6 +708,24 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                           });
                           return;
                         }
+                        if (widget.course != null &&
+                            widget.course?.thumbnail != null) {
+                          photo = widget.course?.thumbnail;
+                        }
+                        if (_selectedImage == null ||
+                            (widget.course != null &&
+                                widget.course?.thumbnail == null)) {
+                          Get.snackbar(
+                            'Error',
+                            'No thumbnail selected!!',
+                            backgroundColor: Colors.redAccent,
+                            colorText: Colors.white,
+                          );
+                          setState(() {
+                            isProcessing = false;
+                          });
+                          return;
+                        }
 
                         if (description == null || description!.isEmpty) {
                           Get.snackbar(
@@ -643,7 +774,8 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                           return;
                         }
 
-                        if (_selectedImage == null) {
+                        if (_selectedImage == null &&
+                            _validateytVideoLinks() == false) {
                           Get.snackbar(
                             'Error',
                             'Please add an image for your course',
@@ -709,13 +841,24 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                           }
                         }
 
+                        List<String> allDocuments = <String>[];
+
+                        if (widget.course != null &&
+                            (widget.course?.contentType == 'files' ||
+                                widget.course?.contentType == 'both')) {
+                          allDocuments = List<String>.from(editDocuments!)
+                            ..addAll(selectedFileNames);
+                        }
+
                         Map<String, dynamic> course = <String, dynamic>{
                           'title': title,
                           'industryId': widget.industryId,
                           'description': description ?? desccontroller!.text,
                           'userId': profileController.myProfile.uid,
                           'timestamp': DateTime.now().millisecondsSinceEpoch,
-                          'price': _courseprice,
+                          'price': _isCustomPriceSelected
+                              ? customPrice
+                              : _courseprice,
                           'isPromoted': false,
                           'isActive': true,
                           'isApproved': false,
@@ -740,9 +883,7 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
                           'thumbnail': photo,
                           'contentType':
                               _selectedContentType.toString().split('.').last,
-                          'documents': selectedFileNames.isEmpty
-                              ? null
-                              : selectedFileNames,
+                          'documents': allDocuments,
                           'courseType': _paidCourse ? 'paid' : 'free',
                           'youtubeUrls': _extractYoutubeUrls(),
                           'transcript': _extractTranscripts(),
@@ -770,6 +911,18 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
           ),
         ),
       );
+    });
+  }
+
+  void _removeFile(int index) {
+    setState(() {
+      editDocuments!.removeAt(index);
+    });
+  }
+
+  void _removeFileUpload(int index) {
+    setState(() {
+      selectedFileNames.removeAt(index);
     });
   }
 
@@ -916,6 +1069,16 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
     return true;
   }
 
+  bool _validateytVideoLinks() {
+    for (dynamic videoLink in videoLinks) {
+      if (!_isValidUrl(videoLink.url) ||
+          !videoLink.url.toString().contains('youtu.be')) {
+        return false;
+      }
+    }
+    return true;
+  }
+
   Future<void> _pickImage(BuildContext context) async {
     final ImagePicker imagePicker = ImagePicker();
     final XFile? image =
@@ -928,15 +1091,6 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
       });
     }
   }
-
-  // bool _isValidYoutubeUrl(String url) {
-  //   final RegExp youtubeRegExp = RegExp(
-  //     r'^(https?\:\/\/)?(www\.youtube\.com\/watch\?v=|youtu\.be\/).+$',
-  //     caseSensitive: false,
-  //     multiLine: false,
-  //   );
-  //   return youtubeRegExp.hasMatch(url);
-  // }
 
   Widget buildAddButton() {
     return GestureDetector(
@@ -977,63 +1131,3 @@ class _CreateCourseScreenState extends State<CreateCourseScreen> {
     );
   }
 }
-
-// /// Coursetype CARD
-// class CourseTypeSelect extends StatelessWidget {
-//   /// CONSTRUCTOR
-//   const CourseTypeSelect({
-//     Key? key,
-//     required this.type,
-//     required this.activetype,
-//     required this.onTap,
-//   }) : super(key: key);
-//   final String type;
-//   final String activetype;
-//   final Function(String) onTap;
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return GestureDetector(
-//       onTap: () {
-    
-//         // print(activetype);
-//       },
-//       child: Container(
-//         margin: const EdgeInsets.symmetric(vertical: 15),
-//         padding: const EdgeInsets.all(15.0),
-//         decoration: BoxDecoration(
-//           color: Colors.white,
-//           border: Border.all(
-//             color:  const Color.fromRGBO(0, 0, 0, 0.0530),
-//             width: 3,
-//           ),
-//           borderRadius: BorderRadius.circular(13),
-//         ),
-//         child: Column(
-//           crossAxisAlignment: CrossAxisAlignment.start,
-//           children: <Widget>[
-//             Row(
-//               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//               children: <Widget>[
-               
-//                   const CircleAvatar(
-//                     radius: 9,
-//                     backgroundColor: Color(0xFFF01C29),
-//                     child: CircleAvatar(
-//                       radius: 5,
-//                       backgroundColor: Colors.white,
-//                     ),
-//                   ),
-//                 TextWidget(
-//                   text: 'llnln',
-//                   size: 15,
-//                   fontWeight: FontWeight.w700,
-//                 ),
-//               ],
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }

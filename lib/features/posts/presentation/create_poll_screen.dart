@@ -41,7 +41,7 @@ class _CreatePollScreenState extends State<CreatePollScreen> {
   String? sharemessage;
   String? title;
   String? livedata;
-  List<String> optionsValues = <String>[''];
+  List<String> optionsValues = <String>[];
 
   void onDetectionFinished() {
     _overlayEntry?.remove();

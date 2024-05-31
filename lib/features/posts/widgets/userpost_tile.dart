@@ -1,5 +1,7 @@
 import 'dart:convert';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
+import 'package:business_bosses_v2/features/donations/models/donations_model.dart';
+import 'package:business_bosses_v2/features/donations/presentation/expanded_donations_screen.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/live_event/controller/live_event_controller.dart';
 import 'package:business_bosses_v2/features/live_event/models/events_model.dart';
@@ -22,6 +24,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_polls/flutter_polls.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import '../../../action/action.dart';
@@ -62,6 +65,7 @@ class _PostTileState extends State<PostTile> {
   final HomeController homeController = Get.find();
   final LiveController liveController = Get.put(LiveController());
   String? selectedValue;
+  NumberFormat formatter = NumberFormat.compact();
 
   Future<void> connect(String userId) async {
     // ignore: unused_local_variable
@@ -137,6 +141,7 @@ class _PostTileState extends State<PostTile> {
   Widget build(BuildContext context) {
     String? title, roomid, date, starttime, host, photourl, startat, endat;
     int? eventId;
+
     // Get the vote counts for each option
     Map<String, int> voteCounts = countVotes(widget.post);
     bool hasVoted = userHasVoted(widget.post, profileController);
@@ -157,17 +162,21 @@ class _PostTileState extends State<PostTile> {
     );
     if (widget.post.livedata != null) {
       try {
-        final jsonData = jsonDecode(widget.post.livedata!.toString());
-        eventId = jsonData['id'];
-        title = jsonData['title'];
-        roomid = jsonData['roomId'];
-
-        date = jsonData['date'];
-        starttime = jsonData['starttime'];
-        host = jsonData['host'];
-        photourl = jsonData['photourl'];
-        startat = jsonData['startat'];
-        endat = jsonData['endat'];
+        if (widget.post.livedata!.toString().contains('roomId')) {
+          final jsonData = jsonDecode(widget.post.livedata!.toString());
+          eventId = jsonData['id'];
+          title = jsonData['title'];
+          roomid = jsonData['roomId'];
+          date = jsonData['date'];
+          starttime = jsonData['starttime'];
+          host = jsonData['host'];
+          photourl = jsonData['photourl'];
+          startat = jsonData['startat'];
+          endat = jsonData['endat'];
+        } else {
+          final jsonData = jsonDecode(widget.post.donation!.toString());
+          title = jsonData['title'];
+        }
       } catch (e) {}
     } else {}
 
@@ -596,6 +605,7 @@ class _PostTileState extends State<PostTile> {
                                 (widget.post.options != null &&
                                     widget.post.options!.isNotEmpty))
                               FlutterPolls(
+                                leadingVotedProgessColor: Colors.black38,
                                 pollId: widget.post.postId,
                                 onVoted: (PollOption pollOption,
                                     int newTotalVotes) async {
@@ -635,63 +645,46 @@ class _PostTileState extends State<PostTile> {
                           ],
                         ),
                       if (widget.post.livedata != null) ...<Widget>[
-                        GestureDetector(
-                          onTap: () {
-                            // Add2Calendar.addEvent2Cal(Event(
-                            //     title: '$title',
-                            //     startDate: DateTime.parse(startat!),
-                            //     endDate: DateTime.parse(endat!)));
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(12),
-                              image: const DecorationImage(
-                                image:
-                                    AssetImage('assets/images/liveeventt.png'),
-                                fit: BoxFit.cover,
+                        if (widget.post.livedata!
+                            .toString()
+                            .contains('roomId')) ...<Widget>{
+                          GestureDetector(
+                            onTap: () {
+                              // Add2Calendar.addEvent2Cal(Event(
+                              //     title: '$title',
+                              //     startDate: DateTime.parse(startat!),
+                              //     endDate: DateTime.parse(endat!)));
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(12),
+                                image: const DecorationImage(
+                                  image: AssetImage(
+                                      'assets/images/liveeventt.png'),
+                                  fit: BoxFit.cover,
+                                ),
+                                // You can also add other properties like boxShadow for a more realistic effect
                               ),
-                              // You can also add other properties like boxShadow for a more realistic effect
-                            ),
-                            child: Stack(children: <Widget>[
-                              Padding(
-                                padding: const EdgeInsets.all(10.0),
-                                child: Column(
-                                  children: <Widget>[
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: <Widget>[
-                                        Container(
-                                          decoration: BoxDecoration(
-                                            color: Colors.white.withAlpha(70),
-                                            borderRadius:
-                                                BorderRadius.circular(5),
-                                          ),
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(5.0),
-                                            child: Row(
-                                              children: <Widget>[
-                                                (DateTime.now().isAfter(DateTime
-                                                            .parse(startat ??
-                                                                '2023-11-07T10:45:00.000Z')) &&
-                                                        DateTime.now().isBefore(
-                                                            DateTime.parse(endat ??
-                                                                DateTime.now()
-                                                                    .toIso8601String())))
-                                                    ? Lottie.asset(
-                                                        'assets/anim/liveeventwhite.json',
-                                                        height: 12,
-                                                      )
-                                                    : SvgPicture.asset(
-                                                        'assets/svgs/liveeventt.svg',
-                                                        height: 12,
-                                                        // ignore: deprecated_member_use
-                                                        color: Colors.white,
-                                                      ),
-                                                const SizedBox(
-                                                  width: 5,
-                                                ),
-                                                Text(
+                              child: Stack(children: <Widget>[
+                                Padding(
+                                  padding: const EdgeInsets.all(10.0),
+                                  child: Column(
+                                    children: <Widget>[
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: <Widget>[
+                                          Container(
+                                            decoration: BoxDecoration(
+                                              color: Colors.white.withAlpha(70),
+                                              borderRadius:
+                                                  BorderRadius.circular(5),
+                                            ),
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(5.0),
+                                              child: Row(
+                                                children: <Widget>[
                                                   (DateTime.now().isAfter(DateTime
                                                               .parse(startat ??
                                                                   '2023-11-07T10:45:00.000Z')) &&
@@ -699,128 +692,308 @@ class _PostTileState extends State<PostTile> {
                                                               DateTime.parse(endat ??
                                                                   DateTime.now()
                                                                       .toIso8601String())))
-                                                      ? 'Ongoing Live Event'
-                                                      : DateTime.now().isAfter(
-                                                              DateTime.parse(
-                                                                  startat ??
-                                                                      '2023-11-07T10:45:00.000Z'))
-                                                          ? 'Ended event'
-                                                          : 'Upcoming Live event',
-                                                  style: const TextStyle(
-                                                    color: Colors.white,
+                                                      ? Lottie.asset(
+                                                          'assets/anim/liveeventwhite.json',
+                                                          height: 12,
+                                                        )
+                                                      : SvgPicture.asset(
+                                                          'assets/svgs/liveeventt.svg',
+                                                          height: 12,
+                                                          // ignore: deprecated_member_use
+                                                          color: Colors.white,
+                                                        ),
+                                                  const SizedBox(
+                                                    width: 5,
                                                   ),
-                                                ),
-                                              ],
+                                                  Text(
+                                                    (DateTime.now().isAfter(
+                                                                DateTime.parse(
+                                                                    startat ??
+                                                                        '2023-11-07T10:45:00.000Z')) &&
+                                                            DateTime.now().isBefore(
+                                                                DateTime.parse(endat ??
+                                                                    DateTime.now()
+                                                                        .toIso8601String())))
+                                                        ? 'Ongoing Live Event'
+                                                        : DateTime.now().isAfter(
+                                                                DateTime.parse(
+                                                                    startat ??
+                                                                        '2023-11-07T10:45:00.000Z'))
+                                                            ? 'Ended event'
+                                                            : 'Upcoming Live event',
+                                                    style: const TextStyle(
+                                                      color: Colors.white,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
                                             ),
-                                          ),
-                                        ),
-                                        Text(
-                                          'ID: $roomid',
-                                          style: const TextStyle(
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.w900),
-                                        )
-                                      ],
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Text(
-                                        '$title',
-                                        style: const TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.w700),
-                                      ),
-                                    ),
-                                    Center(
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: <Widget>[
-                                          NetworkImageWithPlaceHolder(
-                                            imageUrl: '$photourl',
-                                            height: 25,
-                                            width: 25,
-                                          ),
-                                          const SizedBox(
-                                            width: 10,
                                           ),
                                           Text(
-                                            '$host',
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.w500,
-                                                color: Colors.white
-                                                    .withAlpha(200)),
-                                          ),
+                                            'ID: $roomid',
+                                            style: const TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.w900),
+                                          )
                                         ],
                                       ),
-                                    ),
-                                    Text(
-                                      DateTime.now().isAfter(DateTime.parse(
-                                              endat ??
-                                                  DateTime.now()
-                                                      .toIso8601String()))
-                                          ? 'Ended'
-                                          : DateTime.now().isAfter(
-                                                      DateTime.parse(startat ??
-                                                          '2023-11-07T10:45:00.000Z')) &&
-                                                  DateTime.now().isBefore(
-                                                      DateTime.parse(endat ??
-                                                          DateTime.now()
-                                                              .toIso8601String()))
-                                              ? 'Happening now'
-                                              : '$date, $starttime',
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.w700,
-                                        color: Colors.white,
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Text(
+                                          '$title',
+                                          style: const TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.w700),
+                                        ),
                                       ),
-                                    ),
-                                    if (eventId != null)
-                                      AttendeesCountWidget(
-                                        events: homeController.events,
-                                        currentEventId: eventId,
-                                      ),
-                                    isJoinedEvent()
-                                        ? ElevatedButton(
-                                            style: ElevatedButton.styleFrom(
-                                              backgroundColor: Colors.grey,
-                                              foregroundColor: Colors.white,
-                                              minimumSize: const Size(55, 32),
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.circular(
-                                                    12), // Set the border radius
-                                              ),
+                                      Center(
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: <Widget>[
+                                            NetworkImageWithPlaceHolder(
+                                              imageUrl: '$photourl',
+                                              height: 25,
+                                              width: 25,
                                             ),
-                                            onPressed: () async {
-                                              Get.to(() => AttendanceList(
-                                                    eventId: eventId!,
-                                                  ));
-                                            },
-                                            child: const Text(
-                                              'Attending',
+                                            const SizedBox(
+                                              width: 10,
+                                            ),
+                                            Text(
+                                              '$host',
                                               style: TextStyle(
-                                                fontSize: 10,
-                                                fontWeight: FontWeight.w500,
-                                              ),
+                                                  fontWeight: FontWeight.w500,
+                                                  color: Colors.white
+                                                      .withAlpha(200)),
                                             ),
-                                          )
-                                        : ElevatedButton(
-                                            onPressed: () async {
-                                              await homeController
-                                                  .attendEvent(event);
-                                              liveController.joined.add(event);
+                                          ],
+                                        ),
+                                      ),
+                                      Text(
+                                        DateTime.now().isAfter(DateTime.parse(
+                                                endat ??
+                                                    DateTime.now()
+                                                        .toIso8601String()))
+                                            ? 'Ended'
+                                            : DateTime.now().isAfter(DateTime
+                                                        .parse(startat ??
+                                                            '2023-11-07T10:45:00.000Z')) &&
+                                                    DateTime.now().isBefore(
+                                                        DateTime.parse(endat ??
+                                                            DateTime.now()
+                                                                .toIso8601String()))
+                                                ? 'Happening now'
+                                                : '$date, $starttime',
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.w700,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                      if (eventId != null)
+                                        AttendeesCountWidget(
+                                          events: homeController.events,
+                                          currentEventId: eventId,
+                                        ),
+                                      isJoinedEvent()
+                                          ? ElevatedButton(
+                                              style: ElevatedButton.styleFrom(
+                                                backgroundColor: Colors.grey,
+                                                foregroundColor: Colors.white,
+                                                minimumSize: const Size(55, 32),
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          12), // Set the border radius
+                                                ),
+                                              ),
+                                              onPressed: () async {
+                                                Get.to(() => AttendanceList(
+                                                      eventId: eventId!,
+                                                    ));
+                                              },
+                                              child: const Text(
+                                                'Attending',
+                                                style: TextStyle(
+                                                  fontSize: 10,
+                                                  fontWeight: FontWeight.w500,
+                                                ),
+                                              ),
+                                            )
+                                          : ElevatedButton(
+                                              onPressed: () async {
+                                                await homeController
+                                                    .attendEvent(event);
+                                                liveController.joined
+                                                    .add(event);
 
-                                              setState(() {});
-                                            },
-                                            child: const Text('Attend'),
-                                          ),
-                                  ],
+                                                setState(() {});
+                                              },
+                                              child: const Text('Attend'),
+                                            ),
+                                    ],
+                                  ),
+                                ),
+                              ]),
+                            ),
+                          )
+                        },
+                      ],
+                      if (widget.post.donation != null) ...<Widget>{
+                        Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12),
+                            image: const DecorationImage(
+                              image: AssetImage('assets/images/donationph.png'),
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                          child: Stack(children: <Widget>[
+                            Positioned.fill(
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(12),
+                                  color: const Color.fromARGB(255, 0, 0, 0)
+                                      .withOpacity(
+                                          0.5), // Adjust the opacity as needed
                                 ),
                               ),
-                            ]),
-                          ),
-                        )
-                      ],
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: Column(
+                                children: <Widget>[
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: <Widget>[
+                                      Container(
+                                        decoration: BoxDecoration(
+                                          color: Colors.white.withAlpha(70),
+                                          borderRadius:
+                                              BorderRadius.circular(5),
+                                        ),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(5.0),
+                                          child: Row(
+                                            children: <Widget>[
+                                              Text(
+                                                widget.post.donation!
+                                                            .amountRecieved <
+                                                        widget.post.donation!
+                                                            .targetAmount!
+                                                    ? 'Ongoing'
+                                                    : 'Completed',
+                                                style: const TextStyle(
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      widget.post.donation?.title ?? '',
+                                      style: const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.w700),
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 5,
+                                  ),
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(15),
+                                    child: LinearProgressIndicator(
+                                      value: (widget
+                                              .post.donation!.amountRecieved /
+                                          widget.post.donation!.targetAmount!),
+                                      minHeight: 4,
+                                      backgroundColor: Colors.white24,
+                                      valueColor:
+                                          const AlwaysStoppedAnimation<Color>(
+                                              Colors.white),
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 15,
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: <Widget>[
+                                      SvgPicture.asset(
+                                        'assets/svgs/coin.svg',
+                                        height: 20,
+                                      ),
+                                      const SizedBox(
+                                        width: 3,
+                                      ),
+                                      Text(
+                                        '${formatter.format(widget.post.donation!.amountRecieved)} out of ',
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.w700,
+                                            fontSize: 14,
+                                            color: Colors.white),
+                                      ),
+                                      Text(
+                                        formatter
+                                            .format(widget
+                                                .post.donation!.targetAmount)
+                                            .toString(),
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.w700,
+                                            color: Colors.white,
+                                            fontSize: 14),
+                                      ),
+                                      const Text(
+                                        ' Target',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w700,
+                                            color: Colors.white,
+                                            fontSize: 14),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  ElevatedButton(
+                                    onPressed: () async {
+                                      widget.post.donation!.setViews(
+                                          widget.post.donation!.views! + 1);
+                                      ApiService.put(
+                                          path:
+                                              'donation/approve/${widget.post.donation!.id}',
+                                          body: <String, dynamic>{
+                                            'views':
+                                                widget.post.donation!.views! +
+                                                    1,
+                                            'isActive': true,
+                                            'isApproved': true,
+                                          });
+                                      DonationModel donation = DonationModel
+                                          .fromMap(<String, dynamic>{
+                                        ...widget.post.donation!.toMap(),
+                                        'user': widget.post.user!.toMap(),
+                                        'likes': <String>[],
+                                        'comments': <CommentModel>[],
+                                      });
+                                      Get.to(() => ExpandedDonationScreen(
+                                          donation: donation));
+                                    },
+                                    child: const Text('Donate'),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ]),
+                        ),
+                      },
                       if (widget.post.images?.isNotEmpty ?? false)
                         PostImages(
                           post: widget.post,

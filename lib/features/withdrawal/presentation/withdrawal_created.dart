@@ -3,7 +3,6 @@ import 'package:business_bosses_v2/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:lottie/lottie.dart';
 
 class WithdrawalCreated extends StatefulWidget {
   const WithdrawalCreated({super.key});

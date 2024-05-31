@@ -17,7 +17,7 @@ class _OutgoneDonationsState extends State<OutgoneDonations> {
     return widget.history.isEmpty
         ? const SafetyModel(
             isLoading: false,
-            title: 'No Outgone Donations Found',
+            title: 'No Given Donations Found',
             icon: Icon(Icons.warning),
           )
         : ListView.builder(

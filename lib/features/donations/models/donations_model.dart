@@ -21,7 +21,7 @@ class DonationModel {
   final List<String> images;
   final bool? isApproved;
   final bool? isSuspended;
-  final bool? isCashoutApproved;
+  bool? isCashoutApproved;
   final List<DonationTransaction>? transactions;
   DonationModel({
     required this.id,
@@ -101,8 +101,8 @@ class DonationModel {
       'timestamp': timestamp,
       'likes': likes,
       'coins': coins,
-      'comments': comments!.map((CommentModel x) => x.toMap()).toList(),
-      'user': user!.toMap(),
+      'comments': comments?.map((CommentModel x) => x.toMap()).toList() ?? [],
+      'user': user?.toMap() ?? {},
       'views': views,
       'isApproved': isApproved,
       'isSuspended': isSuspended,
@@ -110,7 +110,8 @@ class DonationModel {
       'youtubeUrls': youtubeUrls,
       'images': images,
       'transactions':
-          transactions!.map((DonationTransaction t) => t.toMap()).toList(),
+          transactions?.map((DonationTransaction t) => t.toMap()).toList() ??
+              [],
     };
   }
 
@@ -133,9 +134,11 @@ class DonationModel {
           : null,
       likes: map['likes'] != null ? List<String>.from((map['likes'])) : null,
       coins: map['coins'] != null ? List<String>.from((map['coins'])) : null,
-      comments: List.from(map['comments'])
-          .map((e) => CommentModel.fromMap(e as Map<String, dynamic>))
-          .toList(),
+      comments: map['comments'] != null
+          ? List.from(map['comments'])
+              .map((e) => CommentModel.fromMap(e as Map<String, dynamic>))
+              .toList()
+          : null,
       user: map['user'] != null
           ? UserModel.fromMap(map['user'] as Map<String, dynamic>)
           : null,
@@ -143,10 +146,14 @@ class DonationModel {
       isApproved: map['isApproved'] ?? false,
       isSuspended: map['isSuspended'] ?? false,
       isCashoutApproved: map['isCashoutApproved'] ?? false,
-      images: List<String>.from((map['images'])),
-      transactions: List.from(map['transactions'])
-          .map((t) => DonationTransaction.fromMap(t as Map<String, dynamic>))
-          .toList(),
+      images: map['images'] != null ? List<String>.from(map['images']) : [],
+      transactions: map['transactions'] != null
+          ? List.from(map['transactions'])
+              .where((t) => t != null) // Filter out null elements
+              .map(
+                  (t) => DonationTransaction.fromMap(t as Map<String, dynamic>))
+              .toList()
+          : [],
     );
   }
 

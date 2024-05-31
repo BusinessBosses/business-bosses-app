@@ -20,13 +20,12 @@ class _AllTransactionsState extends State<AllTransactions> {
             title: 'No Courses History Found',
             icon: Icon(Icons.warning),
           )
-        :  Container(
-      child: ListView.builder(
-                itemCount: 5,
-                itemBuilder: (BuildContext context, int i) {
-                  return const CourseHistoryItem();
-                },
-              ),
-    );
+        : ListView.builder(
+            itemCount: widget.history.length,
+            itemBuilder: (BuildContext context, int i) {
+              final dynamic currentHistory = widget.history[i];
+              return CourseHistoryItem(history: currentHistory);
+            },
+          );
   }
 }

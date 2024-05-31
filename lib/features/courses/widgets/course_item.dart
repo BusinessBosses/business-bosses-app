@@ -7,13 +7,13 @@ import 'package:business_bosses_v2/features/courses/controller/course_controller
 import 'package:business_bosses_v2/common/widgets/typography/text_widget.dart';
 import 'package:business_bosses_v2/features/courses/models/course_comment_model.dart';
 import 'package:business_bosses_v2/features/courses/models/course_model.dart';
+import 'package:business_bosses_v2/features/courses/presentation/boost_course.dart';
 import 'package:business_bosses_v2/features/courses/presentation/course_reviews.dart';
 import 'package:business_bosses_v2/features/courses/presentation/create_course.dart';
 import 'package:business_bosses_v2/features/courses/presentation/expanded_course_screen.dart';
 import 'package:business_bosses_v2/features/courses/widgets/course_comment_bottomsheet.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
-import 'package:business_bosses_v2/features/posts/presentation/boost_post_screen.dart';
-import 'package:business_bosses_v2/features/posts/widgets/youtube_display.dart';
+import 'package:business_bosses_v2/features/posts/widgets/youtube_display_item.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
@@ -96,8 +96,6 @@ class _CourseItemState extends State<CourseItem> {
         });
         courseController.updateCourseViews(
             widget.course.id, widget.course.views + 1);
-        homeController.updateCourseViews(
-            widget.course.id, widget.course.views + 1);
         Get.to(() => ExpandedCourseScreen(course: widget.course));
       },
       child: Container(
@@ -127,8 +125,8 @@ class _CourseItemState extends State<CourseItem> {
                                       height: 90,
                                       width: 160,
                                       radius: 10,
-                                      cacheHeight: 90,
-                                      cacheWidth: 90,
+                                      // cacheHeight: 90,
+                                      // cacheWidth: 90,
                                     ),
                                     Positioned.fill(
                                       child: Center(
@@ -150,8 +148,6 @@ class _CourseItemState extends State<CourseItem> {
                                 widget.course.setViews();
                               });
                               courseController.updateCourseViews(
-                                  widget.course.id, widget.course.views + 1);
-                              homeController.updateCourseViews(
                                   widget.course.id, widget.course.views + 1);
                               Get.to(() =>
                                   ExpandedCourseScreen(course: widget.course));
@@ -185,9 +181,9 @@ class _CourseItemState extends State<CourseItem> {
                                       const SizedBox(
                                         width: 5,
                                       ),
-                                      Text(
+                                      const Text(
                                         'Files',
-                                        style: const TextStyle(
+                                        style: TextStyle(
                                           fontSize: 9,
                                           color: Colors.white,
                                           fontWeight: FontWeight.w700,
@@ -207,8 +203,8 @@ class _CourseItemState extends State<CourseItem> {
                                     height: 90,
                                     width: 160,
                                     radius: 10,
-                                    cacheHeight: 90,
-                                    cacheWidth: 90,
+                                    // cacheHeight: 90,
+                                    // cacheWidth: 90,
                                   ),
                                   Positioned.fill(
                                     child: Center(
@@ -242,9 +238,9 @@ class _CourseItemState extends State<CourseItem> {
                                               const SizedBox(
                                                 width: 5,
                                               ),
-                                              Text(
+                                              const Text(
                                                 'Files',
-                                                style: const TextStyle(
+                                                style: TextStyle(
                                                   fontSize: 9,
                                                   color: Colors.white,
                                                   fontWeight: FontWeight.w700,
@@ -271,7 +267,7 @@ class _CourseItemState extends State<CourseItem> {
                                             onTap: () {},
                                             child: isValidYoutubeUrl(widget
                                                     .course.youtubeUrls![0])
-                                                ? YoutubeDisplay(
+                                                ? YoutubeDisplayItem(
                                                     widget.course.youtubeUrls !=
                                                             null
                                                         ? widget.course
@@ -304,9 +300,6 @@ class _CourseItemState extends State<CourseItem> {
                                     widget.course.setViews();
                                   });
                                   courseController.updateCourseViews(
-                                      widget.course.id,
-                                      widget.course.views + 1);
-                                  homeController.updateCourseViews(
                                       widget.course.id,
                                       widget.course.views + 1);
                                   Get.to(() => ExpandedCourseScreen(
@@ -343,12 +336,9 @@ class _CourseItemState extends State<CourseItem> {
                                           const SizedBox(
                                             width: 5,
                                           ),
-                                          Text(
-                                            widget.course.youtubeUrls!.length >
-                                                    1
-                                                ? '${widget.course.youtubeUrls!.length} Video'
-                                                : '${widget.course.youtubeUrls!.length} Videos',
-                                            style: const TextStyle(
+                                          const Text(
+                                            'Videos',
+                                            style: TextStyle(
                                               fontSize: 9,
                                               color: Colors.white,
                                               fontWeight: FontWeight.w700,
@@ -401,7 +391,7 @@ class _CourseItemState extends State<CourseItem> {
                                           WrapCrossAlignment.center,
                                       children: [
                                         widget.course.courseType == 'free'
-                                            ? Text(
+                                            ? const Text(
                                                 'Free',
                                                 style: TextStyle(
                                                     fontWeight:
@@ -415,7 +405,7 @@ class _CourseItemState extends State<CourseItem> {
                                                   ),
                                                   Text(
                                                     ' ${widget.course.price}',
-                                                    style: TextStyle(
+                                                    style: const TextStyle(
                                                         fontWeight:
                                                             FontWeight.w700),
                                                   )
@@ -427,7 +417,7 @@ class _CourseItemState extends State<CourseItem> {
                                 ),
                               ),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               width: 6,
                             ),
                             GestureDetector(
@@ -461,8 +451,10 @@ class _CourseItemState extends State<CourseItem> {
                                             width: 3,
                                           ),
                                           Text(
-                                            widget.course.averageRating!
-                                                .toStringAsFixed(2),
+                                            widget.course.averageRating != null
+                                                ? widget.course.averageRating!
+                                                    .toStringAsFixed(2)
+                                                : '0.00',
                                             style: const TextStyle(
                                               fontWeight: FontWeight.bold,
                                               fontSize: 13,
@@ -533,7 +525,7 @@ class _CourseItemState extends State<CourseItem> {
                       ],
                     ),
                   ),
-                  widget.course.user!.uid == profileController.myProfile.uid
+                  widget.course.user?.uid == profileController.myProfile.uid
                       ? MyPopupMenuButton(
                           popupItems: myPopupMore,
                           icon: const Icon(
@@ -569,6 +561,7 @@ class _CourseItemState extends State<CourseItem> {
                                             .onDeleteCourse(widget.course.id);
                                         homeController
                                             .onDeleteCourse(widget.course.id);
+                                        setState(() {});
                                         Get.back();
                                       },
                                       child: const Text('Yes'),
@@ -577,7 +570,7 @@ class _CourseItemState extends State<CourseItem> {
                                 ),
                               );
                             } else if (val == 'Boost') {
-                              Get.to(() => BoostPost(
+                              Get.to(() => BoostCourse(
                                     postId: widget.course.id,
                                     postTitle: widget.course.title!,
                                   ));
@@ -896,11 +889,10 @@ class _CourseItemState extends State<CourseItem> {
                     onPressed: () async {
                       if (widget.course.user!.uid !=
                           profileController.myProfile.uid) {
-                        homeController.postCoin(
+                        courseController.postCoin(
                             profileController.myProfile.uid,
                             widget.course.id,
                             profileController,
-                            'post',
                             widget.course.user!.uid);
                       }
                       setState(() {});

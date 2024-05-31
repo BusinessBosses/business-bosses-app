@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:business_bosses_v2/common/dialogs/snackbar.dart';
 import 'package:business_bosses_v2/common/models/comment_model.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/common/widgets/typography/text_widget.dart';
@@ -434,6 +435,10 @@ class _CreateDonationScreenState extends State<CreateDonationScreen> {
                           await ApiService.uploadFile(_selectedImage!);
                       if (response['success']) {
                         photo = response['fileUrl'];
+                      } else {
+                        showSnackbar(
+                            message: 'Error Uploading Image!', error: true);
+                        return;
                       }
                     }
                     if (widget.donation != null) {
@@ -463,6 +468,7 @@ class _CreateDonationScreenState extends State<CreateDonationScreen> {
                             photo != null ? <String?>[photo] : <dynamic>[],
                         'comments': <CommentModel>[],
                         'likes': <dynamic>[],
+                        'user': profileController.myProfile.toMap(),
                       });
                     }
                     setState(() {

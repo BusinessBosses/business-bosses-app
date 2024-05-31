@@ -12,7 +12,7 @@ import 'package:business_bosses_v2/features/courses/presentation/expanded_course
 import 'package:business_bosses_v2/features/courses/widgets/course_comment_bottomsheet.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/posts/presentation/boost_post_screen.dart';
-import 'package:business_bosses_v2/features/posts/widgets/youtube_display.dart';
+import 'package:business_bosses_v2/features/posts/widgets/youtube_display_item.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
 import 'package:business_bosses_v2/utils/theme/theme.dart';
@@ -123,8 +123,8 @@ class _CourseItemState extends State<CourseItem> {
                                       height: 90,
                                       width: 160,
                                       radius: 10,
-                                      cacheHeight: 90,
-                                      cacheWidth: 90,
+                                      // cacheHeight: 90,
+                                      // cacheWidth: 90,
                                     ),
                                     Positioned.fill(
                                       child: Center(
@@ -201,8 +201,8 @@ class _CourseItemState extends State<CourseItem> {
                                     height: 90,
                                     width: 160,
                                     radius: 10,
-                                    cacheHeight: 90,
-                                    cacheWidth: 90,
+                                    // cacheHeight: 90,
+                                    // cacheWidth: 90,
                                   ),
                                   Positioned.fill(
                                     child: Center(
@@ -265,7 +265,7 @@ class _CourseItemState extends State<CourseItem> {
                                             onTap: () {},
                                             child: isValidYoutubeUrl(widget
                                                     .course.youtubeUrls![0])
-                                                ? YoutubeDisplay(
+                                                ? YoutubeDisplayItem(
                                                     widget.course.youtubeUrls !=
                                                             null
                                                         ? widget.course
@@ -335,10 +335,7 @@ class _CourseItemState extends State<CourseItem> {
                                             width: 5,
                                           ),
                                           Text(
-                                            widget.course.youtubeUrls!.length >
-                                                    1
-                                                ? '${widget.course.youtubeUrls!.length} Video'
-                                                : '${widget.course.youtubeUrls!.length} Videos',
+                                            'Videos',
                                             style: const TextStyle(
                                               fontSize: 9,
                                               color: Colors.white,
@@ -831,6 +828,9 @@ class _CourseItemState extends State<CourseItem> {
               children: <Widget>[
                 TextButton.icon(
                   onPressed: () async {
+                    homeController.postLike(profileController.myProfile.uid,
+                        widget.course.id, 'course', widget.course.user!.uid);
+
                     setState(() {});
                   },
                   icon: widget.course.likes
@@ -861,6 +861,7 @@ class _CourseItemState extends State<CourseItem> {
                         },
                       ),
                     );
+                    setState(() {});
                   },
                   icon: SvgPicture.asset(
                     'assets/svgs/comment.svg',

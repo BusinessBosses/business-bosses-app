@@ -163,6 +163,8 @@ class _BossUpSectionState extends State<BossUpSection>
               _isSearching = !_isSearching;
               // }
               setState(() {});
+              bossUpController.searchedPosts.clear();
+              bossUpController.searchedUsers.clear();
               // _communitiesController.clearSearch();
             },
           ),

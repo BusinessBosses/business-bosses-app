@@ -1,5 +1,3 @@
-// ignore_for_file: always_specify_types, deprecated_member_use
-
 import 'package:business_bosses_v2/action/action.dart';
 import 'package:business_bosses_v2/common/models/comment_model.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
@@ -42,7 +40,6 @@ class _DonationItemState extends State<DonationItem> {
   final DonationsController donationsController = Get.find();
   List<String> blocked = <String>[];
   NumberFormat formatter = NumberFormat.compact();
-  late DonationModel _donation;
 
   final List<PopupMenuEntry<String>> myPopupMore = <PopupMenuEntry<String>>[
     const PopupMenuItem<String>(
@@ -62,16 +59,16 @@ class _DonationItemState extends State<DonationItem> {
         style: bodyText2,
       ),
     ),
-    const PopupMenuDivider(
-      height: 0.0,
-    ),
-    const PopupMenuItem<String>(
-      value: 'Boost',
-      child: Text(
-        'Boost',
-        style: bodyText2,
-      ),
-    ),
+    // const PopupMenuDivider(
+    //   height: 0.0,
+    // ),
+    // const PopupMenuItem<String>(
+    //   value: 'Boost',
+    //   child: Text(
+    //     'Boost',
+    //     style: bodyText2,
+    //   ),
+    // ),
   ];
 
   final List<PopupMenuEntry<String>> myPopup = <PopupMenuEntry<String>>[
@@ -98,7 +95,6 @@ class _DonationItemState extends State<DonationItem> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _donation = widget.donation;
   }
 
   @override
@@ -391,7 +387,10 @@ class _DonationItemState extends State<DonationItem> {
                   // const SizedBox(
                   //   width: 10,
                   // ),
-                  widget.donation.user!.uid == profileController.myProfile.uid
+                  (widget.donation.user!.uid ==
+                              profileController.myProfile.uid &&
+                          widget.donation.amountRecieved <
+                              widget.donation.targetAmount!)
                       ? MyPopupMenuButton(
                           popupItems: myPopupMore,
                           icon: const Icon(
@@ -432,12 +431,13 @@ class _DonationItemState extends State<DonationItem> {
                                   ],
                                 ),
                               );
-                            } else if (val == 'Boost') {
-                              Get.to(() => BoostDonation(
-                                    donationId: widget.donation.id,
-                                    donationTitle: widget.donation.title!,
-                                  ));
                             }
+                            // else if (val == 'Boost') {
+                            //   Get.to(() => BoostDonation(
+                            //         donationId: widget.donation.id,
+                            //         donationTitle: widget.donation.title!,
+                            //       ));
+                            // }
                           },
                         )
                       : GestureDetector(
@@ -651,6 +651,7 @@ class _DonationItemState extends State<DonationItem> {
                       widget.donation.id,
                       widget.donation.user!.uid,
                     );
+                    setState(() {});
                   },
                   icon: widget.donation.likes
                               ?.contains(profileController.myProfile.uid) ==
@@ -796,10 +797,92 @@ class _DonationItemState extends State<DonationItem> {
 
   void _sharePost() {
     String message =
-        'Have a look at ${widget.donation.user?.username ?? 'Business Bosses'}\'s Donation on Business Bosses\n'
+        'Have a look at ${widget.donation.user?.username ?? 'Business Bosses'}\'s donation post on Business Bosses\n'
         'https://businessbosses.onelink.me/xLWk/36a2ff16';
     logEvent(widget.donation.id, 'donation');
-    socialShare(message);
+    widget.donation.user?.uid != profileController.myProfile.uid
+        ? socialShare(message)
+        : showModalBottomSheet(
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+            context: context,
+            backgroundColor: Colors.white,
+            builder: (BuildContext context) => Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: SizedBox(
+                height: 150,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    GestureDetector(
+                      onTap: () => Get.toNamed(
+                        Routes.createPost,
+                        arguments: <String, dynamic>{
+                          'sharemessage': 'Hey there! Support this donation',
+                          'title': widget.donation.title,
+                          'donationdata': widget.donation,
+                        },
+                      ),
+                      child: Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.symmetric(vertical: 15),
+                        child: Row(
+                          children: [
+                            SvgPicture.asset(
+                              'assets/svgs/text.svg',
+                              color: textColor,
+                            ),
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            const Text(
+                              'Post on Business Bosses',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 18),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Container(
+                      height: 1,
+                      color: backgroundColor,
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        String message =
+                            'Have a look at ${widget.donation.user?.username ?? 'Business Bosses'}\'s donation post on Business Bosses\n'
+                            'https://businessbosses.onelink.me/xLWk/36a2ff16';
+                        logEvent(widget.donation.id, 'donation');
+                        socialShare(message);
+                      },
+                      child: Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.symmetric(vertical: 15),
+                        child: Row(
+                          children: [
+                            SvgPicture.asset(
+                              'assets/svgs/share.svg',
+                              color: textColor,
+                              height: 16,
+                            ),
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            const Text(
+                              'Share',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 18),
+                            ),
+                          ],
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ),
+          );
   }
 
   String formatCount(int count) {

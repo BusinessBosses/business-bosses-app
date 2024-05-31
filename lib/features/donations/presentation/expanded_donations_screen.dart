@@ -1,5 +1,3 @@
-import 'dart:collection';
-
 import 'package:business_bosses_v2/action/action.dart';
 import 'package:business_bosses_v2/common/models/comment_model.dart';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
@@ -458,7 +456,7 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
                             /// for when its your own post
                             (widget.donation.user?.uid ==
                                         profileController.myProfile.uid &&
-                                    widget.donation.amountRecieved !=
+                                    widget.donation.amountRecieved <
                                         widget.donation.targetAmount!)
                                 ? Row(
                                     mainAxisAlignment:
@@ -494,39 +492,39 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
                                           ),
                                         ),
                                       ),
-                                      GestureDetector(
-                                        onTap: () {
-                                          Get.to(() => BoostDonation(
-                                                donationId: widget.donation.id,
-                                                donationTitle:
-                                                    widget.donation.title!,
-                                              ));
-                                        },
-                                        child: Container(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 20, vertical: 10),
-                                          decoration: BoxDecoration(
-                                              border: Border.all(
-                                                  width: 2, color: Colors.grey),
-                                              borderRadius:
-                                                  BorderRadius.circular(10)),
-                                          child: Wrap(
-                                            crossAxisAlignment:
-                                                WrapCrossAlignment.center,
-                                            children: <Widget>[
-                                              const Text('Boost'),
-                                              const SizedBox(
-                                                width: 5,
-                                              ),
-                                              SvgPicture.asset(
-                                                'assets/svgs/rocket.svg',
-                                                height: 20,
-                                                color: subtextColor,
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                      ),
+                                      // GestureDetector(
+                                      //   onTap: () {
+                                      //     Get.to(() => BoostDonation(
+                                      //           donationId: widget.donation.id,
+                                      //           donationTitle:
+                                      //               widget.donation.title!,
+                                      //         ));
+                                      //   },
+                                      //   child: Container(
+                                      //     padding: const EdgeInsets.symmetric(
+                                      //         horizontal: 20, vertical: 10),
+                                      //     decoration: BoxDecoration(
+                                      //         border: Border.all(
+                                      //             width: 2, color: Colors.grey),
+                                      //         borderRadius:
+                                      //             BorderRadius.circular(10)),
+                                      //     child: Wrap(
+                                      //       crossAxisAlignment:
+                                      //           WrapCrossAlignment.center,
+                                      //       children: <Widget>[
+                                      //         const Text('Boost'),
+                                      //         const SizedBox(
+                                      //           width: 5,
+                                      //         ),
+                                      //         SvgPicture.asset(
+                                      //           'assets/svgs/rocket.svg',
+                                      //           height: 20,
+                                      //           color: subtextColor,
+                                      //         )
+                                      //       ],
+                                      //     ),
+                                      //   ),
+                                      // ),
                                       GestureDetector(
                                         onTap: () => _sharePost(),
                                         child: Container(
@@ -681,7 +679,7 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
                                               data, widget.donation.id);
                                   if (response) {
                                     Get.snackbar(
-                                        'Success', 'Donation Successfull',
+                                        'Success', 'Donation Successful',
                                         backgroundColor: Colors.green,
                                         colorText: Colors.white);
                                     // ignore: use_build_context_synchronously
@@ -724,7 +722,9 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
                       if (widget.donation.user?.uid ==
                               profileController.myProfile.uid &&
                           widget.donation.amountRecieved >=
-                              widget.donation.targetAmount!)
+                              widget.donation.targetAmount! &&
+                          (widget.donation.isCashoutApproved != null &&
+                              !widget.donation.isCashoutApproved!))
                         Positioned(
                           left: 0,
                           right: 0,
@@ -1006,6 +1006,89 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
         'Have a look at ${widget.donation.user?.username ?? 'Business Bosses'}\'s donation post on Business Bosses\n'
         'https://businessbosses.onelink.me/xLWk/36a2ff16';
     logEvent(widget.donation.id, 'donation');
-    socialShare(message);
+
+    widget.donation.user?.uid != profileController.myProfile.uid
+        ? socialShare(message)
+        : showModalBottomSheet(
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+            context: context,
+            backgroundColor: Colors.white,
+            builder: (BuildContext context) => Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: SizedBox(
+                height: 150,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    GestureDetector(
+                      onTap: () => Get.toNamed(
+                        Routes.createPost,
+                        arguments: <String, dynamic>{
+                          'sharemessage': 'Hey there! Support this donation',
+                          'title': widget.donation.title,
+                          'donationdata': widget.donation,
+                        },
+                      ),
+                      child: Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.symmetric(vertical: 15),
+                        child: Row(
+                          children: [
+                            SvgPicture.asset(
+                              'assets/svgs/text.svg',
+                              color: textColor,
+                            ),
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            const Text(
+                              'Post on Business Bosses',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 18),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Container(
+                      height: 1,
+                      color: backgroundColor,
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        String message =
+                            'Have a look at ${widget.donation.user?.username ?? 'Business Bosses'}\'s donation post on Business Bosses\n'
+                            'https://businessbosses.onelink.me/xLWk/36a2ff16';
+                        logEvent(widget.donation.id, 'donation');
+                        socialShare(message);
+                      },
+                      child: Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.symmetric(vertical: 15),
+                        child: Row(
+                          children: [
+                            SvgPicture.asset(
+                              'assets/svgs/share.svg',
+                              color: textColor,
+                              height: 16,
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            const Text(
+                              'Share',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 18),
+                            ),
+                          ],
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ),
+          );
   }
 }

@@ -22,9 +22,12 @@ class _PurchasesState extends State<Purchases> {
               icon: Icon(Icons.warning),
             )
           : ListView.builder(
-              itemCount: 1,
+              itemCount: widget.history.length,
               itemBuilder: (BuildContext context, int i) {
-                return const CourseHistoryItem();
+                final dynamic currentHistory = widget.history[i];
+                return CourseHistoryItem(
+                  history: currentHistory,
+                );
               },
             ),
     );
