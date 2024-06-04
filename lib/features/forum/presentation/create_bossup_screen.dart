@@ -274,8 +274,7 @@ class _CreateBossUpScreenState extends State<CreateBossUpScreen> {
                             ? 'https://api.businessbosses.co.uk/appfiles/1698854755_13_download_(1).png'
                             : null,
                       });
-                      if (widget.industryModel.industry ==
-                          'Boss Up Challenge ') {
+                      if (widget.industryModel.industryId != '-MsUOGcOT9oRXGakCcJv') {
                         Map<String, dynamic> updateData = <String, dynamic>{
                           'bossOfTheWeekTimeStamp':
                               DateTime.now().millisecondsSinceEpoch,

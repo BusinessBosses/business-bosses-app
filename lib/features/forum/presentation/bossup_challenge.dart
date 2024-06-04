@@ -167,8 +167,8 @@ class _BossupChallengeState extends State<BossupChallenge> {
                                           MainAxisAlignment.start,
                                       children: <Widget>[
                                         Text(
-                                          category.industry ==
-                                                  'Boss Up Challenge '
+                                          category.industryId !=
+                                                  '-MsUOGcOT9oRXGakCcJv'
                                               ? 'Free Promotion'
                                               : category.award ?? 'Win',
                                           style: const TextStyle(
@@ -192,8 +192,8 @@ class _BossupChallengeState extends State<BossupChallenge> {
                                           width: 5,
                                         ),
                                         Text(
-                                          category.industry ==
-                                                  'Boss Up Challenge '
+                                          category.industryId !=
+                                                  '-MsUOGcOT9oRXGakCcJv'
                                               ? 'Every Monday'
                                               : _getChallengeStatus(category),
                                           style: const TextStyle(

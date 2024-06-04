@@ -20,7 +20,7 @@ class BossUpChallangePopUp extends StatelessWidget {
       insetPadding: const EdgeInsets.all(10),
       child: Container(
         padding: const EdgeInsets.all(15),
-        child: industry?.industry == 'Boss Up Challenge '
+        child: industry?.industryId != '-MsUOGcOT9oRXGakCcJv'
             ? Column(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[

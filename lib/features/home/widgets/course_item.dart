@@ -53,16 +53,16 @@ class _CourseItemState extends State<CourseItem> {
         style: bodyText2,
       ),
     ),
-    const PopupMenuDivider(
-      height: 0.0,
-    ),
-    const PopupMenuItem<String>(
-      value: 'Boost',
-      child: Text(
-        'Boost',
-        style: bodyText2,
-      ),
-    ),
+    // const PopupMenuDivider(
+    //   height: 0.0,
+    // ),
+    // const PopupMenuItem<String>(
+    //   value: 'Boost',
+    //   child: Text(
+    //     'Boost',
+    //     style: bodyText2,
+    //   ),
+    // ),
   ];
 
   final List<PopupMenuEntry<String>> myPopup = <PopupMenuEntry<String>>[
