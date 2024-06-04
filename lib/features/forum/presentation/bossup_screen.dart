@@ -256,8 +256,7 @@ class _BossUpSectionState extends State<BossUpSection>
                                                     children: <Widget>[
                                                       Text(
                                                         widget.industry
-                                                                    .industry ==
-                                                                'Boss Up Challenge '
+                                                                    .industryId != '-MsUOGcOT9oRXGakCcJv'
                                                             ? 'Free Promotion'
                                                             : widget.industry
                                                                     .award ??
@@ -285,8 +284,7 @@ class _BossUpSectionState extends State<BossUpSection>
                                                       ),
                                                       Text(
                                                         widget.industry
-                                                                    .industry ==
-                                                                'Boss Up Challenge '
+                                                                    .industryId != '-MsUOGcOT9oRXGakCcJv'
                                                             ? 'Every Monday'
                                                             : _calculateEndsDate(
                                                                 widget.industry
@@ -576,8 +574,7 @@ class _BossUpSectionState extends State<BossUpSection>
                                                                   1209600000) >
                                                               now &&
                                                           widget.industry
-                                                                  .industry ==
-                                                              'Boss Up Challenge ') {
+                                                                  .industryId != '-MsUOGcOT9oRXGakCcJv') {
                                                         const SnackBar
                                                             snackBar = SnackBar(
                                                           duration: Duration(
@@ -592,8 +589,7 @@ class _BossUpSectionState extends State<BossUpSection>
                                                                 snackBar);
                                                       } else {
                                                         if (widget.industry
-                                                                .industry ==
-                                                            'Boss Up Challenge ') {
+                                                                .industryId != '-MsUOGcOT9oRXGakCcJv') {
                                                           Get.to(
                                                             CreateBossUpScreen(
                                                                 industryModel:
