@@ -167,7 +167,7 @@ class _BossupChallengeState extends State<BossupChallenge> {
                                           MainAxisAlignment.start,
                                       children: <Widget>[
                                         Text(
-                                          category.industryId !=
+                                          category.industryId ==
                                                   '-MsUOGcOT9oRXGakCcJv'
                                               ? 'Free Promotion'
                                               : category.award ?? 'Win',
@@ -192,7 +192,7 @@ class _BossupChallengeState extends State<BossupChallenge> {
                                           width: 5,
                                         ),
                                         Text(
-                                          category.industryId !=
+                                          category.industryId ==
                                                   '-MsUOGcOT9oRXGakCcJv'
                                               ? 'Every Monday'
                                               : _getChallengeStatus(category),

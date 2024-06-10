@@ -261,7 +261,6 @@ class _CreateBossUpScreenState extends State<CreateBossUpScreen> {
                   Preview(controller: controller),
                   const SizedBox(height: 24.0),
                   MCustomButton(
-
                     buttonType: ButtonType.elevated,
                     onPressed: () async {
                       controller.createForum(<String, dynamic>{
@@ -274,7 +273,8 @@ class _CreateBossUpScreenState extends State<CreateBossUpScreen> {
                             ? 'https://api.businessbosses.co.uk/appfiles/1698854755_13_download_(1).png'
                             : null,
                       });
-                      if (widget.industryModel.industryId != '-MsUOGcOT9oRXGakCcJv') {
+                      if (widget.industryModel.industryId ==
+                          '-MsUOGcOT9oRXGakCcJv') {
                         Map<String, dynamic> updateData = <String, dynamic>{
                           'bossOfTheWeekTimeStamp':
                               DateTime.now().millisecondsSinceEpoch,
