@@ -32,9 +32,9 @@ class ChallengeController extends GetxController {
       // Assuming data returned is a list of Map<String, dynamic>
       // Sort categories by placing 'Boss Up Challenge' at the top
       categories.sort((Industry a, Industry b) {
-        if (a.industryId != '-MsUOGcOT9oRXGakCcJv') {
+        if (a.industryId == '-MsUOGcOT9oRXGakCcJv') {
           return -1; // 'Boss Up Challenge' comes first
-        } else if (b.industryId != '-MsUOGcOT9oRXGakCcJv') {
+        } else if (b.industryId == '-MsUOGcOT9oRXGakCcJv') {
           return 1; // 'Boss Up Challenge' comes after other categories
         } else {
           // Sort other categories alphabetically
