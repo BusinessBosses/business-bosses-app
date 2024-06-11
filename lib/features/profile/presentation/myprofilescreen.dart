@@ -105,7 +105,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                       ];
                     },
                     body: DefaultTabController(
-                      length: 6,
+                      length: calculateTabLength(),
                       child: Column(
                         children: <Widget>[
                           // if (_publicUser.uid !=
@@ -120,37 +120,36 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                             height: 1.5,
                             child: ColoredBox(color: backgroundcolorinterface),
                           ),
-                          const Material(
-                            color: Color(0xFFF9F9F9),
+                          Material(
+                            color: const Color(0xFFF9F9F9),
                             child: TabBar(
-                              isScrollable: true,
+                              isScrollable:
+                                  calculateTabLength() == 2 ? false : true,
                               indicatorColor:
                                   primaryColorLT, // Replace primaryColorLT with the desired color
                               labelStyle:
-                                  TextStyle(fontWeight: FontWeight.w500),
+                                  const TextStyle(fontWeight: FontWeight.w500),
                               labelColor: Colors.black,
                               tabs: <Widget>[
-                                Tab(
+                                const Tab(
                                   text: 'About',
                                 ),
-                                Tab(
+                                const Tab(
                                   text: 'Posts',
                                 ),
-                                Tab(
-                                  text: 'Shop',
-                                ),
-                                Tab(
-                                  text: 'Resources',
-                                ),
-                                Tab(
-                                  text: 'Donations',
-                                ),
-                                Tab(
-                                  text: 'Courses',
-                                ),
-                                // Tab(
-                                //   text: 'Reposts',
-                                // ),
+                                if (marketController.markets
+                                    .where((MarketModel market) =>
+                                        market.userId ==
+                                        profileController.myProfile.uid)
+                                    .isNotEmpty)
+                                  const Tab(text: 'Shop'),
+                                if (homeController.userresources.isNotEmpty)
+                                  const Tab(text: 'Resources'),
+                                if (donationsController
+                                    .userdonations.isNotEmpty)
+                                  const Tab(text: 'Donations'),
+                                if (homeController.usercourses.isNotEmpty)
+                                  const Tab(text: 'Courses'),
                               ],
                             ),
                           ),
@@ -244,94 +243,258 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                               ),
 
                               ///Marketplace
-                              SizedBox(
-                                  height: double.infinity,
-                                  width: double.infinity,
-                                  child: Obx(() {
-                                    return marketController.markets
-                                            .where((MarketModel market) =>
-                                                market.userId ==
-                                                profileController.myProfile.uid)
-                                            .isEmpty
-                                        ? Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            children: <Widget>[
-                                              SvgPicture.asset(
-                                                'assets/svgs/store.svg',
-                                                height: 40,
-                                                color: Colors.grey,
-                                              ),
-                                              const SizedBox(
-                                                height: 10,
-                                              ),
-                                              const Text(
-                                                'No Items Found in your Shop',
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.w700,
-                                                  fontSize: 15,
+                              if (marketController.markets
+                                  .where((MarketModel market) =>
+                                      market.userId ==
+                                      profileController.myProfile.uid)
+                                  .isNotEmpty)
+                                SizedBox(
+                                    height: double.infinity,
+                                    width: double.infinity,
+                                    child: Obx(() {
+                                      return marketController.markets
+                                              .where((MarketModel market) =>
+                                                  market.userId ==
+                                                  profileController
+                                                      .myProfile.uid)
+                                              .isEmpty
+                                          ? Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              children: <Widget>[
+                                                SvgPicture.asset(
+                                                  'assets/svgs/store.svg',
+                                                  height: 40,
+                                                  color: Colors.grey,
                                                 ),
-                                              ),
-                                              const SizedBox(
-                                                height: 50,
-                                              ),
-                                            ],
-                                          )
-                                        : ListView.builder(
-                                            physics:
-                                                const NeverScrollableScrollPhysics(),
-                                            shrinkWrap: true,
-                                            itemCount: marketController.markets
-                                                .where((MarketModel market) =>
-                                                    market.userId ==
-                                                    profileController
-                                                        .myProfile.uid)
-                                                .length,
-                                            itemBuilder: (BuildContext context,
-                                                int index) {
-                                              final List<MarketModel>
-                                                  filteredMarkets =
-                                                  marketController.markets
-                                                      .where((MarketModel
-                                                              market) =>
-                                                          market.userId ==
-                                                          profileController
-                                                              .myProfile.uid)
-                                                      .toList();
-                                              final MarketModel market =
-                                                  filteredMarkets[index];
+                                                const SizedBox(
+                                                  height: 10,
+                                                ),
+                                                const Text(
+                                                  'No Items Found in your Shop',
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.w700,
+                                                    fontSize: 15,
+                                                  ),
+                                                ),
+                                                const SizedBox(
+                                                  height: 50,
+                                                ),
+                                              ],
+                                            )
+                                          : ListView.builder(
+                                              physics:
+                                                  const NeverScrollableScrollPhysics(),
+                                              shrinkWrap: true,
+                                              itemCount: marketController
+                                                  .markets
+                                                  .where((MarketModel market) =>
+                                                      market.userId ==
+                                                      profileController
+                                                          .myProfile.uid)
+                                                  .length,
+                                              itemBuilder:
+                                                  (BuildContext context,
+                                                      int index) {
+                                                final List<MarketModel>
+                                                    filteredMarkets =
+                                                    marketController.markets
+                                                        .where((MarketModel
+                                                                market) =>
+                                                            market.userId ==
+                                                            profileController
+                                                                .myProfile.uid)
+                                                        .toList();
+                                                final MarketModel market =
+                                                    filteredMarkets[index];
 
-                                              return market.isProduct
-                                                  ? MarketTile(
-                                                      post: market,
-                                                      controller:
-                                                          marketController,
-                                                      key: ValueKey(
-                                                          market.marketId),
-                                                    )
-                                                  : ServiceTile(
-                                                      post: market,
-                                                      controller:
-                                                          marketController,
-                                                      key: ValueKey(
-                                                          market.marketId),
-                                                    );
-                                            },
-                                          );
-                                  })),
+                                                return market.isProduct
+                                                    ? MarketTile(
+                                                        post: market,
+                                                        controller:
+                                                            marketController,
+                                                        key: ValueKey(
+                                                            market.marketId),
+                                                      )
+                                                    : ServiceTile(
+                                                        post: market,
+                                                        controller:
+                                                            marketController,
+                                                        key: ValueKey(
+                                                            market.marketId),
+                                                      );
+                                              },
+                                            );
+                                    })),
 
                               ///Forum or Resources
-                              SizedBox(
+                              if (homeController.userresources.isNotEmpty)
+                                SizedBox(
+                                    height: double.infinity,
+                                    width: double.infinity,
+                                    child: Obx(() {
+                                      return homeController.dLoading.value
+                                          ? const Center(
+                                              child:
+                                                  CircularProgressIndicator(),
+                                            )
+                                          : homeController.dError.value
+                                              ? Column(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
+                                                  children: <Widget>[
+                                                    SvgPicture.asset(
+                                                      'assets/svgs/courses.svg',
+                                                      height: 40,
+                                                      color: Colors.grey,
+                                                    ),
+                                                    const SizedBox(
+                                                      height: 10,
+                                                    ),
+                                                    const Text(
+                                                      'Error Loading Resourses!',
+                                                      style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.w700,
+                                                        fontSize: 15,
+                                                      ),
+                                                    ),
+                                                    const SizedBox(
+                                                      height: 50,
+                                                    ),
+                                                  ],
+                                                )
+                                              : homeController
+                                                      .userresources.isEmpty
+                                                  ? Column(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .center,
+                                                      children: <Widget>[
+                                                        SvgPicture.asset(
+                                                          'assets/svgs/courses.svg',
+                                                          height: 40,
+                                                          color: Colors.grey,
+                                                        ),
+                                                        const SizedBox(
+                                                          height: 10,
+                                                        ),
+                                                        const Text(
+                                                          'No Resources Found',
+                                                          style: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight.w700,
+                                                            fontSize: 15,
+                                                          ),
+                                                        ),
+                                                        const SizedBox(
+                                                          height: 50,
+                                                        ),
+                                                      ],
+                                                    )
+                                                  : ListView.builder(
+                                                      physics:
+                                                          const NeverScrollableScrollPhysics(),
+                                                      shrinkWrap: true,
+                                                      itemCount: homeController
+                                                          .userresources.length,
+                                                      itemBuilder:
+                                                          (BuildContext context,
+                                                              int i) {
+                                                        return ForumItem(
+                                                          forum: homeController
+                                                              .userresources[i],
+                                                          controller:
+                                                              homeController,
+                                                        );
+                                                      },
+                                                    );
+                                    })),
+
+                              ///Donations
+                              if (donationsController.userdonations.isNotEmpty)
+                                SizedBox(
+                                    height: double.infinity,
+                                    width: double.infinity,
+                                    child: Obx(() {
+                                      return donationsController
+                                              .userdonations.isEmpty
+                                          ? Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              children: <Widget>[
+                                                SvgPicture.asset(
+                                                  'assets/svgs/supporter.svg',
+                                                  height: 40,
+                                                  color: Colors.grey,
+                                                ),
+                                                const SizedBox(
+                                                  height: 10,
+                                                ),
+                                                const Text(
+                                                  'No Donations Found',
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.w700,
+                                                    fontSize: 15,
+                                                  ),
+                                                ),
+                                                const SizedBox(
+                                                  height: 50,
+                                                ),
+                                              ],
+                                            )
+                                          : ListView.builder(
+                                              physics:
+                                                  const NeverScrollableScrollPhysics(),
+                                              shrinkWrap: true,
+                                              itemCount: donationsController
+                                                  .userdonations.length,
+                                              itemBuilder:
+                                                  (BuildContext context,
+                                                      int i) {
+                                                bool isLastItem =
+                                                    donationsController
+                                                                .userdonations
+                                                                .length !=
+                                                            1
+                                                        ? i ==
+                                                            donationsController
+                                                                    .userdonations
+                                                                    .length -
+                                                                1
+                                                        : i ==
+                                                            donationsController
+                                                                .userdonations
+                                                                .length;
+                                                return DonationItem(
+                                                  donation: donationsController
+                                                      .userdonations[i],
+                                                  isLastItem: isLastItem,
+                                                );
+                                              },
+                                            );
+                                    })),
+
+                              ///Courses
+                              if (homeController.usercourses.isNotEmpty)
+                                SizedBox(
                                   height: double.infinity,
                                   width: double.infinity,
                                   child: Obx(() {
-                                    return homeController.dLoading.value
+                                    return homeController.cLoading.value
                                         ? const Center(
                                             child: CircularProgressIndicator(),
                                           )
-                                        : homeController.dError.value
+                                        : homeController.cError.value
                                             ? Column(
                                                 mainAxisAlignment:
                                                     MainAxisAlignment.center,
@@ -347,7 +510,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                                     height: 10,
                                                   ),
                                                   const Text(
-                                                    'Error Loading Resourses!',
+                                                    'Error Loading Courses!',
                                                     style: TextStyle(
                                                       fontWeight:
                                                           FontWeight.w700,
@@ -359,8 +522,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                                   ),
                                                 ],
                                               )
-                                            : homeController
-                                                    .userresources.isEmpty
+                                            : homeController.usercourses.isEmpty
                                                 ? Column(
                                                     mainAxisAlignment:
                                                         MainAxisAlignment
@@ -378,7 +540,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                                         height: 10,
                                                       ),
                                                       const Text(
-                                                        'No Resources Found',
+                                                        'No Courses Found',
                                                         style: TextStyle(
                                                           fontWeight:
                                                               FontWeight.w700,
@@ -395,165 +557,18 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                                         const NeverScrollableScrollPhysics(),
                                                     shrinkWrap: true,
                                                     itemCount: homeController
-                                                        .userresources.length,
+                                                        .usercourses.length,
                                                     itemBuilder:
                                                         (BuildContext context,
                                                             int i) {
-                                                      return ForumItem(
-                                                        forum: homeController
-                                                            .userresources[i],
-                                                        controller:
-                                                            homeController,
+                                                      return CourseItem(
+                                                        course: homeController
+                                                            .usercourses[i],
                                                       );
                                                     },
                                                   );
-                                  })),
-
-                              ///Donations
-                              SizedBox(
-                                  height: double.infinity,
-                                  width: double.infinity,
-                                  child: Obx(() {
-                                    return donationsController
-                                            .userdonations.isEmpty
-                                        ? Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            children: <Widget>[
-                                              SvgPicture.asset(
-                                                'assets/svgs/supporter.svg',
-                                                height: 40,
-                                                color: Colors.grey,
-                                              ),
-                                              const SizedBox(
-                                                height: 10,
-                                              ),
-                                              const Text(
-                                                'No Donations Found',
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.w700,
-                                                  fontSize: 15,
-                                                ),
-                                              ),
-                                              const SizedBox(
-                                                height: 50,
-                                              ),
-                                            ],
-                                          )
-                                        : ListView.builder(
-                                            physics:
-                                                const NeverScrollableScrollPhysics(),
-                                            shrinkWrap: true,
-                                            itemCount: donationsController
-                                                .userdonations.length,
-                                            itemBuilder:
-                                                (BuildContext context, int i) {
-                                              bool isLastItem =
-                                                  donationsController
-                                                              .userdonations
-                                                              .length !=
-                                                          1
-                                                      ? i ==
-                                                          donationsController
-                                                                  .userdonations
-                                                                  .length -
-                                                              1
-                                                      : i ==
-                                                          donationsController
-                                                              .userdonations
-                                                              .length;
-                                              return  DonationItem(
-                                                donation: donationsController
-                                                    .userdonations[i],
-                                                isLastItem: isLastItem,
-                                              );
-                                            },
-                                          );
-                                  })),
-
-                              ///Courses
-                              SizedBox(
-                                height: double.infinity,
-                                width: double.infinity,
-                                child: Obx(() {
-                                  return homeController.cLoading.value
-                                      ? const Center(
-                                          child: CircularProgressIndicator(),
-                                        )
-                                      : homeController.cError.value
-                                          ? Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                              children: <Widget>[
-                                                SvgPicture.asset(
-                                                  'assets/svgs/courses.svg',
-                                                  height: 40,
-                                                  color: Colors.grey,
-                                                ),
-                                                const SizedBox(
-                                                  height: 10,
-                                                ),
-                                                const Text(
-                                                  'Error Loading Courses!',
-                                                  style: TextStyle(
-                                                    fontWeight: FontWeight.w700,
-                                                    fontSize: 15,
-                                                  ),
-                                                ),
-                                                const SizedBox(
-                                                  height: 50,
-                                                ),
-                                              ],
-                                            )
-                                          : homeController.usercourses.isEmpty
-                                              ? Column(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.center,
-                                                  children: <Widget>[
-                                                    SvgPicture.asset(
-                                                      'assets/svgs/courses.svg',
-                                                      height: 40,
-                                                      color: Colors.grey,
-                                                    ),
-                                                    const SizedBox(
-                                                      height: 10,
-                                                    ),
-                                                    const Text(
-                                                      'No Courses Found',
-                                                      style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.w700,
-                                                        fontSize: 15,
-                                                      ),
-                                                    ),
-                                                    const SizedBox(
-                                                      height: 50,
-                                                    ),
-                                                  ],
-                                                )
-                                              : ListView.builder(
-                                                  physics:
-                                                      const NeverScrollableScrollPhysics(),
-                                                  shrinkWrap: true,
-                                                  itemCount: homeController
-                                                      .usercourses.length,
-                                                  itemBuilder:
-                                                      (BuildContext context,
-                                                          int i) {
-                                                    return CourseItem(
-                                                      course: homeController
-                                                          .usercourses[i],
-                                                    );
-                                                  },
-                                                );
-                                }),
-                              )
+                                  }),
+                                )
                             ]),
                           ),
                         ],
@@ -570,5 +585,19 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
         );
       },
     );
+  }
+
+  int calculateTabLength() {
+    int tabLength = 2;
+
+    if (marketController.markets
+        .where((MarketModel market) =>
+            market.userId == profileController.myProfile.uid)
+        .isNotEmpty) tabLength++;
+    if (homeController.userresources.isNotEmpty) tabLength++;
+    if (donationsController.userdonations.isNotEmpty) tabLength++;
+    if (homeController.usercourses.isNotEmpty) tabLength++;
+
+    return tabLength;
   }
 }
