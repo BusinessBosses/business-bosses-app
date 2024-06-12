@@ -51,6 +51,8 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       Get.put(DonationsController());
   late IO.Socket socket;
   bool isScrolled = true;
+  bool isTabVisible = false;
+
   // List<TargetFocus> targets = [];
 
   // int currentTimestamp = DateTime.now().millisecondsSinceEpoch;
@@ -65,7 +67,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
-
     WidgetsBinding.instance.addObserver(this);
     // showTutorial();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
@@ -79,6 +80,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     final HomeController homeController = Get.find();
 
     _scrollController.addListener(() {
+      _checkScrollPosition();
       if (_scrollController.position.pixels >=
               _scrollController.position.maxScrollExtent - 300 &&
           !homeController.loadingMore.value) {
@@ -629,6 +631,18 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     //     ]));
   }
 
+  void _checkScrollPosition() {
+    if (_scrollController.position.pixels >= 230) {
+      setState(() {
+        isTabVisible = true;
+      });
+    } else {
+      setState(() {
+        isTabVisible = false;
+      });
+    }
+  }
+
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     final HomeController homeController = Get.find();
@@ -685,7 +699,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
             child: Scaffold(
               backgroundColor: backgroundcolorinterface,
               appBar: PreferredSize(
-                preferredSize: const Size.fromHeight(kToolbarHeight),
+                preferredSize: const Size.fromHeight(kToolbarHeight + 48),
                 child: GetBuilder<ChatController>(
                     builder: (ChatController chatController) {
                   final List<MessageModel> unseenChats = chatController.chats
@@ -698,6 +712,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                   return GetBuilder<ProfileController>(
                     builder: (ProfileController profileController) =>
                         Homeappbar(
+                      isTabVisible: isTabVisible,
                       hasBadge: hasBadge,
                       coinsCount:
                           profileController.myProfile.coinscount?.toString() ??
@@ -919,7 +934,18 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                                             if (index == 0) {
                                               return Column(
                                                 children: [
-                                                  const BossOfWeekProfileTile(),
+                                                  LayoutBuilder(
+                                                    builder:
+                                                        (BuildContext context,
+                                                            BoxConstraints
+                                                                constraints) {
+                                                      return BossOfWeekProfileTile(
+                                                        onTileBuilt: () {
+                                                          _checkScrollPosition();
+                                                        },
+                                                      );
+                                                    },
+                                                  ),
                                                   liveEventController
                                                           .ongoing.isNotEmpty
                                                       ? Container(

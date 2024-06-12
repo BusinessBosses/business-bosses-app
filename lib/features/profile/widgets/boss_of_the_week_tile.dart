@@ -22,8 +22,9 @@ import '../../home/controller/home_controller.dart';
 
 /// BOSS OF THE WEEK HOMEPAGE TILE
 class BossOfWeekProfileTile extends StatefulWidget {
-  /// BOSS OF THE WEEK PROFILE
-  const BossOfWeekProfileTile({Key? key}) : super(key: key);
+  final VoidCallback? onTileBuilt; // Add this line
+
+  const BossOfWeekProfileTile({Key? key, this.onTileBuilt}) : super(key: key);
 
   @override
   State<BossOfWeekProfileTile> createState() => _BossOfWeekProfileTileState();
@@ -79,6 +80,14 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
 
   @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (widget.onTileBuilt != null) {
+        WidgetsBinding.instance!.addPostFrameCallback((_) {
+          widget.onTileBuilt!();
+        });
+      }
+    });
+
     List<Map<String, dynamic>> quotes = <Map<String, dynamic>>[
       <String, dynamic>{
         'by': 'Napoleon Hill',
