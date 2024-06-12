@@ -147,7 +147,11 @@ class _BossupChallengeState extends State<BossupChallenge> {
                                         memCacheWidth: 256,
                                         placeholder: (BuildContext context,
                                                 String photo) =>
-                                            const CircularProgressIndicator(),
+                                            Center(
+                                          child: SizedBox(
+                                              child:
+                                                  const CircularProgressIndicator()),
+                                        ),
                                         errorWidget: (BuildContext context,
                                                 String photo, dynamic error) =>
                                             const Icon(Icons.error),
