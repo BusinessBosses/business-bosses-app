@@ -441,7 +441,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                                   height: 10,
                                                 ),
                                                 const Text(
-                                                  'No Donations Found',
+                                                  'No Crowdfunds Found',
                                                   style: TextStyle(
                                                     fontWeight: FontWeight.w700,
                                                     fontSize: 15,

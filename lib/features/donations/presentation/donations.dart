@@ -144,7 +144,7 @@ class _DonationsPageState extends State<DonationsPage> {
                                             mainAxisSize: MainAxisSize.min,
                                             children: <Widget>[
                                               const Text(
-                                                'Create a Donation',
+                                                'Create a Project',
                                                 style: TextStyle(
                                                     fontSize: 15,
                                                     color: Colors.white,
@@ -422,7 +422,7 @@ class _DonationsPageState extends State<DonationsPage> {
                                             WrapCrossAlignment.center,
                                         children: <Widget>[
                                           const Text(
-                                            'Donation History ',
+                                            'Crowdfund History ',
                                             style: TextStyle(
                                                 fontWeight: FontWeight.w700),
                                           ),

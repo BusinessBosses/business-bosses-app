@@ -35,7 +35,7 @@ class _DonationMembersState extends State<DonationMembers> {
         ),
         centerTitle: true,
         title: const Text(
-          'Donation Members',
+          'Crowdfund Members',
           textAlign: TextAlign.center,
           style: TextStyle(fontSize: 20),
         ),

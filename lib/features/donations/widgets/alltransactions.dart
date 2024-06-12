@@ -17,7 +17,7 @@ class _AllTransactionsState extends State<AllTransactions> {
     return widget.history.isEmpty
         ? const SafetyModel(
             isLoading: false,
-            title: 'No Donations Found',
+            title: 'No Crowdfunds Found',
             icon: Icon(Icons.warning),
           )
         : ListView.builder(
