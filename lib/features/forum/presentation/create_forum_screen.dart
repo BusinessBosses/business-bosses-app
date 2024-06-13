@@ -393,7 +393,7 @@ class _CreateForumScreenState extends State<CreateForumScreen> {
                             'industryId': industryId,
                           }, isBossup: isbossup);
                         } else {
-                          controller.createForum(<String, dynamic>{
+                          controller.createForum(context, <String, dynamic>{
                             'title': title.trim(),
                             'description': description.trim(),
                             'timestamp': DateTime.now().millisecondsSinceEpoch,

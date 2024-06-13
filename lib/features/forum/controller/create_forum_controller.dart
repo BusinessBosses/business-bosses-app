@@ -6,6 +6,7 @@ import 'package:business_bosses_v2/features/forum/controller/bossup_controller.d
 import 'package:business_bosses_v2/features/forum/controller/forum_controller.dart';
 import 'package:business_bosses_v2/features/forum/models/forum_model.dart';
 import 'package:business_bosses_v2/features/forum/repository/forum_repository.dart';
+import 'package:business_bosses_v2/features/forum/widgets/postonhomepopup.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -141,7 +142,7 @@ class CreateForumController extends GetxController {
   }
 
   /// CREATE POST CONTROLLER (REGISTER NEW POST TO REMOTE DATA SOURCE)
-  Future<void> createForum(Map<String, dynamic> body) async {
+  Future<void> createForum(BuildContext context, Map<String, dynamic> body) async {
     if (validateCreatePostData(body)) {
       loading(true);
       update();
@@ -153,7 +154,12 @@ class CreateForumController extends GetxController {
           _forumController.addNewForum(response.data);
 
           Get.back();
-          Get.snackbar('Success', 'Post created successfully');
+          // ignore: use_build_context_synchronously
+          showDialog(
+            context: context,
+            builder: (BuildContext context) => const PostonhomePopUp(),
+          );
+          // Get.snackbar('Success', 'Post created successfully');
         }
       } else {
         if (imageFileList.isNotEmpty &&
@@ -176,7 +182,12 @@ class CreateForumController extends GetxController {
             _forumController.addNewForum(response.data);
 
             Get.back();
-            Get.snackbar('Success', 'Post created successfully');
+            // ignore: use_build_context_synchronously
+            showDialog(
+            context: context,
+            builder: (BuildContext context) => const PostonhomePopUp(),
+          );
+            // Get.snackbar('Success', 'Post created successfully');
           }
         }
       }
