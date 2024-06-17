@@ -15,6 +15,11 @@ class HomeRepository {
     return response;
   }
 
+  static Future<ApiResponseModel> fetchPromoted() async {
+    final ApiResponseModel response = await ApiService.get(path: 'promotion');
+    return response;
+  }
+
   static Future<ApiResponseModel> fetchRefreshData() async {
     final ApiResponseModel response =
         await ApiService.get(path: 'init/refresh');

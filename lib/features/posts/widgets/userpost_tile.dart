@@ -962,32 +962,34 @@ class _PostTileState extends State<PostTile> {
                                   const SizedBox(
                                     height: 10,
                                   ),
-                                  ElevatedButton(
-                                    onPressed: () async {
-                                      widget.post.donation!.setViews(
-                                          widget.post.donation!.views! + 1);
-                                      ApiService.put(
-                                          path:
-                                              'donation/approve/${widget.post.donation!.id}',
-                                          body: <String, dynamic>{
-                                            'views':
-                                                widget.post.donation!.views! +
-                                                    1,
-                                            'isActive': true,
-                                            'isApproved': true,
-                                          });
-                                      DonationModel donation = DonationModel
-                                          .fromMap(<String, dynamic>{
-                                        ...widget.post.donation!.toMap(),
-                                        'user': widget.post.user!.toMap(),
-                                        'likes': <String>[],
-                                        'comments': <CommentModel>[],
-                                      });
-                                      Get.to(() => ExpandedDonationScreen(
-                                          donation: donation));
-                                    },
-                                    child: const Text('Donate'),
-                                  ),
+                                  if (widget.post.donation!.amountRecieved <
+                                      widget.post.donation!.targetAmount!)
+                                    ElevatedButton(
+                                      onPressed: () async {
+                                        widget.post.donation!.setViews(
+                                            widget.post.donation!.views! + 1);
+                                        ApiService.put(
+                                            path:
+                                                'donation/approve/${widget.post.donation!.id}',
+                                            body: <String, dynamic>{
+                                              'views':
+                                                  widget.post.donation!.views! +
+                                                      1,
+                                              'isActive': true,
+                                              'isApproved': true,
+                                            });
+                                        DonationModel donation = DonationModel
+                                            .fromMap(<String, dynamic>{
+                                          ...widget.post.donation!.toMap(),
+                                          'user': widget.post.user!.toMap(),
+                                          'likes': <String>[],
+                                          'comments': <CommentModel>[],
+                                        });
+                                        Get.to(() => ExpandedDonationScreen(
+                                            donation: donation));
+                                      },
+                                      child: const Text('Donate'),
+                                    ),
                                 ],
                               ),
                             ),

@@ -105,7 +105,7 @@ class CourseController extends GetxController {
             'comments': <CommentModel>[],
             'user': profileController.myProfile.toMap()
           }));
-      homeController.usercourses.insert(
+      profileController.usercourses.insert(
           0,
           CourseModel.fromMap(<String, dynamic>{
             ...course,
@@ -134,10 +134,10 @@ class CourseController extends GetxController {
           'comments': <CommentModel>[],
           'user': profileController.myProfile.toMap()
         });
-        int homeIndex = homeController.usercourses
+        int homeIndex = profileController.usercourses
             .indexWhere((CourseModel c) => c.id == id);
         if (homeIndex != -1) {
-          homeController.usercourses[homeIndex] =
+          profileController.usercourses[homeIndex] =
               CourseModel.fromMap(<String, dynamic>{
             ...response.data,
             'comments': <CommentModel>[],
@@ -242,10 +242,10 @@ class CourseController extends GetxController {
       if (response.success) {
         showSnackbar(message: 'Course deleted successfully!', title: 'Success');
         courses.removeWhere((CourseModel course) => course.id == courseId);
-        int homeIndex = homeController.usercourses
+        int homeIndex = profileController.usercourses
             .indexWhere((CourseModel c) => c.id == courseId);
         if (homeIndex >= -1) {
-          homeController.usercourses
+          profileController.usercourses
               .removeWhere((CourseModel course) => course.id == courseId);
         }
         update();
@@ -432,15 +432,16 @@ class CourseController extends GetxController {
       update();
     }
 
-    final int homeCourseIndex = homeController.usercourses
+    final int homeCourseIndex = profileController.usercourses
         .indexWhere((CourseModel course) => course.id == postId);
     if (homeCourseIndex != -1) {
-      final bool checkLiked =
-          homeController.usercourses[homeCourseIndex].likes!.contains(userId);
+      final bool checkLiked = profileController
+          .usercourses[homeCourseIndex].likes!
+          .contains(userId);
       if (checkLiked) {
-        homeController.usercourses[homeCourseIndex].likes?.remove(userId);
+        profileController.usercourses[homeCourseIndex].likes?.remove(userId);
       } else {
-        homeController.usercourses[homeCourseIndex].likes?.add(userId);
+        profileController.usercourses[homeCourseIndex].likes?.add(userId);
       }
       update();
     }
