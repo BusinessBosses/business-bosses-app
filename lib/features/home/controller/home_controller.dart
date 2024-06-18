@@ -905,6 +905,8 @@ class HomeController extends GetxController {
     final ApiResponseModel response = await HomeRepository.fetchData();
     final ApiResponseModel partner = await HomeRepository.fetchPartner();
     final ApiResponseModel promoted = await HomeRepository.fetchPromoted();
+    final ApiResponseModel posts = await HomeRepository.fetchPosts(
+        0, DateTime.now().millisecondsSinceEpoch);
     if (response.success) {
       profileController.processDataToState(
           {...response.data['user'], 'connecteds': response.data['connecteds']},
@@ -933,7 +935,12 @@ class HomeController extends GetxController {
         processPromotedPostsToState(promoted.data['promotedPosts']['rows']);
         processPromotedMarketsToState(promoted.data['promotedMarkets']['rows']);
         processPromotedCoursesToState(promoted.data['promotedCourses']['rows']);
-        processPostsAndForumsData(response.data['posts']);
+        if (posts.success) {
+          processPostsAndForumsData(posts.data);
+        } else {
+          error(true);
+          update();
+        }
         totalPromoted = promotedMarkets.length + promotedPosts.length;
       }
       FirebaseMessaging.instance.getToken().then((String? value) {
