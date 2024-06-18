@@ -429,8 +429,7 @@ class DonationsController extends GetxController {
       if (donationIndex != -1) {
         donations[donationIndex]
             .setRecievedAmount(int.tryParse(data['amount'])!);
-        profileController.myProfile
-            .incrementCoinsCount(-(int.tryParse(data['amount'])!));
+        profileController.updateCoinCount(-(int.tryParse(data['amount'])!));
         donations[donationIndex]
             .transactions!
             .add(DonationTransaction.fromMap(<String, dynamic>{
@@ -456,8 +455,7 @@ class DonationsController extends GetxController {
         });
     if (response.success) {
       donationModel.isCashoutApproved = true;
-      profileController.myProfile
-          .incrementCoinsCount(donationModel.amountRecieved);
+      profileController.updateCoinCount(donationModel.amountRecieved);
       showSnackbar(message: 'Withdrawal Successful!');
       Get.back();
     } else {

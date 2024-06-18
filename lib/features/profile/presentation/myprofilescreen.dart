@@ -1,9 +1,9 @@
 import 'package:business_bosses_v2/features/donations/controller/donations_controller.dart';
+import 'package:business_bosses_v2/features/forum/widgets/forum_item.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/donations/widgets/donation_item.dart';
 import 'package:business_bosses_v2/features/home/widgets/bottom_bar.dart';
 import 'package:business_bosses_v2/features/home/widgets/course_item.dart';
-import 'package:business_bosses_v2/features/home/widgets/forum_item.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/features/profile/widgets/profileinfodisplay.dart';
 import 'package:business_bosses_v2/features/live_event/controller/live_event_controller.dart';
@@ -49,8 +49,8 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
   void initState() {
     super.initState();
     donationsController.fetchuserDonations(profileController.myProfile.uid);
-    homeController.fetchuserResources(profileController.myProfile.uid);
-    homeController.fetchuserCourses(profileController.myProfile.uid);
+    profileController.fetchuserResources(profileController.myProfile.uid);
+    profileController.fetchuserCourses(profileController.myProfile.uid);
   }
 
   @override
@@ -143,12 +143,12 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                         profileController.myProfile.uid)
                                     .isNotEmpty)
                                   const Tab(text: 'Shop'),
-                                if (homeController.userresources.isNotEmpty)
+                                if (profileController.userresources.isNotEmpty)
                                   const Tab(text: 'Resources'),
                                 if (donationsController
                                     .userdonations.isNotEmpty)
                                   const Tab(text: 'Donations'),
-                                if (homeController.usercourses.isNotEmpty)
+                                if (profileController.usercourses.isNotEmpty)
                                   const Tab(text: 'Courses'),
                               ],
                             ),
@@ -330,17 +330,17 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                     })),
 
                               ///Forum or Resources
-                              if (homeController.userresources.isNotEmpty)
+                              if (profileController.userresources.isNotEmpty)
                                 SizedBox(
                                     height: double.infinity,
                                     width: double.infinity,
                                     child: Obx(() {
-                                      return homeController.dLoading.value
+                                      return profileController.dLoading.value
                                           ? const Center(
                                               child:
                                                   CircularProgressIndicator(),
                                             )
-                                          : homeController.dError.value
+                                          : profileController.dError.value
                                               ? Column(
                                                   mainAxisAlignment:
                                                       MainAxisAlignment.center,
@@ -368,7 +368,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                                     ),
                                                   ],
                                                 )
-                                              : homeController
+                                              : profileController
                                                       .userresources.isEmpty
                                                   ? Column(
                                                       mainAxisAlignment:
@@ -403,13 +403,13 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                                       physics:
                                                           const NeverScrollableScrollPhysics(),
                                                       shrinkWrap: true,
-                                                      itemCount: homeController
+                                                      itemCount: profileController
                                                           .userresources.length,
                                                       itemBuilder:
                                                           (BuildContext context,
                                                               int i) {
                                                         return ForumItem(
-                                                          forum: homeController
+                                                          forum: profileController
                                                               .userresources[i],
                                                           controller:
                                                               homeController,
@@ -485,16 +485,16 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                     })),
 
                               ///Courses
-                              if (homeController.usercourses.isNotEmpty)
+                              if (profileController.usercourses.isNotEmpty)
                                 SizedBox(
                                   height: double.infinity,
                                   width: double.infinity,
                                   child: Obx(() {
-                                    return homeController.cLoading.value
+                                    return profileController.cLoading.value
                                         ? const Center(
                                             child: CircularProgressIndicator(),
                                           )
-                                        : homeController.cError.value
+                                        : profileController.cError.value
                                             ? Column(
                                                 mainAxisAlignment:
                                                     MainAxisAlignment.center,
@@ -522,7 +522,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                                   ),
                                                 ],
                                               )
-                                            : homeController.usercourses.isEmpty
+                                            : profileController.usercourses.isEmpty
                                                 ? Column(
                                                     mainAxisAlignment:
                                                         MainAxisAlignment
@@ -556,13 +556,13 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                                     physics:
                                                         const NeverScrollableScrollPhysics(),
                                                     shrinkWrap: true,
-                                                    itemCount: homeController
+                                                    itemCount: profileController
                                                         .usercourses.length,
                                                     itemBuilder:
                                                         (BuildContext context,
                                                             int i) {
                                                       return CourseItem(
-                                                        course: homeController
+                                                        course: profileController
                                                             .usercourses[i],
                                                       );
                                                     },
@@ -594,9 +594,9 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
         .where((MarketModel market) =>
             market.userId == profileController.myProfile.uid)
         .isNotEmpty) tabLength++;
-    if (homeController.userresources.isNotEmpty) tabLength++;
+    if (profileController.userresources.isNotEmpty) tabLength++;
     if (donationsController.userdonations.isNotEmpty) tabLength++;
-    if (homeController.usercourses.isNotEmpty) tabLength++;
+    if (profileController.usercourses.isNotEmpty) tabLength++;
 
     return tabLength;
   }

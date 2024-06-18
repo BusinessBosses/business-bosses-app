@@ -1,3 +1,4 @@
+import 'package:business_bosses_v2/common/widgets/safety_model.dart';
 import 'package:business_bosses_v2/features/donations/controller/donations_controller.dart';
 import 'package:business_bosses_v2/features/donations/presentation/donation_members.dart';
 import 'package:business_bosses_v2/features/donations/presentation/donationpopup.dart';
@@ -348,120 +349,127 @@ class _DonationsPageState extends State<DonationsPage> {
                 )
               ];
             },
-            body: GetBuilder<DonationsController>(
-              builder: (DonationsController controller) {
-                return Container(
-                  child: Column(
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.only(
-                            right: 15, left: 15, bottom: 10, top: 10),
-                        child: Container(
-                            height: 40,
-                            decoration: BoxDecoration(
-                              color: const Color(0xFFFFFFFF),
-                              borderRadius: BorderRadius.circular(10),
-                              boxShadow: <BoxShadow>[
-                                BoxShadow(
-                                  color: Colors.grey.withOpacity(0.3),
-                                  spreadRadius: 20,
-                                  blurRadius: 500,
-                                  offset: const Offset(0, 3),
+            body: donationsController.donations.isEmpty
+                ? const SafetyModel(
+                    isLoading: false,
+                    title: 'No Post Found!',
+                  )
+                : GetBuilder<DonationsController>(
+                    builder: (DonationsController controller) {
+                      return Column(
+                        children: <Widget>[
+                          Padding(
+                            padding: const EdgeInsets.only(
+                                right: 15, left: 15, bottom: 10, top: 10),
+                            child: Container(
+                                height: 40,
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFFFFFFFF),
+                                  borderRadius: BorderRadius.circular(10),
+                                  boxShadow: <BoxShadow>[
+                                    BoxShadow(
+                                      color: Colors.grey.withOpacity(0.3),
+                                      spreadRadius: 20,
+                                      blurRadius: 500,
+                                      offset: const Offset(0, 3),
+                                    ),
+                                  ],
                                 ),
-                              ],
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: <Widget>[
-                                GestureDetector(
-                                  onTap: () {
-                                    Get.toNamed(Routes.promotionscreen);
-                                  },
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(left: 10.0),
-                                    child: Container(
-                                      width: 142,
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 1),
-                                      decoration: BoxDecoration(
-                                          color: backgroundColor,
-                                          borderRadius:
-                                              BorderRadius.circular(5)),
-                                      child: Wrap(
-                                        alignment: WrapAlignment.center,
-                                        crossAxisAlignment:
-                                            WrapCrossAlignment.center,
-                                        children: <Widget>[
-                                          const Text('Balance: '),
-                                          SvgPicture.asset(
-                                              'assets/svgs/coin.svg'),
-                                          const SizedBox(
-                                            width: 2,
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: <Widget>[
+                                    GestureDetector(
+                                      onTap: () {
+                                        Get.toNamed(Routes.promotionscreen);
+                                      },
+                                      child: Padding(
+                                        padding:
+                                            const EdgeInsets.only(left: 10.0),
+                                        child: Container(
+                                          width: 142,
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 1),
+                                          decoration: BoxDecoration(
+                                              color: backgroundColor,
+                                              borderRadius:
+                                                  BorderRadius.circular(5)),
+                                          child: Wrap(
+                                            alignment: WrapAlignment.center,
+                                            crossAxisAlignment:
+                                                WrapCrossAlignment.center,
+                                            children: <Widget>[
+                                              const Text('Balance: '),
+                                              SvgPicture.asset(
+                                                  'assets/svgs/coin.svg'),
+                                              const SizedBox(
+                                                width: 2,
+                                              ),
+                                              Text(
+                                                '${_myProfile.myProfile.coinscount!}',
+                                                style: const TextStyle(
+                                                    fontWeight: FontWeight.w700,
+                                                    color: subtextColor),
+                                              )
+                                            ],
                                           ),
-                                          Text(
-                                            '${_myProfile.myProfile.coinscount!}',
-                                            style: const TextStyle(
-                                                fontWeight: FontWeight.w700,
-                                                color: subtextColor),
-                                          )
-                                        ],
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                ),
-                                GestureDetector(
-                                  onTap: () {
-                                    Get.to(() => const DonationsHistory());
-                                  },
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(
-                                      right: 10.0,
-                                    ),
-                                    child: Wrap(
-                                        crossAxisAlignment:
-                                            WrapCrossAlignment.center,
-                                        children: <Widget>[
-                                          const Text(
-                                            'Crowdfund History ',
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.w700),
-                                          ),
-                                          SvgPicture.asset(
-                                            'assets/svgs/nexticon.svg',
-                                            color: textColor,
-                                          ),
-                                        ]),
+                                    GestureDetector(
+                                      onTap: () {
+                                        Get.to(() => const DonationsHistory());
+                                      },
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(
+                                          right: 10.0,
+                                        ),
+                                        child: Wrap(
+                                            crossAxisAlignment:
+                                                WrapCrossAlignment.center,
+                                            children: <Widget>[
+                                              const Text(
+                                                'Crowdfund History ',
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.w700),
+                                              ),
+                                              SvgPicture.asset(
+                                                'assets/svgs/nexticon.svg',
+                                                color: textColor,
+                                              ),
+                                            ]),
+                                      ),
+                                    )
+                                  ],
+                                )),
+                          ),
+                          controller.loading.value
+                              ? const Expanded(
+                                  child: Center(
+                                    child: CircularProgressIndicator(),
                                   ),
                                 )
-                              ],
-                            )),
-                      ),
-                      controller.loading.value
-                          ? const Expanded(
-                              child: Center(
-                                child: CircularProgressIndicator(),
-                              ),
-                            )
-                          : Expanded(
-                              child: ListView.builder(
-                                itemCount: controller.donations.length,
-                                itemBuilder: (BuildContext context, int i) {
-                                  bool isLastItem =
-                                      controller.donations.length != 1
+                              : Expanded(
+                                  child: ListView.builder(
+                                    itemCount: controller.donations.length,
+                                    itemBuilder: (BuildContext context, int i) {
+                                      bool isLastItem = controller
+                                                  .donations.length !=
+                                              1
                                           ? i == controller.donations.length - 1
                                           : i == controller.donations.length;
-                                  return DonationItem(
-                                    donation: controller.donations[i],
-                                    isLastItem: isLastItem,
-                                  );
-                                },
-                              ),
-                            )
-                    ],
+                                      return DonationItem(
+                                        donation: controller.donations[i],
+                                        isLastItem: isLastItem,
+                                      );
+                                    },
+                                  ),
+                                )
+                        ],
+                      );
+                    },
                   ),
-                );
-              },
-            ),
           );
   }
 }
