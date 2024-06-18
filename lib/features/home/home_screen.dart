@@ -64,6 +64,17 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
 
   int marketIndex = 0;
   // final GlobalKey<NavigatorState> postButtonKey = GlobalKey<NavigatorState>();
+  void _checkScrollPosition() {
+    if (_scrollController.position.pixels >= 230) {
+      setState(() {
+        isTabVisible = true;
+      });
+    } else {
+      setState(() {
+        isTabVisible = false;
+      });
+    }
+  }
 
   @override
   void initState() {
@@ -79,6 +90,18 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       }
     });
     final HomeController homeController = Get.find();
+
+    void _checkScrollPosition() {
+      if (_scrollController.position.pixels >= 230) {
+        setState(() {
+          isTabVisible = true;
+        });
+      } else {
+        setState(() {
+          isTabVisible = false;
+        });
+      }
+    }
 
     _scrollController.addListener(() {
       _checkScrollPosition();
