@@ -422,9 +422,10 @@ class _ExpandedMarketplaceScreenState extends State<ExpandedMarketplaceScreen> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: <Widget>[
                             Text(
-                              widget.market.price.toString(),
+                              'Price - ${widget.market.price.toString()}',
                               style: const TextStyle(
                                 fontWeight: FontWeight.w800,
+                                fontSize: 16
                               ),
                             ),
                             const SizedBox(
@@ -454,7 +455,7 @@ class _ExpandedMarketplaceScreenState extends State<ExpandedMarketplaceScreen> {
                           ],
                         ),
                         const SizedBox(
-                          height: 2,
+                          height: 8,
                         ),
                         Row(
                           children: <Widget>[
@@ -462,8 +463,15 @@ class _ExpandedMarketplaceScreenState extends State<ExpandedMarketplaceScreen> {
                                     widget.market.category != null
                                 ? Row(
                                     children: <Widget>[
-                                      SvgPicture.asset(
-                                          'assets/svgs/location.svg'),
+                                      widget.market.location!
+                                              .contains('delivery')
+                                          ? SvgPicture.asset(
+                                              'assets/svgs/location.svg')
+                                          : const Icon(
+                                              Icons.timelapse,
+                                              size: 16,
+                                              color: subtextColor,
+                                            ),
                                       const SizedBox(
                                         width: 1,
                                       ),
@@ -473,18 +481,18 @@ class _ExpandedMarketplaceScreenState extends State<ExpandedMarketplaceScreen> {
                                             : widget.market.location!,
                                         style: const TextStyle(
                                             fontWeight: FontWeight.normal,
-                                            fontSize: 12,
+                                            fontSize: 16,
                                             color: subtextColor),
                                         overflow: TextOverflow.ellipsis,
                                         softWrap: false,
                                       ),
                                       const SizedBox(
-                                        width: 5,
+                                        width: 10,
                                       ),
                                       SvgPicture.asset(
                                           'assets/svgs/category.svg'),
                                       const SizedBox(
-                                        width: 3,
+                                        width: 5,
                                       ),
                                       Text(
                                         widget.market.category!.length > 50
@@ -492,7 +500,7 @@ class _ExpandedMarketplaceScreenState extends State<ExpandedMarketplaceScreen> {
                                             : widget.market.category!,
                                         style: const TextStyle(
                                             fontWeight: FontWeight.normal,
-                                            fontSize: 12,
+                                            fontSize: 16,
                                             color: subtextColor),
                                       ),
                                       const SizedBox(
@@ -507,20 +515,32 @@ class _ExpandedMarketplaceScreenState extends State<ExpandedMarketplaceScreen> {
                                   ),
                           ],
                         ),
+                        const SizedBox(
+                          height: 10,
+                        ),
                         Row(
                           children: <Widget>[
-                            const Icon(
-                              Icons.star,
-                              color: Color.fromRGBO(255, 202, 40, 1),
-                              size: 16,
-                            ),
-                            Text(
-                              widget.market.user!.averageRating!
-                                  .toStringAsFixed(1),
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 13,
-                              ),
+                            Container(
+                              decoration: BoxDecoration(
+                                  color: backgroundColor,
+                                  borderRadius: BorderRadius.circular(20)),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 5),
+                              child: Wrap(children: [
+                                const Icon(
+                                  Icons.star,
+                                  color: Color.fromRGBO(255, 202, 40, 1),
+                                  size: 16,
+                                ),
+                                Text(
+                                  widget.market.user!.averageRating!
+                                      .toStringAsFixed(1),
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              ]),
                             ),
                             const SizedBox(
                               width: 5,
@@ -533,7 +553,7 @@ class _ExpandedMarketplaceScreenState extends State<ExpandedMarketplaceScreen> {
                               child: const Text(
                                 'Seller reviews',
                                 style: TextStyle(
-                                  fontSize: 13,
+                                  fontSize: 16,
                                   fontWeight: FontWeight.bold,
                                   decoration: TextDecoration.underline,
                                 ),
