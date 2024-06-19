@@ -7,6 +7,7 @@ import 'package:business_bosses_v2/features/live_event/controller/live_event_con
 import 'package:business_bosses_v2/features/live_event/models/events_model.dart';
 import 'package:business_bosses_v2/features/live_event/presentation/attendance_list.dart';
 import 'package:business_bosses_v2/features/live_event/presentation/create_event.dart';
+import 'package:business_bosses_v2/features/live_event/widgets/attendeesitem.dart';
 import 'package:business_bosses_v2/features/live_event/widgets/call_room.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/navigation/routes.dart';
@@ -208,10 +209,27 @@ class _EventItemState extends State<EventItem> {
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(right: 15.0),
-                          child: Text(
-                            attendMessage,
-                            style: const TextStyle(fontSize: 13),
+                          padding: const EdgeInsets.only(right:15.0),
+                          child: GestureDetector(
+                            onTap: () {
+                              showModalBottomSheet(
+                                  context: context,
+                                  builder: (BuildContext context) =>
+                                      AttendeesItem(
+                                        event: widget.event,
+                                      ));
+                            },
+                            child: Container(
+                              padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+                              decoration: BoxDecoration(color: Colors.grey, borderRadius: BorderRadius.circular(5)),
+                              child: Text(
+                                attendMessage,
+                                style: const TextStyle(
+                                  fontSize: 13,
+                                  color: Colors.white
+                                ),
+                              ),
+                            ),
                           ),
                         ),
                         if (widget.event.user?.uid ==
@@ -425,7 +443,7 @@ class _EventItemState extends State<EventItem> {
                                 minimumSize: const Size(55, 32),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(
-                                      12), // Set the border radius
+                                      5), // Set the border radius
                                 ),
                               ),
                               onPressed: () async {

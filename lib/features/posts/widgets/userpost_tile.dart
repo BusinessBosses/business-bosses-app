@@ -306,7 +306,7 @@ class _PostTileState extends State<PostTile> {
                   )
                 ],
                 ListTile(
-                  contentPadding: const EdgeInsets.only(left: 15, right: 0),
+                  contentPadding: const EdgeInsets.only(left: 15, right: 15),
                   leading: GestureDetector(
                     onTap: () {
                       if (profileController.myProfile.uid ==
@@ -428,7 +428,6 @@ class _PostTileState extends State<PostTile> {
                                 child: const RankingBadge(),
                               ),
                         Container(
-                          padding: const EdgeInsets.only(right: 15),
                           height: double.infinity,
                           color: Colors.white,
                           child: widget.post.user!.uid ==
