@@ -209,7 +209,7 @@ class _EventItemState extends State<EventItem> {
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(right:15.0),
+                          padding: const EdgeInsets.only(right:15.0, top: 10),
                           child: GestureDetector(
                             onTap: () {
                               showModalBottomSheet(
@@ -221,7 +221,7 @@ class _EventItemState extends State<EventItem> {
                             },
                             child: Container(
                               padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-                              decoration: BoxDecoration(color: Colors.grey, borderRadius: BorderRadius.circular(5)),
+                              decoration: BoxDecoration(color: Colors.grey, borderRadius: BorderRadius.circular(6)),
                               child: Text(
                                 attendMessage,
                                 style: const TextStyle(
@@ -237,6 +237,7 @@ class _EventItemState extends State<EventItem> {
                           _buildPopupMenuButton(context),
                       ],
                     ),
+                    const SizedBox(height: 5,),
                     Align(
                       alignment: Alignment.topLeft,
                       child: Text(
@@ -443,7 +444,7 @@ class _EventItemState extends State<EventItem> {
                                 minimumSize: const Size(55, 32),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(
-                                      5), // Set the border radius
+                                      6), // Set the border radius
                                 ),
                               ),
                               onPressed: () async {
