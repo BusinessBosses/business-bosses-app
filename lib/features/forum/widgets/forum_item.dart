@@ -863,6 +863,7 @@ class _ForumItemState extends State<ForumItem> {
                     Get.find<BossUpController>()
                         .deleteForum(widget.forum.forumId);
                   }
+                  setState(() {});
                 },
                 child: const TextWidget(
                   text: 'Delete',

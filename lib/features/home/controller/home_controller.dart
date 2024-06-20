@@ -854,15 +854,6 @@ class HomeController extends GetxController {
     update();
   }
 
-  void removeForum(String forumId) {
-    mixedPosts.removeWhere((Map<String, dynamic> element) =>
-        element['shouldCount'] == null &&
-        element['isForum'] &&
-        element['data'].forumId == forumId);
-    ApiService.delete(path: 'forum/delete/$forumId');
-    update();
-  }
-
   void updatePost(PostModel post) {
     final int postIndex =
         posts.indexWhere((PostModel element) => element.postId == post.postId);

@@ -736,7 +736,7 @@ class _ServiceTileState extends State<ServiceTile> {
                                                       padding:
                                                           EdgeInsets.all(5.0),
                                                       child: Text(
-                                                        'Message Seller',
+                                                        'Book Now',
                                                         style: TextStyle(
                                                           color: primaryColorLT,
                                                           fontWeight:
