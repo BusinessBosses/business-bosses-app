@@ -68,7 +68,7 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
           ),
           centerTitle: true,
           title: const Text(
-            'Donation',
+            'Crowdfund',
             textAlign: TextAlign.center,
             style: TextStyle(fontSize: 20),
           ),
@@ -245,7 +245,7 @@ class _ExpandedDonationScreenState extends State<ExpandedDonationScreen> {
                                         },
                                         contentPadding: EdgeInsets.zero,
                                         title: const TextWidget(
-                                          text: 'Report this Donation',
+                                          text: 'Report this Project',
                                           color: Colors.red,
                                         ),
                                       )

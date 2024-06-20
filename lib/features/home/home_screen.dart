@@ -19,6 +19,7 @@ import 'package:lottie/lottie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:text_scroll/text_scroll.dart';
 import 'package:upgrader/upgrader.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 import '../../utils/constants/constants.dart';
 import '../../utils/theme/theme.dart';
@@ -190,6 +191,26 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
           },
         ),
       ),
+      ...homeController.bossUp!.reversed
+          .toList()
+          .map((Map<String, dynamic> item) => GestureDetector(
+                onTap: () async {
+                  final Uri url = Uri.parse(item['companyUrl']);
+                  if (!await launchUrl(url)) {
+                    throw Exception('Could not launch $url');
+                  }
+                },
+                child: SizedBox(
+                  height: 280,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text(item['companyName'].toString()),
+                    ],
+                  ),
+                ),
+              ))
+          .toList(),
     ];
     return WillPopScope(
       onWillPop: () async {

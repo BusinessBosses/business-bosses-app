@@ -496,9 +496,9 @@ class _CreateDonationScreenState extends State<CreateDonationScreen> {
                       child: Text(
                         textAlign: TextAlign.center,
                         overflow: TextOverflow.ellipsis,
-                        maxLines: 2,
+                        maxLines: 3,
                         style: TextStyle(fontSize: 13, color: subtextColor),
-                        'Please note this donation MUST be for your business only. We do not currently support any charitable organisation donations. ',
+                        'Please note this crowdfunding MUST be for your business only. We do not currently support any charitable organisation crowdfunds. ',
                       ),
                     ),
                   ],

@@ -620,7 +620,7 @@ class _DonationItemState extends State<DonationItem> {
                                             },
                                             contentPadding: EdgeInsets.zero,
                                             title: const TextWidget(
-                                              text: 'Report this Donation',
+                                              text: 'Report this Project',
                                               color: Colors.red,
                                             ),
                                           )

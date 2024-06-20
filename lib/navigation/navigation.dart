@@ -18,6 +18,7 @@ import 'package:business_bosses_v2/features/live_event/presentation/confirm_crea
 import 'package:business_bosses_v2/features/live_event/presentation/create_event.dart';
 import 'package:business_bosses_v2/features/live_event/presentation/live_event.dart';
 import 'package:business_bosses_v2/features/marketplace/controllers/market_controller.dart';
+import 'package:business_bosses_v2/features/marketplace/presentation/expanded_market_screen.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/renewconfirmation.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/sell_screen.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/subscription_confirmation.dart';
@@ -281,8 +282,11 @@ var routes = [
     name: Routes.donationshistoryscreen,
     page: () => const DonationsHistory(),
   ),
-   GetPage(
+  GetPage(
     name: Routes.pdfscreen,
-    page: () => const PDFScreen(url: '', filename: '',),
+    page: () => const PDFScreen(
+      url: '',
+      filename: '',
+    ),
   ),
 ];
