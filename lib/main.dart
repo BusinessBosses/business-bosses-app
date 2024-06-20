@@ -71,7 +71,8 @@ void main() async {
         // Check the type of message
         if (type == 'incoming_call') {
           // Display incoming call UI and join Zegocloud room using callId
-          Get.to(CallPage(callID: callID, userId: userId, username: username));
+          Get.to(() =>
+              CallPage(callID: callID, userId: userId, username: username));
         }
       } else {
         Get.toNamed(
@@ -101,7 +102,8 @@ void main() async {
         // Check the type of message
         if (type == 'incoming_call') {
           // Display incoming call UI and join Zegocloud room using callId
-          Get.to(CallPage(callID: callID, userId: userId, username: username));
+          Get.to(() =>
+              CallPage(callID: callID, userId: userId, username: username));
         }
       } else {
         Get.toNamed(

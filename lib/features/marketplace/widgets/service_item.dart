@@ -2,31 +2,23 @@ import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder
 import 'package:business_bosses_v2/features/marketplace/presentation/boost_market_screen.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/expanded_market_screen.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/sell_screen.dart';
-import 'package:business_bosses_v2/features/marketplace/presentation/sell_services.dart';
 import 'package:business_bosses_v2/features/marketplace/presentation/seller_reviews.dart';
 
-import 'package:business_bosses_v2/features/marketplace/widgets/post_images_market.dart';
 import 'package:business_bosses_v2/features/posts/models/post_model.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
-import 'package:detectable_text_field/detector/sample_regular_expressions.dart';
-import 'package:detectable_text_field/widgets/detectable_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:url_launcher/url_launcher.dart';
 import '../../../../action/action.dart';
 import '../../../../common/widgets/popup/my_popup_menu_button.dart';
 import '../../../../common/widgets/text_widget.dart';
-import '../../../../common/widgets/user_avatar_with_badge.dart';
-import '../../../../navigation/routes.dart';
 import '../../../../utils/theme/theme.dart';
 import '../../../common/models/api_response_model.dart';
 import '../../../common/models/comment_model.dart';
 import '../../../common/models/user_model.dart';
 import '../../chat/chat_room_screen.dart';
 import '../../profile/presentation/publicprofilescreen.dart';
-import '../../profile/widgets/premium_profile_tile.dart';
 import '../controllers/market_controller.dart';
 import '../models/market_model.dart';
 import 'post_like_comment.dart';
@@ -162,7 +154,7 @@ class _ServiceTileState extends State<ServiceTile> {
       return _post.user != null
           ? GestureDetector(
               onTap: () {
-                Get.to(ExpandedMarketplaceScreen(market: _post));
+                Get.to(() => ExpandedMarketplaceScreen(market: _post));
               },
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -249,14 +241,16 @@ class _ServiceTileState extends State<ServiceTile> {
                                         ),
                                       ),
                                       widget.post.user?.isSubscribed == true
-                                          ? Wrap(children: [
-                                              const SizedBox(width: 3),
-                                              SvgPicture.asset(
-                                                'assets/svgs/premiumbadge.svg',
-                                                height: 7,
-                                                color: primaryColorLT,
-                                              )
-                                            ])
+                                          ? Wrap(
+                                              children: <Widget>[
+                                                const SizedBox(width: 3),
+                                                SvgPicture.asset(
+                                                  'assets/svgs/premiumbadge.svg',
+                                                  height: 7,
+                                                  color: primaryColorLT,
+                                                )
+                                              ],
+                                            )
                                           : Container()
                                     ],
                                   ),
@@ -266,7 +260,7 @@ class _ServiceTileState extends State<ServiceTile> {
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
+                                  children: <Widget>[
                                     Padding(
                                       padding:
                                           const EdgeInsets.only(left: 10.0),
@@ -941,8 +935,6 @@ class _ServiceTileState extends State<ServiceTile> {
   }
 
   void connectToUser() async {
-    print(
-        'This are my connected users ${profileController.myProfile.connecteds}');
     final int checkConnected = profileController.myProfile.connecteds == null
         ? -1
         : profileController.myProfile.connecteds!

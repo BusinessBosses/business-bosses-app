@@ -281,7 +281,7 @@ class ChatController extends GetxController {
         ...data,
         'callID': response.data['callId'],
       };
-      Get.to(CallPage(
+      Get.to(() => CallPage(
           callID: dataNew['callID'],
           userId: data['userId'],
           username: data['username']));

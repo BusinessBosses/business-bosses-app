@@ -3,6 +3,7 @@
 import 'package:business_bosses_v2/common/models/comment_model.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/features/donations/models/donations_model.dart';
+import 'package:business_bosses_v2/features/forum/models/forum_model.dart';
 
 class PostModel {
   final String postId;
@@ -27,9 +28,11 @@ class PostModel {
   final bool? isPolled;
   final List<dynamic>? options;
   final DonationModel? donation;
+  final ForumModel? forum;
   final List<Map<String, dynamic>>? pollvotes;
   PostModel({
     this.donation,
+    this.forum,
     required this.postId,
     required this.title,
     this.images,
@@ -78,6 +81,7 @@ class PostModel {
     List<dynamic>? options,
     List<Map<String, dynamic>>? pollvotes,
     DonationModel? donation,
+    ForumModel? forum,
   }) {
     return PostModel(
       postId: postId ?? this.postId,
@@ -103,6 +107,7 @@ class PostModel {
       options: options ?? this.options,
       pollvotes: pollvotes ?? this.pollvotes,
       donation: donation ?? this.donation,
+      forum: forum ?? this.forum,
     );
   }
 
@@ -131,6 +136,7 @@ class PostModel {
       'options': options,
       'pollvotes': pollvotes,
       'donation': donation,
+      'forum': forum,
     };
   }
 
@@ -164,6 +170,7 @@ class PostModel {
       donation: map['donation'] != null
           ? DonationModel.fromMap(map['donation'])
           : null,
+      forum: map['forum'] != null ? ForumModel.fromMap(map['forum']) : null,
       ytUrl: map['ytUrl'] != null ? map['ytUrl'] as String : null,
       livedata: map['livedata'] != null ? map['livedata'] as String : null,
       isRanked: map['isRanked'] as bool,
