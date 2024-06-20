@@ -11,6 +11,7 @@ import 'package:business_bosses_v2/features/donations/controller/donations_contr
 import 'package:business_bosses_v2/features/live_event/presentation/live_event.dart';
 import 'package:business_bosses_v2/features/marketplace/models/market_model.dart';
 import 'package:business_bosses_v2/features/marketplace/widgets/marketplace_item.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -18,6 +19,7 @@ import 'package:lottie/lottie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:text_scroll/text_scroll.dart';
 import 'package:upgrader/upgrader.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 import '../../utils/constants/constants.dart';
 import '../../utils/theme/theme.dart';
@@ -91,7 +93,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     });
     final HomeController homeController = Get.find();
 
-    void _checkScrollPosition() {
+    void checkScrollPosition() {
       if (_scrollController.position.pixels >= 230) {
         setState(() {
           isTabVisible = true;
@@ -104,7 +106,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     }
 
     _scrollController.addListener(() {
-      _checkScrollPosition();
+      checkScrollPosition();
       if (_scrollController.position.pixels >=
               _scrollController.position.maxScrollExtent - 300 &&
           !homeController.loadingMore.value) {
@@ -176,6 +178,40 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
+    final List<Widget> widgetList = <Widget>[
+      Padding(
+        padding: const EdgeInsets.only(bottom: 8.0),
+        child: LayoutBuilder(
+          builder: (BuildContext context, BoxConstraints constraints) {
+            return BossOfWeekProfileTile(
+              onTileBuilt: () {
+                _checkScrollPosition();
+              },
+            );
+          },
+        ),
+      ),
+      ...homeController.bossUp!.reversed
+          .toList()
+          .map((Map<String, dynamic> item) => GestureDetector(
+                onTap: () async {
+                  final Uri url = Uri.parse(item['companyUrl']);
+                  if (!await launchUrl(url)) {
+                    throw Exception('Could not launch $url');
+                  }
+                },
+                child: SizedBox(
+                  height: 280,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text(item['companyName'].toString()),
+                    ],
+                  ),
+                ),
+              ))
+          .toList(),
+    ];
     return WillPopScope(
       onWillPop: () async {
         showDialog(
@@ -363,17 +399,27 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                                             if (index == 0) {
                                               return Column(
                                                 children: <Widget>[
-                                                  LayoutBuilder(
-                                                    builder:
-                                                        (BuildContext context,
-                                                            BoxConstraints
-                                                                constraints) {
-                                                      return BossOfWeekProfileTile(
-                                                        onTileBuilt: () {
-                                                          _checkScrollPosition();
-                                                        },
-                                                      );
-                                                    },
+                                                  CarouselSlider(
+                                                    options: CarouselOptions(
+                                                      height: 280,
+                                                      autoPlay: true,
+                                                      enlargeCenterPage: true,
+                                                      autoPlayCurve:
+                                                          Curves.fastOutSlowIn,
+                                                      enableInfiniteScroll:
+                                                          true,
+                                                      autoPlayAnimationDuration:
+                                                          const Duration(
+                                                              milliseconds:
+                                                                  800),
+                                                      viewportFraction: 1,
+                                                    ),
+                                                    items: widgetList
+                                                        .map(
+                                                          (Widget widget) =>
+                                                              widget,
+                                                        )
+                                                        .toList(),
                                                   ),
                                                   if (liveEventController
                                                       .ongoing.isNotEmpty)
@@ -623,7 +669,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                                       ),
                                     ),
                                   ),
-                                  Padding(padding: EdgeInsets.all(100)),
+                                  const Padding(padding: EdgeInsets.all(100)),
                                   const BottomBar(
                                     activeIndex: 0,
                                   ),

@@ -161,10 +161,10 @@ class _ServiceTileState extends State<ServiceTile> {
 
       return _post.user != null
           ? GestureDetector(
-             onTap: () {
+              onTap: () {
                 Get.to(ExpandedMarketplaceScreen(market: _post));
               },
-            child: Column(
+              child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
@@ -235,8 +235,8 @@ class _ServiceTileState extends State<ServiceTile> {
                                       ),
                                       Text(
                                         (widget.post.user?.name ??
-                                                        widget
-                                                            .post.user!.username)
+                                                        widget.post.user!
+                                                            .username)
                                                     .length >
                                                 15
                                             ? '${(widget.post.user?.name ?? widget.post.user!.username).substring(0, 15)}...'
@@ -268,12 +268,14 @@ class _ServiceTileState extends State<ServiceTile> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Padding(
-                                      padding: const EdgeInsets.only(left:10.0),
-                                      child: Text('${_post.category} - \$${_post.price.toString()}',
-                                              style: const TextStyle(
-                                                fontWeight: FontWeight.w800,
-                                              ),
-                                            ),
+                                      padding:
+                                          const EdgeInsets.only(left: 10.0),
+                                      child: Text(
+                                        '${_post.category} - \$${_post.price.toString()}',
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.w800,
+                                        ),
+                                      ),
                                     ),
                                     Padding(
                                       padding: const EdgeInsets.only(
@@ -282,8 +284,6 @@ class _ServiceTileState extends State<ServiceTile> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.start,
                                         children: <Widget>[
-                                          
-                                          
                                           const SizedBox(
                                             width: 8,
                                           ),
@@ -317,8 +317,8 @@ class _ServiceTileState extends State<ServiceTile> {
                                       ),
                                     ),
                                     Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: 10.0),
+                                      padding:
+                                          const EdgeInsets.only(left: 10.0),
                                       child: Align(
                                         alignment: Alignment.centerLeft,
                                         child: Text(
@@ -342,14 +342,15 @@ class _ServiceTileState extends State<ServiceTile> {
                                               ? Row(
                                                   children: <Widget>[
                                                     const Icon(
-                                                    Icons.timelapse,
-                                                    size: 12,
-                                                  ),
+                                                      Icons.timelapse,
+                                                      size: 12,
+                                                    ),
                                                     const SizedBox(
                                                       width: 1,
                                                     ),
                                                     Text(
-                                                      _post.location!.length > 50
+                                                      _post.location!.length >
+                                                              50
                                                           ? '${_post.location!.substring(0, 50)}...'
                                                           : _post.location!,
                                                       style: const TextStyle(
@@ -373,7 +374,6 @@ class _ServiceTileState extends State<ServiceTile> {
                                         ],
                                       ),
                                     ),
-                                    
                                     Padding(
                                       padding: const EdgeInsets.only(
                                           left: 9.0, top: 3),
@@ -560,7 +560,8 @@ class _ServiceTileState extends State<ServiceTile> {
                                               .bodyMedium
                                               ?.copyWith(
                                                 fontWeight: FontWeight.w700,
-                                                color: textColor.withOpacity(0.8),
+                                                color:
+                                                    textColor.withOpacity(0.8),
                                               ),
                                         ),
                                       ),
@@ -589,7 +590,8 @@ class _ServiceTileState extends State<ServiceTile> {
                                               .bodyMedium
                                               ?.copyWith(
                                                 fontWeight: FontWeight.w700,
-                                                color: textColor.withOpacity(0.8),
+                                                color:
+                                                    textColor.withOpacity(0.8),
                                               ),
                                         ),
                                       ),
@@ -598,7 +600,8 @@ class _ServiceTileState extends State<ServiceTile> {
                                           ? TextButton.icon(
                                               onPressed: () async {
                                                 _marketController.coin(
-                                                  profileController.myProfile.uid,
+                                                  profileController
+                                                      .myProfile.uid,
                                                   _post.marketId,
                                                   profileController,
                                                   'market',
@@ -624,7 +627,8 @@ class _ServiceTileState extends State<ServiceTile> {
                                                     .textTheme
                                                     .bodyMedium
                                                     ?.copyWith(
-                                                      fontWeight: FontWeight.w700,
+                                                      fontWeight:
+                                                          FontWeight.w700,
                                                       color: textColor
                                                           .withOpacity(0.8),
                                                     ),
@@ -666,7 +670,8 @@ class _ServiceTileState extends State<ServiceTile> {
                                               .bodyMedium
                                               ?.copyWith(
                                                 fontWeight: FontWeight.w700,
-                                                color: textColor.withOpacity(0.8),
+                                                color:
+                                                    textColor.withOpacity(0.8),
                                               ),
                                         ),
                                       ),
@@ -691,8 +696,8 @@ class _ServiceTileState extends State<ServiceTile> {
                                                   child: Container(
                                                     decoration: BoxDecoration(
                                                         borderRadius:
-                                                            BorderRadius.circular(
-                                                                8),
+                                                            BorderRadius
+                                                                .circular(8),
                                                         border: Border.all(
                                                             width: 1.5,
                                                             color:
@@ -702,9 +707,10 @@ class _ServiceTileState extends State<ServiceTile> {
                                                         padding:
                                                             EdgeInsets.all(5.0),
                                                         child: Text(
-                                                          'Message Seller',
+                                                          'Book Now',
                                                           style: TextStyle(
-                                                            color: primaryColorLT,
+                                                            color:
+                                                                primaryColorLT,
                                                             fontWeight:
                                                                 FontWeight.w700,
                                                             fontSize: 11,
@@ -755,7 +761,7 @@ class _ServiceTileState extends State<ServiceTile> {
                   )
                 ],
               ),
-          )
+            )
           : const SizedBox();
     } else {
       return const SizedBox();

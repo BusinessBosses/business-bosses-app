@@ -306,12 +306,7 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                         homeController.bossUp!.isNotEmpty
                     ? GestureDetector(
                         onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (BuildContext context) =>
-                                    const Bossuppartner()),
-                          );
+                          Get.to(() => const Bossuppartner());
                         },
                         child: Padding(
                           padding: const EdgeInsets.only(right: 0, top: 5),

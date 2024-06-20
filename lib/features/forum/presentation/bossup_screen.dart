@@ -141,7 +141,8 @@ class _BossUpSectionState extends State<BossUpSection>
                 },
                 onSubmit: (String query) {
                   _searchTabController.index == 1
-                      ? bossUpController.searchUsers(query, widget.industry.industryId)
+                      ? bossUpController.searchUsers(
+                          query, widget.industry.industryId)
                       : bossUpController.searchPosts(query);
                   setState(() {});
                 },
@@ -256,7 +257,8 @@ class _BossUpSectionState extends State<BossUpSection>
                                                     children: <Widget>[
                                                       Text(
                                                         widget.industry
-                                                                    .industryId == '-MsUOGcOT9oRXGakCcJv'
+                                                                    .industryId ==
+                                                                '-MsUOGcOT9oRXGakCcJv'
                                                             ? 'Free Promotion'
                                                             : widget.industry
                                                                     .award ??
@@ -284,7 +286,8 @@ class _BossUpSectionState extends State<BossUpSection>
                                                       ),
                                                       Text(
                                                         widget.industry
-                                                                    .industryId == '-MsUOGcOT9oRXGakCcJv'
+                                                                    .industryId ==
+                                                                '-MsUOGcOT9oRXGakCcJv'
                                                             ? 'Every Monday'
                                                             : _calculateEndsDate(
                                                                 widget.industry
@@ -310,11 +313,11 @@ class _BossUpSectionState extends State<BossUpSection>
                                               onTap: (() {
                                                 showDialog(
                                                   context: context,
-                                                  builder: (BuildContext
-                                                          context) =>
-                                                      BossUpChallangePopUp(
-                                                          industry:
-                                                              widget.industry),
+                                                  builder:
+                                                      (BuildContext context) =>
+                                                          BossUpChallangePopUp(
+                                                              industry: widget
+                                                                  .industry),
                                                 );
                                               }),
                                               child: Container(
@@ -574,7 +577,8 @@ class _BossUpSectionState extends State<BossUpSection>
                                                                   1209600000) >
                                                               now &&
                                                           widget.industry
-                                                                  .industryId == '-MsUOGcOT9oRXGakCcJv') {
+                                                                  .industryId ==
+                                                              '-MsUOGcOT9oRXGakCcJv') {
                                                         const SnackBar
                                                             snackBar = SnackBar(
                                                           duration: Duration(
@@ -589,7 +593,8 @@ class _BossUpSectionState extends State<BossUpSection>
                                                                 snackBar);
                                                       } else {
                                                         if (widget.industry
-                                                                .industryId == '-MsUOGcOT9oRXGakCcJv') {
+                                                                .industryId ==
+                                                            '-MsUOGcOT9oRXGakCcJv') {
                                                           Get.to(
                                                             CreateBossUpScreen(
                                                                 industryModel:
@@ -631,7 +636,7 @@ class _BossUpSectionState extends State<BossUpSection>
                                                             return;
                                                           }
                                                           Get.to(
-                                                            CreateBossUpScreen(
+                                                            () => CreateBossUpScreen(
                                                                 industryModel:
                                                                     widget
                                                                         .industry),
@@ -643,8 +648,9 @@ class _BossUpSectionState extends State<BossUpSection>
                                                                       .industry
                                                                       .industryId
                                                             },
-                                                            binding: BindingsBuilder
-                                                                .put(() =>
+                                                            binding: BindingsBuilder<
+                                                                    CreateBossUpController>.put(
+                                                                () =>
                                                                     CreateBossUpController()),
                                                           );
                                                         }

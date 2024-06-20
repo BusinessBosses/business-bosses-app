@@ -141,6 +141,8 @@ class _CreateServiceScreenState extends State<CreateServiceScreen> {
                         'Monthly Account Book Keeping',
                         'Logo & Branding Guidelines',
                         'Test, Review & Feedback',
+                        '1 to 1 Mentoring/Coaching',
+                        'Appointment',
                         'Other Business Service',
                       ].map<DropdownMenuItem<String>>((String? value) {
                         return DropdownMenuItem<String>(
