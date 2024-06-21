@@ -11,6 +11,7 @@ import 'package:business_bosses_v2/features/donations/controller/donations_contr
 import 'package:business_bosses_v2/features/live_event/presentation/live_event.dart';
 import 'package:business_bosses_v2/features/marketplace/models/market_model.dart';
 import 'package:business_bosses_v2/features/marketplace/widgets/marketplace_item.dart';
+import 'package:business_bosses_v2/features/marketplace/widgets/service_item.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -625,10 +626,15 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                                                     });
                                                   }
                                                 },
-                                                child: MarketTile(
-                                                  controller: controller,
-                                                  post: marketModel,
-                                                ),
+                                                child: marketModel.isProduct
+                                                    ? MarketTile(
+                                                        controller: controller,
+                                                        post: marketModel,
+                                                      )
+                                                    : ServiceTile(
+                                                        controller: controller,
+                                                        post: marketModel,
+                                                      ),
                                               );
                                             } else if (currentPost['type'] ==
                                                 'course') {
