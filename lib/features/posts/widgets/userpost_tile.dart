@@ -670,8 +670,8 @@ class _PostTileState extends State<PostTile> {
                               ),
                             ),
                             Positioned(
-                              left: 15,
-                              top: 15,
+                              left: 10,
+                              top: 10,
                               child: Container(
                                 padding: EdgeInsets.symmetric(
                                     horizontal: 10, vertical: 8),
