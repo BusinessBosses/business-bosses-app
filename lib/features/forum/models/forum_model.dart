@@ -111,9 +111,11 @@ class ForumModel {
           : null,
       likes: map['likes'] != null ? List<String>.from((map['likes'])) : null,
       coins: map['coins'] != null ? List<String>.from((map['coins'])) : null,
-      comments: List.from(map['comments'])
-          .map((e) => CommentModel.fromMap(e as Map<String, dynamic>))
-          .toList(),
+      comments: map['comments'] != null
+          ? List.from(map['comments'])
+              .map((e) => CommentModel.fromMap(e as Map<String, dynamic>))
+              .toList()
+          : [],
       user: map['user'] != null
           ? UserModel.fromMap(map['user'] as Map<String, dynamic>)
           : null,

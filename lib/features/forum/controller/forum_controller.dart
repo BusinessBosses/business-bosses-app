@@ -4,6 +4,7 @@ import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/features/forum/models/forum_model.dart';
 import 'package:business_bosses_v2/features/forum/models/industry.dart';
 import 'package:business_bosses_v2/features/forum/repository/forum_repository.dart';
+import 'package:business_bosses_v2/features/forum/widgets/postonhomepopup.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/home/repository/home_repository.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
@@ -216,26 +217,25 @@ class ForumController extends GetxController {
   }
 
   Future<void> searchUsers(String query, String industryid) async {
-  loadingSearch(true);
-  update();
+    loadingSearch(true);
+    update();
 
-  searchedUsers.clear();
+    searchedUsers.clear();
 
-  if (members.isEmpty) {
-    await fetchIndustryUsers(industryid);
-  }
-
-  for (var user in members) {
-    if (user.username.toLowerCase().contains(query.toLowerCase()) ||
-        user.name!.toLowerCase().contains(query.toLowerCase())) {
-      searchedUsers.add(user);
+    if (members.isEmpty) {
+      await fetchIndustryUsers(industryid);
     }
+
+    for (var user in members) {
+      if (user.username.toLowerCase().contains(query.toLowerCase()) ||
+          user.name!.toLowerCase().contains(query.toLowerCase())) {
+        searchedUsers.add(user);
+      }
+    }
+
+    loadingSearch(false);
+    update();
   }
-
-  loadingSearch(false);
-  update();
-}
-
 
   Future<void> searchPosts(
     String query,
@@ -246,8 +246,11 @@ class ForumController extends GetxController {
     searchedPosts.clear();
 
     // Assuming products is the list of already fetched products
-    for (var product in forums) {
-      if (product.description!.toLowerCase().contains(query.toLowerCase())) {
+    for (ForumModel product in forums) {
+      if (product.description!.toLowerCase().contains(query.toLowerCase()) ||
+          product.title!.toLowerCase().contains(query.toLowerCase()) ||
+          product.user!.name!.toLowerCase().contains(query.toLowerCase()) ||
+          product.user!.username.toLowerCase().contains(query.toLowerCase())) {
         searchedPosts.add(product);
       }
     }
@@ -354,7 +357,11 @@ class ForumController extends GetxController {
     });
 
     forums.insert(0, modelizedNewPost);
-
+    _profileController.userresources.insert(0, modelizedNewPost);
+    Get.off(() => PostonhomePopUp(
+          forum: modelizedNewPost,
+          isBossUp: false,
+        ));
     update();
   }
 

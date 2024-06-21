@@ -4,6 +4,7 @@ import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/features/forum/models/forum_model.dart';
 import 'package:business_bosses_v2/features/forum/models/industry.dart';
 import 'package:business_bosses_v2/features/forum/repository/forum_repository.dart';
+import 'package:business_bosses_v2/features/forum/widgets/postonhomepopup.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/profile/controller/profile_controller.dart';
 import 'package:business_bosses_v2/services/api_service.dart';
@@ -331,6 +332,12 @@ class BossUpController extends GetxController {
 
     forums.insert(0, modelizedNewPost);
     _profileController.userresources.insert(0, modelizedNewPost);
+
+    Get.off(() => PostonhomePopUp(
+          forum: modelizedNewPost,
+          isBossUp: true,
+        ));
+
     update();
   }
 

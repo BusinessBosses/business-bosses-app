@@ -995,6 +995,9 @@ class _PostTileState extends State<PostTile> {
                           ]),
                         ),
                       },
+                      if (widget.post.forum != null) ...<Widget>{
+                        Text(widget.post.forum!.title!),
+                      },
                       if (widget.post.images?.isNotEmpty ?? false)
                         PostImages(
                           post: widget.post,

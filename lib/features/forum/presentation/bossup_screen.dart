@@ -596,7 +596,7 @@ class _BossUpSectionState extends State<BossUpSection>
                                                                 .industryId ==
                                                             '-MsUOGcOT9oRXGakCcJv') {
                                                           Get.to(
-                                                            CreateBossUpScreen(
+                                                            () => CreateBossUpScreen(
                                                                 industryModel:
                                                                     widget
                                                                         .industry),

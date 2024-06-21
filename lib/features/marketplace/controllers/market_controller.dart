@@ -85,18 +85,15 @@ class MarketController extends GetxController {
     if (index != -1) {
       // Create an updated market model
       MarketModel updatedMarket = MarketModel.fromMap(data);
-      print(updatedMarket.isProduct);
       // Update in the main list
       markets[index] = MarketModel.fromMap(data);
 
       // Update in the products list if it's a product
       final int productIndex = products.indexWhere(
           (MarketModel element) => element.marketId == updatedMarket.marketId);
-      print(productIndex);
       if (productIndex != -1) {
         products[productIndex] = updatedMarket;
       }
-      print(updatedMarket.isProduct);
       // Update in the services list if it's a service
 
       final int serviceIndex = services.indexWhere(

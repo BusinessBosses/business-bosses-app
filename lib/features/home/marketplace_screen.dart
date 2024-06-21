@@ -1,4 +1,3 @@
-import 'package:business_bosses_v2/features/donations/presentation/filterdonationposts.dart';
 import 'package:business_bosses_v2/features/donations/presentation/filterdonationusers.dart';
 import 'package:business_bosses_v2/features/forum/models/industry.dart';
 import 'package:business_bosses_v2/features/home/widgets/bottom_bar.dart';
@@ -115,8 +114,8 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
         automaticallyImplyLeading: false,
         title: _ismarketplaceSearching
             ? SizedBox(
-              height: 42,
-              child: Searchbar(
+                height: 42,
+                child: Searchbar(
                   hintText: 'Search Marketplace',
                   onChange: (String query) {
                     if (query.isEmpty) {
@@ -137,7 +136,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                     setState(() {});
                   },
                 ),
-            )
+              )
             : Column(
                 children: [
                   GestureDetector(
@@ -167,7 +166,10 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
                             ),
                           ),
                           hintText: 'Search Marketplace',
-                          hintStyle: TextStyle(color: Colors.black45, fontSize: 16, fontWeight: FontWeight.w500),
+                          hintStyle: TextStyle(
+                              color: Colors.black45,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500),
                         ),
                       ),
                     ),
