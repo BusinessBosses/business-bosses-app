@@ -216,26 +216,25 @@ class ForumController extends GetxController {
   }
 
   Future<void> searchUsers(String query, String industryid) async {
-  loadingSearch(true);
-  update();
+    loadingSearch(true);
+    update();
 
-  searchedUsers.clear();
+    searchedUsers.clear();
 
-  if (members.isEmpty) {
-    await fetchIndustryUsers(industryid);
-  }
-
-  for (var user in members) {
-    if (user.username.toLowerCase().contains(query.toLowerCase()) ||
-        user.name!.toLowerCase().contains(query.toLowerCase())) {
-      searchedUsers.add(user);
+    if (members.isEmpty) {
+      await fetchIndustryUsers(industryid);
     }
+
+    for (var user in members) {
+      if (user.username.toLowerCase().contains(query.toLowerCase()) ||
+          user.name!.toLowerCase().contains(query.toLowerCase())) {
+        searchedUsers.add(user);
+      }
+    }
+
+    loadingSearch(false);
+    update();
   }
-
-  loadingSearch(false);
-  update();
-}
-
 
   Future<void> searchPosts(
     String query,
@@ -246,8 +245,11 @@ class ForumController extends GetxController {
     searchedPosts.clear();
 
     // Assuming products is the list of already fetched products
-    for (var product in forums) {
-      if (product.description!.toLowerCase().contains(query.toLowerCase())) {
+    for (ForumModel product in forums) {
+      if (product.description!.toLowerCase().contains(query.toLowerCase()) ||
+          product.title!.toLowerCase().contains(query.toLowerCase()) ||
+          product.user!.name!.toLowerCase().contains(query.toLowerCase()) ||
+          product.user!.username.toLowerCase().contains(query.toLowerCase())) {
         searchedPosts.add(product);
       }
     }
