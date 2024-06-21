@@ -78,8 +78,7 @@ class PostonhomePopUp extends StatelessWidget {
               // ),
               GestureDetector(
                 onTap: () {
-                  Get.back();
-                  Get.toNamed(
+                  Get.offAndToNamed(
                     Routes.createPost,
                     arguments: <String, dynamic>{
                       'sharemessage': 'Hey there! Check out this post',

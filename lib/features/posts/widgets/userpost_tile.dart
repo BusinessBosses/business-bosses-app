@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:business_bosses_v2/common/widgets/network_image_with_placeholder.dart';
 import 'package:business_bosses_v2/features/donations/models/donations_model.dart';
 import 'package:business_bosses_v2/features/donations/presentation/expanded_donations_screen.dart';
+import 'package:business_bosses_v2/features/forum/presentation/expanded_forum_view.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/live_event/controller/live_event_controller.dart';
 import 'package:business_bosses_v2/features/live_event/models/events_model.dart';
@@ -646,8 +647,8 @@ class _PostTileState extends State<PostTile> {
                         ),
                       if (widget.post.forum != null) ...<Widget>{
                         Stack(
-                          children: [
-                            Container(
+                          children: <Widget>[
+                            SizedBox(
                               width: double.infinity,
                               height: 200,
                               child: ClipRRect(
@@ -669,28 +670,28 @@ class _PostTileState extends State<PostTile> {
                                 ),
                               ),
                             ),
-                            Positioned(
-                              left: 10,
-                              top: 10,
-                              child: Container(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 10, vertical: 8),
-                                decoration: BoxDecoration(
-                                    color: Colors.white.withAlpha(70),
-                                    borderRadius: BorderRadius.circular(5)),
-                                child: Center(
-                                    child: Text('Industry name',
-                                        style: const TextStyle(
-                                          color: Colors.white,
-                                        ))),
-                              ),
-                            ),
+                            // Positioned(
+                            //   left: 10,
+                            //   top: 10,
+                            //   child: Container(
+                            //     padding: const EdgeInsets.symmetric(
+                            //         horizontal: 10, vertical: 8),
+                            //     decoration: BoxDecoration(
+                            //         color: Colors.white.withAlpha(70),
+                            //         borderRadius: BorderRadius.circular(5)),
+                            //     child: Center(
+                            //         child: Text('Industry name',
+                            //             style: const TextStyle(
+                            //               color: Colors.white,
+                            //             ))),
+                            //   ),
+                            // ),
                             Padding(
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 15.0),
                               child: Column(
-                                children: [
-                                  SizedBox(
+                                children: <Widget>[
+                                  const SizedBox(
                                     height: 80,
                                   ),
                                   Center(
@@ -702,17 +703,39 @@ class _PostTileState extends State<PostTile> {
                                             color: Colors.white,
                                             fontWeight: FontWeight.w700)),
                                   ),
-                                  SizedBox(height: 10,),
-                                  Container(child: Container(
-                                    padding: EdgeInsets.symmetric(horizontal: 10, vertical:5),
-                                    decoration: BoxDecoration(
-                                       color: Colors.white.withAlpha(70),
-                                      borderRadius: BorderRadius.circular(50)
-                                    ),
-                                    child: Wrap(
-                                      crossAxisAlignment: WrapCrossAlignment.center,
-                                      children: [Text('View Post', style: TextStyle(color: Colors.white),),
-                                      SizedBox(width: 5,), SvgPicture.asset('assets/svgs/nexticon.svg', color: Colors.white,)])),)
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 10, vertical: 5),
+                                      decoration: BoxDecoration(
+                                          color: Colors.white.withAlpha(70),
+                                          borderRadius:
+                                              BorderRadius.circular(50)),
+                                      child: Wrap(
+                                          crossAxisAlignment:
+                                              WrapCrossAlignment.center,
+                                          children: <Widget>[
+                                            GestureDetector(
+                                              onTap: () {
+                                                Get.to(() => ExpandedForumView(
+                                                    forum: widget.post.forum!));
+                                              },
+                                              child: const Text(
+                                                'View Post',
+                                                style: TextStyle(
+                                                    color: Colors.white),
+                                              ),
+                                            ),
+                                            const SizedBox(
+                                              width: 5,
+                                            ),
+                                            SvgPicture.asset(
+                                              'assets/svgs/nexticon.svg',
+                                              color: Colors.white,
+                                            ),
+                                          ]))
                                 ],
                               ),
                             )

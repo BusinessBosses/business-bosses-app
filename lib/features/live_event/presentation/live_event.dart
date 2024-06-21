@@ -67,6 +67,7 @@ class _LiveEventState extends State<LiveEvent> {
   void initState() {
     tzdata.initializeTimeZones(); // Initialize time zones
     super.initState();
+    liveEventController.initEvents();
     scrollController.addListener(() {
       double percentageScrolled =
           scrollController.offset / scrollController.position.maxScrollExtent;
@@ -567,7 +568,6 @@ class _LiveEventState extends State<LiveEvent> {
 
   @override
   void dispose() {
-    Get.delete<LiveController>();
     super.dispose();
   }
 

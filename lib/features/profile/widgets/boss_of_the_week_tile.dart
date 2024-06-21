@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:business_bosses_v2/common/models/api_response_model.dart';
 import 'package:business_bosses_v2/common/models/user_model.dart';
 import 'package:business_bosses_v2/common/widgets/popup/bossup_challenge_popuphome.dart';
@@ -39,7 +37,7 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
   late UserModel? user;
   final HomeController homeController = Get.find();
   late Color startColor;
-  final List<Color> startColors = [
+  final List<Color> startColors = <Color>[
     Colors.green,
     const Color.fromARGB(255, 0, 71, 129),
     const Color.fromARGB(255, 255, 59, 219),
@@ -62,7 +60,7 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
     );
     final ApiResponseModel res = await ApiService.get(
         path: '/connection/connecteds/referals/${publicUser.uid}');
-    Navigator.pop(context);
+    Get.back();
 
     if (res.success) {
       if (res.data.isEmpty) {
@@ -91,7 +89,7 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (widget.onTileBuilt != null) {
-        WidgetsBinding.instance!.addPostFrameCallback((_) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
           widget.onTileBuilt!();
         });
       }
@@ -317,22 +315,22 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                     .toList()
                     .map((Map<String, dynamic> item) => GestureDetector(
                           onTap: () async {
-                            Get.to(const Bossuppartner());
+                            Get.to(() => const Bossuppartner());
                           },
                           child: Container(
-                            padding: EdgeInsets.symmetric(vertical: 15),
+                            padding: const EdgeInsets.symmetric(vertical: 15),
                             color: Colors.white,
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
+                              children: <Widget>[
                                 Padding(
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 15.0),
                                   child: Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
-                                    children: [
+                                    children: <Widget>[
                                       const Text(
                                         'See more deals',
                                         style: TextStyle(
@@ -386,9 +384,9 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                                                   width: 1.0,
                                                 ),
                                                 gradient: LinearGradient(
-                                                  colors: [
+                                                  colors: <Color>[
                                                     startColor,
-                                                    Color(0xFF0F132D)
+                                                    const Color(0xFF0F132D)
                                                   ],
                                                   begin: Alignment.topRight,
                                                   end: Alignment.bottomLeft,
@@ -399,7 +397,7 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                                               child: Column(
                                                 mainAxisAlignment:
                                                     MainAxisAlignment.end,
-                                                children: [
+                                                children: <Widget>[
                                                   Padding(
                                                     padding: const EdgeInsets
                                                         .symmetric(
@@ -421,12 +419,13 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                                                             bottom: 10,
                                                             left: 12,
                                                             right: 12),
-                                                    child: Container(
+                                                    child: SizedBox(
                                                       width: double.infinity,
                                                       child: ElevatedButton(
                                                         style: const ButtonStyle(
                                                             backgroundColor:
-                                                                MaterialStatePropertyAll(
+                                                                MaterialStatePropertyAll<
+                                                                        Color?>(
                                                                     Colors
                                                                         .white)),
                                                         onPressed: () async {
@@ -442,7 +441,7 @@ class _BossOfWeekProfileTileState extends State<BossOfWeekProfileTile> {
                                                         child: const Text(
                                                           'Learn more',
                                                           style: TextStyle(
-                                                            fontSize: 12,
+                                                              fontSize: 12,
                                                               color: Color(
                                                                   0xFF0F132D)),
                                                         ),

@@ -12,7 +12,6 @@ import 'package:business_bosses_v2/features/live_event/presentation/live_event.d
 import 'package:business_bosses_v2/features/marketplace/models/market_model.dart';
 import 'package:business_bosses_v2/features/marketplace/widgets/marketplace_item.dart';
 import 'package:business_bosses_v2/features/marketplace/widgets/service_item.dart';
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -20,7 +19,6 @@ import 'package:lottie/lottie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:text_scroll/text_scroll.dart';
 import 'package:upgrader/upgrader.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 import '../../utils/constants/constants.dart';
 import '../../utils/theme/theme.dart';
@@ -44,7 +42,8 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver,TickerProviderStateMixin {
+class _HomeScreenState extends State<HomeScreen>
+    with WidgetsBindingObserver, TickerProviderStateMixin {
   final HomeController homeController = Get.put(HomeController());
   final ProfileController _profileController = Get.find();
   final LiveController liveEventController = Get.put(LiveController());
@@ -83,7 +82,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver,Tic
   @override
   void initState() {
     super.initState();
-     _tabController = TabController(vsync: this, length: 2);
+    _tabController = TabController(vsync: this, length: 2);
     WidgetsBinding.instance.addObserver(this);
     // showTutorial();
     WidgetsBinding.instance.addPostFrameCallback((_) async {

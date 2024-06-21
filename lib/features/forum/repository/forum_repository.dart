@@ -8,6 +8,12 @@ class ForumRepository {
     return response;
   }
 
+  static Future<ApiResponseModel> getForum(String id) async {
+    final ApiResponseModel response =
+        await ApiService.get(path: 'forum/get/$id');
+    return response;
+  }
+
   static Future<ApiResponseModel> getForumMembers(
       int page, String industryId) async {
     final ApiResponseModel response = await ApiService.get(

@@ -168,6 +168,19 @@ class _ServiceTileState extends State<ServiceTile> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
+                        if (_post.promote && _post.approved)
+                          const Padding(
+                            padding:
+                                EdgeInsets.only(left: 15, right: 15, top: 15),
+                            child: TextWidget(
+                              text: 'Sponsored',
+                              fontWeight: FontWeight.w700,
+                              size: 10,
+                            ),
+                          ),
+                        const SizedBox(
+                          height: 5,
+                        ),
                         Padding(
                           padding: const EdgeInsets.only(
                               left: 15.0, right: 15, bottom: 15, top: 10),
