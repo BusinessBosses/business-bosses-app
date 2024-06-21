@@ -4,6 +4,7 @@ import 'package:business_bosses_v2/features/forum/models/forum_model.dart';
 import 'package:business_bosses_v2/features/home/controller/home_controller.dart';
 import 'package:business_bosses_v2/features/home/widgets/forum_item.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 class ExpandedForumView extends StatefulWidget {
@@ -28,23 +29,28 @@ class _ExpandedForumViewState extends State<ExpandedForumView> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('View Post'),
+    return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: SvgPicture.asset('assets/svgs/backbutton.svg'),
         ),
-        body: Obx(
-          () => controller.loading.value
-              ? const Center(child: SafetyModel())
-              : Column(
-                  children: <Widget>[
-                    ForumItem(
-                      forum: controller.forum!,
-                      controller: homeController,
-                    ),
-                  ],
-                ),
-        ),
+        centerTitle: true,
+        title: const Text('View Post'),
+      ),
+      body: Obx(
+        () => controller.loading.value
+            ? const Center(child: SafetyModel())
+            : Column(
+                children: <Widget>[
+                  ForumItem(
+                    forum: controller.forum!,
+                    controller: homeController,
+                  ),
+                ],
+              ),
       ),
     );
   }
