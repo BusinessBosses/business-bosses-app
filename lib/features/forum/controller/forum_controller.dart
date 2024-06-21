@@ -358,7 +358,7 @@ class ForumController extends GetxController {
 
     forums.insert(0, modelizedNewPost);
     _profileController.userresources.insert(0, modelizedNewPost);
-    Get.to(() => PostonhomePopUp(
+    Get.off(() => PostonhomePopUp(
           forum: modelizedNewPost,
           isBossUp: false,
         ));
